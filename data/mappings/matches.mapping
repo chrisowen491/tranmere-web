@@ -1,0 +1,50 @@
+{
+    "mappings": {
+        "properties": {
+            "Date": {
+                "type": "date"
+            },
+            "FT": {
+                "type": "keyword"
+            },
+            "Season": {
+                "type": "integer"
+            },
+            "competition": {
+                "type": "keyword"
+            },
+            "division": {
+                "type": "keyword"
+            },
+            "goaldif": {
+                "type": "integer"
+            },
+            "hgoal": {
+                "type": "integer"
+            },
+            "home": {
+                "type": "keyword",
+                "copy_to": "teams"
+            },
+            "result": {
+                "type": "keyword"
+            },
+            "tier": {
+                "type": "integer"
+            },
+            "totgoal": {
+                "type": "integer"
+            },
+            "vgoal": {
+                "type": "integer"
+            },
+            "visitor": {
+                "type": "keyword",
+                "copy_to": "teams"
+            },
+            "teams": {
+                "type": "keyword"
+            }
+        }
+    }
+}

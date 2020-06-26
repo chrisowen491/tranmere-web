@@ -75,6 +75,57 @@ module.exports = function (path, fs, Mustache,client) {
             return client.search(query);
          },
 
+         findAllTeams : async function(size) {
+            var teamQuery = {
+                index: "matches",
+                body: {
+                    "size": 0,
+                    "query": {
+                      "match": {
+                        "teams": "Tranmere Rovers"
+                      }
+                    },
+                    "aggs": {
+                      "teams": {
+                        "terms": {
+                          "size" : size,
+                          "field": "teams"
+                        }
+                      }
+                    }
+                }
+            };
+
+            return await client.search(teamQuery);
+         },
+
+         findAllTranmereMatchesByOpposition : async function(opposition, size) {
+            var query = {
+                index: "matches",
+                body: {
+                   "sort": ["Date"],
+                   "size": size,
+                   "query": {
+                     "bool": {
+                        "must": [
+                          {
+                            "match": {
+                             "teams": opposition
+                            }
+                          },
+                          {
+                              "match": {
+                                "teams": "Tranmere Rovers"
+                              }
+                          }
+                        ]
+                      }
+                   }
+                }
+              };
+         return await client.search(query);
+         },
+
          findAllTranmereMatchesBySeason : async function(season, size) {
               var query = {
                 index: "matches",

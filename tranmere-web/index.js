@@ -13,6 +13,7 @@ async function run () {
     utils.buildPage({title: "About the site"}, "./templates/about.tpl.html",'./output/site/about.html' );
     utils.buildPage({title: "Links"}, "./templates/links.tpl.html",'./output/site/links.html' );
     utils.buildPage({title: "Oops"}, "./templates/error.tpl.html",'./output/site/error.html' );
+    utils.buildPage({title: "Contact Us"}, "./templates/contact.tpl.html",'./output/site/contact.html' );
 
     var seasonsView = {
         decades: [],
@@ -31,64 +32,14 @@ async function run () {
     }
     utils.buildPage(seasonsView, "./templates/seasons.tpl.html",'./output/site/seasons.html' );
 
-    var teamQuery = {
-        index: "matches",
-        body: {
-            "size": 0,
-            "query": {
-              "match": {
-                "teams": "Tranmere Rovers"
-              }
-            },
-            "aggs": {
-              "teams": {
-                "terms": {
-                  "size" : 150,
-                  "field": "teams"
-                }
-              }
-            }
-        }
-    };
-
-    var teams = await client.search(teamQuery);
-
-    var teamsView = {
-        title: "Opposition Team Index",
-        teams: teams.body.aggregations.teams.buckets
-    };
-    utils.buildPage(teamsView, "./templates/teams.tpl.html", './output/site/teams.html');
-
-
+    var teams = await utils.findAllTeams(150);
+    utils.buildPage({title: "Opposition Team Index",teams: teams.body.aggregations.teams.buckets},
+        "./templates/teams.tpl.html", './output/site/teams.html');
 
     for(var i=0; i<teams.body.aggregations.teams.buckets.length; i++ ) {
         var team = teams.body.aggregations.teams.buckets[i].key;
         if(team != "Tranmere Rovers") {
-            var query = {
-               index: "matches",
-               body: {
-                  "sort": ["Date"],
-                  "size": 200,
-                  "query": {
-                    "bool": {
-                       "must": [
-                         {
-                           "match": {
-                            "teams": team
-                           }
-                         },
-                         {
-                             "match": {
-                               "teams": "Tranmere Rovers"
-                             }
-                         }
-                       ]
-                     }
-                  }
-               }
-             };
-
-            var results = await client.search(query);
+            var results = await utils.findAllTranmereMatchesByOpposition(team, 200);
             var meta = utils.calculateWinsDrawsLossesFromMatchesSearch(results.body.hits.hits);
             var teamView = {
                 title: "Matches against " + team,
@@ -109,11 +60,8 @@ async function run () {
      };
     var managers = await client.search(managersQuery);
 
-    var managersView = {
-        title: "Managerial Records",
-        managers: managers.body.hits.hits
-    };
-    utils.buildPage(managersView, "./templates/managers.tpl.html", './output/site/managers.html');
+    utils.buildPage({title: "Managerial Records",managers: managers.body.hits.hits},
+        "./templates/managers.tpl.html", './output/site/managers.html');
 
     for(var i=0; i < managers.body.hits.hits.length; i++) {
 
@@ -135,7 +83,6 @@ async function run () {
         utils.buildPage(managerView, "./templates/manager.tpl.html", './output/site/managers/'+managers.body.hits.hits[i]["_id"]+'.html');
     }
 
-
     for(var i=1921; i < 2021; i++) {
         var results = await utils.findAllTranmereMatchesBySeason(i,200);
         var mySeasonView = {
@@ -148,4 +95,3 @@ async function run () {
     }
 }
 run().catch(console.log)
-
