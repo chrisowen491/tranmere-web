@@ -1,0 +1,67 @@
+{{>head}}
+<body data-spy="scroll" data-target="#toc">
+
+
+<section class="py-0">
+    <div class="container-fluid">
+        <div class="row justify-content-between">
+
+            {{>nav2}}
+
+            <!-- content -->
+            <article class="col-lg-9 col-xxl-10 doc-content">
+
+                <div class="row">
+                    <div class="col">
+                        <div class="doc-content-header">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <nav aria-label="breadcrumb" class="align-items-center">
+                                        <ol class="breadcrumb d-none d-lg-inline-flex">
+                                            <li class="breadcrumb-item"><a href="/index.html">Home</a></li>
+                                            <li class="breadcrumb-item active" aria-current="page">{{title}}</li>
+                                        </ol>
+                                    </nav>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row justify-content-between doc-content-body">
+                    <article class="col-md-9 col-xxl-8">
+
+                        <h1 class="h2 font-weight-light">{{title}}</h1>
+                        <h3 class="h3 font-weight-light" id="section-official">Official Club Links</h3>
+                        <p><a href="https://www.tranmererovers.co.uk">Official Club Website</a></p>
+                        <h3 class="h3 font-weight-light" id="section-fans">Fan Sites</h3>
+                        <p><a href="https://www.roversrearguard.com/">RoversRearguard</a></p>
+                        <h3 class="h3 font-weight-light" id="section-social">Social Media</h3>
+
+                    </article>
+
+                    <aside class="col-md-3 col-xxl-3 d-none d-md-block">
+                        <div class="sticky">
+                            <ul id="toc" class="nav flex-column toc">
+                                <li class="nav-item">
+                                    <a data-scroll class="nav-link" href="#section-official">Official Club Links</a>
+                                    <a data-scroll class="nav-link" href="#section-fans">Fan Sites</a>
+                                    <a data-scroll class="nav-link" href="#section-social">Social Media</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </aside>
+
+                </div>
+
+            </article>
+            <!-- / content -->
+
+        </div>
+    </div>
+</section>
+
+{{>footer}}
+</body>
+</html>

@@ -1,0 +1,15 @@
+/data/clubs/*
+/data/conference/*
+/data/facup/*
+/data/leaguecup/*
+/data/matches/*
+/data/playoffs/*
+.idea
+site
+/tranmere-web/output/site/*.html
+/tranmere-web/node_modules/
+/tranmere-web-api/
+/tranmere-web/output/site/managers/*.html
+/tranmere-web/output/site/seasons/*.html
+/tranmere-web/output/site/teams/*.html
+**/.DS_Store

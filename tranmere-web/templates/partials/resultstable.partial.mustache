@@ -1,0 +1,43 @@
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body py-0">
+                <div class="accordion accordion-fluid" id="accordion-1">
+                    {{#matches}}
+                    <div class="card">
+                        <div class="card-header" id="heading-{{_id}}">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse-{{_id}}" aria-expanded="false" aria-controls="collapse-{{_id}}">
+                                    <div class="row align-items-center">
+                                        <div class="col-12 col-md-4 col-lg-2">
+                                            <small><time datetime="{{_source.Date}}" class="text-muted d-block">{{_source.Date}}</time></small>
+                                        </div>
+                                        <div class="col-12 col-lg-2">
+                                            <small>{{_source.competition}}</small>
+                                        </div>
+                                        <div class="col-12 col-md-2 col-lg-2 text-left text-md-right">
+                                            <small>{{_source.home}}</small>
+                                        </div>
+                                        <div class="col-12 col-md-2 col-lg-2 text-left text-md-right">
+                                            <small>{{_source.FT}}</small>
+                                        </div>
+                                        <div class="col-12 col-md-2 col-lg-2 text-left text-md-right">
+                                            <small>{{_source.visitor}}</small>
+                                        </div>
+                                    </div>
+                                </button>
+                            </h5>
+                        </div>
+
+                        <div id="collapse-{{_id}}" class="collapse" aria-labelledby="heading-{{_id}}" data-parent="#accordion-1">
+                            <div class="card-body">
+                                <small>Attendance: {{_source.attendance}}</small>
+                            </div>
+                        </div>
+                    </div>
+                    {{/matches}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
