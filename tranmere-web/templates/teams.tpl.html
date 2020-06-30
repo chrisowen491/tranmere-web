@@ -4,60 +4,64 @@
 
 <section class="py-0">
     <div class="container-fluid">
-        <div class="row justify-content-between">
+        <div class="row doc-content-body">
 
             {{>nav2}}
+
 
             <!-- content -->
             <article class="col-lg-9 col-xxl-10 doc-content">
 
-                <div class="row">
-                    <div class="col">
-                        <div class="doc-content-header">
-                            <div class="row align-items-center">
-                                <div class="col">
-                                    <nav aria-label="breadcrumb" class="align-items-center">
-                                        <ol class="breadcrumb d-none d-lg-inline-flex">
-                                            <li class="breadcrumb-item"><a href="/index.html">Home</a></li>
-                                            <li class="breadcrumb-item active" aria-current="page">{{title}}</li>
-                                        </ol>
-                                    </nav>
-                                </div>
+                {{>breadcrumb}}
 
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row justify-content-between doc-content-body">
+                <div class="row doc-content-body">
                     <article class="col-md-9 col-xxl-8">
 
-                        <h1 class="h2 font-weight-light">All Tranmere Rovers Matches Against...</h1>
-                        <ul>
-                            {{#teams}}
+                        <h1>Games By Opposition</h1>
 
 
-                            <li id="section-{{key}}">
-                                <h5 class="mb-0">
-                                    <a href="/teams/{{key}}.html">Games against {{key}}</a>
-                                </h5>
-                            </li>
-                            {{/teams}}
-                        </ul>
+                        <!-- styles -->
+                        <section id="section-1">
+
+                            <div class="row">
+
+
+                                <div class="row gutter-2">
+                                    {{#resultsByLetter}}
+                                    <div class="col-md-6">
+                                        <div class="boxed p-3">
+                                            <h4>{{key}}</h4>
+                                            {{#teams}}
+                                            <a class="nav-link" href="/teams/{{.}}.html">{{.}}</a>
+                                            {{/teams}}
+                                        </div>
+                                    </div>
+                                    {{/resultsByLetter}}
+                                </div>
+
+
+
+                            </div>
+                        </section>
+                        <!-- / styles -->
+
+
 
                     </article>
+
 
                     <aside class="col-md-3 col-xxl-3 d-none d-md-block">
                         <div class="sticky">
                             <ul id="toc" class="nav flex-column toc">
                                 <li class="nav-item">
                                     {{#teams}}
-                                    <a data-scroll class="nav-link" href="#section-{{key}}">{{key}}</a>
+                                    <a class="nav-link" href="/teams/{{key}}.html">{{key}}</a>
                                     {{/teams}}
                                 </li>
                             </ul>
                         </div>
                     </aside>
+
 
                 </div>
 

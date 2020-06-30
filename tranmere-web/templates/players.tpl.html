@@ -13,15 +13,26 @@
 
                 {{>breadcrumb}}
 
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <i class="icon-check2"></i>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="fs-22">Site Update</h4>
+                    <p>Only data from the 1988-89 season has been uploaded so far!</p>
+                    <p>Does not include data from the Sherpa Van Trophy Games</p>
+                    <p>Assist data based on available videos</p>
+                </div>
+
                 <div class="row justify-content-between doc-content-body">
                     <article class="col-md-9 col-xxl-8">
 
-                        <h1 class="h2 font-weight-light">Managerial Records</h1>
-                        <p >Click the manager for more details</p>
-                        {{#managers}}
+                        <h1 class="h2 font-weight-light">Players Records</h1>
+                        <p >Click the player for more details</p>
+                        {{#players}}
                         <div class="card">
                             <div class="card-body py-0">
-                                <a href="/managers/{{_id}}.html" class="topic" id="manager-{{_id}}">
+                                <a href="/players/{{_source.Name}}.html" class="topic" id="manager-{{_id}}">
                                     <div class="row align-items-center">
                                         <div class="col-12 col-md-6 col-lg-6">
                                             <h4 class="topic-title">{{_source.Name}}</h4>
@@ -29,16 +40,7 @@
                                         <div class="col-12 col-lg-3 d-none d-lg-block">
                                             <div class="d-flex align-items-center">
                                                 <small>
-                                                    From
-                                                    <time datetime="{{_source.DateJoined}}" class="text-muted d-block">{{_source.DateJoined}}</time>
-                                                </small>
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-lg-3 d-none d-lg-block">
-                                            <div class="d-flex align-items-center">
-                                                <small>
-                                                    To
-                                                    <time datetime="{{_source.DateLeft}}" class="text-muted d-block">{{_source.DateLeft}}</time>
+                                                    {{_source.PrimaryPosition}}
                                                 </small>
                                             </div>
                                         </div>
@@ -46,7 +48,7 @@
                                 </a>
                             </div>
                         </div>
-                        {{/managers}}
+                        {{/players}}
 
                     </article>
 
@@ -54,9 +56,9 @@
                         <div class="sticky">
                             <ul id="toc" class="nav flex-column toc">
                                 <li class="nav-item">
-                                    {{#managers}}
+                                    {{#players}}
                                     <a data-scroll class="nav-link" href="#manager-{{_id}}">{{_source.Name}}</a>
-                                    {{/managers}}
+                                    {{/players}}
                                 </li>
                             </ul>
                         </div>

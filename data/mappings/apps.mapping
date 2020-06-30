@@ -1,0 +1,50 @@
+{
+	"mappings": {
+		"properties": {
+			"Competition": {
+				"type": "keyword"
+			},
+			"Date": {
+				"type": "date"
+			},
+			"Name": {
+				"type": "keyword",
+				"copy_to": "PlayersInvolved"
+			},
+			"Number": {
+				"type": "integer"
+			},
+			"Season": {
+				"type": "integer"
+			},
+			"SubTime": {
+				"type": "integer"
+			},
+			"Opposition": {
+				"type": "keyword"
+			},
+			"SubYellow": {
+				"type": "keyword"
+			},
+			"SubRed": {
+				"type": "keyword"
+			},
+			"YellowCard": {
+				"type": "keyword"
+			},
+			"RedCard": {
+				"type": "keyword"
+			},
+			"Started": {
+				"type": "keyword"
+			},
+			"SubbedBy": {
+				"type": "keyword",
+				"copy_to": "PlayersInvolved"
+			},
+            "PlayersInvolved": {
+                "type": "keyword"
+            }
+		}
+	}
+}

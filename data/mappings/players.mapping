@@ -1,0 +1,25 @@
+{
+
+	"mappings": {
+		"properties": {
+			"DateOfBirth": {
+				"type": "date"
+			},
+			"Foot": {
+				"type": "keyword"
+			},
+			"Height": {
+				"type": "double"
+			},
+     		"Name": {
+				"type": "keyword"
+			},
+			"PlaceOfBirth": {
+				"type": "keyword"
+			},
+			"PrimaryPosition": {
+				"type": "keyword"
+			}
+		}
+	}
+}

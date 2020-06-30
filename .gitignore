@@ -6,6 +6,7 @@
 /data/playoffs/*
 .idea
 site
+icons
 /tranmere-web/output/site/*.html
 /tranmere-web/node_modules/
 /tranmere-web-api/
