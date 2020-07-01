@@ -1,5 +1,23 @@
 module.exports = function (path, fs, Mustache,client) {
     return {
+
+         pages: [],
+
+         pad: function(a,b){
+            return(1e15+a+"").slice(-b)
+         },
+
+         buildSitemapEntry: function(page) {
+            var m = new Date();
+            var dateString = m.getUTCFullYear() +"-"+ this.pad(m.getUTCMonth()+1,2) +"-"+this.pad(m.getUTCDate(),2);
+            return {
+                url: page.replace('./output/site/','/').replace('&', '&amp;'),
+                date: dateString,
+                priority: 0.5,
+                changes: "monthly"
+            };
+         },
+
          loadSharedPartials: function() {
            var partials = {};
 
@@ -17,7 +35,10 @@ module.exports = function (path, fs, Mustache,client) {
            return partials;
          },
          buildPage: function (view, pageTpl, outputPath) {
+            if(outputPath != './output/site/index.html')
+                view.url = outputPath.replace('./output/site/','/');
             var pageHTML = Mustache.render(fs.readFileSync(pageTpl).toString(), view, this.loadSharedPartials());
+            this.pages.push(this.buildSitemapEntry(outputPath));
             fs.writeFile(outputPath, pageHTML, function (err) {
                 if (err) return console.log(err);
             });

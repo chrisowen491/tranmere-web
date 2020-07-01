@@ -2,7 +2,9 @@
 <body data-spy="scroll" data-target="#toc">
 
 
-<section class="py-0">
+<section class="py-0"  itemscope itemtype ="http://schema.org/SportsTeam">
+    <meta itemprop="sport" content="football" />
+    <meta itemprop="name" content="Tranmere Rovers F.C." />
     <div class="container-fluid">
         <div class="row justify-content-between">
 
@@ -30,12 +32,12 @@
                         <h1 class="h2 font-weight-light">Players Records</h1>
                         <p >Click the player for more details</p>
                         {{#players}}
-                        <div class="card">
+                        <div class="card" itemprop="athlete" itemscope itemtype ="http://schema.org/Person">
                             <div class="card-body py-0">
-                                <a href="/players/{{_source.Name}}.html" class="topic" id="manager-{{_id}}">
+                                <a href="/players/{{_source.Name}}.html" class="topic" id="manager-{{_id}}" itemprop="url">
                                     <div class="row align-items-center">
                                         <div class="col-12 col-md-6 col-lg-6">
-                                            <h4 class="topic-title">{{_source.Name}}</h4>
+                                            <h4 class="topic-title" itemprop="name">{{_source.Name}}</h4>
                                         </div>
                                         <div class="col-12 col-lg-3 d-none d-lg-block">
                                             <div class="d-flex align-items-center">

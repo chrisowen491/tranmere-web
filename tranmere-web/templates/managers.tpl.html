@@ -19,12 +19,12 @@
                         <h1 class="h2 font-weight-light">Managerial Records</h1>
                         <p >Click the manager for more details</p>
                         {{#managers}}
-                        <div class="card">
+                        <div class="card"  itemscope itemtype ="http://schema.org/coach">
                             <div class="card-body py-0">
-                                <a href="/managers/{{_id}}.html" class="topic" id="manager-{{_id}}">
+                                <a href="/managers/{{_id}}.html" class="topic" id="manager-{{_id}}" itemprop="url">
                                     <div class="row align-items-center">
                                         <div class="col-12 col-md-6 col-lg-6">
-                                            <h4 class="topic-title">{{_source.Name}}</h4>
+                                            <h4 class="topic-title" itemprop="name">{{_source.Name}}</h4>
                                         </div>
                                         <div class="col-12 col-lg-3 d-none d-lg-block">
                                             <div class="d-flex align-items-center">

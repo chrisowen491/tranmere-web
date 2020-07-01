@@ -13,4 +13,6 @@ icons
 /tranmere-web/output/site/managers/*.html
 /tranmere-web/output/site/seasons/*.html
 /tranmere-web/output/site/teams/*.html
+/tranmere-web/output/site/players/*.html
+/tranmere-web/output/site/player-season/*.html
 **/.DS_Store

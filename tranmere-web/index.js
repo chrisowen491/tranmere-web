@@ -32,6 +32,7 @@ async function run () {
     }
     utils.buildPage(seasonsView, "./templates/seasons.tpl.html",'./output/site/seasons.html' );
 
+
     var teams = await utils.findAllTeams(150);
 
     utils.buildPage({title: "Opposition Team Index",resultsByLetter: teams.resultsByLetter, teams:teams.results },
@@ -142,5 +143,7 @@ async function run () {
 
         utils.buildPage(mySeasonView, "./templates/season.tpl.html", './output/site/seasons/'+i+'.html');
     }
+
+    utils.buildPage({urls:utils.pages}, "./templates/sitemap.tpl.xml", './output/site/sitemap.xml');
 }
 run().catch(console.log)
