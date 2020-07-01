@@ -41,13 +41,13 @@ async function run () {
     for(var i=0; i<teams.results.length; i++ ) {
         var team = teams.results[i].key;
         var results = await utils.findAllTranmereMatchesByOpposition(team, 200);
-        var meta = utils.calculateWinsDrawsLossesFromMatchesSearch(results.body.hits.hits);
+        var meta = utils.calculateWinsDrawsLossesFromMatchesSearch(results);
         var teamView = {
             title: "Matches against " + team,
             wins: meta.wins,
             draws: meta.draws,
             losses: meta.losses,
-            matches: results.body.hits.hits
+            matches: results
         };
         utils.buildPage(teamView, "./templates/team.tpl.html", './output/site/teams/'+team+'.html');
 
@@ -107,7 +107,7 @@ async function run () {
         if(managers.body.hits.hits[i]["_source"].DateLeft)
             dateLeft = managers.body.hits.hits[i]["_source"].DateLeft;
         var results = await utils.findAllTranmereMatchesWithinTimePeriod(managers.body.hits.hits[i]["_source"].DateJoined,dateLeft,500);
-        var meta = utils.calculateWinsDrawsLossesFromMatchesSearch(results.body.hits.hits);
+        var meta = utils.calculateWinsDrawsLossesFromMatchesSearch(results);
 
         var managerView = {
             title: managers.body.hits.hits[i]["_source"].Name + "'s matches in charge ",
@@ -116,7 +116,7 @@ async function run () {
             wins: meta.wins,
             draws: meta.draws,
             losses: meta.losses,
-            matches: results.body.hits.hits
+            matches: results
         };
         utils.buildPage(managerView, "./templates/manager.tpl.html", './output/site/managers/'+managers.body.hits.hits[i]["_id"]+'.html');
     }
@@ -125,22 +125,18 @@ async function run () {
         var results = await utils.findAllTranmereMatchesBySeason(i,200);
         var mySeasonView = {
             title: "Season " + i + "-" + (i+1),
-            matches: results.body.hits.hits,
+            matches: results,
             next_season: i+1,
             previous_season: i-1,
         };
 
         var matches = [];
-        for(var x=0; x < results.body.hits.hits.length; x++) {
-            var match = results.body.hits.hits[x]["_source"];
+        for(var x=0; x < results.length; x++) {
+            var match = results;
             match.Opposition = match.home == "Tranmere Rovers" ? match.visitor : match.home;
             matches.push(match);
         }
         utils.buildPage({matches: matches}, "./templates/season.tpl.csv", './output/site/csv/'+i+'.csv');
-        var myCSVView = {
-            matches: results.body.hits.hits,
-        };
-
         utils.buildPage(mySeasonView, "./templates/season.tpl.html", './output/site/seasons/'+i+'.html');
     }
 

@@ -52,11 +52,11 @@ module.exports = function (path, fs, Mustache,client) {
              }
              for(var m=0; m<results.length; m++) {
                  var r = results[m];
-                 if(r["_source"].home == "Tranmere Rovers" && r["_source"].result == "H") {
+                 if(r.home == "Tranmere Rovers" && r.result == "H") {
                      obj.wins = obj.wins + 1;
-                 } else if(r["_source"].visitor == "Tranmere Rovers" && r["_source"].result == "A") {
+                 } else if(r.visitor == "Tranmere Rovers" && r.result == "A") {
                      obj.wins = obj.wins + 1;
-                 } else if(r["_source"].result == "D") {
+                 } else if(r.result == "D") {
                      obj.draws = obj.draws +1;
                  } else {
                      obj.losses = obj.losses+1;
@@ -93,7 +93,15 @@ module.exports = function (path, fs, Mustache,client) {
                 }
               };
 
-            return client.search(query);
+            var results = await client.search(query);
+            var matches = [];
+            for(var i=0; i < results.body.hits.hits.length; i++) {
+                var match = results.body.hits.hits[i]["_source"];
+                var apps = await this.getAppsByDate(match.Date);
+                match.apps = apps;
+                matches.push(match)
+            }
+            return matches;
          },
 
          findGoalsByPlayer : async function(player, size, season) {
@@ -372,7 +380,44 @@ module.exports = function (path, fs, Mustache,client) {
                    }
                 }
               };
-            return await client.search(query);
+            var results = await client.search(query);
+            var matches = [];
+            for(var i=0; i < results.body.hits.hits.length; i++) {
+                var match = results.body.hits.hits[i]["_source"];
+                var apps = await this.getAppsByDate(match.Date);
+                match.apps = apps;
+                matches.push(match)
+            }
+            return matches;
+         },
+
+         getAppsByDate : async function(date) {
+              var query = {
+                index: "apps",
+                body: {
+                   "sort": ["Number"],
+                   "size": 20,
+                   "query": {
+                     "bool": {
+                        "must": [
+                          {
+                            "match": {
+                             "Date" : date
+                            }
+                          }
+                        ]
+                      }
+                   }
+                }
+              };
+
+             var results = await client.search(query);
+             var apps = [];
+             for(var i=0; i < results.body.hits.hits.length; i++) {
+                var app = results.body.hits.hits[i]["_source"];
+                apps.push(app)
+             }
+             return apps;
          },
 
          getLinksByPlayer : async function(name, size) {
@@ -397,8 +442,9 @@ module.exports = function (path, fs, Mustache,client) {
              return client.search(query);
          },
 
+
          findAllTranmereMatchesBySeason : async function(season, size) {
-              var query = {
+            var query = {
                 index: "matches",
                 body: {
                    "sort": ["Date"],
@@ -421,8 +467,16 @@ module.exports = function (path, fs, Mustache,client) {
                    }
                 }
               };
+            var results = await client.search(query);
 
-             return client.search(query);
+            var processResults = [];
+            for(var i=0; i < results.body.hits.hits.length; i++) {
+               var match = results.body.hits.hits[i]["_source"];
+               var apps = await this.getAppsByDate(match.Date);
+               match.apps = apps;
+               processResults.push(match);
+            }
+            return processResults;
          }
     };
 };

@@ -54,8 +54,10 @@
                       </thead>
                       <tbody>
                       {{#stats.seasons}}
-                      <tr>
-                          <td><a href="/player-season/{{title}}-{{Season}}.html">{{Season}}</a></td>
+                          <td><a href="/seasons/{{Season}}.html">{{Season}}</a>
+                              <br/>
+                              <small>
+                              <a href="/player-season/{{title}}-{{Season}}.html">Player Season Record</a></small></td>
                           <td  class="text-center">{{starts}} ({{subs}})</td>
                           <td  class="text-center">{{goals}}</td>
                           <td  class="text-center d-none d-md-table-cell">{{assists}}</td>

@@ -5,33 +5,47 @@
                 <div class="accordion accordion-fluid" id="accordion-1">
                     {{#matches}}
                     <div class="card">
-                        <div class="card-header" id="heading-{{_id}}">
+                        <div class="card-header" id="heading-{{Date}}">
                             <h5 class="mb-0">
-                                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse-{{_id}}" aria-expanded="false" aria-controls="collapse-{{_id}}">
+                                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse-{{Date}}" aria-expanded="false" aria-controls="collapse-{{_id}}">
                                     <div class="row align-items-center">
                                         <div class="col-12 col-md-4 col-lg-2">
-                                            <small><time datetime="{{_source.Date}}" class="text-muted d-block">{{_source.Date}}</time></small>
+                                            <small><time datetime="{{Date}}" class="text-muted d-block">{{Date}}</time></small>
                                         </div>
                                         <div class="col-12 col-lg-2">
-                                            <small>{{_source.competition}}</small>
+                                            <small>{{competition}}</small>
                                         </div>
                                         <div class="col-12 col-md-2 col-lg-2 text-left text-md-right">
-                                            <small>{{_source.home}}</small>
+                                            <small>{{home}}</small>
                                         </div>
                                         <div class="col-12 col-md-2 col-lg-2 text-left text-md-right">
-                                            <small>{{_source.FT}}</small>
+                                            <small>{{FT}}</small>
                                         </div>
                                         <div class="col-12 col-md-2 col-lg-2 text-left text-md-right">
-                                            <small>{{_source.visitor}}</small>
+                                            <small>{{visitor}}</small>
                                         </div>
                                     </div>
                                 </button>
                             </h5>
                         </div>
 
-                        <div id="collapse-{{_id}}" class="collapse" aria-labelledby="heading-{{_id}}" data-parent="#accordion-1">
+                        <div id="collapse-{{Date}}" class="collapse" aria-labelledby="heading-{{Date}}" data-parent="#accordion-1">
                             <div class="card-body">
-                                <small>Attendance: {{_source.attendance}}</small>
+                                {{#attendance}}
+                                <small>Attendance: {{attendance}}</small>
+                                {{/attendance}}
+                                <table class="table table-striped boxed">
+                                    {{#apps}}
+                                    <tr>
+                                        <td><small>{{Number}}</small></td>
+                                        <td>
+                                            <small><a href="/players/{{Name}}.html">{{Name}}</a>
+                                            {{#SubbedBy}}(<a href="/players/{{SubbedBy}}.html">{{SubbedBy}}</a>){{/SubbedBy}}
+                                            </small>
+                                        </td>
+                                    </tr>
+                                    {{/apps}}
+                                </table>
                             </div>
                         </div>
                     </div>
