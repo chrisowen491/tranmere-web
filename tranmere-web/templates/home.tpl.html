@@ -28,27 +28,19 @@
 
 <section class="half bg-primary">
     <div class="half-bg bg-light pb-10">
-        <div class="image image-gradient-vertical" style="background-image:url(/assets/images/image.jpg)"></div>
+        <div class="image image-gradient-vertical"></div>
     </div>
     <div class="container-full mb-10">
         <div class="row gutter-0 justify-content-center">
             <div class="col-12">
                 <div class="owl-carousel owl-carousel-showcase owl-carousel-fluid" data-items="[3,2,1]" data-center="true" data-margin="30" data-nav="true" data-loop="true">
+                    {{#carousel}}
                     <div class="card card-showcase lift">
-                        <a href="/teams.html">
-                            <img class="card-img-top" src="/assets/images/Screenshot1.png" alt="Results By Opposition">
+                        <a href="{{link}}">
+                            <img class="card-img-top" src="https://images.tranmere-web.com/{{base64}}" alt="{{title}}">
                         </a>
                     </div>
-                    <div class="card card-showcase lift">
-                        <a href="/players.html">
-                            <img class="card-img-top" src="/assets/images/Screenshot2.png" alt="Player Records">
-                        </a>
-                    </div>
-                    <div class="card card-showcase lift">
-                        <a href="/seasons.html">
-                            <img class="card-img-top" src="/assets/images/Screenshot3.png" alt="Results By Season">
-                        </a>
-                    </div>
+                    {{/carousel}}
                 </div>
             </div>
         </div>

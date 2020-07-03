@@ -34,7 +34,7 @@
                         {{#players}}
                         <div class="card" itemprop="athlete" itemscope itemtype ="http://schema.org/Person">
                             <div class="card-body py-0">
-                                <a href="/players/{{Name}}.html" class="topic" id="manager-{{_id}}" itemprop="url">
+                                <a href="/players/{{Name}}.html" class="topic" id="player-{{Id}}" itemprop="url">
                                     <div class="row align-items-center">
                                         <div class="col-12 col-md-6 col-lg-6">
                                             <h4 class="topic-title" itemprop="name">{{Name}}</h4>
@@ -59,7 +59,7 @@
                             <ul id="toc" class="nav flex-column toc">
                                 <li class="nav-item">
                                     {{#players}}
-                                    <a data-scroll class="nav-link" href="#manager-{{_id}}">{{Name}}</a>
+                                    <a data-scroll class="nav-link" href="#player-{{Id}}">{{Name}}</a>
                                     {{/players}}
                                 </li>
                             </ul>

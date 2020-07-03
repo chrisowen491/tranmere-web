@@ -37,6 +37,29 @@ module.exports = function (path, fs, Mustache,client) {
          buildPage: function (view, pageTpl, outputPath) {
             if(outputPath != './output/site/index.html')
                 view.url = outputPath.replace('./output/site/','/');
+            if(view.carousel) {
+                for(var i=0; i < view.carousel.length; i++) {
+                    var body = {
+                        "bucket": "trfc-programmes",
+                        "key": "screenshots/" + view.carousel[i].image,
+                      "edits": {
+                        "resize": {
+                          "width": 1000,
+                          "height": 400,
+                          "fit": "contain",
+                          "background": {
+                            "r": 255,
+                            "g": 255,
+                            "b": 255,
+                            "alpha": 1
+                          }
+                        }
+                      }
+                    };
+                    view.carousel[i].base64 = Buffer.from(JSON.stringify(body)).toString('base64');
+                }
+            }
+
             var pageHTML = Mustache.render(fs.readFileSync(pageTpl).toString(), view, this.loadSharedPartials());
             this.pages.push(this.buildSitemapEntry(outputPath));
             fs.writeFile(outputPath, pageHTML, function (err) {
@@ -77,6 +100,7 @@ module.exports = function (path, fs, Mustache,client) {
             var players = [];
             for(var i=0; i < results.body.hits.hits.length; i++) {
                 var player = results.body.hits.hits[i]["_source"];
+                player.Id = results.body.hits.hits[i]["_id"]
                 player.goals = await this.findGoalsByPlayer(player.Name, 250);
                 player.apps = await this.findAppsByPlayer(player.Name, 250);
                 player.links = await this.getLinksByPlayer(player.Name);

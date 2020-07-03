@@ -9,7 +9,31 @@ var utils = require('./libs/utils')(path,fs,Mustache,client);
 
 async function run () {
 
-    utils.buildPage({title: "Home", pageType:"WebPage", description: "Tranmere-Web.com is a website full of data, statistics and information about Tranmere Rovers FC"}, "./templates/home.tpl.html",'./output/site/index.html' );
+    utils.buildPage(
+        {
+            title: "Home",
+            pageType:"WebPage",
+            description: "Tranmere-Web.com is a website full of data, statistics and information about Tranmere Rovers FC",
+            carousel: [
+                {
+                    image: "Screenshot1.png",
+                    title: "Results By Opposition",
+                    link: "/teams.html",
+                },
+                {
+                    image: "Screenshot2.png",
+                    title: "Player Records",
+                    link: "/players.html",
+                },
+                {
+                    image: "Screenshot3.png",
+                    title: "Results By Season",
+                    link: "/seasons.html",
+                },
+            ]
+
+        },
+        "./templates/home.tpl.html",'./output/site/index.html' );
     utils.buildPage({title: "About the site", pageType:"AboutPage", description: "All about Tranmere-Web"}, "./templates/about.tpl.html",'./output/site/about.html' );
     utils.buildPage({title: "Links", pageType:"WebPage", description: "Some popular Tranmere Rovers links from the web"}, "./templates/links.tpl.html",'./output/site/links.html' );
     utils.buildPage({title: "Oops", pageType:"WebPage"}, "./templates/error.tpl.html",'./output/site/error.html' );
