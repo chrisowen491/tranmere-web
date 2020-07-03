@@ -1,5 +1,6 @@
 <div class="row">
     <div class="col">
+        {{#showProgrammes}}<small>Click on any programme for a larger version</small>{{/showProgrammes}}
         <div class="card">
             <div class="card-body py-0">
                 <div class="accordion accordion-fluid" id="accordion-1">
@@ -9,20 +10,21 @@
                             <h5 class="mb-0">
                                 <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse-{{Date}}" aria-expanded="false" aria-controls="collapse-{{_id}}">
                                     <div class="row align-items-center">
-                                        <div class="col-12 col-md-4 col-lg-2">
+                                        {{#showProgrammes}}
+                                        <div class="col-md-2 col-lg-2">
+                                            {{#programme}}
+                                            <a href="https://images.tranmere-web.com/{{largeProgramme}}"><img src="https://images.tranmere-web.com/{{programme}}" alt="Matchday Programme" /></a>
+                                            {{/programme}}
+                                        </div>
+                                        {{/showProgrammes}}
+                                        <div class="col-md-2 col-lg-2">
                                             <small><time datetime="{{Date}}" class="text-muted d-block">{{Date}}</time></small>
                                         </div>
-                                        <div class="col-12 col-lg-2">
+                                        <div class="col-md-2 col-lg-2">
                                             <small>{{competition}}</small>
                                         </div>
-                                        <div class="col-12 col-md-2 col-lg-2 text-left text-md-right">
-                                            <small>{{home}}</small>
-                                        </div>
-                                        <div class="col-12 col-md-2 col-lg-2 text-left text-md-right">
-                                            <small>{{FT}}</small>
-                                        </div>
-                                        <div class="col-12 col-md-2 col-lg-2 text-left text-md-right">
-                                            <small>{{visitor}}</small>
+                                        <div class="col-md-5 col-lg-5 text-left text-md-right">
+                                            <small>{{home}} {{FT}} {{visitor}}</small>
                                         </div>
                                     </div>
                                 </button>
@@ -31,21 +33,38 @@
 
                         <div id="collapse-{{Date}}" class="collapse" aria-labelledby="heading-{{Date}}" data-parent="#accordion-1">
                             <div class="card-body">
+
+
                                 {{#attendance}}
-                                <small>Attendance: {{attendance}}</small>
+                                <div class="row">
+                                    <div class="col-2">
+                                        <img class="rounded mx-auto d-block" alt="Attendance" title="Attendance" width="40px" height="40px" src="/assets/icons/054-stadium.png"  />
+                                    </div>
+                                    <div class="col-10">
+                                        <small>
+                                            {{attendance}}
+                                        </small>
+                                    </div>
+                                </div>
                                 {{/attendance}}
-                                <table class="table table-striped boxed">
-                                    {{#apps}}
-                                    <tr>
-                                        <td><small>{{Number}}</small></td>
-                                        <td>
-                                            <small><a href="/players/{{Name}}.html">{{Name}}</a>
-                                            {{#SubbedBy}}(<a href="/players/{{SubbedBy}}.html">{{SubbedBy}}</a>){{/SubbedBy}}
-                                            </small>
-                                        </td>
-                                    </tr>
-                                    {{/apps}}
-                                </table>
+                                <div class="row">
+                                    <div class="col-2">
+                                        <img class="rounded mx-auto d-block" alt="Rovers Team" title="Rovers Team" width="40px" height="40px" src="/assets/icons/043-player.svg"  />
+                                    </div>
+                                    <div class="col-10">
+                                        <small>
+                                            {{#apps}}<a href="/players/{{Name}}.html">{{Name}}</a>{{#SubbedBy}} (<a href="/players/{{SubbedBy}}.html">{{SubbedBy}}</a>){{/SubbedBy}}, {{/apps}}
+                                        </small>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-2">
+                                        <img class="rounded mx-auto d-block" alt="goals" title="goals" width="40px" height="40px" src="/assets/icons/004-soccer ball.svg" />
+                                    </div>
+                                    <div class="col-10">
+                                        <small>  {{#goals}}{{Scorer}}, {{/goals}}</small>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

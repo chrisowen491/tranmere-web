@@ -34,7 +34,6 @@ async function run () {
     }
     utils.buildPage(seasonsView, "./templates/seasons.tpl.html",'./output/site/seasons.html' );
 
-
     var teams = await utils.findAllTeams(150);
 
     utils.buildPage({title: "Results BY Opposition Team", pageType:"WebPage", description:"Directory of opposition teams Tranmere Rovers has played against", resultsByLetter: teams.resultsByLetter, teams:teams.results },
@@ -56,17 +55,30 @@ async function run () {
         utils.buildPage(teamView, "./templates/team.tpl.html", './output/site/teams/'+team+'.html');
 
     }
-     var managersQuery = {
-       index: "managers",
-       body: {
-          "sort": ["DateJoined"],
-          "size": 200,
-       }
-     };
-    var managers = await client.search(managersQuery);
 
-    utils.buildPage({title: "Tranmere Rovers Managerial Records",managers: managers.body.hits.hits, pageType:"WebPage",  description: "Records of all Tranmere Rovers managers"},
+    var managers = await utils.findAllTranmereManagers(200);
+
+    utils.buildPage({title: "Tranmere Rovers Managerial Records",managers: managers, pageType:"WebPage",  description: "Records of all Tranmere Rovers managers"},
         "./templates/managers.tpl.html", './output/site/managers.html');
+
+    for(var i=0; i < managers.length; i++) {
+
+        var results = await utils.findAllTranmereMatchesWithinTimePeriod(managers[i].DateJoined,managers[i].DateLeft,500);
+        var meta = utils.calculateWinsDrawsLossesFromMatchesSearch(results);
+
+        var managerView = {
+            title: managers[i].Name + "'s matches in charge ",
+            dateFrom: managers[i].DateJoined,
+            dateTo: managers[i].DateLeftText,
+            wins: meta.wins,
+            draws: meta.draws,
+            losses: meta.losses,
+            matches: results,
+            pageType:"ProfilePage",
+            description: "Record of " + managers[i].Name + " as Tranmere Rovers manager"
+        };
+        utils.buildPage(managerView, "./templates/manager.tpl.html", './output/site/managers/'+managers[i].Id+'.html');
+    }
 
      var playerQuery = {
        index: "players",
@@ -75,61 +87,41 @@ async function run () {
           "size": 200,
        }
      };
-    var players = await client.search(playerQuery);
+    var players = await utils.findAllPlayers(200);
 
-    for(var i=0; i < players.body.hits.hits.length; i++) {
-        if(players.body.hits.hits[i]["_source"]["Name"]) {
-            var name = players.body.hits.hits[i]["_source"]["Name"];
-            var goals = await utils.findGoalsByPlayer(name, 250);
-            var apps = await utils.findAppsByPlayer(name, 250);
+    for(var i=0; i < players.length; i++) {
+        if(players[i].Name) {
 
-            var links= await utils.getLinksByPlayer(name);
-            var stats = utils.calculateStats(apps, goals);
             var player = {
-                title: name,
-                games: apps,
-                stats: stats,
-                goals: goals,
-                links: links.body.hits.hits,
+                title: players[i].Name,
+                games: players[i].apps,
+                stats: players[i].stats,
+                goals: players[i].goals,
+                links: players[i].links,
                 pageType:"ProfilePage",
-                description: "Information about " + name + "'s record playing for Tranmere Rovers"
+                description: "Information about " + players[i].Name + "'s record playing for Tranmere Rovers"
             };
-            utils.buildPage(player,"./templates/player.tpl.html", './output/site/players/'+player.title+'.html');
+            utils.buildPage(player,"./templates/player.tpl.html", './output/site/players/' + players[i].Name + '.html');
 
-            for(var x=0; x < stats.seasons.length; x++) {
-                var g2 = await utils.findGoalsByPlayer(name, 250, stats.seasons[x].Season);
-                var g = await utils.findAppsByPlayer(name, 250, stats.seasons[x].Season);
-                var title = name + ' record in season ' + stats.seasons[x].Season;
-                var description = "Full playing record of " + name + " during the " + stats.seasons[x].Season + " Tranmere Rovers season"
-                utils.buildPage({name:name, title:title , pageType:"WebPage", description:description,  games:g, goals: g2},"./templates/player-season.tpl.html", './output/site/player-season/'+name+'-'+stats.seasons[x].Season+'.html');
+            for(var x=0; x < players[i].stats.seasons.length; x++) {
+                var view = {
+                   name: players[i].Name,
+                   title: players[i].Name + ' record in season ' + players[i].stats.seasons[x].Season,
+                   pageType: "WebPage",
+                   description: "Full playing record of " + players[i].Name + " during the " + players[i].stats.seasons[x].Season + " Tranmere Rovers season",
+                   games: await utils.findAppsByPlayer(players[i].Name, 250, players[i].stats.seasons[x].Season),
+                   goals: await utils.findGoalsByPlayer(players[i].Name, 250, players[i].stats.seasons[x].Season)
+                };
+                utils.buildPage(view,
+                    "./templates/player-season.tpl.html",
+                    './output/site/player-season/' + players[i].Name + '-' + players[i].stats.seasons[x].Season + '.html'
+                );
             }
         }
     }
 
-    utils.buildPage({title: "Tranmere Rovers Player Records",players: players.body.hits.hits, pageType:"WebPage", description: "LIst of Tranmere Rovers players records "},
+    utils.buildPage({title: "Tranmere Rovers Player Records",players: players, pageType:"WebPage", description: "List of Tranmere Rovers players records "},
         "./templates/players.tpl.html", './output/site/players.html');
-
-    for(var i=0; i < managers.body.hits.hits.length; i++) {
-
-        var dateLeft = "now";
-        if(managers.body.hits.hits[i]["_source"].DateLeft)
-            dateLeft = managers.body.hits.hits[i]["_source"].DateLeft;
-        var results = await utils.findAllTranmereMatchesWithinTimePeriod(managers.body.hits.hits[i]["_source"].DateJoined,dateLeft,500);
-        var meta = utils.calculateWinsDrawsLossesFromMatchesSearch(results);
-
-        var managerView = {
-            title: managers.body.hits.hits[i]["_source"].Name + "'s matches in charge ",
-            dateFrom: managers.body.hits.hits[i]["_source"].DateJoined,
-            dateTo: dateLeft,
-            wins: meta.wins,
-            draws: meta.draws,
-            losses: meta.losses,
-            matches: results,
-            pageType:"ProfilePage",
-            description: "Record of " + managers.body.hits.hits[i]["_source"].Name + " as Tranmere Rovers manager"
-        };
-        utils.buildPage(managerView, "./templates/manager.tpl.html", './output/site/managers/'+managers.body.hits.hits[i]["_id"]+'.html');
-    }
 
     for(var i=1921; i < 2021; i++) {
         var results = await utils.findAllTranmereMatchesBySeason(i,200);
@@ -140,15 +132,10 @@ async function run () {
             matches: results,
             next_season: i+1,
             previous_season: i-1,
+            showProgrammes: true
         };
 
-        var matches = [];
-        for(var x=0; x < results.length; x++) {
-            var match = results[x];
-            match.Opposition = match.home == "Tranmere Rovers" ? match.visitor : match.home;
-            matches.push(match);
-        }
-        utils.buildPage({matches: matches}, "./templates/season.tpl.csv", './output/site/csv/'+i+'.csv');
+        utils.buildPage({matches: results}, "./templates/season.tpl.csv", './output/site/csv/'+i+'.csv');
         utils.buildPage(mySeasonView, "./templates/season.tpl.html", './output/site/seasons/'+i+'.html');
     }
 

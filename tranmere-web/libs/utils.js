@@ -65,6 +65,49 @@ module.exports = function (path, fs, Mustache,client) {
              return obj;
          },
 
+         findAllPlayers : async function(size) {
+            var playersQuery = {
+                index: "players",
+                body: {
+                    "sort": ["Name"],
+                    "size": size,
+                }
+            };
+            var results = await client.search(playersQuery);
+            var players = [];
+            for(var i=0; i < results.body.hits.hits.length; i++) {
+                var player = results.body.hits.hits[i]["_source"];
+                player.goals = await this.findGoalsByPlayer(player.Name, 250);
+                player.apps = await this.findAppsByPlayer(player.Name, 250);
+                player.links = await this.getLinksByPlayer(player.Name);
+                player.stats = this.calculateStats(player.apps, player.goals);
+                players.push(player)
+            }
+            return players;
+         },
+
+         findAllTranmereManagers : async function(size) {
+            var managersQuery = {
+                index: "managers",
+                body: {
+                    "sort": ["DateJoined"],
+                    "size": size,
+                }
+            };
+            var results = await client.search(managersQuery);
+            var managers = [];
+            for(var i=0; i < results.body.hits.hits.length; i++) {
+                var manager = results.body.hits.hits[i]["_source"];
+                var dateLeft = "now";
+                if(manager.DateLeft)
+                    dateLeft = manager.DateLeft;
+                manager.DateLeftText = dateLeft;
+                manager.Id = results.body.hits.hits[i]["_id"]
+                managers.push(manager)
+            }
+            return managers;
+         },
+
          findAllTranmereMatchesWithinTimePeriod : async function(from, to, size) {
             var query = {
                 index: "matches",
@@ -386,9 +429,40 @@ module.exports = function (path, fs, Mustache,client) {
                 var match = results.body.hits.hits[i]["_source"];
                 var apps = await this.getAppsByDate(match.Date);
                 match.apps = apps;
+                var goals = await this.getGoalsByDate(match.Date);
+                match.goals = goals;
                 matches.push(match)
             }
             return matches;
+         },
+
+         getProgrammesBySeason : async function(season) {
+              var query = {
+                index: "programmes",
+                body: {
+                   "sort": ["Date"],
+                   "size": 100,
+                   "query": {
+                     "bool": {
+                        "must": [
+                          {
+                            "match": {
+                             "Season" : season
+                            }
+                          }
+                        ]
+                      }
+                   }
+                }
+              };
+
+             var results = await client.search(query);
+             var programmes = {};
+             for(var i=0; i < results.body.hits.hits.length; i++) {
+                var programme = results.body.hits.hits[i]["_source"];
+                programmes[programme.Date] = programme
+             }
+             return programmes;
          },
 
          getAppsByDate : async function(date) {
@@ -420,6 +494,34 @@ module.exports = function (path, fs, Mustache,client) {
              return apps;
          },
 
+         getGoalsByDate : async function(date) {
+               var query = {
+                 index: "goals",
+                 body: {
+                    "size": 20,
+                    "query": {
+                      "bool": {
+                         "must": [
+                           {
+                             "match": {
+                              "Date" : date
+                             }
+                           }
+                         ]
+                       }
+                    }
+                 }
+               };
+
+              var results = await client.search(query);
+              var goals = [];
+              for(var i=0; i < results.body.hits.hits.length; i++) {
+                 var goal = results.body.hits.hits[i]["_source"];
+                 goals.push(goal)
+              }
+              return goals;
+          },
+
          getLinksByPlayer : async function(name, size) {
               var query = {
                 index: "links",
@@ -439,7 +541,13 @@ module.exports = function (path, fs, Mustache,client) {
                 }
               };
 
-             return client.search(query);
+             var results = await client.search(query);
+             var links = [];
+             for(var i=0; i < results.body.hits.hits.length; i++) {
+               var link = results.body.hits.hits[i]["_source"];
+               links.push(link)
+             }
+             return links;
          },
 
 
@@ -468,12 +576,34 @@ module.exports = function (path, fs, Mustache,client) {
                 }
               };
             var results = await client.search(query);
-
+            var programmes = await this.getProgrammesBySeason(season);
             var processResults = [];
             for(var i=0; i < results.body.hits.hits.length; i++) {
                var match = results.body.hits.hits[i]["_source"];
+               if(programmes && programmes[match.Date]) {
+                var programme = programmes[match.Date];
+                var smallBody = {
+                     "bucket": programme.Bucket,
+                     "key": programme.Path,
+                     "edits": {
+                       "resize": {
+                         "width": 50,
+                         "fit": "contain"
+                       }
+                     }
+                   };
+                    var largeBody = {
+                         "bucket": programme.Bucket,
+                         "key": programme.Path,
+                       };
+                match.programme = Buffer.from(JSON.stringify(smallBody)).toString('base64');
+                match.largeProgramme = Buffer.from(JSON.stringify(largeBody)).toString('base64');
+               }
+               match.Opposition = match.home == "Tranmere Rovers" ? match.visitor : match.home;
                var apps = await this.getAppsByDate(match.Date);
                match.apps = apps;
+               var goals = await this.getGoalsByDate(match.Date);
+               match.goals = goals;
                processResults.push(match);
             }
             return processResults;
