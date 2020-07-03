@@ -9,15 +9,17 @@ var utils = require('./libs/utils')(path,fs,Mustache,client);
 
 async function run () {
 
-    utils.buildPage({title: "Home"}, "./templates/home.tpl.html",'./output/site/index.html' );
-    utils.buildPage({title: "About the site"}, "./templates/about.tpl.html",'./output/site/about.html' );
-    utils.buildPage({title: "Links"}, "./templates/links.tpl.html",'./output/site/links.html' );
-    utils.buildPage({title: "Oops"}, "./templates/error.tpl.html",'./output/site/error.html' );
-    utils.buildPage({title: "Contact Us"}, "./templates/contact.tpl.html",'./output/site/contact.html' );
+    utils.buildPage({title: "Home", pageType:"WebPage", description: "Tranmere-Web.com is a website full of data, statistics and information about Tranmere Rovers FC"}, "./templates/home.tpl.html",'./output/site/index.html' );
+    utils.buildPage({title: "About the site", pageType:"AboutPage", description: "All about Tranmere-Web"}, "./templates/about.tpl.html",'./output/site/about.html' );
+    utils.buildPage({title: "Links", pageType:"WebPage", description: "Some popular Tranmere Rovers links from the web"}, "./templates/links.tpl.html",'./output/site/links.html' );
+    utils.buildPage({title: "Oops", pageType:"WebPage"}, "./templates/error.tpl.html",'./output/site/error.html' );
+    utils.buildPage({title: "Contact Us", pageType:"ContactPage", description: "How to contact us at Tranmere-Web"}, "./templates/contact.tpl.html",'./output/site/contact.html' );
 
     var seasonsView = {
         decades: [],
-        title: "Season Index"
+        title: "Results By Season",
+        pageType:"WebPage",
+        description: "All Tranmere Rovers seasons by decade"
     };
     for(var y = 1920; y < 2020; y = y + 10) {
         var decade = {
@@ -35,7 +37,7 @@ async function run () {
 
     var teams = await utils.findAllTeams(150);
 
-    utils.buildPage({title: "Opposition Team Index",resultsByLetter: teams.resultsByLetter, teams:teams.results },
+    utils.buildPage({title: "Results BY Opposition Team", pageType:"WebPage", description:"Directory of opposition teams Tranmere Rovers has played against", resultsByLetter: teams.resultsByLetter, teams:teams.results },
         "./templates/teams.tpl.html", './output/site/teams.html');
 
     for(var i=0; i<teams.results.length; i++ ) {
@@ -47,7 +49,9 @@ async function run () {
             wins: meta.wins,
             draws: meta.draws,
             losses: meta.losses,
-            matches: results
+            matches: results,
+            pageType:"WebPage",
+            description: "Full results of all Tranmere Rovers matches against " + team
         };
         utils.buildPage(teamView, "./templates/team.tpl.html", './output/site/teams/'+team+'.html');
 
@@ -61,7 +65,7 @@ async function run () {
      };
     var managers = await client.search(managersQuery);
 
-    utils.buildPage({title: "Managerial Records",managers: managers.body.hits.hits},
+    utils.buildPage({title: "Tranmere Rovers Managerial Records",managers: managers.body.hits.hits, pageType:"WebPage",  description: "Records of all Tranmere Rovers managers"},
         "./templates/managers.tpl.html", './output/site/managers.html');
 
      var playerQuery = {
@@ -86,19 +90,23 @@ async function run () {
                 games: apps,
                 stats: stats,
                 goals: goals,
-                links: links.body.hits.hits
+                links: links.body.hits.hits,
+                pageType:"ProfilePage",
+                description: "Information about " + name + "'s record playing for Tranmere Rovers"
             };
             utils.buildPage(player,"./templates/player.tpl.html", './output/site/players/'+player.title+'.html');
 
             for(var x=0; x < stats.seasons.length; x++) {
                 var g2 = await utils.findGoalsByPlayer(name, 250, stats.seasons[x].Season);
                 var g = await utils.findAppsByPlayer(name, 250, stats.seasons[x].Season);
-                utils.buildPage({name:name, title:name + ' record in season ' + stats.seasons[x].Season, games:g, goals: g2},"./templates/player-season.tpl.html", './output/site/player-season/'+name+'-'+stats.seasons[x].Season+'.html');
+                var title = name + ' record in season ' + stats.seasons[x].Season;
+                var description = "Full playing record of " + name + " during the " + stats.seasons[x].Season + " Tranmere Rovers season"
+                utils.buildPage({name:name, title:title , pageType:"WebPage", description:description,  games:g, goals: g2},"./templates/player-season.tpl.html", './output/site/player-season/'+name+'-'+stats.seasons[x].Season+'.html');
             }
         }
     }
 
-    utils.buildPage({title: "Player Records",players: players.body.hits.hits},
+    utils.buildPage({title: "Tranmere Rovers Player Records",players: players.body.hits.hits, pageType:"WebPage", description: "LIst of Tranmere Rovers players records "},
         "./templates/players.tpl.html", './output/site/players.html');
 
     for(var i=0; i < managers.body.hits.hits.length; i++) {
@@ -116,7 +124,9 @@ async function run () {
             wins: meta.wins,
             draws: meta.draws,
             losses: meta.losses,
-            matches: results
+            matches: results,
+            pageType:"ProfilePage",
+            description: "Record of " + managers.body.hits.hits[i]["_source"].Name + " as Tranmere Rovers manager"
         };
         utils.buildPage(managerView, "./templates/manager.tpl.html", './output/site/managers/'+managers.body.hits.hits[i]["_id"]+'.html');
     }
@@ -125,6 +135,8 @@ async function run () {
         var results = await utils.findAllTranmereMatchesBySeason(i,200);
         var mySeasonView = {
             title: "Season " + i + "-" + (i+1),
+            pageType:"WebPage",
+            description: "Tranmere Rovers results in " + i + " season",
             matches: results,
             next_season: i+1,
             previous_season: i-1,
@@ -132,7 +144,7 @@ async function run () {
 
         var matches = [];
         for(var x=0; x < results.length; x++) {
-            var match = results;
+            var match = results[x];
             match.Opposition = match.home == "Tranmere Rovers" ? match.visitor : match.home;
             matches.push(match);
         }

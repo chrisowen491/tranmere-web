@@ -1,0 +1,80 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Tranmere-Web-Api
+
+  Sam scripts for tranmere-web
+Parameters:
+  Email:
+    Type: String
+    Description: The email address to send contact to
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 3
+  Api:
+    Cors:
+      AllowHeaders: "'Content-Type'"
+      AllowOrigin: "'*'"
+
+Resources:
+  TranmereWebApiGateway:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: TranmereWebApi Gateway
+      StageName: Prod
+      Cors:
+        AllowMethods: "'POST, GET'"
+        AllowHeaders: "'Content-Type'"
+        AllowOrigin: "'https://www.tranmere-web.com'"
+        MaxAge: "'600'"
+        AllowCredentials: True
+
+  PageFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: page/
+      Handler: app.handler
+      Runtime: nodejs10.x
+      Events:
+        PageRequest:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /page/{pageName}
+            RestApiId: !Ref TranmereWebApiGateway
+            Method: get
+
+  ContactUsFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: contact-us/
+      Handler: app.handler
+      Runtime: nodejs10.x
+      Policies:
+        - AWSXrayWriteOnlyAccess
+        - Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action:
+                - 'ses:SendEmail'
+                - 'ses:SendRawEmail'
+              Resource: '*'
+      Environment:
+        Variables:
+          EMAIL_ADDRESS: !Ref 'Email'
+      Events:
+        ContactRequest:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /contact-us
+            RestApiId: !Ref TranmereWebApiGateway
+            Method: post
+
+Outputs:
+  ContactUsFunction:
+    Description: "Contact Us Lambda Function ARN"
+    Value: !GetAtt ContactUsFunction.Arn
+  ContactUsFunctionIamRole:
+    Description: "Implicit IAM Role created for Contact Us function"
+    Value: !GetAtt ContactUsFunctionRole.Arn
