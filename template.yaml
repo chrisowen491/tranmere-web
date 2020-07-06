@@ -36,7 +36,7 @@ Resources:
     Properties:
       CodeUri: tranmere-web-api/sam/page/
       Handler: app.handler
-      Runtime: nodejs10.x
+      Runtime: nodejs12.x
       Events:
         PageRequest:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
@@ -50,7 +50,7 @@ Resources:
     Properties:
       CodeUri: tranmere-web-api/sam/contact-us/
       Handler: app.handler
-      Runtime: nodejs10.x
+      Runtime: nodejs12.x
       Policies:
         - AWSXrayWriteOnlyAccess
         - Version: '2012-10-17'
@@ -76,7 +76,7 @@ Resources:
     Properties:
       CodeUri: tranmere-web-api/sam/crud/
       Handler: app.playerHandler
-      Runtime: nodejs10.x
+      Runtime: nodejs12.x
       Events:
         PlayerPostAPI:
           Type: Api

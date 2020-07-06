@@ -16,6 +16,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
+      - uses: bahmutov/npm-install@v1
+        with:
+          working-directory: tranmere-web-api/sam/contact-us
+      - uses: bahmutov/npm-install@v1
+        with:
+          working-directory: tranmere-web-api/sam/crud
+      - uses: bahmutov/npm-install@v1
+        with:
+          working-directory: tranmere-web-api/sam/page
       - uses: falnyr/aws-sam-deploy-action@v1.0.0
         env:
           TEMPLATE: 'template.yaml'
