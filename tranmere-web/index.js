@@ -102,7 +102,7 @@ async function run () {
             pageType:"ProfilePage",
             description: "Record of " + managers[i].Name + " as Tranmere Rovers manager"
         };
-        utils.buildPage(managerView, "./templates/manager.tpl.html", './output/site/managers/'+managers[i].Id+'.html');
+        utils.buildPage(managerView, "./templates/manager.tpl.html", './output/site/managers/'+managers[i].Name+'.html');
     }
 
      var playerQuery = {

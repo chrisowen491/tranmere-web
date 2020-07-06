@@ -116,7 +116,7 @@ function watch() {
 }
 
 
-const build = gulp.series(css, minifyCss, scripts, styles, gulp.parallel(watch, serve));
+const build = gulp.series(css, minifyCss, scripts, styles, minify, gulp.parallel(watch, serve));
 
 
 // tasks

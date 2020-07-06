@@ -25,6 +25,7 @@ icons
 /tranmere-web-api/sam/packaged.yaml
 
 tranmere-web/package-lock.json
+/data/log.txt
 /data/apps/1993/1.csv
 /data/apps/1993/2.csv
 /data/apps/1993/3.csv

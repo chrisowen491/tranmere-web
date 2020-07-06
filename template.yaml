@@ -34,7 +34,7 @@ Resources:
   PageFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
-      CodeUri: page/
+      CodeUri: tranmere-web-api/sam/page/
       Handler: app.handler
       Runtime: nodejs10.x
       Events:
@@ -48,7 +48,7 @@ Resources:
   ContactUsFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
-      CodeUri: contact-us/
+      CodeUri: tranmere-web-api/sam/contact-us/
       Handler: app.handler
       Runtime: nodejs10.x
       Policies:
@@ -74,7 +74,7 @@ Resources:
   PlayerCRUDFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: crud/
+      CodeUri: tranmere-web-api/sam/crud/
       Handler: app.playerHandler
       Runtime: nodejs10.x
       Events:
