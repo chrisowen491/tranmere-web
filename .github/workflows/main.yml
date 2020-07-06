@@ -49,4 +49,3 @@ jobs:
         CLOUDFLARE_AUTH_EMAIL : ${{ secrets.CLOUDFLARE_AUTH_EMAIL }}
         CLOUDFLARE_SCRIPT_NAME : "workers/tranmere-web-api"
         CLOUDFLARE_AUTH_KEY: ${{ secrets.CLOUDFLARE_AUTH_KEY }}
-      secrets: ${{ secrets.CLOUDFLARE_AUTH_KEY }}
