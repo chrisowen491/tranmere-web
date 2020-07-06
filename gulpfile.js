@@ -18,7 +18,7 @@ function reload(done) {
 function serve(done) {
   server.init({
     server: {
-      baseDir: 'output/site'
+      baseDir: 'tranmere-web/output/site'
     }
   });
   done();
@@ -27,11 +27,11 @@ function serve(done) {
 
 // compile sass to css
 function css() {
-  return gulp.src('output/site/assets/scss/style.scss')
+  return gulp.src('tranmere-web/output/site/assets/scss/style.scss')
   .pipe(maps.init())
   .pipe(sass())
   .pipe(maps.write('./'))
-  .pipe(gulp.dest('output/site/assets/css'))
+  .pipe(gulp.dest('tranmere-web/output/site/assets/css'))
   .pipe(server.stream());
 }
 
@@ -59,12 +59,12 @@ function scripts() {
     //'node_modules/prismjs/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js',
     //'node_modules/video.js/dist/video.js',
     //'node_modules/videojs-youtube/dist/Youtube.js',
-    'output/site/assets/js/modernizr.js'
+    'tranmere-web/output/site/assets/js/modernizr.js'
     ])
     .pipe(maps.init())
     .pipe(concat('vendor.js'))
     .pipe(maps.write('./'))
-    .pipe(gulp.dest('output/site/assets/js'));
+    .pipe(gulp.dest('tranmere-web/output/site/assets/js'));
 }
 
 
@@ -87,31 +87,31 @@ function styles() {
     .pipe(maps.init({loadMaps: true}))
     .pipe(concat("vendor.css"))
     .pipe(maps.write())
-    .pipe(gulp.dest('output/site/assets/css'));
+    .pipe(gulp.dest('tranmere-web/output/site/assets/css'));
 }
 
 
 // minify js
 function minify() {
-  return gulp.src('output/site/assets/js/vendor.js')
+  return gulp.src('tranmere-web/output/site/assets/js/vendor.js')
   .pipe(maps.init())
   .pipe(uglify())
   .pipe(rename('vendor.min.js'))
   .pipe(maps.write('./'))
-  .pipe(gulp.dest('output/site/assets/js'));
+  .pipe(gulp.dest('tranmere-web/output/site/assets/js'));
 }
 
 function minifyCss() {
-  return gulp.src('output/site/assets/css/*.css')
+  return gulp.src('tranmere-web/output/site/assets/css/*.css')
     .pipe(cleanCSS())
-    .pipe(gulp.dest('output/site/assets/css'));
+    .pipe(gulp.dest('tranmere-web/output/site/assets/css'));
 }
 
 
 // watch for changes
 function watch() {
-  gulp.watch('output/site/assets/scss/**/*', css);
-  gulp.watch(['output/site/*','output/site/**/*', 'output/site/assets/js/*'], reload);
+  gulp.watch('tranmere-web/output/site/assets/scss/**/*', css);
+  gulp.watch(['tranmere-web/output/site/*','tranmere-web/output/site/**/*', 'tranmere-web/output/site/assets/js/*'], reload);
   gulp.watch('gulpfile.js', gulp.series(scripts, styles, minify));
 }
 

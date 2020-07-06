@@ -11,7 +11,7 @@ module.exports = function (path, fs, Mustache,client) {
             var m = new Date();
             var dateString = m.getUTCFullYear() +"-"+ this.pad(m.getUTCMonth()+1,2) +"-"+this.pad(m.getUTCDate(),2);
             return {
-                url: page.replace('./output/site/','/').replace('&', '&amp;'),
+                url: page.replace('./tranmere-web/output/site/','/').replace('&', '&amp;'),
                 date: dateString,
                 priority: 0.5,
                 changes: "monthly"
@@ -21,13 +21,13 @@ module.exports = function (path, fs, Mustache,client) {
          loadSharedPartials: function() {
            var partials = {};
 
-           var files = fs.readdirSync('./templates/partials');
+           var files = fs.readdirSync('./tranmere-web/templates/partials');
            for (var i = 0, l = files.length; i < l; i++) {
              var file = files[i];
 
              if (file.match(/\.partial\.mustache$/)) {
                var name = path.basename(file, '.partial.mustache');
-               partials[name] = fs.readFileSync('./templates/partials/' + file, {
+               partials[name] = fs.readFileSync('./tranmere-web/templates/partials/' + file, {
                  encoding: 'utf8'
                });
              }
@@ -35,8 +35,8 @@ module.exports = function (path, fs, Mustache,client) {
            return partials;
          },
          buildPage: function (view, pageTpl, outputPath) {
-            if(outputPath != './output/site/index.html')
-                view.url = outputPath.replace('./output/site/','/');
+            if(outputPath != './tranmere-web/output/site/index.html')
+                view.url = outputPath.replace('./tranmere-web/output/site/','/');
             if(view.carousel) {
                 for(var i=0; i < view.carousel.length; i++) {
                     var body = {

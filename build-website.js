@@ -6,7 +6,7 @@ var Mustache = require("mustache");
 var excel = require('excel4node');
 var fs = require("fs");
 var path = require('path');
-var utils = require('./libs/utils')(path,fs,Mustache,client);
+var utils = require('./tranmere-web/libs/utils')(path,fs,Mustache,client);
 
 async function run () {
 
@@ -34,11 +34,11 @@ async function run () {
             ]
 
         },
-        "./templates/home.tpl.html",'./output/site/index.html' );
-    utils.buildPage({title: "About the site", pageType:"AboutPage", description: "All about Tranmere-Web"}, "./templates/about.tpl.html",'./output/site/about.html' );
-    utils.buildPage({title: "Links", pageType:"WebPage", description: "Some popular Tranmere Rovers links from the web"}, "./templates/links.tpl.html",'./output/site/links.html' );
-    utils.buildPage({title: "Oops", pageType:"WebPage"}, "./templates/error.tpl.html",'./output/site/error.html' );
-    utils.buildPage({title: "Contact Us", pageType:"ContactPage", description: "How to contact us at Tranmere-Web"}, "./templates/contact.tpl.html",'./output/site/contact.html' );
+        "./tranmere-web/templates/home.tpl.html",'./tranmere-web/output/site/index.html' );
+    utils.buildPage({title: "About the site", pageType:"AboutPage", description: "All about Tranmere-Web"}, "./tranmere-web/templates/about.tpl.html",'./tranmere-web/output/site/about.html' );
+    utils.buildPage({title: "Links", pageType:"WebPage", description: "Some popular Tranmere Rovers links from the web"}, "./tranmere-web/templates/links.tpl.html",'./tranmere-web/output/site/links.html' );
+    utils.buildPage({title: "Oops", pageType:"WebPage"}, "./tranmere-web/templates/error.tpl.html",'./tranmere-web/output/site/error.html' );
+    utils.buildPage({title: "Contact Us", pageType:"ContactPage", description: "How to contact us at Tranmere-Web"}, "./tranmere-web/templates/contact.tpl.html",'./tranmere-web/output/site/contact.html' );
 
     var seasonsView = {
         decades: [],
@@ -57,12 +57,12 @@ async function run () {
         }
         seasonsView.decades.push(decade);
     }
-    utils.buildPage(seasonsView, "./templates/seasons.tpl.html",'./output/site/seasons.html' );
+    utils.buildPage(seasonsView, "./tranmere-web/templates/seasons.tpl.html",'./tranmere-web/output/site/seasons.html' );
 
     var teams = await utils.findAllTeams(150);
 
     utils.buildPage({title: "Results BY Opposition Team", pageType:"WebPage", description:"Directory of opposition teams Tranmere Rovers has played against", resultsByLetter: teams.resultsByLetter, teams:teams.results },
-        "./templates/teams.tpl.html", './output/site/teams.html');
+        "./tranmere-web/templates/teams.tpl.html", './tranmere-web/output/site/teams.html');
 
     for(var i=0; i<teams.results.length; i++ ) {
         var team = teams.results[i].key;
@@ -77,14 +77,14 @@ async function run () {
             pageType:"WebPage",
             description: "Full results of all Tranmere Rovers matches against " + team
         };
-        utils.buildPage(teamView, "./templates/team.tpl.html", './output/site/teams/'+team+'.html');
+        utils.buildPage(teamView, "./tranmere-web/templates/team.tpl.html", './tranmere-web/output/site/teams/'+team+'.html');
 
     }
 
     var managers = await utils.findAllTranmereManagers(200);
 
     utils.buildPage({title: "Tranmere Rovers Managerial Records",managers: managers, pageType:"WebPage",  description: "Records of all Tranmere Rovers managers"},
-        "./templates/managers.tpl.html", './output/site/managers.html');
+        "./tranmere-web/templates/managers.tpl.html", './tranmere-web/output/site/managers.html');
 
     for(var i=0; i < managers.length; i++) {
 
@@ -102,7 +102,7 @@ async function run () {
             pageType:"ProfilePage",
             description: "Record of " + managers[i].Name + " as Tranmere Rovers manager"
         };
-        utils.buildPage(managerView, "./templates/manager.tpl.html", './output/site/managers/'+managers[i].Name+'.html');
+        utils.buildPage(managerView, "./tranmere-web/templates/manager.tpl.html", './tranmere-web/output/site/managers/'+managers[i].Name+'.html');
     }
 
      var playerQuery = {
@@ -126,7 +126,7 @@ async function run () {
                 pageType:"ProfilePage",
                 description: "Information about " + players[i].Name + "'s record playing for Tranmere Rovers"
             };
-            utils.buildPage(player,"./templates/player.tpl.html", './output/site/players/' + players[i].Name + '.html');
+            utils.buildPage(player,"./tranmere-web/templates/player.tpl.html", './tranmere-web/output/site/players/' + players[i].Name + '.html');
 
             for(var x=0; x < players[i].stats.seasons.length; x++) {
                 var view = {
@@ -138,15 +138,15 @@ async function run () {
                    goals: await utils.findGoalsByPlayer(players[i].Name, 250, players[i].stats.seasons[x].Season)
                 };
                 utils.buildPage(view,
-                    "./templates/player-season.tpl.html",
-                    './output/site/player-season/' + players[i].Name + '-' + players[i].stats.seasons[x].Season + '.html'
+                    "./tranmere-web/templates/player-season.tpl.html",
+                    './tranmere-web/output/site/player-season/' + players[i].Name + '-' + players[i].stats.seasons[x].Season + '.html'
                 );
             }
         }
     }
 
     utils.buildPage({title: "Tranmere Rovers Player Records",players: players, pageType:"WebPage", description: "List of Tranmere Rovers players records "},
-        "./templates/players.tpl.html", './output/site/players.html');
+        "./tranmere-web/templates/players.tpl.html", './tranmere-web/output/site/players.html');
 
     for(var i=1921; i < 2021; i++) {
         var results = await utils.findAllTranmereMatchesBySeason(i,200);
@@ -226,10 +226,10 @@ async function run () {
                 }
             }
         }
-        workbook.write('../data/apps-master/raw/'+i+'.xlsx');
-        utils.buildPage(mySeasonView, "./templates/season.tpl.html", './output/site/seasons/'+i+'.html');
+        workbook.write('data/apps-master/raw/'+i+'.xlsx');
+        utils.buildPage(mySeasonView, "./tranmere-web/templates/season.tpl.html", './tranmere-web/output/site/seasons/'+i+'.html');
     }
 
-    utils.buildPage({urls:utils.pages}, "./templates/sitemap.tpl.xml", './output/site/sitemap.xml');
+    utils.buildPage({urls:utils.pages}, "./tranmere-web/templates/sitemap.tpl.xml", './tranmere-web/output/site/sitemap.xml');
 }
 run().catch(console.log)
