@@ -1,12 +1,7 @@
 var AWS = require('aws-sdk');
 var ses = new AWS.SES();
-const config = require('secrets').secretSync({
-	region: 'eu-west-1',
-	id: 'tranmere-web/email',
-});
 
-var RECEIVER = config.email.secret;
-console.log(RECEIVER);
+var RECEIVER = process.env.EMAIL_ADDRESS;
 var SENDER = 'admin@tranmere-web.com';
 
 var response = {

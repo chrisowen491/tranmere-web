@@ -5,9 +5,7 @@
   "main": "app.js",
   "author": "SAM CLI",
   "license": "MIT",
-  "dependencies": {
-    "@jwerre/secrets": "^0.2.2"
-  },
+  "dependencies": {},
   "scripts": {
     "test": "mocha tests/unit/"
   }
