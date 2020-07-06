@@ -9,7 +9,6 @@
       fn.Masonry();
       fn.Overlay();
       fn.Filetree();
-      fn.Clipboard();
       fn.OwlCarousel();
       fn.ImageView();
       fn.Apps();
@@ -103,22 +102,6 @@
       })
     },
 
-
-    // Clipboard
-    Clipboard: function() {
-      var a = new ClipboardJS('.anchor', {
-        text: function(b) {
-          return window.location.host + window.location.pathname + $(b).attr("href")
-        }
-      });
-
-      a.on('success', function(e) {
-        e.clearSelection(), $(e.trigger).addClass("copied"), setTimeout(function() {
-          $(e.trigger).removeClass("copied")
-        }, 2000)
-      });
-    },
-
     ImageView: function() {
       $('.lightbox').magnificPopup({
         type: 'image',
@@ -141,16 +124,7 @@
               }
           });
       });
-      
-      $('.popup-youtube, .popup-vimeo, .popup-gmaps').magnificPopup({
-        disableOn: 700,
-        type: 'iframe',
-        mainClass: 'mfp-fade',
-        removalDelay: 160,
-        preloader: false,
 
-        fixedContentPos: false
-      });
     },
 
 
@@ -243,75 +217,11 @@
           return;
         }
 
-        if (!Prism.plugins.toolbar) {
-          console.warn('Copy to Clipboard plugin loaded before Toolbar plugin.');
 
-          return;
-        }
-
-        var ClipboardJS = window.ClipboardJS || undefined;
-
-        if (!ClipboardJS && typeof require === 'function') {
-          ClipboardJS = require('clipboard');
-        }
 
         var callbacks = [];
 
-        if (!ClipboardJS) {
-          var script = document.createElement('script');
-          var head = document.querySelector('head');
 
-          script.onload = function() {
-            ClipboardJS = window.ClipboardJS;
-
-            if (ClipboardJS) {
-              while (callbacks.length) {
-                callbacks.pop()();
-              }
-            }
-          };
-
-          script.src = 'https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js';
-          head.appendChild(script);
-        }
-
-        Prism.plugins.toolbar.registerButton('copy-to-clipboard', function (env) {
-          var linkCopy = document.createElement('a');
-          linkCopy.textContent = 'Copy';
-
-          if (!ClipboardJS) {
-            callbacks.push(registerClipboard);
-          } else {
-            registerClipboard();
-          }
-
-          return linkCopy;
-
-          function registerClipboard() {
-            var clip = new ClipboardJS(linkCopy, {
-              'text': function () {
-                return env.code;
-              }
-            });
-
-            clip.on('success', function() {
-              linkCopy.textContent = 'Copied!';
-
-              resetText();
-            });
-            clip.on('error', function () {
-              linkCopy.textContent = 'Press Ctrl+C to copy';
-
-              resetText();
-            });
-          }
-
-          function resetText() {
-            setTimeout(function () {
-              linkCopy.textContent = 'Copy';
-            }, 5000);
-          }
-        });
       })();
     }
   };

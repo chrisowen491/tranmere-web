@@ -1,0 +1,15 @@
+{
+    "mappings": {
+        "properties": {
+            "Name": {
+                "type": "keyword"
+            },
+            "DateJoined": {
+                "type": "date"
+            },
+            "DateLeft": {
+                "type": "date"
+            }
+        }
+    }
+}

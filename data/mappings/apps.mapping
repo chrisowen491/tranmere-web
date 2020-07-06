@@ -35,9 +35,6 @@
 			"RedCard": {
 				"type": "keyword"
 			},
-			"Started": {
-				"type": "keyword"
-			},
 			"SubbedBy": {
 				"type": "keyword",
 				"copy_to": "PlayersInvolved"

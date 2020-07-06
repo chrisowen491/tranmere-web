@@ -4,6 +4,8 @@
 /data/leaguecup/*
 /data/matches/*
 /data/playoffs/*
+/data/apps-master/raw/*
+/data/apps/*/*.csv
 .idea
 node_modules/
 site
@@ -12,6 +14,8 @@ icons
 /tranmere-web/node_modules/
 /tranmere-web-api/scripts/
 /tranmere-web-api/src/
+/tranmere-web/output/assets/css/*.css
+/tranmere-web/output/assets/js/vendor*.js
 /tranmere-web/output/site/managers/*.html
 /tranmere-web/output/site/seasons/*.html
 /tranmere-web/output/site/teams/*.html
@@ -19,3 +23,16 @@ icons
 /tranmere-web/output/site/player-season/*.html
 **/.DS_Store
 /tranmere-web-api/sam/packaged.yaml
+
+tranmere-web/package-lock.json
+/data/apps/1993/1.csv
+/data/apps/1993/2.csv
+/data/apps/1993/3.csv
+/data/apps/1993/4.csv
+/data/apps/1993/5.csv
+/data/apps/1993/6.csv
+/data/apps/1993/7.csv
+/data/apps/1993/8.csv
+/data/apps/1993/9.csv
+/data/apps/1993/10.csv
+/data/apps/1993/11.csv

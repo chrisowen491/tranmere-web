@@ -3,6 +3,7 @@ const client = new Client({
   node: 'http://localhost:9200'
 });
 var Mustache = require("mustache");
+var excel = require('excel4node');
 var fs = require("fs");
 var path = require('path');
 var utils = require('./libs/utils')(path,fs,Mustache,client);
@@ -159,7 +160,73 @@ async function run () {
             showProgrammes: true
         };
 
-        utils.buildPage({matches: results}, "./templates/season.tpl.csv", './output/site/csv/'+i+'.csv');
+        var workbook = new excel.Workbook();
+
+        for(var y=1; y <13; y++) {
+            var worksheet = null;
+            if(y != 12) {
+                worksheet = workbook.addWorksheet(y);
+                worksheet.cell(1,1).string('Date');
+                worksheet.cell(1,2).string('Opposition');
+                worksheet.cell(1,3).string('Competition');
+                worksheet.cell(1,4).string('Season');
+                worksheet.cell(1,5).string('Name');
+                worksheet.cell(1,6).string('Number');
+                worksheet.cell(1,7).string('SubbedBy');
+                worksheet.cell(1,8).string('SubTime');
+                worksheet.cell(1,9).string('YellowCard');
+                worksheet.cell(1,10).string('RedCard');
+                worksheet.cell(1,11).string('SubYellow');
+                worksheet.cell(1,12).string('SubRed');
+                for(var x=0; x < results.length; x++) {
+                    if(results[x]) {
+                        worksheet.cell(x+2,1).string(results[x].Date);
+                        worksheet.cell(x+2,2).string(results[x].Opposition);
+                        worksheet.cell(x+2,3).string(results[x].competition);
+                        worksheet.cell(x+2,4).string(results[x].Season);
+                        worksheet.cell(x+2,6).number(y);
+                    }
+                }
+            }
+            else{
+                worksheet = workbook.addWorksheet("goals");
+                worksheet.cell(1,1).string('Date');
+                worksheet.cell(1,2).string('Opposition');
+                worksheet.cell(1,3).string('Competition');
+                worksheet.cell(1,4).string('Season');
+                worksheet.cell(1,5).string('Scorer');
+                worksheet.cell(1,6).string('Assist');
+                worksheet.cell(1,7).string('GoalType');
+                worksheet.cell(1,8).string('AssistType');
+                worksheet.cell(1,9).string('Minute');
+                worksheet.cell(1,10).string('6YardBox');
+                worksheet.cell(1,11).string('18YardBox');
+                worksheet.cell(1,12).string('LongRange');
+                worksheet.cell(1,13).string('CrossSide');
+                worksheet.cell(1,14).string('Foot');
+                var currentRow =1;
+                for(var z=0; z < results.length; z++) {
+                    if(results[z].home == "Tranmere Rovers") {
+                        for(var g=0; g < results[z].hgoal; g++) {
+                            var currentRow = currentRow+1;
+                            worksheet.cell(currentRow,1).string(results[z].Date);
+                            worksheet.cell(currentRow,2).string(results[z].Opposition);
+                            worksheet.cell(currentRow,3).string(results[z].competition);
+                            worksheet.cell(currentRow,4).string(results[z].Season);
+                        }
+                    } else {
+                        for(var g=0; g<results[z].vgoal; g++) {
+                            var currentRow = currentRow+1;
+                            worksheet.cell(currentRow,1).string(results[z].Date);
+                            worksheet.cell(currentRow,2).string(results[z].Opposition);
+                            worksheet.cell(currentRow,3).string(results[z].competition);
+                            worksheet.cell(currentRow,4).string(results[z].Season);
+                        }
+                    }
+                }
+            }
+        }
+        workbook.write('../data/apps-master/raw/'+i+'.xlsx');
         utils.buildPage(mySeasonView, "./templates/season.tpl.html", './output/site/seasons/'+i+'.html');
     }
 

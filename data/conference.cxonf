@@ -1,0 +1,22 @@
+input {
+  file {
+    path => "/Users/chrisowen/Desktop/tranmere-web/data/conference/*.csv"
+    start_position => "beginning"
+  }
+}
+filter {
+  csv {
+     separator => ","
+     columns => ["Date","Season","home","visitor","FT","hgoal","vgoal","division","tier","totgoal","goaldif","result"]
+     add_field => {
+      "competition" => "Non League"
+     }
+  }
+}
+output {
+   elasticsearch {
+     hosts => "http://localhost:9200/"
+     index => "matches"
+  }
+  stdout {}
+}
