@@ -56,5 +56,5 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID : ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_ZONE_ID : ${{ secrets.CLOUDFLARE_ZONE_ID }}
           CLOUDFLARE_AUTH_EMAIL : ${{ secrets.CLOUDFLARE_AUTH_EMAIL }}
-          CLOUDFLARE_SCRIPT_NAME : "workers/tranmere-web-api"
+          CLOUDFLARE_SCRIPT_NAME : "tranmere-web-api"
           CLOUDFLARE_AUTH_KEY: ${{ secrets.CLOUDFLARE_AUTH_KEY }}
