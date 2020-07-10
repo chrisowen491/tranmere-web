@@ -1,0 +1,49 @@
+{{>head}}
+<body data-spy="scroll" data-target="#toc">
+
+
+<section class="py-0">
+    <div class="container-fluid">
+        <div class="row justify-content-between">
+
+            {{>nav2}}
+
+            <!-- content -->
+            <article class="col-lg-9 col-xxl-12 doc-content">
+
+                {{>breadcrumb}}
+
+                <div class="row justify-content-between doc-content-body">
+                    <article class="col-12">
+
+                        <h1 class="h2 font-weight-light">{{title}}</h1>
+                        {{#players}}
+                        <div class="card stacked" style="margin-bottom:50px">
+                            <div class="card-body">
+                                <div class="row gutter-2 align-items-center">
+                                    <div class="col">
+                                        <a href="/players/{{Name}}.html" class="topic">
+                                            <h3 class="card-title mb-1">{{Name}}</h3>
+                                            <p class="card-text mb-2">{{Goals}} goals</p>
+                                        </a>
+                                    </div>
+                                </div>
+                                <i class="icon-photo icon-background text-blue"></i>
+                            </div>
+                        </div>
+                        {{/players}}
+
+                    </article>
+
+                </div>
+
+            </article>
+            <!-- / content -->
+
+        </div>
+    </div>
+</section>
+
+{{>footer}}
+</body>
+</html>

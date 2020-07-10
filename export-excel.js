@@ -1,6 +1,6 @@
 XLSX = require('xlsx');
 
-var sheets = ['1988', '1991','1992', '1993'];
+var sheets = ['1987','1988','1989','1990', '1991','1992', '1993'];
 
 function exportme(year) {
     const workBook = XLSX.readFile("./data/apps-master/"+year+".xlsx");
@@ -13,4 +13,7 @@ function exportme(year) {
 for(var i=0; i < sheets.length; i++) {
     exportme(sheets[i]);
 }
+
+const workBook = XLSX.readFile("./data/apps-master/AllTranmereResults.xlsx");
+XLSX.writeFile(workBook, './data/games/games.csv', { bookType: "csv", sheet: 'AllTranmereResults' });
 

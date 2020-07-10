@@ -13,11 +13,11 @@
             "competition": {
                 "type": "keyword"
             },
-            "division": {
+            "Venue": {
                 "type": "keyword"
             },
-            "goaldif": {
-                "type": "integer"
+            "division": {
+                "type": "keyword"
             },
             "hgoal": {
                 "type": "integer"
@@ -26,13 +26,7 @@
                 "type": "keyword",
                 "copy_to": "teams"
             },
-            "result": {
-                "type": "keyword"
-            },
             "tier": {
-                "type": "integer"
-            },
-            "totgoal": {
                 "type": "integer"
             },
             "vgoal": {
@@ -44,6 +38,10 @@
             },
             "teams": {
                 "type": "keyword"
+            },
+            "attendance": {
+                "type": "integer",
+                "ignore_malformed": true
             }
         }
     }

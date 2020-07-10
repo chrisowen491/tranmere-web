@@ -40,6 +40,63 @@ async function run () {
     utils.buildPage({title: "Oops", pageType:"WebPage"}, "./tranmere-web/templates/error.tpl.html",'./tranmere-web/output/site/error.html' );
     utils.buildPage({title: "Contact Us", pageType:"ContactPage", description: "How to contact us at Tranmere-Web"}, "./tranmere-web/templates/contact.tpl.html",'./tranmere-web/output/site/contact.html' );
 
+    var competitionView = {
+        competitions: await utils.getAllCupCompetitions(50),
+        title: "Results By Competition",
+        pageType:"WebPage",
+        description: "All Tranmere Rovers seasons by cup competition"
+    };
+    utils.buildPage(competitionView, "./tranmere-web/templates/competitions.tpl.html",'./tranmere-web/output/site/competitions.html' );
+
+    var wembleyView = {
+        matches: await utils.findAllTranmereMatchesByVenue('Wembley Stadium'),
+        title: "Results at Wembley",
+        pageType:"WebPage",
+        image: utils.buildImagePath("photos/Wembley2.jpeg", 1920,1080),
+        description: "All Tranmere Rovers matches at Wembley Stadium"
+    };
+    utils.buildPage(wembleyView, "./tranmere-web/templates/competition.tpl.html",'./tranmere-web/output/site/wembley.html' );
+
+    var attendanceView = {
+        matches: await utils.findTranmereMatchesSortedByTopAttendance(50),
+        title: "Tranmere Matches With Top Attendances",
+        pageType:"WebPage",
+        description: "The highest attendances for any Tranmere Rovers match",
+        commaFormat: function() {
+            return this.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+    };
+    utils.buildPage(attendanceView, "./tranmere-web/templates/attendances.tpl.html",'./tranmere-web/output/site/attendances.html' );
+
+    var appsView = {
+        players: await utils.getTopPlayerByAppearnces(50),
+        title: "Most Tranmere Rovers Appearances",
+        pageType:"WebPage",
+        description: "List of players with most appearances for Tranmere Rovers"
+    };
+    utils.buildPage(appsView, "./tranmere-web/templates/appearances.tpl.html",'./tranmere-web/output/site/appearances.html' );
+
+    var goalsView = {
+        players: await utils.getTopPlayerByGoals(50),
+        title: "Most Tranmere Rovers Goals",
+        pageType:"WebPage",
+        description: "List of players with most goals for Tranmere Rovers"
+    };
+    utils.buildPage(goalsView, "./tranmere-web/templates/goals.tpl.html",'./tranmere-web/output/site/goals.html' );
+
+
+    for(var c=0; c < competitionView.competitions.length; c++) {
+        var compView = {
+                matches: await utils.findAllTranmereMatchesByCompetition(competitionView.competitions[c].Name,200),
+                title: "Results in " + competitionView.competitions[c].Name,
+                pageType:"WebPage",
+                image: "/assets/images/20170408_165126.jpg",
+                description: "All Tranmere Rovers seasons in " + competitionView.competitions[c].Name
+        };
+        utils.buildPage(compView, "./tranmere-web/templates/competition.tpl.html",'./tranmere-web/output/site/competitions/'+competitionView.competitions[c].Name+'.html' );
+
+    }
+
     var seasonsView = {
         decades: [],
         title: "Results By Season",
@@ -134,8 +191,8 @@ async function run () {
                    title: players[i].Name + ' record in season ' + players[i].stats.seasons[x].Season,
                    pageType: "WebPage",
                    description: "Full playing record of " + players[i].Name + " during the " + players[i].stats.seasons[x].Season + " Tranmere Rovers season",
-                   games: await utils.findAppsByPlayer(players[i].Name, 250, players[i].stats.seasons[x].Season),
-                   goals: await utils.findGoalsByPlayer(players[i].Name, 250, players[i].stats.seasons[x].Season)
+                   games: await utils.findAppsByPlayer(players[i].Name, 70, players[i].stats.seasons[x].Season),
+                   goals: await utils.findGoalsByPlayer(players[i].Name, 70, players[i].stats.seasons[x].Season)
                 };
                 utils.buildPage(view,
                     "./tranmere-web/templates/player-season.tpl.html",
@@ -162,9 +219,13 @@ async function run () {
 
         var workbook = new excel.Workbook();
 
-        for(var y=1; y <13; y++) {
+        var maxSquadNumber = 13;
+        if(i > 1998)
+            maxSquadNumber = 41;
+
+        for(var y=1; y <maxSquadNumber; y++) {
             var worksheet = null;
-            if(y != 12) {
+            if(y != maxSquadNumber-1) {
                 worksheet = workbook.addWorksheet(y);
                 worksheet.cell(1,1).string('Date');
                 worksheet.cell(1,2).string('Opposition');

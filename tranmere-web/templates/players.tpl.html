@@ -32,22 +32,18 @@
                         <h1 class="h2 font-weight-light">Players Records</h1>
                         <p >Click the player for more details</p>
                         {{#players}}
-                        <div class="card" itemprop="athlete" itemscope itemtype ="http://schema.org/Person">
-                            <div class="card-body py-0">
-                                <a href="/players/{{Name}}.html" class="topic" id="player-{{Id}}" itemprop="url">
-                                    <div class="row align-items-center">
-                                        <div class="col-12 col-md-6 col-lg-6">
-                                            <h4 class="topic-title" itemprop="name">{{Name}}</h4>
-                                        </div>
-                                        <div class="col-12 col-lg-3 d-none d-lg-block">
-                                            <div class="d-flex align-items-center">
-                                                <small>
-                                                    {{PrimaryPosition}}
-                                                </small>
-                                            </div>
-                                        </div>
+                        <div class="card stacked" style="margin-bottom:50px" itemprop="athlete" itemscope itemtype ="http://schema.org/Person">
+                            <div class="card-body">
+                                <div class="row gutter-2 align-items-center">
+                                    <div class="col">
+                                        <a href="/players/{{Name}}.html" class="topic" id="player-{{Id}}" itemprop="url">
+                                            <h3 class="card-title mb-1" itemprop="name">{{Name}}</h3>
+                                            <p class="card-text mb-2"><{{PrimaryPosition}}</p>
+
+                                        </a>
                                     </div>
-                                </a>
+                                </div>
+                                <i class="icon-photo icon-background text-blue"></i>
                             </div>
                         </div>
                         {{/players}}

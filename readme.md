@@ -5,10 +5,9 @@ Source code for Tranmere-Web.com
 
 ### Deploying
 
-cd tranmere-web
-node index.js
-aws s3 sync ./output/site s3://www.tranmere-web.com
-
+aws s3 sync ./tranmere-web/output/site s3://www.tranmere-web.com
+aws s3 sync ./images s3://trfc-programmes
+=CONCATENATE("1989-90/Scan ",E24,".jpeg")
 
 ### ToDo
 
@@ -22,7 +21,10 @@ aws s3 sync ./output/site s3://www.tranmere-web.com
   * Player media
   * Combined Manager Stats
   * More Links
-  
+  * 88/89 SVT Games
+  * 91/92 ZDS Games
+  * AI Games
+  * Check Last Games Of Season 
   
 ## Tranmere web API
 

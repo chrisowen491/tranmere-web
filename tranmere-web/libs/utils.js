@@ -34,6 +34,21 @@ module.exports = function (path, fs, Mustache,client) {
            }
            return partials;
          },
+         buildImagePath: function (image, width, height) {
+            var body = {
+             "bucket": "trfc-programmes",
+             "key": image,
+               "edits": {
+                 "resize": {
+                   "width": width,
+                   "height": height,
+                   "fit": "fill",
+                 }
+               }
+             };
+            return "https://images.tranmere-web.com/" + Buffer.from(JSON.stringify(body)).toString('base64');
+         },
+
          buildPage: function (view, pageTpl, outputPath) {
             if(outputPath != './tranmere-web/output/site/index.html')
                 view.url = outputPath.replace('./tranmere-web/output/site/','/');
@@ -42,20 +57,20 @@ module.exports = function (path, fs, Mustache,client) {
                     var body = {
                         "bucket": "trfc-programmes",
                         "key": "screenshots/" + view.carousel[i].image,
-                      "edits": {
-                        "resize": {
-                          "width": 1000,
-                          "height": 400,
-                          "fit": "contain",
-                          "background": {
-                            "r": 255,
-                            "g": 255,
-                            "b": 255,
-                            "alpha": 1
+                          "edits": {
+                            "resize": {
+                              "width": 1000,
+                              "height": 400,
+                              "fit": "contain",
+                              "background": {
+                                "r": 255,
+                                "g": 255,
+                                "b": 255,
+                                "alpha": 1
+                              }
+                            }
                           }
-                        }
-                      }
-                    };
+                        };
                     view.carousel[i].base64 = Buffer.from(JSON.stringify(body)).toString('base64');
                 }
             }
@@ -75,11 +90,11 @@ module.exports = function (path, fs, Mustache,client) {
              }
              for(var m=0; m<results.length; m++) {
                  var r = results[m];
-                 if(r.home == "Tranmere Rovers" && r.result == "H") {
+                 if(r.home == "Tranmere Rovers" && r.hgoal > r.vgoal) {
                      obj.wins = obj.wins + 1;
-                 } else if(r.visitor == "Tranmere Rovers" && r.result == "A") {
+                 } else if(r.visitor == "Tranmere Rovers" && r.vgoal > r.hgoal) {
                      obj.wins = obj.wins + 1;
-                 } else if(r.result == "D") {
+                 } else if(r.vgoal == r.hgoal) {
                      obj.draws = obj.draws +1;
                  } else {
                      obj.losses = obj.losses+1;
@@ -101,8 +116,8 @@ module.exports = function (path, fs, Mustache,client) {
             for(var i=0; i < results.body.hits.hits.length; i++) {
                 var player = results.body.hits.hits[i]["_source"];
                 player.Id = results.body.hits.hits[i]["_id"]
-                player.goals = await this.findGoalsByPlayer(player.Name, 250);
-                player.apps = await this.findAppsByPlayer(player.Name, 250);
+                player.goals = await this.findGoalsByPlayer(player.Name, 500);
+                player.apps = await this.findAppsByPlayer(player.Name, 500);
                 player.links = await this.getLinksByPlayer(player.Name);
                 player.stats = this.calculateStats(player.apps, player.goals);
                 players.push(player)
@@ -114,7 +129,7 @@ module.exports = function (path, fs, Mustache,client) {
             var managersQuery = {
                 index: "managers",
                 body: {
-                    "sort": ["DateJoined"],
+                    "sort": [{"DateJoined" : {"order" : "desc"}}],
                     "size": size,
                 }
             };
@@ -323,7 +338,7 @@ module.exports = function (path, fs, Mustache,client) {
                 index: "apps",
                 body: {
                    "sort": ["Date"],
-                   "size": 200,
+                   "size": size,
                    "query": {
                      "bool": {
                         "must": [
@@ -367,6 +382,96 @@ module.exports = function (path, fs, Mustache,client) {
 
             return Promise.resolve(appsList);
          },
+
+        getTopPlayerByAppearnces : async function(size) {
+            var query = {
+                index: "apps",
+                body: {
+                      "size": 0,
+                      "aggs": {
+                        "apps": {
+                          "terms": {
+                            "size" : size,
+                            "field": "Name"
+                          }
+                        },
+                        "subs": {
+                         "terms": {
+                            "size" : size,
+                            "field": "SubbedBy"
+                          }
+                        }
+                      }
+                  }
+            };
+
+            var result = await client.search(query);
+            var results = [];
+            for(var i=0; i < result.body.aggregations.apps.buckets.length; i++) {
+                var player = result.body.aggregations.apps.buckets[i].key;
+                var subs = 0;
+                for(var x=0; x<result.body.aggregations.subs.buckets.length; x++) {
+                    if(result.body.aggregations.subs.buckets[x].key == player) {
+                        subs = result.body.aggregations.subs.buckets[x].doc_count;
+                    }
+                }
+
+                results.push({"Name": player, Subs:subs, "Starts": result.body.aggregations.apps.buckets[i].doc_count})
+            }
+            return results;
+        },
+
+        getTopPlayerByGoals : async function(size) {
+            var query = {
+                index: "goals",
+                body: {
+                      "size": 0,
+                      "aggs": {
+                        "Scorer": {
+                          "terms": {
+                            "size" : size,
+                            "field": "Scorer"
+                          }
+                        }
+                      }
+                  }
+            };
+
+            var result = await client.search(query);
+            var results = [];
+            for(var i=0; i < result.body.aggregations.Scorer.buckets.length; i++) {
+                var player = result.body.aggregations.Scorer.buckets[i].key;
+                results.push({"Name": player, "Goals": result.body.aggregations.Scorer.buckets[i].doc_count})
+            }
+            return results;
+        },
+
+        getAllCupCompetitions : async function(size) {
+            var competitionQuery = {
+                index: "matches",
+                body: {
+                    "size": 0,
+                    "aggs": {
+                      "competition": {
+                        "terms": {
+                          "size" : size,
+                          "field": "competition"
+                        }
+                      }
+                    }
+                }
+            };
+
+            var result = await client.search(competitionQuery);
+            var results = [];
+            for(var i=0; i < result.body.aggregations.competition.buckets.length; i++) {
+                if(result.body.aggregations.competition.buckets[i].key != "League"
+                    && result.body.aggregations.competition.buckets[i].key != "Conference") {
+                    results.push({"Name": result.body.aggregations.competition.buckets[i].key, "Count": result.body.aggregations.competition.buckets[i].doc_count})
+                }
+            }
+            return results;
+        },
 
          findAllTeams : async function(size) {
             var teamQuery = {
@@ -421,6 +526,77 @@ module.exports = function (path, fs, Mustache,client) {
               return 0;
             });
             return {results:results, resultsByLetter:list};
+         },
+
+         findTranmereMatchesSortedByTopAttendance : async function(size) {
+            var query = {
+                index: "matches",
+                body: {
+                   "sort": [{"attendance" : {"order" : "desc"}}],
+                   "size": size,
+                }
+              };
+            var results = await client.search(query);
+            var matches = [];
+            for(var i=0; i < results.body.hits.hits.length; i++) {
+                var match = results.body.hits.hits[i]["_source"];
+                matches.push(match)
+            }
+            return matches;
+         },
+
+         findAllTranmereMatchesByVenue : async function(venue, size) {
+            var query = {
+                index: "matches",
+                body: {
+                   "sort": ["Date"],
+                   "size": size,
+                   "query": {
+                    "match": {
+                     "Venue": venue
+                    }
+                   }
+                }
+              };
+            var results = await client.search(query);
+            var matches = [];
+            for(var i=0; i < results.body.hits.hits.length; i++) {
+                var match = results.body.hits.hits[i]["_source"];
+                var apps = await this.getAppsByDate(match.Date);
+                match.apps = apps;
+                var goals = await this.getGoalsByDate(match.Date);
+                match.goals = goals;
+                match.isCup = true;
+                matches.push(match)
+            }
+            return matches;
+         },
+
+         findAllTranmereMatchesByCompetition : async function(competition, size) {
+            var query = {
+                index: "matches",
+                body: {
+                   "sort": ["Date"],
+                   "size": size,
+                   "query": {
+                    "match": {
+                     "competition": competition
+                    }
+                   }
+                }
+              };
+            var results = await client.search(query);
+            var matches = [];
+            for(var i=0; i < results.body.hits.hits.length; i++) {
+                var match = results.body.hits.hits[i]["_source"];
+                var apps = await this.getAppsByDate(match.Date);
+                match.apps = apps;
+                var goals = await this.getGoalsByDate(match.Date);
+                match.goals = goals;
+                match.isCup = true;
+                matches.push(match)
+            }
+            return matches;
          },
 
          findAllTranmereMatchesByOpposition : async function(opposition, size) {

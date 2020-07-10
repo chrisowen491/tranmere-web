@@ -19,33 +19,28 @@
                         <h1 class="h2 font-weight-light">Managerial Records</h1>
                         <p >Click the manager for more details</p>
                         {{#managers}}
-                        <div class="card"  itemscope itemtype ="http://schema.org/coach">
-                            <div class="card-body py-0">
-                                <a href="/managers/{{Name}}.html" class="topic" id="manager-{{Id}}" itemprop="url">
-                                    <div class="row align-items-center">
-                                        <div class="col-12 col-md-6 col-lg-6">
-                                            <h4 class="topic-title" itemprop="name">{{Name}}</h4>
-                                        </div>
-                                        <div class="col-12 col-lg-3 d-none d-lg-block">
-                                            <div class="d-flex align-items-center">
-                                                <small>
-                                                    From
-                                                    <time datetime="{{DateJoined}}" class="text-muted d-block">{{DateJoined}}</time>
-                                                </small>
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-lg-3 d-none d-lg-block">
-                                            <div class="d-flex align-items-center">
-                                                <small>
-                                                    To
-                                                    <time datetime="{{DateLeft}}" class="text-muted d-block">{{DateLeft}}</time>
-                                                </small>
-                                            </div>
-                                        </div>
+
+                        <div class="card stacked" style="margin-bottom:50px">
+                            <div class="card-body">
+                                <div class="row gutter-2 align-items-center">
+                                    <div class="col">
+                                        <a href="/managers/{{Name}}.html" class="topic" id="manager-{{Id}}" itemprop="url">
+                                        <h3 class="card-title mb-1" itemprop="name">{{Name}}</h3>
+                                        <p class="card-text mb-2"><small>
+                                            From
+                                            <time datetime="{{DateJoined}}" class="text-muted d-block">{{DateJoined}}</time>
+                                        </small></p>
+                                        <p class="card-text mb-2"><small>
+                                            To
+                                            <time datetime="{{DateLeft}}" class="text-muted d-block">{{DateLeft}}</time>
+                                        </small></p>
+                                        </a>
                                     </div>
-                                </a>
+                                </div>
+                                <i class="icon-photo icon-background text-blue"></i>
                             </div>
                         </div>
+
                         {{/managers}}
 
                     </article>

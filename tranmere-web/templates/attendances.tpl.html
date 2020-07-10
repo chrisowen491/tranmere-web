@@ -1,0 +1,49 @@
+{{>head}}
+<body data-spy="scroll" data-target="#toc">
+
+
+<section class="py-0">
+    <div class="container-fluid">
+        <div class="row justify-content-between">
+
+            {{>nav2}}
+
+            <!-- content -->
+            <article class="col-lg-9 col-xxl-12 doc-content">
+
+                {{>breadcrumb}}
+
+                <div class="row justify-content-between doc-content-body">
+                    <article class="col-12">
+
+                        <h1 class="h2 font-weight-light">{{title}}</h1>
+                        {{#matches}}
+                        <div class="card stacked" style="margin-bottom:50px">
+                            <div class="card-body">
+                                <div class="row gutter-2 align-items-center">
+                                    <div class="col">
+                                        <h3 class="card-title mb-1">{{#attendance}}{{commaFormat}}{{/attendance}}</h3>
+                                        <p class="card-text mb-2">{{home}} {{FT}} {{visitor}}</p>
+                                        <p class="card-text mb-2">{{Venue}}</p>
+                                        <time datetime="{{Date}}" class="text-muted">{{Date}}</time>
+                                    </div>
+                                </div>
+                                <i class="icon-bar-chart icon-background text-blue"></i>
+                            </div>
+                        </div>
+                        {{/matches}}
+
+                    </article>
+
+                </div>
+
+            </article>
+            <!-- / content -->
+
+        </div>
+    </div>
+</section>
+
+{{>footer}}
+</body>
+</html>

@@ -1,6 +1,4 @@
-cd apps-master
-node index.js
-cd ../
+npm run export-excel
 curl -i -X DELETE http://localhost:9200/apps -H "Content-Type: application/json"
 curl -i -X PUT http://localhost:9200/apps -H "Content-Type: application/json" --data-binary "@mappings/apps.mapping"
 curl -i -X DELETE http://localhost:9200/goals -H "Content-Type: application/json"
@@ -13,6 +11,8 @@ curl -i -X DELETE http://localhost:9200/managers -H "Content-Type: application/j
 curl -i -X PUT http://localhost:9200/managers -H "Content-Type: application/json" --data-binary "@mappings/managers.mapping"
 curl -i -X DELETE http://localhost:9200/teams -H "Content-Type: application/json"
 curl -i -X PUT http://localhost:9200/teams -H "Content-Type: application/json" --data-binary "@mappings/teams.mapping"
+curl -i -X DELETE http://localhost:9200/matches -H "Content-Type: application/json"
+curl -i -X PUT http://localhost:9200/matches -H "Content-Type: application/json" --data-binary "@mappings/matches.mapping"
 curl -i -X DELETE http://localhost:9200/links -H "Content-Type: application/json"
 curl -i -X PUT http://localhost:9200/links -H "Content-Type: application/json"
 rm /tmp/logstash

@@ -13,7 +13,7 @@
                                         {{#showProgrammes}}
                                         <div class="col-md-2 col-lg-2">
                                             {{#programme}}
-                                            <a href="https://images.tranmere-web.com/{{largeProgramme}}"><img src="https://images.tranmere-web.com/{{programme}}" alt="Matchday Programme" /></a>
+                                            <a href="https://images.tranmere-web.com/{{largeProgramme}}"><img src="https://images.tranmere-web.com/{{programme}}" loading="lazy" alt="Matchday Programme" /></a>
                                             {{/programme}}
                                         </div>
                                         {{/showProgrammes}}
@@ -22,6 +22,7 @@
                                         </div>
                                         <div class="col-md-2 col-lg-2">
                                             <small>{{competition}}</small>
+
                                         </div>
                                         <div class="col-md-5 col-lg-5 text-left text-md-right">
                                             <small>{{home}} {{FT}} {{visitor}}</small>
@@ -34,7 +35,18 @@
                         <div id="collapse-{{Date}}" class="collapse" aria-labelledby="heading-{{Date}}" data-parent="#accordion-1">
                             <div class="card-body">
 
-
+                                {{#isCup}}
+                                <div class="row">
+                                    <div class="col-2">
+                                        <img class="rounded mx-auto d-block" alt="Cup" title="Cup" width="40px" height="40px" src="/assets/icons/044-playoff.png"  />
+                                    </div>
+                                    <div class="col-10">
+                                        <small>
+                                            {{round}} Round {{tie}}
+                                        </small>
+                                    </div>
+                                </div>
+                                {{/isCup}}
                                 {{#attendance}}
                                 <div class="row">
                                     <div class="col-2">
