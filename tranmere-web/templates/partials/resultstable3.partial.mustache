@@ -1,40 +1,29 @@
-<div class="row">
-    <div class="col">
-        {{#showProgrammes}}<small>Click on any programme for a larger version</small>{{/showProgrammes}}
-        <div class="card">
-            <div class="card-body py-0">
-                <div class="accordion accordion-fluid" id="accordion-1">
-                    {{#matches}}
-                    <div class="card">
-                        <div class="card-header" id="heading-{{Date}}">
-                            <h5 class="mb-0">
-                                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse-{{Date}}" aria-expanded="false" aria-controls="collapse-{{_id}}">
-                                    <div class="row align-items-center">
-                                        {{#showProgrammes}}
-                                        <div class="col-md-2 col-lg-2">
-                                            {{#programme}}
-                                            <a href="https://images.tranmere-web.com/{{largeProgramme}}"><img src="https://images.tranmere-web.com/{{programme}}" loading="lazy" alt="Matchday Programme" /></a>
-                                            {{/programme}}
-                                        </div>
-                                        {{/showProgrammes}}
-                                        <div class="col-md-2 col-lg-2">
-                                            <small><time datetime="{{Date}}" class="text-muted d-block">{{Date}}</time></small>
-                                        </div>
-                                        <div class="col-md-2 col-lg-2">
-                                            <small>{{competition}}</small>
-
-                                        </div>
-                                        <div class="col-md-5 col-lg-5 text-left text-md-right">
-                                            <small>{{home}} {{FT}} {{visitor}}</small>
-                                        </div>
-                                    </div>
-                                </button>
-                            </h5>
-                        </div>
-
-                        <div id="collapse-{{Date}}" class="collapse" aria-labelledby="heading-{{Date}}" data-parent="#accordion-1">
-                            <div class="card-body">
-
+<div class="row justify-content-between doc-content-body">
+    <article class="col-12 tranmere-results">
+        {{#matches}}
+        <div class="card" >
+            {{#programme}}
+            <div class="card-body" style="background-image:url(https://images.tranmere-web.com/{{programme}});">
+            {{/programme}}
+            {{^programme}}
+            <div class="card-body">
+                <i class="icon-photo icon-background text-blue"></i>
+            {{/programme}}
+                <div class="row gutter-2 align-items-center">
+                    <div class="col">
+                        <h5 class="card-title mb-1" id="{{Player}}">{{Player}}</h5>
+                        <p class="card-text mb-2">{{Notes}}</p>
+                        <p class="card-text mb-2">{{home}} {{FT}} {{visitor}} ({{competition}})</p>
+                        <p class="card-text mb-2"><small><time datetime="{{Date}}" class="text-muted d-block">{{Date}}</time></small></p>
+                        {{#pens}}<p class="card-text mb-2">{{pens}}</p>{{/pens}}
+                        <div class="accordion accordion-fluid" id="accordion-{{Date}}">
+                            {{#report}}
+                            <button class="btn btn-sm btn-primary" type="button" data-toggle="collapse" data-target="#collapse-{{Date}}" aria-expanded="false" aria-controls="collapse-{{Date}}">Match Summary</button>
+                            {{/report}}
+                            {{#programme}}<a href="https://images.tranmere-web.com/{{largeProgramme}}" class="btn btn-sm btn-rounded btn-primary">Programme</a>{{/programme}}
+                            {{#report}}
+                            <div id="collapse-{{Date}}" class="collapse" aria-labelledby="{{Date}}" data-parent="#accordion-{{Date}}">
+                                <div class="card-body">
                                 {{#isCup}}
                                 <div class="row">
                                     <div class="col-2">
@@ -65,7 +54,7 @@
                                     </div>
                                     <div class="col-10">
                                         <small>
-                                            {{#apps}}<a href="/players/{{Name}}.html">{{Name}}</a>{{#SubbedBy}} (<a href="/players/{{SubbedBy}}.html">{{SubbedBy}}</a>){{/SubbedBy}}, {{/apps}}
+                                            {{#apps}}<a href="/players/{{Name}}.html">{{Name}}</a>{{#SubbedBy}} (<a href="/players/{{SubbedBy}}.html">{{SubbedBy}}</a>){{/SubbedBy}}{{#SubSubbedBy}} (<a href="/players/{{SubSubbedBy}}.html">{{SubSubbedBy}}</a>){{/SubSubbedBy}}, {{/apps}}
                                         </small>
                                     </div>
                                 </div>
@@ -77,12 +66,15 @@
                                         <small>{{formattedGoals}}</small>
                                     </div>
                                 </div>
+
                             </div>
+                            </div>
+                            {{/report}}
                         </div>
                     </div>
-                    {{/matches}}
                 </div>
             </div>
         </div>
-    </div>
+        {{/matches}}
+    </article>
 </div>

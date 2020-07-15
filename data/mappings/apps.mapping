@@ -39,6 +39,10 @@
 				"type": "keyword",
 				"copy_to": "PlayersInvolved"
 			},
+			"SubSubbedBy": {
+				"type": "keyword",
+				"copy_to": "PlayersInvolved"
+			},
             "PlayersInvolved": {
                 "type": "keyword"
             }

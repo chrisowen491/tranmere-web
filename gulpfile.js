@@ -111,7 +111,7 @@ function minifyCss() {
 // watch for changes
 function watch() {
   gulp.watch('tranmere-web/output/site/assets/scss/**/*', css);
-  gulp.watch(['tranmere-web/output/site/*','tranmere-web/output/site/**/*', 'tranmere-web/output/site/assets/js/*'], reload);
+  gulp.watch(['tranmere-web/output/site/assets/js/*'], reload);
   gulp.watch('gulpfile.js', gulp.series(scripts, styles, minify));
 }
 

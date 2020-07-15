@@ -1,0 +1,15 @@
+{
+    "mappings": {
+        "properties": {
+            "Player": {
+                "type": "keyword"
+            },
+            "Date": {
+                "type": "date"
+            },
+            "Notes": {
+                "type": "text"
+            }
+        }
+    }
+}

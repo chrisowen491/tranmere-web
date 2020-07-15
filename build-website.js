@@ -31,13 +31,18 @@ async function run () {
                     title: "Results By Season",
                     link: "/seasons.html",
                 },
+                {
+                    image: "Screenshot4.png",
+                    title: "Results By Season",
+                    link: "/seasons.html",
+                },
             ]
 
         },
         "./tranmere-web/templates/home.tpl.html",'./tranmere-web/output/site/index.html' );
     utils.buildPage({title: "About the site", pageType:"AboutPage", description: "All about Tranmere-Web"}, "./tranmere-web/templates/about.tpl.html",'./tranmere-web/output/site/about.html' );
     utils.buildPage({title: "Links", pageType:"WebPage", description: "Some popular Tranmere Rovers links from the web"}, "./tranmere-web/templates/links.tpl.html",'./tranmere-web/output/site/links.html' );
-    utils.buildPage({title: "Oops", pageType:"WebPage"}, "./tranmere-web/templates/error.tpl.html",'./tranmere-web/output/site/error.html' );
+    utils.buildPage({title: "Oops", pageType:"WebPage"}, "./tranmere-web/templates/error.tpl.html",'./tranmere-web/output/site/error.html' , true);
     utils.buildPage({title: "Contact Us", pageType:"ContactPage", description: "How to contact us at Tranmere-Web"}, "./tranmere-web/templates/contact.tpl.html",'./tranmere-web/output/site/contact.html' );
 
     var competitionView = {
@@ -56,6 +61,25 @@ async function run () {
         description: "All Tranmere Rovers matches at Wembley Stadium"
     };
     utils.buildPage(wembleyView, "./tranmere-web/templates/competition.tpl.html",'./tranmere-web/output/site/wembley.html' );
+
+    var penaltyView = {
+        matches: await utils.findTranmereMatchesWithPenalties(20),
+        title: "Tranmere in Penalty Shootouts",
+        pageType:"WebPage",
+        image: utils.buildImagePath("photos/Wembley3.jpeg", 1920,1080),
+        description: "All Tranmere Rovers matches with penalty shootouts"
+    };
+    utils.buildPage(penaltyView, "./tranmere-web/templates/competition.tpl.html",'./tranmere-web/output/site/penalty-shootouts.html' );
+
+    var starsView = {
+        matches: await utils.findTranmereMatchesWithStars(20),
+        title: "Superstars who have played at Prenton Park",
+        pageType:"WebPage",
+        image: utils.buildImagePath("photos/manutd.jpg", 1920,1080),
+        description: "List of famous players to have played against Tranmere Rovers at Prenton Park"
+    };
+    utils.buildPage(starsView, "./tranmere-web/templates/stars.tpl.html",'./tranmere-web/output/site/super-stars.html' );
+
 
     var attendanceView = {
         matches: await utils.findTranmereMatchesSortedByTopAttendance(50),
@@ -84,13 +108,12 @@ async function run () {
     };
     utils.buildPage(goalsView, "./tranmere-web/templates/goals.tpl.html",'./tranmere-web/output/site/goals.html' );
 
-
     for(var c=0; c < competitionView.competitions.length; c++) {
         var compView = {
                 matches: await utils.findAllTranmereMatchesByCompetition(competitionView.competitions[c].Name,200),
                 title: "Results in " + competitionView.competitions[c].Name,
                 pageType:"WebPage",
-                image: "/assets/images/20170408_165126.jpg",
+                image: utils.buildImagePath("photos/cowshed.jpg", 1920,1080),
                 description: "All Tranmere Rovers seasons in " + competitionView.competitions[c].Name
         };
         utils.buildPage(compView, "./tranmere-web/templates/competition.tpl.html",'./tranmere-web/output/site/competitions/'+competitionView.competitions[c].Name+'.html' );
@@ -131,6 +154,7 @@ async function run () {
             draws: meta.draws,
             losses: meta.losses,
             matches: results,
+            image: utils.buildImagePath("photos/manutd.jpg", 1920,1080),
             pageType:"WebPage",
             description: "Full results of all Tranmere Rovers matches against " + team
         };
@@ -150,6 +174,7 @@ async function run () {
 
         var managerView = {
             title: managers[i].Name + "'s matches in charge ",
+            image: utils.buildImagePath("photos/kop.jpg", 1920,1080),
             dateFrom: managers[i].DateJoined,
             dateTo: managers[i].DateLeftText,
             wins: meta.wins,
@@ -162,13 +187,6 @@ async function run () {
         utils.buildPage(managerView, "./tranmere-web/templates/manager.tpl.html", './tranmere-web/output/site/managers/'+managers[i].Name+'.html');
     }
 
-     var playerQuery = {
-       index: "players",
-       body: {
-          "sort": ["Name"],
-          "size": 200,
-       }
-     };
     var players = await utils.findAllPlayers(200);
 
     for(var i=0; i < players.length; i++) {
@@ -180,6 +198,7 @@ async function run () {
                 stats: players[i].stats,
                 goals: players[i].goals,
                 links: players[i].links,
+                image: utils.buildImagePath("photos/kop.jpg", 1920,1080),
                 pageType:"ProfilePage",
                 description: "Information about " + players[i].Name + "'s record playing for Tranmere Rovers"
             };
@@ -190,6 +209,7 @@ async function run () {
                    name: players[i].Name,
                    title: players[i].Name + ' record in season ' + players[i].stats.seasons[x].Season,
                    pageType: "WebPage",
+                   image: utils.buildImagePath("photos/kop.jpg", 1920,1080),
                    description: "Full playing record of " + players[i].Name + " during the " + players[i].stats.seasons[x].Season + " Tranmere Rovers season",
                    games: await utils.findAppsByPlayer(players[i].Name, 70, players[i].stats.seasons[x].Season),
                    goals: await utils.findGoalsByPlayer(players[i].Name, 70, players[i].stats.seasons[x].Season)
@@ -210,6 +230,7 @@ async function run () {
         var mySeasonView = {
             title: "Season " + i + "-" + (i+1),
             pageType:"WebPage",
+            image: utils.buildImagePath("photos/kop.jpg", 1920,1080),
             description: "Tranmere Rovers results in " + i + " season",
             matches: results,
             next_season: i+1,

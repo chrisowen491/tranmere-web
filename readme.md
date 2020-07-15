@@ -12,11 +12,8 @@ aws s3 sync ./images s3://trfc-programmes
 ### ToDo
 
   * Schema.Org Markup
-  * Season Data
   * Player Grouping
   * Attendances
-  * Better Screenshots on Homepage
-  * WebP Images
   * Better Bio Data for players
   * Player media
   * Combined Manager Stats

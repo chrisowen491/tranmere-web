@@ -2,8 +2,8 @@
 <body id="top">
 {{>homenav}}
     <!-- hero -->
-    <section>
-      <div class="image image-overlay" style="background-image:url(/assets/images/20180701_105154.jpg)"></div>
+    <section style="padding-bottom:10px;">
+      <div class="image image-overlay" style="background-image:url({{image}})"></div>
       <div class="container">
         <div class="row">
           <div class="col text-white">
@@ -15,9 +15,9 @@
     <!-- / hero -->
 
     <!-- listing inside -->
-    <section class="overlay">
+    <section class="overlay"  style="padding-top:0px;">
       <div class="container">
-          {{>resultstable}}
+          {{>resultstable2}}
 
 
         <div class="row">
