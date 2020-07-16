@@ -339,6 +339,23 @@ module.exports = function (path, fs, Mustache,client) {
             return matches;
          },
 
+         findTranmereMatchesSortedByTopAttendanceAtHome : async function(size) {
+            var query = {
+                index: "matches",
+                body: {
+                   "sort": [{"attendance" : {"order" : "desc"}}],
+                   "size": size,
+                   "query": {
+                    "match": {
+                        "Venue": "Prenton Park"
+                    }
+                   }
+                }
+            };
+            return this.findTranmereMatchesByQuery(query);
+         },
+
+
          findTranmereMatchesSortedByTopAttendance : async function(size) {
             var query = {
                 index: "matches",

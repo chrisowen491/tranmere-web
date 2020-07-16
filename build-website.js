@@ -42,6 +42,12 @@ async function run () {
         "./tranmere-web/templates/home.tpl.html",'./tranmere-web/output/site/index.html' );
     utils.buildPage({title: "About the site", pageType:"AboutPage", description: "All about Tranmere-Web"}, "./tranmere-web/templates/about.tpl.html",'./tranmere-web/output/site/about.html' );
     utils.buildPage({title: "Links", pageType:"WebPage", description: "Some popular Tranmere Rovers links from the web"}, "./tranmere-web/templates/links.tpl.html",'./tranmere-web/output/site/links.html' );
+
+
+    // Graphs
+    utils.buildPage({graph:fs.readFileSync('./tranmere-web/graphs/attendances.js', 'utf8'), title: "Average League Home Attendance By Season", pageType:"WebPage", description: "Average Tranmere Rovers League Attendance By Season"}, "./tranmere-web/templates/graph.tpl.html",'./tranmere-web/output/site/graph-attendances.html' );
+    utils.buildPage({graph:fs.readFileSync('./tranmere-web/graphs/tiers.js', 'utf8'), title: "Which Tiers Have Tranmere Been In", pageType:"WebPage", description: "Tranmere Rovers League Tiers By Season"}, "./tranmere-web/templates/graph.tpl.html",'./tranmere-web/output/site/graph-tiers.html' );
+
     utils.buildPage({title: "Oops", pageType:"WebPage"}, "./tranmere-web/templates/error.tpl.html",'./tranmere-web/output/site/error.html' , true);
     utils.buildPage({title: "Contact Us", pageType:"ContactPage", description: "How to contact us at Tranmere-Web"}, "./tranmere-web/templates/contact.tpl.html",'./tranmere-web/output/site/contact.html' );
 
@@ -91,6 +97,18 @@ async function run () {
         }
     };
     utils.buildPage(attendanceView, "./tranmere-web/templates/attendances.tpl.html",'./tranmere-web/output/site/attendances.html' );
+
+    var ppAttendanceView = {
+        matches: await utils.findTranmereMatchesSortedByTopAttendanceAtHome(50),
+        title: "Top Attendances at Prenton Park",
+        pageType:"WebPage",
+        description: "The highest attendances for any Tranmere Rovers at Prenton Park",
+        commaFormat: function() {
+            return this.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+    };
+    utils.buildPage(ppAttendanceView, "./tranmere-web/templates/attendances.tpl.html",'./tranmere-web/output/site/prenton-park-attendances.html' );
+
 
     var appsView = {
         players: await utils.getTopPlayerByAppearnces(50),
