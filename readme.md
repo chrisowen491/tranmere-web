@@ -19,9 +19,6 @@ aws s3 sync ./images s3://trfc-programmes
   * Player media
   * Combined Manager Stats
   * More Links
-  * 88/89 SVT Games
-  * 91/92 ZDS Games
-  * AI Games
   * Check Last Games Of Season 
   
 ## Tranmere web API
