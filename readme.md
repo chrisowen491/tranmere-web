@@ -15,19 +15,19 @@ There are a number of NPM scripts which build a local Elastic Search index, and 
 
 ### Building
 
-npm install
-./data/cleanindex.sh
-npm run build-web
-gulp 
+ * npm install
+ * ./data/cleanindex.sh
+ * npm run build-web
+ * gulp 
 
 ### Deploying
 
-aws s3 sync ./tranmere-web/output/site s3://www.tranmere-web.com
-aws s3 sync ./images s3://trfc-programmes
+ * aws s3 sync ./tranmere-web/output/site s3://www.tranmere-web.com
+ * aws s3 sync ./images s3://trfc-programmes
   
 ## tranmere-web-api
 
 The API is a set of AWS Lambdas. 
 
 ###  
-./deploy-api.sh  
+ * ./deploy-api.sh  
