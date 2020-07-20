@@ -1,0 +1,21 @@
+{
+	"mappings": {
+		"properties": {
+            "Type": {
+                "type": "keyword"
+            },
+            "Name": {
+                "type": "keyword"
+            },
+            "Image": {
+                "type": "keyword"
+            },
+            "Published": {
+                "type": "keyword"
+            },
+            "Author": {
+                "type": "keyword"
+            }
+		}
+	}
+}

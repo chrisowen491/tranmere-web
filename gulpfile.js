@@ -73,9 +73,7 @@ function styles() {
   return gulp.src([
     'node_modules/swiper/dist/css/swiper.css',
     'node_modules/owl.carousel/dist/assets/owl.carousel.css',
-    /*
     'node_modules/magnific-popup/dist/magnific-popup.css',
-    */
     'node_modules/bootstrap-select/dist/css/bootstrap-select.css',
     /*
     'node_modules/prismjs/themes/prism.css',

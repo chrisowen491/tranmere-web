@@ -1,38 +1,50 @@
 {{>head}}
-<body data-spy="scroll" data-target="#toc">
+  <body data-spy="scroll" data-target="#toc">
 
 
-<section class="py-0">
-    <div class="container-fluid">
-        <div class="row justify-content-between">
+  <!-- header -->
+  {{>homenav}}
+  <!-- / header -->
 
-            {{>nav2}}
+  <!-- hero -->
+  {{>stats-breadcrumb}}
+  <!-- / hero -->
 
-            <!-- content -->
-            <article class="col-lg-9 col-xxl-10 doc-content">
+    <!-- sidebar layout -->
+    <section class="overlay">
+      <div class="container overlay-item-top">
+        <div class="row">
+          <div class="col">
+            <div class="content boxed">
+              <div class="row separated">
 
-                {{>breadcrumb}}
+                <!-- content -->
+                <article class="col-md-8 content-body">
 
-                <div class="row justify-content-between doc-content-body">
-                    <article>
-                        <h1 class="h2 font-weight-light">{{title}}</h1>
-                        <div id="my_dataviz"></div>
+                  <div id="my_dataviz"></div>
 
-                    </article>
+                </article>
+                <!-- / content -->
 
-                </div>
 
-            </article>
-            <!-- / content -->
+                <!-- sidebar -->
+                {{>recent}}
+                <!-- / sidebar -->
 
+
+              </div>
+            </div>
+          </div>
         </div>
-    </div>
-</section>
+      </div>
+    </section>
+    <!-- / sidebar layout -->
 
-{{>footer}}
-<script src="https://d3js.org/d3.v4.js"></script>
-<script>
+
+    {{>footer}}
+  <script src="https://d3js.org/d3.v4.js"></script>
+  <script>
 {{{graph}}}
 </script>
-</body>
+  </body>
 </html>

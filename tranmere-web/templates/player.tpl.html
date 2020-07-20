@@ -21,12 +21,12 @@
       <div class="container">
           <ul class="nav nav-tabs lavalamp mb-2" id="myTab" role="tablist">
               <li class="nav-item">
-                  <a class="nav-link active" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Stats</a>
+                  <a class="nav-link active" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="true">Stats</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" id="transfers-tab" data-toggle="tab" href="#transfers" role="tab" aria-controls="transfers" aria-selected="false">Transfers</a>
               </li>
               <!--
-              <li class="nav-item">
-                  <a class="nav-link" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Transfers (Coming Soon)</a>
-              </li>
               <li class="nav-item">
                   <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Media (Coming Soon)</a>
               </li>
@@ -87,16 +87,28 @@
               <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
 
               </div>
-              <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+              <div class="tab-pane fade" id="transfers" role="tabpanel" aria-labelledby="transfers-tab">
 
-              </div>
-              <div class="tab-pane fade" id="links" role="tabpanel" aria-labelledby="links-tab">
                   <table class="table table-striped boxed">
                       <thead>
                       <tr>
-                          <th scope="col">Link</th>
+                          <th scope="col">Date</th>
+                          <th scope="col">Club</th>
+                          <th scope="col">Fee</th>
                       </tr>
                       </thead>
+                      <tbody>
+                      {{#transfers}}
+                      <tr>
+                          <td><small><time datetime="{{Date}}" class="text-muted d-block">{{Date}}</time></small></td>
+                          <td><small>{{^incoming}}<span class="icon-arrow-right text-danger"></span>{{/incoming}}{{#incoming}}<span class="icon-arrow-left text-success"></span>{{/incoming}}<a href="/teams/{{Club}}.html">{{Club}}</a></small></td>
+                          <td><small>{{#loan}}Loan{{/loan}}{{^loan}}{{#currencyFormat}}{{Fee}}{{/currencyFormat}}{{/loan}}</small></td>
+                      </tr>
+                      {{/transfers}}
+                  </table>
+              </div>
+              <div class="tab-pane fade" id="links" role="tabpanel" aria-labelledby="links-tab">
+                  <table class="table table-striped boxed">
                       <tbody>
                       {{#links}}
                       <tr>

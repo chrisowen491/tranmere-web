@@ -15,8 +15,13 @@ curl -i -X DELETE http://localhost:9200/matches -H "Content-Type: application/js
 curl -i -X PUT http://localhost:9200/matches -H "Content-Type: application/json" --data-binary "@mappings/matches.mapping"
 curl -i -X DELETE http://localhost:9200/stars -H "Content-Type: application/json"
 curl -i -X PUT http://localhost:9200/stars -H "Content-Type: application/json" --data-binary "@mappings/stars.mapping"
+curl -i -X DELETE http://localhost:9200/transfers -H "Content-Type: application/json"
+curl -i -X PUT http://localhost:9200/transfers -H "Content-Type: application/json" --data-binary "@mappings/transfers.mapping"
 curl -i -X DELETE http://localhost:9200/links -H "Content-Type: application/json"
-curl -i -X PUT http://localhost:9200/links -H "Content-Type: application/json"
+curl -i -X PUT http://localhost:9200/links -H "Content-Type: application/json" --data-binary "@mappings/links.mapping"
+curl -i -X DELETE http://localhost:9200/media -H "Content-Type: application/json"
+curl -i -X PUT http://localhost:9200/media -H "Content-Type: application/json" --data-binary "@mappings/media.mapping"
+
 rm /tmp/logstash
 rm -rf /tmp/logstash4/
 logstash -f '*.conf' --log.level warn --path.data /tmp/logstash4 > log.txt

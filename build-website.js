@@ -7,6 +7,12 @@ var excel = require('excel4node');
 var fs = require("fs");
 var path = require('path');
 var utils = require('./tranmere-web/libs/utils')(path,fs,Mustache,client);
+var formatter = new Intl.NumberFormat('en-GB', {
+  style: 'currency',
+  currency: 'GBP',
+  minimumFractionDigits: 0,
+  maximumFractionDigits: 0
+});
 
 async function run () {
 
@@ -36,17 +42,53 @@ async function run () {
                     title: "Results By Season",
                     link: "/seasons.html",
                 },
+                {
+                    image: "Screenshot5.png",
+                    title: "Fanzines Gallery",
+                    link: "/media/fanzines.html",
+                },
             ]
 
         },
         "./tranmere-web/templates/home.tpl.html",'./tranmere-web/output/site/index.html' );
     utils.buildPage({title: "About the site", pageType:"AboutPage", description: "All about Tranmere-Web"}, "./tranmere-web/templates/about.tpl.html",'./tranmere-web/output/site/about.html' );
     utils.buildPage({title: "Links", pageType:"WebPage", description: "Some popular Tranmere Rovers links from the web"}, "./tranmere-web/templates/links.tpl.html",'./tranmere-web/output/site/links.html' );
+    utils.buildPage({title: "Players Home", pageType:"WebPage", description: "Tranmere Rovers player information index"}, "./tranmere-web/templates/players-home.tpl.html",'./tranmere-web/output/site/players.html' );
+    utils.buildPage({title: "Results Home", pageType:"WebPage", description: "Tranmere Rovers results information index"}, "./tranmere-web/templates/results-home.tpl.html",'./tranmere-web/output/site/results.html' );
+    utils.buildPage({title: "Stats Home", pageType:"WebPage", description: "Tranmere Rovers statistics"}, "./tranmere-web/templates/stats-home.tpl.html",'./tranmere-web/output/site/stats.html' );
+    utils.buildPage({title: "Media Home", pageType:"WebPage", description: "Tranmere Rovers media"}, "./tranmere-web/templates/media-home.tpl.html",'./tranmere-web/output/site/media.html' );
 
+
+    utils.buildPage(
+        {
+            title: "Tranmere Rovers Books",
+            pageType:"WebPage",
+            description: "Published books about Tranmere Rovers",
+            carousel: await utils.getAllMediaByType('Book', 25)
+        },
+        "./tranmere-web/templates/gallery.tpl.html",'./tranmere-web/output/site/media/books.html' );
+
+    utils.buildPage(
+        {
+            title: "Tranmere Rovers Fanzines",
+            pageType:"WebPage",
+            description: "Fanzines about Tranmere Rovers",
+            carousel: await utils.getAllMediaByType('Fanzine', 50)
+        },
+        "./tranmere-web/templates/gallery.tpl.html",'./tranmere-web/output/site/media/fanzines.html' );
+
+    utils.buildPage(
+        {
+            title: "Newspaper Specials",
+            pageType:"WebPage",
+            description: "Newspaper Specials about Tranmere Rovers",
+            carousel: await utils.getAllMediaByType('Newspaper', 50)
+        },
+        "./tranmere-web/templates/gallery.tpl.html",'./tranmere-web/output/site/media/newspapers.html' );
 
     // Graphs
-    utils.buildPage({graph:fs.readFileSync('./tranmere-web/graphs/attendances.js', 'utf8'), title: "Average League Home Attendance By Season", pageType:"WebPage", description: "Average Tranmere Rovers League Attendance By Season"}, "./tranmere-web/templates/graph.tpl.html",'./tranmere-web/output/site/graph-attendances.html' );
-    utils.buildPage({graph:fs.readFileSync('./tranmere-web/graphs/tiers.js', 'utf8'), title: "Which Tiers Have Tranmere Been In", pageType:"WebPage", description: "Tranmere Rovers League Tiers By Season"}, "./tranmere-web/templates/graph.tpl.html",'./tranmere-web/output/site/graph-tiers.html' );
+    utils.buildPage({graph:fs.readFileSync('./tranmere-web/graphs/attendances.js', 'utf8'), title: "Average League Home Attendance", pageType:"WebPage", description: "Average Tranmere Rovers League Attendance By Season"}, "./tranmere-web/templates/graph.tpl.html",'./tranmere-web/output/site/graph-attendances.html' );
+    utils.buildPage({graph:fs.readFileSync('./tranmere-web/graphs/tiers.js', 'utf8'), title: "Tranmere's League Tiers", pageType:"WebPage", description: "Tranmere Rovers League Tiers By Season"}, "./tranmere-web/templates/graph.tpl.html",'./tranmere-web/output/site/graph-tiers.html' );
 
     utils.buildPage({title: "Oops", pageType:"WebPage"}, "./tranmere-web/templates/error.tpl.html",'./tranmere-web/output/site/error.html' , true);
     utils.buildPage({title: "Contact Us", pageType:"ContactPage", description: "How to contact us at Tranmere-Web"}, "./tranmere-web/templates/contact.tpl.html",'./tranmere-web/output/site/contact.html' );
@@ -111,7 +153,7 @@ async function run () {
 
 
     var appsView = {
-        players: await utils.getTopPlayerByAppearnces(50),
+        players: await utils.getTopPlayerByAppearnces(10),
         title: "Most Tranmere Rovers Appearances",
         pageType:"WebPage",
         description: "List of players with most appearances for Tranmere Rovers"
@@ -119,12 +161,21 @@ async function run () {
     utils.buildPage(appsView, "./tranmere-web/templates/appearances.tpl.html",'./tranmere-web/output/site/appearances.html' );
 
     var goalsView = {
-        players: await utils.getTopPlayerByGoals(50),
+        players: await utils.getTopPlayerByGoals(10),
         title: "Most Tranmere Rovers Goals",
         pageType:"WebPage",
         description: "List of players with most goals for Tranmere Rovers"
     };
     utils.buildPage(goalsView, "./tranmere-web/templates/goals.tpl.html",'./tranmere-web/output/site/goals.html' );
+
+    var topScorersView = {
+        players: await utils.getTopScorersBySeason(20),
+        title: "Top Scorers BY Season",
+        pageType:"WebPage",
+        description: "Tranmere Rovers Top Scorers By Season"
+    };
+    utils.buildPage(topScorersView, "./tranmere-web/templates/goals.tpl.html",'./tranmere-web/output/site/top-scorers-by-season.html' );
+
 
     for(var c=0; c < competitionView.competitions.length; c++) {
         var compView = {
@@ -157,9 +208,9 @@ async function run () {
     }
     utils.buildPage(seasonsView, "./tranmere-web/templates/seasons.tpl.html",'./tranmere-web/output/site/seasons.html' );
 
-    var teams = await utils.findAllTeams(150);
+    var teams = await utils.findAllTeams(200);
 
-    utils.buildPage({title: "Results BY Opposition Team", pageType:"WebPage", description:"Directory of opposition teams Tranmere Rovers has played against", resultsByLetter: teams.resultsByLetter, teams:teams.results },
+    utils.buildPage({title: "Results By Opposition Team", pageType:"WebPage", description:"Directory of opposition teams Tranmere Rovers has played against", resultsByLetter: teams.resultsByLetter, teams:teams.results },
         "./tranmere-web/templates/teams.tpl.html", './tranmere-web/output/site/teams.html');
 
     for(var i=0; i<teams.results.length; i++ ) {
@@ -206,10 +257,21 @@ async function run () {
     }
 
     var players = await utils.findAllPlayers(200);
+    var playersByLetter = await utils.findAllPlayersByLetterAndDates(150, '1980-01-01', '1990-01-01');
+    utils.buildPage({title: "Players Records - 1980's", pageType:"WebPage", description:"Directory of player records for Tranmere Rovers players in the 1980's", resultsByLetter: playersByLetter.resultsByLetter, players:playersByLetter.results },
+        "./tranmere-web/templates/players.tpl.html", './tranmere-web/output/site/players-80s.html');
+    playersByLetter = await utils.findAllPlayersByLetterAndDates(150, '1990-01-01', '2000-01-01');
+    utils.buildPage({title: "Players Records - 1990's", pageType:"WebPage", description:"Directory of player records for Tranmere Rovers players in the 1990's", resultsByLetter: playersByLetter.resultsByLetter, players:playersByLetter.results },
+        "./tranmere-web/templates/players.tpl.html", './tranmere-web/output/site/players-90s.html');
+    playersByLetter = await utils.findAllPlayersByLetterAndDates(150, '2000-01-01', '2010-01-01');
+    utils.buildPage({title: "Players Records - 2000's", pageType:"WebPage", description:"Directory of player records for Tranmere Rovers players in the 2000's", resultsByLetter: playersByLetter.resultsByLetter, players:playersByLetter.results },
+        "./tranmere-web/templates/players.tpl.html", './tranmere-web/output/site/players-00s.html');
+    playersByLetter = await utils.findAllPlayersByLetterAndDates(150, '2010-01-01', '2030-01-01');
+    utils.buildPage({title: "Players Records - 2010's", pageType:"WebPage", description:"Directory of player records for Tranmere Rovers players in the 2010's", resultsByLetter: playersByLetter.resultsByLetter, players:playersByLetter.results },
+        "./tranmere-web/templates/players.tpl.html", './tranmere-web/output/site/players-10s.html');
 
     for(var i=0; i < players.length; i++) {
         if(players[i].Name) {
-
             var player = {
                 title: players[i].Name,
                 games: players[i].apps,
@@ -217,8 +279,21 @@ async function run () {
                 goals: players[i].goals,
                 links: players[i].links,
                 image: utils.buildImagePath("photos/kop.jpg", 1920,1080),
+                transfers: await utils.getTransfersByPlayer(players[i].Name, 20),
                 pageType:"ProfilePage",
-                description: "Information about " + players[i].Name + "'s record playing for Tranmere Rovers"
+                description: "Information about " + players[i].Name + "'s record playing for Tranmere Rovers",
+                currencyFormat: function() {
+                    return function(text, render) {
+                      if(render(text) == "") {
+                        return "Undisclosed"
+                      }
+                      else if(parseInt(render(text)) == 0)
+                        return "Free Transfer"
+                      else {
+                        return formatter.format(parseInt(render(text)))
+                      }
+                    }
+                }
             };
             utils.buildPage(player,"./tranmere-web/templates/player.tpl.html", './tranmere-web/output/site/players/' + players[i].Name + '.html');
 
@@ -239,9 +314,6 @@ async function run () {
             }
         }
     }
-
-    utils.buildPage({title: "Tranmere Rovers Player Records",players: players, pageType:"WebPage", description: "List of Tranmere Rovers players records "},
-        "./tranmere-web/templates/players.tpl.html", './tranmere-web/output/site/players.html');
 
     for(var i=1921; i < 2021; i++) {
         var results = await utils.findAllTranmereMatchesBySeason(i,200);

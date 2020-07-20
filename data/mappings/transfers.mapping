@@ -1,0 +1,27 @@
+{
+    "mappings": {
+        "properties": {
+            "Player": {
+                "type": "keyword"
+            },
+            "Date": {
+                "type": "date"
+            },
+            "Fee": {
+                "type": "integer"
+            },
+            "Club": {
+                "type": "keyword"
+            },
+            "Type": {
+                "type": "keyword"
+            },
+            "Direction": {
+                "type": "keyword"
+            },
+            "PartExchange": {
+                "type": "keyword"
+            }
+        }
+    }
+}

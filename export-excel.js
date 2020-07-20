@@ -25,5 +25,6 @@ XLSX.writeFile(masterBook, './data/links/links.csv', { bookType: "csv", sheet: '
 XLSX.writeFile(masterBook, './data/transfers/transfers.csv', { bookType: "csv", sheet: 'transfers' });
 XLSX.writeFile(masterBook, './data/clubs/clubs.csv', { bookType: "csv", sheet: 'clubs' });
 XLSX.writeFile(masterBook, './data/players/players.csv', { bookType: "csv", sheet: 'players' });
+XLSX.writeFile(masterBook, './data/media/media.csv', { bookType: "csv", sheet: 'media' });
 
 

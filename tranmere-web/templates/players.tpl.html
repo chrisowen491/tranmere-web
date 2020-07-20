@@ -1,76 +1,58 @@
 {{>head}}
-<body data-spy="scroll" data-target="#toc">
+  <body data-spy="scroll" data-target="#toc">
 
 
-<section class="py-0"  itemscope itemtype ="http://schema.org/SportsTeam">
-    <meta itemprop="sport" content="football" />
-    <meta itemprop="name" content="Tranmere Rovers F.C." />
-    <div class="container-fluid">
-        <div class="row justify-content-between">
+  <!-- header -->
+  {{>homenav}}
+  <!-- / header -->
 
-            {{>nav2}}
 
-            <!-- content -->
-            <article class="col-lg-9 col-xxl-10 doc-content">
+    <!-- hero -->
+    {{>players-breadcrumb}}
+    <!-- / hero -->
 
-                {{>breadcrumb}}
+    <!-- sidebar layout -->
+    <section class="overlay">
+      <div class="container overlay-item-top">
+        <div class="row">
+          <div class="col">
+            <div class="content boxed">
+              <div class="row separated">
 
-                <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                    <i class="icon-check2"></i>
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                    <h4 class="fs-22">Site Update</h4>
-                    <p>Only data from the 1987-94  has been uploaded so far!</p>
-                    <p>Does not include data some minor cup competitions yet</p>
-                    <p>Assist data based on available videos</p>
-                </div>
+                <!-- content -->
+                <article class="col-md-8 content-body">
 
-                <div class="row justify-content-between doc-content-body">
-                    <article class="col-md-9 col-xxl-8">
-
-                        <h1 class="h2 font-weight-light">Players Records</h1>
-                        <p >Click the player for more details</p>
+                  <div class="row gutter-2">
+                    {{#resultsByLetter}}
+                    <div class="col-md-6">
+                      <div class="boxed p-3">
+                        <h4>{{key}}</h4>
                         {{#players}}
-                        <div class="card stacked" style="margin-bottom:50px" itemprop="athlete" itemscope itemtype ="http://schema.org/Person">
-                            <div class="card-body">
-                                <div class="row gutter-2 align-items-center">
-                                    <div class="col">
-                                        <a href="/players/{{Name}}.html" class="topic" id="player-{{Id}}" itemprop="url">
-                                            <h3 class="card-title mb-1" itemprop="name">{{Name}}</h3>
-                                            <p class="card-text mb-2"><{{PrimaryPosition}}</p>
-
-                                        </a>
-                                    </div>
-                                </div>
-                                <i class="icon-photo icon-background text-blue"></i>
-                            </div>
-                        </div>
+                        <a class="nav-link" href="/players/{{.}}.html">{{.}}</a>
                         {{/players}}
+                      </div>
+                    </div>
+                    {{/resultsByLetter}}
+                  </div>
 
-                    </article>
+                </article>
+                <!-- / content -->
 
-                    <aside class="col-md-3 col-xxl-3 d-none d-md-block">
-                        <div class="sticky">
-                            <ul id="toc" class="nav flex-column toc">
-                                <li class="nav-item">
-                                    {{#players}}
-                                    <a data-scroll class="nav-link" href="#player-{{Id}}">{{Name}}</a>
-                                    {{/players}}
-                                </li>
-                            </ul>
-                        </div>
-                    </aside>
 
-                </div>
+                <!-- sidebar -->
+                {{>recent}}
+                <!-- / sidebar -->
 
-            </article>
-            <!-- / content -->
 
+              </div>
+            </div>
+          </div>
         </div>
-    </div>
-</section>
+      </div>
+    </section>
+    <!-- / sidebar layout -->
 
-{{>footer}}
-</body>
+
+    {{>footer}}
+  </body>
 </html>

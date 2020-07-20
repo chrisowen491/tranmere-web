@@ -246,7 +246,8 @@ module.exports = function (path, fs, Mustache,client) {
              if((match.apps && match.apps.length > 0)) {
                 match.report = true;
              }
-             match.isCup = true;
+             if(match.competition != "League")
+                match.isCup = true;
              return match;
          },
 
@@ -354,7 +355,6 @@ module.exports = function (path, fs, Mustache,client) {
             };
             return this.findTranmereMatchesByQuery(query);
          },
-
 
          findTranmereMatchesSortedByTopAttendance : async function(size) {
             var query = {
@@ -571,6 +571,78 @@ module.exports = function (path, fs, Mustache,client) {
               }
               return goals;
           },
+
+         getTransfersByPlayer : async function(name, size) {
+              var query = {
+                index: "transfers",
+                body: {
+                   "size": size,
+                   "sort": [{"Date" : {"order" : "asc"}}],
+                   "query": {
+                        "match": {
+                         "Player" : name
+                        }
+                   }
+                }
+              };
+
+             var results = await client.search(query);
+             var transfers = [];
+             for(var i=0; i < results.body.hits.hits.length; i++) {
+               var transfer = results.body.hits.hits[i]["_source"];
+               if(transfer.Direction == "In")
+                transfer.incoming = true;
+               if(transfer.Type == "Loan")
+                transfer.loan = true;
+               transfers.push(transfer)
+             }
+             return transfers;
+         },
+
+         getAllMediaByType : async function(type, size) {
+              var query = {
+                index: "media",
+                body: {
+                   "size": size,
+                   "sort": ["Published", "Name"],
+                   "query": {
+                        "match": {
+                         "Type" : type
+                        }
+                   }
+                }
+              };
+
+             var results = await client.search(query);
+             var media = [];
+             for(var i=0; i < results.body.hits.hits.length; i++) {
+               var item = {title: results.body.hits.hits[i]["_source"].Name};
+               var image = {
+                 "bucket": "trfc-programmes",
+                 "key": results.body.hits.hits[i]["_source"].Image,
+                 "edits": {
+                   "resize": {
+                     "height": 400,
+                     "fit": "contain"
+                   }
+                 }
+               };
+               var link = {
+                    "bucket": "trfc-programmes",
+                    "key": results.body.hits.hits[i]["_source"].Image,
+                    "edits": {
+                     "resize": {
+                       "height": 1200,
+                       "fit": "contain"
+                     }
+                   }
+               };
+               item.image = "https://images.tranmere-web.com/" + Buffer.from(JSON.stringify(image)).toString('base64');
+               item.link = "https://images.tranmere-web.com/" + Buffer.from(JSON.stringify(link)).toString('base64');
+               media.push(item)
+             }
+             return media;
+         },
 
          getLinksByPlayer : async function(name, size) {
               var query = {
@@ -854,6 +926,46 @@ module.exports = function (path, fs, Mustache,client) {
             return results;
         },
 
+         getTopScorersBySeason : async function(size) {
+            var query = {
+                index: "goals",
+                body: {
+                        "size": 0,
+                        "aggs": {
+                          "season": {
+                            "terms": {
+                              "size": size,
+                              "field": "Season",
+                              "order": {
+                                "_key": "asc"
+                              }
+                            },
+                            "aggs": {
+                              "scorers": {
+                                "terms": {
+                                  "field": "Scorer",
+                                  "size": 1
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+            };
+
+            var result = await client.search(query);
+            var results = [];
+            for(var i=0; i < result.body.aggregations.season.buckets.length; i++) {
+                var record = {
+                    Name: result.body.aggregations.season.buckets[i].scorers.buckets[0].key,
+                    Season: result.body.aggregations.season.buckets[i].key,
+                    Goals: result.body.aggregations.season.buckets[i].scorers.buckets[0]['doc_count']
+                }
+                results.push(record);
+            }
+            return results;
+        },
+
          findAllTeams : async function(size) {
             var teamQuery = {
                 index: "matches",
@@ -907,7 +1019,61 @@ module.exports = function (path, fs, Mustache,client) {
               return 0;
             });
             return {results:results, resultsByLetter:list};
-         }
+         },
 
+         findAllPlayersByLetterAndDates : async function(size, from,to) {
+            var query = {
+                index: "apps",
+                body: {
+                    "size": 0,
+                    "query": {
+                     "range": {
+                       "Date": {
+                         "gte": from,
+                         "lte": to
+                       }
+                     }
+                    },
+                    "aggs": {
+                      "players": {
+                        "terms": {
+                          "size" : size,
+                          "field": "Name"
+                        }
+                      }
+                    }
+                }
+            };
+
+            var result = await client.search(query);
+            var results = [];
+            var resultsByLetter = {};
+            for(var i=0; i < result.body.aggregations.players.buckets.length; i++) {
+                var firstLetter = result.body.aggregations.players.buckets[i].key.substring(0,1);
+                if(resultsByLetter[firstLetter]) {
+                    resultsByLetter[firstLetter].push(result.body.aggregations.players.buckets[i].key)
+                } else {
+                    var obj = [result.body.aggregations.players.buckets[i].key];
+                    resultsByLetter[firstLetter] = obj;
+                }
+                results.push(result.body.aggregations.players.buckets[i])
+            }
+            var list = [];
+            var keys = Object.keys(resultsByLetter);
+            for(var i=0; i < keys.length; i++) {
+                list.push({key: keys[i], players: resultsByLetter[keys[i]]});
+            }
+            results.sort(function(a, b) {
+              if (a.key < b.key) return -1;
+              if (a.key > b.key) return 1;
+              return 0;
+            });
+            list.sort(function(a, b) {
+              if (a.key < b.key) return -1;
+              if (a.key > b.key) return 1;
+              return 0;
+            });
+            return {results:results, resultsByLetter:list};
+         }
     };
 };

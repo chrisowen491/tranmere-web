@@ -9,7 +9,6 @@ $letter-spacing:           0.05em;
 $letter-spacing-sm:        ($letter-spacing / 2);
 $letter-spacing-lg:        ($letter-spacing * 2);
 
-
 // Layout
 $section-padding:          6.25rem;
 
@@ -31,6 +30,11 @@ $skype:                    #00aff0;
 $instagram:                #517fa4;
 $behance:                  #1769ff;
 $rss:                      #f26522;
+$tranmere-blue: #001489;
+$tranmere-green: #008000;
+$tranmere-claret: #831f2d;
+$tranmere-claret-blue: #6b96c9;
+
 
 $socials: ();
 $socials: map-merge((

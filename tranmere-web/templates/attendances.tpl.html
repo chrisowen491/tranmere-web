@@ -1,49 +1,65 @@
 {{>head}}
-<body data-spy="scroll" data-target="#toc">
+  <body data-spy="scroll" data-target="#toc">
 
 
-<section class="py-0">
-    <div class="container-fluid">
-        <div class="row justify-content-between">
+  <!-- header -->
+  {{>homenav}}
+  <!-- / header -->
 
-            {{>nav2}}
 
-            <!-- content -->
-            <article class="col-lg-9 col-xxl-12 doc-content">
+  <!-- hero -->
+  {{>stats-breadcrumb}}
+  <!-- / hero -->
 
-                {{>breadcrumb}}
+    <!-- sidebar layout -->
+    <section class="overlay">
+      <div class="container overlay-item-top">
+        <div class="row">
+          <div class="col">
+            <div class="content boxed">
+              <div class="row separated">
 
-                <div class="row justify-content-between doc-content-body">
-                    <article class="col-12">
+                <article class="col-md-8 content-body tranmere-results">
 
-                        <h1 class="h2 font-weight-light">{{title}}</h1>
-                        {{#matches}}
-                        <div class="card stacked" style="margin-bottom:50px">
-                            <div class="card-body">
-                                <div class="row gutter-2 align-items-center">
-                                    <div class="col">
-                                        <h3 class="card-title mb-1">{{#attendance}}{{commaFormat}}{{/attendance}}</h3>
-                                        <p class="card-text mb-2">{{home}} {{FT}} {{visitor}}</p>
-                                        <p class="card-text mb-2">{{Venue}}</p>
-                                        <time datetime="{{Date}}" class="text-muted">{{Date}}</time>
-                                    </div>
-                                </div>
-                                <i class="icon-bar-chart icon-background text-blue"></i>
-                            </div>
+                  {{#matches}}
+                  <div class="card" style="margin-bottom:50px">
+                    {{#programme}}
+                    <div class="card-body" style="background-image:url(https://images.tranmere-web.com/{{programme}});">
+                      {{/programme}}
+                      {{^programme}}
+                      <div class="card-body">
+                        <i class="icon-photo icon-background text-blue"></i>
+                        {{/programme}}
+                        <div class="row gutter-2 align-items-center">
+                          <div class="col">
+                            <h3 class="card-title mb-1">{{#attendance}}{{commaFormat}}{{/attendance}}</h3>
+                            <p class="card-title mb-2">{{home}} {{FT}} {{visitor}}</p>
+                            <p class="card-text mb-2">{{Venue}}</p>
+                            <time datetime="{{Date}}" class="text-muted">{{Date}}</time>
+                          </div>
                         </div>
-                        {{/matches}}
+                      </div>
+                    </div>
+                    {{/matches}}
 
-                    </article>
+                </article>
 
-                </div>
 
-            </article>
-            <!-- / content -->
+                <!-- sidebar -->
+                {{>recent}}
+                <!-- / sidebar -->
 
+
+
+              </div>
+            </div>
+          </div>
         </div>
-    </div>
-</section>
+      </div>
+    </section>
+    <!-- / sidebar layout -->
 
-{{>footer}}
-</body>
+
+    {{>footer}}
+  </body>
 </html>

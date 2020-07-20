@@ -15,6 +15,7 @@
                         <p class="card-text mb-2">{{competition}}</p>
                         <p class="card-text mb-2"><small><time datetime="{{Date}}" class="text-muted d-block">{{Date}}</time></small></p>
                         {{#pens}}<p class="card-text mb-2">{{pens}}</p>{{/pens}}
+                        <br /><br />
                         <div class="accordion accordion-fluid" id="accordion-{{Date}}">
                             {{#report}}
                             <button class="btn btn-sm btn-primary" type="button" data-toggle="collapse" data-target="#collapse-{{Date}}" aria-expanded="false" aria-controls="collapse-{{Date}}">Match Summary</button>

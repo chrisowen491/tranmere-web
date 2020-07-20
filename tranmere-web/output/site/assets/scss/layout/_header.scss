@@ -9,7 +9,7 @@
 	z-index: 100;
 
 	+ section {
-		padding-top: ($section-padding * 2);
+		padding-top: ($section-padding * 2.25);
 	}
 
 	nav {
@@ -37,7 +37,7 @@
 
 
 // header types
-.header-transparent { background: #041e42; }
+.header-transparent { background: $tranmere-blue;; }
 .header-white { 
 	@include shadow;
 	background: $white; 
@@ -46,7 +46,7 @@
 .header-transparent,
 .header-minimal-dark {
 	@include media-breakpoint-down(md) {
-		background: #041e42;
+		background: $tranmere-blue;;
 	}
 }
 
@@ -64,16 +64,16 @@
 			
 			&::before,
 			&::after {
-				background-color: #041e42;
+				background-color: $tranmere-blue;
 			}
 		}
 	}
 }
 
 .headroom--not-top.headroom--pinned {
-	.header-transparent { background: #041e42; }
+	.header-transparent { background: $tranmere-blue; }
 
-	.header-minimal-dark { background: $dark; }
+	.header-minimal-dark { background: $tranmere-blue; }
 
 	.header-minimal-light {
 		@include shadow;

@@ -1,71 +1,65 @@
 {{>head}}
-<body data-spy="scroll" data-target="#toc">
+  <body data-spy="scroll" data-target="#toc">
 
+  <!-- header -->
+  {{>homenav}}
+  <!-- / header -->
 
-<section class="py-0">
-    <div class="container-fluid">
-        <div class="row justify-content-between">
+  <!-- hero -->
+  {{>results-breadcrumb}}
+  <!-- / hero -->
 
-            {{>nav2}}
+    <!-- sidebar layout -->
+    <section class="overlay">
+      <div class="container overlay-item-top">
+        <div class="row">
+          <div class="col">
+            <div class="content boxed">
+              <div class="row separated">
 
-            <!-- content -->
-            <article class="col-lg-9 col-xxl-10 doc-content">
+                <!-- content -->
+                <article class="col-md-8 content-body">
 
-                {{>breadcrumb}}
-
-                <div class="row justify-content-between doc-content-body">
-                    <article class="col-md-9 col-xxl-8">
-
-                        <h1 class="h2 font-weight-light">Managerial Records</h1>
-                        <p >Click the manager for more details</p>
-                        {{#managers}}
-
-                        <div class="card stacked" style="margin-bottom:50px">
-                            <div class="card-body">
-                                <div class="row gutter-2 align-items-center">
-                                    <div class="col">
-                                        <a href="/managers/{{Name}}.html" class="topic" id="manager-{{Id}}" itemprop="url">
-                                        <h3 class="card-title mb-1" itemprop="name">{{Name}}</h3>
-                                        <p class="card-text mb-2"><small>
-                                            From
-                                            <time datetime="{{DateJoined}}" class="text-muted d-block">{{DateJoined}}</time>
-                                        </small></p>
-                                        <p class="card-text mb-2"><small>
-                                            To
-                                            <time datetime="{{DateLeft}}" class="text-muted d-block">{{DateLeft}}</time>
-                                        </small></p>
-                                        </a>
-                                    </div>
-                                </div>
-                                <i class="icon-photo icon-background text-blue"></i>
-                            </div>
+                  <p>Click the manager for more details</p>
+                  {{#managers}}
+                  <div class="card stacked" style="margin-bottom:50px">
+                    <div class="card-body">
+                      <div class="row gutter-2 align-items-center">
+                        <div class="col">
+                          <a href="/managers/{{Name}}.html" class="topic" id="manager-{{Id}}" itemprop="url">
+                            <h3 class="card-title mb-1" itemprop="name">{{Name}}</h3>
+                            <p class="card-text mb-2"><small>
+                              From
+                              <time datetime="{{DateJoined}}" class="text-muted d-block">{{DateJoined}}</time>
+                            </small></p>
+                            <p class="card-text mb-2"><small>
+                              To
+                              <time datetime="{{DateLeft}}" class="text-muted d-block">{{DateLeft}}</time>
+                            </small></p>
+                          </a>
                         </div>
+                      </div>
+                      <i class="icon-photo icon-background text-blue"></i>
+                    </div>
+                  </div>
+                  {{/managers}}
 
-                        {{/managers}}
+                </article>
+                <!-- / content -->
 
-                    </article>
 
-                    <aside class="col-md-3 col-xxl-3 d-none d-md-block">
-                        <div class="sticky">
-                            <ul id="toc" class="nav flex-column toc">
-                                <li class="nav-item">
-                                    {{#managers}}
-                                    <a data-scroll class="nav-link" href="#manager-{{Id}}">{{Name}}</a>
-                                    {{/managers}}
-                                </li>
-                            </ul>
-                        </div>
-                    </aside>
+                <!-- sidebar -->
+                {{>recent}}
+                <!-- / sidebar -->
 
-                </div>
-
-            </article>
-            <!-- / content -->
-
+              </div>
+            </div>
+          </div>
         </div>
-    </div>
-</section>
+      </div>
+    </section>
+    <!-- / sidebar layout -->
 
-{{>footer}}
-</body>
+    {{>footer}}
+  </body>
 </html>

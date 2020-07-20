@@ -1,13 +1,12 @@
 {{>head}}
   <body data-spy="scroll" data-target="#toc">
 
-
   <!-- header -->
   {{>homenav}}
   <!-- / header -->
 
   <!-- hero -->
-  {{>results-breadcrumb}}
+  {{>media-breadcrumb}}
   <!-- / hero -->
 
     <!-- sidebar layout -->
@@ -21,17 +20,14 @@
                 <!-- content -->
                 <article class="col-md-8 content-body">
 
-                  <div class="row gutter-2">
-                    {{#resultsByLetter}}
-                    <div class="col-md-6">
-                      <div class="boxed p-3">
-                        <h4>{{key}}</h4>
-                        {{#teams}}
-                        <a class="nav-link" href="/teams/{{.}}.html">{{.}}</a>
-                        {{/teams}}
-                      </div>
-                    </div>
-                    {{/resultsByLetter}}
+                  <div class="owl-carousel" data-margin="30" data-nav="true" data-center="true" data-dots="true" data-items="[3,2,1]">
+                    {{#carousel}}
+                    <figure class="photo">
+                      <a class="lightbox" href="{{link}}" title="{{title}}">
+                        <img src="{{image}}" alt="Image">
+                      </a>
+                    </figure>
+                    {{/carousel}}
                   </div>
 
                 </article>
@@ -40,7 +36,6 @@
                 <!-- sidebar -->
                 {{>recent}}
                 <!-- / sidebar -->
-
 
               </div>
             </div>
