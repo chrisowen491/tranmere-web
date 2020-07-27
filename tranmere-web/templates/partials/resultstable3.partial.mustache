@@ -12,13 +12,13 @@
                 <div class="row gutter-2 align-items-center">
                     <div class="col">
                         <h5 class="card-title mb-1" id="{{Player}}">{{Player}}</h5>
-                        <p class="card-text mb-2">{{Notes}}</p>
-                        <p class="card-text mb-2">{{home}} {{FT}} {{visitor}} ({{competition}})</p>
+                        <p class="card-text mb-2"><small>{{Notes}}</small></p>
+                        <p class="card-text mb-2"><small>{{home}} {{FT}} {{visitor}} ({{competition}})</small></p>
                         <p class="card-text mb-2"><small><time datetime="{{Date}}" class="text-muted d-block">{{Date}}</time></small></p>
                         {{#pens}}<p class="card-text mb-2">{{pens}}</p>{{/pens}}
                         <div class="accordion accordion-fluid" id="accordion-{{Date}}">
                             {{#report}}
-                            <button class="btn btn-sm btn-primary" type="button" data-toggle="collapse" data-target="#collapse-{{Date}}" aria-expanded="false" aria-controls="collapse-{{Date}}">Match Summary</button>
+                            <button class="btn btn-sm btn-primary" type="button" data-toggle="collapse" data-target="#collapse-{{Date}}" aria-expanded="false" aria-controls="collapse-{{Date}}">Summary</button>
                             {{/report}}
                             {{#programme}}<a href="https://images.tranmere-web.com/{{largeProgramme}}" class="btn btn-sm btn-rounded btn-primary">Programme</a>{{/programme}}
                             {{#report}}

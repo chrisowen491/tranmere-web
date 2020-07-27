@@ -50,7 +50,95 @@ async function run () {
             ]
 
         },
-        "./tranmere-web/templates/home.tpl.html",'./tranmere-web/output/site/index.html' );
+        "./tranmere-web/templates/home2.tpl.html",'./tranmere-web/output/site/index.html' );
+
+    utils.buildPage(
+        {
+            title: "Tranmere Kits",
+            pageType:"WebPage",
+            description: "Historic Tranmere Kits",
+            kits: [
+                {
+                    Season: "1986-1987",
+                    image: "/assets/shirts/1986.svg",
+                },
+                {
+                    Season: "1987-1989",
+                    image: "/assets/shirts/1988.svg",
+                },
+                {
+                    Season: "1989-1991",
+                    image: "/assets/shirts/1989.svg",
+                },
+                {
+                    Season: "1991-1993",
+                    image: "/assets/shirts/1991.svg",
+                },
+                {
+                    Season: "1993-1995",
+                    image: "/assets/shirts/1993.svg",
+                },
+                {
+                    Season: "1995-1997",
+                    image: "/assets/shirts/1995.svg",
+                },
+                {
+                    Season: "1997-1999",
+                    image: "/assets/shirts/1997.svg",
+                },
+                {
+                    Season: "1999-2000",
+                    image: "/assets/shirts/1999.svg",
+                },
+                {
+                    Season: "2000-2002",
+                    image: "/assets/shirts/2000.svg",
+                },
+                {
+                    Season: "2002-2004",
+                    image: "/assets/shirts/2002.svg",
+                },
+                {
+                    Season: "2004-2006",
+                    image: "/assets/shirts/2004.svg",
+                },
+                {
+                    Season: "2007-2009",
+                    image: "/assets/shirts/2007.svg",
+                },
+                {
+                    Season: "2011-2013",
+                    image: "/assets/shirts/2011.svg",
+                },
+                {
+                    Season: "2013-2014",
+                    image: "/assets/shirts/2013.svg",
+                },
+                {
+                    Season: "2015-2016",
+                    image: "/assets/shirts/2015.svg",
+                },
+                {
+                    Season: "2016-2017",
+                    image: "/assets/shirts/2016.svg",
+                },
+                {
+                    Season: "2017-2018",
+                    image: "/assets/shirts/2017.svg",
+                },
+                {
+                    Season: "2018-2019",
+                    image: "/assets/shirts/2018.svg",
+                },
+                {
+                    Season: "2019-2020",
+                    image: "/assets/shirts/2019.svg",
+                }
+            ]
+
+        },
+        "./tranmere-web/templates/kits.tpl.html",'./tranmere-web/output/site/media/kits.html' );
+
     utils.buildPage({title: "About the site", pageType:"AboutPage", description: "All about Tranmere-Web"}, "./tranmere-web/templates/about.tpl.html",'./tranmere-web/output/site/about.html' );
     utils.buildPage({title: "Links", pageType:"WebPage", description: "Some popular Tranmere Rovers links from the web"}, "./tranmere-web/templates/links.tpl.html",'./tranmere-web/output/site/links.html' );
     utils.buildPage({title: "Players Home", pageType:"WebPage", description: "Tranmere Rovers player information index"}, "./tranmere-web/templates/players-home.tpl.html",'./tranmere-web/output/site/players.html' );
@@ -67,6 +155,24 @@ async function run () {
             carousel: await utils.getAllMediaByType('Book', 25)
         },
         "./tranmere-web/templates/gallery.tpl.html",'./tranmere-web/output/site/media/books.html' );
+
+    utils.buildPage(
+        {
+            title: "Tranmere Rovers Football Videos",
+            pageType:"WebPage",
+            description: "Videos & DVSs Featuring Tranmere Rovers",
+            carousel: await utils.getAllMediaByType('Video', 25)
+        },
+        "./tranmere-web/templates/gallery.tpl.html",'./tranmere-web/output/site/media/videos.html' );
+
+    utils.buildPage(
+        {
+            title: "Tranmere Rovers Football Cards",
+            pageType:"WebPage",
+            description: "Football Cards Featuring Tranmere Rovers",
+            carousel: await utils.getAllMediaByType('Card', 25)
+        },
+        "./tranmere-web/templates/gallery.tpl.html",'./tranmere-web/output/site/media/cards.html' );
 
     utils.buildPage(
         {
@@ -121,7 +227,7 @@ async function run () {
 
     var starsView = {
         matches: await utils.findTranmereMatchesWithStars(20),
-        title: "Superstars who have played at Prenton Park",
+        title: "Stars  at Prenton Park",
         pageType:"WebPage",
         image: utils.buildImagePath("photos/manutd.jpg", 1920,1080),
         description: "List of famous players to have played against Tranmere Rovers at Prenton Park"
@@ -278,6 +384,7 @@ async function run () {
                 stats: players[i].stats,
                 goals: players[i].goals,
                 links: players[i].links,
+                pic:   players[i].Pic,
                 image: utils.buildImagePath("photos/kop.jpg", 1920,1080),
                 transfers: await utils.getTransfersByPlayer(players[i].Name, 20),
                 pageType:"ProfilePage",

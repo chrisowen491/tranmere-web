@@ -1,0 +1,21 @@
+{
+	"mappings": {
+		"properties": {
+            "Type": {
+                "type": "keyword"
+            },
+            "Season": {
+                "type": "integer"
+            },
+            "AgeGroup": {
+                "type": "keyword"
+            },
+            "Area": {
+                "type": "keyword"
+            },
+            "Cost": {
+                "type": "double"
+            }
+		}
+	}
+}

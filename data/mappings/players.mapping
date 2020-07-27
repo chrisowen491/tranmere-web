@@ -11,6 +11,9 @@
 			"Height": {
 				"type": "double"
 			},
+            "Pic": {
+                "type": "keyword"
+            },
      		"Name": {
 				"type": "keyword"
 			},

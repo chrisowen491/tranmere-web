@@ -21,6 +21,9 @@ curl -i -X DELETE http://localhost:9200/links -H "Content-Type: application/json
 curl -i -X PUT http://localhost:9200/links -H "Content-Type: application/json" --data-binary "@data/mappings/links.mapping"
 curl -i -X DELETE http://localhost:9200/media -H "Content-Type: application/json"
 curl -i -X PUT http://localhost:9200/media -H "Content-Type: application/json" --data-binary "@data/mappings/media.mapping"
+curl -i -X DELETE http://localhost:9200/tickets -H "Content-Type: application/json"
+curl -i -X PUT http://localhost:9200/tickets -H "Content-Type: application/json" --data-binary "@data/mappings/tickets.mapping"
+
 
 rm /tmp/logstash
 rm -rf /tmp/logstash4/

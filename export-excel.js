@@ -1,6 +1,6 @@
 XLSX = require('xlsx');
 
-var sheets = ['1984','1985','1986','1987','1988','1989','1990', '1991','1992', '1993', '1994'];
+var sheets = ['1984','1985','1986','1987','1988','1989','1990', '1991','1992', '1993', '1994', '1995', '1996', '1997', '2017'];
 
 function exportme(year) {
     const workBook = XLSX.readFile("./data/apps-master/"+year+".xlsx");
@@ -26,5 +26,6 @@ XLSX.writeFile(masterBook, './data/transfers/transfers.csv', { bookType: "csv", 
 XLSX.writeFile(masterBook, './data/clubs/clubs.csv', { bookType: "csv", sheet: 'clubs' });
 XLSX.writeFile(masterBook, './data/players/players.csv', { bookType: "csv", sheet: 'players' });
 XLSX.writeFile(masterBook, './data/media/media.csv', { bookType: "csv", sheet: 'media' });
+XLSX.writeFile(masterBook, './data/tickets/tickets.csv', { bookType: "csv", sheet: 'tickets' });
 
 

@@ -58,6 +58,8 @@ module.exports = function (path, fs, Mustache,client) {
             if(outputPath == './tranmere-web/output/site/index.html') {
                 view.url = "";
             }
+            view.random = Math.ceil(Math.random() * 100000);
+
             if(view.carousel) {
                 for(var i=0; i < view.carousel.length; i++) {
                     var body = {
@@ -756,7 +758,7 @@ module.exports = function (path, fs, Mustache,client) {
                         goal.isShot = true;
                     else if(goal.GoalType == "Penalty")
                         goal.isPenalty = true;
-                    else if(goal.GoalType == "Free Kick")
+                    else if(goal.GoalType == "FreeKick")
                         goal.isFreeKick = true;
                     else
                         goal.isUnknown= true;
@@ -768,7 +770,7 @@ module.exports = function (path, fs, Mustache,client) {
                         goal.isCross = true;
                     else if(goal.AssistType == "Pass")
                         goal.isPass = true;
-                    else if(goal.AssistType == "Free Kick")
+                    else if(goal.AssistType == "FreeKick")
                         goal.isFreeKick = true;
                     else if(goal.AssistType == "Corner")
                         goal.isCorner = true;
