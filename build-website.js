@@ -505,7 +505,7 @@ async function run () {
                 }
             }
         }
-        workbook.write('data/apps-master/raw/'+i+'.xlsx');
+        workbook.write('tmp/apps-master/raw/'+i+'.xlsx');
         utils.buildPage(mySeasonView, "./tranmere-web/templates/season.tpl.html", './tranmere-web/output/site/seasons/'+i+'.html');
     }
 

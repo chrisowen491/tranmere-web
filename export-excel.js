@@ -4,10 +4,11 @@ var sheets = ['1984','1985','1986','1987','1988','1989','1990', '1991','1992', '
 
 function exportme(year) {
     const workBook = XLSX.readFile("./data/apps-master/"+year+".xlsx");
+
     for(var i=1; i <12; i++) {
-        XLSX.writeFile(workBook, './data/apps/'+year+'/'+i+'.csv', { bookType: "csv", sheet: i.toString() });
+        XLSX.writeFile(workBook, './tmp/apps/'+year+'/'+i+'.csv', { bookType: "csv", sheet: i.toString() });
     }
-    XLSX.writeFile(workBook, './data/goals/'+year+'.csv', { bookType: "csv", sheet: 'goals' });
+    XLSX.writeFile(workBook, './tmp/goals/'+year+'.csv', { bookType: "csv", sheet: 'goals' });
 }
 
 for(var i=0; i < sheets.length; i++) {
@@ -15,17 +16,17 @@ for(var i=0; i < sheets.length; i++) {
 }
 
 const workBook = XLSX.readFile("./data/apps-master/AllTranmereResults.xlsx");
-XLSX.writeFile(workBook, './data/games/games.csv', { bookType: "csv", sheet: 'AllTranmereResults' });
+XLSX.writeFile(workBook, './tmp/games/the_games.csv', { bookType: "csv", sheet: 'AllTranmereResults' });
 
 const masterBook = XLSX.readFile("./data/master.xlsx");
-XLSX.writeFile(masterBook, './data/stars/stars.csv', { bookType: "csv", sheet: 'stars' });
-XLSX.writeFile(masterBook, './data/programmes/programmes.csv', { bookType: "csv", sheet: 'programmes' });
-XLSX.writeFile(masterBook, './data/managers/managers.csv', { bookType: "csv", sheet: 'managers' });
-XLSX.writeFile(masterBook, './data/links/links.csv', { bookType: "csv", sheet: 'links' });
-XLSX.writeFile(masterBook, './data/transfers/transfers.csv', { bookType: "csv", sheet: 'transfers' });
-XLSX.writeFile(masterBook, './data/clubs/clubs.csv', { bookType: "csv", sheet: 'clubs' });
-XLSX.writeFile(masterBook, './data/players/players.csv', { bookType: "csv", sheet: 'players' });
-XLSX.writeFile(masterBook, './data/media/media.csv', { bookType: "csv", sheet: 'media' });
-XLSX.writeFile(masterBook, './data/tickets/tickets.csv', { bookType: "csv", sheet: 'tickets' });
+XLSX.writeFile(masterBook, './tmp/stars/stars.csv', { bookType: "csv", sheet: 'stars' });
+XLSX.writeFile(masterBook, './tmp/programmes/programmes.csv', { bookType: "csv", sheet: 'programmes' });
+XLSX.writeFile(masterBook, './tmp/managers/managers.csv', { bookType: "csv", sheet: 'managers' });
+XLSX.writeFile(masterBook, './tmp/links/links.csv', { bookType: "csv", sheet: 'links' });
+XLSX.writeFile(masterBook, './tmp/transfers/transfers.csv', { bookType: "csv", sheet: 'transfers' });
+XLSX.writeFile(masterBook, './tmp/clubs/clubs.csv', { bookType: "csv", sheet: 'clubs' });
+XLSX.writeFile(masterBook, './tmp/players/players.csv', { bookType: "csv", sheet: 'players' });
+XLSX.writeFile(masterBook, './tmp/media/media.csv', { bookType: "csv", sheet: 'media' });
+XLSX.writeFile(masterBook, './tmp/tickets/tickets.csv', { bookType: "csv", sheet: 'tickets' });
 
 
