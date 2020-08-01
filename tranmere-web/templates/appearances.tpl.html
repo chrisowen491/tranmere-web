@@ -24,7 +24,13 @@
 
                   {{#players}}
                   <div class="card stacked" style="margin-bottom:50px">
-                    <div class="card-body">
+                    {{#Bio.Pic}}
+                    <div class="card-body" style="background-image:url({{Bio.Pic}});background-position-x: right;background-size: contain;background-repeat: no-repeat;">
+                      {{/Bio.Pic}}
+                      {{^Bio.Pic}}
+                      <div class="card-body">
+                        <i class="icon-photo icon-background text-blue"></i>
+                        {{/Bio.Pic}}
                       <div class="row gutter-2 align-items-center">
                         <div class="col">
                           <a href="/players/{{Name}}.html" class="topic">
@@ -33,7 +39,6 @@
                           </a>
                         </div>
                       </div>
-                      <i class="icon-photo icon-background text-blue"></i>
                     </div>
                   </div>
                   {{/players}}

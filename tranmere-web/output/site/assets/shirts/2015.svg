@@ -64,10 +64,11 @@
         </g>
         <text xml:space="preserve" text-anchor="start" font-family="Arvo, sans-serif" font-size="6" id="svg_33" y="482.64434" x="242.81241" fill-opacity="null" stroke-width="0" stroke="#0000bf" fill="#ffffff">Waste Services</text>
         <line fill="none" stroke-width="4" stroke-opacity="null" opacity="0.5" x1="430" y1="219" x2="430" y2="219" id="svg_11"/>
-        <line stroke="#cccccc" id="svg_51" y2="375.45312" x2="255" y1="347.45313" x1="224" fill="none"/>
-        <line stroke="#cccccc" transform="rotate(2.4784739017486572 267.98989868164074,362.68630981445256) " id="svg_52" y2="376.6863" x2="254.97332" y1="348.6863" x1="281.00649" fill="none"/>
         <g id="svg_25">
             <title>Simple Collar</title>
+            <line stroke="#cccccc" id="svg_51" y2="375.45312" x2="255" y1="347.45313" x1="224" fill="none"/>
+            <line stroke="#cccccc" transform="rotate(2.4784739017486572 267.98989868164074,362.68630981445256) " id="svg_52" y2="376.6863" x2="254.97332" y1="348.6863" x1="281.00649" fill="none"/>
+
             <g id="svg_26">
                 <path id="svg_27" fill="#ffffff" d="m256,345l-30,30l-31.996,-70.056l17.996,-11.944l44,52z" stroke="#b2b2b2"/>
             </g>

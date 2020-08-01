@@ -55,6 +55,6 @@ curl -i -X DELETE http://localhost:9200/tickets -H "Content-Type: application/js
 curl -i -X PUT http://localhost:9200/tickets -H "Content-Type: application/json" --data-binary "@data/mappings/tickets.mapping"
 
 
-rm  ./tmp/logstash
+rm  /tmp/logstash
 rm -rf  ./tmp/logstash4/
 logstash -f 'data/*.conf' --log.level warn --path.data  ./tmp/logstash4 > ./tmp/log.txt

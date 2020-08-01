@@ -865,16 +865,38 @@ module.exports = function (path, fs, Mustache,client) {
             for(var i=0; i < result.body.aggregations.apps.buckets.length; i++) {
                 var player = result.body.aggregations.apps.buckets[i].key;
                 var subs = 0;
-                for(var x=0; x<result.body.aggregations.subs.buckets.length; x++) {
+                for(var x=0; x < result.body.aggregations.subs.buckets.length; x++) {
                     if(result.body.aggregations.subs.buckets[x].key == player) {
                         subs = result.body.aggregations.subs.buckets[x].doc_count;
                     }
                 }
+                var playerBio = await this.getPlayerByName(player);
 
-                results.push({"Name": player, Subs:subs, "Starts": result.body.aggregations.apps.buckets[i].doc_count})
+                results.push({"Name": player, "Bio": playerBio, Subs:subs, "Starts": result.body.aggregations.apps.buckets[i].doc_count})
             }
             return results;
         },
+
+         getPlayerByName : async function(name) {
+              var query = {
+                index: "players",
+                body: {
+                   "size": 1,
+                   "query": {
+                        "match": {
+                         "Name" : name
+                        }
+                   }
+                }
+              };
+
+             var results = await client.search(query);
+             if(results.body.hits && results.body.hits.hits) {
+                return results.body.hits.hits[0]["_source"];
+             } else {
+                return null;
+             }
+         },
 
          getTopPlayerByGoals : async function(size) {
             var query = {
@@ -896,7 +918,8 @@ module.exports = function (path, fs, Mustache,client) {
             var results = [];
             for(var i=0; i < result.body.aggregations.Scorer.buckets.length; i++) {
                 var player = result.body.aggregations.Scorer.buckets[i].key;
-                results.push({"Name": player, "Goals": result.body.aggregations.Scorer.buckets[i].doc_count})
+                var playerBio = await this.getPlayerByName(player);
+                results.push({"Name": player, "Bio": playerBio, "Goals": result.body.aggregations.Scorer.buckets[i].doc_count})
             }
             return results;
         },
