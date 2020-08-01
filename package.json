@@ -29,7 +29,7 @@
     "excel4node": "^1.7.2",
     "gulp-clean-css": "^4.3.0",
     "gulp-minify": "^3.1.0",
-    "headroom.js": "^0.9.4",
+    "headroom.js": "^0.11.0",
     "jquery": "^3.3.1",
     "lavalamp": "^1.1.0",
     "magnific-popup": "^1.1.0",
