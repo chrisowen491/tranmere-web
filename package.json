@@ -23,7 +23,7 @@
   "dependencies": {
     "@elastic/elasticsearch": "^7.8.0",
     "ejs": ">=2.5.5",
-    "bootstrap": "^4.3.1",
+    "bootstrap": "^4.5.1",
     "bootstrap-select": "^1.13.2",
     "clipboard": "^2.0.1",
     "excel4node": "^1.7.2",
