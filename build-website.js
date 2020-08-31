@@ -58,7 +58,7 @@ async function run () {
         },
         "./tranmere-web/templates/home2.tpl.html",'./tranmere-web/output/site/index.html' );
 
-/*
+
     utils.buildPage(
         {
             title: "Tranmere Kits",
@@ -217,6 +217,8 @@ async function run () {
 
     utils.buildPage({title: "Oops", pageType:"WebPage"}, "./tranmere-web/templates/error.tpl.html",'./tranmere-web/output/site/error.html' , true);
     utils.buildPage({title: "Contact Us", pageType:"ContactPage", description: "How to contact us at Tranmere-Web"}, "./tranmere-web/templates/contact.tpl.html",'./tranmere-web/output/site/contact.html' );
+
+/*
 
     var competitionView = {
         competitions: await utils.getAllCupCompetitions(50),
