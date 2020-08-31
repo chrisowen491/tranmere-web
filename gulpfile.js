@@ -140,6 +140,7 @@ function watch() {
 
 
 const build = gulp.series(static, publish, css, minifyCss, scripts, styles, minify, gulp.parallel(watch, serve));
+const deploy = gulp.series(static, publish, css, minifyCss, scripts, styles, minify);
 
 
 // tasks
@@ -148,6 +149,7 @@ exports.scripts = scripts;
 exports.styles = styles;
 exports.minify = minify;
 exports.minifyCss = minifyCss;
+exports.deploy = deploy;
 
 
 exports.default = build;
