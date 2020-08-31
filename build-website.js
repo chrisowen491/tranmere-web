@@ -175,7 +175,7 @@ async function run () {
     utils.buildPage({title: "Stats Home", pageType:"WebPage", description: "Tranmere Rovers statistics"}, "./tranmere-web/templates/stats-home.tpl.html",'./tranmere-web/output/site/stats.html' );
     utils.buildPage({title: "Media Home", pageType:"WebPage", description: "Tranmere Rovers media"}, "./tranmere-web/templates/media-home.tpl.html",'./tranmere-web/output/site/media.html' );
 
-    utils.buildPage({title: "Match Summary", pageType:"WebPage", description: "Match Summary}, "./tranmere-web/templates/match.tpl.html",'./tranmere-web/output/site/match.html' );
+    utils.buildPage({title: "Match Summary", pageType:"WebPage", description: "Match Summary"}, "./tranmere-web/templates/match.tpl.html",'./tranmere-web/output/site/match.html' );
 
 
     var seasons = [];
