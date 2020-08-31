@@ -52,6 +52,7 @@ module.exports = function (path, fs, Mustache,client) {
          },
 
          buildPage: function (view, pageTpl, outputPath, noindex) {
+            console.log("Building " + outputPath);
             if(outputPath != './tranmere-web/output/site/index.html')
                 view.url = outputPath.replace('./tranmere-web/output/site/','/');
 
@@ -220,8 +221,14 @@ module.exports = function (path, fs, Mustache,client) {
 
          buildMatch : async function(match) {
              match.Opposition = match.home == "Tranmere Rovers" ? match.visitor : match.home;
-             var apps = await this.getAppsByDate(match.Date);
-             match.apps = apps;
+             var appsCutOff = new Date('1983-01-01');
+
+             if(match.Date > appsCutOff) {
+                var apps = await this.getAppsByDate(match.Date);
+                match.apps = apps;
+             } else {
+                match.apps = null;
+             }
 
              //var programme = match.Programme; //await this.getProgrammesByDate(match.Date);
              if(match.Programme) {
