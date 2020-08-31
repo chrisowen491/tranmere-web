@@ -1,0 +1,31 @@
+.tranmere-results{
+
+    .card{
+        margin-bottom:40px;
+
+        .card-body {
+            background-position: right 20px top 20px;
+            background-repeat: no-repeat;
+        }
+
+        .card-title, .card-text {
+            width: 65%;
+        }
+    }
+
+    .table{
+        th, td {
+            padding-top: 0.75rem;
+            padding-right: 0.8rem;
+            padding-bottom: 0.75rem;
+            padding-left: 0.8rem;
+            font-size:0.8rem;
+        }
+
+        .thead-dark {
+            th {
+                background-color: #001489;
+            }
+        }
+    }
+}

@@ -1,0 +1,59 @@
+
+<section class="hero bg-blue">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-white mb-3">
+                <h1 class="h1 pb-1">{{home}} {{FT}} {{visitor}}</h1>
+                <h3 class="h3 pb-1">{{competition}}, {{Date}}</h3>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb breadcrumb-minimal"  itemscope="" itemtype="http://schema.org/BreadcrumbList">
+                        <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem" class="breadcrumb-item"><a href="/" itemprop="item"><span itemprop="name">Home<meta itemprop="position" content="1"/></span></a></li>
+                        <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem" class="breadcrumb-item"><a href="/results.html" itemprop="item"><span itemprop="name">Results<meta itemprop="position" content="2"/></span></a></li>
+                        <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem" class="breadcrumb-item"><a href="/results.html?season={{Season}}" itemprop="item"><span itemprop="name">Season {{Season}}<meta itemprop="position" content="3"/></span></a></li>
+                        <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem" class="breadcrumb-item active" aria-current="page"><span itemprop="name">{{title}}</span><meta itemprop="position" content="4"/></li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section>
+<div class="container overlay-item-top">
+    <div class="row">
+        <div class="col">
+            <div class="content boxed">
+                <div class="row separated">
+
+                    <aside class="col-md-4 content-aside bg-light">
+                        <div class="widget">
+                            {{#largeProgramme}}
+                            <img src="https://images.tranmere-web.com/{{largeProgramme}}"/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            {{/largeProgramme}}
+
+                            Venue: <strong>{{Venue}}</strong>
+                            <br/>
+                            Attendance: <strong>{{Attendance}}</strong>
+                            <br/>
+                            Rovers Scorers: <strong>{{formattedGoals}}</strong>
+                        </div>
+
+                    </aside>
+                    <article class="col-md-8 content-body tranmere-results">
+
+                        <ul>
+                            {{#apps}}<li>{{Name}} {{#SubbedBy}}({{SubbedBy}} {{SubTime}}){{/SubbedBy}}</li>{{/apps}}
+                        </ul>
+
+                    </article>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</section>

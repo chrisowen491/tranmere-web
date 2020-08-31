@@ -1,0 +1,41 @@
+{{>head}}
+<body data-spy="scroll" data-target="#toc">
+
+
+<!-- header -->
+{{>homenav}}
+<!-- / header -->
+
+<div id="loading">
+    <div class="spinner-grow text-primary" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
+
+{{>footer}}
+<script>
+$.urlParam = function (name) {
+    var results = new RegExp('[\?&]' + name + '=([^&#]*)')
+                      .exec(window.location.search);
+
+    return (results !== null) ? results[1] || 0 : false;
+}
+
+function search() {
+  var url = 'https://www.tranmere-web.com/search/?date='+ $.urlParam('date');
+  $.getJSON(url, function(view) {
+    $.get("/assets/templates/match.mustache", function(template) {
+      var article = Mustache.render( template, view );
+      $("#homenav").after(article);
+      $("#loading").hide();
+    });
+  });
+}
+
+
+$(document).ready(function() {
+    search();
+});
+</script>
+</body>
+</html>

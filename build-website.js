@@ -25,20 +25,8 @@ async function run () {
     if (!fs.existsSync('./tranmere-web/output/site/media')){
         fs.mkdirSync('./tranmere-web/output/site/media');
     }
-    if (!fs.existsSync('./tranmere-web/output/site/competitions')){
-        fs.mkdirSync('./tranmere-web/output/site/competitions');
-    }
-    if (!fs.existsSync('./tranmere-web/output/site/managers')){
-        fs.mkdirSync('./tranmere-web/output/site/managers');
-    }
     if (!fs.existsSync('./tranmere-web/output/site/players')){
         fs.mkdirSync('./tranmere-web/output/site/players');
-    }
-    if (!fs.existsSync('./tranmere-web/output/site/seasons')){
-        fs.mkdirSync('./tranmere-web/output/site/seasons');
-    }
-    if (!fs.existsSync('./tranmere-web/output/site/teams')){
-        fs.mkdirSync('./tranmere-web/output/site/teams');
     }
     if (!fs.existsSync('./tranmere-web/output/site/player-season')){
         fs.mkdirSync('./tranmere-web/output/site/player-season');
@@ -184,11 +172,25 @@ async function run () {
     utils.buildPage({title: "About the site", pageType:"AboutPage", description: "All about Tranmere-Web"}, "./tranmere-web/templates/about.tpl.html",'./tranmere-web/output/site/about.html' );
     utils.buildPage({title: "Links", pageType:"WebPage", description: "Some popular Tranmere Rovers links from the web"}, "./tranmere-web/templates/links.tpl.html",'./tranmere-web/output/site/links.html' );
     utils.buildPage({title: "Players Home", pageType:"WebPage", description: "Tranmere Rovers player information index"}, "./tranmere-web/templates/players-home.tpl.html",'./tranmere-web/output/site/players.html' );
-    utils.buildPage({title: "Results Home", pageType:"WebPage", description: "Tranmere Rovers results information index"}, "./tranmere-web/templates/results-home.tpl.html",'./tranmere-web/output/site/results.html' );
     utils.buildPage({title: "Stats Home", pageType:"WebPage", description: "Tranmere Rovers statistics"}, "./tranmere-web/templates/stats-home.tpl.html",'./tranmere-web/output/site/stats.html' );
     utils.buildPage({title: "Media Home", pageType:"WebPage", description: "Tranmere Rovers media"}, "./tranmere-web/templates/media-home.tpl.html",'./tranmere-web/output/site/media.html' );
 
+    utils.buildPage({title: "Match Summary", pageType:"WebPage", description: "Match Summary}, "./tranmere-web/templates/match.tpl.html",'./tranmere-web/output/site/match.html' );
 
+
+    var seasons = [];
+    for(var i = 2020; i > 1920; i--) {
+        seasons.push(i)
+    }
+
+    var teams = await utils.findAllTeams(200);
+    var competitions =  await utils.getAllCupCompetitions(50);
+
+    var managers = await utils.findAllTranmereManagers(200);
+
+    utils.buildPage({title: "Results Home", pageType:"WebPage", description: "Tranmere Rovers results information index", teams: teams, managers: managers, competitions: competitions, seasons: seasons}, "./tranmere-web/templates/results-home.tpl.html",'./tranmere-web/output/site/results.html' );
+
+    /* Media */
     utils.buildPage(
         {
             title: "Tranmere Rovers Books",
@@ -240,14 +242,6 @@ async function run () {
 
     utils.buildPage({title: "Oops", pageType:"WebPage"}, "./tranmere-web/templates/error.tpl.html",'./tranmere-web/output/site/error.html' , true);
     utils.buildPage({title: "Contact Us", pageType:"ContactPage", description: "How to contact us at Tranmere-Web"}, "./tranmere-web/templates/contact.tpl.html",'./tranmere-web/output/site/contact.html' );
-
-    var competitionView = {
-        competitions: await utils.getAllCupCompetitions(50),
-        title: "Results By Competition",
-        pageType:"WebPage",
-        description: "All Tranmere Rovers seasons by cup competition"
-    };
-    utils.buildPage(competitionView, "./tranmere-web/templates/competitions.tpl.html",'./tranmere-web/output/site/competitions.html' );
 
     var wembleyView = {
         matches: await utils.findAllTranmereMatchesByVenue('Wembley Stadium'),
@@ -324,85 +318,8 @@ async function run () {
     };
     utils.buildPage(topScorersView, "./tranmere-web/templates/goals.tpl.html",'./tranmere-web/output/site/top-scorers-by-season.html' );
 
-    for(var c=0; c < competitionView.competitions.length; c++) {
-        var compView = {
-                matches: await utils.findAllTranmereMatchesByCompetition(competitionView.competitions[c].Name,200),
-                title: "Results in " + competitionView.competitions[c].Name,
-                pageType:"WebPage",
-                image: utils.buildImagePath("photos/cowshed.jpg", 1920,1080),
-                description: "All Tranmere Rovers seasons in " + competitionView.competitions[c].Name
-        };
-        utils.buildPage(compView, "./tranmere-web/templates/competition.tpl.html",'./tranmere-web/output/site/competitions/'+competitionView.competitions[c].Name+'.html' );
-
-    }
-
-
-    var seasonsView = {
-        decades: [],
-        title: "Results By Season",
-        pageType:"WebPage",
-        description: "All Tranmere Rovers seasons by decade"
-    };
-    for(var y = 1920; y < 2020; y = y + 10) {
-        var decade = {
-            year: y,
-            seasons: []
-        };
-        for(var x = y; x < y +10; x++) {
-            if(x > 1920)
-                decade.seasons.push({year:x, nextYear:x+1});
-        }
-        seasonsView.decades.push(decade);
-    }
-    utils.buildPage(seasonsView, "./tranmere-web/templates/seasons.tpl.html",'./tranmere-web/output/site/seasons.html' );
-
-    var teams = await utils.findAllTeams(200);
-
-    utils.buildPage({title: "Results By Opposition Team", pageType:"WebPage", description:"Directory of opposition teams Tranmere Rovers has played against", resultsByLetter: teams.resultsByLetter, teams:teams.results },
-        "./tranmere-web/templates/teams.tpl.html", './tranmere-web/output/site/teams.html');
-
-    for(var i=0; i<teams.results.length; i++ ) {
-        var team = teams.results[i].key;
-        var results = await utils.findAllTranmereMatchesByOpposition(team, 200);
-        var meta = utils.calculateWinsDrawsLossesFromMatchesSearch(results);
-        var teamView = {
-            title: "Matches against " + team,
-            wins: meta.wins,
-            draws: meta.draws,
-            losses: meta.losses,
-            matches: results,
-            image: utils.buildImagePath("photos/manutd.jpg", 1920,1080),
-            pageType:"WebPage",
-            description: "Full results of all Tranmere Rovers matches against " + team
-        };
-        utils.buildPage(teamView, "./tranmere-web/templates/team.tpl.html", './tranmere-web/output/site/teams/'+team+'.html');
-
-    }
-
-    var managers = await utils.findAllTranmereManagers(200);
-
     utils.buildPage({title: "Tranmere Rovers Managerial Records",managers: managers, pageType:"WebPage",  description: "Records of all Tranmere Rovers managers"},
         "./tranmere-web/templates/managers.tpl.html", './tranmere-web/output/site/managers.html');
-
-    for(var i=0; i < managers.length; i++) {
-
-        var results = await utils.findAllTranmereMatchesWithinTimePeriod(managers[i].DateJoined,managers[i].DateLeft,500);
-        var meta = utils.calculateWinsDrawsLossesFromMatchesSearch(results);
-
-        var managerView = {
-            title: managers[i].Name + "'s matches in charge ",
-            image: utils.buildImagePath("photos/kop.jpg", 1920,1080),
-            dateFrom: managers[i].DateJoined,
-            dateTo: managers[i].DateLeftText,
-            wins: meta.wins,
-            draws: meta.draws,
-            losses: meta.losses,
-            matches: results,
-            pageType:"ProfilePage",
-            description: "Record of " + managers[i].Name + " as Tranmere Rovers manager"
-        };
-        utils.buildPage(managerView, "./tranmere-web/templates/manager.tpl.html", './tranmere-web/output/site/managers/'+managers[i].Name+'.html');
-    }
 
     var players = await utils.findAllPlayers(2000);
     var playersByLetter = await utils.findAllPlayersByLetterAndDates(300, '1980-01-01', '1990-01-01');
@@ -462,93 +379,6 @@ async function run () {
                 );
             }
         }
-    }
-
-    for(var i=1921; i < 2021; i++) {
-        var results = await utils.findAllTranmereMatchesBySeason(i,200);
-        var mySeasonView = {
-            title: "Season " + i + "-" + (i+1),
-            pageType:"WebPage",
-            image: utils.buildImagePath("photos/kop.jpg", 1920,1080),
-            description: "Tranmere Rovers results in " + i + " season",
-            matches: results,
-            next_season: i+1,
-            previous_season: i-1,
-            showProgrammes: true
-        };
-
-        var workbook = new excel.Workbook();
-
-        var maxSquadNumber = 13;
-        if(i > 1998)
-            maxSquadNumber = 41;
-
-        for(var y=1; y <maxSquadNumber; y++) {
-            var worksheet = null;
-            if(y != maxSquadNumber-1) {
-                worksheet = workbook.addWorksheet(y);
-                worksheet.cell(1,1).string('Date');
-                worksheet.cell(1,2).string('Opposition');
-                worksheet.cell(1,3).string('Competition');
-                worksheet.cell(1,4).string('Season');
-                worksheet.cell(1,5).string('Name');
-                worksheet.cell(1,6).string('Number');
-                worksheet.cell(1,7).string('SubbedBy');
-                worksheet.cell(1,8).string('SubTime');
-                worksheet.cell(1,9).string('YellowCard');
-                worksheet.cell(1,10).string('RedCard');
-                worksheet.cell(1,11).string('SubYellow');
-                worksheet.cell(1,12).string('SubRed');
-                for(var x=0; x < results.length; x++) {
-                    if(results[x]) {
-                        worksheet.cell(x+2,1).string(results[x].Date);
-                        worksheet.cell(x+2,2).string(results[x].Opposition);
-                        worksheet.cell(x+2,3).string(results[x].competition);
-                        worksheet.cell(x+2,4).string(results[x].Season);
-                        worksheet.cell(x+2,6).number(y);
-                    }
-                }
-            }
-            else{
-                worksheet = workbook.addWorksheet("goals");
-                worksheet.cell(1,1).string('Date');
-                worksheet.cell(1,2).string('Opposition');
-                worksheet.cell(1,3).string('Competition');
-                worksheet.cell(1,4).string('Season');
-                worksheet.cell(1,5).string('Scorer');
-                worksheet.cell(1,6).string('Assist');
-                worksheet.cell(1,7).string('GoalType');
-                worksheet.cell(1,8).string('AssistType');
-                worksheet.cell(1,9).string('Minute');
-                worksheet.cell(1,10).string('6YardBox');
-                worksheet.cell(1,11).string('18YardBox');
-                worksheet.cell(1,12).string('LongRange');
-                worksheet.cell(1,13).string('CrossSide');
-                worksheet.cell(1,14).string('Foot');
-                var currentRow =1;
-                for(var z=0; z < results.length; z++) {
-                    if(results[z].home == "Tranmere Rovers") {
-                        for(var g=0; g < results[z].hgoal; g++) {
-                            var currentRow = currentRow+1;
-                            worksheet.cell(currentRow,1).string(results[z].Date);
-                            worksheet.cell(currentRow,2).string(results[z].Opposition);
-                            worksheet.cell(currentRow,3).string(results[z].competition);
-                            worksheet.cell(currentRow,4).string(results[z].Season);
-                        }
-                    } else {
-                        for(var g=0; g<results[z].vgoal; g++) {
-                            var currentRow = currentRow+1;
-                            worksheet.cell(currentRow,1).string(results[z].Date);
-                            worksheet.cell(currentRow,2).string(results[z].Opposition);
-                            worksheet.cell(currentRow,3).string(results[z].competition);
-                            worksheet.cell(currentRow,4).string(results[z].Season);
-                        }
-                    }
-                }
-            }
-        }
-        workbook.write('tmp/apps-master/raw/'+i+'.xlsx');
-        utils.buildPage(mySeasonView, "./tranmere-web/templates/season.tpl.html", './tranmere-web/output/site/seasons/'+i+'.html');
     }
 
     utils.buildPage({urls:utils.pages}, "./tranmere-web/templates/sitemap.tpl.xml", './tranmere-web/output/site/sitemap.xml');

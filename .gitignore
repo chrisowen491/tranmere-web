@@ -5,9 +5,7 @@ node_modules/
 /tranmere-web/node_modules/
 /tranmere-web-api/scripts/
 /tranmere-web-api/src/
-/tranmere-web/output/assets/css/*.css
-/tranmere-web/output/assets/js/vendor*.js
-/tranmere-web/output/site/*/*.html
+/tranmere-web/output/*
 **/.DS_Store
 /tranmere-web-api/sam/packaged.yaml
 /images/*
@@ -15,3 +13,4 @@ node_modules/
 /packaged.yaml
 /data/apps-master/AllResults.xlsx
 
+/tranmere-web-api/sam/search/package-lock.json
