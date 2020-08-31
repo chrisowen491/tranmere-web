@@ -22,6 +22,9 @@ var formatter = new Intl.NumberFormat('en-GB', {
 
 async function run () {
 
+    if (!fs.existsSync('./tranmere-web/output/site')){
+        fs.mkdirSync('./tranmere-web/output/site');
+    }
     if (!fs.existsSync('./tranmere-web/output/site/media')){
         fs.mkdirSync('./tranmere-web/output/site/media');
     }
