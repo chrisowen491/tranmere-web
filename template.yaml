@@ -12,7 +12,7 @@ Parameters:
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
-    Timeout: 3
+    Timeout: 600
   Api:
     Cors:
       AllowHeaders: "'Content-Type'"
@@ -42,6 +42,34 @@ Resources:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /page/{pageName}
+            RestApiId: !Ref TranmereWebApiGateway
+            Method: get
+
+  ScraperFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: tranmere-web-api/sam/scraper/
+      Handler: app.handler
+      Runtime: nodejs12.x
+      Events:
+        PageRequest:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /scraper/{season}/{id}
+            RestApiId: !Ref TranmereWebApiGateway
+            Method: get
+
+  PlayerBuilderFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: tranmere-web-api/sam/player-builder/
+      Handler: app.handler
+      Runtime: nodejs12.x
+      Events:
+        PageRequest:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /player-builder/{kit}/{hair}/{body}/{features}
             RestApiId: !Ref TranmereWebApiGateway
             Method: get
 

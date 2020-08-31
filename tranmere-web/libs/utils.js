@@ -594,8 +594,12 @@ module.exports = function (path, fs, Mustache,client) {
                var transfer = results.body.hits.hits[i]["_source"];
                if(transfer.Direction == "In")
                 transfer.incoming = true;
-               if(transfer.Type == "Loan")
-                transfer.loan = true;
+               if(transfer.Type == "Loan" || transfer.Type == "Youth" || transfer.Type == "FreeTransfer" || transfer.Type == "Retired" || transfer.Type == "Released")
+                transfer.noFee = true;
+               if(transfer.Type == "Loan" || transfer.Type == "Youth" || transfer.Type == "FreeTransfer" || transfer.Type == "Tribunal" || transfer.Type == "Retired" || transfer.Type == "Released")
+                transfer.Other = true;
+               if(transfer.Type == "Youth" )
+                 transfer.Type = "Tranmere Youth Team"
                transfers.push(transfer)
              }
              return transfers;
@@ -687,8 +691,8 @@ module.exports = function (path, fs, Mustache,client) {
             for(var i=0; i < results.body.hits.hits.length; i++) {
                 var player = results.body.hits.hits[i]["_source"];
                 player.Id = results.body.hits.hits[i]["_id"]
-                player.goals = await this.findGoalsByPlayer(player.Name, 500);
-                player.apps = await this.findAppsByPlayer(player.Name, 500);
+                player.goals = await this.findGoalsByPlayer(player.Name, 200);
+                player.apps = await this.findAppsByPlayer(player.Name, 1000);
                 player.links = await this.getLinksByPlayer(player.Name);
                 player.stats = this.calculateStats(player.apps, player.goals);
                 players.push(player)
@@ -838,7 +842,7 @@ module.exports = function (path, fs, Mustache,client) {
             return Promise.resolve(appsList);
          },
 
-         getTopPlayerByAppearnces : async function(size) {
+         getTopPlayerByAppearances : async function(size) {
             var query = {
                 index: "apps",
                 body: {
@@ -849,12 +853,6 @@ module.exports = function (path, fs, Mustache,client) {
                             "size" : size,
                             "field": "Name"
                           }
-                        },
-                        "subs": {
-                         "terms": {
-                            "size" : size,
-                            "field": "SubbedBy"
-                          }
                         }
                       }
                   }
@@ -864,15 +862,10 @@ module.exports = function (path, fs, Mustache,client) {
             var results = [];
             for(var i=0; i < result.body.aggregations.apps.buckets.length; i++) {
                 var player = result.body.aggregations.apps.buckets[i].key;
-                var subs = 0;
-                for(var x=0; x < result.body.aggregations.subs.buckets.length; x++) {
-                    if(result.body.aggregations.subs.buckets[x].key == player) {
-                        subs = result.body.aggregations.subs.buckets[x].doc_count;
-                    }
-                }
+
                 var playerBio = await this.getPlayerByName(player);
 
-                results.push({"Name": player, "Bio": playerBio, Subs:subs, "Starts": result.body.aggregations.apps.buckets[i].doc_count})
+                results.push({"Name": player, "Bio": playerBio, "Starts": result.body.aggregations.apps.buckets[i].doc_count})
             }
             return results;
         },
@@ -891,7 +884,7 @@ module.exports = function (path, fs, Mustache,client) {
               };
 
              var results = await client.search(query);
-             if(results.body.hits && results.body.hits.hits) {
+             if(results.body.hits && results.body.hits.hits && results.body.hits.hits[0]) {
                 return results.body.hits.hits[0]["_source"];
              } else {
                 return null;
@@ -1046,7 +1039,7 @@ module.exports = function (path, fs, Mustache,client) {
             return {results:results, resultsByLetter:list};
          },
 
-         findAllPlayersByLetterAndDates : async function(size, from,to) {
+         findAllPlayersByLetterAndDates : async function(size, from, to) {
             var query = {
                 index: "apps",
                 body: {

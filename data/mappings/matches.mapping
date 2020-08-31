@@ -13,6 +13,9 @@
             "competition": {
                 "type": "keyword"
             },
+            "Programme": {
+                "type": "keyword"
+            },
             "Venue": {
                 "type": "keyword"
             },

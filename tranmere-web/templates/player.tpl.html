@@ -113,7 +113,12 @@
                       <tr>
                           <td><small><time datetime="{{Date}}" class="text-muted d-block">{{Date}}</time></small></td>
                           <td><small>{{^incoming}}<span class="icon-arrow-right text-danger"></span>{{/incoming}}{{#incoming}}<span class="icon-arrow-left text-success"></span>{{/incoming}}<a href="/teams/{{Club}}.html">{{Club}}</a></small></td>
-                          <td><small>{{#loan}}Loan{{/loan}}{{^loan}}{{#currencyFormat}}{{Fee}}{{/currencyFormat}}{{/loan}}</small></td>
+                          <td><small>
+                              {{^noFee}}
+                                {{#currencyFormat}}{{Fee}}{{/currencyFormat}}
+                              {{/noFee}}
+                              {{#Other}} {{Type}} {{/Other}}
+                          </small></td>
                       </tr>
                       {{/transfers}}
                   </table>

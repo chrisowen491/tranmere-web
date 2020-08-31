@@ -1,6 +1,12 @@
 const { Client } = require('@elastic/elasticsearch')
 const client = new Client({
-  node: 'http://localhost:9200'
+    cloud: {
+        id: process.env.es_cluster,
+      },
+      auth: {
+        username: process.env.es_user,
+        password: process.env.es_password
+      }
 });
 var Mustache = require("mustache");
 var excel = require('excel4node');
@@ -52,12 +58,17 @@ async function run () {
         },
         "./tranmere-web/templates/home2.tpl.html",'./tranmere-web/output/site/index.html' );
 
+/*
     utils.buildPage(
         {
             title: "Tranmere Kits",
             pageType:"WebPage",
             description: "Historic Tranmere Kits",
             kits: [
+                {
+                    Season: "1984-1985",
+                    image: "/assets/shirts/1985.svg",
+                },
                 {
                     Season: "1986-1987",
                     image: "/assets/shirts/1986.svg",
@@ -103,8 +114,16 @@ async function run () {
                     image: "/assets/shirts/2004.svg",
                 },
                 {
+                    Season: "2005-2007",
+                    image: "/assets/shirts/2006.svg",
+                },
+                {
                     Season: "2007-2009",
                     image: "/assets/shirts/2007.svg",
+                },
+                {
+                    Season: "2010-2011",
+                    image: "/assets/shirts/2010.svg",
                 },
                 {
                     Season: "2011-2013",
@@ -259,7 +278,7 @@ async function run () {
 
 
     var appsView = {
-        players: await utils.getTopPlayerByAppearnces(10),
+        players: await utils.getTopPlayerByAppearances(20),
         title: "Most Tranmere Rovers Appearances",
         pageType:"WebPage",
         description: "List of players with most appearances for Tranmere Rovers"
@@ -267,7 +286,7 @@ async function run () {
     utils.buildPage(appsView, "./tranmere-web/templates/appearances.tpl.html",'./tranmere-web/output/site/appearances.html' );
 
     var goalsView = {
-        players: await utils.getTopPlayerByGoals(10),
+        players: await utils.getTopPlayerByGoals(20),
         title: "Most Tranmere Rovers Goals",
         pageType:"WebPage",
         description: "List of players with most goals for Tranmere Rovers"
@@ -275,7 +294,7 @@ async function run () {
     utils.buildPage(goalsView, "./tranmere-web/templates/goals.tpl.html",'./tranmere-web/output/site/goals.html' );
 
     var topScorersView = {
-        players: await utils.getTopScorersBySeason(20),
+        players: await utils.getTopScorersBySeason(50),
         title: "Top Scorers BY Season",
         pageType:"WebPage",
         description: "Tranmere Rovers Top Scorers By Season"
@@ -362,17 +381,17 @@ async function run () {
         utils.buildPage(managerView, "./tranmere-web/templates/manager.tpl.html", './tranmere-web/output/site/managers/'+managers[i].Name+'.html');
     }
 
-    var players = await utils.findAllPlayers(200);
-    var playersByLetter = await utils.findAllPlayersByLetterAndDates(150, '1980-01-01', '1990-01-01');
+    var players = await utils.findAllPlayers(2000);
+    var playersByLetter = await utils.findAllPlayersByLetterAndDates(300, '1980-01-01', '1990-01-01');
     utils.buildPage({title: "Players Records - 1980's", pageType:"WebPage", description:"Directory of player records for Tranmere Rovers players in the 1980's", resultsByLetter: playersByLetter.resultsByLetter, players:playersByLetter.results },
         "./tranmere-web/templates/players.tpl.html", './tranmere-web/output/site/players-80s.html');
-    playersByLetter = await utils.findAllPlayersByLetterAndDates(150, '1990-01-01', '2000-01-01');
+    playersByLetter = await utils.findAllPlayersByLetterAndDates(300, '1990-01-01', '2000-01-01');
     utils.buildPage({title: "Players Records - 1990's", pageType:"WebPage", description:"Directory of player records for Tranmere Rovers players in the 1990's", resultsByLetter: playersByLetter.resultsByLetter, players:playersByLetter.results },
         "./tranmere-web/templates/players.tpl.html", './tranmere-web/output/site/players-90s.html');
-    playersByLetter = await utils.findAllPlayersByLetterAndDates(150, '2000-01-01', '2010-01-01');
+    playersByLetter = await utils.findAllPlayersByLetterAndDates(300, '2000-01-01', '2010-01-01');
     utils.buildPage({title: "Players Records - 2000's", pageType:"WebPage", description:"Directory of player records for Tranmere Rovers players in the 2000's", resultsByLetter: playersByLetter.resultsByLetter, players:playersByLetter.results },
         "./tranmere-web/templates/players.tpl.html", './tranmere-web/output/site/players-00s.html');
-    playersByLetter = await utils.findAllPlayersByLetterAndDates(150, '2010-01-01', '2030-01-01');
+    playersByLetter = await utils.findAllPlayersByLetterAndDates(300, '2010-01-01', '2030-01-01');
     utils.buildPage({title: "Players Records - 2010's", pageType:"WebPage", description:"Directory of player records for Tranmere Rovers players in the 2010's", resultsByLetter: playersByLetter.resultsByLetter, players:playersByLetter.results },
         "./tranmere-web/templates/players.tpl.html", './tranmere-web/output/site/players-10s.html');
 
@@ -510,5 +529,6 @@ async function run () {
     }
 
     utils.buildPage({urls:utils.pages}, "./tranmere-web/templates/sitemap.tpl.xml", './tranmere-web/output/site/sitemap.xml');
+*/
 }
 run().catch(console.log)

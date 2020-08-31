@@ -1,6 +1,7 @@
 XLSX = require('xlsx');
 
-var sheets = ['1984','1985','1986','1987','1988','1989','1990', '1991','1992', '1993', '1994', '1995', '1996', '1997', '2017'];
+var sheets = ['1984','1985','1986','1987','1988','1989','1990', '1991','1992', '1993', '1994', '1995'];
+var sheets2 = [1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019];
 
 function exportme(year) {
     const workBook = XLSX.readFile("./data/apps-master/"+year+".xlsx");
@@ -11,8 +12,17 @@ function exportme(year) {
     XLSX.writeFile(workBook, './tmp/goals/'+year+'.csv', { bookType: "csv", sheet: 'goals' });
 }
 
+function exportmescraped(year) {
+    const workBook = XLSX.readFile("./data/apps-master/"+year+".xlsx");
+    XLSX.writeFile(workBook, './tmp/apps/scraped/'+year+'.csv', { bookType: "csv", sheet: 'apps' });
+    XLSX.writeFile(workBook, './tmp/goals/'+year+'.csv', { bookType: "csv", sheet: 'goals' });
+}
+
 for(var i=0; i < sheets.length; i++) {
     exportme(sheets[i]);
+}
+for(var i=0; i < sheets2.length; i++) {
+    exportmescraped(sheets2[i]);
 }
 
 const workBook = XLSX.readFile("./data/apps-master/AllTranmereResults.xlsx");

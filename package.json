@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build-web": "node build-website",
-    "export-excel": "node export-excel"
+    "export-excel": "node export-excel",
+    "process-json": "node buildFromJson"
   },
   "author": "Chris Owen",
   "license": "ISC",

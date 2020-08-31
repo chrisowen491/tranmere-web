@@ -31,3 +31,11 @@ The API is a set of AWS Lambdas.
 
 ###  
  * ./deploy-api.sh  
+ 
+ http://127.0.0.1:3001/scraper/2011/141
+ 
+ https://editor.method.ac/#move_back
+ 
+ http://www.historicalkits.co.uk/Tranmere_Rovers/Tranmere_Rovers.htm
+ 
+ 
