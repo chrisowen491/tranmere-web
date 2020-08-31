@@ -222,12 +222,13 @@ module.exports = function (path, fs, Mustache,client) {
              match.Opposition = match.home == "Tranmere Rovers" ? match.visitor : match.home;
              var apps = await this.getAppsByDate(match.Date);
              match.apps = apps;
-             var programme = await this.getProgrammesByDate(match.Date);
-             if(programme) {
+
+             //var programme = match.Programme; //await this.getProgrammesByDate(match.Date);
+             if(match.Programme) {
 
                  var smallBody = {
-                      "bucket": programme.Bucket,
-                      "key": programme.Path,
+                      "bucket": 'trfc-programmes',
+                      "key": match.Programme,
                       "edits": {
                         "resize": {
                           "width": 100,
@@ -236,9 +237,10 @@ module.exports = function (path, fs, Mustache,client) {
                       }
                     };
                      var largeBody = {
-                          "bucket": programme.Bucket,
-                          "key": programme.Path,
+                          "bucket": 'trfc-programmes',
+                          "key": match.Programme,
                         };
+                 delete match.Programme;
                  match.programme = Buffer.from(JSON.stringify(smallBody)).toString('base64');
                  match.largeProgramme = Buffer.from(JSON.stringify(largeBody)).toString('base64');
              }
@@ -492,29 +494,6 @@ module.exports = function (path, fs, Mustache,client) {
                 }
               };
             return this.findTranmereMatchesByQuery(query);
-         },
-
-         getProgrammesByDate : async function(date) {
-              var query = {
-                index: "programmes",
-                body: {
-                   "query": {
-                     "bool": {
-                        "must": [
-                          {
-                            "match": {
-                             "Date" : date
-                            }
-                          }
-                        ]
-                      }
-                   }
-                }
-              };
-
-             var results = await client.search(query);
-             if(results.body.hits.hits.length == 1)
-                return results.body.hits.hits[0]["_source"];
          },
 
          getAppsByDate : async function(date) {

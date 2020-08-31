@@ -10,28 +10,28 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  deploy-api:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v1
-      - uses: bahmutov/npm-install@v1
-        with:
-          working-directory: tranmere-web-api/sam/contact-us
-      - uses: bahmutov/npm-install@v1
-        with:
-          working-directory: tranmere-web-api/sam/crud
-      - uses: bahmutov/npm-install@v1
-        with:
-          working-directory: tranmere-web-api/sam/page
-      - uses: falnyr/aws-sam-deploy-action@v1.0.0
-        env:
-          TEMPLATE: 'template.yaml'
-          AWS_STACK_NAME: Tranmere-Web-Api
-          AWS_REGION: 'eu-west-1'
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEPLOY_BUCKET: ${{ secrets.AWS_DEPLOY_BUCKET }}
-          PARAMETER_OVERRIDES: Email=${{ secrets.CLOUDFLARE_AUTH_EMAIL }}
+  #deploy-api:
+  #  runs-on: ubuntu-latest
+  #  steps:
+  #    - uses: actions/checkout@v1
+  #    - uses: bahmutov/npm-install@v1
+  #      with:
+  #        working-directory: tranmere-web-api/sam/contact-us
+  #    - uses: bahmutov/npm-install@v1
+  #      with:
+  #        working-directory: tranmere-web-api/sam/crud
+  #    - uses: bahmutov/npm-install@v1
+  #      with:
+  #        working-directory: tranmere-web-api/sam/page
+  #    - uses: falnyr/aws-sam-deploy-action@v1.0.0
+  #      env:
+  #        TEMPLATE: 'template.yaml'
+  #        AWS_STACK_NAME: Tranmere-Web-Api
+  #        AWS_REGION: 'eu-west-1'
+  #        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #        AWS_DEPLOY_BUCKET: ${{ secrets.AWS_DEPLOY_BUCKET }}
+  #        PARAMETER_OVERRIDES: Email=${{ secrets.CLOUDFLARE_AUTH_EMAIL }}
 
   deploy-website:
     # The type of runner that the job will run on
@@ -55,20 +55,20 @@ jobs:
         run: aws s3 sync ./tranmere-web/output/site s3://www.tranmere-web.com  --delete
 
 
-  deploy-cloudflare:
+  #deploy-cloudflare:
     # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+    #runs-on: ubuntu-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
+    #steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+     # - uses: actions/checkout@v2
 
-      - name: cloudflare worker
-        uses: cloudflare/serverless-action@master
-        env:
-          CLOUDFLARE_ACCOUNT_ID : ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          CLOUDFLARE_ZONE_ID : ${{ secrets.CLOUDFLARE_ZONE_ID }}
-          CLOUDFLARE_AUTH_EMAIL : ${{ secrets.CLOUDFLARE_AUTH_EMAIL }}
-          CLOUDFLARE_SCRIPT_NAME : "tranmere-web-api"
-          CLOUDFLARE_AUTH_KEY: ${{ secrets.CLOUDFLARE_AUTH_KEY }}
+     # - name: cloudflare worker
+     #   uses: cloudflare/serverless-action@master
+     #   env:
+     #     CLOUDFLARE_ACCOUNT_ID : ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+     #     CLOUDFLARE_ZONE_ID : ${{ secrets.CLOUDFLARE_ZONE_ID }}
+     #     CLOUDFLARE_AUTH_EMAIL : ${{ secrets.CLOUDFLARE_AUTH_EMAIL }}
+     #     CLOUDFLARE_SCRIPT_NAME : "tranmere-web-api"
+     #     CLOUDFLARE_AUTH_KEY: ${{ secrets.CLOUDFLARE_AUTH_KEY }}

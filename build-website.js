@@ -241,8 +241,6 @@ async function run () {
     utils.buildPage({title: "Oops", pageType:"WebPage"}, "./tranmere-web/templates/error.tpl.html",'./tranmere-web/output/site/error.html' , true);
     utils.buildPage({title: "Contact Us", pageType:"ContactPage", description: "How to contact us at Tranmere-Web"}, "./tranmere-web/templates/contact.tpl.html",'./tranmere-web/output/site/contact.html' );
 
-/*
-
     var competitionView = {
         competitions: await utils.getAllCupCompetitions(50),
         title: "Results By Competition",
@@ -326,7 +324,6 @@ async function run () {
     };
     utils.buildPage(topScorersView, "./tranmere-web/templates/goals.tpl.html",'./tranmere-web/output/site/top-scorers-by-season.html' );
 
-
     for(var c=0; c < competitionView.competitions.length; c++) {
         var compView = {
                 matches: await utils.findAllTranmereMatchesByCompetition(competitionView.competitions[c].Name,200),
@@ -338,6 +335,7 @@ async function run () {
         utils.buildPage(compView, "./tranmere-web/templates/competition.tpl.html",'./tranmere-web/output/site/competitions/'+competitionView.competitions[c].Name+'.html' );
 
     }
+
 
     var seasonsView = {
         decades: [],
@@ -554,6 +552,5 @@ async function run () {
     }
 
     utils.buildPage({urls:utils.pages}, "./tranmere-web/templates/sitemap.tpl.xml", './tranmere-web/output/site/sitemap.xml');
-*/
 }
 run().catch(console.log)
