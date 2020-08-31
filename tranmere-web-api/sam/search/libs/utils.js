@@ -147,6 +147,13 @@ module.exports = function (client) {
              match.Opposition = match.home == "Tranmere Rovers" ? match.visitor : match.home;
              var apps = await this.getAppsByDate(match.Date);
              match.apps = apps;
+             if(match.venue == "Wembley Stadium") {
+                 match.location = "N";
+             } else if(match.home == "Tranmere Rovers") {
+                 match.location = "H";
+             } else {
+                 match.location = "A";
+             }
 
              if(match.Programme && match.Programme != "#N/A") {
 

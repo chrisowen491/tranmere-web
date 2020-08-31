@@ -28,9 +28,9 @@ $(document).ready(function() {
     if($.urlParam('season'))
         $('#season').val($.urlParam('season'));
     if($.urlParam('opposition'))
-        $('#opposition').val($.urlParam('opposition'));
+        $('#opposition').val(decodeURIComponent($.urlParam('opposition')));
     if($.urlParam('competition'))
-        $('#competition').val($.urlParam('competition'));
+        $('#competition').val(decodeURIComponent($.urlParam('competition')));
     if($.urlParam('manager'))
         $('#manager').val($.urlParam('manager'));
     if(!$('#season').val())

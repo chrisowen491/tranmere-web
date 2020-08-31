@@ -10,7 +10,7 @@
                         <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem" class="breadcrumb-item"><a href="/" itemprop="item"><span itemprop="name">Home<meta itemprop="position" content="1"/></span></a></li>
                         <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem" class="breadcrumb-item"><a href="/results.html" itemprop="item"><span itemprop="name">Results<meta itemprop="position" content="2"/></span></a></li>
                         <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem" class="breadcrumb-item"><a href="/results.html?season={{Season}}" itemprop="item"><span itemprop="name">Season {{Season}}<meta itemprop="position" content="3"/></span></a></li>
-                        <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem" class="breadcrumb-item active" aria-current="page"><span itemprop="name">{{title}}</span><meta itemprop="position" content="4"/></li>
+                        <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem" class="breadcrumb-item active" aria-current="page"><span itemprop="name">{{home}} {{FT}} {{visitor}}</span><meta itemprop="position" content="4"/></li>
                     </ol>
                 </nav>
             </div>
@@ -36,14 +36,14 @@
 
                             Venue: <strong>{{Venue}}</strong>
                             <br/>
-                            Attendance: <strong>{{Attendance}}</strong>
-                            <br/>
-                            Rovers Scorers: <strong>{{formattedGoals}}</strong>
+                            Attendance: <strong>{{attendance}}</strong>
                         </div>
 
                     </aside>
                     <article class="col-md-8 content-body tranmere-results">
-
+                        <h3>Scorers:</h3>
+                        <strong>{{formattedGoals}}</strong>
+                        <h3>LineUp</h3>
                         <ul>
                             {{#apps}}<li>{{Name}} {{#SubbedBy}}({{SubbedBy}} {{SubTime}}){{/SubbedBy}}</li>{{/apps}}
                         </ul>
