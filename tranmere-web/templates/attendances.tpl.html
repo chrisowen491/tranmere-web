@@ -32,10 +32,12 @@
                         {{/programme}}
                         <div class="row gutter-2 align-items-center">
                           <div class="col">
-                            <h3 class="card-title mb-1">{{#attendance}}{{commaFormat}}{{/attendance}}</h3>
-                            <p class="card-title mb-2">{{home}} {{FT}} {{visitor}}</p>
-                            <p class="card-text mb-2">{{Venue}}</p>
-                            <time datetime="{{Date}}" class="text-muted">{{Date}}</time>
+                            <a href="/match.html?date={{Date}}" class="topic">
+                              <h3 class="card-title mb-1">{{#attendance}}{{commaFormat}}{{/attendance}}</h3>
+                              <p class="card-title mb-2">{{home}} {{FT}} {{visitor}}</p>
+                              <p class="card-text mb-2">{{Venue}}</p>
+                              <time datetime="{{Date}}" class="text-muted">{{Date}}</time>
+                            </a>
                           </div>
                         </div>
                       </div>

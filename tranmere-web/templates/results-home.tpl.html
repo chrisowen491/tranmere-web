@@ -63,7 +63,7 @@
                       <label for="season">Manager</label>
                       <select class="form-control form-control-sm" id="manager">
                         <option></option>
-                        {{#managers}}<option>{{Name}}</option>{{/managers}}
+                        {{#managers}}<option value="{{DateJoined}},{{DateLeft}}">{{Name}}</option>{{/managers}}
                       </select>
                     </div>
                     <button type="button" class="btn btn-sm btn-primary btn-rounded" onclick="search()">Search</button>
