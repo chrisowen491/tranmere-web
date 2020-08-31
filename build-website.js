@@ -22,6 +22,29 @@ var formatter = new Intl.NumberFormat('en-GB', {
 
 async function run () {
 
+    if (!fs.existsSync('./tranmere-web/output/site/media')){
+        fs.mkdirSync('./tranmere-web/output/site/media');
+    }
+    if (!fs.existsSync('./tranmere-web/output/site/competitions')){
+        fs.mkdirSync('./tranmere-web/output/site/competitions');
+    }
+    if (!fs.existsSync('./tranmere-web/output/site/managers')){
+        fs.mkdirSync('./tranmere-web/output/site/managers');
+    }
+    if (!fs.existsSync('./tranmere-web/output/site/players')){
+        fs.mkdirSync('./tranmere-web/output/site/players');
+    }
+    if (!fs.existsSync('./tranmere-web/output/site/seasons')){
+        fs.mkdirSync('./tranmere-web/output/site/seasons');
+    }
+    if (!fs.existsSync('./tranmere-web/output/site/teams')){
+        fs.mkdirSync('./tranmere-web/output/site/teams');
+    }
+    if (!fs.existsSync('./tranmere-web/output/site/player-season')){
+        fs.mkdirSync('./tranmere-web/output/site/player-season');
+    }
+
+
     utils.buildPage(
         {
             title: "Home",
