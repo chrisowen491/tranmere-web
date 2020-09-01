@@ -1,5 +1,14 @@
 .tranmere-results{
 
+    .match {
+        padding:0px;
+    }
+
+    .hero {
+        padding-top: ($section-padding * 1.5);
+        padding-bottom: 0px;
+    }
+
     .card{
         margin-bottom:40px;
 

@@ -6,8 +6,8 @@
         <th scope="col">Opposition</th>
         <th scope="col">Competition</th>
         <th scope="col">Result</th>
-        <th scope="col">Att.</th>
-        <th scope="col" class="d-none d-md-block">Programme</th>
+        <th  class="d-none d-sm-table-cell" scope="col">Att.</th>
+        <th scope="col" class="d-none d-sm-table-cell">Programme</th>
     </tr>
     </thead>
     <tbody>
@@ -19,8 +19,8 @@
         <td><a href="/results.html?opposition={{Opposition}}">{{Opposition}}</a>  ({{location}})</td>
         <td>{{competition}}</td>
         <td>{{FT}}</td>
-        <td>{{attendance}}</td>
-        <td class="d-none d-md-block">{{#programme}}<img src="https://images.tranmere-web.com/{{programme}}"/>{{/programme}}</td>
+        <td class="d-none d-sm-table-cell">{{attendance}}</td>
+        <td class="d-none d-sm-table-cell">{{#programme}}<img src="https://images.tranmere-web.com/{{programme}}"/>{{/programme}}</td>
     </tr>
     {{/results}}
     </tbody>

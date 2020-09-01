@@ -33,7 +33,7 @@ $(document).ready(function() {
         $('#competition').val(decodeURIComponent($.urlParam('competition')));
     if($.urlParam('manager'))
         $('#manager').val($.urlParam('manager'));
-    if(!$('#season').val())
+    if(!$('#season').val() && !$.urlParam('manager') && !$.urlParam('opposition') && !$.urlParam('competition'))
         $('#season').val(2019);
     search();
 });
