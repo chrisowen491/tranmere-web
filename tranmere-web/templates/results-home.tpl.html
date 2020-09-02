@@ -66,6 +66,28 @@
                         {{#managers}}<option value="{{DateJoined}},{{DateLeft}}">{{Name}}</option>{{/managers}}
                       </select>
                     </div>
+                    <div class="form-group">
+                      <label for="venue">Venue</label>
+                      <select class="form-control form-control-sm" id="venue">
+                        <option></option>
+                        <option>Prenton Park</option>
+                        <option>Wembley Stadium</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label for="pens">Penalties</label>
+                      <select class="form-control form-control-sm" id="pens">
+                        <option></option>
+                        <option>Penalty Shootout</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label for="pens">Sort</label>
+                      <select class="form-control form-control-sm" id="sort">
+                        <option>Date</option>
+                        <option>Top Attendance</option>
+                      </select>
+                    </div>
                     <button type="button" class="btn btn-sm btn-primary btn-rounded" onclick="search()">Search</button>
                   </div>
 

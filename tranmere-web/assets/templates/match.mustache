@@ -43,7 +43,7 @@
 
                     </aside>
                     <article class="col-md-8 content-body tranmere-results">
-
+                        {{#pens}}<h4>{{pens}}</h4>{{/pens}}
                         <ul class="list-group">
                             <li  class="list-group-item"><h4>Team</h4></li>
                             {{#apps}}<li  class="list-group-item"><a href="/players/{{Name}}.html">{{Name}}</a> {{#SubbedBy}}(<a href="/players/{{SubbedBy}}.html">{{SubbedBy}}</a> {{SubTime}}){{/SubbedBy}}</li>{{/apps}}

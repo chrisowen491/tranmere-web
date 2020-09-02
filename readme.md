@@ -16,7 +16,6 @@ There are a number of NPM scripts which build a local Elastic Search index, and 
 ### Building
 
  * npm install
- * ./data/cleanindex.sh
  * npm run build-web
  * gulp 
 
@@ -24,11 +23,3 @@ There are a number of NPM scripts which build a local Elastic Search index, and 
 
  * aws s3 sync ./tranmere-web/output/site s3://www.tranmere-web.com
  * aws s3 sync ./images s3://trfc-programmes
-  
- http://127.0.0.1:3001/scraper/2011/141
- 
- https://editor.method.ac/#move_back
- 
- http://www.historicalkits.co.uk/Tranmere_Rovers/Tranmere_Rovers.htm
- 
- 

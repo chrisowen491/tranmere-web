@@ -124,9 +124,7 @@ function publish() {
           './tranmere-web/assets/players/*',
           './tranmere-web/assets/shirts/*',
           './tranmere-web/assets/templates/*',
-          './tranmere-web/assets/js/app.js',
-          './tranmere-web/assets/js/contact.js',
-          './tranmere-web/assets/js/search.js'
+          './tranmere-web/assets/js/*.js',
       ],  {base: './tranmere-web/assets/'})
       .pipe(gulp.dest('./tranmere-web/output/site/assets/'));
 }
@@ -135,6 +133,7 @@ function publish() {
 function watch() {
   gulp.watch('tranmere-web/assets/scss/**/*', gulp.series(css));
   gulp.watch(['tranmere-web/assets/js/*'], gulp.series(publish, reload));
+  gulp.watch(['tranmere-web/assets/templates/*'], gulp.series(publish, reload));
   gulp.watch('gulpfile.js', gulp.series(scripts, styles, minify));
 }
 

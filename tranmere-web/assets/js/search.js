@@ -3,7 +3,10 @@ function search() {
   $("#content").hide();
   var url = 'https://www.tranmere-web.com/search/?season='+ $('#season').val()
               + '&competition='+ $('#competition').val() + '&opposition=' + $('#opposition').val()
-              + '&manager=' + $('#manager').val();
+              + '&manager=' + $('#manager').val()
+              + '&venue=' + $('#venue').val()
+              + '&pens=' + $('#pens').val()
+              + '&sort=' + $('#sort').val();
   $.getJSON(url, function(data) {
     var view = {
         results: data
@@ -31,9 +34,15 @@ $(document).ready(function() {
         $('#opposition').val(decodeURIComponent($.urlParam('opposition')));
     if($.urlParam('competition'))
         $('#competition').val(decodeURIComponent($.urlParam('competition')));
+    if($.urlParam('venue'))
+        $('#venue').val(decodeURIComponent($.urlParam('venue')));
+    if($.urlParam('pens'))
+        $('#pens').val(decodeURIComponent($.urlParam('pens')));
+    if($.urlParam('sort'))
+        $('#sort').val(decodeURIComponent($.urlParam('sort')));
     if($.urlParam('manager'))
         $('#manager').val($.urlParam('manager'));
-    if(!$('#season').val() && !$.urlParam('manager') && !$.urlParam('opposition') && !$.urlParam('competition'))
+    if(!$('#season').val() && !$.urlParam('manager') && !$.urlParam('opposition') && !$.urlParam('competition') && !$.urlParam('venue') && !$.urlParam('pens'))
         $('#season').val(2019);
     search();
 });
