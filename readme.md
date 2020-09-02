@@ -25,13 +25,6 @@ There are a number of NPM scripts which build a local Elastic Search index, and 
  * aws s3 sync ./tranmere-web/output/site s3://www.tranmere-web.com
  * aws s3 sync ./images s3://trfc-programmes
   
-## tranmere-web-api
-
-The API is a set of AWS Lambdas. 
-
-###  
- * ./deploy-api.sh  
- 
  http://127.0.0.1:3001/scraper/2011/141
  
  https://editor.method.ac/#move_back
