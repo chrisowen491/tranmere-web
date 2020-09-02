@@ -1,13 +1,14 @@
 const { Client } = require('@elastic/elasticsearch')
 const client = new Client({
     cloud: {
-        id: process.env.es_cluster,
+        id: "tranmere-web:ZXVyb3BlLXdlc3QyLmdjcC5lbGFzdGljLWNsb3VkLmNvbSRlMTQ1MGUzMTg0NTA0MDYzOWQ4MTZkMDMwMDljMWUxZCQ2YzE3ZTA3NTA3NzM0NGVhYjFiZmY3OGNmOTkzNjQzNA==" //process.env.es_cluster,
       },
       auth: {
-        username: process.env.es_user,
-        password: process.env.es_password
+        username: 'elastic',//process.env.es_user,
+        password: 'YsMOJrRgFtk75h4MEDRwuSwt'//process.env.es_password
       }
 });
+
 var Mustache = require("mustache");
 var excel = require('excel4node');
 var fs = require("fs");
