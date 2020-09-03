@@ -1,11 +1,11 @@
 const { Client } = require('@elastic/elasticsearch')
 const client = new Client({
     cloud: {
-        id: 'tranmere-web:ZXVyb3BlLXdlc3QyLmdjcC5lbGFzdGljLWNsb3VkLmNvbSRlMTQ1MGUzMTg0NTA0MDYzOWQ4MTZkMDMwMDljMWUxZCQ2YzE3ZTA3NTA3NzM0NGVhYjFiZmY3OGNmOTkzNjQzNA==',
+        id: process.env.es_cluster,
       },
       auth: {
-        username: 'elastic',
-        password: 'YsMOJrRgFtk75h4MEDRwuSwt'
+        username: process.env.es_user,
+        password: process.env.es_password
       }
 });
 
