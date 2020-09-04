@@ -42,7 +42,7 @@ $(document).ready(function() {
         $('#sort').val(decodeURIComponent($.urlParam('sort')));
     if($.urlParam('manager'))
         $('#manager').val($.urlParam('manager'));
-    if(!$('#season').val() && !$.urlParam('manager') && !$.urlParam('opposition') && !$.urlParam('competition') && !$.urlParam('venue') && !$.urlParam('pens'))
+    if(!$('#season').val() && !$.urlParam('manager') && !$.urlParam('opposition') && !$.urlParam('competition') && !$.urlParam('venue') && !$.urlParam('pens') && !$.urlParam('sort'))
         $('#season').val(2019);
     search();
 });
