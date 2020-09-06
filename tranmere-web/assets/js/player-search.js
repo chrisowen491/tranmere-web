@@ -26,6 +26,6 @@ $(document).ready(function() {
 
     $('#sort').val(decodeURIComponent($.urlParam('sort')));
     if(!$('#season').val() && !$.urlParam('sort'))
-        $('#season').val(2019);
+        $('#season').val(2020);
     search();
 });
