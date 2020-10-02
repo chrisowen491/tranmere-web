@@ -42,7 +42,7 @@
     "smoothscroll": "^0.4.0",
     "sticky-kit": "^1.1.3",
     "swiper": "^4.3.5",
-    "video.js": "^7.9.1",
+    "video.js": "^7.9.5",
     "videojs-youtube": "^2.6.0",
     "http-proxy": ">=1.18.1",
     "yargs-parser": ">=13.1.2"
