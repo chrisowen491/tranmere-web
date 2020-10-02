@@ -9,7 +9,7 @@
             <div class="col-7 text-white mb-md-0">
                 <div class="row gutter-2">
                     <div class="col">
-                        <h1 class="mb-3" itemprop="name">{{title}}</h1>
+                        <h1 class="mb-3" itemprop="name" id="PlayerName">{{title}}</h1>
                     </div>
                 </div>
             </div>
@@ -30,6 +30,7 @@
     <!-- listing inside -->
     <section class="overlay">
       <div class="container">
+          <div id="profile"></div>
           <ul class="nav nav-tabs lavalamp mb-2" id="myTab" role="tablist">
               <li class="nav-item">
                   <a class="nav-link active" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="true">Stats</a>
@@ -138,5 +139,6 @@
     </section>
     <!-- / listing inside -->
 {{>footer}}
+<script src="/assets/js/player.js"></script>
 </body>
 </html>
