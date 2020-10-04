@@ -7,7 +7,7 @@ var formatter = new Intl.NumberFormat('en-GB', {
   maximumFractionDigits: 0
 });
 
-  var url = 'https://www.tranmere-web.com/entities/TranmereWebPlayerTable/name/'+ $("#PlayerName").html() +"?v=1";
+  var url = 'https://www.tranmere-web.com/entities/TranmereWebPlayerTable/name/'+ $("#PlayerName").html();
 
   $.getJSON(url, function(data) {
     if(data.message.length == 1) {
@@ -18,7 +18,7 @@ var formatter = new Intl.NumberFormat('en-GB', {
     }
   });
 
-  var linksUrl = 'https://www.tranmere-web.com/entities/TranmereWebPlayerLinks/name/'+ $("#PlayerName").html() +"?v=1";
+  var linksUrl = 'https://www.tranmere-web.com/entities/TranmereWebPlayerLinks/name/'+ $("#PlayerName").html();
 
   $.getJSON(linksUrl, function(data) {
     $.get("/assets/templates/links.mustache", function(template) {
@@ -27,7 +27,7 @@ var formatter = new Intl.NumberFormat('en-GB', {
     });
   });
 
-  var transfersUrl = 'https://www.tranmere-web.com/entities/TranmereWebPlayerTransfers/name/'+ $("#PlayerName").html() +"?v=1";
+  var transfersUrl = 'https://www.tranmere-web.com/entities/TranmereWebPlayerTransfers/name/'+ $("#PlayerName").html();
 
   $.getJSON(transfersUrl, function(data) {
 
