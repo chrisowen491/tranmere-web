@@ -21,14 +21,15 @@
   },
   "dependencies": {
     "@elastic/elasticsearch": "^7.8.0",
-    "ejs": ">=2.5.5",
+    "axios": "^0.20.0",
     "bootstrap": "^4.5.1",
     "bootstrap-select": "^1.13.2",
     "clipboard": "^2.0.1",
-    "excel4node": "^1.7.2",
+    "ejs": ">=2.5.5",
     "gulp-clean-css": "^4.3.0",
     "gulp-minify": "^3.1.0",
     "headroom.js": "^0.11.0",
+    "http-proxy": ">=1.18.1",
     "jquery": "^3.3.1",
     "lavalamp": "^1.1.0",
     "magnific-popup": "^1.1.0",
@@ -44,7 +45,6 @@
     "swiper": "^4.3.5",
     "video.js": "^7.9.1",
     "videojs-youtube": "^2.6.0",
-    "http-proxy": ">=1.18.1",
     "yargs-parser": ">=13.1.2"
   }
 }

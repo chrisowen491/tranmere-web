@@ -1,4 +1,4 @@
-module.exports = function (path, fs, Mustache,client) {
+module.exports = function (path, fs, Mustache, client, axios) {
     return {
 
          pages: [],
@@ -560,58 +560,15 @@ module.exports = function (path, fs, Mustache,client) {
               return goals;
           },
 
-         getTransfersByPlayer : async function(name, size) {
-              var query = {
-                index: "transfers",
-                body: {
-                   "size": size,
-                   "sort": [{"Date" : {"order" : "asc"}}],
-                   "query": {
-                        "match": {
-                         "Player" : name
-                        }
-                   }
-                }
-              };
-
-             var results = await client.search(query);
-             var transfers = [];
-             for(var i=0; i < results.body.hits.hits.length; i++) {
-               var transfer = results.body.hits.hits[i]["_source"];
-               if(transfer.Direction == "In")
-                transfer.incoming = true;
-               if(transfer.Type == "Loan" || transfer.Type == "Youth" || transfer.Type == "FreeTransfer" || transfer.Type == "Retired" || transfer.Type == "Released")
-                transfer.noFee = true;
-               if(transfer.Type == "Loan" || transfer.Type == "Youth" || transfer.Type == "FreeTransfer" || transfer.Type == "Tribunal" || transfer.Type == "Retired" || transfer.Type == "Released")
-                transfer.Other = true;
-               if(transfer.Type == "Youth" )
-                 transfer.Type = "Tranmere Youth Team"
-               transfers.push(transfer)
-             }
-             return transfers;
-         },
-
-         getAllMediaByType : async function(type, size) {
-              var query = {
-                index: "media",
-                body: {
-                   "size": size,
-                   "sort": ["Published", "Name"],
-                   "query": {
-                        "match": {
-                         "Type" : type
-                        }
-                   }
-                }
-              };
-
-             var results = await client.search(query);
+         getAllMediaByType : async function(type) {
+             var results = await axios.get("https://api.tranmere-web.com/entities/TranmereWebMediaTable/category/"+type);;
              var media = [];
-             for(var i=0; i < results.body.hits.hits.length; i++) {
-               var item = {title: results.body.hits.hits[i]["_source"].Name};
+
+             for(var i=0; i < results.data.message.length; i++) {
+               var item = results.data.message[i];
                var image = {
                  "bucket": "trfc-programmes",
-                 "key": results.body.hits.hits[i]["_source"].Image,
+                 "key": results.data.message[i].image,
                  "edits": {
                    "resize": {
                      "height": 400,
@@ -621,7 +578,7 @@ module.exports = function (path, fs, Mustache,client) {
                };
                var link = {
                     "bucket": "trfc-programmes",
-                    "key": results.body.hits.hits[i]["_source"].Image,
+                    "key": results.data.message[i].image,
                     "edits": {
                      "resize": {
                        "height": 1200,
@@ -629,82 +586,48 @@ module.exports = function (path, fs, Mustache,client) {
                      }
                    }
                };
-               item.image = "https://images.tranmere-web.com/" + Buffer.from(JSON.stringify(image)).toString('base64');
-               item.link = "https://images.tranmere-web.com/" + Buffer.from(JSON.stringify(link)).toString('base64');
+               item.imagePath = "https://images.tranmere-web.com/" + Buffer.from(JSON.stringify(image)).toString('base64');
+               item.linkPath = "https://images.tranmere-web.com/" + Buffer.from(JSON.stringify(link)).toString('base64');
                media.push(item)
              }
+             media.sort(function(a, b) {
+               if (a.published < b.published) return -1
+               if (a.published > b.published) return 1
+               return 0
+             });
              return media;
          },
 
-         getLinksByPlayer : async function(name, size) {
-              var query = {
-                index: "links",
-                body: {
-                   "size": size,
-                   "query": {
-                     "bool": {
-                        "must": [
-                          {
-                            "match": {
-                             "Name" : name
-                            }
-                          }
-                        ]
-                      }
-                   }
-                }
-              };
-
-             var results = await client.search(query);
-             var links = [];
-             for(var i=0; i < results.body.hits.hits.length; i++) {
-               var link = results.body.hits.hits[i]["_source"];
-               links.push(link)
-             }
-             return links;
-         },
-
-         findAllPlayers : async function(size) {
-            var playersQuery = {
-                index: "players",
-                body: {
-                    "sort": ["Name"],
-                    "size": size,
-                }
-            };
-            var results = await client.search(playersQuery);
+         findAllPlayers : async function() {
+            var results = await axios.get("https://api.tranmere-web.com/entities/TranmereWebPlayerTable/ALL/ALL");
             var players = [];
-            for(var i=0; i < results.body.hits.hits.length; i++) {
-                var player = results.body.hits.hits[i]["_source"];
-                player.Id = results.body.hits.hits[i]["_id"]
-                player.goals = await this.findGoalsByPlayer(player.Name, 200);
-                player.apps = await this.findAppsByPlayer(player.Name, 1000);
-                player.links = await this.getLinksByPlayer(player.Name);
+            for(var i=0; i < results.data.message.length; i++) {
+                var player = results.data.message[i];
+                player.goals = await this.findGoalsByPlayer(player.name, 200);
+                player.apps = await this.findAppsByPlayer(player.name, 1000);
                 player.stats = this.calculateStats(player.apps, player.goals);
                 players.push(player)
             }
             return players;
          },
 
-         findAllTranmereManagers : async function(size) {
-            var managersQuery = {
-                index: "managers",
-                body: {
-                    "sort": [{"DateJoined" : {"order" : "desc"}}],
-                    "size": size,
-                }
-            };
-            var results = await client.search(managersQuery);
+         findAllTranmereManagers : async function() {
+            var results = await axios.get("https://api.tranmere-web.com/entities/TranmereWebManagers/ALL/ALL");
+
             var managers = [];
-            for(var i=0; i < results.body.hits.hits.length; i++) {
-                var manager = results.body.hits.hits[i]["_source"];
+            for(var i=0; i < results.data.message.length; i++) {
+                var manager = results.data.message[i];
                 var dateLeft = "now";
-                if(manager.DateLeft)
-                    dateLeft = manager.DateLeft;
-                manager.DateLeftText = dateLeft;
-                manager.Id = results.body.hits.hits[i]["_id"]
+                if(manager.dateLeft)
+                    dateLeft = manager.dateLeft;
+                manager.dateLeftText = dateLeft;
                 managers.push(manager)
             }
+             managers.sort(function(a, b) {
+               if (a.dateJoined < b.dateJoined) return 1
+               if (a.dateJoined > b.dateJoined) return -1
+               return 0
+             });
             return managers;
          },
 
@@ -828,81 +751,6 @@ module.exports = function (path, fs, Mustache,client) {
             return Promise.resolve(appsList);
          },
 
-         getTopPlayerByAppearances : async function(size) {
-            var query = {
-                index: "apps",
-                body: {
-                      "size": 0,
-                      "aggs": {
-                        "apps": {
-                          "terms": {
-                            "size" : size,
-                            "field": "Name"
-                          }
-                        }
-                      }
-                  }
-            };
-
-            var result = await client.search(query);
-            var results = [];
-            for(var i=0; i < result.body.aggregations.apps.buckets.length; i++) {
-                var player = result.body.aggregations.apps.buckets[i].key;
-
-                var playerBio = await this.getPlayerByName(player);
-
-                results.push({"Name": player, "Bio": playerBio, "Starts": result.body.aggregations.apps.buckets[i].doc_count})
-            }
-            return results;
-        },
-
-         getPlayerByName : async function(name) {
-              var query = {
-                index: "players",
-                body: {
-                   "size": 1,
-                   "query": {
-                        "match": {
-                         "Name" : name
-                        }
-                   }
-                }
-              };
-
-             var results = await client.search(query);
-             if(results.body.hits && results.body.hits.hits && results.body.hits.hits[0]) {
-                return results.body.hits.hits[0]["_source"];
-             } else {
-                return null;
-             }
-         },
-
-         getTopPlayerByGoals : async function(size) {
-            var query = {
-                index: "goals",
-                body: {
-                      "size": 0,
-                      "aggs": {
-                        "Scorer": {
-                          "terms": {
-                            "size" : size,
-                            "field": "Scorer"
-                          }
-                        }
-                      }
-                  }
-            };
-
-            var result = await client.search(query);
-            var results = [];
-            for(var i=0; i < result.body.aggregations.Scorer.buckets.length; i++) {
-                var player = result.body.aggregations.Scorer.buckets[i].key;
-                var playerBio = await this.getPlayerByName(player);
-                results.push({"Name": player, "Bio": playerBio, "Goals": result.body.aggregations.Scorer.buckets[i].doc_count})
-            }
-            return results;
-        },
-
          getAllCupCompetitions : async function(size) {
             var competitionQuery = {
                 index: "matches",
@@ -1011,61 +859,6 @@ module.exports = function (path, fs, Mustache,client) {
             var keys = Object.keys(resultsByLetter);
             for(var i=0; i < keys.length; i++) {
                 list.push({key: keys[i], teams: resultsByLetter[keys[i]]});
-            }
-            results.sort(function(a, b) {
-              if (a.key < b.key) return -1;
-              if (a.key > b.key) return 1;
-              return 0;
-            });
-            list.sort(function(a, b) {
-              if (a.key < b.key) return -1;
-              if (a.key > b.key) return 1;
-              return 0;
-            });
-            return {results:results, resultsByLetter:list};
-         },
-
-         findAllPlayersByLetterAndDates : async function(size, from, to) {
-            var query = {
-                index: "apps",
-                body: {
-                    "size": 0,
-                    "query": {
-                     "range": {
-                       "Date": {
-                         "gte": from,
-                         "lte": to
-                       }
-                     }
-                    },
-                    "aggs": {
-                      "players": {
-                        "terms": {
-                          "size" : size,
-                          "field": "Name"
-                        }
-                      }
-                    }
-                }
-            };
-
-            var result = await client.search(query);
-            var results = [];
-            var resultsByLetter = {};
-            for(var i=0; i < result.body.aggregations.players.buckets.length; i++) {
-                var firstLetter = result.body.aggregations.players.buckets[i].key.substring(0,1);
-                if(resultsByLetter[firstLetter]) {
-                    resultsByLetter[firstLetter].push(result.body.aggregations.players.buckets[i].key)
-                } else {
-                    var obj = [result.body.aggregations.players.buckets[i].key];
-                    resultsByLetter[firstLetter] = obj;
-                }
-                results.push(result.body.aggregations.players.buckets[i])
-            }
-            var list = [];
-            var keys = Object.keys(resultsByLetter);
-            for(var i=0; i < keys.length; i++) {
-                list.push({key: keys[i], players: resultsByLetter[keys[i]]});
             }
             results.sort(function(a, b) {
               if (a.key < b.key) return -1;
