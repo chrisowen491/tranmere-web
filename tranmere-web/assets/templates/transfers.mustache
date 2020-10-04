@@ -1,0 +1,22 @@
+<table class="table table-striped boxed">
+    <thead>
+    <tr>
+        <th scope="col">Date</th>
+        <th scope="col">Club</th>
+        <th scope="col">Fee</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{#transfers}}
+    <tr>
+        <td><small><time datetime="{{date}}" class="text-muted d-block">{{date}}</time></small></td>
+        <td><small>{{^incoming}}<span class="icon-arrow-right text-danger"></span>{{/incoming}}{{#incoming}}<span class="icon-arrow-left text-success"></span>{{/incoming}}<a href="/teams/{{club}}.html">{{club}}</a></small></td>
+        <td><small>
+            {{^noFee}}
+            {{#currencyFormat}}{{fee}}{{/currencyFormat}}
+            {{/noFee}}
+            {{#other}} {{type}} {{/other}}
+        </small></td>
+    </tr>
+    {{/transfers}}
+</table>

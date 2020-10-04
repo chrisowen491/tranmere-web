@@ -3,27 +3,27 @@
 {{>homenav}}
     <!-- hero -->
     <section itemscope itemtype ="http://schema.org/athlete" class="hero overlay">
-    <div class="image image-overlay" style="background-image:url({{{image}}})"></div>
-    <div class="container">
-        <div class="row align-items-end justify-content-between">
-            <div class="col-7 text-white mb-md-0">
-                <div class="row gutter-2">
-                    <div class="col">
-                        <h1 class="mb-3" itemprop="name" id="PlayerName">{{title}}</h1>
+        <div class="image image-overlay" style="background-image:url({{{image}}})"></div>
+        <div class="container">
+            <div class="row align-items-end justify-content-between">
+                <div class="col-7 text-white mb-md-0">
+                    <div class="row gutter-2">
+                        <div class="col">
+                            <h1 class="mb-3" itemprop="name" id="PlayerName">{{title}}</h1>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-5 pic">
-                {{#pic}}
-                <img src="{{pic}}" alt="Image" class="overlay-item-bottom">
-                {{/pic}}
-                {{^pic}}
-                <img src="/assets/shirts/blank.svg" alt="Image" class="overlay-item-bottom">
-                {{/pic}}
+                <div class="col-5 pic">
+                    {{#pic}}
+                    <img src="{{pic}}" alt="Image" class="overlay-item-bottom">
+                    {{/pic}}
+                    {{^pic}}
+                    <img src="/assets/shirts/blank.svg" alt="Image" class="overlay-item-bottom">
+                    {{/pic}}
+                </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
     <!-- / hero -->
 
 
@@ -38,11 +38,6 @@
               <li class="nav-item">
                   <a class="nav-link" id="transfers-tab" data-toggle="tab" href="#transfers" role="tab" aria-controls="transfers" aria-selected="false">Transfers</a>
               </li>
-              <!--
-              <li class="nav-item">
-                  <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Media (Coming Soon)</a>
-              </li>
-              -->
               <li class="nav-item">
                   <a class="nav-link" id="links-tab" data-toggle="tab" href="#links" role="tab" aria-controls="links" aria-selected="false">Links</a>
               </li>
@@ -95,44 +90,11 @@
                       </tbody>
                   </table>
               </div>
-
-              <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
-
-              </div>
               <div class="tab-pane fade" id="transfers" role="tabpanel" aria-labelledby="transfers-tab">
-
-                  <table class="table table-striped boxed">
-                      <thead>
-                      <tr>
-                          <th scope="col">Date</th>
-                          <th scope="col">Club</th>
-                          <th scope="col">Fee</th>
-                      </tr>
-                      </thead>
-                      <tbody>
-                      {{#transfers}}
-                      <tr>
-                          <td><small><time datetime="{{Date}}" class="text-muted d-block">{{Date}}</time></small></td>
-                          <td><small>{{^incoming}}<span class="icon-arrow-right text-danger"></span>{{/incoming}}{{#incoming}}<span class="icon-arrow-left text-success"></span>{{/incoming}}<a href="/teams/{{Club}}.html">{{Club}}</a></small></td>
-                          <td><small>
-                              {{^noFee}}
-                                {{#currencyFormat}}{{Fee}}{{/currencyFormat}}
-                              {{/noFee}}
-                              {{#Other}} {{Type}} {{/Other}}
-                          </small></td>
-                      </tr>
-                      {{/transfers}}
-                  </table>
+                  <div id="pnlTransfers"></div>
               </div>
               <div class="tab-pane fade" id="links" role="tabpanel" aria-labelledby="links-tab">
-                  <table class="table table-striped boxed">
-                      <tbody>
-                      {{#links}}
-                      <tr>
-                          <td><a href="{{Links}}">{{Type}}</a></td>
-                      </tr>
-                      {{/links}}
-                  </table>
+                  <div id="pnlLinks"></div>
               </div>
           </div>
       </div>
