@@ -319,24 +319,17 @@ module.exports = function (path, fs, Mustache, client, axios) {
          },
 
          findTranmereMatchesWithStars : async function(size) {
-            var query = {
-                index: "stars",
-                body: {
-                   "sort": ["Date"],
-                   "size": size,
-                }
-            };
-            var results = await client.search(query);
+            var results = await axios.get("https://api.tranmere-web.com/entities/TranmereWebStars/ALL/ALL");
             var matches = [];
-            for(var i=0; i < results.body.hits.hits.length; i++) {
-                var star = results.body.hits.hits[i]["_source"];
+            for(var i=0; i < results.data.message.length; i++) {
+                var star = results.data.message[i];
                 var matchQuery = {
                     index: "matches",
                     body: {
                        "size": 1,
                        "query": {
                           "match": {
-                            "Date": star.Date
+                            "Date": Date.parse(star.date)
                           }
                        }
                     }
@@ -344,10 +337,15 @@ module.exports = function (path, fs, Mustache, client, axios) {
                 var d = await this.findTranmereMatchesByQuery(matchQuery);
                 var match = d[0];
 
-                match.Player = star.Player;
-                match.Notes = star.Notes;
+                match.Player = star.name;
+                match.Notes = star.notes;
                 matches.push(match);
             }
+            matches.sort(function(a, b) {
+               if (a.Player < b.Player) return -1
+               if (a.Player > b.Player) return 1
+               return 0
+            });
             return matches;
          },
 
