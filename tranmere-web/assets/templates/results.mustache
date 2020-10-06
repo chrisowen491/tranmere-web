@@ -14,11 +14,11 @@
     {{#results}}
     <tr>
         <td>
-            <a href="/match.html?date={{Date}}">{{Date}}</a>
+            <a href="/match.html?date={{date}}&season={{season}}">{{date}}</a>
         </td>
-        <td><a href="/results.html?opposition={{Opposition}}">{{Opposition}}</a>  ({{location}})</td>
+        <td><a href="/results.html?opposition={{opposition}}">{{opposition}}</a>  ({{location}})</td>
         <td>{{competition}}</td>
-        <td>{{FT}}</td>
+        <td>{{ft}}</td>
         <td class="d-none d-sm-table-cell">{{attendance}}</td>
         <td class="d-none d-sm-table-cell">{{#programme}}<img src="https://images.tranmere-web.com/{{programme}}"/>{{/programme}}</td>
     </tr>

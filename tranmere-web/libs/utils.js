@@ -230,7 +230,6 @@ module.exports = function (path, fs, Mustache, client, axios) {
                 match.apps = null;
              }
 
-             //var programme = match.Programme; //await this.getProgrammesByDate(match.Date);
              if(match.Programme) {
 
                  var smallBody = {
@@ -302,205 +301,27 @@ module.exports = function (path, fs, Mustache, client, axios) {
               return 0;
          },
 
-         findTranmereMatchesWithPenalties : async function(size) {
-            var query = {
-                index: "matches",
-                body: {
-                   "sort": ["Date"],
-                   "size": size,
-                   "query": {
-                        "exists": {
-                            "field": "pens"
-                        }
-                   }
-                }
-            };
-            return this.findTranmereMatchesByQuery(query);
-         },
-
+         // Done
          findTranmereMatchesWithStars : async function(size) {
             var results = await axios.get("https://api.tranmere-web.com/entities/TranmereWebStars/ALL/ALL");
             var matches = [];
             for(var i=0; i < results.data.message.length; i++) {
                 var star = results.data.message[i];
-                var matchQuery = {
-                    index: "matches",
-                    body: {
-                       "size": 1,
-                       "query": {
-                          "match": {
-                            "Date": Date.parse(star.date)
-                          }
-                       }
-                    }
-                };
-                var d = await this.findTranmereMatchesByQuery(matchQuery);
-                var match = d[0];
-
+                var result = await axios.get("https://api.tranmere-web.com/result-search/?season="+star.season+"&date="+star.date);
+                var match = result.data;
                 match.Player = star.name;
                 match.Notes = star.notes;
                 matches.push(match);
             }
             matches.sort(function(a, b) {
-               if (a.Player < b.Player) return -1
-               if (a.Player > b.Player) return 1
+               if (a.date < b.date) return -1
+               if (a.date > b.date) return 1
                return 0
             });
             return matches;
          },
 
-         findTranmereMatchesSortedByTopAttendanceAtHome : async function(size) {
-            var query = {
-                index: "matches",
-                body: {
-                   "sort": [{"attendance" : {"order" : "desc"}}],
-                   "size": size,
-                   "query": {
-                    "match": {
-                        "Venue": "Prenton Park"
-                    }
-                   }
-                }
-            };
-            return this.findTranmereMatchesByQuery(query);
-         },
-
-         findTranmereMatchesSortedByTopAttendance : async function(size) {
-            var query = {
-                index: "matches",
-                body: {
-                   "sort": [{"attendance" : {"order" : "desc"}}],
-                   "size": size,
-                }
-            };
-            return this.findTranmereMatchesByQuery(query);
-         },
-
-         findTranmereMatchesByQuery: async function(query) {
-             var results = await client.search(query);
-             var matches = [];
-             for(var i=0; i < results.body.hits.hits.length; i++) {
-                 matches.push(await this.buildMatch(results.body.hits.hits[i]["_source"]));
-             }
-             return matches;
-         },
-
-         findAllTranmereMatchesByVenue : async function(venue, size) {
-            var query = {
-                index: "matches",
-                body: {
-                   "sort": ["Date"],
-                   "size": size,
-                   "query": {
-                    "match": {
-                     "Venue": venue
-                    }
-                   }
-                }
-              };
-            return this.findTranmereMatchesByQuery(query);
-         },
-
-         findAllTranmereMatchesByCompetition : async function(competition, size) {
-            var query = {
-                index: "matches",
-                body: {
-                   "sort": ["Date"],
-                   "size": size,
-                   "query": {
-                    "match": {
-                     "competition": competition
-                    }
-                   }
-                }
-              };
-            return this.findTranmereMatchesByQuery(query);
-         },
-
-         findAllTranmereMatchesByOpposition : async function(opposition, size) {
-            var query = {
-                index: "matches",
-                body: {
-                   "sort": ["Date"],
-                   "size": size,
-                   "query": {
-                     "bool": {
-                        "must": [
-                          {
-                            "match": {
-                             "teams": opposition
-                            }
-                          },
-                          {
-                              "match": {
-                                "teams": "Tranmere Rovers"
-                              }
-                          }
-                        ]
-                      }
-                   }
-                }
-              };
-            return this.findTranmereMatchesByQuery(query);
-         },
-
-         findAllTranmereMatchesBySeason : async function(season, size) {
-            var query = {
-                index: "matches",
-                body: {
-                   "sort": ["Date"],
-                   "size": size,
-                   "query": {
-                     "bool": {
-                        "must": [
-                          {
-                            "match": {
-                             "Season" : season
-                            }
-                          },
-                          {
-                              "match": {
-                                "teams": "Tranmere Rovers"
-                              }
-                          }
-                        ]
-                      }
-                   }
-                }
-              };
-            return this.findTranmereMatchesByQuery(query);
-         },
-
-         findAllTranmereMatchesWithinTimePeriod : async function(from, to, size) {
-            var query = {
-                index: "matches",
-                body: {
-                   "sort": ["Date"],
-                   "size": size,
-                   "query": {
-                     "bool": {
-                        "must": [
-                          {
-                             "range": {
-                               "Date": {
-                                 "gte": from,
-                                 "lte": to
-                               }
-                             }
-                          },
-                          {
-                              "match": {
-                                "teams": "Tranmere Rovers"
-                              }
-                          }
-                        ]
-                      }
-                   }
-                }
-              };
-            return this.findTranmereMatchesByQuery(query);
-         },
-
+         //Yes
          getAppsByDate : async function(date) {
               var query = {
                 index: "apps",
@@ -530,6 +351,7 @@ module.exports = function (path, fs, Mustache, client, axios) {
              return apps;
          },
 
+         //Yes
          getGoalsByDate : async function(date) {
                var query = {
                  index: "goals",
@@ -558,6 +380,7 @@ module.exports = function (path, fs, Mustache, client, axios) {
               return goals;
           },
 
+         // Done
          getAllMediaByType : async function(type) {
              var results = await axios.get("https://api.tranmere-web.com/entities/TranmereWebMediaTable/category/"+type);;
              var media = [];
@@ -596,6 +419,7 @@ module.exports = function (path, fs, Mustache, client, axios) {
              return media;
          },
 
+         // Done
          findAllPlayers : async function() {
             var results = await axios.get("https://api.tranmere-web.com/entities/TranmereWebPlayerTable/ALL/ALL");
             var players = [];
@@ -609,6 +433,7 @@ module.exports = function (path, fs, Mustache, client, axios) {
             return players;
          },
 
+         // Done
          findAllTranmereManagers : async function() {
             var results = await axios.get("https://api.tranmere-web.com/entities/TranmereWebManagers/ALL/ALL");
 
@@ -629,6 +454,7 @@ module.exports = function (path, fs, Mustache, client, axios) {
             return managers;
          },
 
+         // Maybe
          findGoalsByPlayer : async function(player, size, season) {
             var query = {
                 index: "goals",
@@ -694,6 +520,7 @@ module.exports = function (path, fs, Mustache, client, axios) {
             return Promise.resolve(goalsList);
          },
 
+         // Maybe
          findAppsByPlayer : async function(player, size, season) {
             var query = {
                 index: "apps",
@@ -749,33 +576,13 @@ module.exports = function (path, fs, Mustache, client, axios) {
             return Promise.resolve(appsList);
          },
 
+         // Done
          getAllCupCompetitions : async function(size) {
-            var competitionQuery = {
-                index: "matches",
-                body: {
-                    "size": 0,
-                    "aggs": {
-                      "competition": {
-                        "terms": {
-                          "size" : size,
-                          "field": "competition"
-                        }
-                      }
-                    }
-                }
-            };
-
-            var result = await client.search(competitionQuery);
-            var results = [];
-            for(var i=0; i < result.body.aggregations.competition.buckets.length; i++) {
-                if(result.body.aggregations.competition.buckets[i].key != "League"
-                    && result.body.aggregations.competition.buckets[i].key != "Conference") {
-                    results.push({"Name": result.body.aggregations.competition.buckets[i].key, "Count": result.body.aggregations.competition.buckets[i].doc_count})
-                }
-            }
-            return results;
+            var results = await axios.get("https://api.tranmere-web.com/entities/TranmereWebClubs/ALL/ALL");
+            return results.data.message;
         },
 
+         // ?
          getTopScorersBySeason : async function(size) {
             var query = {
                 index: "goals",
@@ -816,59 +623,17 @@ module.exports = function (path, fs, Mustache, client, axios) {
             return results;
         },
 
+         // Done
          findAllTeams : async function(size) {
-            var teamQuery = {
-                index: "matches",
-                body: {
-                    "size": 0,
-                    "query": {
-                      "match": {
-                        "teams": "Tranmere Rovers"
-                      }
-                    },
-                    "aggs": {
-                      "teams": {
-                        "terms": {
-                          "size" : size,
-                          "field": "teams"
-                        }
-                      }
-                    }
-                }
-            };
+            var result = await axios.get("https://api.tranmere-web.com/entities/TranmereWebClubs/ALL/ALL");
+            var results = result.data.message;
 
-            var result = await client.search(teamQuery);
-            var results = [];
-            var resultsByLetter = {};
-            for(var i=0; i < result.body.aggregations.teams.buckets.length; i++) {
-                if(result.body.aggregations.teams.buckets[i].key != "Tranmere Rovers") {
-
-                    var firstLetter = result.body.aggregations.teams.buckets[i].key.substring(0,1);
-                    if(resultsByLetter[firstLetter]) {
-                        resultsByLetter[firstLetter].push(result.body.aggregations.teams.buckets[i].key)
-                    } else {
-                        var obj = [result.body.aggregations.teams.buckets[i].key];
-                        resultsByLetter[firstLetter] = obj;
-                    }
-                    results.push(result.body.aggregations.teams.buckets[i])
-                }
-            }
-            var list = [];
-            var keys = Object.keys(resultsByLetter);
-            for(var i=0; i < keys.length; i++) {
-                list.push({key: keys[i], teams: resultsByLetter[keys[i]]});
-            }
             results.sort(function(a, b) {
-              if (a.key < b.key) return -1;
-              if (a.key > b.key) return 1;
+              if (a.name < b.name) return -1;
+              if (a.name > b.name) return 1;
               return 0;
             });
-            list.sort(function(a, b) {
-              if (a.key < b.key) return -1;
-              if (a.key > b.key) return 1;
-              return 0;
-            });
-            return {results:results, resultsByLetter:list};
+            return results;
          }
     };
 };
