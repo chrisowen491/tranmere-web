@@ -92,27 +92,6 @@ module.exports = function (path, fs, Mustache, client, axios) {
             });
          },
 
-         calculateWinsDrawsLossesFromMatchesSearch : function(results) {
-             var obj = {
-                wins: 0,
-                draws: 0,
-                losses: 0
-             }
-             for(var m=0; m<results.length; m++) {
-                 var r = results[m];
-                 if(r.home == "Tranmere Rovers" && r.hgoal > r.vgoal) {
-                     obj.wins = obj.wins + 1;
-                 } else if(r.visitor == "Tranmere Rovers" && r.vgoal > r.hgoal) {
-                     obj.wins = obj.wins + 1;
-                 } else if(r.vgoal == r.hgoal) {
-                     obj.draws = obj.draws +1;
-                 } else {
-                     obj.losses = obj.losses+1;
-                 }
-             }
-             return obj;
-         },
-
          calculateStats : function(apps, goals) {
 
             var seasons = [];
@@ -195,72 +174,6 @@ module.exports = function (path, fs, Mustache, client, axios) {
              return currentObj;
          },
 
-         formatGoals: function(goals) {
-            var output = "";
-            var scorers = {};
-            for(var i=0; i < goals.length; i++) {
-                if(scorers[goals[i].Scorer]) {
-                   scorers[goals[i].Scorer] =  scorers[goals[i].Scorer] + 1;
-                } else {
-                   scorers[goals[i].Scorer] = 1;
-                }
-            }
-            const keys = Object.keys(scorers);
-            for( var x=0; x < keys.length; x++) {
-                if(scorers[keys[x]] > 1) {
-                    output = output + keys[x] + " " + scorers[keys[x]];
-                } else {
-                    output = output + keys[x]
-                }
-                if( x != keys.length-1) {
-                    output = output + ", "
-                }
-            }
-            return output;
-         },
-
-         buildMatch : async function(match) {
-             match.Opposition = match.home == "Tranmere Rovers" ? match.visitor : match.home;
-             var appsCutOff = new Date('1983-01-01');
-
-             if(match.Date > appsCutOff) {
-                var apps = await this.getAppsByDate(match.Date);
-                match.apps = apps;
-             } else {
-                match.apps = null;
-             }
-
-             if(match.Programme) {
-
-                 var smallBody = {
-                      "bucket": 'trfc-programmes',
-                      "key": match.Programme,
-                      "edits": {
-                        "resize": {
-                          "width": 100,
-                          "fit": "contain"
-                        }
-                      }
-                    };
-                     var largeBody = {
-                          "bucket": 'trfc-programmes',
-                          "key": match.Programme,
-                        };
-                 delete match.Programme;
-                 match.programme = Buffer.from(JSON.stringify(smallBody)).toString('base64');
-                 match.largeProgramme = Buffer.from(JSON.stringify(largeBody)).toString('base64');
-             }
-             var goals = await this.getGoalsByDate(match.Date);
-             match.goals = goals;
-             match.formattedGoals = this.formatGoals(goals);
-             if((match.apps && match.apps.length > 0)) {
-                match.report = true;
-             }
-             if(match.competition != "League")
-                match.isCup = true;
-             return match;
-         },
-
          //Todo
          findGoalsTotalBySeasonAndPlayer : async function(size) {
              var query = {
@@ -320,65 +233,6 @@ module.exports = function (path, fs, Mustache, client, axios) {
             });
             return matches;
          },
-
-         //Yes
-         getAppsByDate : async function(date) {
-              var query = {
-                index: "apps",
-                body: {
-                   "sort": ["Number"],
-                   "size": 20,
-                   "query": {
-                     "bool": {
-                        "must": [
-                          {
-                            "match": {
-                             "Date" : date
-                            }
-                          }
-                        ]
-                      }
-                   }
-                }
-              };
-
-             var results = await client.search(query);
-             var apps = [];
-             for(var i=0; i < results.body.hits.hits.length; i++) {
-                var app = results.body.hits.hits[i]["_source"];
-                apps.push(app)
-             }
-             return apps;
-         },
-
-         //Yes
-         getGoalsByDate : async function(date) {
-               var query = {
-                 index: "goals",
-                 body: {
-                    "size": 20,
-                    "query": {
-                      "bool": {
-                         "must": [
-                           {
-                             "match": {
-                              "Date" : date
-                             }
-                           }
-                         ]
-                       }
-                    }
-                 }
-               };
-
-              var results = await client.search(query);
-              var goals = [];
-              for(var i=0; i < results.body.hits.hits.length; i++) {
-                 var goal = results.body.hits.hits[i]["_source"];
-                 goals.push(goal)
-              }
-              return goals;
-          },
 
          // Done
          getAllMediaByType : async function(type) {
