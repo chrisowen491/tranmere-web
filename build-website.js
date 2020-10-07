@@ -2,7 +2,7 @@ var Mustache = require("mustache");
 var fs = require("fs");
 var path = require('path');
 var axios = require('axios')
-var utils = require('./tranmere-web/libs/utils')(path,fs,Mustache,null,axios);
+var utils = require('./tranmere-web/libs/utils')(path,fs,Mustache,axios);
 
 async function run () {
 
@@ -242,15 +242,15 @@ async function run () {
     };
     utils.buildPage(starsView, "./tranmere-web/templates/stars.tpl.html",'./tranmere-web/output/site/super-stars.html' );
 
-/*
+
     var topScorersView = {
-        players: await utils.getTopScorersBySeason(50),
+        players: await utils.getTopScorersBySeason(),
         title: "Top Scorers BY Season",
         pageType:"WebPage",
         description: "Tranmere Rovers Top Scorers By Season"
     };
     utils.buildPage(topScorersView, "./tranmere-web/templates/goals.tpl.html",'./tranmere-web/output/site/top-scorers-by-season.html' );
-*/
+
     utils.buildPage({title: "Tranmere Rovers Managerial Records",managers: managers, pageType:"WebPage",  description: "Records of all Tranmere Rovers managers"},
         "./tranmere-web/templates/managers.tpl.html", './tranmere-web/output/site/managers.html');
 

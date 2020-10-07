@@ -24,19 +24,14 @@
                   <p>Data only goes as far back as the 1984-85 season.</p>
                   {{#players}}
                   <div class="card stacked" style="margin-bottom:50px">
-                    {{#Bio.Pic}}
-                    <div class="card-body" style="background-image:url({{Bio.Pic}});background-position-x: right;background-size: contain;background-repeat: no-repeat;">
-                    {{/Bio.Pic}}
-                    {{^Bio.Pic}}
-                    <div class="card-body">
-                      <i class="icon-photo icon-background text-blue"></i>
-                    {{/Bio.Pic}}
+                    <div class="card-body" style="background-image:url({{bio.pic}});background-position-x: right;background-size: contain;background-repeat: no-repeat;">
+
                       <div class="row gutter-2 align-items-center">
                         <div class="col">
                           <a href="/players/{{Name}}.html" class="topic">
                             {{#Season}}<h3 class="card-title mb-1">{{Season}}</h3>{{/Season}}
-                            <h3 class="card-title mb-1">{{Name}}</h3>
-                            <p class="card-text mb-2">{{Goals}} goals</p>
+                            <h3 class="card-title mb-1">{{Player}}</h3>
+                            <p class="card-text mb-2">{{goals}} goals</p>
                           </a>
                         </div>
                       </div>

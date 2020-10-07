@@ -1,4 +1,4 @@
-module.exports = function (path, fs, Mustache, client, axios) {
+module.exports = function (path, fs, Mustache, axios) {
     return {
 
          pages: [],
@@ -189,46 +189,18 @@ module.exports = function (path, fs, Mustache, client, axios) {
             return results.data.message;
         },
 
-         // ?
-         getTopScorersBySeason : async function(size) {
-            var query = {
-                index: "goals",
-                body: {
-                        "size": 0,
-                        "aggs": {
-                          "season": {
-                            "terms": {
-                              "size": size,
-                              "field": "Season",
-                              "order": {
-                                "_key": "asc"
-                              }
-                            },
-                            "aggs": {
-                              "scorers": {
-                                "terms": {
-                                  "field": "Scorer",
-                                  "size": 1
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-            };
+         // done
+         getTopScorersBySeason : async function() {
 
-            var result = await client.search(query);
             var results = [];
-            for(var i=0; i < result.body.aggregations.season.buckets.length; i++) {
-                var record = {
-                    Name: result.body.aggregations.season.buckets[i].scorers.buckets[0].key,
-                    Season: result.body.aggregations.season.buckets[i].key,
-                    Goals: result.body.aggregations.season.buckets[i].scorers.buckets[0]['doc_count']
-                }
-                results.push(record);
+
+            for(var i= 1984; i < 2021; i++) {
+                var result = await axios.get("https://api.tranmere-web.com/player-search/?season="+i+"&sort=Goals");
+                var player = result.data.players[0];
+                results.push(player);
             }
             return results;
-        },
+         },
 
          // Done
          findAllTeams : async function(size) {
