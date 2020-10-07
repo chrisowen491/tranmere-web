@@ -1,19 +1,8 @@
-const { Client } = require('@elastic/elasticsearch')
-const client = new Client({
-    cloud: {
-        id: 'tranmere-web:ZXVyb3BlLXdlc3QyLmdjcC5lbGFzdGljLWNsb3VkLmNvbSRlMTQ1MGUzMTg0NTA0MDYzOWQ4MTZkMDMwMDljMWUxZCQ2YzE3ZTA3NTA3NzM0NGVhYjFiZmY3OGNmOTkzNjQzNA==',
-      },
-      auth: {
-        username: 'elastic',
-        password: 'YsMOJrRgFtk75h4MEDRwuSwt'
-      }
-});
-
 var Mustache = require("mustache");
 var fs = require("fs");
 var path = require('path');
 var axios = require('axios')
-var utils = require('./tranmere-web/libs/utils')(path,fs,Mustache,client,axios);
+var utils = require('./tranmere-web/libs/utils')(path,fs,Mustache,null,axios);
 
 async function run () {
 
@@ -253,7 +242,7 @@ async function run () {
     };
     utils.buildPage(starsView, "./tranmere-web/templates/stars.tpl.html",'./tranmere-web/output/site/super-stars.html' );
 
-
+/*
     var topScorersView = {
         players: await utils.getTopScorersBySeason(50),
         title: "Top Scorers BY Season",
@@ -261,7 +250,7 @@ async function run () {
         description: "Tranmere Rovers Top Scorers By Season"
     };
     utils.buildPage(topScorersView, "./tranmere-web/templates/goals.tpl.html",'./tranmere-web/output/site/top-scorers-by-season.html' );
-
+*/
     utils.buildPage({title: "Tranmere Rovers Managerial Records",managers: managers, pageType:"WebPage",  description: "Records of all Tranmere Rovers managers"},
         "./tranmere-web/templates/managers.tpl.html", './tranmere-web/output/site/managers.html');
 
@@ -272,7 +261,6 @@ async function run () {
             var player = {
                 title: players[i].name,
                 games: players[i].apps,
-                stats: players[i].stats,
                 goals: players[i].goals,
                 pic:   players[i].pic,
                 image: utils.buildImagePath("photos/kop.jpg", 1920,1080),
@@ -280,7 +268,7 @@ async function run () {
                 description: "Information about " + players[i].name + "'s record playing for Tranmere Rovers"
             };
             utils.buildPage(player,"./tranmere-web/templates/player.tpl.html", './tranmere-web/output/site/players/' + players[i].name + '.html');
-
+/*
             for(var x=0; x < players[i].stats.seasons.length; x++) {
                 var view = {
                    name: players[i].name,
@@ -296,6 +284,7 @@ async function run () {
                     './tranmere-web/output/site/player-season/' + players[i].name + '-' + players[i].stats.seasons[x].Season + '.html'
                 );
             }
+*/
         }
     }
 

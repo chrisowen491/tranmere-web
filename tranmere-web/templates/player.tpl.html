@@ -45,50 +45,7 @@
           <div class="tab-content" id="myTabContent">
 
               <div class="tab-pane fade  show active" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-
-                  <table class="table table-striped boxed">
-                      <thead>
-                      <tr>
-                          <th scope="col">Season</th>
-                          <th scope="col"  class="text-center"><img class="rounded mx-auto d-block" alt="Start" title="Start" width="40px" height="40px" src="/assets/icons/043-player.svg" /></th>
-                          <th scope="col"  class="text-center"><img class="rounded mx-auto d-block" alt="goals" title="goals" width="40px" height="40px" src="/assets/icons/004-soccer ball.svg"/></th>
-                          <th scope="col"  class="text-center d-none d-md-table-cell"><img class="rounded mx-auto d-block" alt="assists" title="assists" width="40px" height="40px" src="/assets/icons/001-strategy.png"/></th>
-                          <th scope="col"  class="text-center d-none d-lg-table-cell"><img class="rounded mx-auto d-block" alt="headers" title="headers" width="40px" height="40px" src="/assets/icons/028-header.svg"/></th>
-                          <th scope="col"  class="text-center d-none d-lg-table-cell"><img class="rounded mx-auto d-block" alt="free kicks" title="free kicks" width="40px" height="40px" src="/assets/icons/022-free kick.png"/></th>
-                          <th scope="col"  class="text-center d-none d-lg-table-cell"><img class="rounded mx-auto d-block" alt="penalties" title="penalties" width="40px" height="40px" src="/assets/icons/041-penalty kick.png"/></th>
-                          <th scope="col"  class="text-center d-none d-md-table-cell"><img class="rounded mx-auto d-block" alt="yellow card" title="yellow card" width="40px" height="40px" src="/assets/icons/064-yellow card.png"/></th>
-                          <th scope="col"  class="text-center d-none d-md-table-cell"><img class="rounded mx-auto d-block" alt="red card" title="red card" width="40px" height="40px" src="/assets/icons/047-red card.png"/></th>
-                      </tr>
-                      </thead>
-                      <tbody>
-                      {{#stats.seasons}}
-                          <td><a href="/results.html?season={{Season}}">{{Season}}</a>
-                              <br/>
-                              <small>
-                              <a href="/player-season/{{title}}-{{Season}}.html">Player Season Record</a></small></td>
-                          <td  class="text-center">{{starts}} ({{subs}})</td>
-                          <td  class="text-center">{{goals}}</td>
-                          <td  class="text-center d-none d-md-table-cell">{{assists}}</td>
-                          <td  class="text-center d-none d-lg-table-cell">{{headers}}</td>
-                          <td  class="text-center d-none d-lg-table-cell">{{fk}}</td>
-                          <td  class="text-center d-none d-lg-table-cell">{{penalties}}</td>
-                          <td  class="text-center d-none d-md-table-cell">{{yellow}}</td>
-                          <td  class="text-center d-none d-md-table-cell">{{red}}</td>
-                      </tr>
-                      {{/stats.seasons}}
-                      <tr>
-                          <th>Total</th>
-                          <th  class="text-center">{{stats.total.starts}} ({{stats.total.subs}})</th>
-                          <th  class="text-center">{{stats.total.goals}}</th>
-                          <th  class="text-center d-none d-md-table-cell">{{stats.total.assists}}</th>
-                          <th  class="text-center d-none d-lg-table-cell">{{stats.total.headers}}</th>
-                          <th  class="text-center d-none d-lg-table-cell">{{stats.total.fk}}</th>
-                          <th  class="text-center d-none d-lg-table-cell">{{stats.total.penalties}}</th>
-                          <th  class="text-center d-none d-md-table-cell">{{stats.total.yellow}}</th>
-                          <th  class="text-center d-none d-md-table-cell">{{stats.total.red}}</th>
-                      </tr>
-                      </tbody>
-                  </table>
+                  <div id="pnlStats"></div>
               </div>
               <div class="tab-pane fade" id="transfers" role="tabpanel" aria-labelledby="transfers-tab">
                   <div id="pnlTransfers"></div>

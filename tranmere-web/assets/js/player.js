@@ -27,6 +27,15 @@ var formatter = new Intl.NumberFormat('en-GB', {
     });
   });
 
+  var statsUrl = 'https://www.tranmere-web.com/entities/TranmereWebPlayerSeasonSummaryTable/Player/'+$("#PlayerName").html()+'?index=ByPlayerIndex';
+
+  $.getJSON(statsUrl, function(data) {
+    $.get("/assets/templates/stats.mustache", function(template) {
+      var article = Mustache.render( template, data );
+      $("#pnlStats").html(article);
+    });
+  });
+
   var transfersUrl = 'https://www.tranmere-web.com/entities/TranmereWebPlayerTransfers/name/'+ $("#PlayerName").html();
 
   $.getJSON(transfersUrl, function(data) {
