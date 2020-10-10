@@ -245,7 +245,7 @@ async function run () {
 
     var topScorersView = {
         players: await utils.getTopScorersBySeason(),
-        title: "Top Scorers BY Season",
+        title: "Top Scorers By Season",
         pageType:"WebPage",
         description: "Tranmere Rovers Top Scorers By Season"
     };
