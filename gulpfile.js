@@ -6,6 +6,7 @@ var maps = require('gulp-sourcemaps');
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
 var server = require('browser-sync').create();
+var critical = require('critical');
 const cleanCSS = require('gulp-clean-css');
 
 
@@ -106,6 +107,30 @@ function minifyCss() {
     .pipe(gulp.dest('tranmere-web/output/site/assets/css'));
 }
 
+function criticalTask() {
+    return critical.generate({
+        inline: true,
+        base: 'tranmere-web/output/site/',
+        src: 'index.html',
+          // Output results to file
+          target: {
+            html: 'index.html'
+          },
+          dimensions: [
+            {
+              height: 320,
+              width: 480,
+            },
+            {
+              height: 900,
+              width: 1200,
+            },
+          ],
+        minify: false
+    });
+}
+
+
 function static() {
     return gulp.src([
           './tranmere-web/data/*',
@@ -131,16 +156,15 @@ function publish() {
 
 // watch for changes
 function watch() {
-  gulp.watch('tranmere-web/assets/scss/**/*', gulp.series(css));
+  gulp.watch('tranmere-web/assets/scss/**/*', gulp.series(css, criticalTask, reload));
   gulp.watch(['tranmere-web/assets/js/*'], gulp.series(publish, reload));
-  gulp.watch(['tranmere-web/assets/templates/*'], gulp.series(publish, reload));
-  gulp.watch('gulpfile.js', gulp.series(scripts, styles, minify));
+  gulp.watch(['tranmere-web/assets/templates/*'], gulp.series(publish, criticalTask, reload));
+  gulp.watch('gulpfile.js', gulp.series(scripts, styles, minify, criticalTask, reload));
 }
 
 
-const build = gulp.series(static, publish, css, minifyCss, scripts, styles, minify, gulp.parallel(watch, serve));
-const deploy = gulp.series(static, publish, css, minifyCss, scripts, styles, minify);
-
+const build = gulp.series(static, publish, css, minifyCss, scripts, styles, minify, criticalTask, gulp.parallel(watch, serve));
+const deploy = gulp.series(static, publish, css, minifyCss, scripts, styles, minify, criticalTask);
 
 // tasks
 exports.css = css;
@@ -149,6 +173,7 @@ exports.styles = styles;
 exports.minify = minify;
 exports.minifyCss = minifyCss;
 exports.deploy = deploy;
+exports.criticalTask = criticalTask;
 
 
 exports.default = build;
