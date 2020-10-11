@@ -253,7 +253,7 @@ async function run () {
 
     utils.buildPage({title: "Tranmere Rovers Managerial Records",managers: managers, pageType:"WebPage",  description: "Records of all Tranmere Rovers managers"},
         "./tranmere-web/templates/managers.tpl.html", './tranmere-web/output/site/managers.html');
-
+/*
     var players = await utils.findAllPlayers();
 
     for(var i=0; i < players.length; i++) {
@@ -268,6 +268,7 @@ async function run () {
                 description: "Information about " + players[i].name + "'s record playing for Tranmere Rovers"
             };
             utils.buildPage(player,"./tranmere-web/templates/player.tpl.html", './tranmere-web/output/site/players/' + players[i].name + '.html');
+*/
 /*
             for(var x=0; x < players[i].stats.seasons.length; x++) {
                 var view = {
