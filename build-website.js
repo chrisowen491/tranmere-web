@@ -168,7 +168,8 @@ async function run () {
 
     var seasons = [];
     for(var i = 2020; i > 1920; i--) {
-        seasons.push(i)
+        seasons.push(i);
+        utils.addSiteMapEntry("/results.html?season="+i);
     }
 
     var teams = await utils.findAllTeams(200);
@@ -254,9 +255,13 @@ async function run () {
     utils.buildPage({title: "Tranmere Rovers Managerial Records",managers: managers, pageType:"WebPage",  description: "Records of all Tranmere Rovers managers"},
         "./tranmere-web/templates/managers.tpl.html", './tranmere-web/output/site/managers.html');
     utils.buildPage({image: utils.buildImagePath("photos/kop.jpg", 1920,1080),title:"test", seasons:[{},{}]},"./tranmere-web/templates/player.tpl.html", './tranmere-web/output/site/player.html', true);
-/*
-    var players = await utils.findAllPlayers();
 
+    var players = await utils.findAllPlayers();
+    for(var i=0; i < players.length; i++) {
+        utils.addSiteMapEntry("/page/player/"+players[i].name);
+    }
+
+/*
     for(var i=0; i < players.length; i++) {
         if(players[i].name) {
             var player = {

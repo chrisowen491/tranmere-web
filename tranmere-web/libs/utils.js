@@ -51,6 +51,10 @@ module.exports = function (path, fs, Mustache, axios) {
             return "https://images.tranmere-web.com/" + Buffer.from(JSON.stringify(body)).toString('base64');
          },
 
+         addSiteMapEntry: function(url) {
+            this.pages.push(this.buildSitemapEntry(url));
+         },
+
          buildPage: function (view, pageTpl, outputPath, noindex) {
             console.log("Building " + outputPath);
             if(outputPath != './tranmere-web/output/site/index.html')
