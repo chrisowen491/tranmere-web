@@ -6,7 +6,7 @@ var maps = require('gulp-sourcemaps');
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
 var server = require('browser-sync').create();
-var critical = require('critical');
+const critical = require('critical').stream;
 const cleanCSS = require('gulp-clean-css');
 
 
@@ -108,15 +108,13 @@ function minifyCss() {
 }
 
 function criticalTask() {
-    return critical.generate({
-        inline: true,
+ return gulp
+    .src(['tranmere-web/output/site/*.html'])
+    .pipe(
+      critical({
         base: 'tranmere-web/output/site/',
-        src: 'index.html',
-          // Output results to file
-          target: {
-            html: 'index.html'
-          },
-          dimensions: [
+        inline: true,
+        dimensions: [
             {
               height: 320,
               width: 480,
@@ -124,10 +122,11 @@ function criticalTask() {
             {
               height: 900,
               width: 1200,
-            },
-          ],
-        minify: false
-    });
+            }
+        ]
+      })
+    )
+    .pipe(gulp.dest('tranmere-web/output/site/'));
 }
 
 
