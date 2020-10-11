@@ -116,8 +116,8 @@ function criticalTask() {
         inline: true,
         dimensions: [
             {
-              height: 320,
-              width: 480,
+              height: 500,
+              width: 280,
             },
             {
               height: 900,
