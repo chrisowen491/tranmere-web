@@ -185,7 +185,7 @@ module.exports = function (path, fs, Mustache, axios) {
 
          // Done
          getAllCupCompetitions : async function(size) {
-            var results = await axios.get("https://api.tranmere-web.com/entities/TranmereWebClubs/ALL/ALL");
+            var results = await axios.get("https://api.tranmere-web.com/entities/TranmereWebCompetitions/ALL/ALL");
             return results.data.message;
         },
 

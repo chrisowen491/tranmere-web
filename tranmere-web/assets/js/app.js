@@ -5,8 +5,6 @@
 
     // Launch Functions
     Launch: function () {
-      fn.Header();
-      fn.Masonry();
       fn.Overlay();
       fn.Filetree();
       fn.OwlCarousel();
@@ -15,18 +13,7 @@
     },
 
 
-    Header: function (){
-      $(document.body).headroom({
-        tolerance : 10
-      });
-    },
 
-
-    Masonry: function() {
-      var $grid = $('.masonry').masonry({
-        itemSelector: '.masonry > *',
-      });
-    },
 
 
     // Owl Carousel
@@ -127,7 +114,6 @@
 
     },
 
-
     // Apps
     Apps: function () {
 
@@ -141,87 +127,26 @@
         $('.collapse').on('hide.bs.collapse', function () {
             $(this).parent().removeClass('active');
         });
-
       });
-
 
       // tooltips
       $('[data-toggle="tooltip"]').tooltip()
 
-
-
-      // skrollr
-      skrollr.init({  
-          forceHeight: false,        
-          mobileCheck: function() {
-              //hack - forces mobile version to be off
-              return false;
-          }
-      });
-
-
-      // Smooth Scroll
-      $(function () {
-        var scroll = new SmoothScroll('[data-scroll]');
-      });
-
-
-      // Lavalamp
-      $('.lavalamp').lavalamp({
-        setOnClick: true,
-        enableHover: false,
-        margins: false,
-        autoUpdate: true,
-        duration: 200
-      });
-
-
       $(document).ready(function(){
           var window_width = jQuery( window ).width();
-
-          if (window_width < 768) {
-            $(".sticky").trigger("sticky_kit:detach");
-          } else {
-            make_sticky();
-          }
-
-
-          $( window ).resize(function() {
-
-            window_width = jQuery( window ).width();
-
-            if (window_width < 768) {
-              $(".sticky").trigger("sticky_kit:detach");
-            } else {
-              make_sticky();
-            }
-
-          });
-
 
           // recalc on collapse
           $('.nav-item .collapse').on('shown.bs.collapse hidden.bs.collapse', function () {
             $(".sticky").trigger("sticky_kit:recalc");
           });
 
-          function make_sticky() {
-            $(".sticky").stick_in_parent();
-          }
-
       });
-
-
       // prism
       (function(){
         if (typeof self === 'undefined' || !self.Prism || !self.document) {
           return;
         }
-
-
-
         var callbacks = [];
-
-
       })();
     }
   };
