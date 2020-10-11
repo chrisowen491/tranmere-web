@@ -255,7 +255,7 @@ $transition-collapse:         height .35s ease !default;
 
 // stylelint-disable value-keyword-case
 $font-family-sans-serif:      'Open Sans', sans-serif;
-$font-family-monospace:       'Roboto Mono', monospace;
+$font-family-monospace:       'Open Sans', monospace;
 $font-family-base:            $font-family-sans-serif;
 // stylelint-enable value-keyword-case
 
@@ -278,7 +278,7 @@ $h5-font-size:                $font-size-base * 1.25;
 $h6-font-size:                $font-size-base !default;
 
 $headings-margin-bottom:      ($spacer / 2) !default;
-$headings-font-family:        'Muli', sans-serif;
+$headings-font-family:        'Open Sans', sans-serif;
 $headings-font-weight:        400;
 $headings-line-height:        1.4;
 $headings-color:              $black;
