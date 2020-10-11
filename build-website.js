@@ -286,9 +286,10 @@ async function run () {
                 );
             }
 */
+/*
         }
     }
-
+*/
     utils.buildPage({urls:utils.pages}, "./tranmere-web/templates/sitemap.tpl.xml", './tranmere-web/output/site/sitemap.xml');
 }
 run().catch(console.log)
