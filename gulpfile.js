@@ -153,8 +153,8 @@ function watch() {
 }
 
 
-const build = gulp.series(static, publish, css, minifyCss, scripts, styles, minify, criticalTask, gulp.parallel(watch, serve));
-const deploy = gulp.series(static, publish, css, minifyCss, scripts, styles, minify, criticalTask);
+const build = gulp.series(static, publish, css, scripts, styles, minify, minifyCss, criticalTask, gulp.parallel(watch, serve));
+const deploy = gulp.series(static, publish, css, scripts, styles, minify, minifyCss, criticalTask);
 
 // tasks
 exports.css = css;
