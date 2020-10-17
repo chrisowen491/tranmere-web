@@ -25,9 +25,9 @@ jobs:
           aws-region: eu-west-1
       - name: Build static site
         env:
-          es_cluster: ${{ secrets.ES_CLUSTER }}
-          es_user: ${{ secrets.ES_USER }}
-          es_password: ${{ secrets.ES_PASSWORD }}
+          API_KEY: ${{ secrets.API_KEY }}
+          CF_SPACE: ${{ secrets.CF_SPACE }}
+          CF_KEY: ${{ secrets.CF_KEY }}
         run: npm install && npm run build-web
       - name: Build assets
         run: gulp deploy

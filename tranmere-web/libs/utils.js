@@ -1,6 +1,10 @@
-module.exports = function (path, fs, Mustache, axios) {
+module.exports = function (path, fs, Mustache, axios, key) {
     return {
-
+         apiOptions: {
+           headers: {
+             'x-api-key': key
+           }
+         },
          pages: [],
 
          pad: function(a,b){
@@ -98,11 +102,11 @@ module.exports = function (path, fs, Mustache, axios) {
 
          // Done
          findTranmereMatchesWithStars : async function(size) {
-            var results = await axios.get("https://www.tranmere-web.com/entities/TranmereWebStars/ALL/ALL");
+            var results = await axios.get("https://api.tranmere-web.com/entities/TranmereWebStarsTable/ALL/ALL", this.apiOptions);
             var matches = [];
             for(var i=0; i < results.data.message.length; i++) {
                 var star = results.data.message[i];
-                var result = await axios.get("https://www.tranmere-web.com/result-search/?season="+star.season+"&date="+star.date);
+                var result = await axios.get("https://api.tranmere-web.com/result-search/?season="+star.season+"&date="+star.date, this.apiOptions);
                 var match = result.data;
                 match.Player = star.name;
                 match.Notes = star.notes;
@@ -118,7 +122,7 @@ module.exports = function (path, fs, Mustache, axios) {
 
          // Done
          getAllMediaByType : async function(type) {
-             var results = await axios.get("https://www.tranmere-web.com/entities/TranmereWebMediaTable/category/"+type);;
+             var results = await axios.get("https://api.tranmere-web.com/entities/TranmereWebMediaSyncTable/category/"+type+"?index=ByCategoryIndex", this.apiOptions);
              var media = [];
 
              for(var i=0; i < results.data.message.length; i++) {
@@ -157,7 +161,7 @@ module.exports = function (path, fs, Mustache, axios) {
 
          // Done
          findAllPlayers : async function() {
-            var results = await axios.get("https://www.tranmere-web.com/entities/TranmereWebPlayerTable/ALL/ALL");
+            var results = await axios.get("https://api.tranmere-web.com/entities/TranmereWebPlayerTable/ALL/ALL", this.apiOptions);
             var players = [];
             for(var i=0; i < results.data.message.length; i++) {
                 var player = results.data.message[i];
@@ -168,7 +172,7 @@ module.exports = function (path, fs, Mustache, axios) {
 
          // Done
          findAllTranmereManagers : async function() {
-            var results = await axios.get("https://www.tranmere-web.com/entities/TranmereWebManagers/ALL/ALL");
+            var results = await axios.get("https://api.tranmere-web.com/entities/TranmereWebManagers/ALL/ALL", this.apiOptions);
 
             var managers = [];
             for(var i=0; i < results.data.message.length; i++) {
@@ -189,7 +193,7 @@ module.exports = function (path, fs, Mustache, axios) {
 
          // Done
          getAllCupCompetitions : async function(size) {
-            var results = await axios.get("https://www.tranmere-web.com/entities/TranmereWebCompetitions/ALL/ALL");
+            var results = await axios.get("https://api.tranmere-web.com/entities/TranmereWebCompetitions/ALL/ALL", this.apiOptions);
             return results.data.message;
         },
 
@@ -199,7 +203,7 @@ module.exports = function (path, fs, Mustache, axios) {
             var results = [];
 
             for(var i= 1984; i < 2021; i++) {
-                var result = await axios.get("https://www.tranmere-web.com/player-search/?season="+i+"&sort=Goals");
+                var result = await axios.get("https://api.tranmere-web.com/player-search/?season="+i+"&sort=Goals", this.apiOptions);
                 var player = result.data.players[0];
                 results.push(player);
             }
@@ -208,7 +212,7 @@ module.exports = function (path, fs, Mustache, axios) {
 
          // Done
          findAllTeams : async function(size) {
-            var result = await axios.get("https://www.tranmere-web.com/entities/TranmereWebClubs/ALL/ALL");
+            var result = await axios.get("https://api.tranmere-web.com/entities/TranmereWebClubs/ALL/ALL", this.apiOptions);
             var results = result.data.message;
 
             results.sort(function(a, b) {

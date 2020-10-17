@@ -1,8 +1,14 @@
-var Mustache = require("mustache");
-var fs = require("fs");
-var path = require('path');
-var axios = require('axios')
-var utils = require('./tranmere-web/libs/utils')(path,fs,Mustache,axios);
+const Mustache = require("mustache");
+const fs = require("fs");
+const path = require('path');
+const axios = require('axios')
+const contentful = require("contentful");
+const client = contentful.createClient({
+  space: process.env.CF_SPACE,
+  accessToken: process.env.CF_KEY
+});
+
+var utils = require('./tranmere-web/libs/utils')(path,fs,Mustache,axios, process.env.API_KEY);
 
 async function run () {
 
@@ -15,47 +21,16 @@ async function run () {
     if (!fs.existsSync('./tranmere-web/output/site/media')){
         fs.mkdirSync('./tranmere-web/output/site/media');
     }
-    if (!fs.existsSync('./tranmere-web/output/site/players')){
-        fs.mkdirSync('./tranmere-web/output/site/players');
-    }
-    if (!fs.existsSync('./tranmere-web/output/site/player-season')){
-        fs.mkdirSync('./tranmere-web/output/site/player-season');
-    }
 
+
+    var content = await client.getEntries({'content_type': 'blogPost', order: '-fields.datePosted'});
 
     utils.buildPage(
         {
             title: "Home",
             pageType:"WebPage",
             description: "Tranmere-Web.com is a website full of data, statistics and information about Tranmere Rovers FC",
-            carousel: [
-                {
-                    image: "Screenshot1.png",
-                    title: "Results By Opposition",
-                    link: "/teams.html",
-                },
-                {
-                    image: "Screenshot2.png",
-                    title: "Player Records",
-                    link: "/players.html",
-                },
-                {
-                    image: "Screenshot3.png",
-                    title: "Results By Season",
-                    link: "/seasons.html",
-                },
-                {
-                    image: "Screenshot4.png",
-                    title: "Results By Season",
-                    link: "/seasons.html",
-                },
-                {
-                    image: "Screenshot5.png",
-                    title: "Fanzines Gallery",
-                    link: "/media/fanzines.html",
-                },
-            ]
-
+            blogs: content.items
         },
         "./tranmere-web/templates/home2.tpl.html",'./tranmere-web/output/site/index.html' );
 
@@ -162,9 +137,7 @@ async function run () {
     utils.buildPage({title: "About the site", pageType:"AboutPage", description: "All about Tranmere-Web"}, "./tranmere-web/templates/about.tpl.html",'./tranmere-web/output/site/about.html' );
     utils.buildPage({title: "Stats Home", pageType:"WebPage", description: "Tranmere Rovers statistics"}, "./tranmere-web/templates/stats-home.tpl.html",'./tranmere-web/output/site/stats.html' );
     utils.buildPage({title: "Media Home", pageType:"WebPage", description: "Tranmere Rovers media"}, "./tranmere-web/templates/media-home.tpl.html",'./tranmere-web/output/site/media.html' );
-
     utils.buildPage({title: "Match Summary", pageType:"WebPage", description: "Match Summary"}, "./tranmere-web/templates/match.tpl.html",'./tranmere-web/output/site/match.html' );
-
 
     var seasons = [];
     for(var i = 2020; i > 1920; i--) {
@@ -174,11 +147,10 @@ async function run () {
 
     var teams = await utils.findAllTeams(200);
     var competitions =  await utils.getAllCupCompetitions(50);
-
     var managers = await utils.findAllTranmereManagers();
+    var players = await utils.findAllPlayers();
 
     utils.buildPage({title: "Results Home", pageType:"WebPage", description: "Tranmere Rovers results information index", teams: teams, managers: managers, competitions: competitions, seasons: seasons}, "./tranmere-web/templates/results-home.tpl.html",'./tranmere-web/output/site/results.html' );
-
     utils.buildPage({title: "Players Home", pageType:"WebPage", description: "Tranmere Rovers player information index", seasons: seasons}, "./tranmere-web/templates/player-search.tpl.html",'./tranmere-web/output/site/player-search.html' );
 
     /* Media */
@@ -255,46 +227,11 @@ async function run () {
     utils.buildPage({title: "Tranmere Rovers Managerial Records",managers: managers, pageType:"WebPage",  description: "Records of all Tranmere Rovers managers"},
         "./tranmere-web/templates/managers.tpl.html", './tranmere-web/output/site/managers.html');
     utils.buildPage({image: utils.buildImagePath("photos/kop.jpg", 1920,1080),title:"test", seasons:[{},{}]},"./tranmere-web/templates/player.tpl.html", './tranmere-web/output/site/player.html', true);
-/*
-    var players = await utils.findAllPlayers();
+
     for(var i=0; i < players.length; i++) {
         utils.addSiteMapEntry("/page/player/"+players[i].name);
     }
-*/
-/*
-    for(var i=0; i < players.length; i++) {
-        if(players[i].name) {
-            var player = {
-                title: players[i].name,
-                games: players[i].apps,
-                goals: players[i].goals,
-                pic:   players[i].pic,
-                pageType:"ProfilePage",
-                description: "Information about " + players[i].name + "'s record playing for Tranmere Rovers"
-            };
-            utils.buildPage(player,"./tranmere-web/templates/player.tpl.html", './tranmere-web/output/site/players/' + players[i].name + '.html');
-*/
-/*
-            for(var x=0; x < players[i].stats.seasons.length; x++) {
-                var view = {
-                   name: players[i].name,
-                   title: players[i].name + ' record in season ' + players[i].stats.seasons[x].Season,
-                   pageType: "WebPage",
-                   image: utils.buildImagePath("photos/kop.jpg", 1920,1080),
-                   description: "Full playing record of " + players[i].name + " during the " + players[i].stats.seasons[x].Season + " Tranmere Rovers season",
-                   games: await utils.findAppsByPlayer(players[i].name, 70, players[i].stats.seasons[x].Season),
-                   goals: await utils.findGoalsByPlayer(players[i].name, 70, players[i].stats.seasons[x].Season)
-                };
-                utils.buildPage(view,
-                    "./tranmere-web/templates/player-season.tpl.html",
-                    './tranmere-web/output/site/player-season/' + players[i].name + '-' + players[i].stats.seasons[x].Season + '.html'
-                );
-            }
-*/
-/*
-        }
-    }
-*/
+
     utils.buildPage({urls:utils.pages}, "./tranmere-web/templates/sitemap.tpl.xml", './tranmere-web/output/site/sitemap.xml');
 }
 run().catch(console.log)
