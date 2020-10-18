@@ -5,12 +5,11 @@ const axios = require('axios')
 const contentful = require("contentful");
 const contentfulSDK = require('@contentful/rich-text-html-renderer');
 const client = contentful.createClient({
-  space: 'pz711f8blqyy', //process.env.CF_SPACE,
-  accessToken: 'kXG52DaIS0e8R8gWqErmmadoTjxcC2xyFaSFnOEWou0'//process.env.CF_KEY
+  space: process.env.CF_SPACE,
+  accessToken: process.env.CF_KEY
 });
 
-var utils = require('./tranmere-web/libs/utils')(path,fs,Mustache,axios, 'Ubz2w38CTS18anpiEApqf1pBWayHRcmLz5fKyyW4');
-//var utils = require('./tranmere-web/libs/utils')(path,fs,Mustache,axios, process.env.API_KEY);
+var utils = require('./tranmere-web/libs/utils')(path,fs,Mustache,axios, process.env.API_KEY);
 
 async function run () {
 
