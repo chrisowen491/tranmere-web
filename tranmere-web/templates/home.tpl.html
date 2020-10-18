@@ -6,161 +6,88 @@
 {{>homenav}}
 <!-- / header -->
 
-
 <!-- hero -->
-<section class="bg-primary">
+<section class="hero bg-blue overlay">
     <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-10 text-white text-center">
-                <h1 class="font-weight-light">Welcome To Tranmere-Web!</h1>
-                <p>This site is still in progress!</p>
+        <div class="row align-items-end justify-content-between">
+            <div class="col-md-6 text-white mb-3 mb-md-0">
+                <div class="row gutter-2">
+                    <div class="col-12">
+                        <h1 class="h2 font-weight-normal">Welcome To Tranmere Web</h1>
+                    </div>
+                    <div class="col-12">
+                        <h3 class="h3">The website full of data, statistics and information about Tranmere Rovers FC</h3>
+                        <h3 class="h3">This site is still in progress. But feel free to browse around while we finish it off.</h3>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col text-white text-center">
-                <h2 class="font-weight-light">The website full of data, statistics and information about Tranmere Rovers FC</h2>
+            <div class="col-md-6 pl-md-5">
+                <img src="/assets/shirts/1989.svg" alt="Image" class="overlay-item-bottom">
             </div>
         </div>
     </div>
 </section>
 <!-- / hero -->
 
-
-
-<section class="half bg-primary">
-    <div class="half-bg bg-light pb-10">
-        <div class="image image-gradient-vertical"></div>
-    </div>
-    <div class="container-full mb-10">
-        <div class="row gutter-0 justify-content-center">
-            <div class="col-12">
-                <div class="owl-carousel owl-carousel-showcase owl-carousel-fluid" data-items="[3,2,1]" data-center="true" data-margin="30" data-nav="true" data-loop="true">
-                    {{#carousel}}
-                    <div class="card card-showcase lift">
-                        <a href="{{link}}">
-                            <img class="card-img-top" src="https://images.tranmere-web.com/{{base64}}" alt="{{title}}">
-                        </a>
+<!-- sidebar layout -->
+<section class="bg-white">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="content boxed">
+                    <div class="row separated">
+                        <!-- sidebar -->
+                        {{>recent}}
+                        <!-- / sidebar -->
+                        <!-- content -->
+                        <article class="col-md-8 content-body">
+                            <h2>Site Features</h2>
+                            <ul class="list-group list-group-lines">
+                                <li class="list-group-item d-flex align-items-center boxed">
+                                    <i class="icon-check2 mr-2 text-primary fs-24"></i>
+                                    All First Team Results Since 1921
+                                    <span class="badge badge-green">New</span>
+                                </li>
+                                <li class="list-group-item d-flex align-items-center">
+                                    <i class="icon-check2 mr-2 text-primary fs-24"></i>
+                                    Programme Covers from over 1500 Tranmere games
+                                    <span class="badge badge-green">New</span>
+                                </li>
+                                <li class="list-group-item d-flex align-items-center">
+                                    <i class="icon-check2 mr-2 text-primary fs-24"></i>
+                                    Appearance Data Since 1985
+                                    <span class="badge badge-green">New</span>
+                                </li>
+                                <li class="list-group-item d-flex align-items-center">
+                                    <i class="icon-check2 mr-2 text-primary fs-24"></i>
+                                    Goals Data Since 1985
+                                    <span class="badge badge-green">New</span>
+                                </li>
+                                <li class="list-group-item d-flex align-items-center">
+                                    <i class="icon-check2 mr-2 text-primary fs-24"></i>
+                                    Assist Data Since 1989
+                                    <span class="badge badge-yellow">In progress</span>
+                                </li>
+                                <li class="list-group-item d-flex align-items-center">
+                                    <i class="icon-check2 mr-2 text-primary fs-24"></i>
+                                    Attendances
+                                    <span class="badge badge-yellow">In progress</span>
+                                </li>
+                                <li class="list-group-item d-flex align-items-center">
+                                    <i class="icon-check2 mr-2 text-primary fs-24"></i>
+                                    Memorabilia Galleries
+                                    <span class="badge badge-green">New</span>
+                                </li>
+                            </ul>
+                        </article>
+                        <!-- / content -->
                     </div>
-                    {{/carousel}}
                 </div>
             </div>
         </div>
     </div>
 </section>
-
-
-<!-- categories -->
-<section class="bg-white">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-6 text-center">
-                <h2>What's coming soon?</h2>
-                <p>Detailed stats about all things Tranmere Rovers</p>
-            </div>
-        </div>
-        <div class="row gutter-1">
-            <div class="col-6 col-md-4 col-lg-2">
-                <a href="#" title="Accordions" class="card bordered highlight">
-                    <div class="card-body text-center px-0 py-1 py-md-2 py-lg-3">
-                        <img alt="Player" style="margin-left:20px" title="Player" width="40px" height="40px" src="/assets/icons/043-player.svg" align="left"/>
-                        <h5 class="fs-18">Player Stats</h5>
-                    </div>
-                </a>
-            </div>
-            <div class="col-6 col-md-4 col-lg-2">
-                <a href="#" title="Alerts" class="card bordered highlight">
-                    <div class="card-body text-center px-0 py-1 py-md-2 py-lg-3">
-                        <img alt="Ball" style="margin-left:20px" title="Ball" width="40px" height="40px" src="/assets/icons/004-soccer ball.svg" align="left"/>
-                        <h5 class="fs-18">Programmes</h5>
-                    </div>
-                </a>
-            </div>
-            <div class="col-6 col-md-4 col-lg-2">
-                <a href="#" title="Widgets" class="card bordered highlight">
-                    <div class="card-body text-center px-0 py-1 py-md-2 py-lg-3">
-                        <img alt="Ball" style="margin-left:20px" title="Ball" width="40px" height="40px" src="/assets/icons/004-soccer ball.svg" align="left"/>
-                        <h5 class="fs-18">Goals/Assists</h5>
-                    </div>
-                </a>
-            </div>
-            <div class="col-6 col-md-4 col-lg-2">
-                <a href="#" title="Typography" class="card bordered highlight">
-                    <div class="card-body text-center px-0 py-1 py-md-2 py-lg-3">
-                        <img alt="Kit" style="margin-left:20px" title="Kit" width="40px" height="40px" src="/assets/icons/033-kit.png" align="left"/>
-                        <h5 class="fs-18">Historic Kits</h5>
-                    </div>
-                </a>
-            </div>
-            <div class="col-6 col-md-4 col-lg-2">
-                <a href="documentation/components/video.html" title="Video" class="card bordered highlight">
-                    <div class="card-body text-center px-0 py-1 py-md-2 py-lg-3">
-                        <img alt="Ball" style="margin-left:20px" title="Ball" width="40px" height="40px" src="/assets/icons/004-soccer ball.svg" align="left"/>
-                        <h5 class="fs-18">Memorabilia</h5>
-                    </div>
-                </a>
-            </div>
-            <div class="col-6 col-md-4 col-lg-2">
-                <a href="#" title="Cards" class="card bordered highlight">
-                    <div class="card-body text-center px-0 py-1 py-md-2 py-lg-3">
-                        <img alt="Ball" style="margin-left:20px" title="Ball" width="40px" height="40px" src="/assets/icons/004-soccer ball.svg" align="left"/>
-                        <h5 class="fs-18">Tickets</h5>
-                    </div>
-                </a>
-            </div>
-            <div class="col-6 col-md-4 col-lg-2">
-                <a href="#" title="Carousels" class="card bordered highlight">
-                    <div class="card-body text-center px-0 py-1 py-md-2 py-lg-3">
-                        <img alt="Player" style="margin-left:20px" title="Player" width="40px" height="40px" src="/assets/icons/054-stadium.png" align="left"/>
-                        <h5 class="fs-18">Attendances</h5>
-                    </div>
-                </a>
-            </div>
-            <div class="col-6 col-md-4 col-lg-2">
-                <a href="#" title="Code" class="card bordered highlight">
-                    <div class="card-body text-center px-0 py-1 py-md-2 py-lg-3">
-                        <img alt="Ball" style="margin-left:20px" title="Ball" width="40px" height="40px" src="/assets/icons/004-soccer ball.svg" align="left"/>
-                        <h5 class="fs-18">More Stats</h5>
-                    </div>
-                </a>
-            </div>
-            <div class="col-6 col-md-4 col-lg-2">
-                <a href="#" title="Forms" class="card bordered highlight">
-                    <div class="card-body text-center px-0 py-1 py-md-2 py-lg-3">
-                        <img alt="Ball" style="margin-left:20px" title="Ball" width="40px" height="40px" src="/assets/icons/004-soccer ball.svg" align="left"/>
-                        <h5 class="fs-18">Site Search</h5>
-                    </div>
-                </a>
-            </div>
-            <div class="col-6 col-md-4 col-lg-2">
-                <a href="#" title="Lists" class="card bordered highlight">
-                    <div class="card-body text-center px-0 py-1 py-md-2 py-lg-3">
-                        <img alt="Ball" style="margin-left:20px" title="Ball" width="40px" height="40px" src="/assets/icons/004-soccer ball.svg" align="left"/>
-                        <h5 class="fs-18">API</h5>
-                    </div>
-                </a>
-            </div>
-            <div class="col-6 col-md-4 col-lg-2">
-                <a href="#" title="Steps" class="card bordered highlight">
-                    <div class="card-body text-center px-0 py-1 py-md-2 py-lg-3">
-                        <img alt="Player" style="margin-left:20px" title="Player" width="40px" height="40px" src="/assets/icons/043-player.svg" align="left"/>
-                        <h5 class="fs-18">Dream Teams</h5>
-                    </div>
-                </a>
-            </div>
-            <div class="col-6 col-md-4 col-lg-2">
-                <a href="#" title="View All Components" class="card bordered highlight">
-                    <div class="card-body text-center  px-0 py-1 py-md-2 py-lg-3">
-                        <img alt="Ball" style="margin-left:20px" title="Ball" width="40px" height="40px" src="/assets/icons/004-soccer ball.svg" align="left"/>
-                        <h5 class="fs-18">Much More...</h5>
-                    </div>
-                </a>
-            </div>
-        </div>
-    </div>
-</section>
-<!-- / categories -->
-
-
+<!-- / sidebar layout -->
 
 <!-- cta -->
 <div class="half bg-white">

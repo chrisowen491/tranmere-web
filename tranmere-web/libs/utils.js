@@ -121,45 +121,6 @@ module.exports = function (path, fs, Mustache, axios, key) {
          },
 
          // Done
-         getAllMediaByType : async function(type) {
-             var results = await axios.get("https://api.tranmere-web.com/entities/TranmereWebMediaSyncTable/category/"+type+"?index=ByCategoryIndex", this.apiOptions);
-             var media = [];
-
-             for(var i=0; i < results.data.message.length; i++) {
-               var item = results.data.message[i];
-               var image = {
-                 "bucket": "trfc-programmes",
-                 "key": results.data.message[i].image,
-                 "edits": {
-                   "resize": {
-                     "height": 400,
-                     "fit": "contain"
-                   }
-                 }
-               };
-               var link = {
-                    "bucket": "trfc-programmes",
-                    "key": results.data.message[i].image,
-                    "edits": {
-                     "resize": {
-                       "height": 1200,
-                       "fit": "contain"
-                     }
-                   }
-               };
-               item.imagePath = "https://images.tranmere-web.com/" + Buffer.from(JSON.stringify(image)).toString('base64');
-               item.linkPath = "https://images.tranmere-web.com/" + Buffer.from(JSON.stringify(link)).toString('base64');
-               media.push(item)
-             }
-             media.sort(function(a, b) {
-               if (a.published < b.published) return -1
-               if (a.published > b.published) return 1
-               return 0
-             });
-             return media;
-         },
-
-         // Done
          findAllPlayers : async function() {
             var results = await axios.get("https://api.tranmere-web.com/entities/TranmereWebPlayerTable/ALL/ALL", this.apiOptions);
             var players = [];

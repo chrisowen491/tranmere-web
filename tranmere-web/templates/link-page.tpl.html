@@ -1,11 +1,9 @@
 {{>head}}
   <body data-spy="scroll" data-target="#toc">
 
-
   <!-- header -->
   {{>homenav}}
   <!-- / header -->
-
 
     <!-- hero -->
     <section class="hero bg-blue">
@@ -38,34 +36,24 @@
 
                   <div class="row gutter-2">
 
+                    {{#groups}}
                     <div class="col-md-6">
                       <div class="boxed p-3">
-                        <h4>Books & Magazines</h4>
-                        <a class="nav-link" href="/media/fanzines.html">Fanzines</a>
-                        <a class="nav-link" href="/media/books.html">Books</a>
-                        <a class="nav-link" href="/media/newspapers.html">Newspaper Souvenir Specials</a>
+                        <h4>{{groupName}}</h4>
+                        {{#links}}
+                        <a class="nav-link" href="{{linkUrl}}">{{linkText}}</a>
+                        {{/links}}
                       </div>
                     </div>
-                    <div class="col-md-6">
-                      <div class="boxed p-3">
-                        <h4>Memorabilia</h4>
-                        <a class="nav-link" href="/media/cards.html">Football Cards</a>
-                        <a class="nav-link" href="/media/tickets.html">Tickets</a>
-                        <a class="nav-link" href="/media/club.html">Club Literature</a>
-                        <a class="nav-link" href="/media/videos.html">Videos</a>
-                        <a class="nav-link" href="/media/kits.html">Kits</a>
-                      </div>
-                    </div>
+                    {{/groups}}
                   </div>
 
                 </article>
                 <!-- / content -->
 
-
                 <!-- sidebar -->
                 {{>recent}}
                 <!-- / sidebar -->
-
 
               </div>
             </div>
