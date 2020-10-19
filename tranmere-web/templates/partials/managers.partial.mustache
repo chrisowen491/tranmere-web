@@ -1,0 +1,22 @@
+{{#managers}}
+<div class="card stacked" style="margin-bottom:50px">
+    <div class="card-body">
+        <div class="row gutter-2 align-items-center">
+            <div class="col">
+                <a href="/managers/{{name}}.html" class="topic" id="manager-{{id}}" itemprop="url">
+                    <h3 class="card-title mb-1" itemprop="name">{{name}}</h3>
+                    <p class="card-text mb-2"><small>
+                        From
+                        <time datetime="{{dateJoined}}" class="text-muted d-block">{{dateJoined}}</time>
+                    </small></p>
+                    <p class="card-text mb-2"><small>
+                        To
+                        <time datetime="{{dateLeft}}" class="text-muted d-block">{{dateLeft}}</time>
+                    </small></p>
+                </a>
+            </div>
+        </div>
+        <i class="icon-photo icon-background text-blue"></i>
+    </div>
+</div>
+{{/managers}}

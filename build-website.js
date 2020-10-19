@@ -40,107 +40,17 @@ async function run () {
         }
     }
 
-    var kits = [
-       {
-           Season: "1984-1985",
-           image: "/assets/shirts/1985.svg",
-       },
-       {
-           Season: "1986-1987",
-           image: "/assets/shirts/1986.svg",
-       },
-       {
-           Season: "1987-1989",
-           image: "/assets/shirts/1988.svg",
-       },
-       {
-           Season: "1989-1991",
-           image: "/assets/shirts/1989.svg",
-       },
-       {
-           Season: "1991-1993",
-           image: "/assets/shirts/1991.svg",
-       },
-       {
-           Season: "1993-1995",
-           image: "/assets/shirts/1993.svg",
-       },
-       {
-           Season: "1995-1997",
-           image: "/assets/shirts/1995.svg",
-       },
-       {
-           Season: "1997-1999",
-           image: "/assets/shirts/1997.svg",
-       },
-       {
-           Season: "1999-2000",
-           image: "/assets/shirts/1999.svg",
-       },
-       {
-           Season: "2000-2002",
-           image: "/assets/shirts/2000.svg",
-       },
-       {
-           Season: "2002-2004",
-           image: "/assets/shirts/2002.svg",
-       },
-       {
-           Season: "2004-2006",
-           image: "/assets/shirts/2004.svg",
-       },
-       {
-           Season: "2005-2007",
-           image: "/assets/shirts/2006.svg",
-       },
-       {
-           Season: "2007-2009",
-           image: "/assets/shirts/2007.svg",
-       },
-       {
-           Season: "2010-2011",
-           image: "/assets/shirts/2010.svg",
-       },
-       {
-           Season: "2011-2013",
-           image: "/assets/shirts/2011.svg",
-       },
-       {
-           Season: "2013-2014",
-           image: "/assets/shirts/2013.svg",
-       },
-       {
-           Season: "2015-2016",
-           image: "/assets/shirts/2015.svg",
-       },
-       {
-           Season: "2016-2017",
-           image: "/assets/shirts/2016.svg",
-       },
-       {
-           Season: "2017-2018",
-           image: "/assets/shirts/2017.svg",
-       },
-       {
-           Season: "2018-2019",
-           image: "/assets/shirts/2018.svg",
-       },
-       {
-           Season: "2019-2020",
-           image: "/assets/shirts/2019.svg",
-       }
-   ];
     var seasons = [];
     for(var i = 2020; i > 1920; i--) {
         seasons.push(i);
         utils.addSiteMapEntry("/results.html?season="+i);
     }
-    var teams = await utils.findAllTeams(200);
-    var competitions =  await utils.getAllCupCompetitions(50);
-    var managers = await utils.findAllTranmereManagers();
-    var players = await utils.findAllPlayers();
-    var stars = await utils.findTranmereMatchesWithStars(20);
-    var topScorers =  await utils.getTopScorersBySeason();
+    var teams = []//await utils.findAllTeams(200);
+    var competitions =  []//await utils.getAllCupCompetitions(50);
+    var players = []//await utils.findAllPlayers();
+    var managers = []//await utils.findAllTranmereManagers();
+    var topScorers =  []//await utils.getTopScorersBySeason();
+
     for(var i=0; i < pages.items.length; i++) {
         var page = pages.items[i].fields;
         page.blogs = content.items;
@@ -151,12 +61,12 @@ async function run () {
           }
         }
         page.content =  contentfulSDK.documentToHtmlString(page.body, options);
-        page.kits = kits;
-        page.teams = teams;
+
+        page.topScorers = topScorers;
         page.managers = managers;
+        page.teams = teams;
         page.competitions = competitions;
         page.seasons = seasons;
-        page.stars = stars;
         page.image = utils.buildImagePath("photos/kop.jpg", 1920,1080);
         if(pageCategories[page.key]) {
             var groups = [];
@@ -164,6 +74,25 @@ async function run () {
                 groups.push({groupName: key, links : pageCategories[page.key].groups[key]})
             }
             page.groups = groups;
+        }
+        if(groups && groups.length > 0) {
+            page.hasGroups = true;
+            page.groups = groups;
+        }
+        if(page.sections) {
+            var sectionContent = "";
+            for(var s=0; s<page.sections.length; s++) {
+                sectionContent = sectionContent + "\n" + utils.renderFragment(page, page.sections[s]);
+            }
+            page.sectionHTML = sectionContent;
+        }
+        if(page.blocks) {
+            var blockContent = "";
+            for(var b=0; b<page.blocks.length; b++) {
+                blockContent = blockContent + "\n" + utils.renderFragment(page.blocks[b].fields, page.blocks[b].sys.contentType.sys.id);
+            }
+            page.blockHTML = blockContent;
+
         }
         var fileName = page.key.toLowerCase();
         utils.buildPage(page,`./tranmere-web/templates/${page.template}`,`./tranmere-web/output/site/${fileName}.html` );

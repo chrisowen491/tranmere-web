@@ -100,6 +100,11 @@ module.exports = function (path, fs, Mustache, axios, key) {
             });
          },
 
+         renderFragment : function(view, templateKey) {
+            var tpl = `./tranmere-web/templates/partials/${templateKey}.partial.mustache`;
+            return Mustache.render(fs.readFileSync(tpl).toString(), view, this.loadSharedPartials());
+         },
+
          // Done
          findTranmereMatchesWithStars : async function(size) {
             var results = await axios.get("https://api.tranmere-web.com/entities/TranmereWebStarsTable/ALL/ALL", this.apiOptions);
