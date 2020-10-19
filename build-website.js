@@ -45,11 +45,11 @@ async function run () {
         seasons.push(i);
         utils.addSiteMapEntry("/results.html?season="+i);
     }
-    var teams = []//await utils.findAllTeams(200);
-    var competitions =  []//await utils.getAllCupCompetitions(50);
-    var players = []//await utils.findAllPlayers();
-    var managers = []//await utils.findAllTranmereManagers();
-    var topScorers =  []//await utils.getTopScorersBySeason();
+    var teams = await utils.findAllTeams(200);
+    var competitions =  await utils.getAllCupCompetitions(50);
+    var players = await utils.findAllPlayers();
+    var managers = await utils.findAllTranmereManagers();
+    var topScorers =  await utils.getTopScorersBySeason();
 
     for(var i=0; i < pages.items.length; i++) {
         var page = pages.items[i].fields;
