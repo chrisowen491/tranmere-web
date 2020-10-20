@@ -21,24 +21,7 @@ async function run () {
     }
 
     var content = await client.getEntries({'content_type': 'blogPost', order: '-fields.datePosted'});
-    var links = await client.getEntries({'content_type': 'internalLinks'});
     var pages = await client.getEntries({'content_type': 'pageMetaData'});
-
-    var pageCategories = {};
-    for(var i=0; i < links.items.length; i++) {
-        var item = links.items[i];
-        if(pageCategories[item.fields.pageCategory]) {
-
-            if(pageCategories[item.fields.pageCategory].groups[item.fields.groupCategory]) {
-               pageCategories[item.fields.pageCategory].groups[item.fields.groupCategory].push(item.fields);
-            } else {
-                pageCategories[item.fields.pageCategory].groups[item.fields.groupCategory] = [item.fields];
-            }
-        } else {
-            pageCategories[item.fields.pageCategory] = { groups: {} };
-            pageCategories[item.fields.pageCategory].groups[item.fields.groupCategory] = [item.fields]
-        }
-    }
 
     var seasons = [];
     for(var i = 2020; i > 1920; i--) {
@@ -46,10 +29,10 @@ async function run () {
         utils.addSiteMapEntry("/results.html?season="+i);
     }
     var teams = await utils.findAllTeams(200);
-    var competitions =  await utils.getAllCupCompetitions(50);
+    var competitions = await utils.getAllCupCompetitions(50);
     var players = await utils.findAllPlayers();
     var managers = await utils.findAllTranmereManagers();
-    var topScorers =  await utils.getTopScorersBySeason();
+    var topScorers = await utils.getTopScorersBySeason();
 
     for(var i=0; i < pages.items.length; i++) {
         var page = pages.items[i].fields;
@@ -68,17 +51,7 @@ async function run () {
         page.competitions = competitions;
         page.seasons = seasons;
         page.image = utils.buildImagePath("photos/kop.jpg", 1920,1080);
-        if(pageCategories[page.key]) {
-            var groups = [];
-            for (const key in pageCategories[page.key].groups) {
-                groups.push({groupName: key, links : pageCategories[page.key].groups[key]})
-            }
-            page.groups = groups;
-        }
-        if(groups && groups.length > 0) {
-            page.hasGroups = true;
-            page.groups = groups;
-        }
+
         if(page.sections) {
             var sectionContent = "";
             for(var s=0; s<page.sections.length; s++) {
@@ -93,6 +66,13 @@ async function run () {
             }
             page.blockHTML = blockContent;
 
+        }
+        if(page.cardBlocks) {
+            var blockContent = "";
+            for(var b=0; b<page.cardBlocks.length; b++) {
+                blockContent = blockContent + "\n" + utils.renderFragment(page.cardBlocks[b].fields, page.cardBlocks[b].sys.contentType.sys.id);
+            }
+            page.cardBlocksHTML = blockContent;
         }
         var fileName = page.key.toLowerCase();
         utils.buildPage(page,`./tranmere-web/templates/${page.template}`,`./tranmere-web/output/site/${fileName}.html` );
