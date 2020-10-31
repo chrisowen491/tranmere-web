@@ -8,13 +8,23 @@
         vertical-align: top;
 
         img {
-            width: 75px;
+            @include media-breakpoint-up(md) {
+                width: 100px;
+            }
 
+            @include media-breakpoint-down(sm) {
+                width: 50px;
+            }
         }
+
         a {
             display: block;
             color: #ffffff;
             text-decoration: none;
+
+            @include media-breakpoint-down(sm) {
+                font-size: 0.7rem;
+            }
         }
     }
 }
