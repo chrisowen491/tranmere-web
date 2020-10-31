@@ -1,3 +1,5 @@
+var globalStore = {};
+
 $.urlParam = function (name) {
     var results = new RegExp('[\?&]' + name + '=([^&#]*)')
                       .exec(window.location.search);
@@ -5,16 +7,89 @@ $.urlParam = function (name) {
     return (results !== null) ? results[1] || 0 : false;
 }
 
-
 function search() {
-  var url = 'https://www.tranmere-web.com/result-search/?date='+ $.urlParam('date') + "&season=" + $.urlParam('season');
-  $.getJSON(url, function(view) {
-    view.formattedGoals = formatGoals(view.goals);
+  $.when(
+    // Get the HTML
     $.get("/assets/templates/match.mustache", function(template) {
-      var article = Mustache.render( template, view );
-      $("#homenav").after(article);
-      $("#loading").hide();
-    });
+      globalStore.template = template;
+    }),
+
+    $.get("/player-search/?season="+$.urlParam('season')+"&sort=null", function(players) {
+      globalStore.players = players;
+    }),
+
+
+    $.get('/result-search/?date='+ $.urlParam('date') + "&season=" + $.urlParam('season'), function(match) {
+      globalStore.match = match;
+    }),
+
+    // Get the JS
+    //$.getScript("/assets/feature.js")
+
+  ).then(function() {
+
+       var playerMap = {};
+       var view = globalStore.match;
+       view.goalkeepers = [];
+       view.defenders = [];
+       view.midfielders = [];
+       view.strikers = [];
+       view.formattedGoals = formatGoals(view.goals);
+       for (var i=0; i < globalStore.players.players.length; i++) {
+        playerMap[globalStore.players.players[i].Player] = globalStore.players.players[i].bio;
+       }
+
+       var noPositionList = [];
+       for(var i=0; i < globalStore.match.apps.length; i++) {
+        var app = globalStore.match.apps[i];
+        if(playerMap[app.Name]) {
+
+            app.bio = playerMap[globalStore.match.apps[i].Name];
+
+            if(app.bio.position == "Goalkeeper") {
+                view.goalkeepers.push(app);
+            } else if(app.bio.position == "Central Defender" || app.bio.position == "Full Back") {
+                view.defenders.push(app);
+            } else if(app.bio.position == "Central Midfielder" || app.bio.position == "Winger") {
+                view.midfielders.push(app);
+            } else if(app.bio.position == "Striker") {
+                view.strikers.push(app);
+            } else {
+                noPositionList.push(app)
+            }
+        } else {
+            app.bio = {
+                pic: {
+                     fields:{
+                         file:{
+                             url:"https://images.ctfassets.net/pz711f8blqyy/1GOdp93iMC7T3l9L9UUqaM/0ea20a8950cdfb6f0239788f93747d74/blank.svg"
+                         }
+                     }
+                 }
+            }     ;
+            noPositionList.push(app);
+        }
+       }
+
+       for(var i=0; i < noPositionList.length; i++) {
+            if(view.goalkeepers.length == 0){
+                view.goalkeepers.push(noPositionList[i]);
+            } else if(view.defenders.length < 4){
+                view.defenders.push(noPositionList[i]);
+            } else if(view.midfielders.length < 4){
+                view.midfielders.push(noPositionList[i]);
+            } else {
+                view.strikers.push(noPositionList[i]);
+            }
+       }
+
+       view.defColspan  = 20 / view.defenders.length;
+       view.midColspan  = 20 / view.midfielders.length;
+       view.strColspan = 20 / view.strikers.length;
+
+       var article = Mustache.render( globalStore.template, view );
+       $("#homenav").after(article);
+       $("#loading").hide();
   });
 }
 
