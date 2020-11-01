@@ -26,5 +26,25 @@
                 font-size: 0.7rem;
             }
         }
+
+        a.yellow {
+            display: block;
+            color: #FFFF00;
+            text-decoration: none;
+
+            @include media-breakpoint-down(sm) {
+                font-size: 0.7rem;
+            }
+        }
+
+        a.red {
+            display: block;
+            color: #ff0000;
+            text-decoration: none;
+
+            @include media-breakpoint-down(sm) {
+                font-size: 0.7rem;
+            }
+        }
     }
 }

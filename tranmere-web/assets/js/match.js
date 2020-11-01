@@ -31,8 +31,12 @@ function search() {
        var playerMap = {};
        var view = globalStore.match;
        view.goalkeepers = [];
+       view.fullback1 = [];
+       view.fullback2 = [];
        view.defenders = [];
        view.midfielders = [];
+       view.wingers1 = [];
+       view.wingers2 = [];
        view.strikers = [];
        view.formattedGoals = formatGoals(view.goals);
        for (var i=0; i < globalStore.players.players.length; i++) {
@@ -48,10 +52,18 @@ function search() {
 
             if(app.bio.position == "Goalkeeper") {
                 view.goalkeepers.push(app);
-            } else if(app.bio.position == "Central Defender" || app.bio.position == "Full Back") {
+            } else if(app.bio.position == "Central Defender") {
                 view.defenders.push(app);
-            } else if(app.bio.position == "Central Midfielder" || app.bio.position == "Winger") {
+            } else if(app.bio.position == "Full Back" && view.fullback1.length == 0) {
+                view.fullback1.push(app);
+            } else if(app.bio.position == "Full Back" && view.fullback2.length == 0) {
+                view.fullback2.push(app);
+            } else if(app.bio.position == "Central Midfielder") {
                 view.midfielders.push(app);
+            } else if(app.bio.position == "Winger" && view.wingers1.length == 0) {
+                view.wingers1.push(app);
+            } else if(app.bio.position == "Winger" && view.wingers2.length == 0) {
+                view.wingers2.push(app);
             } else if(app.bio.position == "Striker") {
                 view.strikers.push(app);
             } else {
@@ -74,17 +86,25 @@ function search() {
        for(var i=0; i < noPositionList.length; i++) {
             if(view.goalkeepers.length == 0){
                 view.goalkeepers.push(noPositionList[i]);
-            } else if(view.defenders.length < 4){
+            } else if(view.fullback1.length == 0){
+                  view.fullback1.push(noPositionList[i]);
+            } else if(view.fullback2.length == 0){
+                  view.fullback2.push(noPositionList[i]);
+            } else if(view.defenders.length < 2){
                 view.defenders.push(noPositionList[i]);
-            } else if(view.midfielders.length < 4){
+            } else if(view.wingers1.length == 0){
+                  view.wingers1.push(noPositionList[i]);
+            } else if(view.wingers2.length == 0){
+                  view.wingers2.push(noPositionList[i]);
+            } else if(view.midfielders.length < 2){
                 view.midfielders.push(noPositionList[i]);
             } else {
                 view.strikers.push(noPositionList[i]);
             }
        }
 
-       view.defColspan  = 20 / view.defenders.length;
-       view.midColspan  = 20 / view.midfielders.length;
+       view.defColspan  = 20 / (view.defenders.length + view.fullback1.length + view.fullback2.length);
+       view.midColspan  = 20 / (view.midfielders.length + view.wingers1.length + view.wingers2.length);
        view.strColspan = 20 / view.strikers.length;
 
        var article = Mustache.render( globalStore.template, view );
