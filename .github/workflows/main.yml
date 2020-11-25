@@ -28,6 +28,9 @@ jobs:
           API_KEY: ${{ secrets.API_KEY }}
           CF_SPACE: ${{ secrets.CF_SPACE }}
           CF_KEY: ${{ secrets.CF_KEY }}
+          AL_KEY: ${{ secrets.AL_KEY }}
+          AL_SPACE: ${{ secrets.AL_SPACE }}
+          AL_INDEX: ${{ secrets.AL_INDEX }}
         run: npm install && npm run build-web
       - name: Build assets
         run: gulp deploy

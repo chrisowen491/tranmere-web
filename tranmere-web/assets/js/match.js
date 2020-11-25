@@ -14,12 +14,12 @@ function search() {
       globalStore.template = template;
     }),
 
-    $.get("/player-search/?season="+$.urlParam('season')+"&sort=null", function(players) {
+    $.get("https://www.tranmere-web.com/player-search/?season="+$.urlParam('season')+"&sort=null&x=true7", function(players) {
       globalStore.players = players;
     }),
 
 
-    $.get('/result-search/?date='+ $.urlParam('date') + "&season=" + $.urlParam('season'), function(match) {
+    $.get('https://www.tranmere-web.com/result-search/?date='+ $.urlParam('date') + "&season=" + $.urlParam('season'), function(match) {
       globalStore.match = match;
     }),
 

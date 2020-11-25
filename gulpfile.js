@@ -46,6 +46,8 @@ function scripts() {
     'node_modules/owl.carousel/dist/owl.carousel.js',
     'node_modules/magnific-popup/dist/jquery.magnific-popup.min.js',
     'node_modules/mustache/mustache.js',
+    'node_modules/algoliasearch/dist/algoliasearch.js',
+    'node_modules/autocomplete.js/dist/autocomplete.js',
     //'node_modules/clipboard/dist/clipboard.min.js',
     //'node_modules/prismjs/prism.js',
     //'node_modules/prismjs/plugins/toolbar/prism-toolbar.js',

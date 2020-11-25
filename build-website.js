@@ -4,12 +4,15 @@ const path = require('path');
 const axios = require('axios')
 const contentful = require("contentful");
 const contentfulSDK = require('@contentful/rich-text-html-renderer');
+const algoliasearch = require('algoliasearch');
 const client = contentful.createClient({
   space: process.env.CF_SPACE,
   accessToken: process.env.CF_KEY
 });
+const search_client = algoliasearch(process.env.AL_SPACE, process.env.AL_KEY);
+const search_index = search_client.initIndex(process.env.AL_INDEX);
 
-var utils = require('./tranmere-web/libs/utils')(path,fs,Mustache,axios, process.env.API_KEY);
+var utils = require('./tranmere-web/libs/utils')(path, fs, Mustache, axios, process.env.API_KEY);
 
 async function run () {
 
@@ -84,6 +87,9 @@ async function run () {
 
     for(var i=0; i < players.length; i++) {
         utils.addSiteMapEntry("/page/player/"+players[i].name);
+        players[i].objectID = "Player-" + players[i].name;
+        players[i].link = "https://www.tranmere-web.com/page/player/" + players[i].name;
+        search_index.saveObject(players[i]);
     }
 
     utils.buildPage({urls:utils.pages}, "./tranmere-web/templates/sitemap.tpl.xml", './tranmere-web/output/site/sitemap.xml');

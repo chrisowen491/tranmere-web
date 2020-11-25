@@ -12,10 +12,6 @@
       fn.Apps();
     },
 
-
-
-
-
     // Owl Carousel
     OwlCarousel: function() {
 
@@ -156,3 +152,20 @@
   });
 
 })(jQuery);
+
+var client = algoliasearch('DZJXSVOWI3', 'c050f0bd17ccfde9aa78a3563d552db2');
+var index = client.initIndex('TranmereWeb');
+autocomplete('#search-input', { hint: false }, [
+{
+  source: autocomplete.sources.hits(index, { hitsPerPage: 5 }),
+  displayKey: 'objectID',
+  templates: {
+    suggestion: function(suggestion) {
+      return "<a href='" + suggestion.link +"'>" + suggestion.name + "</a>";
+    }
+  }
+}
+]).on('autocomplete:selected', function(event, suggestion, dataset) {
+    //console.log(suggestion, dataset);
+    //alert('dataset: ' + dataset + ', ' + suggestion.name);
+});
