@@ -158,17 +158,18 @@ var index = client.initIndex('TranmereWeb');
 autocomplete('#search-input', { hint: false }, [
 {
   source: autocomplete.sources.hits(index, { hitsPerPage: 5 }),
-  displayKey: 'objectID',
+  displayKey: 'name',
   templates: {
     suggestion: function(suggestion) {
         if(suggestion.pic)
-            return "<a href='" + suggestion.link +"'><img width='40px' src='"+suggestion.pic.fields.file.url+"'/>" + suggestion.name + "</a>";
+            return "<img width='40px' src='"+suggestion.pic.fields.file.url+"'/>" + suggestion.name;
         else
-            return "<a href='" + suggestion.link +"'>" + suggestion.name + "</a>";
+            return suggestion.name;
     }
   }
 }
 ]).on('autocomplete:selected', function(event, suggestion, dataset) {
+    window.location.href = suggestion.link;
     //console.log(suggestion, dataset);
     //alert('dataset: ' + dataset + ', ' + suggestion.name);
 });
