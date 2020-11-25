@@ -13,7 +13,6 @@ const search_client = algoliasearch(process.env.AL_SPACE, process.env.AL_KEY);
 const search_index = search_client.initIndex(process.env.AL_INDEX);
 
 var utils = require('./tranmere-web/libs/utils')(path, fs, Mustache, axios, process.env.API_KEY);
-
 async function run () {
 
     if (!fs.existsSync('./tranmere-web/output')){
@@ -90,6 +89,20 @@ async function run () {
         players[i].objectID = "Player-" + players[i].name;
         players[i].link = "https://www.tranmere-web.com/page/player/" + players[i].name;
         search_index.saveObject(players[i]);
+    }
+
+    for(var i=0; i< teams.length; i++) {
+        teams[i].objectID = "Team-" + teams[i].name;
+        teams[i].link = "https://www.tranmere-web.com/results.html?opposition=" + teams[i].name;
+        teams[i].name = "Results against " +  teams[i].name;
+        search_index.saveObject(teams[i]);
+    }
+
+    for(var i=0; i< competitions.length; i++) {
+        competitions[i].objectID = "Competition-" + competitions[i].name;
+        competitions[i].link = "https://www.tranmere-web.com/results.html?competition=" + competitions[i].name;
+        competitions[i].name = "Results in " +  competitions[i].name;
+        search_index.saveObject(competitions[i]);
     }
 
     utils.buildPage({urls:utils.pages}, "./tranmere-web/templates/sitemap.tpl.xml", './tranmere-web/output/site/sitemap.xml');

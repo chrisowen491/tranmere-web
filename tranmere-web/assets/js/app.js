@@ -161,7 +161,10 @@ autocomplete('#search-input', { hint: false }, [
   displayKey: 'objectID',
   templates: {
     suggestion: function(suggestion) {
-      return "<a href='" + suggestion.link +"'>" + suggestion.name + "</a>";
+        if(suggestion.pic)
+            return "<a href='" + suggestion.link +"'><img width='40px' src='"+suggestion.pic.fields.file.url+"'/>" + suggestion.name + "</a>";
+        else
+            return "<a href='" + suggestion.link +"'>" + suggestion.name + "</a>";
     }
   }
 }
