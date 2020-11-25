@@ -13,6 +13,9 @@ const search_client = algoliasearch(process.env.AL_SPACE, process.env.AL_KEY);
 const search_index = search_client.initIndex(process.env.AL_INDEX);
 
 var utils = require('./tranmere-web/libs/utils')(path, fs, Mustache, axios, process.env.API_KEY);
+
+var utils = require('./tranmere-web/libs/utils')(path, fs, Mustache, axios, 'Ubz2w38CTS18anpiEApqf1pBWayHRcmLz5fKyyW4');
+
 async function run () {
 
     if (!fs.existsSync('./tranmere-web/output')){

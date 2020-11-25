@@ -41,7 +41,7 @@
 	}
 
 	@include media-breakpoint-down(md) {
-		margin-top: $grid-gutter-width;
+		margin-top: 5px;
 	}
 }
 
@@ -50,7 +50,7 @@
 	padding: 0;
 
 	img {
-		max-height: 6.375rem;
+		max-height: 4.375rem;
 	}
 }
 
