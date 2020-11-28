@@ -42,7 +42,3 @@ jobs:
           CLOUDFLARE_ZONE: ${{ secrets.CLOUDFLARE_ZONE_ID }}
           CLOUDFLARE_EMAIL: ${{ secrets.CLOUDFLARE_AUTH_EMAIL }}
           CLOUDFLARE_KEY: ${{ secrets.CLOUDFLARE_AUTH_KEY }}
-
-on:
-  schedule:
-    - cron:  '*/15 * * * *'
