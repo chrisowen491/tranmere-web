@@ -14,8 +14,6 @@ const search_index = search_client.initIndex(process.env.AL_INDEX);
 
 var utils = require('./tranmere-web/libs/utils')(path, fs, Mustache, axios, process.env.API_KEY);
 
-var utils = require('./tranmere-web/libs/utils')(path, fs, Mustache, axios, 'Ubz2w38CTS18anpiEApqf1pBWayHRcmLz5fKyyW4');
-
 async function run () {
 
     if (!fs.existsSync('./tranmere-web/output')){
@@ -32,6 +30,12 @@ async function run () {
     for(var i = 2020; i > 1920; i--) {
         seasons.push(i);
         utils.addSiteMapEntry("/results.html?season="+i);
+        var seasonResults = {
+            objectID: "Season-" + i,
+            link: "https://www.tranmere-web.com/results.html?season=" + i,
+            name: `Results For Season ${i}/${i+1}`
+        };
+        search_index.saveObject(seasonResults);
     }
     var teams = await utils.findAllTeams(200);
     var competitions = await utils.getAllCupCompetitions(50);
@@ -81,6 +85,13 @@ async function run () {
         }
         var fileName = page.key.toLowerCase();
         utils.buildPage(page,`./tranmere-web/templates/${page.template}`,`./tranmere-web/output/site/${fileName}.html` );
+        var pageMeta = {
+            objectID: "Page-" + page.key.toLowerCase(),
+            link: "https://www.tranmere-web.com/" + fileName,
+            name: page.description,
+            meta: page.name
+        };
+        search_index.saveObject(pageMeta);
     }
 
     // Graphs
