@@ -168,7 +168,7 @@ module.exports = function (path, fs, Mustache, axios, key) {
 
             var results = [];
 
-            for(var i= 1984; i < 2021; i++) {
+            for(var i= 1977; i < 2021; i++) {
                 var result = await axios.get("https://api.tranmere-web.com/player-search/?season="+i+"&sort=Goals", this.apiOptions);
                 var player = result.data.players[0];
                 results.push(player);
