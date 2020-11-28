@@ -87,7 +87,7 @@ async function run () {
         utils.buildPage(page,`./tranmere-web/templates/${page.template}`,`./tranmere-web/output/site/${fileName}.html` );
         var pageMeta = {
             objectID: "Page-" + page.key.toLowerCase(),
-            link: "https://www.tranmere-web.com/" + fileName,
+            link: `https://www.tranmere-web.com/${fileName}.html`,
             name: page.description,
             meta: page.name
         };
