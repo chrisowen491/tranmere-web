@@ -101,6 +101,9 @@ module.exports = function (path, fs, Mustache, axios, key) {
          },
 
          renderFragment : function(view, templateKey) {
+            if(view.chart) {
+                view.chart = JSON.stringify(view.chart);
+            }
             var tpl = `./tranmere-web/templates/partials/${templateKey}.partial.mustache`;
             return Mustache.render(fs.readFileSync(tpl).toString(), view, this.loadSharedPartials());
          },
