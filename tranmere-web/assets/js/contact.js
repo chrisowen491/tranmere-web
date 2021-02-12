@@ -29,7 +29,7 @@ function submitToAPI() {
 
    $.ajax({
      type: "POST",
-     url : "https://api.tranmere-web.com/contact-us",
+     url : "/contact-us",
      dataType: "json",
      crossDomain: "true",
      contentType: "application/json; charset=utf-8",
