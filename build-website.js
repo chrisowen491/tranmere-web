@@ -13,7 +13,6 @@ const search_client = algoliasearch(process.env.AL_SPACE, process.env.AL_KEY);
 const search_index = search_client.initIndex(process.env.AL_INDEX);
 
 var utils = require('./tranmere-web/libs/utils')(path, fs, Mustache, axios, process.env.API_KEY);
-
 async function run () {
 
     if (!fs.existsSync('./tranmere-web/output')){
@@ -64,6 +63,7 @@ async function run () {
         if(page.sections) {
             var sectionContent = "";
             for(var s=0; s<page.sections.length; s++) {
+                console.log(page.key);
                 sectionContent = sectionContent + "\n" + utils.renderFragment(page, page.sections[s]);
             }
             page.sectionHTML = sectionContent;
@@ -93,10 +93,6 @@ async function run () {
         };
         search_index.saveObject(pageMeta);
     }
-
-    // Graphs
-    //utils.buildPage({graph:fs.readFileSync('./tranmere-web/graphs/attendances.js', 'utf8'), title: "Average League Home Attendance", pageType:"WebPage", description: "Average Tranmere Rovers League Attendance By Season",blogs: content.items}, "./tranmere-web/templates/graph.tpl.html",'./tranmere-web/output/site/graph-attendances.html' );
-    //utils.buildPage({graph:fs.readFileSync('./tranmere-web/graphs/tiers.js', 'utf8'), title: "Tranmere's League Tiers", pageType:"WebPage", description: "Tranmere Rovers League Tiers By Season",blogs: content.items}, "./tranmere-web/templates/graph.tpl.html",'./tranmere-web/output/site/graph-tiers.html' );
 
     for(var i=0; i < players.length; i++) {
         utils.addSiteMapEntry("/page/player/"+players[i].name);

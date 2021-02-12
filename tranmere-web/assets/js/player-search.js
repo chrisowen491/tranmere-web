@@ -1,7 +1,7 @@
 function search() {
   $("#loading").show();
   $("#content").hide();
-  var url = 'https://www.tranmere-web.com/player-search/?season='+ $('#season').val()
+  var url = '/player-search/?season='+ $('#season').val()
               + '&sort=' + $('#sort').val();
   $.getJSON(url, function(view) {
     $.get("/assets/templates/players.mustache", function(template) {
