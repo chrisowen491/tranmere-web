@@ -52,8 +52,8 @@ function scripts() {
     //'node_modules/prismjs/prism.js',
     //'node_modules/prismjs/plugins/toolbar/prism-toolbar.js',
     //'node_modules/prismjs/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js',
-    //'node_modules/video.js/dist/video.js',
-    //'node_modules/videojs-youtube/dist/Youtube.js',
+    'node_modules/video.js/dist/video.js',
+    'node_modules/videojs-youtube/dist/Youtube.js',
     'tranmere-web/assets/js/modernizr.js'
     ])
     .pipe(maps.init())
@@ -74,8 +74,9 @@ function styles() {
     'node_modules/prismjs/themes/prism.css',
     'node_modules/prismjs/plugins/toolbar/prism-toolbar.css',
     'node_modules/prismjs/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js',
-    'node_modules/video.js/dist/video-js.css'
     */
+    'node_modules/video.js/dist/video-js.css'
+
     ])
     .pipe(maps.init({loadMaps: true}))
     .pipe(concat("vendor.css"))
