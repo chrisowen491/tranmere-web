@@ -14,7 +14,7 @@ function search() {
       globalStore.template = template;
     }),
 
-    $.get("/player-search/?season="+$.urlParam('season')+"&sort=null&x=true7", function(players) {
+    $.get("/player-search/?season="+$.urlParam('season')+"&sort=null", function(players) {
       globalStore.players = players;
     }),
 
