@@ -10,6 +10,7 @@
       fn.OwlCarousel();
       fn.ImageView();
       fn.Apps();
+      fn.Auth();
     },
 
     // Owl Carousel
@@ -68,6 +69,47 @@
       });
     },
 
+    Auth: function() {
+
+        $(document).ready(function(){
+            var authData = {
+                ClientId : "3civek6bpngorkivrntf5ai4ro",
+                AppWebDomain : 'auth.tranmere-web.com',
+                TokenScopesArray : ['TranmereWeb/matches.read'],
+                RedirectUriSignIn : 'http://localhost:3000/home.html',
+                RedirectUriSignOut : 'http://localhost:3000/home.html',
+                UserPoolId : "eu-west-1_GAF4md6wn"
+            };
+            var auth = new AmazonCognitoIdentity.CognitoAuth(authData);
+            window.auth = auth;
+            auth.userhandler = {
+                onSuccess: function(result) {
+                    $("#loginout").html('Sign Out');
+                    //console.log(result.getAccessToken().getJwtToken());
+                    auth.setState("signedIn");
+                },
+                onFailure: function(err) {
+                    alert("Error!" + err);
+                }
+            };
+
+            auth.useCodeGrantFlow();
+            if(auth.storage['CognitoIdentityServiceProvider.3civek6bpngorkivrntf5ai4ro.LastAuthUser']) {
+                auth.getSession();
+                //console.log(JSON.stringify(auth))
+            }
+            $(document).on('click', '#loginout', function() {
+                if ($("#loginout").html() === "Sign Out") {
+                    auth.signOut();
+                    $("#loginout").html('Sign In');
+                } else {
+                    auth.getSession();
+                }
+            });
+            var curUrl = window.location.href;
+            auth.parseCognitoWebResponse(window.location.href);
+        });
+    },
 
     // File Tree
     Filetree: function() {

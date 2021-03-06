@@ -15,7 +15,9 @@ function submitToAPI() {
      crossDomain: "true",
      contentType: "application/json; charset=utf-8",
      data: JSON.stringify(data),
-
+     headers: {
+        "Authorization": window.auth.getSession().getAccessToken().getJwtToken()
+     },
      success: function () {
         alert('success')
      },

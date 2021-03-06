@@ -54,6 +54,7 @@ function scripts() {
     //'node_modules/prismjs/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js',
     'node_modules/video.js/dist/video.js',
     'node_modules/videojs-youtube/dist/Youtube.js',
+    'node_modules/amazon-cognito-auth-js/dist/amazon-cognito-auth.min.js',
     'tranmere-web/assets/js/modernizr.js'
     ])
     .pipe(maps.init())
