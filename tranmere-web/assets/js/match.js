@@ -16,7 +16,7 @@ function submitToAPI() {
      contentType: "application/json; charset=utf-8",
      data: JSON.stringify(data),
      headers: {
-        "Authorization": window.auth.getSession().getAccessToken().getJwtToken()
+        "Authorization": window.auth.getCachedSession().getAccessToken().getJwtToken()
      },
      success: function () {
         alert('success')
@@ -24,4 +24,4 @@ function submitToAPI() {
      error: function () {
         alert('fail')
      }});
- }
+}

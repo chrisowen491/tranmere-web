@@ -76,8 +76,8 @@
                 ClientId : "3civek6bpngorkivrntf5ai4ro",
                 AppWebDomain : 'auth.tranmere-web.com',
                 TokenScopesArray : ['TranmereWeb/matches.read'],
-                RedirectUriSignIn : 'http://localhost:3000/home.html',
-                RedirectUriSignOut : 'http://localhost:3000/home.html',
+                RedirectUriSignIn : 'https://www.tranmere-web.com/',
+                RedirectUriSignOut : 'https://www.tranmere-web.com/',
                 UserPoolId : "eu-west-1_GAF4md6wn"
             };
             var auth = new AmazonCognitoIdentity.CognitoAuth(authData);
@@ -85,7 +85,6 @@
             auth.userhandler = {
                 onSuccess: function(result) {
                     $("#loginout").html('Sign Out');
-                    //console.log(result.getAccessToken().getJwtToken());
                     auth.setState("signedIn");
                 },
                 onFailure: function(err) {
@@ -96,7 +95,6 @@
             auth.useCodeGrantFlow();
             if(auth.storage['CognitoIdentityServiceProvider.3civek6bpngorkivrntf5ai4ro.LastAuthUser']) {
                 auth.getSession();
-                //console.log(JSON.stringify(auth))
             }
             $(document).on('click', '#loginout', function() {
                 if ($("#loginout").html() === "Sign Out") {
@@ -106,6 +104,7 @@
                     auth.getSession();
                 }
             });
+
             var curUrl = window.location.href;
             auth.parseCognitoWebResponse(window.location.href);
         });
