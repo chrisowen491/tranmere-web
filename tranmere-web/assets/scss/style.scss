@@ -9,6 +9,8 @@
 @import "variables-custom";
 @import "../../../node_modules/bootstrap/scss/bootstrap";
 
+@import "mixins";
+
 // Components
 @import "layout/_layout";
 @import "components/_components";
