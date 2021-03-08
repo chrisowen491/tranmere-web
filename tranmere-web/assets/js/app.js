@@ -91,8 +91,6 @@
                     alert("Error!" + err);
                 }
             };
-
-            auth.useCodeGrantFlow();
             if(auth.storage['CognitoIdentityServiceProvider.3civek6bpngorkivrntf5ai4ro.LastAuthUser']) {
                 auth.getSession();
             }
