@@ -184,7 +184,7 @@
                 "Authorization": window.auth.getCachedSession().getAccessToken().getJwtToken()
              },
              success: function () {
-                window.location.href =  window.location.href + "&v=" + Math.floor(Math.random() * 10);
+                window.location.href =  window.location.href + "?v=" + Math.floor(Math.random() * 10);
              },
              error: function () {
                 alert('fail')
