@@ -86,12 +86,14 @@
                 onSuccess: function(result) {
                     $("#loginout").html('Sign Out');
                     auth.setState("signedIn");
+                    $('#edit').show();
                 },
                 onFailure: function(err) {
                     alert("Error!" + err);
                 }
             };
             if(auth.storage['CognitoIdentityServiceProvider.3civek6bpngorkivrntf5ai4ro.LastAuthUser']) {
+                $('#edit').show();
                 auth.getSession();
             }
             $(document).on('click', '#loginout', function() {
@@ -162,6 +164,31 @@
         $('.collapse').on('hide.bs.collapse', function () {
             $(this).parent().removeClass('active');
         });
+      });
+
+      $(document).on('click', '#editbutton', function() {
+
+           var data = {
+              programme : $("#programme").val(),
+              attendance : $("#attendance").val(),
+              youtube : $("#youtube").val()
+            };
+
+           $.ajax({
+             type: "POST",
+             dataType: "json",
+             crossDomain: "true",
+             contentType: "application/json; charset=utf-8",
+             data: JSON.stringify(data),
+             headers: {
+                "Authorization": window.auth.getCachedSession().getAccessToken().getJwtToken()
+             },
+             success: function () {
+                window.location.href =  window.location.href + "&v=" + Math.floor(Math.random() * 10);
+             },
+             error: function () {
+                alert('fail')
+             }});
       });
 
       // tooltips
