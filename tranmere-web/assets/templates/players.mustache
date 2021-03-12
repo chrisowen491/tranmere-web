@@ -3,9 +3,9 @@
     <thead class="thead-dark">
     <tr>
         <th scope="col">Name</th>
-        <th scope="col" class="text-center">DOB</th>
         <th scope="col" class="text-center">Starts</th>
         <th scope="col" class="text-center">Goals</th>
+        <th scope="col" class="text-center">Assists</th>
         <th scope="col" class="text-center d-none d-sm-table-cell">Pic</th>
     </tr>
     </thead>
@@ -15,9 +15,9 @@
         <td>
             <a href="/page/player/{{Player}}">{{Player}}</a>
         </td>
-        <td class="text-center">{{bio.dateOfBirth}}</td>
         <td class="text-center">{{starts}} {{#subs}}({{subs}}){{/subs}}</td>
         <td class="text-center">{{goals}}</td>
+        <td class="text-center">{{assists}}</td>
         <td class="d-none d-sm-table-cell text-center">{{#bio.pic.fields.file.url}}<img width="75px" src="{{bio.pic.fields.file.url}}"/>{{/bio.pic.fields.file.url}}</td>
     </tr>
     {{/players}}
