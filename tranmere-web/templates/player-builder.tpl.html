@@ -31,7 +31,9 @@
                                     <select class="form-control form-control-sm" id="kit">
                                         <option value="1987">1987-88 Home</option>
                                         <option value="1989">1989-91 Home</option>
+                                        <option value="1989">1993-95 Home</option>
                                         <option value="1997">1997-99 Home</option>
+                                        <option value="2000">2000-02 Home</option>
                                         <option value="2021">2020-21 Home</option>
                                     </select>
                                 </div>
@@ -57,6 +59,11 @@
                                         <option>middle-parting</option>
                                         <option>balding</option>
                                         <option>buzzcut</option>
+                                        <option>beard</option>
+                                        <option>mousse</option>
+                                        <option>scruffy</option>
+                                        <option>morgan</option>
+                                        <option>curly</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -66,6 +73,14 @@
                                         <option value="7f3f00">Dark Brown</option>
                                         <option value="bc9d00">Blonde</option>
                                         <option value="bc6a21">Light Brown</option>
+                                        <option value="666666">Gray</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="highlights">Hair Highlights Colour</label>
+                                    <select class="form-control form-control-sm" id="highlights">
+                                        <option value="8e740c">Option 1</option>
+                                        <option value="bc8a00">Option 2</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -75,11 +90,20 @@
                                         <option>stubble</option>
                                     </select>
                                 </div>
+                                <div class="form-group">
+                                    <label for="background">Background Colour</label>
+                                    <select class="form-control form-control-sm" id="background">
+                                        <option value="LightGray">LightGray</option>
+                                        <option value="White">White</option>
+                                        <option value="none">Transparent</option>
+                                    </select>
+                                </div>
                                 <button type="button" class="btn btn-sm btn-primary btn-rounded" onclick="draw()">Search</button>
                             </div>
 
                         </aside>
                         <article class="col-md-9 content-body">
+                            {{{content}}}
                             <div id="content"></div>
                         </article>
 
