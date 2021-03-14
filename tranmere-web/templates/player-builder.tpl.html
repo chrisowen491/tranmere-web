@@ -1,0 +1,97 @@
+{{>head}}
+<body data-spy="scroll" data-target="#toc">
+
+
+<!-- header -->
+{{>homenav}}
+<!-- / header -->
+
+
+<!-- hero -->
+<section class="hero bg-blue">
+    <div class="container">
+        {{>breadcrumb}}
+    </div>
+</section>
+<!-- / hero -->
+
+<!-- sidebar layout -->
+<section class="overlay">
+    <div class="container overlay-item-top">
+        <div class="row">
+            <div class="col">
+                <div class="content boxed">
+                    <div class="row separated">
+
+                        <aside class="col-md-3 content-aside bg-light">
+                            <div class="widget">
+                                <h3 class="widget-title">Filter</h3>
+                                <div class="form-group">
+                                    <label for="kit">Kit</label>
+                                    <select class="form-control form-control-sm" id="kit">
+                                        <option value="1987">1987-88 Home</option>
+                                        <option value="1989">1989-91 Home</option>
+                                        <option value="1997">1997-99 Home</option>
+                                        <option value="2021">2020-21 Home</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="skinColour">Skin Colour</label>
+                                    <select class="form-control form-control-sm" id="skinColour">
+                                        <option>ffd3b3</option>
+                                        <option>7f3f00</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="neckColour">Neck Colour</label>
+                                    <select class="form-control form-control-sm" id="neckColour">
+                                        <option>fcb98b</option>
+                                        <option>5b2d01</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="hair">Hair Shape</label>
+                                    <select class="form-control form-control-sm" id="hair">
+                                        <option>simple</option>
+                                        <option>side-parting</option>
+                                        <option>middle-parting</option>
+                                        <option>balding</option>
+                                        <option>buzzcut</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="colour">Hair Colour</label>
+                                    <select class="form-control form-control-sm" id="colour">
+                                        <option value="000000">Black</option>
+                                        <option value="7f3f00">Dark Brown</option>
+                                        <option value="bc9d00">Blonde</option>
+                                        <option value="bc6a21">Light Brown</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="feature">Feature</label>
+                                    <select class="form-control form-control-sm" id="feature">
+                                        <option>none</option>
+                                        <option>stubble</option>
+                                    </select>
+                                </div>
+                                <button type="button" class="btn btn-sm btn-primary btn-rounded" onclick="draw()">Search</button>
+                            </div>
+
+                        </aside>
+                        <article class="col-md-9 content-body">
+                            <div id="content"></div>
+                        </article>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- / sidebar layout -->
+
+{{>footer}}
+<script src="/assets/js/player-builder.js?r={{random}}"></script>
+</body>
+</html>
