@@ -236,6 +236,4 @@ autocomplete('#search-input', { hint: false }, [
 }
 ]).on('autocomplete:selected', function(event, suggestion, dataset) {
     window.location.href = suggestion.link;
-    //console.log(suggestion, dataset);
-    //alert('dataset: ' + dataset + ', ' + suggestion.name);
 });

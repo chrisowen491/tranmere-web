@@ -1,9 +1,10 @@
 function search() {
   $("#loading").show();
   $("#content").hide();
-  var url = '/result-search/?season='+ $('#season').val()
+  var base = window.location.hostname == "www.tranmere-web.com" ? null : "https://www.tranmere-web.com";
+  var url = base + '/result-search/?season='+ $('#season').val()
               + '&competition='+ $('#competition').val()
-              + '&opposition=' + $('#opposition').val()
+              + '&opposition=' + $('#opposition').val().replace('&','%26')
               + '&manager=' + $('#manager').val()
               + '&venue=' + $('#venue').val()
               + '&pens=' + $('#pens').val()
