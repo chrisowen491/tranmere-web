@@ -227,8 +227,8 @@ autocomplete('#search-input', { hint: false }, [
   displayKey: 'name',
   templates: {
     suggestion: function(suggestion) {
-        if(suggestion.pic)
-            return "<img width='40px' src='"+suggestion.pic.fields.file.url+"'/>" + suggestion.name;
+        if(suggestion.picLink)
+            return "<img width='40px' src='"+suggestion.picLink+"'/>" + suggestion.name;
         else
             return suggestion.name;
     }
