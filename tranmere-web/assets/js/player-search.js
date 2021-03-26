@@ -33,7 +33,6 @@ function search() {
                     season = seasonMapping[season]
                 view.players[i].bio.picLink = view.players[i].bio.picLink.replace(re, '/'+season+'/')
                 view.players[i].bio.picLink = view.players[i].bio.picLink.replace(re3, '/'+season+'/')
-                console.log(view.players[i].bio.picLink)
             }
           }
       }
