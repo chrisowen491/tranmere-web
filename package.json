@@ -28,7 +28,7 @@
     "axios": "^0.21.1",
     "bootstrap": "^4.6.0",
     "bootstrap-select": "^1.13.2",
-    "clipboard": "^2.0.1",
+    "clipboard": "^2.0.7",
     "contentful": "^8.1.9",
     "ejs": "^3.1.5",
     "gulp-clean-css": "^4.3.0",
