@@ -50,6 +50,6 @@
     "swiper": "^4.3.5",
     "video.js": "^7.11.5",
     "videojs-youtube": "^2.6.0",
-    "yargs-parser": ">=13.1.2"
+    "yargs-parser": ">=20.2.7"
   }
 }
