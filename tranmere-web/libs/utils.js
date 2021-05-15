@@ -109,31 +109,11 @@ module.exports = function (path, fs, Mustache, axios, key) {
          },
 
          // Done
-         findTranmereMatchesWithStars : async function(size) {
-            var results = await axios.get("https://api.ci1.tranmere-web.com/entities/TranmereWebStarsTable/ALL/ALL", this.apiOptions);
-            var matches = [];
-            for(var i=0; i < results.data.message.length; i++) {
-                var star = results.data.message[i];
-                var result = await axios.get("https://api.ci1.tranmere-web.com/result-search/?season="+star.season+"&date="+star.date, this.apiOptions);
-                var match = result.data;
-                match.Player = star.name;
-                match.Notes = star.notes;
-                matches.push(match);
-            }
-            matches.sort(function(a, b) {
-               if (a.date < b.date) return -1
-               if (a.date > b.date) return 1
-               return 0
-            });
-            return matches;
-         },
-
-         // Done
          findAllPlayers : async function() {
-            var results = await axios.get("https://api.ci1.tranmere-web.com/entities/TranmereWebPlayerTable/ALL/ALL", this.apiOptions);
+            var results = await axios.get("https://www.tranmere-web.com/graphql?query={listTranmereWebPlayerTable(limit:300){items{name}}}");
             var players = [];
-            for(var i=0; i < results.data.message.length; i++) {
-                var player = results.data.message[i];
+            for(var i=0; i < results.data.data.listTranmereWebPlayerTable.items.length; i++) {
+                var player = results.data.data.listTranmereWebPlayerTable.items[i];
                 players.push(player);
             }
             return players;
@@ -141,11 +121,11 @@ module.exports = function (path, fs, Mustache, axios, key) {
 
          // Done
          findAllTranmereManagers : async function() {
-            var results = await axios.get("https://api.ci1.tranmere-web.com/entities/TranmereWebManagers/ALL/ALL", this.apiOptions);
+            var results = await axios.get("https://www.tranmere-web.com/graphql?query={listTranmereWebManagers(limit:300){items{name%20dateLeft%20dateJoined}}}",);
 
             var managers = [];
-            for(var i=0; i < results.data.message.length; i++) {
-                var manager = results.data.message[i];
+            for(var i=0; i < results.data.data.listTranmereWebManagers.items.length; i++) {
+                var manager = results.data.data.listTranmereWebManagers.items[i];
                 var dateLeft = "now";
                 if(manager.dateLeft)
                     dateLeft = manager.dateLeft;
@@ -162,8 +142,8 @@ module.exports = function (path, fs, Mustache, axios, key) {
 
          // Done
          getAllCupCompetitions : async function(size) {
-            var results = await axios.get("https://api.ci1.tranmere-web.com/entities/TranmereWebCompetitions/ALL/ALL", this.apiOptions);
-            return results.data.message;
+            var results = await axios.get("https://www.tranmere-web.com/graphql?query={listTranmereWebCompetitions(limit:500){items{name}}}",);
+            return results.data.data.listTranmereWebCompetitions.items;
         },
 
          // done
@@ -181,8 +161,8 @@ module.exports = function (path, fs, Mustache, axios, key) {
 
          // Done
          findAllTeams : async function(size) {
-            var result = await axios.get("https://api.ci1.tranmere-web.com/entities/TranmereWebClubs/ALL/ALL", this.apiOptions);
-            var results = result.data.message;
+            var result = await axios.get("https://www.tranmere-web.com/graphql?query={listTranmereWebClubs(limit:500){items{name}}}");
+            var results = result.data.data.listTranmereWebClubs.items;
 
             results.sort(function(a, b) {
               if (a.name < b.name) return -1;
