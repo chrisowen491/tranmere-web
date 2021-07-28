@@ -1,6 +1,6 @@
 
 var gulp = require('gulp');
-var sass = require('gulp-sass');
+var sass = require('gulp-sass')(require('node-sass'));
 var concat = require('gulp-concat');
 var maps = require('gulp-sourcemaps');
 var uglify = require('gulp-uglify');
@@ -8,8 +8,6 @@ var rename = require('gulp-rename');
 var server = require('browser-sync').create();
 const critical = require('critical').stream;
 const cleanCSS = require('gulp-clean-css');
-
-
 
 function reload(done) {
   server.reload();
@@ -67,17 +65,11 @@ function scripts() {
 // concatenate css files
 function styles() {
   return gulp.src([
-    'node_modules/swiper/dist/css/swiper.css',
+    'node_modules/swiper/swiper.min.css',
     'node_modules/owl.carousel/dist/assets/owl.carousel.css',
     'node_modules/magnific-popup/dist/magnific-popup.css',
     'node_modules/bootstrap-select/dist/css/bootstrap-select.css',
-    /*
-    'node_modules/prismjs/themes/prism.css',
-    'node_modules/prismjs/plugins/toolbar/prism-toolbar.css',
-    'node_modules/prismjs/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js',
-    */
     'node_modules/video.js/dist/video-js.css'
-
     ])
     .pipe(maps.init({loadMaps: true}))
     .pipe(concat("vendor.css"))
@@ -168,6 +160,5 @@ exports.minify = minify;
 exports.minifyCss = minifyCss;
 exports.deploy = deploy;
 exports.criticalTask = criticalTask;
-
 
 exports.default = build;
