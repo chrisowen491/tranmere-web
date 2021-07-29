@@ -50,7 +50,8 @@ function scripts() {
     'node_modules/video.js/dist/video.js',
     'node_modules/videojs-youtube/dist/Youtube.js',
     'node_modules/amazon-cognito-auth-js/dist/amazon-cognito-auth.min.js',
-    'tranmere-web/assets/js/modernizr.js'
+    'tranmere-web/assets/js/modernizr.js',
+    'tranmere-web/assets/js/datadog.js',
     ])
     .pipe(maps.init())
     .pipe(concat('vendor.js'))
