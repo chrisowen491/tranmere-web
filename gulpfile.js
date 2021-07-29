@@ -51,7 +51,6 @@ function scripts() {
     'node_modules/videojs-youtube/dist/Youtube.js',
     'node_modules/amazon-cognito-auth-js/dist/amazon-cognito-auth.min.js',
     'tranmere-web/assets/js/modernizr.js',
-    'node_modules/@datadog/browser-rum/bundle/datadog-rum.js'
     'tranmere-web/assets/js/datadog.js',
     ])
     .pipe(maps.init())
