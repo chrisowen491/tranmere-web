@@ -43,7 +43,7 @@ $(document).ready(function() {
     if($.urlParam('manager'))
         $('#manager').val($.urlParam('manager'));
     if(!$('#season').val() && !$.urlParam('manager') && !$.urlParam('opposition') && !$.urlParam('competition') && !$.urlParam('venue') && !$.urlParam('pens') && !$.urlParam('sort'))
-        $('#season').val(2020);
+        $('#season').val(2021);
 
     search();
 });

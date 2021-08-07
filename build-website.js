@@ -26,7 +26,7 @@ async function run () {
     var pages = await client.getEntries({'content_type': 'pageMetaData'});
 
     var seasons = [];
-    for(var i = 2020; i > 1920; i--) {
+    for(var i = 2021; i > 1920; i--) {
         seasons.push(i);
         utils.addSiteMapEntry("/results.html?season="+i);
         var seasonResults = {
