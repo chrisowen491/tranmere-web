@@ -8,7 +8,8 @@ function search() {
               + '&manager=' + $('#manager').val()
               + '&venue=' + $('#venue').val()
               + '&pens=' + $('#pens').val()
-              + '&sort=' + $('#sort').val();
+              + '&sort=' + $('#sort').val()
+              + '&c=' + dateobj.getDate();
   $.getJSON(url, function(data) {
     var view = {
         results: data

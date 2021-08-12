@@ -16,9 +16,11 @@ var seasonMapping = {
 function search() {
   $("#loading").show();
   $("#content").hide();
+  var dateobj = new Date();
   var base = window.location.hostname == "www.tranmere-web.com" ? '' : "https://www.tranmere-web.com";
   var url = base + '/player-search/?season='+ $('#season').val()
-              + '&sort=' + $('#sort').val();
+              + '&sort=' + $('#sort').val()
+              + '&c=' + dateobj.getDate();
   var re = /\/\d\d\d\d\//gm;
   var re2 = /\/\d\d\d\dgk\//gm;
   var re3 = /\/\d\d\d\d[A-Za-z]\//gm;
