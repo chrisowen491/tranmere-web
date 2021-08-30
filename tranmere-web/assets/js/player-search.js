@@ -61,7 +61,7 @@ $(document).ready(function() {
         $('#season').val($.urlParam('season'));
 
     $('#sort').val(decodeURIComponent($.urlParam('sort')));
-    if(!$('#season').val() && !$.urlParam('sort'))
+    if(!$('#season').val() && (!$.urlParam('sort') && !$.urlParam('filter') ))
         $('#season').val(2021);
     if($.urlParam('filter'))
         $('#filter').val(decodeURIComponent($.urlParam('filter')));
