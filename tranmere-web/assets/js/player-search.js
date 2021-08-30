@@ -20,6 +20,7 @@ function search() {
   var base = window.location.hostname == "www.tranmere-web.com" ? '' : "https://www.tranmere-web.com";
   var url = base + '/player-search/?season='+ $('#season').val()
               + '&sort=' + $('#sort').val()
+              + '&filter=' + $('#filter').val()
               + '&c=' + dateobj.getDate();
   var re = /\/\d\d\d\d\//gm;
   var re2 = /\/\d\d\d\dgk\//gm;
@@ -62,5 +63,7 @@ $(document).ready(function() {
     $('#sort').val(decodeURIComponent($.urlParam('sort')));
     if(!$('#season').val() && !$.urlParam('sort'))
         $('#season').val(2021);
+    if($.urlParam('filter'))
+        $('#filter').val(decodeURIComponent($.urlParam('filter')));
     search();
 });
