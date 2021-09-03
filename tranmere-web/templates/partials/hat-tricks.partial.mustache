@@ -5,13 +5,15 @@
             <div class="col">
                 <a href="/page/player/{{Player}}" class="topic">
                     <h3 class="card-title mb-1">{{Player}}</h3>
-                    {{#Opposition}}<h4 class="card-title mb-1">{{Opposition}}</h4>{{/Opposition}}
-                    {{#Date}}<h5 class="card-title mb-1">{{Date}}</h5>{{/Date}}
-                    <p class="card-text mb-2">{{Goals}} Goals</p>
-                    <div>
-                        <a href="/match/{{Season}}/{{Date}}" class="btn btn-sm btn-rounded btn-primary">Report</a>
-                    </div>
+                    <h4 class="card-title mb-1">{{Opposition}}</h4>
+                    <p>{{Date}}</p>
+                    <p>{{Goals}} Goals</p>
                 </a>
+            </div>
+            <div class="col">
+                <div>
+                    <a href="/match/{{Season}}/{{Date}}" class="btn btn-sm btn-rounded btn-primary">Report</a>
+                </div>
             </div>
         </div>
     </div>
