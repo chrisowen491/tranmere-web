@@ -170,6 +170,19 @@ module.exports = function (path, fs, Mustache, axios, key) {
               return 0;
             });
             return results;
+         },
+
+         // Done
+         findAllHatTricks : async function(size) {
+            var result = await axios.get("https://www.tranmere-web.com/graphql?query={listTranmereWebHatTricks(limit:500){items{Date%20Player%20Opposition%20Goals%20Season}}}");
+            var results = result.data.data.listTranmereWebHatTricks.items;
+
+            results.sort(function(a, b) {
+              if (a.Date < b.Date) return -1;
+              if (a.Date > b.Date) return 1;
+              return 0;
+            });
+            return results;
          }
     };
 };

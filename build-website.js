@@ -41,6 +41,7 @@ async function run () {
     var players = await utils.findAllPlayers();
     var managers = await utils.findAllTranmereManagers();
     var topScorers = await utils.getTopScorersBySeason();
+    var hatTricks = await utils.findAllHatTricks();
 
     for(var i=0; i < pages.items.length; i++) {
         var page = pages.items[i].fields;
@@ -54,6 +55,7 @@ async function run () {
         page.content =  contentfulSDK.documentToHtmlString(page.body, options);
 
         page.topScorers = topScorers;
+        page.hatTricks = hatTricks;
         page.managers = managers;
         page.teams = teams;
         page.competitions = competitions;
