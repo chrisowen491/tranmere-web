@@ -17,13 +17,13 @@ const cacheHandler = async ({ request, next, waitUntil }) => {
     let response = await cache.match(cacheKey)
 
     if(!response) {
-        const response = await next(); 
-        if(response.status != 500) {
+        let downstream_response = await next(); 
+        if(downstream_response.status != 500) {
             // Store the fetched response as cacheKey
             // Use waitUntil so computational expensive tasks don"t delay the response
-            waitUntil(cache.put(cacheKey, response.clone()))
+            waitUntil(cache.put(cacheKey, downstream_response.clone()))
         }
-        return response   
+        return downstream_response   
     }
 };
 
