@@ -12,15 +12,15 @@ export async function onRequest(context) {
 
   try {
 
-  //  const cacheUrl = new URL(request.url)
+    const cacheUrl = new URL(request.url)
 
-  //  const cacheKey = new Request(cacheUrl.toString(), request)
-  //  const cache = caches.default
+    const cacheKey = new Request(cacheUrl.toString(), request)
+    const cache = caches.default
 
     // Get this request from this zone's cache
-  //  let response = await cache.match(cacheKey)
+    let response = await cache.match(cacheKey)
 
-  //  if (!response) {
+    if (!response) {
 
         let url = new URL(request.url)
 
@@ -58,9 +58,9 @@ export async function onRequest(context) {
       if(response.status != 500) {
         // Store the fetched response as cacheKey
         // Use waitUntil so computational expensive tasks don"t delay the response
-        //waitUntil(cache.put(cacheKey, response.clone()))
+        waitUntil(cache.put(cacheKey, response.clone()))
       }
-    //}
+    }
     return response
   } catch (err) {
     return new Response(`${err.message}\n${err.stack}`, { status: 500 });
