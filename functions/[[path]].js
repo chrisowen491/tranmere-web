@@ -47,9 +47,9 @@ export async function onRequest(context) {
       // If not in cache, get it from origin
       response = await fetch(new_request)
 
-      nav_response = await fetch(new Request('https://raw.githubusercontent.com/chrisowen491/tranmere-web/master/tranmere-web/templates/partials/homenav.partial.mustache'))
+      let nav_response = await fetch(new Request('https://raw.githubusercontent.com/chrisowen491/tranmere-web/master/tranmere-web/templates/partials/homenav.partial.mustache'))
       let nav_text = await nav_response.text();
-      var amendedBody = await response.text()
+      let amendedBody = await response.text()
       amendedBody = amendedBody.replace(/NAV_BAR_PLACEHOLDER/g, nav_text);
 
       // Must use Response constructor to inherit all of response's fields
