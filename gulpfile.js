@@ -119,6 +119,7 @@ function static() {
           './tranmere-web/data/*',
           './tranmere-web/favicon.ico',
           './tranmere-web/_headers',
+          './tranmere-web/_redirects',
           './tranmere-web/OneSignalSDKUpdaterWorker.js',
           './tranmere-web/OneSignalSDKWorker.js'],  {base: './tranmere-web/'})
       .pipe(gulp.dest('./tranmere-web/output/site/'));
