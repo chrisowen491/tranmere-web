@@ -14,7 +14,7 @@ export async function onRequest(context) {
   new_request.headers.set("x-api-key", env.API_KEY)
   
   // If not in cache, get it from origin
-  response = await fetch(new_request)
+  let response = await fetch(new_request)
 
   let nav_response = await fetch(new Request('https://raw.githubusercontent.com/chrisowen491/tranmere-web/master/tranmere-web/templates/partials/homenav.partial.mustache'))
   let nav_text = await nav_response.text();
