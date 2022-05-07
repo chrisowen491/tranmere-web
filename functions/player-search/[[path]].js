@@ -22,5 +22,5 @@ export async function onRequest(context) {
   amendedBody = amendedBody.replace(/NAV_BAR_PLACEHOLDER/g, nav_text);
 
   // Must use Response constructor to inherit all of response's fields
-  return Response(amendedBody, response)
+  return new Response(amendedBody, response)
 }
