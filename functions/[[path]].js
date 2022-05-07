@@ -41,7 +41,7 @@ export async function onRequest(context) {
           url.host = "tgzafameebdujmbaw4tdkuaiku.appsync-api.eu-west-1.amazonaws.com";
           new_request.headers.set("x-api-key", "da2-uaiu6wz4gjeetknxcdq5bf7bo4")
         } else {
-          new_request.headers.set("x-api-key", APIKEY)
+          new_request.headers.set("x-api-key", env.API_KEY)
         }
 
       // If not in cache, get it from origin
