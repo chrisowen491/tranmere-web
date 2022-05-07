@@ -24,6 +24,8 @@ const cacheHandler = async ({ request, next, waitUntil }) => {
             waitUntil(cache.put(cacheKey, downstream_response.clone()))
         }
         return downstream_response   
+    } else {
+        return response;
     }
 };
 
