@@ -1,7 +1,6 @@
 
 var gulp = require('gulp');
-const sass = require('gulp-sass')
-sass.compiler = require('sass')
+const sass = require('gulp-sass')(require('sass'));
 var concat = require('gulp-concat');
 var maps = require('gulp-sourcemaps');
 var uglify = require('gulp-uglify');
