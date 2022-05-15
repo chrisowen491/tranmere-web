@@ -30,6 +30,7 @@
     "axios": "^0.21.3",
     "bootstrap": "^4.6.1",
     "bootstrap-select": "^1.13.2",
+    "ci": "^2.2.0",
     "contentful": "^8.4.3",
     "ejs": "^3.1.7",
     "gulp-clean-css": "^4.3.0",
