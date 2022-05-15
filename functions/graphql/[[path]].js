@@ -8,10 +8,10 @@ export async function onRequest(context) {
   } = context;
 
   let url = new URL(request.url)
-  url.host = "tgzafameebdujmbaw4tdkuaiku.appsync-api.eu-west-1.amazonaws.com";
+  url.host = "jafvqela5jaz3or4rxu3yo4xry.appsync-api.eu-west-1.amazonaws.com";
 
   let new_request = new Request(url, request)
-  new_request.headers.set("x-api-key", "da2-uaiu6wz4gjeetknxcdq5bf7bo4")
+  new_request.headers.set("x-api-key", "da2-e4cxvs3ht5bblgogoozh2xgr4e")
 
   return await fetch(new_request)
 }
