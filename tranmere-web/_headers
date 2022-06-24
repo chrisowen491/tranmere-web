@@ -5,5 +5,5 @@
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: document-domain=()
   Strict-Transport-Security: max-age=1000
-  Content-Security-Policy: default-src 'none'; font-src 'self' data:; script-src 'self' 'unsafe-inline' https://www.youtube.com https://static.cloudflareinsights.com https://www.datadoghq-browser-agent.com; connect-src 'self' https://*.browser-intake-datadoghq.com; img-src 'self' https://images.tranmere-web.com; style-src 'unsafe-inline' 'self'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests; worker-src blob:;
+  Content-Security-Policy: default-src 'none'; font-src 'self' data:; script-src 'self' 'unsafe-inline' https://www.youtube.com https://static.cloudflareinsights.com https://www.datadoghq-browser-agent.com; connect-src 'self' https://*.browser-intake-datadoghq.eu; img-src 'self' https://images.tranmere-web.com; style-src 'unsafe-inline' 'self'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests; worker-src blob:;
             
