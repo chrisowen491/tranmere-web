@@ -21,6 +21,8 @@
             display: block;
             color: #ffffff;
             text-decoration: none;
+            font-size: x-small;
+            padding-top: 2px;
 
             @include media-breakpoint-down(sm) {
                 font-size: 0.7rem;
