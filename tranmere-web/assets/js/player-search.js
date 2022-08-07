@@ -62,7 +62,7 @@ $(document).ready(function() {
 
     $('#sort').val(decodeURIComponent($.urlParam('sort')));
     if(!$('#season').val() && (!$.urlParam('sort') && !$.urlParam('filter') ))
-        $('#season').val(2021);
+        $('#season').val(2022);
     if($.urlParam('filter'))
         $('#filter').val(decodeURIComponent($.urlParam('filter')));
     search();
