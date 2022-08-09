@@ -27,7 +27,7 @@ async function run () {
 
     var seasons = [];
     var theDate = new Date();
-    var theYear = theDate.getUTCMonth > 6 ? theDate.getFullYear() : theDate.getFullYear() -1;
+    var theYear = theDate.getUTCMonth() > 6 ? theDate.getFullYear() : theDate.getFullYear() -1;
 
     for(var i = theYear; i > 1920; i--) {
         seasons.push(i);

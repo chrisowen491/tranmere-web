@@ -13,7 +13,7 @@ var seasonMapping = {
 }
 
 var theDate = new Date();
-var theYear = theDate.getUTCMonth > 6 ? theDate.getFullYear() : theDate.getFullYear() -1;
+var theYear = theDate.getUTCMonth() > 6 ? theDate.getFullYear() : theDate.getFullYear() -1;
 
 
 function search() {

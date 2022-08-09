@@ -151,7 +151,7 @@ module.exports = function (path, fs, Mustache, axios, key) {
 
             var results = [];
             var theDate = new Date();
-            var theYear = theDate.getUTCMonth > 6 ? theDate.getFullYear() : theDate.getFullYear() -1;
+            var theYear = theDate.getUTCMonth() > 6 ? theDate.getFullYear() : theDate.getFullYear() -1;
         
             for(var i= 1977; i <= theYear; i++) {
                 var result = await axios.get("https://api.ci1.tranmere-web.com/player-search/?season="+i+"&sort=Goals", this.apiOptions);
