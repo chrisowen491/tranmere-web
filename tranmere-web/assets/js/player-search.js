@@ -12,6 +12,9 @@ var seasonMapping = {
     "2008": 2007
 }
 
+var theDate = new Date();
+var theYear = theDate.getUTCMonth > 6 ? theDate.getFullYear() : theDate.getFullYear() -1;
+
 
 function search() {
   $("#loading").show();
@@ -62,7 +65,7 @@ $(document).ready(function() {
 
     $('#sort').val(decodeURIComponent($.urlParam('sort')));
     if(!$('#season').val() && (!$.urlParam('sort') && !$.urlParam('filter') ))
-        $('#season').val(2022);
+        $('#season').val(theYear);
     if($.urlParam('filter'))
         $('#filter').val(decodeURIComponent($.urlParam('filter')));
     search();
