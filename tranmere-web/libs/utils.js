@@ -1,5 +1,14 @@
-module.exports = function (path, fs, Mustache, axios, key) {
+module.exports = function (path, fs, Mustache, axios, key, appsynckey) {
     return {
+         
+         APP_SYNC_URL: "https://jafvqela5jaz3or4rxu3yo4xry.appsync-api.eu-west-1.amazonaws.com",
+      
+         APP_SYNC_OPTIONS: {
+          headers: {
+            'x-api-key': appsynckey
+          }
+         },
+
          apiOptions: {
            headers: {
              'x-api-key': key
@@ -110,7 +119,7 @@ module.exports = function (path, fs, Mustache, axios, key) {
 
          // Done
          findAllPlayers : async function() {
-            var results = await axios.get("https://www.tranmere-web.com/graphql?query={listTranmereWebPlayerTable(limit:300){items{name}}}");
+            var results = await axios.get(`${APP_SYNC_URL}/graphql?query={listTranmereWebPlayerTable(limit:300){items{name}}}`, this.APP_SYNC_OPTIONS);
             var players = [];
             for(var i=0; i < results.data.data.listTranmereWebPlayerTable.items.length; i++) {
                 var player = results.data.data.listTranmereWebPlayerTable.items[i];
@@ -121,7 +130,7 @@ module.exports = function (path, fs, Mustache, axios, key) {
 
          // Done
          findAllTranmereManagers : async function() {
-            var results = await axios.get("https://www.tranmere-web.com/graphql?query={listTranmereWebManagers(limit:300){items{name%20dateLeft%20dateJoined}}}",);
+            var results = await axios.get(`${APP_SYNC_URL}/graphql?query={listTranmereWebManagers(limit:300){items{name%20dateLeft%20dateJoined}}}`, this.APP_SYNC_OPTIONS);
 
             var managers = [];
             for(var i=0; i < results.data.data.listTranmereWebManagers.items.length; i++) {
@@ -142,7 +151,7 @@ module.exports = function (path, fs, Mustache, axios, key) {
 
          // Done
          getAllCupCompetitions : async function(size) {
-            var results = await axios.get("https://www.tranmere-web.com/graphql?query={listTranmereWebCompetitions(limit:500){items{name}}}",);
+            var results = await axios.get(`${APP_SYNC_URL}/graphql?query={listTranmereWebCompetitions(limit:500){items{name}}}`, this.APP_SYNC_OPTIONS);
             return results.data.data.listTranmereWebCompetitions.items;
         },
 
@@ -164,7 +173,7 @@ module.exports = function (path, fs, Mustache, axios, key) {
 
          // Done
          findAllTeams : async function(size) {
-            var result = await axios.get("https://www.tranmere-web.com/graphql?query={listTranmereWebClubs(limit:500){items{name}}}");
+            var result = await axios.get(`${APP_SYNC_URL}/graphql?query={listTranmereWebClubs(limit:500){items{name}}}`, this.APP_SYNC_OPTIONS);
             var results = result.data.data.listTranmereWebClubs.items;
 
             results.sort(function(a, b) {
@@ -177,7 +186,7 @@ module.exports = function (path, fs, Mustache, axios, key) {
 
          // Done
          findAllHatTricks : async function(size) {
-            var result = await axios.get("https://www.tranmere-web.com/graphql?query={listTranmereWebHatTricks(limit:500){items{Date%20Player%20Opposition%20Goals%20Season}}}");
+            var result = await axios.get(`${APP_SYNC_URL}/graphql?query={listTranmereWebHatTricks(limit:500){items{Date%20Player%20Opposition%20Goals%20Season}}}`, this.APP_SYNC_OPTIONS);
             var results = result.data.data.listTranmereWebHatTricks.items;
 
             results.sort(function(a, b) {
