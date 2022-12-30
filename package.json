@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build-web": "node build-website"
+    "build-web": "node build-website",
+    "preshrinkwrap": "git checkout -- npm-shrinkwrap.json",
+    "postshrinkwrap": "git checkout -- npm-shrinkwrap.json"
+
   },
   "author": "Chris Owen",
   "license": "ISC",
