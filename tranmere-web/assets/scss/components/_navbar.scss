@@ -3,6 +3,9 @@
 //
 //
 
+$burger-height: null;
+$burger-gutter: null;
+
 .navbar {
 	@include media-breakpoint-up(lg) {
 		padding-top: 0;
