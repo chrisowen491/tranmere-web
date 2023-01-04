@@ -27,7 +27,9 @@ jobs:
           EMAIL_ADDRESS: ${{ secrets.EMAIL_ADDRESS }}
           CF_SPACE: ${{ secrets.CF_SPACE }}
           CF_KEY: ${{ secrets.CF_KEY }}
-      - name: Post Deploy Checks
+      - name: Post Deploy API Checks
         run: 
           newman run ./api_tests/postman-collection.json -e ./api_tests/env/aws-prod.json --env-var "testApiKey=${{ secrets.API_KEY }}"
-    
+      - name: Post Deploy CF Worker Checks
+        run: 
+          newman run ./api_tests/postman-collection.json -e ./api_tests/env/cf-prod.json --env-var "testApiKey=${{ secrets.API_KEY }}"
