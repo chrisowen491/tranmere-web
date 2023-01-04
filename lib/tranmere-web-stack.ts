@@ -499,7 +499,7 @@ export class TranmereWebStack extends cdk.Stack {
     }
 
     datadog.addLambdaFunctions([contact_us_lambda, media_sync_lambda, player_builder_lambda, results_search_lambda, player_search_lambda, match_page_lambda, match_update_lambda]);
-    datadog.addLambdaFunctions([page_lambda, hat_trick_job_lambda, update_job_lambda, scraper_job_lambda]);
+    datadog.addLambdaFunctions([hat_trick_job_lambda, update_job_lambda, scraper_job_lambda]);
 
   }
 }
