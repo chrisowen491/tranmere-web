@@ -8,7 +8,7 @@ export async function onRequest(context) {
     } = context;
     
     let url = new URL(request.url)  
-    url.host = "api.ci1.tranmere-web.com"
+    url.host = "api.prod.tranmere-web.com"
     url.pathname = "/page/home/home"
 
     let new_request = new Request(url, request)

@@ -40,6 +40,8 @@ exports.handler = async function (event, context) {
     }
 
     var view = await getResults(season, date);
+    view.dd_app = process.env.DD_SERVICE;
+    view.dd_version = process.env.DD_VERSION;
     view.goals = await getGoals(date, season);
     view.apps = await getApps(date, season);
     if(view.programme && view.programme != "#N/A") {
