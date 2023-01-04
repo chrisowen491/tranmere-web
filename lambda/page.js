@@ -171,6 +171,9 @@ exports.handler = async function (event, context) {
         }
     }
 
+    view.dd_app = process.env.DD_SERVICE;
+    view.dd_version = process.env.DD_VERSION;
+
     var maxAge = pageName === "player" ? 86400 : 2592000;
     var page = utils.buildPage(view, pages[pageName].template);
     return {

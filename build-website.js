@@ -5,6 +5,8 @@ const axios = require('axios')
 const contentful = require("contentful");
 const contentfulSDK = require('@contentful/rich-text-html-renderer');
 const algoliasearch = require('algoliasearch');
+const pack = require('./package.json');
+
 const client = contentful.createClient({
   space: process.env.CF_SPACE,
   accessToken: process.env.CF_KEY
@@ -62,6 +64,8 @@ async function run () {
         page.competitions = competitions;
         page.seasons = seasons;
         page.image = utils.buildImagePath("photos/kop.jpg", 1920,1080);
+        page.dd_app = pack.name;
+        page.dd_version = pack.version;
 
         if(page.sections) {
             var sectionContent = "";

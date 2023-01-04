@@ -40,10 +40,9 @@
       clientToken: 'pub91e87345f76af7acb5aa202805d95df0',
       applicationId: 'bb11809d-d51b-408d-9be4-cacc89c65d63',
       site: 'datadoghq.eu',
-      service: 'tranmereweb',
-      
-      // Specify a version number to identify the deployed version of your application in Datadog 
-      // version: '1.0.0',
+      service: '{{dd_app}}',
+      env: 'prod',
+      version: '{{dd_version}}',
       sampleRate: 100,
       premiumSampleRate: 100,
       trackInteractions: true,

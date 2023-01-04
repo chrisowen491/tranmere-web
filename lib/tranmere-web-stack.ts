@@ -35,6 +35,7 @@ export class TranmereWebStack extends cdk.Stack {
       version: pack.version,
       forwarderArn: `arn:aws:lambda:${this.region}:${this.account}:function:datadog-ForwarderStack-19X9T7BINWXOJ-Forwarder-DWZq1b3ofPJO`,
       tags: "owner:architecture,datadog:true",
+      enableDatadogTracing: true,
       addLayers: true
     });
 
@@ -46,7 +47,10 @@ export class TranmereWebStack extends cdk.Stack {
       "CF_KEY": CF_KEY,
       "SCRAPE_ID": SCRAPE_ID,
       "SCRAPE_SEASON": SCRAPE_SEASON,
-      "SCRAPE_URL": SCRAPE_URL
+      "SCRAPE_URL": SCRAPE_URL,
+      "DD_SERVICE": pack.name,
+      "DD_VERSION": pack.version,
+      "DD_ENV": ENVIRONMENT
     }
 
     // Base API gateway
