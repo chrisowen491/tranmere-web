@@ -3,18 +3,19 @@ import * as lambda from 'aws-cdk-lib/aws-lambda';
 import {NodejsFunction} from 'aws-cdk-lib/aws-lambda-nodejs';
 import { aws_apigateway as apigw} from 'aws-cdk-lib'; 
 import { Construct } from 'constructs';
-import { Datadog } from 'datadog-cdk-constructs-v2';
 import * as acm from "aws-cdk-lib/aws-certificatemanager"
 import * as ddb from 'aws-cdk-lib/aws-dynamodb';
 import * as iam from 'aws-cdk-lib/aws-iam';
-import * as route53 from "aws-cdk-lib/aws-route53";
+import * as appsync from '@aws-cdk/aws-appsync-alpha';
+import { MappingTemplate } from '@aws-cdk/aws-appsync-alpha';
+import { Datadog } from 'datadog-cdk-constructs-v2';
+
+
 const ENVIRONMENT : string = process.env.ENVIRONMENT!;
 const CF_KEY : string = process.env.CF_KEY!;
 const CF_SPACE : string = process.env.CF_SPACE!;
 const EMAIL : string = process.env.EMAIL!;
 import * as pack from '../package.json';
-import * as appsync from '@aws-cdk/aws-appsync-alpha';
-import { MappingTemplate } from '@aws-cdk/aws-appsync-alpha';
 // import * as sqs from 'aws-cdk-lib/aws-sqs';
 
 export class TranmereWebStack extends cdk.Stack {
@@ -32,12 +33,6 @@ export class TranmereWebStack extends cdk.Stack {
     });
 
     const rootDomain = "tranmere-web.com";
-
-    /*
-    const zone = route53.HostedZone.fromLookup(this, "baseZone", {
-      domainName: rootDomain,
-    });
-    */
 
     const env_variables = {
       "EMAIL_ADDRESS": EMAIL,
@@ -103,7 +98,7 @@ export class TranmereWebStack extends cdk.Stack {
             return [];
           },
           afterBundling(inputDir: string, outputDir: string): string[] {
-            return [`mkdir ${outputDir}/templates && cp -R ${inputDir}/lambda/templates/* ${outputDir}/templates && mkdir ${outputDir}/libs && cp -R ${inputDir}/lambda/libs/* ${outputDir}/libs`];
+            return [`mkdir ${outputDir}/templates && cp -R ${inputDir}/tranmere-web/templates/* ${outputDir}/templates && mkdir ${outputDir}/libs && cp -R ${inputDir}/lambda/libs/* ${outputDir}/libs`];
           },
           beforeInstall() {
             return [];
@@ -140,7 +135,7 @@ export class TranmereWebStack extends cdk.Stack {
             return [];
           },
           afterBundling(inputDir: string, outputDir: string): string[] {
-            return [`mkdir ${outputDir}/templates && cp -R ${inputDir}/lambda/templates/* ${outputDir}/templates && mkdir ${outputDir}/libs && cp -R ${inputDir}/lambda/libs/* ${outputDir}/libs`];
+            return [`mkdir ${outputDir}/templates && cp -R ${inputDir}/tranmere-web/templates/* ${outputDir}/templates && mkdir ${outputDir}/libs && cp -R ${inputDir}/lambda/libs/* ${outputDir}/libs`];
           },
           beforeInstall() {
             return [];
@@ -271,29 +266,34 @@ export class TranmereWebStack extends cdk.Stack {
       new apigw.LambdaIntegration(results_search_lambda, {proxy: true}),
     );
 
-    const TranmereWebPlayerTable = ddb.Table.fromTableArn(this, "TranmereWebPlayerTable", `arn:aws:dynamodb:${this.region}:${this.account}:table/TranmereWebPlayerTable`);
-    const TranmereWebAppsTable = ddb.Table.fromTableArn(this, "TranmereWebAppsTable", `arn:aws:dynamodb:${this.region}:${this.account}:table/TranmereWebAppsTable`);
+    const TranmereWebPlayerTable = ddb.Table.fromTableAttributes(this,'TranmereWebPlayerTable',{tableName: 'TranmereWebPlayerTable',grantIndexPermissions: true});
+    const TranmereWebAppsTable = ddb.Table.fromTableAttributes(this,'TranmereWebAppsTable',{tableName: 'TranmereWebAppsTable',grantIndexPermissions: true});
     const TranmereWebGoalsTable = ddb.Table.fromTableArn(this, "TranmereWebGoalsTable", `arn:aws:dynamodb:${this.region}:${this.account}:table/TranmereWebGoalsTable`);
-    const TranmereWebPlayerSeasonSummaryTable = ddb.Table.fromTableArn(this, "TranmereWebPlayerSeasonSummaryTable", `arn:aws:dynamodb:${this.region}:${this.account}:table/TranmereWebPlayerSeasonSummaryTable`);
+    const TranmereWebPlayerSeasonSummaryTable = ddb.Table.fromTableAttributes(this,'TranmereWebPlayerSeasonSummaryTable',{tableName: 'TranmereWebPlayerSeasonSummaryTable',grantIndexPermissions: true});
     const TranmereWebMediaSyncTable = ddb.Table.fromTableArn(this, "TranmereWebMediaSyncTable", `arn:aws:dynamodb:${this.region}:${this.account}:table/TranmereWebMediaSyncTable`);
-    const TranmereWebGames = ddb.Table.fromTableArn(this, "TranmereWebGames", `arn:aws:dynamodb:${this.region}:${this.account}:table/TranmereWebGames`);
+    const TranmereWebGames = ddb.Table.fromTableAttributes(this,'TranmereWebGames',{tableName: 'TranmereWebGames',grantIndexPermissions: true});
     const TranmereWebClubs = ddb.Table.fromTableArn(this, "TranmereWebClubs", `arn:aws:dynamodb:${this.region}:${this.account}:table/TranmereWebClubs`);
     const TranmereWebCompetitions = ddb.Table.fromTableArn(this, "TranmereWebCompetitions", `arn:aws:dynamodb:${this.region}:${this.account}:table/TranmereWebCompetitions`);
     const TranmereWebManagers = ddb.Table.fromTableArn(this, "TranmereWebManagers", `arn:aws:dynamodb:${this.region}:${this.account}:table/TranmereWebManagers`);
     const TranmereWebStarsTable = ddb.Table.fromTableArn(this, "TranmereWebStarsTable", `arn:aws:dynamodb:${this.region}:${this.account}:table/TranmereWebStarsTable`);
-    const TranmereWebHatTricks = ddb.Table.fromTableArn(this, "TranmereWebHatTricks", `arn:aws:dynamodb:${this.region}:${this.account}:table/TranmereWebHatTricks`);
+    const TranmereWebHatTricks = ddb.Table.fromTableAttributes(this,'TranmereWebHatTricks',{tableName: 'TranmereWebHatTricks',grantIndexPermissions: true});
 
     TranmereWebPlayerTable.grantReadData(player_search_lambda);
     TranmereWebPlayerSeasonSummaryTable.grantReadData(player_search_lambda);
+
     TranmereWebGames.grantReadData(results_search_lambda);
+    
     TranmereWebAppsTable.grantReadData(page_lambda);
     TranmereWebPlayerSeasonSummaryTable.grantReadData(page_lambda);
     TranmereWebPlayerTable.grantReadData(page_lambda);
+
     TranmereWebGames.grantReadWriteData(match_update_lambda);
+
     TranmereWebPlayerTable.grantReadData(match_page_lambda);
     TranmereWebGames.grantReadData(match_page_lambda);
     TranmereWebGoalsTable.grantReadData(match_page_lambda);
     TranmereWebAppsTable.grantReadData(match_page_lambda);
+
     TranmereWebMediaSyncTable.grantReadWriteData(media_sync_lambda);
     TranmereWebPlayerTable.grantReadWriteData(media_sync_lambda);
     TranmereWebStarsTable.grantReadWriteData(media_sync_lambda);

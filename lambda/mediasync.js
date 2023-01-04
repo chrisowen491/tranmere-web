@@ -1,4 +1,3 @@
-const { v4: uuidv4 } = require('uuid');
 const AWS = require('aws-sdk');
 const contentful = require("contentful");
 let dynamo = new AWS.DynamoDB.DocumentClient();
