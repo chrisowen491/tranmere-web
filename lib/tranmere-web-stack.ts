@@ -6,6 +6,8 @@ import { Construct } from 'constructs';
 import * as acm from "aws-cdk-lib/aws-certificatemanager"
 import * as ddb from 'aws-cdk-lib/aws-dynamodb';
 import * as iam from 'aws-cdk-lib/aws-iam';
+import * as events from 'aws-cdk-lib/aws-events'
+import * as targets from 'aws-cdk-lib/aws-events-targets'
 import * as appsync from '@aws-cdk/aws-appsync-alpha';
 import { MappingTemplate } from '@aws-cdk/aws-appsync-alpha';
 import { Datadog } from 'datadog-cdk-constructs-v2';
@@ -15,6 +17,10 @@ const ENVIRONMENT : string = process.env.ENVIRONMENT!;
 const CF_KEY : string = process.env.CF_KEY!;
 const CF_SPACE : string = process.env.CF_SPACE!;
 const EMAIL_ADDRESS : string = process.env.EMAIL_ADDRESS!;
+const SCRAPE_ID : string = process.env.SCRAPE_ID!;
+const SCRAPE_SEASON : string = process.env.SCRAPE_SEASON!;
+const SCRAPE_URL : string = process.env.SCRAPE_URL!;
+
 import * as pack from '../package.json';
 // import * as sqs from 'aws-cdk-lib/aws-sqs';
 
@@ -37,7 +43,10 @@ export class TranmereWebStack extends cdk.Stack {
     const env_variables = {
       "EMAIL_ADDRESS": EMAIL_ADDRESS,
       "CF_SPACE": CF_SPACE,
-      "CF_KEY": CF_KEY
+      "CF_KEY": CF_KEY,
+      "SCRAPE_ID": SCRAPE_ID,
+      "SCRAPE_SEASON": SCRAPE_SEASON,
+      "SCRAPE_URL": SCRAPE_URL
     }
 
     // Base API gateway
@@ -82,6 +91,94 @@ export class TranmereWebStack extends cdk.Stack {
       resources: ['*'],
       effect: iam.Effect.ALLOW,
     }));
+
+    const update_job_lambda = new NodejsFunction(this, 'UpdateJobFunction', {
+      entry: './lambda/updatejob.js',
+      handler: 'handler', 
+      memorySize: 1024,
+      runtime: lambda.Runtime.NODEJS_16_X,
+      timeout: cdk.Duration.seconds(600),
+      environment: env_variables,
+      bundling: {
+        minify: true,
+        externalModules: ['aws-sdk'],
+        commandHooks: {
+          beforeBundling(inputDir: string, outputDir: string): string[] {
+            return [];
+          },
+          afterBundling(inputDir: string, outputDir: string): string[] {
+            return [`mkdir ${outputDir}/libs && cp -R ${inputDir}/lambda/libs/* ${outputDir}/libs`];
+          },
+          beforeInstall() {
+            return [];
+          },
+        },
+      }
+    });
+
+    new events.Rule(this,'UpdateJobFunctionRule',{
+      targets: [new targets.LambdaFunction(update_job_lambda)],
+      schedule: events.Schedule.cron({minute: '45', hour: '23'}),
+    });
+
+    const hat_trick_job_lambda = new NodejsFunction(this, 'HatTrickJobFunction', {
+      entry: './lambda/hatTrickJob.js',
+      handler: 'handler', 
+      memorySize: 1024,
+      runtime: lambda.Runtime.NODEJS_16_X,
+      timeout: cdk.Duration.seconds(600),
+      environment: env_variables,
+      bundling: {
+        minify: true,
+        externalModules: ['aws-sdk'],
+        commandHooks: {
+          beforeBundling(inputDir: string, outputDir: string): string[] {
+            return [];
+          },
+          afterBundling(inputDir: string, outputDir: string): string[] {
+            return [`mkdir ${outputDir}/libs && cp -R ${inputDir}/lambda/libs/* ${outputDir}/libs`];
+          },
+          beforeInstall() {
+            return [];
+          },
+        },
+      }
+    });
+
+    new events.Rule(this,'HatTrickJobFunctionRule',{
+      targets: [new targets.LambdaFunction(hat_trick_job_lambda)],
+      schedule: events.Schedule.cron({minute: '45', hour: '23'}),
+    });
+
+    const scraper_job_lambda = new NodejsFunction(this, 'ScraperJobFunction', {
+      entry: './lambda/scraper.js',
+      handler: 'handler', 
+      memorySize: 1024,
+      runtime: lambda.Runtime.NODEJS_16_X,
+      timeout: cdk.Duration.seconds(600),
+      environment: env_variables,
+      bundling: {
+        minify: true,
+        externalModules: ['aws-sdk'],
+        commandHooks: {
+          beforeBundling(inputDir: string, outputDir: string): string[] {
+            return [];
+          },
+          afterBundling(inputDir: string, outputDir: string): string[] {
+            return [`mkdir ${outputDir}/libs && cp -R ${inputDir}/lambda/libs/* ${outputDir}/libs`];
+          },
+          beforeInstall() {
+            return [];
+          },
+        },
+      }
+    });
+
+    new events.Rule(this,'ScraperJobFunctionRule',{
+      targets: [new targets.LambdaFunction(scraper_job_lambda)],
+      schedule: events.Schedule.cron({minute: '45', hour: '23'}),
+    });
+
 
     const match_page_lambda =new NodejsFunction(this, 'MatchPageFunction', {
       entry: './lambda/matchpage.js',
@@ -298,6 +395,17 @@ export class TranmereWebStack extends cdk.Stack {
     TranmereWebPlayerTable.grantReadWriteData(media_sync_lambda);
     TranmereWebStarsTable.grantReadWriteData(media_sync_lambda);
 
+    TranmereWebPlayerSeasonSummaryTable.grantReadWriteData(update_job_lambda);
+    TranmereWebGoalsTable.grantReadData(update_job_lambda);
+    TranmereWebAppsTable.grantReadData(update_job_lambda);
+
+    TranmereWebGoalsTable.grantReadData(hat_trick_job_lambda);
+    TranmereWebHatTricks.grantReadWriteData(hat_trick_job_lambda);
+
+    TranmereWebGoalsTable.grantReadWriteData(scraper_job_lambda);
+    TranmereWebAppsTable.grantReadWriteData(scraper_job_lambda);
+    TranmereWebGames.grantReadWriteData(scraper_job_lambda);
+
     const graphqltables = [
       TranmereWebClubs,
       TranmereWebCompetitions,
@@ -391,5 +499,7 @@ export class TranmereWebStack extends cdk.Stack {
     }
 
     datadog.addLambdaFunctions([contact_us_lambda, media_sync_lambda, player_builder_lambda, results_search_lambda, player_search_lambda, match_page_lambda, match_update_lambda]);
+    datadog.addLambdaFunctions([page_lambda, hat_trick_job_lambda, update_job_lambda, scraper_job_lambda]);
+
   }
 }
