@@ -14,7 +14,7 @@ import { Datadog } from 'datadog-cdk-constructs-v2';
 const ENVIRONMENT : string = process.env.ENVIRONMENT!;
 const CF_KEY : string = process.env.CF_KEY!;
 const CF_SPACE : string = process.env.CF_SPACE!;
-const EMAIL : string = process.env.EMAIL!;
+const EMAIL_ADDRESS : string = process.env.EMAIL_ADDRESS!;
 import * as pack from '../package.json';
 // import * as sqs from 'aws-cdk-lib/aws-sqs';
 
@@ -35,7 +35,7 @@ export class TranmereWebStack extends cdk.Stack {
     const rootDomain = "tranmere-web.com";
 
     const env_variables = {
-      "EMAIL_ADDRESS": EMAIL,
+      "EMAIL_ADDRESS": EMAIL_ADDRESS,
       "CF_SPACE": CF_SPACE,
       "CF_KEY": CF_KEY
     }
