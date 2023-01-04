@@ -1,5 +1,14 @@
 .idea
-node_modules/
+*.d.ts
+node_modules
+bin/*.js
+lib/*.js
+
+# CDK asset staging directory
+.cdk.staging
+cdk.out
+web.out
+
 /tmp
 /tranmere-web/output/site/*.html
 /tranmere-web/node_modules/
@@ -14,3 +23,6 @@ node_modules/
 /data/apps-master/AllResults.xlsx
 
 /tranmere-web-api/sam/search/package-lock.json
+
+set_env.sh
+

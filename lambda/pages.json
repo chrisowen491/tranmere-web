@@ -1,0 +1,17 @@
+{
+  "player": {
+    "template": "./templates/player.tpl.html"
+  },
+  "blog": {
+    "template": "./templates/blog.tpl.html"
+  },
+  "home": {
+    "template": "./templates/home.tpl.html"
+  },
+  "gallery": {
+    "template": "./templates/gallery.tpl.html"
+  },
+  "tag": {
+    "template": "./templates/tag.tpl.html"
+  }
+}

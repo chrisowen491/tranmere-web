@@ -1,7 +1,7 @@
 module.exports = function (path, fs, Mustache, axios, key, appsynckey) {
     return {
          
-         APP_SYNC_URL: "https://jafvqela5jaz3or4rxu3yo4xry.appsync-api.eu-west-1.amazonaws.com",
+         APP_SYNC_URL: "https://api.prod.tranmere-web.com",
       
          APP_SYNC_OPTIONS: {
           headers: {
@@ -70,10 +70,10 @@ module.exports = function (path, fs, Mustache, axios, key, appsynckey) {
 
          buildPage: function (view, pageTpl, outputPath, noindex) {
             console.log("Building " + outputPath);
-            if(outputPath != './tranmere-web/output/site/index.html')
-                view.url = outputPath.replace('./tranmere-web/output/site/','/');
+            if(outputPath != './web.out/index.html')
+                view.url = outputPath.replace('./web.out/','/');
 
-            if(outputPath == './tranmere-web/output/site/index.html') {
+            if(outputPath == './web.out/index.html') {
                 view.url = "";
             }
             view.random = Math.ceil(Math.random() * 100000);
@@ -119,7 +119,8 @@ module.exports = function (path, fs, Mustache, axios, key, appsynckey) {
 
          // Done
          findAllPlayers : async function() {
-            var results = await axios.get(`${this.APP_SYNC_URL}/graphql?query={listTranmereWebPlayerTable(limit:300){items{name}}}`, this.APP_SYNC_OPTIONS);
+            var query = encodeURIComponent("{listTranmereWebPlayerTable(limit:300){items{name}}}");
+            var results = await axios.get(`${this.APP_SYNC_URL}/graphql?query=${query}`, this.APP_SYNC_OPTIONS);
             var players = [];
             for(var i=0; i < results.data.data.listTranmereWebPlayerTable.items.length; i++) {
                 var player = results.data.data.listTranmereWebPlayerTable.items[i];
@@ -130,7 +131,8 @@ module.exports = function (path, fs, Mustache, axios, key, appsynckey) {
 
          // Done
          findAllTranmereManagers : async function() {
-            var results = await axios.get(`${this.APP_SYNC_URL}/graphql?query={listTranmereWebManagers(limit:300){items{name%20dateLeft%20dateJoined}}}`, this.APP_SYNC_OPTIONS);
+            var query = encodeURIComponent("{listTranmereWebManagers(limit:300){items{name dateLeft dateJoined}}}");
+            var results = await axios.get(`${this.APP_SYNC_URL}/graphql?query=${query}`, this.APP_SYNC_OPTIONS);
 
             var managers = [];
             for(var i=0; i < results.data.data.listTranmereWebManagers.items.length; i++) {
@@ -151,7 +153,8 @@ module.exports = function (path, fs, Mustache, axios, key, appsynckey) {
 
          // Done
          getAllCupCompetitions : async function(size) {
-            var results = await axios.get(`${this.APP_SYNC_URL}/graphql?query={listTranmereWebCompetitions(limit:500){items{name}}}`, this.APP_SYNC_OPTIONS);
+            var query = encodeURIComponent("{listTranmereWebCompetitions(limit:500){items{name}}}");
+            var results = await axios.get(`${this.APP_SYNC_URL}/graphql?query=${query}`, this.APP_SYNC_OPTIONS);
             return results.data.data.listTranmereWebCompetitions.items;
         },
 
@@ -163,7 +166,7 @@ module.exports = function (path, fs, Mustache, axios, key, appsynckey) {
             var theYear = theDate.getUTCMonth() > 6 ? theDate.getFullYear() : theDate.getFullYear() -1;
         
             for(var i= 1977; i <= theYear; i++) {
-                var result = await axios.get("https://api.ci1.tranmere-web.com/player-search/?season="+i+"&sort=Goals", this.apiOptions);
+                var result = await axios.get("https://api.prod.tranmere-web.com/player-search/?season="+i+"&sort=Goals", this.apiOptions);
                 var player = result.data.players[0];
                 if(player)
                   results.push(player);
@@ -173,7 +176,8 @@ module.exports = function (path, fs, Mustache, axios, key, appsynckey) {
 
          // Done
          findAllTeams : async function(size) {
-            var result = await axios.get(`${this.APP_SYNC_URL}/graphql?query={listTranmereWebClubs(limit:500){items{name}}}`, this.APP_SYNC_OPTIONS);
+            var query = encodeURIComponent("{listTranmereWebClubs(limit:500){items{name}}}");  
+            var result = await axios.get(`${this.APP_SYNC_URL}/graphql?query=${query}`, this.APP_SYNC_OPTIONS);
             var results = result.data.data.listTranmereWebClubs.items;
 
             results.sort(function(a, b) {
@@ -186,7 +190,8 @@ module.exports = function (path, fs, Mustache, axios, key, appsynckey) {
 
          // Done
          findAllHatTricks : async function(size) {
-            var result = await axios.get(`${this.APP_SYNC_URL}/graphql?query={listTranmereWebHatTricks(limit:500){items{Date%20Player%20Opposition%20Goals%20Season}}}`, this.APP_SYNC_OPTIONS);
+            var query = encodeURIComponent("{listTranmereWebHatTricks(limit:500){items{Date Player Opposition Goals Season}}}");
+            var result = await axios.get(`${this.APP_SYNC_URL}/graphql?query=${query}`, this.APP_SYNC_OPTIONS);
             var results = result.data.data.listTranmereWebHatTricks.items;
 
             results.sort(function(a, b) {

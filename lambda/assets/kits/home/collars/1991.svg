@@ -1,0 +1,16 @@
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+  <g id="collar">
+   <ellipse stroke="#d3d3d3" ry="3.66667" rx="3.27778" id="svg_28" cy="366.11979" cx="255.16666" stroke-width="null" fill="#ffffff"/>
+   <rect stroke="#d3d3d3" id="svg_34" height="28.44441" width="11.99999" y="357.88848" x="249.33334" stroke-width="null" fill="none"/>
+    <g>
+        <path stroke="#b2b2b2" d="m256,356l-30,30l-31.996,-70.056l17.996,-11.944l44,52z" fill="#ffffff"/>
+    </g>
+    <g>
+        <path stroke="#b2b2b2" d="m256,356l30,30l31.996,-70.056l-17.996,-11.944l-44,52z" fill="#ffffff"/>
+    </g>
+  </g>
+  <g id="sub-collar">
+   <line fill="none" stroke-width="4" fill-opacity="null" x1="198" y1="311.45313" x2="229" y2="377.45313" id="svg_37" stroke-dasharray="5,5" stroke="#0000ff"/>
+   <line fill="none" stroke-width="4" fill-opacity="null" x1="312" y1="309.45313" x2="281" y2="375.45313" id="svg_46" stroke-dasharray="5,5" stroke="#0000ff"/>
+  </g>
+</svg>  

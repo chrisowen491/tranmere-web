@@ -1,0 +1,8 @@
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+    <g id="hair-bg">
+        <ellipse fill="#HAIR" stroke="null" stroke-width="null" cx="341.5" cy="117.45313" id="svg_57" rx="23" ry="25"/>
+        <ellipse fill="#HAIR" stroke="null" stroke-width="1.5" stroke-opacity="null" fill-opacity="null" cx="174.5" cy="102.45313" id="svg_56" rx="23" ry="25"/>
+        <ellipse fill="#HAIR" stroke="null" stroke-width="1.5" cx="174.5" cy="95.45313" id="svg_42" rx="23" ry="25"/>
+        <ellipse fill="#HAIR" stroke="null" stroke-width="1.5" cx="169.5" cy="132.45313" id="svg_41" rx="23" ry="25"/>
+    </g>
+</svg>

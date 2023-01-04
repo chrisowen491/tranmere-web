@@ -1,0 +1,9 @@
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+  <g id="collar">
+    <path stroke="#b2b2b2" d="m256,356l-30,30l-31.996,-70.056l17.996,-11.944l44,52z" fill="#008500"/>
+    <path stroke="#b2b2b2" d="m256,356l30,30l31.996,-70.056l-17.996,-11.944l-44,52z" fill="#008500"/>
+  </g>
+  <path fill="#008500" d="m132.09262,513.07187l-66.42734,0l0,-83.68575l66.42734,0l0,83.68575z" id="svg_63"/>
+  <path stroke="null" d="m378.30297,429.67353l67.40171,0l0,86.68575l-67.40171,0l0,-86.68575z" fill="#008500" id="svg_64"/>
+  <line stroke-linecap="null" stroke-linejoin="null" id="svg_29" y2="518.5" x2="372.5" y1="452.5" x1="371.5" opacity="undefined" fill-opacity="null" stroke-dasharray="null" stroke-width="null" stroke="#000000" fill="none"/>
+  <line stroke-linecap="null" stroke-linejoin="null" id="svg_37" y2="520.5" x2="140.5" y1="454.5" x1="139.5" opacity="undefined" fill-opacity="null" stroke-dasharray="null" stroke-width="null" stroke="#000000" fill="none"/></svg>  

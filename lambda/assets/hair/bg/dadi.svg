@@ -1,0 +1,13 @@
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+    <g id="hair-bg">
+      <line fill="none" stroke-width="6" stroke-opacity="null" x1="157.6436" y1="267.59284" x2="196.3564" y2="164.31341" transform="rotate(-16.94650650024414 176.99999999999997,215.953125HAIR09) " stroke="#HAIR"/>
+        <line fill="none" stroke-width="6" stroke-opacity="null" x1="173.6436" y1="275.59284" x2="212.3564" y2="172.31341" transform="rotate(-7.458127498626709 193.HAIRHAIR03,223.953125HAIR03) " stroke="#HAIR"/>
+        <line fill="none" stroke-width="6" stroke-opacity="null" x1="153.35991" y1="258.84489" x2="200.64009" y2="125.06135" transform="rotate(-10.872594833374023 176.99999999999986,191.95312499999997) " stroke="#HAIR"/>
+        <line fill="none" stroke-width="6" stroke-opacity="null" x1="123.50893" y1="250.05788" x2="181.49107" y2="117.84837" transform="rotate(-2.665134906768799 152.5HAIR0000065,183.9531249999998) " stroke="#HAIR"/>
+        <line fill="none" stroke-width="6" stroke-opacity="null" x1="155.6436" y1="234.59284" x2="194.3564" y2="131.31341" transform="rotate(-7.458127498626709 174.99999999999997,182.95312499999994) " stroke="#HAIR"/>
+        <line fill="none" stroke="#HAIR" stroke-width="6" stroke-opacity="null" x1="146.5" y1="224.45313" x2="186.5" y2="134.45313"/>
+        <line fill="none" stroke-width="6" stroke-opacity="null" x1="139.5" y1="260.45312" x2="189.5" y2="134.45313" stroke="#HAIR"/>
+        <ellipse fill="#HAIR" stroke-width="6" cx="218.06263" cy="129.43776" rx="65.92222" ry="76.23859" transform="rotate(-1.201983094215393 218.06262207031153,129.4377593994138) " stroke="#HAIR"/>
+
+    </g>
+</svg>        

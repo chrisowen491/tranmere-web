@@ -1,0 +1,14 @@
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+  <g>
+   <ellipse stroke="#0000ff" ry="3.66667" rx="3.27778" cy="366.22617" cx="254.74113" stroke-width="null" fill="#ffffff"/>
+   <rect height="28.44441" width="11.99999" y="357.99486" x="248.90781" stroke-width="null" fill="none" stroke="#d3d3d3"/>
+  </g>
+  <g id="v-collar">
+   <g>
+    <path fill="#0000ff" d="m254,357l-51,40l-10.996,-80.056l17.996,-11.944l44,52z"/>
+   </g>
+   <g>
+    <path fill="#0000ff" d="m254,357l51,40l10.996,-80.056l-17.996,-11.944l-44,52z"/>
+   </g>
+  </g>
+ </svg>

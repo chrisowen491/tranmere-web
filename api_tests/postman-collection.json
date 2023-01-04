@@ -1,0 +1,295 @@
+{
+	"info": {
+		"_postman_id": "da0cdf2a-8302-495b-82bd-944c0c62e577",
+		"name": "tranmere-web-api-tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Page-Test",
+			"item": [
+				{
+					"name": "Page-Test",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{testApiKey}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{protocol}}://{{domain}}/page/blog/7GNQCz3dEPOCvuyfcHTWvA",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"page/blog/7GNQCz3dEPOCvuyfcHTWvA",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "PlayerSearch-Test",
+			"item": [
+				{
+					"name": "PlayerSearch-Test",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let jsonData = pm.response.json();",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response\", function () {",
+									"    let response = pm.response.json();",
+									"    pm.expect(response.players[0].Player).to.eql('Steve Mungall');",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{testApiKey}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{protocol}}://{{domain}}/player-search/",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"player-search",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "PlayerBuilder-Test",
+			"item": [
+				{
+					"name": "PlayerBuilder-Test",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							
+								{
+									"key": "x-api-key",
+									"value": "{{testApiKey}}",
+									"type": "text"
+								}
+						  	
+						],
+						"url": {
+							"raw": "{{protocol}}://{{domain}}/builder/2000/curly/ffd3b3/none/a8890d/fcb98b/LightGray/8e740c",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"builder/2000/curly/ffd3b3/none/a8890d/fcb98b/LightGray/8e740c",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ResultSearch-Test",
+			"item": [
+				{
+					"name": "ResultSearch-Test",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let jsonData = pm.response.json();",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response\", function () {",
+									"    let response = pm.response.json();",
+									"    pm.expect(response[0].venue).to.eql('Prenton Park');",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{testApiKey}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{protocol}}://{{domain}}/result-search?season=2020",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"result-search"
+							],
+							"query": [
+								{
+									"key": "season",
+									"value": "2020"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Sunderland-Test",
+			"item": [
+				{
+					"name": "Sunderland-Test",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							
+								{
+									"key": "x-api-key",
+									"value": "{{testApiKey}}",
+									"type": "text"
+								}
+						  	
+						],
+						"url": {
+							"raw": "{{protocol}}://{{domain}}/match/2020/2021-03-14",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"match/2020/2021-03-14",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "GraphQL-Test",
+			"item": [
+				{
+					"name": "GraphQL-Test",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response\", function () {",
+									"    let response = pm.response.json();",
+									"    pm.expect(response.data.listTranmereWebPlayerTable.items[0].name).to.eql('Adam McGurk');",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+						],
+						"url": {
+							"raw": "{{protocol}}://{{domain}}/graphql?query=%7BlistTranmereWebPlayerTable%28limit%3A1%29%7Bitems%7Bname%7D%7D%7D",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"graphql?query=%7BlistTranmereWebPlayerTable%28limit%3A1%29%7Bitems%7Bname%7D%7D%7D",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

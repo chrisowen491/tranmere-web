@@ -8,7 +8,7 @@ export async function onRequest(context) {
   } = context;
 
   let url = new URL(request.url)
-  url.host = "jafvqela5jaz3or4rxu3yo4xry.appsync-api.eu-west-1.amazonaws.com";
+  url.host = "api.prod.tranmere-web.com";
 
   let new_request = new Request(url, request)
   new_request.headers.set("x-api-key", "da2-upnumdu7inamne5prs2wsuxfnq")

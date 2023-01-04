@@ -1,0 +1,21 @@
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+<g id="hair">
+   <ellipse stroke="#HAIR" ry="19.5" rx="32.5" id="svg_26" cy="60.95313" cx="199.5" stroke-width="8" fill="#HAIR"/>
+   <ellipse stroke="#HAIR" transform="rotate(-35.09581756591797 209.20268249511722,48.33773040771482) " ry="21" rx="21.13649" id="svg_27" cy="48.33773" cx="209.20269" stroke-width="8" fill="#HAIR"/>
+   <ellipse stroke="#HAIR" ry="21" rx="14.5" id="svg_28" cy="41.45313" cx="253.5" stroke-width="8" fill="#HAIR"/>
+   <ellipse stroke="#HAIR" ry="21" rx="24.56405" id="svg_30" cy="51.36707" cx="301.99291" stroke-width="8" fill="#HAIR"/>
+   <ellipse ry="21" rx="24.03333" id="svg_31" cy="79.78418" cx="183.24034" stroke-width="8" fill="#HAIR" stroke="#HAIR"/>
+   <ellipse ry="21" rx="24.03333" id="svg_32" cy="71.78418" cx="309.24034" stroke-width="8" fill="#HAIR" stroke="#HAIR"/>
+   <ellipse ry="26.70523" rx="30.41302" id="svg_46" cy="63.18428" cx="256.74034" stroke-width="8" fill="#HAIR" stroke="#HAIR"/>
+   <ellipse stroke="#HAIR" transform="rotate(35.09581756591797 323.99291992187494,73.36707305908203) " ry="21" rx="24.56405" id="svg_51" cy="73.36707" cx="323.99291" stroke-width="8" fill="#HAIR"/>
+   <ellipse stroke="#HAIR" transform="rotate(114.24739074707031 172.99290466308597,76.36707305908203) " ry="21" rx="24.56405" id="svg_52" cy="76.36707" cx="172.99291" stroke-width="8" fill="#HAIR"/>
+   <ellipse fill="#HAIR" stroke-width="8" cx="354.19108" cy="76.36811" id="svg_59" rx="24.56405" ry="21" stroke="#HAIR"/>
+   <ellipse fill="#HAIR" stroke-width="8" cx="158.19296" cy="98.7679" id="svg_60" rx="24.56405" ry="21" stroke="#HAIR"/>
+   <ellipse fill="#HAIR" stroke-width="8" cx="373.39089" cy="106.76782" id="svg_61" rx="24.56405" ry="21" stroke="#HAIR"/>
+   <ellipse fill="#HAIR" stroke-width="8" cx="176.59278" cy="54.76832" id="svg_62" rx="24.56405" ry="21" stroke="#HAIR"/>
+   <ellipse fill="#HAIR" stroke-width="8" cx="335.79125" cy="53.16834" id="svg_63" rx="24.56405" ry="21" stroke="#HAIR"/>
+   <ellipse fill="#HAIR" stroke-width="8" cx="145.39308" cy="129.1676" id="svg_64" rx="24.56405" ry="21" stroke="#HAIR"/>
+   <ellipse fill="#HAIR" stroke-width="8" cx="370.9909" cy="125.96763" id="svg_65" rx="24.56405" ry="21" stroke="#HAIR"/>
+   <ellipse fill="#HAIR" stroke-width="8" cx="354.99106" cy="244.36649" id="svg_66" rx="24.56405" ry="21" stroke="#HAIR"/>
+  </g>
+</svg>

@@ -17,7 +17,7 @@ function reload(done) {
 function serve(done) {
   server.init({
     server: {
-      baseDir: 'tranmere-web/output/site'
+      baseDir: 'web.out'
     }
   });
   done();
@@ -30,7 +30,7 @@ function css() {
   .pipe(maps.init())
   .pipe(sass())
   .pipe(maps.write('./'))
-  .pipe(gulp.dest('tranmere-web/output/site/assets/css'))
+  .pipe(gulp.dest('web.out/assets/css'))
   .pipe(server.stream());
 }
 
@@ -55,7 +55,7 @@ function scripts() {
     .pipe(maps.init())
     .pipe(concat('vendor.js'))
     .pipe(maps.write('./'))
-    .pipe(gulp.dest('tranmere-web/output/site/assets/js'));
+    .pipe(gulp.dest('web.out/assets/js'));
 }
 
 
@@ -70,32 +70,32 @@ function styles() {
     .pipe(maps.init({loadMaps: true}))
     .pipe(concat("vendor.css"))
     .pipe(maps.write())
-    .pipe(gulp.dest('tranmere-web/output/site/assets/css'));
+    .pipe(gulp.dest('web.out/assets/css'));
 }
 
 
 // minify js
 function minify() {
-  return gulp.src('tranmere-web/output/site/assets/js/vendor.js')
+  return gulp.src('web.out/assets/js/vendor.js')
   .pipe(maps.init())
   .pipe(uglify())
   .pipe(rename('vendor.min.js'))
   .pipe(maps.write('./'))
-  .pipe(gulp.dest('tranmere-web/output/site/assets/js'));
+  .pipe(gulp.dest('web.out/assets/js'));
 }
 
 function minifyCss() {
-  return gulp.src('tranmere-web/output/site/assets/css/*.css')
+  return gulp.src('web.out/assets/css/*.css')
     .pipe(cleanCSS())
-    .pipe(gulp.dest('tranmere-web/output/site/assets/css'));
+    .pipe(gulp.dest('web.out/assets/css'));
 }
 
 function criticalTask() {
  return gulp
-    .src(['tranmere-web/output/site/*.html'])
+    .src(['web.out/*.html'])
     .pipe(
       critical({
-        base: 'tranmere-web/output/site/',
+        base: 'web.out/',
         inline: true,
         dimensions: [
             {
@@ -109,7 +109,7 @@ function criticalTask() {
         ]
       })
     )
-    .pipe(gulp.dest('tranmere-web/output/site/'));
+    .pipe(gulp.dest('web.out'));
 }
 
 
@@ -121,7 +121,7 @@ function static() {
           './tranmere-web/_redirects',
           './tranmere-web/OneSignalSDKUpdaterWorker.js',
           './tranmere-web/OneSignalSDKWorker.js'],  {base: './tranmere-web/'})
-      .pipe(gulp.dest('./tranmere-web/output/site/'));
+      .pipe(gulp.dest('./web.out/'));
 }
 
 function publish() {
@@ -135,7 +135,7 @@ function publish() {
           './tranmere-web/assets/templates/*',
           './tranmere-web/assets/js/*.js',
       ],  {base: './tranmere-web/assets/'})
-      .pipe(gulp.dest('./tranmere-web/output/site/assets/'));
+      .pipe(gulp.dest('./web.out/assets/'));
 }
 
 // watch for changes

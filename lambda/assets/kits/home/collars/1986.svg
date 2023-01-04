@@ -1,0 +1,9 @@
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+  <g id="collar">
+    <path d="m256,356l-30,30l-31.996,-70.056l17.996,-11.944l44,52z" fill="#0000ff" id="svg_39" stroke-dasharray="5,5"/>
+    <path d="m256,356l30,30l31.996,-70.056l-17.996,-11.944l-44,52z" fill="#0000ff" id="svg_41" stroke-dasharray="5,5"/>
+    <line fill="none" stroke-width="4.5" x1="204" y1="312.45313" x2="252" y2="364.45312" id="svg_42" stroke="#ffffff"/>
+    <line fill="none" stroke-width="3.5" x1="258" y1="365.45313" x2="306" y2="310.45312" id="svg_43" stroke="#ffffff"/>
+   </g>
+
+</svg>          

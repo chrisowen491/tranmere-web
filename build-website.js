@@ -13,13 +13,11 @@ const search_client = algoliasearch(process.env.AL_SPACE, process.env.AL_KEY);
 const search_index = search_client.initIndex(process.env.AL_INDEX);
 
 var utils = require('./tranmere-web/libs/utils')(path, fs, Mustache, axios, process.env.API_KEY, process.env.APPSYNC_KEY);
+
 async function run () {
 
-    if (!fs.existsSync('./tranmere-web/output')){
-        fs.mkdirSync('./tranmere-web/output');
-    }
-    if (!fs.existsSync('./tranmere-web/output/site')){
-        fs.mkdirSync('./tranmere-web/output/site');
+    if (!fs.existsSync('./web.out')){
+        fs.mkdirSync('./web.out');
     }
 
     var content = await client.getEntries({'content_type': 'blogPost', order: '-fields.datePosted'});
@@ -89,7 +87,7 @@ async function run () {
             page.cardBlocksHTML = blockContent;
         }
         var fileName = page.key.toLowerCase();
-        utils.buildPage(page,`./tranmere-web/templates/${page.template}`,`./tranmere-web/output/site/${fileName}.html` );
+        utils.buildPage(page,`./tranmere-web/templates/${page.template}`,`./web.out/${fileName}.html` );
         var pageMeta = {
             objectID: "Page-" + page.key.toLowerCase(),
             link: `https://www.tranmere-web.com/${fileName}.html`,
@@ -120,6 +118,6 @@ async function run () {
         search_index.saveObject(competitions[i]);
     }
 
-    utils.buildPage({urls:utils.pages}, "./tranmere-web/templates/sitemap.tpl.xml", './tranmere-web/output/site/sitemap.xml');
+    utils.buildPage({urls:utils.pages}, "./tranmere-web/templates/sitemap.tpl.xml", './web.out/sitemap.xml');
 }
 run().catch(console.log)

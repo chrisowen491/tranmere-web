@@ -1,0 +1,259 @@
+{{>head}}
+<body data-spy="scroll" data-target="#toc" class="tranmere-results">
+
+
+<!-- header -->
+NAV_BAR_PLACEHOLDER
+<!-- / header -->
+
+
+<section class="hero bg-blue">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-white mb-3">
+                <h1 class="h1 pb-1">{{home}} {{ft}} {{visitor}}</h1>
+                <h3 class="h3 pb-1">{{competition}}, {{date}}</h3>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb breadcrumb-minimal"  itemscope="" itemtype="http://schema.org/BreadcrumbList">
+                        <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem" class="breadcrumb-item"><a href="/" itemprop="item"><span itemprop="name">Home<meta itemprop="position" content="1"/></span></a></li>
+                        <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem" class="breadcrumb-item"><a href="/results.html" itemprop="item"><span itemprop="name">Results<meta itemprop="position" content="2"/></span></a></li>
+                        <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem" class="breadcrumb-item"><a href="/results.html?season={{season}}" itemprop="item"><span itemprop="name">{{season}}<meta itemprop="position" content="3"/></span></a></li>
+                        <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem" class="breadcrumb-item active" aria-current="page"><span itemprop="name">{{date}}</span><meta itemprop="position" content="4"/></li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="match">
+    <div class="container overlay-item-top">
+        <div class="row">
+            <div class="col-md-12" id="edit" style="display: none;">
+                <div class="form-group">
+                    <label for="youtube">Youtube</label>
+                    <input type="text" name="youtube" id="youtube" value="{{youtube}}"/>
+                </div>
+                <div class="form-group">
+                    <label for="attendance">Attendance</label>
+                    <input type="text" name="attendance" id="attendance" value="{{attendance}}"/>
+                </div>
+                <div class="form-group">
+                    <label for="programme">Programme</label>
+                    <input type="text" name="programme" id="programme" value="{{programme}}"/>
+                </div>
+                <div class="form-group">
+                    <label for="programme">Venue</label>
+                    <input type="text" name="venue" id="venue" value="{{venue}}"/>
+                </div>
+                <div class="form-group">
+                    <label for="programme">Pens</label>
+                    <input type="text" name="pens" id="pens" value="{{pens}}"/>
+                </div>
+                <div class="form-group">
+                    <label for="programme">Home</label>
+                    <input type="text" name="home" id="home" value="{{home}}"/>
+                </div>
+                <div class="form-group">
+                    <label for="programme">Visitor</label>
+                    <input type="text" name="visitor" id="visitor" value="{{visitor}}"/>
+                </div> 
+                <div class="form-group">
+                    <label for="programme">Opposition</label>
+                    <input type="text" name="opposition" id="opposition" value="{{opposition}}"/>
+                </div>                                
+                <button id="editbutton2" class="btn btn-primary px-3">Submit</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="content boxed">
+                    <div class="row separated">    
+                        <aside class="col-md-4 content-aside bg-light">
+                            <div class="widget">
+                                {{#largeProgramme}}
+                                <img src="https://images.tranmere-web.com/{{largeProgramme}}"/>
+                                <br/>
+                                <br/>
+                                <br/>
+                                {{/largeProgramme}}
+                                
+                                {{#hasVenue}}
+                                Venue: <strong>{{venue}}</strong>
+                                {{/hasVenue}}
+
+                                {{#hasAttendance}}
+                                    <br/>
+                                    Attendance: <strong>{{attendance}}</strong>
+                                {{/hasAttendance}}
+                                <br/>
+                                Rovers:
+                                <br />
+                                {{#goalkeepers}}
+                                <a href="/page/player/{{Name}}">{{Name}}</a>{{#SubbedBy}} (<a href="/page/player/{{SubbedBy}}">{{SubbedBy}}</a> {{SubTime}}){{/SubbedBy}}<br />
+                                {{/goalkeepers}}
+
+                                {{#fullback1}}
+                                <a href="/page/player/{{Name}}">{{Name}}</a>{{#SubbedBy}} (<a href="/page/player/{{SubbedBy}}">{{SubbedBy}}</a> {{SubTime}}){{/SubbedBy}}<br />
+                                {{/fullback1}}
+                                {{#defenders}}
+                                <a href="/page/player/{{Name}}">{{Name}}</a>{{#SubbedBy}} (<a href="/page/player/{{SubbedBy}}">{{SubbedBy}}</a> {{SubTime}}){{/SubbedBy}}<br />
+                                {{/defenders}}
+                                {{#fullback2}}
+                                <a href="/page/player/{{Name}}">{{Name}}</a>{{#SubbedBy}} (<a href="/page/player/{{SubbedBy}}">{{SubbedBy}}</a> {{SubTime}}){{/SubbedBy}}<br />
+                                {{/fullback2}}
+                                {{#wingers1}}
+                                <a href="/page/player/{{Name}}">{{Name}}</a>{{#SubbedBy}} (<a href="/page/player/{{SubbedBy}}">{{SubbedBy}}</a> {{SubTime}}){{/SubbedBy}}<br />
+                                {{/wingers1}}
+                                {{#midfielders}}
+                                <a href="/page/player/{{Name}}">{{Name}}</a>{{#SubbedBy}} (<a href="/page/player/{{SubbedBy}}">{{SubbedBy}}</a> {{SubTime}}){{/SubbedBy}}<br />
+                                {{/midfielders}}
+                                {{#wingers2}}
+                                <a href="/page/player/{{Name}}">{{Name}}</a>{{#SubbedBy}} (<a href="/page/player/{{SubbedBy}}">{{SubbedBy}}</a> {{SubTime}}){{/SubbedBy}}<br />
+                                {{/wingers2}}
+                                {{#strikers}}
+                                <a href="/page/player/{{Name}}">{{Name}}</a>{{#SubbedBy}} (<a href="/page/player/{{SubbedBy}}">{{SubbedBy}}</a> {{SubTime}}){{/SubbedBy}}<br />
+                                {{/strikers}}
+                                <br/>
+                                Scorers: <strong>{{formattedGoals}}</strong>
+                                {{#youtube}}
+                                <br/>
+                                <a href="{{youtube}}">You Tube Link</a>
+                                <video
+                                    id="video"
+                                    class="youtube video-js vjs-default-skin video-16-9"
+                                    controls
+                                    width="640" height="264"
+                                    data-setup='{ "techOrder": ["youtube"], "sources": [{ "type": "video/youtube", "src": "{{youtube}}"}], "youtube": { "ytControls": 2 } }'
+                                >
+                                </video>
+                                {{/youtube}}
+                            </div>
+
+                        </aside>
+                        <article class="col-md-8 content-body tranmere-results">
+                            {{#pens}}<h4>{{pens}}</h4>{{/pens}}
+                            <div class="col-md-12" style= "padding-bottom:20px">
+                                <h4>Team</h4>
+                                <table class="pitch">
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>    
+                                    <tr>
+                                        {{#goalkeepers}}
+                                        <td colspan="24">
+                                            <a href="/page/player/{{Name}}"><img src="{{bio.picLink}}"></a>
+                                            <a href="/page/player/{{Name}}" class="{{#YellowCard}}yellow{{/YellowCard}} {{#RedCard}}red{{/RedCard}}">{{Name}}</a>
+                                            {{#SubbedBy}}<a href="/page/player/{{SubbedBy}}" class="{{#SubYellow}}yellow{{/SubYellow}} {{#SubRed}}red{{/SubRed}}">({{SubbedBy}} {{SubTime}})</a>{{/SubbedBy}}
+                                        </td>
+                                        {{/goalkeepers}}
+                                    </tr>
+                                    <tr>
+                                        {{#fullback1}}
+                                        <td colspan="{{defColspan}}">
+                                            <a href="/page/player/{{Name}}"><img src="{{bio.picLink}}"></a>
+                                            <a href="/page/player/{{Name}}" class="{{#YellowCard}}yellow{{/YellowCard}} {{#RedCard}}red{{/RedCard}}">{{Name}}</a>
+                                            {{#SubbedBy}}<a href="/page/player/{{SubbedBy}}" class="{{#SubYellow}}yellow{{/SubYellow}} {{#SubRed}}red{{/SubRed}}">({{SubbedBy}} {{SubTime}})</a>{{/SubbedBy}}
+                                        </td>
+                                        {{/fullback1}}
+                                        {{#defenders}}
+                                        <td colspan="{{defColspan}}">
+                                            <a href="/page/player/{{Name}}"><img src="{{bio.picLink}}"></a>
+                                            <a href="/page/player/{{Name}}" class="{{#YellowCard}}yellow{{/YellowCard}} {{#RedCard}}red{{/RedCard}}">{{Name}}</a>
+                                            {{#SubbedBy}}<a href="/page/player/{{SubbedBy}}" class="{{#SubYellow}}yellow{{/SubYellow}} {{#SubRed}}red{{/SubRed}}">({{SubbedBy}} {{SubTime}})</a>{{/SubbedBy}}
+                                        </td>
+                                        {{/defenders}}
+                                        {{#fullback2}}
+                                        <td colspan="{{defColspan}}">
+                                            <a href="/page/player/{{Name}}"><img src="{{bio.picLink}}"></a>
+                                            <a href="/page/player/{{Name}}" class="{{#YellowCard}}yellow{{/YellowCard}} {{#RedCard}}red{{/RedCard}}">{{Name}}</a>
+                                            {{#SubbedBy}}<a href="/page/player/{{SubbedBy}}" class="{{#SubYellow}}yellow{{/SubYellow}} {{#SubRed}}red{{/SubRed}}">({{SubbedBy}} {{SubTime}})</a>{{/SubbedBy}}
+                                        </td>
+                                        {{/fullback2}}
+                                    </tr>
+                                    <tr>
+                                        {{#wingers1}}
+                                        <td colspan="{{midColspan}}">
+                                            <a href="/page/player/{{Name}}"><img src="{{bio.picLink}}"></a>
+                                            <a href="/page/player/{{Name}}" class="{{#YellowCard}}yellow{{/YellowCard}} {{#RedCard}}red{{/RedCard}}">{{Name}}</a>
+                                            {{#SubbedBy}}<a href="/page/player/{{SubbedBy}}" class="{{#SubYellow}}yellow{{/SubYellow}} {{#SubRed}}red{{/SubRed}}">({{SubbedBy}} {{SubTime}})</a>{{/SubbedBy}}
+                                        </td>
+                                        {{/wingers1}}
+                                        {{#midfielders}}
+                                        <td colspan="{{midColspan}}">
+                                            <a href="/page/player/{{Name}}"><img src="{{bio.picLink}}"></a>
+                                            <a href="/page/player/{{Name}}" class="{{#YellowCard}}yellow{{/YellowCard}} {{#RedCard}}red{{/RedCard}}">{{Name}}</a>
+                                            {{#SubbedBy}}<a href="/page/player/{{SubbedBy}}" class="{{#SubYellow}}yellow{{/SubYellow}} {{#SubRed}}red{{/SubRed}}">({{SubbedBy}} {{SubTime}})</a>{{/SubbedBy}}
+                                        </td>
+                                        {{/midfielders}}
+                                        {{#wingers2}}
+                                        <td colspan="{{midColspan}}">
+                                            <a href="/page/player/{{Name}}"><img src="{{bio.picLink}}"></a>
+                                            <a href="/page/player/{{Name}}" class="{{#YellowCard}}yellow{{/YellowCard}} {{#RedCard}}red{{/RedCard}}">{{Name}}</a>
+                                            {{#SubbedBy}}<a href="/page/player/{{SubbedBy}}" class="{{#SubYellow}}yellow{{/SubYellow}} {{#SubRed}}red{{/SubRed}}">({{SubbedBy}} {{SubTime}})</a>{{/SubbedBy}}
+                                        </td>
+                                        {{/wingers2}}
+                                    </tr>
+                                    <tr>
+                                        {{#strikers}}
+                                        <td colspan="{{strColspan}}">
+                                            <a href="/page/player/{{Name}}"><img src="{{bio.picLink}}"></a>
+                                            <a href="/page/player/{{Name}}" class="{{#YellowCard}}yellow{{/YellowCard}} {{#RedCard}}red{{/RedCard}}">{{Name}}</a>
+                                            {{#SubbedBy}}<a href="/page/player/{{SubbedBy}}" class="{{#SubYellow}}yellow{{/SubYellow}} {{#SubRed}}red{{/SubRed}}">({{SubbedBy}} {{SubTime}})</a>{{/SubbedBy}}
+                                        </td>
+                                        {{/strikers}}
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-md-12">
+                                <h4>Previous 5 Matches</h4>
+                                <div id="previous-five-loading">
+                                    <div class="spinner-grow text-primary" role="status">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                </div>
+                                <div id="previous-five-content"></div>
+                            </div>
+                            <div class="col-md-12">
+                                <h4>Next 5 Matches</h4>
+                                <div id="next-five-loading">
+                                    <div class="spinner-grow text-primary" role="status">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                </div>
+                                <div id="next-five-content"></div>
+                            </div>
+                          </article>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{{>footer}}
+</body>
+</html>

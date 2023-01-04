@@ -1,0 +1,13 @@
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+  
+  <g id="left-sleeve">
+   <path id="svg_20" d="m131.09262,534.07187l-66.42734,0l0,-83.68575l66.42734,0l0,83.68575z" fill="#08a051"/>
+  </g>
+  <g id="right-sleeve">
+   <path id="svg_21" stroke="null" fill="#08a051" d="m380.30297,448.67353l65.40171,0l0,86.68575l-65.40171,0l0,-86.68575z"/>
+  </g>
+    <line stroke-linecap="null" stroke-linejoin="null" id="svg_48" y2="512.5" x2="69.5" y1="450.5" x1="68.5" opacity="undefined" fill-opacity="null" stroke-dasharray="null" stroke-width="8" stroke="#000000" fill="none"/>
+  <line stroke-linecap="null" stroke-linejoin="null" id="svg_49" y2="512.5" x2="84.5" y1="450.5" x1="83.5" opacity="undefined" fill-opacity="null" stroke-dasharray="null" stroke-width="8" stroke="#000000" fill="none"/>
+  <line stroke="#000000" stroke-linecap="null" stroke-linejoin="null" id="svg_50" y2="518.5" x2="430.07143" y1="448.5" x1="430.07143" opacity="undefined" fill-opacity="null" stroke-dasharray="null" stroke-width="6" fill="none"/>
+  <line stroke="#000000" stroke-linecap="null" stroke-linejoin="null" id="svg_51" y2="513.5" x2="443.07143" y1="444.5" x1="442.07143" opacity="undefined" fill-opacity="null" stroke-dasharray="null" stroke-width="8" fill="none"/>
+</svg>  

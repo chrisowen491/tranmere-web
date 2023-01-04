@@ -1,0 +1,11 @@
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+
+  <g id="collar" transform="rotate(-1.8462761640548706 255.9533996582044,337.8578491210934)">
+    <line stroke="#0000ff" id="svg_46" y2="363.06486" x2="258.52514" y1="312.65082" x1="210.48927" stroke-width="3" fill="none"/>
+    <line stroke="#0000ff" id="svg_48" y2="360.85241" x2="249.33614" y1="315.30138" x1="301.41754" stroke-width="3" fill="none"/>
+    <line fill="none" stroke="#ffffff" stroke-width="12" stroke-dasharray="null" fill-opacity="null" opacity="undefined" x1="203.51235" y1="320.84349" x2="262.14827" y2="373.57036" id="svg_49" stroke-linejoin="null" stroke-linecap="null" transform="rotate(2.981182336807251 232.83032226562275,347.2069091796874) "/>
+    <line fill="none" stroke="#ffffff" stroke-width="12" stroke-dasharray="null" fill-opacity="null" opacity="undefined" x1="247.39387" y1="320.42682" x2="306.02979" y2="373.15369" id="svg_50" stroke-linejoin="null" stroke-linecap="null" transform="rotate(-85.11904907226562 276.7118530273438,346.7902526855469) "/> 
+  </g>
+  
+
+</svg>  

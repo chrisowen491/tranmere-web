@@ -8,7 +8,7 @@ export async function onRequest(context) {
   } = context;
   
   let url = new URL(request.url)  
-  url.host = "api.ci1.tranmere-web.com"
+  url.host = "api.prod.tranmere-web.com"
 
   let new_request = new Request(url, request)
   new_request.headers.set("x-api-key", env.API_KEY)

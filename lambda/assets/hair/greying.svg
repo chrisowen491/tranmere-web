@@ -1,0 +1,18 @@
+
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+ <defs>
+  <linearGradient spreadMethod="pad" y2="0.15625" x2="0.48047" y1="0.63672" x1="0.49609" id="grey1">
+   <stop offset="0" stop-color="#cccccc"/>
+   <stop offset="1" stop-color="#HAIR"/>
+  </linearGradient>
+  <linearGradient spreadMethod="pad" y2="0.15625" x2="0.51953" y1="0.63672" x1="0.50391" id="grey2">
+   <stop offset="0" stop-color="#cccccc"/>
+   <stop offset="1" stop-color="#HAIR"/>
+  </linearGradient>
+ </defs>
+  <g id="hair">
+   <path d="m162.04359,81.75903l0,35.24097l28.4513,-32.89157s34.54801,5.63855 64.01543,5.63855s64.01543,-5.63855 64.01543,-5.63855l28.4513,32.89157l0,-35.24097c0,-23.61521 -41.39868,-42.75903 -92.46673,-42.75903c-51.06806,0 -92.46673,19.14384 -92.46673,42.75903l0.00002,0z" fill="#HAIR"/>
+   <path d="m347.58903,89.97894l-1.81545,59.97455l-21.0318,-60.61526l22.84725,0.64071z" stroke-opacity="null" stroke-width="null" fill="url(#grey1)"/>
+   <path d="m162.6961,85.63983l-1.81545,59.97455l26.71946,-59.27616l-24.90401,-0.69839z" stroke-opacity="null" stroke-width="null" fill="url(#grey2)"/>
+  </g>
+</svg>        

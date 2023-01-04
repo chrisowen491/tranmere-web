@@ -1,0 +1,7 @@
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+  <g id="hair">
+   <path id="svg_5" fill="#HAIR" d="m160.44486,85.69315l0,39.30723l29.09395,-36.68674s35.32836,6.28916 65.46137,6.28916s65.46137,-6.28916 65.46137,-6.28916l29.09395,36.68674l0,-39.30723c0,-26.34003 -42.33377,-47.69277 -94.55532,-47.69277c-52.22155,0 -94.55532,21.35274 -94.55532,47.69277z" stroke="null"/>
+   <ellipse ry="17.22772" rx="65.10367" id="svg_25" cy="90.93526" cx="254.48349" fill-opacity="null" stroke-opacity="null" stroke-width="null" fill="#SKIN" stroke="null"/>
+   <ellipse ry="22.82673" rx="26.35148" id="svg_26" cy="72.6966" cx="249.83323" stroke-opacity="null" stroke-width="null" fill="#HAIR" stroke="null"/>
+  </g>
+</svg>  
