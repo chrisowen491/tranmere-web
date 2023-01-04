@@ -93,7 +93,7 @@ export class TranmereWebStack extends cdk.Stack {
     }));
 
     const update_job_lambda = new NodejsFunction(this, 'UpdateJobFunction', {
-      entry: './lambda/updatejob.js',
+      entry: './lambda/updateJob.js',
       handler: 'handler', 
       memorySize: 1024,
       runtime: lambda.Runtime.NODEJS_16_X,
