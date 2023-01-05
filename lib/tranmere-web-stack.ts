@@ -319,7 +319,8 @@ export class TranmereWebStack extends cdk.Stack {
     );
 
     const media_sync = api.root.addResource('media-sync');
-    media_sync.addMethod(
+    const type = media_sync.addResource('{type}');
+    type.addMethod(
       'POST',
       new apigw.LambdaIntegration(media_sync_lambda, {proxy: true}),
     );
