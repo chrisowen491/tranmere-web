@@ -25,7 +25,7 @@ export async function onRequest(context) {
     return new Response(amendedBody, response)
   } else {
     let url = new URL(request.url)  
-    url.pathname = "404.html"
+    url.pathname = "error.html"
     return await fetch(new Request(url, request));
   }
 }
