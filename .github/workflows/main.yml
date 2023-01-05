@@ -28,7 +28,8 @@ jobs:
           CF_KEY: ${{ secrets.CF_KEY }}
           SCRAPE_ID: ${{ secrets.SCRAPE_ID }}
           SCRAPE_SEASON: ${{ secrets.SCRAPE_SEASON }}
-          SCRAPE_URL: ${{ secrets.SCRAPE_URL }}\
+          SCRAPE_URL: ${{ secrets.SCRAPE_URL }}
+          DD_KEY: ${{ secrets.DD_KEY }}
       - name: Post Deploy API Checks
         run: 
           newman run ./api_tests/postman-collection.json -e ./api_tests/env/aws-prod.json --env-var "testApiKey=${{ secrets.API_KEY }}"
