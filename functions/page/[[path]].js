@@ -16,11 +16,16 @@ export async function onRequest(context) {
   // If not in cache, get it from origin
   let response = await fetch(new_request)
 
-  let nav_response = await fetch(new Request('https://raw.githubusercontent.com/chrisowen491/tranmere-web/master/tranmere-web/templates/partials/homenav.partial.mustache'))
-  let nav_text = await nav_response.text();
-  let amendedBody = await response.text()
-  amendedBody = amendedBody.replace(/NAV_BAR_PLACEHOLDER/g, nav_text);
-
-  // Must use Response constructor to inherit all of response's fields
-  return new Response(amendedBody, response)
+  if(response.status < 400) {
+    let nav_response = await fetch(new Request('https://raw.githubusercontent.com/chrisowen491/tranmere-web/master/tranmere-web/templates/partials/homenav.partial.mustache'))
+    let nav_text = await nav_response.text();
+    let amendedBody = await response.text()
+    amendedBody = amendedBody.replace(/NAV_BAR_PLACEHOLDER/g, nav_text);
+    // Must use Response constructor to inherit all of response's fields
+    return new Response(amendedBody, response)
+  } else {
+    let url = new URL(request.url)  
+    url.pathname = "404.html"
+    return await fetch(new Request(url, request));
+  }
 }

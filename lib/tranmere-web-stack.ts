@@ -14,6 +14,7 @@ import { Datadog } from 'datadog-cdk-constructs-v2';
 
 
 const ENVIRONMENT : string = process.env.ENVIRONMENT!;
+const DD_KEY : string = process.env.DD_KEY!;
 const CF_KEY : string = process.env.CF_KEY!;
 const CF_SPACE : string = process.env.CF_SPACE!;
 const EMAIL_ADDRESS : string = process.env.EMAIL_ADDRESS!;
@@ -22,6 +23,7 @@ const SCRAPE_SEASON : string = process.env.SCRAPE_SEASON!;
 const SCRAPE_URL : string = process.env.SCRAPE_URL!;
 
 import * as pack from '../package.json';
+import { Tracing } from 'aws-cdk-lib/aws-lambda';
 // import * as sqs from 'aws-cdk-lib/aws-sqs';
 
 export class TranmereWebStack extends cdk.Stack {
@@ -29,14 +31,16 @@ export class TranmereWebStack extends cdk.Stack {
     super(scope, id, props);
 
     const datadog = new Datadog(this, "Datadog", {
-      nodeLayerVersion: 78,
+      nodeLayerVersion: 85,
+      extensionLayerVersion: 34,
       env: ENVIRONMENT,
+      site: "datadoghq.eu",
       service: pack.name,
       version: pack.version,
-      forwarderArn: `arn:aws:lambda:${this.region}:${this.account}:function:datadog-ForwarderStack-19X9T7BINWXOJ-Forwarder-DWZq1b3ofPJO`,
+      enableMergeXrayTraces: true,
+      //forwarderArn: `arn:aws:lambda:${this.region}:${this.account}:function:datadog-ForwarderStack-19X9T7BINWXOJ-Forwarder-DWZq1b3ofPJO`,
       tags: "owner:architecture,datadog:true",
-      enableDatadogTracing: true,
-      addLayers: true
+      apiKey: DD_KEY
     });
 
     const rootDomain = "tranmere-web.com";
@@ -503,7 +507,7 @@ export class TranmereWebStack extends cdk.Stack {
     }
 
     datadog.addLambdaFunctions([contact_us_lambda, media_sync_lambda, player_builder_lambda, results_search_lambda, player_search_lambda, match_page_lambda, match_update_lambda]);
-    datadog.addLambdaFunctions([hat_trick_job_lambda, update_job_lambda, scraper_job_lambda]);
+    datadog.addLambdaFunctions([page_lambda, hat_trick_job_lambda, update_job_lambda, scraper_job_lambda]);
 
   }
 }
