@@ -1,6 +1,6 @@
 {
   "name": "tranmere-web",
-  "version": "1.0.0",
+  "version": "v1.0.3",
   "description": "",
   "bin": {
     "tranmere-web": "bin/tranmere-web.js"
@@ -19,8 +19,7 @@
     "local-web-prod": "http-server web.out/ --proxy https://www.tranmere-web.com --proxy-options.secure false",
     "local-web": "http-server web.out/ --proxy http://localhost:3000 --proxy-options.secure false",
     "acceptance-test": "newman run ./api_tests/postman-collection.json -e ./api_tests/env/aws-prod.json --env-var 'testApiKey=123'",
-    "local-acceptance-test": "newman run ./api_tests/postman-collection.json -e ./api_tests/env/sam-local.json",
-    "set-tag": "export VERSION=\"$(git describe --tags --abbrev=0)\" && echo $VERSION"
+    "local-acceptance-test": "newman run ./api_tests/postman-collection.json -e ./api_tests/env/sam-local.json"
   },
   "author": "Chris Owen",
   "license": "ISC",

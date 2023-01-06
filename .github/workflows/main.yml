@@ -7,9 +7,6 @@ on:
 jobs:
   build_test_and_package:
     runs-on: ubuntu-latest
-    outputs:
-      tag:
-        ${{steps.tag_repo.outputs.new_tag}}
     steps:
       - uses: actions/checkout@v3
       - name: Install AWS CDK
@@ -21,21 +18,19 @@ jobs:
         run: npm run test
         env:
           DD_KEY: ${{ secrets.DD_KEY }}
-      - name: Bump version and push tag
-        id: tag_repo
-        uses: anothrNick/github-tag-action@1.55.0
+      - name: "Automated Version Bump"
+        uses: "phips28/gh-action-bump-version@master"
+        with:
+          tag-prefix: 'v'
         env:
-          GITHUB_TOKEN: ${{ github.token }}
-          WITH_V: true  
-          RELEASE_BRANCHES: .* 
-          INITIAL_VERSION: 1.0.1  
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}          
 
   trigger_web_deploy:
     runs-on: ubuntu-latest
     needs: build_test_and_package
     steps:
       - name: Call Web Hook
-        run: curl https://api.cloudflare.com/client/v4/pages/webhooks/deploy_hooks/d244ae02-7152-4c32-b6c8-d75c023e735c       
+        run: curl -X POST https://api.cloudflare.com/client/v4/pages/webhooks/deploy_hooks/d244ae02-7152-4c32-b6c8-d75c023e735c       
 
   aws_cdk:
     runs-on: ubuntu-latest
@@ -62,7 +57,6 @@ jobs:
           SCRAPE_SEASON: ${{ secrets.SCRAPE_SEASON }}
           SCRAPE_URL: ${{ secrets.SCRAPE_URL }}
           DD_KEY: ${{ secrets.DD_KEY }}
-          VERSION: ${{needs.build_test_and_package.outputs.tag}}
 
   api_acceptance_test:
     runs-on: ubuntu-latest
