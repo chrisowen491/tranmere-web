@@ -7,6 +7,8 @@ on:
 jobs:
   build_test_and_package:
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.bump.outputs.version }}
     steps:
       - uses: actions/checkout@v3
       - name: Install AWS CDK
@@ -18,13 +20,15 @@ jobs:
         run: npm run test
         env:
           DD_KEY: ${{ secrets.DD_KEY }}
-      - name: "Automated Version Bump"
-        uses: "phips28/gh-action-bump-version@master"
+      - name: Automated Version Bump
+        uses: phips28/gh-action-bump-version@master
         with:
           tag-prefix: 'v'
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}          
-
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - id: bump
+        run: echo "version=$(node tag.js)" >> $GITHUB_OUTPUT
+        
   trigger_web_deploy:
     runs-on: ubuntu-latest
     needs: build_test_and_package
@@ -57,6 +61,7 @@ jobs:
           SCRAPE_SEASON: ${{ secrets.SCRAPE_SEASON }}
           SCRAPE_URL: ${{ secrets.SCRAPE_URL }}
           DD_KEY: ${{ secrets.DD_KEY }}
+          VERSION: ${{needs.build_test_and_package.outputs.version}}
 
   api_acceptance_test:
     runs-on: ubuntu-latest
