@@ -13,7 +13,9 @@ const client = contentful.createClient({
 });
 const search_client = algoliasearch(process.env.AL_SPACE, process.env.AL_KEY);
 const search_index = search_client.initIndex(process.env.AL_INDEX);
-const version = process.env.VERSION;
+const version = process.env.npm_config_version_var;
+
+console.log(version);
 
 var utils = require('./tranmere-web/libs/utils')(path, fs, Mustache, axios, process.env.API_KEY, process.env.APPSYNC_KEY);
 
