@@ -15,7 +15,6 @@
     "watch": "tsc -w",
     "test": "jest",
     "cdk": "cdk",
-    "pretest": "eslint .",
     "local-api": "cdk synth && sam local start-api -t ./cdk.out/TranmereWebStack.template.json",
     "local-web-prod": "http-server web.out/ --proxy https://www.tranmere-web.com --proxy-options.secure false",
     "local-web": "http-server web.out/ --proxy http://localhost:3000 --proxy-options.secure false",

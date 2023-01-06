@@ -13,6 +13,7 @@ const client = contentful.createClient({
 });
 const search_client = algoliasearch(process.env.AL_SPACE, process.env.AL_KEY);
 const search_index = search_client.initIndex(process.env.AL_INDEX);
+const version = process.env.VERSION;
 
 var utils = require('./tranmere-web/libs/utils')(path, fs, Mustache, axios, process.env.API_KEY, process.env.APPSYNC_KEY);
 
@@ -65,7 +66,7 @@ async function run () {
         page.seasons = seasons;
         page.image = utils.buildImagePath("photos/kop.jpg", 1920,1080);
         page.dd_app = pack.name;
-        page.dd_version = pack.version;
+        page.dd_version = version;
 
         if(page.sections) {
             var sectionContent = "";

@@ -21,6 +21,7 @@ export CF_KEY=
 export AL_SPACE=
 export AL_KEY=
 export AL_INDEX=
+export VERSION=
 ```
 
 ```bash
@@ -48,6 +49,7 @@ export SCRAPE_ID=
 export SCRAPE_SEASON=
 export SCRAPE_ID=
 export DD_KEY=
+export VERSION=
 ```
 
 ### Deployment

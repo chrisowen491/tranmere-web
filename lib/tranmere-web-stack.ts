@@ -20,6 +20,7 @@ const EMAIL_ADDRESS : string = process.env.EMAIL_ADDRESS!;
 const SCRAPE_ID : string = process.env.SCRAPE_ID!;
 const SCRAPE_SEASON : string = process.env.SCRAPE_SEASON!;
 const SCRAPE_URL : string = process.env.SCRAPE_URL!;
+const VERSION : string = process.env.VERSION!;
 
 import * as pack from '../package.json';
 
@@ -33,7 +34,7 @@ export class TranmereWebStack extends cdk.Stack {
       env: ENVIRONMENT,
       site: "datadoghq.eu",
       service: pack.name,
-      version: pack.version,
+      version: VERSION,
       enableMergeXrayTraces: true,
       //forwarderArn: `arn:aws:lambda:${this.region}:${this.account}:function:datadog-ForwarderStack-19X9T7BINWXOJ-Forwarder-DWZq1b3ofPJO`,
       tags: "owner:architecture,datadog:true",
@@ -50,7 +51,7 @@ export class TranmereWebStack extends cdk.Stack {
       "SCRAPE_SEASON": SCRAPE_SEASON,
       "SCRAPE_URL": SCRAPE_URL,
       "DD_SERVICE": pack.name,
-      "DD_VERSION": pack.version,
+      "DD_VERSION": VERSION,
       "DD_ENV": ENVIRONMENT
     }
 
