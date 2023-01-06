@@ -1,13 +1,13 @@
 {
   "name": "tranmere-web",
-  "version": "v1.0.3",
+  "version": "1.1.0",
   "description": "",
   "bin": {
     "tranmere-web": "bin/tranmere-web.js"
   },
-  "engines" : { 
-    "npm" : ">=8.19.2",
-    "node" : ">=16.18.1"
+  "engines": {
+    "npm": ">=8.19.2",
+    "node": ">=16.18.1"
   },
   "scripts": {
     "build-web": "node build-website",
