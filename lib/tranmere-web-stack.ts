@@ -36,7 +36,6 @@ export class TranmereWebStack extends cdk.Stack {
       service: pack.name,
       version: VERSION,
       enableMergeXrayTraces: true,
-      //forwarderArn: `arn:aws:lambda:${this.region}:${this.account}:function:datadog-ForwarderStack-19X9T7BINWXOJ-Forwarder-DWZq1b3ofPJO`,
       tags: "owner:architecture,datadog:true",
       apiKey: DD_KEY
     });

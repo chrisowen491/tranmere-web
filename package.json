@@ -6,8 +6,8 @@
     "tranmere-web": "bin/tranmere-web.js"
   },
   "engines" : { 
-    "npm" : ">=8.19.3",
-    "node" : ">=16.19.0"
+    "npm" : ">=8.19.2",
+    "node" : ">=16.18.1"
   },
   "scripts": {
     "build-web": "node build-website",

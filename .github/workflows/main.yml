@@ -19,6 +19,8 @@ jobs:
         run: npm install
       - name: Unit Test
         run: npm run test
+        env:
+          DD_KEY: ${{ secrets.DD_KEY }}
       - name: Bump version and push tag
         id: tag_repo
         uses: anothrNick/github-tag-action@1.55.0
@@ -27,17 +29,6 @@ jobs:
           WITH_V: true  
           RELEASE_BRANCHES: .* 
           INITIAL_VERSION: v1.0.1  
-          AWS_REGION: eu-west-1
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          ENVIRONMENT: prod
-          EMAIL_ADDRESS: ${{ secrets.EMAIL_ADDRESS }}
-          CF_SPACE: ${{ secrets.CF_SPACE }}
-          CF_KEY: ${{ secrets.CF_KEY }}
-          SCRAPE_ID: ${{ secrets.SCRAPE_ID }}
-          SCRAPE_SEASON: ${{ secrets.SCRAPE_SEASON }}
-          SCRAPE_URL: ${{ secrets.SCRAPE_URL }}
-          DD_KEY: ${{ secrets.DD_KEY }}
 
   aws_cdk:
     runs-on: ubuntu-latest
