@@ -20,7 +20,7 @@ function search() {
   $("#loading").show();
   $("#content").hide();
   var dateobj = new Date();
-  var base = window.location.hostname == "www.tranmere-web.com" ? '' : "https://www.tranmere-web.com";
+  var base = "";
   var url = base + '/player-search/?season='+ $('#season').val()
               + '&sort=' + $('#sort').val()
               + '&filter=' + $('#filter').val()

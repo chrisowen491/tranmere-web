@@ -75,6 +75,10 @@ exports.handler = async function (event, context) {
         
         var pl = playerSearch.Items.length == 1 ? playerSearch.Items[0] : null 
 
+        if(playerSearch.Items.length == 0 && debutSearch.Items.length == 0 && summarySearch.Items.length == 0){
+            throw new Error("Player has no records")
+        }
+
         view = {
             name: decodeURIComponent(playerName),
             debut: debutSearch.Items[0],

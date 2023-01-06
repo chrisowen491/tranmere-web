@@ -5,7 +5,7 @@ function search() {
   $("#loading").show();
   $("#content").hide();
   var dateobj = new Date();
-  var base = window.location.hostname == "www.tranmere-web.com" ? '' : "https://www.tranmere-web.com";
+  var base = "";
   var url = base + '/result-search/?season='+ $('#season').val()
               + '&competition='+ $('#competition').val()
               + '&opposition=' + $('#opposition').val().replace('&','%26')

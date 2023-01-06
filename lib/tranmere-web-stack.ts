@@ -12,7 +12,6 @@ import * as appsync from '@aws-cdk/aws-appsync-alpha';
 import { MappingTemplate } from '@aws-cdk/aws-appsync-alpha';
 import { Datadog } from 'datadog-cdk-constructs-v2';
 
-
 const ENVIRONMENT : string = process.env.ENVIRONMENT!;
 const DD_KEY : string = process.env.DD_KEY!;
 const CF_KEY : string = process.env.CF_KEY!;
@@ -23,8 +22,6 @@ const SCRAPE_SEASON : string = process.env.SCRAPE_SEASON!;
 const SCRAPE_URL : string = process.env.SCRAPE_URL!;
 
 import * as pack from '../package.json';
-import { Tracing } from 'aws-cdk-lib/aws-lambda';
-// import * as sqs from 'aws-cdk-lib/aws-sqs';
 
 export class TranmereWebStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -507,8 +504,9 @@ export class TranmereWebStack extends cdk.Stack {
       });
     }
 
-    datadog.addLambdaFunctions([contact_us_lambda, media_sync_lambda, player_builder_lambda, results_search_lambda, player_search_lambda, match_page_lambda, match_update_lambda]);
-    datadog.addLambdaFunctions([page_lambda, hat_trick_job_lambda, update_job_lambda, scraper_job_lambda]);
-
+    if(ENVIRONMENT === "prod") {
+      datadog.addLambdaFunctions([contact_us_lambda, media_sync_lambda, player_builder_lambda, results_search_lambda, player_search_lambda, match_page_lambda, match_update_lambda]);
+      datadog.addLambdaFunctions([page_lambda, hat_trick_job_lambda, update_job_lambda, scraper_job_lambda]);
+    }
   }
 }

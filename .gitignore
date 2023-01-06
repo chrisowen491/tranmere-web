@@ -25,4 +25,5 @@ web.out
 /tranmere-web-api/sam/search/package-lock.json
 
 set_env.sh
-
+template.yml
+.aws-sam

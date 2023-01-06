@@ -1,26 +1,86 @@
 # Tranmere Web.com
 
-This site is a demo site using Tarnmere Rovers data to demonstrate all sorts of website functionality. 
-It is not meant as a commercial entity, and is purely for fun. 
+This site is a demo site using Tarnmere Rovers data to demonstrate all sorts of website functionality. It is not meant as a commercial entity, and is purely for fun. 
 
-
-## tranmere-web
-Source code for Tranmere-Web.com. The site is a static site designed to be deployed onto Amazon S3.
-There are a number of NPM scripts which build a local Elastic Search index, and then use this to generate a set of HTML files. 
+## Frontend - Static HTML, JQuery, Saas
+Source code for Tranmere-Web.com. The site is a static site designed to be deployed via cloudflare pages.
 
 ### Prerequisites
 
  * Scripts are designed for Linux/Mac
- * Node, NPM
- * Elastic search running locally on port 9200 
+ * Node v16+, NPM
 
 ### Building
 
- * npm install
- * npm run build-web
- * gulp 
+Set Key Env variables
 
-### Deploying
+```bash
+export ENVIRONMENT=local
+export CF_SPACE=
+export CF_KEY=
+export AL_SPACE=
+export AL_KEY=
+export AL_INDEX=
+```
 
- * aws s3 sync ./tranmere-web/output/site s3://www.tranmere-web.com
- * aws s3 sync ./images s3://trfc-programmes
+```bash
+$ npm install
+$ npm run build-web
+$ gulp deploy
+```
+
+### Local Testing (Using production backend)
+
+```bash
+$ npm run local-web-prod
+```
+
+## Backend - AWS Lambda, AppSync, CDK
+
+Set Key Env variables
+
+```bash
+export ENVIRONMENT=
+export EMAIL_ADDRESS=
+export CF_SPACE=
+export CF_KEY=
+export SCRAPE_ID=
+export SCRAPE_SEASON=
+export SCRAPE_ID=
+export DD_KEY=
+```
+
+### Deployment
+
+```bash
+$ cdk deploy
+```
+
+### Local Testing
+
+
+Make sure AWS SAM is installed
+
+```bash
+$ brew tap aws/tap
+$ brew install aws-sam-cli
+$ sam --version
+```
+
+You will need docker runing too.
+
+```bash
+$ npm run local-api
+```
+
+### Running Local Acceptance Tests 
+
+```bash
+$ npm run local-acceptance-test
+```
+
+## Deploying Images
+
+```bash
+$ aws s3 sync ./images s3://trfc-programmes
+```

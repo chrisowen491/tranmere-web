@@ -1,6 +1,6 @@
 {
 	"id": "886144eb-13dd-47d8-81d8-eb7097840a47",
-	"name": "aws-sit1",
+	"name": "aws-prod",
 	"values": [
 		{
 			"key": "domain",

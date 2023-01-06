@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "da0cdf2a-8302-495b-82bd-944c0c62e577",
+		"_postman_id": "6a0f146d-154b-4ba8-90f4-a871f8f3f365",
 		"name": "tranmere-web-api-tests",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -8,6 +8,46 @@
 		{
 			"name": "Page-Test",
 			"item": [
+				{
+					"name": "Home-Test",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{testApiKey}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{protocol}}://{{domain}}/page/home/home",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"page",
+								"home",
+								"home"
+							]
+						}
+					},
+					"response": []
+				},
 				{
 					"name": "Page-Test",
 					"event": [
@@ -34,14 +74,56 @@
 							}
 						],
 						"url": {
-							"raw": "{{protocol}}://{{domain}}/page/blog/7GNQCz3dEPOCvuyfcHTWvA",
+							"raw": "{{protocol}}://{{domain}}/page/blog/7GNQCz3dEPOCvuyfcHTWvA/",
 							"protocol": "{{protocol}}",
 							"host": [
 								"{{domain}}"
 							],
 							"path": [
-								"page/blog/7GNQCz3dEPOCvuyfcHTWvA",
+								"page",
+								"blog",
+								"7GNQCz3dEPOCvuyfcHTWvA",
 								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "JohnAldridge-Test",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{testApiKey}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{protocol}}://{{domain}}/page/player/John%20Aldridge",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"page",
+								"player",
+								"John%20Aldridge"
 							]
 						}
 					},
@@ -121,22 +203,28 @@
 					"request": {
 						"method": "GET",
 						"header": [
-							
-								{
-									"key": "x-api-key",
-									"value": "{{testApiKey}}",
-									"type": "text"
-								}
-						  	
+							{
+								"key": "x-api-key",
+								"value": "{{testApiKey}}",
+								"type": "text"
+							}
 						],
 						"url": {
-							"raw": "{{protocol}}://{{domain}}/builder/2000/curly/ffd3b3/none/a8890d/fcb98b/LightGray/8e740c",
+							"raw": "{{protocol}}://{{domain}}/builder/2000/curly/ffd3b3/none/a8890d/fcb98b/LightGray/8e740c/",
 							"protocol": "{{protocol}}",
 							"host": [
 								"{{domain}}"
 							],
 							"path": [
-								"builder/2000/curly/ffd3b3/none/a8890d/fcb98b/LightGray/8e740c",
+								"builder",
+								"2000",
+								"curly",
+								"ffd3b3",
+								"none",
+								"a8890d",
+								"fcb98b",
+								"LightGray",
+								"8e740c",
 								""
 							]
 						}
@@ -202,7 +290,7 @@
 			]
 		},
 		{
-			"name": "Sunderland-Test",
+			"name": "Match-Test",
 			"item": [
 				{
 					"name": "Sunderland-Test",
@@ -223,22 +311,22 @@
 					"request": {
 						"method": "GET",
 						"header": [
-							
-								{
-									"key": "x-api-key",
-									"value": "{{testApiKey}}",
-									"type": "text"
-								}
-						  	
+							{
+								"key": "x-api-key",
+								"value": "{{testApiKey}}",
+								"type": "text"
+							}
 						],
 						"url": {
-							"raw": "{{protocol}}://{{domain}}/match/2020/2021-03-14",
+							"raw": "{{protocol}}://{{domain}}/match/2020/2021-03-14/",
 							"protocol": "{{protocol}}",
 							"host": [
 								"{{domain}}"
 							],
 							"path": [
-								"match/2020/2021-03-14",
+								"match",
+								"2020",
+								"2021-03-14",
 								""
 							]
 						}
@@ -251,7 +339,7 @@
 			"name": "GraphQL-Test",
 			"item": [
 				{
-					"name": "GraphQL-Test",
+					"name": "Player-Test",
 					"event": [
 						{
 							"listen": "test",
@@ -273,17 +361,121 @@
 					],
 					"request": {
 						"method": "GET",
-						"header": [
-						],
+						"header": [],
 						"url": {
-							"raw": "{{protocol}}://{{domain}}/graphql?query=%7BlistTranmereWebPlayerTable%28limit%3A1%29%7Bitems%7Bname%7D%7D%7D",
+							"raw": "{{protocol}}://{{domain}}/graphql?query=%7BlistTranmereWebPlayerTable%28limit%3A1%29%7Bitems%7Bname%7D%7D%7D/",
 							"protocol": "{{protocol}}",
 							"host": [
 								"{{domain}}"
 							],
 							"path": [
-								"graphql?query=%7BlistTranmereWebPlayerTable%28limit%3A1%29%7Bitems%7Bname%7D%7D%7D",
-								""
+								"graphql"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "%7BlistTranmereWebPlayerTable%28limit%3A1%29%7Bitems%7Bname%7D%7D%7D/"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Clubs-Test",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response\", function () {",
+									"    let response = pm.response.json();",
+									"    pm.expect(response.data.listTranmereWebClubs.items[0].name).to.eql('Bangor City');",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{protocol}}://{{domain}}/graphql?query=%7BlistTranmereWebClubs%28limit%3A1%29%7Bitems%7Bname%7D%7D%7D",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"graphql"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "%7BlistTranmereWebClubs%28limit%3A1%29%7Bitems%7Bname%7D%7D%7D"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ContactUs-Test",
+			"item": [
+				{
+					"name": "ContactUs",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{testApiKey}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"Chris\",\n    \"email\":\"test@test.com\",\n    \"desc\":\"Just a test\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{protocol}}://{{domain}}/contact-us",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"contact-us"
 							]
 						}
 					},
