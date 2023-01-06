@@ -41,6 +41,7 @@ jobs:
 
   aws_cdk:
     runs-on: ubuntu-latest
+    needs: build_test_and_package
     steps:         
       - name: Deploy CDK
         run: |
