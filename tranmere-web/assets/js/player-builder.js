@@ -1,5 +1,5 @@
 function draw() {
-  var base = "";
+  var base = "/builder/";
   var url = $('#kit').val() +'/' + $('#hair').val() + '/' + $('#skinColour').val() + '/'
     + $('#feature').val() + '/' + $('#colour').val() + '/' + $('#neckColour').val() + '/'
     + $('#background').val()+ '/' + $('#highlights').val();
