@@ -68,7 +68,19 @@ exports.handler = async function (event, context) {
             }        
             if(filter == "STR" && results[i].bio && results[i].bio.position  == "Striker") {
                 newResults.push(results[i]);
-            }                    
+            }
+            if(filter == "CM" && results[i].bio && results[i].bio.position  == "Central Midfielder") {
+                newResults.push(results[i]);
+            }   
+            if(filter == "WIN" && results[i].bio && results[i].bio.position  == "Winger") {
+                newResults.push(results[i]);
+            }   
+            if(filter == "FB" && results[i].bio && results[i].bio.position  == "Full Back") {
+                newResults.push(results[i]);
+            }   
+            if(filter == "CD" && results[i].bio && results[i].bio.position  == "Central Defender") {
+                newResults.push(results[i]);
+            }                       
         }
         results = newResults;
     }
