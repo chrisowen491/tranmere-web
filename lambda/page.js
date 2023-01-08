@@ -12,6 +12,7 @@ const client = contentful.createClient({
 exports.handler = async function (event, context) {
     var pageName = event.pathParameters.pageName;
     var classifier = event.pathParameters.classifier;
+    var view = {};
 
     if(pageName === "home") {
         const content = await client.getEntries({'content_type': 'blogPost', order: '-sys.createdAt'});
