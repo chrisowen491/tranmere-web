@@ -19,6 +19,7 @@ const SCRAPE_ID : string = process.env.SCRAPE_ID!;
 const SCRAPE_SEASON : string = process.env.SCRAPE_SEASON!;
 const SCRAPE_URL : string = process.env.SCRAPE_URL!;
 const VERSION : string = process.env.VERSION!;
+const DD_TAGS : string = process.env.DD_TAGS!;
 
 import * as pack from '../package.json';
 
@@ -37,7 +38,8 @@ export class TranmereWebStack extends cdk.Stack {
       "SCRAPE_URL": SCRAPE_URL,
       "DD_SERVICE": pack.name,
       "DD_VERSION": VERSION,
-      "DD_ENV": ENVIRONMENT
+      "DD_ENV": ENVIRONMENT,
+      "DD_TAGS": DD_TAGS
     }
 
     // Base API gateway

@@ -61,6 +61,7 @@ jobs:
           SCRAPE_SEASON: ${{ secrets.SCRAPE_SEASON }}
           SCRAPE_URL: ${{ secrets.SCRAPE_URL }}
           VERSION: ${{needs.build_test_and_package.outputs.version}}
+          DD_TAGS: git.commit.sha:{{ github.sha }} git.repository_url:https://github.com/${{github.repository}}
 
   data_dog:
     runs-on: ubuntu-latest
