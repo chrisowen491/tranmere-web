@@ -1,7 +1,7 @@
 const AWS = require('aws-sdk');
 let dynamo = new AWS.DynamoDB.DocumentClient();
 const request = require('axios');
-const utils = require('./libs/utils')();
+const utils = require('../lib/utils')();
 const theSeason = process.env.SCRAPE_SEASON;
 const id = process.env.SCRAPE_ID;
 const baseUrl = process.env.SCRAPE_URL;

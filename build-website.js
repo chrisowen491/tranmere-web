@@ -1,10 +1,8 @@
-const Mustache = require("mustache");
 const fs = require("fs");
-const path = require('path');
-const axios = require('axios')
 const contentful = require("contentful");
 const contentfulSDK = require('@contentful/rich-text-html-renderer');
 const algoliasearch = require('algoliasearch');
+const utils = require('./lib/utils')();
 const pack = require('./package.json');
 
 const client = contentful.createClient({
@@ -13,8 +11,6 @@ const client = contentful.createClient({
 });
 const search_client = algoliasearch(process.env.AL_SPACE, process.env.AL_KEY);
 const search_index = search_client.initIndex(process.env.AL_INDEX);
-
-var utils = require('./tranmere-web/libs/utils')(path, fs, Mustache, axios, process.env.API_KEY, process.env.APPSYNC_KEY);
 
 async function run () {
 
@@ -91,7 +87,7 @@ async function run () {
             page.cardBlocksHTML = blockContent;
         }
         var fileName = page.key.toLowerCase();
-        utils.buildPage(page,`./tranmere-web/templates/${page.template}`,`./web.out/${fileName}.html` );
+        utils.buildPageView(page,`./templates/${page.template}`,`./web.out/${fileName}.html` );
         var pageMeta = {
             objectID: "Page-" + page.key.toLowerCase(),
             link: `https://www.tranmere-web.com/${fileName}.html`,
@@ -122,6 +118,6 @@ async function run () {
         search_index.saveObject(competitions[i]);
     }
 
-    utils.buildPage({urls:utils.pages}, "./tranmere-web/templates/sitemap.tpl.xml", './web.out/sitemap.xml');
+    utils.buildPageView({urls:utils.pages}, "./templates/sitemap.tpl.xml", './web.out/sitemap.xml');
 }
 run().catch(console.log)

@@ -1,6 +1,6 @@
 const AWS = require('aws-sdk');
 const contentful = require("contentful");
-const utils = require('./libs/utils')();
+const utils = require('../lib/utils')();
 let dynamo = new AWS.DynamoDB.DocumentClient();
 const client = contentful.createClient({
   space: process.env.CF_SPACE,

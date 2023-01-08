@@ -1,6 +1,6 @@
 const AWS = require('aws-sdk');
 let dynamo = new AWS.DynamoDB.DocumentClient();
-const utils = require('./libs/utils')();
+const utils = require('../lib/utils')();
 const contentful = require("contentful");
 const pages = require('./pages.json');
 const contentfulSDK = require('@contentful/rich-text-html-renderer');

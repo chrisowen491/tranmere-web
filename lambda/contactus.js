@@ -1,6 +1,6 @@
 const AWS = require('aws-sdk');
 const ses = new AWS.SES();
-const utils = require('./libs/utils')();
+const utils = require('../lib/utils')();
 
 const RECEIVER = process.env.EMAIL_ADDRESS;
 const SENDER = 'admin@tranmere-web.com';

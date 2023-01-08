@@ -167,7 +167,7 @@ export class TranmereWebStack extends cdk.Stack {
             return [];
           },
           afterBundling(inputDir: string, outputDir: string): string[] {
-            return [`mkdir ${outputDir}/templates && cp -R ${inputDir}/tranmere-web/templates/* ${outputDir}/templates`];
+            return [`mkdir ${outputDir}/templates && cp -R ${inputDir}/templates/* ${outputDir}/templates`];
           },
           beforeInstall() {
             return [];
@@ -204,7 +204,7 @@ export class TranmereWebStack extends cdk.Stack {
             return [];
           },
           afterBundling(inputDir: string, outputDir: string): string[] {
-            return [`mkdir ${outputDir}/templates && cp -R ${inputDir}/tranmere-web/templates/* ${outputDir}/templates`];
+            return [`mkdir ${outputDir}/templates && cp -R ${inputDir}/templates/* ${outputDir}/templates`];
           },
           beforeInstall() {
             return [];

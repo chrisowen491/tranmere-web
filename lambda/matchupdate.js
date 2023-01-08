@@ -1,6 +1,6 @@
 const AWS = require('aws-sdk');
 let dynamo = new AWS.DynamoDB.DocumentClient();
-const utils = require('./libs/utils')();
+const utils = require('../lib/utils')();
 
 exports.handler = async function (event, context) {
 
