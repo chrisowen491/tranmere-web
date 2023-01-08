@@ -2,7 +2,6 @@ const AWS = require('aws-sdk');
 let dynamo = new AWS.DynamoDB.DocumentClient();
 const utils = require('../lib/utils')();
 const contentful = require("contentful");
-const pages = require('./pages.json');
 const contentfulSDK = require('@contentful/rich-text-html-renderer');
 
 const client = contentful.createClient({
@@ -170,6 +169,6 @@ exports.handler = async function (event, context) {
     }
 
     const maxAge = pageName === "player" ? 86400 : 2592000;
-    const page = utils.buildPage(view, pages[pageName].template);
+    const page = utils.buildPage(view, `./templates/${pageName}.tpl.html`);
     return utils.sendHTMLResponse(page, maxAge); 
 };

@@ -22,10 +22,8 @@ async function run () {
     var pages = await client.getEntries({'content_type': 'pageMetaData'});
 
     var seasons = [];
-    var theDate = new Date();
-    var theYear = theDate.getUTCMonth() > 6 ? theDate.getFullYear() : theDate.getFullYear() -1;
 
-    for(var i = theYear; i > 1920; i--) {
+    for(var i = utils.getYear(); i > 1920; i--) {
         seasons.push(i);
         utils.addSiteMapEntry("/results.html?season="+i);
         var seasonResults = {
