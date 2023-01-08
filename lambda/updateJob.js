@@ -1,24 +1,23 @@
 const AWS = require('aws-sdk');
 let dynamo = new AWS.DynamoDB.DocumentClient();
-const {getYear} = require('./libs/helpers');
-const TABLE_NAME = "TranmereWebPlayerSeasonSummaryTable";
+const utils = require('./libs/utils')();
 
 exports.handler = async function (event, context) {
    console.log('Received event:', event);
 
     var playerTotalsHash = {};
 
-    for(var i = 1977; i <= getYear(); i++) {
+    for(var i = 1977; i <= utils.getYear(); i++) {
         var playerHash = {};
         var appsQuery = {
-            TableName:"TranmereWebAppsTable",
+            TableName: utils.APPS_TABLE_NAME,
             KeyConditionExpression :  "Season = :season",
             ExpressionAttributeValues: {
                 ":season" : i.toString()
             }
         };
         var goalsQuery = {
-            TableName:"TranmereWebGoalsTable",
+            TableName: utils.GOALS_TABLE_NAME,
             KeyConditionExpression :  "Season = :season",
             ExpressionAttributeValues: {
                 ":season" : i.toString()
@@ -84,7 +83,7 @@ exports.handler = async function (event, context) {
         for (var key in playerHash) {
             if (Object.prototype.hasOwnProperty.call(playerHash, key)) {
                 if(key != "")
-                    await dynamo.put({Item: playerHash[key], TableName: TABLE_NAME}).promise();
+                    await dynamo.put({Item: playerHash[key], TableName: utils.SUMMARY_TABLE_NAME}).promise();
 
                 console.log("Updated DB for " + key + " during season "  + i);
                 if(!playerTotalsHash[key]) {
@@ -107,7 +106,7 @@ exports.handler = async function (event, context) {
     for (var key in playerTotalsHash) {
         if (Object.prototype.hasOwnProperty.call(playerTotalsHash, key)) {
             if(key != "")
-                await dynamo.put({Item: playerTotalsHash[key], TableName: TABLE_NAME}).promise();
+                await dynamo.put({Item: playerTotalsHash[key], TableName: utils.SUMMARY_TABLE_NAME}).promise();
         }
     }
 

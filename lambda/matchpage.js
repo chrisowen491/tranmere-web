@@ -1,16 +1,8 @@
 const AWS = require('aws-sdk');
 let dynamo = new AWS.DynamoDB.DocumentClient();
-
-var Mustache = require("mustache");
-var fs = require("fs");
-var path = require('path');
-var utils = require('./libs/utils')(path,fs,Mustache);
+const utils = require('./libs/utils')();
 var playerMap = {};
 
-const APPS_TABLE_NAME = "TranmereWebAppsTable";
-const PLAYER_TABLE_NAME = "TranmereWebPlayerTable";
-const GOALS_TABLE_NAME = "TranmereWebGoalsTable";
-const RESULTS_TABLE = "TranmereWebGames"
 const re = /\/\d\d\d\d\//gm;
 const re3 = /\/\d\d\d\d[A-Za-z]\//gm;
 const seasonMapping = {
@@ -29,11 +21,11 @@ const seasonMapping = {
 
 exports.handler = async function (event, context) {
 
-    var date = event.pathParameters.date;
-    var season = event.pathParameters.season;
+    const date = event.pathParameters.date;
+    const season = event.pathParameters.season;
 
     if(!playerMap["John Aldridge"]) {
-        var squadSearch = await dynamo.scan({TableName:PLAYER_TABLE_NAME}).promise();
+        var squadSearch = await dynamo.scan({TableName:utils.PLAYER_TABLE_NAME}).promise();
         for(var i=0; i < squadSearch.Items.length; i++) {
             playerMap[squadSearch.Items[i].name] = squadSearch.Items[i];
         }
@@ -142,22 +134,8 @@ exports.handler = async function (event, context) {
     var page = utils.buildPage(view, './templates/match.tpl.html');
 
     var maxAge = season == 2021 ? 86400 : 2592000;
-
-    return {
-        "isBase64Encoded": false,
-        "headers": {
-            "Content-Type": "text/html",
-            "Content-Security-Policy" : "upgrade-insecure-requests",
-            "Strict-Transport-Security" : "max-age=1000",
-            "X-Xss-Protection" : "1; mode=block",
-            "X-Frame-Options" : "DENY",
-            "X-Content-Type-Options" : "nosniff",
-            "Referrer-Policy" : "strict-origin-when-cross-origin",
-            "Cache-Control": "public, max-age=" + maxAge
-        },
-        "statusCode": 200,
-        "body": page
-    };
+    
+    return utils.sendHTMLResponse(page, maxAge); 
 };
 
 function formatGoals(goals) {
@@ -187,7 +165,7 @@ function formatGoals(goals) {
 async function getResults(season, date) {
 
     var params = {
-        TableName : RESULTS_TABLE,
+        TableName : utils.RESULTS_TABLE,
         KeyConditionExpression:  "season = :season and #date = :date",
         ExpressionAttributeValues: {
         ":season": decodeURIComponent(season),
@@ -202,7 +180,7 @@ async function getResults(season, date) {
 async function getGoals(date, season) {
 
     var params = {
-        TableName : GOALS_TABLE_NAME,
+        TableName : utils.GOALS_TABLE_NAME,
         KeyConditionExpression :  "Season = :season",
         FilterExpression : "#Date = :date",
         ExpressionAttributeNames : {
@@ -220,7 +198,7 @@ async function getGoals(date, season) {
 async function getApps(date, season) {
 
     var params = {
-        TableName : APPS_TABLE_NAME,
+        TableName : utils.APPS_TABLE_NAME,
         KeyConditionExpression :  "Season = :season",
         FilterExpression : "#Date = :date",
         ExpressionAttributeNames : {

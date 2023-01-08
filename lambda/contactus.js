@@ -1,25 +1,19 @@
-var AWS = require('aws-sdk');
-var ses = new AWS.SES();
+const AWS = require('aws-sdk');
+const ses = new AWS.SES();
+const utils = require('./libs/utils')();
 
-var RECEIVER = process.env.EMAIL_ADDRESS;
-var SENDER = 'admin@tranmere-web.com';
-
-var response = {
- "isBase64Encoded": false,
- "headers": { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*',"Access-Control-Allow-Methods": "OPTIONS,POST,GET"},
- "statusCode": 200,
- "body": "{\"result\": \"Success.\"}"
- };
+const RECEIVER = process.env.EMAIL_ADDRESS;
+const SENDER = 'admin@tranmere-web.com';
 
 exports.handler = async function (event, context) {
     console.log('Received event:', event);
     if(event.body)
-        var results = await sendEmail(JSON.parse(event.body));
-    return response;
+        await sendEmail(JSON.parse(event.body));
+    return utils.sendResponse(200, "Success");
 };
 
 async function sendEmail (event, done) {
-    var params = {
+    const params = {
         Destination: {
             ToAddresses: [
                 RECEIVER

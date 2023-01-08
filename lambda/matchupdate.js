@@ -1,15 +1,15 @@
 const AWS = require('aws-sdk');
 let dynamo = new AWS.DynamoDB.DocumentClient();
-const RESULTS_TABLE = "TranmereWebGames"
+const utils = require('./libs/utils')();
 
 exports.handler = async function (event, context) {
 
-    var date = event.pathParameters.date;
-    var season = event.pathParameters.season;
-    var body = JSON.parse(event.body)
+    const date = event.pathParameters.date;
+    const season = event.pathParameters.season;
+    const body = JSON.parse(event.body)
 
     var params = {
-        TableName:RESULTS_TABLE,
+        TableName: utils.RESULTS_TABLE,
         Key:{
             "season": season,
             "date": date
@@ -28,10 +28,5 @@ exports.handler = async function (event, context) {
     };
 
     await dynamo.update(params).promise();
-
-    return {
-        "headers": { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
-        "statusCode": 200,
-        "body": JSON.stringify('ok')
-      };
+    return utils.sendResponse(200, "ok");
 };

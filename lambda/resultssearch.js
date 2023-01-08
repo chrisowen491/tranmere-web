@@ -1,20 +1,20 @@
 const AWS = require('aws-sdk');
 let dynamo = new AWS.DynamoDB.DocumentClient();
+const utils = require('./libs/utils')();
 
 exports.handler = async function(event, context){
 
-    var season = event.queryStringParameters ? event.queryStringParameters.season : null;
-    var competition = event.queryStringParameters ? event.queryStringParameters.competition : null;
-    var opposition = event.queryStringParameters ? event.queryStringParameters.opposition : null;
-    var date = event.queryStringParameters ? event.queryStringParameters.date : null;
-    var manager = event.queryStringParameters ? event.queryStringParameters.manager : null;
-    var venue = event.queryStringParameters ? event.queryStringParameters.venue : null;
-    var pens = event.queryStringParameters ? event.queryStringParameters.pens : null;
-    var sort = event.queryStringParameters ? event.queryStringParameters.sort : null;
-    var or = event.queryStringParameters ? event.queryStringParameters.or : null;
+    const season = event.queryStringParameters ? event.queryStringParameters.season : null;
+    const competition = event.queryStringParameters ? event.queryStringParameters.competition : null;
+    const opposition = event.queryStringParameters ? event.queryStringParameters.opposition : null;
+    const date = event.queryStringParameters ? event.queryStringParameters.date : null;
+    const manager = event.queryStringParameters ? event.queryStringParameters.manager : null;
+    const venue = event.queryStringParameters ? event.queryStringParameters.venue : null;
+    const pens = event.queryStringParameters ? event.queryStringParameters.pens : null;
+    const sort = event.queryStringParameters ? event.queryStringParameters.sort : null;
+    const or = event.queryStringParameters ? event.queryStringParameters.or : null;
 
-    
-    var data = await getResults(season, competition, opposition, date, manager, venue, pens, sort, or);
+    const data = await getResults(season, competition, opposition, date, manager, venue, pens, sort, or);
     var results = [];
     for(var i=0; i < data.length; i++) {
         var match = data[i];
@@ -69,11 +69,10 @@ exports.handler = async function(event, context){
         });
     }
 
-
     if(date && results.length == 1)
-        return sendResponse(200, results[0]);
+        return utils.sendResponse(200, results[0]);
     else
-        return sendResponse(200, results);
+        return utils.sendResponse(200, results);
 
 }
 
@@ -81,7 +80,7 @@ async function getResults(season, competition, opposition, date, manager, venue,
 
     var query = false;
     var params = {
-        TableName : "TranmereWebGames",
+        TableName : utils.RESULTS_TABLE,
         ExpressionAttributeValues: {},
         ExpressionAttributeNames: {}
     };
@@ -166,6 +165,9 @@ async function getResults(season, competition, opposition, date, manager, venue,
 
     if(venue && (season || competition || opposition))
         params = buildQuery(params, venue, "venue"); 
+    else if(venue && sort && (decodeURIComponent(sort) == "Top Attendance")) {
+        params = buildQuery(params, venue, "venue"); 
+    }
 
     if(pens) {
         params.FilterExpression = params.FilterExpression ? params.FilterExpression + " and pens <> :pens" : "pens <> :pens";
@@ -194,7 +196,7 @@ function buildQuery(query, attribute, attributeName) {
 async function getGoals(date, season) {
 
     var params = {
-        TableName : "TranmereWebGoalsTable",
+        TableName : utils.GOALS_TABLE_NAME,
         KeyConditionExpression :  "Season = :season",
         FilterExpression : "#Date = :date",
         ExpressionAttributeNames : {
@@ -213,7 +215,7 @@ async function getGoals(date, season) {
 async function getApps(date, season) {
 
     var params = {
-        TableName : "TranmereWebAppsTable",
+        TableName : utils.APPS_TABLE_NAME,
         KeyConditionExpression :  "Season = :season",
         FilterExpression : "#Date = :date",
         ExpressionAttributeNames : {
@@ -228,16 +230,3 @@ async function getApps(date, season) {
     var result = await dynamo.query(params).promise();
     return result.Items;
 };
-
-function sendResponse(statusCode, message) {
-	const response = {
-		statusCode: statusCode,
-		body: JSON.stringify(message),
-		headers: { 
-            'Content-Type': 'application/json', 
-            'Access-Control-Allow-Origin': '*',
-            "Cache-Control": "public, max-age=86400"
-        },
-	};
-	return response;
-}

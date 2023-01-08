@@ -1,5 +1,6 @@
 const AWS = require('aws-sdk');
 const contentful = require("contentful");
+const utils = require('./libs/utils')();
 let dynamo = new AWS.DynamoDB.DocumentClient();
 const client = contentful.createClient({
   space: process.env.CF_SPACE,
@@ -11,10 +12,10 @@ exports.handler = async function (event, context) {
     console.log(event.pathParameters.type);
 
     if(event.body) {
-        var body = JSON.parse(event.body)
+        const body = JSON.parse(event.body)
 
         if(body.sys.type === "Entry") {
-            var content = await client.getEntry(body.sys.id, );
+            const content = await client.getEntry(body.sys.id);
             var item = content.fields;
             item.id = body.sys.id;
             await insertUpdateItem(item, event.pathParameters.type);
@@ -22,13 +23,7 @@ exports.handler = async function (event, context) {
             await deleteItem(body.sys.id, event.pathParameters.type);
         }
     }
-
-    return {
-     "isBase64Encoded": false,
-     "headers": { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
-     "statusCode": 200,
-     "body": JSON.stringify({message: "ok"})
-     };
+    return utils.sendResponse(200, "ok");
 };
 
 async function insertUpdateItem(item, type){

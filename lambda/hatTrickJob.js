@@ -1,15 +1,12 @@
 const AWS = require('aws-sdk');
 const { v4: uuidv4 } = require('uuid');
-const {getYear} = require('./libs/helpers');
 let dynamo = new AWS.DynamoDB.DocumentClient();
-const TABLE_NAME = "TranmereWebHatTricks";
+const utils = require('./libs/utils')();
 
 exports.handler = async function (event, context) {
    console.log('Received event:', event);
 
-    var playerTotalsHash = {};
-
-    for(var i = 1977; i <= getYear(); i++) {
+    for(var i = 1977; i <= utils.getYear(); i++) {
         var dateMap = {};
         
         // Get All Goals
@@ -66,7 +63,7 @@ exports.handler = async function (event, context) {
                                     Opposition: playerMap[player][0].Opposition, 
                                     Goals: playerMap[player].length
                                 }
-                                await dynamo.put({Item: entry, TableName: TABLE_NAME}).promise();
+                                await dynamo.put({Item: entry, TableName: utils.HAT_TRICKS_TABLE}).promise();
                             }
                         }
                     }

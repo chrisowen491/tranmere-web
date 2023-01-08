@@ -107,17 +107,6 @@ export class TranmereWebStack extends cdk.Stack {
       bundling: {
         minify: true,
         externalModules: ['aws-sdk'],
-        commandHooks: {
-          beforeBundling(inputDir: string, outputDir: string): string[] {
-            return [];
-          },
-          afterBundling(inputDir: string, outputDir: string): string[] {
-            return [`mkdir ${outputDir}/libs && cp -R ${inputDir}/lambda/libs/* ${outputDir}/libs`];
-          },
-          beforeInstall() {
-            return [];
-          },
-        },
       }
     });
 
@@ -136,17 +125,6 @@ export class TranmereWebStack extends cdk.Stack {
       bundling: {
         minify: true,
         externalModules: ['aws-sdk'],
-        commandHooks: {
-          beforeBundling(inputDir: string, outputDir: string): string[] {
-            return [];
-          },
-          afterBundling(inputDir: string, outputDir: string): string[] {
-            return [`mkdir ${outputDir}/libs && cp -R ${inputDir}/lambda/libs/* ${outputDir}/libs`];
-          },
-          beforeInstall() {
-            return [];
-          },
-        },
       }
     });
 
@@ -165,17 +143,6 @@ export class TranmereWebStack extends cdk.Stack {
       bundling: {
         minify: true,
         externalModules: ['aws-sdk'],
-        commandHooks: {
-          beforeBundling(inputDir: string, outputDir: string): string[] {
-            return [];
-          },
-          afterBundling(inputDir: string, outputDir: string): string[] {
-            return [`mkdir ${outputDir}/libs && cp -R ${inputDir}/lambda/libs/* ${outputDir}/libs`];
-          },
-          beforeInstall() {
-            return [];
-          },
-        },
       }
     });
 
@@ -200,7 +167,7 @@ export class TranmereWebStack extends cdk.Stack {
             return [];
           },
           afterBundling(inputDir: string, outputDir: string): string[] {
-            return [`mkdir ${outputDir}/templates && cp -R ${inputDir}/tranmere-web/templates/* ${outputDir}/templates && mkdir ${outputDir}/libs && cp -R ${inputDir}/lambda/libs/* ${outputDir}/libs`];
+            return [`mkdir ${outputDir}/templates && cp -R ${inputDir}/tranmere-web/templates/* ${outputDir}/templates`];
           },
           beforeInstall() {
             return [];
@@ -237,7 +204,7 @@ export class TranmereWebStack extends cdk.Stack {
             return [];
           },
           afterBundling(inputDir: string, outputDir: string): string[] {
-            return [`mkdir ${outputDir}/templates && cp -R ${inputDir}/tranmere-web/templates/* ${outputDir}/templates && mkdir ${outputDir}/libs && cp -R ${inputDir}/lambda/libs/* ${outputDir}/libs`];
+            return [`mkdir ${outputDir}/templates && cp -R ${inputDir}/tranmere-web/templates/* ${outputDir}/templates`];
           },
           beforeInstall() {
             return [];

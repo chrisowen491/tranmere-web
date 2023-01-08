@@ -1,10 +1,10 @@
 const AWS = require('aws-sdk');
 let dynamo = new AWS.DynamoDB.DocumentClient();
-const TABLE_NAME = "TranmereWebPlayerSeasonSummaryTable";
+const utils = require('./libs/utils')();
 
 exports.handler = async function (event, context) {
 
-    var squadSearch = await dynamo.scan({TableName:"TranmereWebPlayerTable"}).promise();
+    var squadSearch = await dynamo.scan({TableName:utils.PLAYER_TABLE_NAME}).promise();
     var playerHash = {};
     for(var i=0; i < squadSearch.Items.length; i++) {
         playerHash[squadSearch.Items[i].name] = squadSearch.Items[i];
@@ -19,7 +19,7 @@ exports.handler = async function (event, context) {
 
     if(player) {
         query = {
-            TableName:TABLE_NAME,
+            TableName: utils.SUMMARY_TABLE_NAME,
             IndexName: "ByPlayerIndex",
             KeyConditionExpression :  "Player = :player",
             ExpressionAttributeValues: {
@@ -31,7 +31,7 @@ exports.handler = async function (event, context) {
             season = "TOTAL";
 
         query = {
-            TableName:TABLE_NAME,
+            TableName: utils.SUMMARY_TABLE_NAME,
             KeyConditionExpression :  "Season = :season",
             ExpressionAttributeValues: {
                 ":season" : season
@@ -99,14 +99,5 @@ exports.handler = async function (event, context) {
         });
     }
 
-    return {
-     "isBase64Encoded": false,
-     "headers": { 
-      'Content-Type': 'application/json', 
-      'Access-Control-Allow-Origin': '*',
-      'Cache-Control': 'public, max-age=86400'
-    },
-     "statusCode": 200,
-     "body": JSON.stringify({players: results.slice(0, 50)})
-     };
+    return utils.sendResponse(200, {players: results.slice(0, 50)});
 };

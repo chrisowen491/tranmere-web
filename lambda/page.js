@@ -1,16 +1,10 @@
 const AWS = require('aws-sdk');
 let dynamo = new AWS.DynamoDB.DocumentClient();
-
-var Mustache = require("mustache");
-var fs = require("fs");
-var path = require('path');
-var utils = require('./libs/utils')(path,fs,Mustache);
+const utils = require('./libs/utils')();
 const contentful = require("contentful");
-var pages = require('./pages.json');
-var contentfulSDK = require('@contentful/rich-text-html-renderer');
-const SUMMARY_TABLE_NAME = "TranmereWebPlayerSeasonSummaryTable";
-const APPS_TABLE_NAME = "TranmereWebAppsTable";
-const PLAYER_TABLE_NAME = "TranmereWebPlayerTable";
+const pages = require('./pages.json');
+const contentfulSDK = require('@contentful/rich-text-html-renderer');
+
 const client = contentful.createClient({
   space: process.env.CF_SPACE,
   accessToken: process.env.CF_KEY
@@ -19,22 +13,25 @@ const client = contentful.createClient({
 exports.handler = async function (event, context) {
     var pageName = event.pathParameters.pageName;
     var classifier = event.pathParameters.classifier;
-    var view = {}
+    var view = {
+        dd_app: process.env.DD_SERVICE,
+        dd_version: process.env.DD_VERSION,
+        random: Math.ceil(Math.random() * 100000)
+    }
 
     if(pageName === "home") {
-        var content = await client.getEntries({'content_type': 'blogPost', order: '-sys.createdAt'});
+        const content = await client.getEntries({'content_type': 'blogPost', order: '-sys.createdAt'});
         view = {
             title: "Home",
             pageType:"WebPage",
             description: "Tranmere-Web.com is a website full of data, statistics and information about Tranmere Rovers FC",
-            blogs: content.items,
-            random: Math.ceil(Math.random() * 100000)
+            blogs: content.items
         };
     } else if(pageName === "player") {
         var playerName = classifier;
         var playerSearch = await dynamo.query(
             {
-                TableName: PLAYER_TABLE_NAME,
+                TableName: utils.PLAYER_TABLE_NAME,
                 KeyConditionExpression: "#name = :name",
                 ExpressionAttributeNames:{
                     "#name": "name"
@@ -48,7 +45,7 @@ exports.handler = async function (event, context) {
 
         var debutSearch = await dynamo.query(
             {
-                TableName: APPS_TABLE_NAME,
+                TableName: utils.APPS_TABLE_NAME,
                 KeyConditionExpression: "#name = :name",
                 IndexName: "ByPlayerIndex",
                 ExpressionAttributeNames:{
@@ -62,7 +59,7 @@ exports.handler = async function (event, context) {
 
         var summarySearch = await dynamo.query(
             {
-                TableName: SUMMARY_TABLE_NAME,
+                TableName: utils.SUMMARY_TABLE_NAME,
                 KeyConditionExpression: "#player = :player",
                 IndexName: "ByPlayerIndex",
                 ExpressionAttributeNames:{
@@ -84,7 +81,6 @@ exports.handler = async function (event, context) {
             debut: debutSearch.Items[0],
             seasons: summarySearch.Items,
             player: pl,
-            random: Math.ceil(Math.random() * 100000),
             url: `/page/${pageName}/${classifier}`
         };
 
@@ -103,7 +99,6 @@ exports.handler = async function (event, context) {
             pageType: "SearchResultsPage",
             title: "All blogs for " + tagId,
             description: "All blogs for " + tagId,
-            random: Math.ceil(Math.random() * 100000),
             url: `/page/${pageName}/${classifier}`,
         }
     } else if(pageName === "blog") {
@@ -121,7 +116,6 @@ exports.handler = async function (event, context) {
         view.pageType = "AboutPage";
         view.description = "Blog Page | " + content.fields.title;
         view.blogContent = contentfulSDK.documentToHtmlString(content.fields.blog, options);
-        view.random =  Math.ceil(Math.random() * 100000);
         view.blogs = blogs.items;
         view.url =  `/page/${pageName}/${classifier}`;
         view.carousel = [];
@@ -175,24 +169,7 @@ exports.handler = async function (event, context) {
         }
     }
 
-    view.dd_app = process.env.DD_SERVICE;
-    view.dd_version = process.env.DD_VERSION;
-
-    var maxAge = pageName === "player" ? 86400 : 2592000;
-    var page = utils.buildPage(view, pages[pageName].template);
-    return {
-        "isBase64Encoded": false,
-        "headers": {
-            "Content-Type": "text/html",
-            "Content-Security-Policy" : "upgrade-insecure-requests",
-            "Strict-Transport-Security" : "max-age=1000",
-            "X-Xss-Protection" : "1; mode=block",
-            "X-Frame-Options" : "DENY",
-            "X-Content-Type-Options" : "nosniff",
-            "Referrer-Policy" : "strict-origin-when-cross-origin",
-            "Cache-Control": "public, max-age=" + maxAge
-        },
-        "statusCode": 200,
-        "body": page
-    };
+    const maxAge = pageName === "player" ? 86400 : 2592000;
+    const page = utils.buildPage(view, pages[pageName].template);
+    return utils.sendHTMLResponse(page, maxAge); 
 };
