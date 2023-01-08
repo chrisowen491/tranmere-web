@@ -12,9 +12,6 @@ const client = contentful.createClient({
 exports.handler = async function (event, context) {
     var pageName = event.pathParameters.pageName;
     var classifier = event.pathParameters.classifier;
-    var view = {
-        random: Math.ceil(Math.random() * 100000)
-    }
 
     if(pageName === "home") {
         const content = await client.getEntries({'content_type': 'blogPost', order: '-sys.createdAt'});
@@ -165,7 +162,7 @@ exports.handler = async function (event, context) {
             view.cardBlocksHTML = blockContent;
         }
     }
-
+    view.random =  Math.ceil(Math.random() * 100000);
     const maxAge = pageName === "player" ? 86400 : 2592000;
     const page = utils.buildPage(view, `./templates/${pageName}.tpl.html`);
     return utils.sendHTMLResponse(page, maxAge); 
