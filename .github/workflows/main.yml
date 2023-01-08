@@ -68,7 +68,7 @@ jobs:
       - name: Install Data Dog CI
         run: | 
           npm install -g @datadog/datadog-ci
-      - name: Install
+      - name: Instrument
         run: | 
           datadog-ci lambda instrument --functions-regex "^TranmereWebStack" -r eu-west-1 -v 85 -e 34 --service tranmere-web --env prod --version ${{needs.build_test_and_package.outputs.version}}                  
         env:
@@ -79,7 +79,7 @@ jobs:
 
   api_acceptance_test:
     runs-on: ubuntu-latest
-    needs: aws_cdk
+    needs: [aws_cdk, data_dog]
     steps:
       - uses: actions/checkout@v3
       - name: Install Newman
@@ -91,7 +91,7 @@ jobs:
 
   web_acceptance_test:
     runs-on: ubuntu-latest
-    needs: aws_cdk
+    needs: [aws_cdk, data_dog]
     steps:
       - uses: actions/checkout@v3
       - name: Install Newman
