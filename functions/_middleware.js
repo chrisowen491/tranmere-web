@@ -18,7 +18,7 @@ const cacheHandler = async ({ request, next, waitUntil }) => {
 
     if(!response) {
         let downstream_response = await next(); 
-        if(downstream_response.status == 200) {
+        if(downstream_response.status < 400) {
             // Store the fetched response as cacheKey
             // Use waitUntil so computational expensive tasks dont delay the response
             waitUntil(cache.put(cacheKey, downstream_response.clone()))
