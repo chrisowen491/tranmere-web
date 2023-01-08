@@ -1,3 +1,21 @@
+window.DD_RUM && window.DD_RUM.init({
+  clientToken: 'pub91e87345f76af7acb5aa202805d95df0',
+  applicationId: 'bb11809d-d51b-408d-9be4-cacc89c65d63',
+  site: 'datadoghq.eu',
+  service: 'tranmere-web',
+  env: 'prod',
+  version: '@version@',
+  sampleRate: 100,
+  premiumSampleRate: 100,
+  trackInteractions: true,
+  trackResources: true,
+  defaultPrivacyLevel: 'mask-user-input',
+  allowedTracingOrigins: ["https://www.tranmere-web.com", /https:\/\/.*\.tranmere-web\.com/]
+});
+
+window.DD_RUM &&
+window.DD_RUM.startSessionReplayRecording();
+
 (function ($) {
   "use strict";
 

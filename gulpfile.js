@@ -4,9 +4,11 @@ var concat = require('gulp-concat');
 var maps = require('gulp-sourcemaps');
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
+var replace = require('gulp-string-replace');
 var server = require('browser-sync').create();
 const critical = require('critical').stream;
 const cleanCSS = require('gulp-clean-css');
+const pack = require('./package.json');
 
 function reload(done) {
   server.reload();
@@ -48,6 +50,7 @@ function scripts() {
     'node_modules/video.js/dist/video.js',
     'node_modules/videojs-youtube/dist/Youtube.js',
     'node_modules/amazon-cognito-auth-js/dist/amazon-cognito-auth.min.js',
+    'node_modules/@datadog/browser-rum/bundle/datadog-rum.js',
     'tranmere-web/assets/js/modernizr.js'
     ])
     .pipe(maps.init())
@@ -134,6 +137,12 @@ function publish() {
       .pipe(gulp.dest('./web.out/assets/'));
 }
 
+function swap_version() {
+  return gulp.src(["./web.out/assets/js/app.js"]) // Any file globs are supported
+    .pipe(replace(new RegExp('@version@', 'g'), pack.version))
+    .pipe(gulp.dest('./web.out/assets/js/app-v'));
+}
+
 // watch for changes
 function watch() {
   gulp.watch('tranmere-web/assets/scss/**/*', gulp.series(css, criticalTask, reload));
@@ -143,8 +152,8 @@ function watch() {
 }
 
 
-const build = gulp.series(static, publish, css, scripts, styles, minify, minifyCss, gulp.parallel(watch, serve));
-const deploy = gulp.series(static, publish, css, scripts, styles, minify, minifyCss);
+const build = gulp.series(static, publish, swap_version, css, scripts, styles, minify, minifyCss, gulp.parallel(watch, serve));
+const deploy = gulp.series(static, publish, swap_version, css, scripts, styles, minify, minifyCss);
 
 // tasks
 exports.css = css;
@@ -153,6 +162,7 @@ exports.styles = styles;
 exports.minify = minify;
 exports.minifyCss = minifyCss;
 exports.deploy = deploy;
+exports.swap_version = swap_version;
 exports.criticalTask = criticalTask;
 
 exports.default = build;

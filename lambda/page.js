@@ -13,8 +13,6 @@ exports.handler = async function (event, context) {
     var pageName = event.pathParameters.pageName;
     var classifier = event.pathParameters.classifier;
     var view = {
-        dd_app: process.env.DD_SERVICE,
-        dd_version: process.env.DD_VERSION,
         random: Math.ceil(Math.random() * 100000)
     }
 
