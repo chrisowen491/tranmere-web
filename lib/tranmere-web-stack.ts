@@ -38,8 +38,7 @@ export class TranmereWebStack extends cdk.Stack {
       "SCRAPE_URL": SCRAPE_URL,
       "DD_SERVICE": pack.name,
       "DD_VERSION": VERSION,
-      "DD_ENV": ENVIRONMENT,
-      "DD_TAGS": DD_TAGS
+      "DD_ENV": ENVIRONMENT
     }
 
     // Base API gateway
