@@ -10,35 +10,17 @@ import * as events from 'aws-cdk-lib/aws-events'
 import * as targets from 'aws-cdk-lib/aws-events-targets'
 import * as appsync from '@aws-cdk/aws-appsync-alpha';
 import { MappingTemplate } from '@aws-cdk/aws-appsync-alpha';
-import { Datadog } from 'datadog-cdk-constructs-v2';
 
-const ENVIRONMENT : string = process.env.ENVIRONMENT!;
-const DD_KEY : string = process.env.DD_KEY!;
 const CF_KEY : string = process.env.CF_KEY!;
 const CF_SPACE : string = process.env.CF_SPACE!;
 const EMAIL_ADDRESS : string = process.env.EMAIL_ADDRESS!;
 const SCRAPE_ID : string = process.env.SCRAPE_ID!;
 const SCRAPE_SEASON : string = process.env.SCRAPE_SEASON!;
 const SCRAPE_URL : string = process.env.SCRAPE_URL!;
-const VERSION : string = process.env.VERSION!;
-
-import * as pack from '../package.json';
 
 export class TranmereWebStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
-
-    const datadog = new Datadog(this, "Datadog", {
-      nodeLayerVersion: 85,
-      extensionLayerVersion: 34,
-      env: ENVIRONMENT,
-      site: "datadoghq.eu",
-      service: pack.name,
-      version: VERSION,
-      enableMergeXrayTraces: true,
-      tags: "owner:architecture,datadog:true",
-      apiKey: DD_KEY
-    });
 
     const rootDomain = "tranmere-web.com";
 
@@ -48,10 +30,7 @@ export class TranmereWebStack extends cdk.Stack {
       "CF_KEY": CF_KEY,
       "SCRAPE_ID": SCRAPE_ID,
       "SCRAPE_SEASON": SCRAPE_SEASON,
-      "SCRAPE_URL": SCRAPE_URL,
-      "DD_SERVICE": pack.name,
-      "DD_VERSION": VERSION,
-      "DD_ENV": ENVIRONMENT
+      "SCRAPE_URL": SCRAPE_URL
     }
 
     // Base API gateway
@@ -469,11 +448,6 @@ export class TranmereWebStack extends cdk.Stack {
         requestMappingTemplate: MappingTemplate.fromFile("graphql/template.json"),
         responseMappingTemplate: MappingTemplate.fromString("$util.toJson($context.result)")
       });
-    }
-
-    if(ENVIRONMENT === "prod") {
-      datadog.addLambdaFunctions([contact_us_lambda, media_sync_lambda, player_builder_lambda, results_search_lambda, player_search_lambda, match_page_lambda, match_update_lambda]);
-      datadog.addLambdaFunctions([page_lambda, hat_trick_job_lambda, update_job_lambda, scraper_job_lambda]);
     }
   }
 }

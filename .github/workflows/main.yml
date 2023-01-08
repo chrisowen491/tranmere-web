@@ -28,7 +28,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - id: bump
         run: echo "version=$(node tag.js)" >> $GITHUB_OUTPUT
-        
+
   trigger_web_deploy:
     runs-on: ubuntu-latest
     needs: build_test_and_package
@@ -62,6 +62,21 @@ jobs:
           SCRAPE_URL: ${{ secrets.SCRAPE_URL }}
           DD_KEY: ${{ secrets.DD_KEY }}
           VERSION: ${{needs.build_test_and_package.outputs.version}}
+
+  data_dog:
+    runs-on: ubuntu-latest
+    needs: aws_cdk
+    steps:
+      - name: Install AWS CDK
+        run: | 
+          npm install -g @datadog/datadog-ci
+      - name: Install
+        run: datadog-ci lambda instrument --functions-regex "^TranmereWebStack" -r eu-west-1 -v 85 -e 34 --service tranmere-web --env prod --version ${{needs.build_test_and_package.outputs.version}}                  
+        env:
+          AWS_REGION: eu-west-1
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          DATADOG_API_KEY: ${{ secrets.DD_KEY }}
 
   api_acceptance_test:
     runs-on: ubuntu-latest
