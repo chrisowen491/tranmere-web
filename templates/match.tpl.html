@@ -274,9 +274,9 @@
                   + '&c=' + dateobj.getDate();
       $.getJSON(url, function(data) {
         var view = {
-            results: data
+            results: data.results
         };
-        $.get("/assets/templates/results.mustache", function(template) {
+        $.get("/assets/templates/results.mustache?v={{random}}", function(template) {
           var article = Mustache.render( template, view );
           $(`#${or}-five-content`).html(article);
           $(`#${or}-five-loading`).hide();
