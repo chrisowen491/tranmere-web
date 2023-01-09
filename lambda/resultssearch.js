@@ -133,7 +133,7 @@ exports.handler = async function(event, context){
         });
     }
 
-    if(date && results.length == 1)
+    if(date && results.length == 1 && !or)
         return utils.sendResponse(200, results[0]);
     else
         return utils.sendResponse(200, {results: results, h2hresults: h2hresults});

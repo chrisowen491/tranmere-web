@@ -6,7 +6,7 @@ var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
 var replace = require('gulp-string-replace');
 var server = require('browser-sync').create();
-const critical = require('critical').stream;
+//const critical = require('critical').stream;
 const cleanCSS = require('gulp-clean-css');
 const pack = require('./package.json');
 
@@ -91,6 +91,7 @@ function minifyCss() {
     .pipe(gulp.dest('web.out/assets/css'));
 }
 
+/*
 function criticalTask() {
  return gulp
     .src(['web.out/*.html'])
@@ -112,7 +113,7 @@ function criticalTask() {
     )
     .pipe(gulp.dest('web.out'));
 }
-
+*/
 
 function static() {
     return gulp.src([
@@ -145,10 +146,10 @@ function swap_version() {
 
 // watch for changes
 function watch() {
-  gulp.watch('tranmere-web/assets/scss/**/*', gulp.series(css, criticalTask, reload));
+  gulp.watch('tranmere-web/assets/scss/**/*', gulp.series(css,  reload));
   gulp.watch(['tranmere-web/assets/js/*'], gulp.series(publish, reload));
-  gulp.watch(['tranmere-web/assets/templates/*'], gulp.series(publish, criticalTask, reload));
-  gulp.watch('gulpfile.js', gulp.series(scripts, styles, minify, criticalTask, reload));
+  gulp.watch(['tranmere-web/assets/templates/*'], gulp.series(publish, reload));
+  gulp.watch('gulpfile.js', gulp.series(scripts, styles, minify, reload));
 }
 
 
@@ -163,6 +164,6 @@ exports.minify = minify;
 exports.minifyCss = minifyCss;
 exports.deploy = deploy;
 exports.swap_version = swap_version;
-exports.criticalTask = criticalTask;
+//exports.criticalTask = criticalTask;
 
 exports.default = build;
