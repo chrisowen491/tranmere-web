@@ -8,7 +8,7 @@ function search() {
   var base = "";
   var url = base + '/result-search/?season='+ $('#season').val()
               + '&competition='+ $('#competition').val()
-              + '&opposition=' + $('#opposition').val().replace('&','%26')
+              + '&opposition=' + encodeURIComponent($('#opposition').val())
               + '&manager=' + $('#manager').val()
               + '&venue=' + $('#venue').val()
               + '&pens=' + $('#pens').val()

@@ -251,7 +251,7 @@
 									"",
 									"pm.test(\"Response\", function () {",
 									"    let response = pm.response.json();",
-									"    pm.expect(response[0].venue).to.eql('Prenton Park');",
+									"    pm.expect(response.results[0].venue).to.eql('Prenton Park');",
 									"});",
 									""
 								],

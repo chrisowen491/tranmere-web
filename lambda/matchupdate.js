@@ -14,13 +14,15 @@ exports.handler = async function (event, context) {
             "season": season,
             "date": date
         },
-        UpdateExpression: "set programme = :p, attendance=:a, youtube=:y, home=:h, visitor=:v, opposition=:o, pens=:x",
+        UpdateExpression: "set programme = :p, attendance=:a, youtube=:y, home=:h, visitor=:v, opposition=:o, pens=:x, hgoal:f, hgoal:g",
         ExpressionAttributeValues:{
             ":y": body.youtube,
             ":h": body.home,
             ":v": body.visitor,
             ":o": body.opposition,
             ":x": body.pens,
+            ":f": body.hgoal,
+            ":g": body.vgoal,
             ":a": parseInt(body.attendance),
             ":p": body.programme
         },
