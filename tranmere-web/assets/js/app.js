@@ -2,7 +2,7 @@ window.DD_RUM && window.DD_RUM.init({
   clientToken: 'pub91e87345f76af7acb5aa202805d95df0',
   applicationId: 'bb11809d-d51b-408d-9be4-cacc89c65d63',
   site: 'datadoghq.eu',
-  service: 'tranmere-web',
+  service: 'www.tranmere-web.com',
   env: 'prod',
   version: '@version@',
   sampleRate: 100,
