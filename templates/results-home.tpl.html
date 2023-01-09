@@ -29,7 +29,7 @@
                     <div class="form-group">
                       <label for="season">Season</label>
                       <select class="form-control form-control-sm" id="season">
-                        <option></option>
+                        <option value="">All</option>
                         {{#seasons}}<option>{{.}}</option>{{/seasons}}
 
                       </select>
@@ -37,14 +37,15 @@
                     <div class="form-group">
                       <label for="season">Competition</label>
                       <select class="form-control form-control-sm" id="competition">
-                        <option></option>
+                        <option value="">All</option>
+                        <option value="League">League</option>
                         {{#competitions}}<option>{{name}}</option>{{/competitions}}
                       </select>
                     </div>
                     <div class="form-group">
                       <label for="season">Opposition</label>
                       <select class="form-control form-control-sm" id="opposition">
-                        <option></option>
+                        <option value="">All</option>
                         {{#teams}}<option>{{name}}</option>{{/teams}}
 
                       </select>
@@ -52,14 +53,14 @@
                     <div class="form-group">
                       <label for="season">Manager</label>
                       <select class="form-control form-control-sm" id="manager">
-                        <option></option>
+                        <option value="">All</option>
                         {{#managers}}<option value="{{dateJoined}},{{dateLeft}}">{{name}}</option>{{/managers}}
                       </select>
                     </div>
                     <div class="form-group">
                       <label for="venue">Venue</label>
                       <select class="form-control form-control-sm" id="venue">
-                        <option></option>
+                        <option value="">All</option>
                         <option>Prenton Park</option>
                         <option>Wembley Stadium</option>
                       </select>
@@ -67,7 +68,7 @@
                     <div class="form-group">
                       <label for="pens">Penalties</label>
                       <select class="form-control form-control-sm" id="pens">
-                        <option></option>
+                        <option value="">No</option>
                         <option>Penalty Shootout</option>
                       </select>
                     </div>

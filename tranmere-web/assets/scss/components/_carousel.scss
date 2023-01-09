@@ -2,6 +2,7 @@
 //
 //
 //
+@use 'sass:math';
 
 .owl-carousel {
 	&[data-dots="true"] { 
@@ -186,13 +187,13 @@
 		.owl-nav {
 			.owl-prev {
 				@include translate(0,-50%);
-				left: -($grid-gutter-width / 2);
+				left: -(math.div($grid-gutter-width, 2));
 			}
 
 
 			.owl-next {
 				@include translate(0,-50%);
-				right: -($grid-gutter-width / 2);
+				right: -(math.div($grid-gutter-width, 2));
 			}
 		}
 	}
@@ -220,7 +221,7 @@
 
 		.owl-prev {
 			@include translate(-100%,-50%);
-			left: -($grid-gutter-width / 2);
+			left: -(math.div($grid-gutter-width, 2));
 			border-top-right-radius: $border-radius!important;
 			border-bottom-right-radius: $border-radius!important;
 		}
@@ -228,7 +229,7 @@
 
 		.owl-next {
 			@include translate(100%,-50%);
-			right: -($grid-gutter-width / 2);
+			right: -(math.div($grid-gutter-width, 2));
 			border-top-left-radius: $border-radius!important;
 			border-bottom-left-radius: $border-radius!important;
 		}

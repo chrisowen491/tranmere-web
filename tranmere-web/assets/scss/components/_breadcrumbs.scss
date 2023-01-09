@@ -2,6 +2,7 @@
 //
 //
 //
+@use 'sass:math';
 
 .breadcrumb {
   display: inline-flex;
@@ -47,7 +48,7 @@
   }
 
   &:not(:last-child) {
-    margin-right: $grid-gutter-width / 2;
+    margin-right: math.div($grid-gutter-width, 2);
   }
 
   &:hover {

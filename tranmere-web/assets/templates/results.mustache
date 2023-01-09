@@ -1,4 +1,33 @@
-
+<h2>Overall Record</h2>
+<table class="table">
+    <thead class="thead-dark">
+    <tr>
+        <th scope="col">Venue</th>
+        <th scope="col">Pld</th>
+        <th scope="col">Won</th>
+        <th scope="col">Draws</th>
+        <th scope="col">Lost</th>
+        <th scope="col">For</th>
+        <th scope="col">Agn</th>
+        <th scope="col">Diff</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{#h2hresults}}
+    <tr>
+        <td>{{venue}}</td>
+        <td>{{pld}}</td>
+        <td>{{wins}}</td>
+        <td>{{draws}}</td>
+        <td>{{lost}}</td>
+        <td>{{for}}</td>
+        <td>{{against}}</td>
+        <td>{{diff}}</td>
+    </tr>
+    {{/h2hresults}}
+    </tbody>
+</table>
+<h2>Results</h2>
 <table class="table">
     <thead class="thead-dark">
     <tr>

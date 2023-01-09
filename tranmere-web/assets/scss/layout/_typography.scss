@@ -2,7 +2,7 @@
 // Typography
 //
 //
-
+@use 'sass:math';
 
 
 
@@ -302,7 +302,7 @@ a {
   line-height: 3.75rem;
   flex: 0;
   width: 100%;
-  margin-bottom: ($grid-gutter-width / 2);
+  margin-bottom: math.div($grid-gutter-width, 2);
   padding-right: 3.75rem;
 
   > * {

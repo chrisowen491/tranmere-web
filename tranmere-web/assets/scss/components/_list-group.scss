@@ -2,12 +2,12 @@
 // List Group
 //
 //
-
+@use 'sass:math';
 
 // minimal
 .list-group-minimal {
 	.list-group-item {
-		margin-bottom: ($card-spacer-x / 2);
+		margin-bottom: math.div($card-spacer-x, 2);
 		padding: 0;
 		background: transparent;
 		border: 0;
@@ -25,7 +25,7 @@
 		@include border-radius;
 		background: transparent;
 		padding: $card-spacer-y;
-		margin-bottom: ($card-spacer-x / 2);
+		margin-bottom: math.div($card-spacer-x, 2);
 
 		&.boxed {
 			background: $white;
@@ -35,7 +35,7 @@
 			@include translate(0,-50%);
 			position: absolute;
 			top: 50%;
-			right: -($card-spacer-x / 2);
+			right: -(math.div($card-spacer-x, 2));
 		}
 	}
 }
@@ -74,7 +74,7 @@
 		background: transparent;
 		border: 0;
 		border-radius: 0;
-		padding: ($card-spacer-x / 2) $card-spacer-x;
+		padding: math.div($card-spacer-x, 2) $card-spacer-x;
 		color: #999;
 		font-size: $font-size-sm;
 

@@ -2,10 +2,11 @@
 // tabs
 //
 //
+@use 'sass:math';
 
 .section-tabs {
 	margin-top: -$section-padding;
-	margin-bottom: ($section-padding / 2);
+	margin-bottom: math.div($section-padding, 2);
 	border-bottom: $border-width solid $border-color;
 
 	.nav {

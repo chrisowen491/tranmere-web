@@ -2,6 +2,7 @@
 // articles
 //
 //
+@use 'sass:math';
 
 .topic {
 	@include transition;
@@ -95,7 +96,7 @@
 	color: $body-color;
 	margin-left: -$card-spacer-x;
 	margin-right: -$card-spacer-x;
-	padding: ($card-spacer-x / 2) $card-spacer-x;
+	padding: math.div($card-spacer-x, 2) $card-spacer-x;
 
 	+ .activity {
 		border-top: $border-width solid $border-color;
@@ -131,7 +132,7 @@
 		@include transition;
 		display: block;
 		color: $white;
-		padding: ($section-padding / 2) 0;	
+		padding: math.div($section-padding, 2) 0;	
 
 		&:hover {
 			background: rgba($white, .1);

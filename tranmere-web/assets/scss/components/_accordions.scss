@@ -2,7 +2,7 @@
 // accordions
 //
 //
-
+@use 'sass:math';
 .accordion {
 
 	.card {
@@ -131,7 +131,7 @@
 
 		.card-header {
 			button {
-				padding: ($section-padding / 2) ($card-spacer-x * 2) ($section-padding / 2) 0;
+				padding: (math.div($section-padding, 2)) ($card-spacer-x * 2) (math.div($section-padding, 2)) 0;
 				font-size: 1.25rem;
 			}
 		}
@@ -212,7 +212,7 @@
 		}
 
 		+ .card {
-			margin-top: ($card-spacer-x / 2);
+			margin-top: math.div($card-spacer-x, 2);
 		}
 	}
 }

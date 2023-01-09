@@ -2,12 +2,13 @@
 //
 // Variables should follow the `$component-state-property-size` formula for
 // consistent naming. Ex: $nav-link-disabled-color and $modal-content-box-shadow-xs.
+@use 'sass:math';
 
 // Typogrpahy
 $font-size-list:           ( 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 50, 60, 70, 80, 90, 100 );
 $letter-spacing:           0.05em;
-$letter-spacing-sm:        ($letter-spacing / 2);
-$letter-spacing-lg:        ($letter-spacing * 2);
+$letter-spacing-sm:        math.div($letter-spacing, 2);
+$letter-spacing-lg:        math.div($letter-spacing, 2);
 
 // Layout
 $section-padding:          6.25rem;

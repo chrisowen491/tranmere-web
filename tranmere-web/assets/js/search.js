@@ -16,7 +16,8 @@ function search() {
               + '&c=' + dateobj.getDate();
   $.getJSON(url, function(data) {
     var view = {
-        results: data
+        results: data.results,
+        h2hresults: data.h2hresults
     };
     $.get("/assets/templates/results.mustache", function(template) {
       var article = Mustache.render( template, view );

@@ -1,7 +1,7 @@
 //
 // Spacing
 //
-
+@use 'sass:math';
 
 // Gutter
 $gutter-list: ();
@@ -19,11 +19,11 @@ $gutter-list: map-merge((
 
     @each $name, $value in $gutter-list {
       .gutter#{$infix}-#{$name} {
-        margin: -#{$value/2}px;
+        margin: -#{math.div($value, 2)}px;
 
         > * {
           margin-bottom: 0!important;
-          padding: #{$value/2}px;
+          padding: #{math.div($value, 2)}px;
         }
       }
     }

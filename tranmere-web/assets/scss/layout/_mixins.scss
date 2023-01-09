@@ -1,13 +1,13 @@
 //
 // Mixins & Functions
 //
-
+@use 'sass:math';
 
 //
 // Rem Calculator
 //
 @function rem($size) {
-  $rem: $size / 16;
+  $rem: math.div($size, 16);
   @return #{$rem}rem;
 }
 

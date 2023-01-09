@@ -1,6 +1,7 @@
 //
 // Content
 //
+@use 'sass:math';
 
 body {
 	position: relative;
@@ -28,8 +29,8 @@ body {
 
 .container-fluid { max-width: 1600px; }
 .container-full {
-	padding-right: ($grid-gutter-width / 2);
-	padding-left: ($grid-gutter-width / 2);
+	padding-right: math.div($grid-gutter-width, 2);
+	padding-left: math.div($grid-gutter-width, 2);
 }
 
 
@@ -37,7 +38,7 @@ body {
 article {
 	> section {
 		&:not(:first-child) {
-			margin-top: ($section-padding / 2);
+			margin-top: math.div($section-padding, 2);
 		}
 
 		> .row {
@@ -83,7 +84,7 @@ article {
 
 	> section {
 		&:not(:first-of-type) {
-			margin-top: ($section-padding / 2);
+			margin-top: math.div($section-padding, 2);
 		}
 	}
 }
@@ -147,7 +148,7 @@ article {
 	@include transition(.4s);
 
 	&.is_stuck {
-		@include translate(0,($card-spacer-x / 2));
+		@include translate(0,math.div($card-spacer-x, 2));
 	}
 }
 

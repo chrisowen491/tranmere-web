@@ -16,14 +16,78 @@ exports.handler = async function(event, context){
 
     const data = await getResults(season, competition, opposition, date, manager, venue, pens, sort, or);
     var results = [];
+    var h2hresults = [
+        {
+            venue: "Home",
+            pld: 0,
+            wins: 0,
+            draws: 0,
+            lost: 0,
+            for: 0,
+            against: 0,
+            diff: 0
+        },
+        {
+            venue: "Away",
+            pld: 0,
+            wins: 0,
+            draws: 0,
+            lost: 0,
+            for: 0,
+            against: 0,
+            diff: 0
+        },
+        {
+            venue: "Neutral",
+            pld: 0,
+            wins: 0,
+            draws: 0,
+            lost: 0,
+            for: 0,
+            against: 0,
+            diff: 0
+        }
+    ];
     for(var i=0; i < data.length; i++) {
         var match = data[i];
-        if(match.venue == "Wembley Stadium") {
-            match.location = "N";
-        } else if(match.home == "Tranmere Rovers") {
-            match.location = "H";
+        if(match.home == "Tranmere Rovers") {
+            var haindex = 0;
+            if(match.venue == "Wembley Stadium") {
+                match.location = "N";
+                haindex = 2;
+            } else {
+                match.location = "H";
+            }
+            h2hresults[haindex].pld = h2hresults[haindex].pld + 1;
+            if(parseInt(match.hgoal) > parseInt(match.vgoal)) {
+                h2hresults[haindex].wins = h2hresults[haindex].wins + 1;
+            } else if(parseInt(match.hgoal) < parseInt(match.vgoal)) {
+                h2hresults[haindex].lost = h2hresults[haindex].lost + 1;
+            } else {
+                h2hresults[haindex].draws = h2hresults[haindex].draws + 1;
+            }
+            h2hresults[haindex].for = h2hresults[haindex].for + parseInt(match.hgoal);
+            h2hresults[haindex].against = h2hresults[haindex].against + parseInt(match.vgoal);
+            h2hresults[haindex].diff = h2hresults[haindex].diff + parseInt(match.hgoal) - parseInt(match.vgoal);
         } else {
-            match.location = "A";
+            haindex = 1;
+            if(match.venue == "Wembley Stadium") {
+                match.location = "N";
+                var haindex = 2;
+            } else {
+                match.location = "A";
+            }
+            h2hresults[haindex].pld = h2hresults[haindex].pld + 1;
+            if(parseInt(match.hgoal) > parseInt(match.vgoal)) {
+                h2hresults[haindex].lost = h2hresults[haindex].lost + 1;
+            } else if(parseInt(match.hgoal) < parseInt(match.vgoal)) {
+                h2hresults[haindex].wins = h2hresults[haindex].wins + 1;
+            } else {
+                h2hresults[haindex].draws = h2hresults[haindex].draws + 1;
+            }
+            h2hresults[haindex].for = h2hresults[haindex].for + parseInt(match.vgoal);
+            h2hresults[haindex].against = h2hresults[haindex].against + parseInt(match.hgoal);
+            h2hresults[haindex].diff = h2hresults[haindex].diff + parseInt(match.vgoal) - parseInt(match.hgoal);            
         }
         if(match.programme && match.programme != "#N/A") {
 
@@ -72,8 +136,7 @@ exports.handler = async function(event, context){
     if(date && results.length == 1)
         return utils.sendResponse(200, results[0]);
     else
-        return utils.sendResponse(200, results);
-
+        return utils.sendResponse(200, {results: results, h2hresults: h2hresults});
 }
 
 async function getResults(season, competition, opposition, date, manager, venue, pens, sort, or) {

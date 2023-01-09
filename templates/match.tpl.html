@@ -61,7 +61,15 @@
                 <div class="form-group">
                     <label for="programme">Opposition</label>
                     <input type="text" name="opposition" id="opposition" value="{{opposition}}"/>
-                </div>                                
+                </div>
+                <div class="form-group">
+                    <label for="programme">Home Goals</label>
+                    <input type="text" name="hgoal" id="hgoal" value="{{hgoal}}"/>
+                </div>  
+                <div class="form-group">
+                    <label for="programme">Away Goals</label>
+                    <input type="text" name="vgoal" id="vgoal" value="{{vgoal}}"/>
+                </div>                                  
                 <button id="editbutton2" class="btn btn-primary px-3">Submit</button>
             </div>
         </div>
@@ -132,9 +140,10 @@
 
                         </aside>
                         <article class="col-md-8 content-body tranmere-results">
-                            {{#pens}}<h4>{{pens}}</h4>{{/pens}}
+                            
                             <div class="col-md-12" style= "padding-bottom:20px">
-                                <h4>Team</h4>
+                                {{#pens}}<h2>{{pens}}</h2>{{/pens}}
+                                <h2>Team</h2>
                                 <table class="pitch">
                                     <tr>
                                         <td></td>
@@ -229,7 +238,7 @@
                                 </table>
                             </div>
                             <div class="col-md-12">
-                                <h4>Previous 5 Matches</h4>
+                                <h2>Previous 5 Matches</h2>
                                 <div id="previous-five-loading">
                                     <div class="spinner-grow text-primary" role="status">
                                         <span class="sr-only">Loading...</span>
@@ -238,7 +247,7 @@
                                 <div id="previous-five-content"></div>
                             </div>
                             <div class="col-md-12">
-                                <h4>Next 5 Matches</h4>
+                                <h2>Next 5 Matches</h2>
                                 <div id="next-five-loading">
                                     <div class="spinner-grow text-primary" role="status">
                                         <span class="sr-only">Loading...</span>
@@ -260,7 +269,7 @@
       $(`#${or}-five-loading`).show();
       $(`#${or}-five-content`).hide();
       var dateobj = new Date();
-      var base = window.location.hostname == "www.tranmere-web.com" ? 'https://www.tranmere-web.com' : "https://www.tranmere-web.com";
+      var base = "";
       var url = base + `/result-search/?season={{season}}&date={{date}}&or=${or}` 
                   + '&c=' + dateobj.getDate();
       $.getJSON(url, function(data) {
@@ -294,7 +303,9 @@
             visitor : $("#visitor").val(),
             opposition : $("#opposition").val(),
             pens : $("#pens").val(),
-            venue : $("#venue").val()
+            venue : $("#venue").val(),
+            hgoal : $("#hgoal").val(),
+            vgoal : $("#vgoal").val(),
         };
     
         $.ajax({
@@ -304,13 +315,13 @@
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify(data),
             headers: {
-            "Authorization": window.auth.getCachedSession().getAccessToken().getJwtToken()
+                "Authorization": window.auth.getCachedSession().getAccessToken().getJwtToken()
             },
             success: function () {
-            window.location.href =  window.location.href + "?v=" + Math.floor(Math.random() * 10);
+                window.location.href =  window.location.href + "?v=" + Math.floor(Math.random() * 10);
             },
             error: function () {
-            alert('fail')
+                alert('fail')
             }});
     });
     </script>

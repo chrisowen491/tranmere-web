@@ -2,6 +2,7 @@
 // doc
 //
 //
+@use 'sass:math';
 
 .doc-sidebar {
 	padding: $card-spacer-x;
@@ -9,10 +10,10 @@
 }
 
 .doc-content-header {
-	margin-left: -($card-spacer-x / 2);
-	margin-right: -($card-spacer-x / 2);
+	margin-left: -(math.div($card-spacer-x, 2));
+	margin-right: -(math.div($card-spacer-x, 2));
 	margin-bottom: $grid-gutter-width;
-	padding: $grid-gutter-width / 2;
+	padding: math.div($grid-gutter-width, 2);
 	border-bottom: $border-width solid $border-color;
 
 	@include media-breakpoint-up(lg) {
@@ -37,11 +38,11 @@
 	margin-top: 0!important;
 
 	> article {
-		padding: $grid-gutter-width / 2;
+		padding: math.div($grid-gutter-width, 2);
 	}
 
 	> aside {
-		padding: $grid-gutter-width / 2;
+		padding: math.div($grid-gutter-width, 2);
 		border-left: $border-width solid $border-color;
 	}
 
