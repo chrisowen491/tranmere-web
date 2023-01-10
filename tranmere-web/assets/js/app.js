@@ -1,3 +1,15 @@
+window.DD_LOGS && window.DD_LOGS.onReady(function() {
+  window.DD_LOGS.init({
+    clientToken: 'pub91e87345f76af7acb5aa202805d95df0',
+    site: 'datadoghq.eu',
+    service: 'www.tranmere-web.com',
+    env: 'prod',
+    version: '@version@',
+    forwardErrorsToLogs: true,
+    forwardConsoleLogs: "all",
+    sampleRate: 100,
+  })
+})
 window.DD_RUM && window.DD_RUM.init({
   clientToken: 'pub91e87345f76af7acb5aa202805d95df0',
   applicationId: 'bb11809d-d51b-408d-9be4-cacc89c65d63',

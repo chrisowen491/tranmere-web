@@ -31,6 +31,7 @@ function scripts() {
     'node_modules/video.js/dist/video.js',
     'node_modules/videojs-youtube/dist/Youtube.js',
     'node_modules/amazon-cognito-auth-js/dist/amazon-cognito-auth.min.js',
+    'node_modules/@datadog/browser-logs/bundle/datadog-logs.js',
     'node_modules/@datadog/browser-rum/bundle/datadog-rum.js',
     'tranmere-web/assets/js/modernizr.js'
     ])
