@@ -5,25 +5,9 @@ var maps = require('gulp-sourcemaps');
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
 var replace = require('gulp-string-replace');
-var server = require('browser-sync').create();
 //const critical = require('critical').stream;
 const cleanCSS = require('gulp-clean-css');
 const pack = require('./package.json');
-
-function reload(done) {
-  server.reload();
-  done();
-}
-
-function serve(done) {
-  server.init({
-    server: {
-      baseDir: 'web.out'
-    }
-  });
-  done();
-}
-
 
 // compile sass to css
 function css() {
@@ -31,13 +15,10 @@ function css() {
   .pipe(maps.init())
   .pipe(sass())
   .pipe(maps.write('./'))
-  .pipe(gulp.dest('web.out/assets/css'))
-  .pipe(server.stream());
+  .pipe(gulp.dest('web.out/assets/css'));
 }
 
-
 // concatenate js files
-
 function scripts() {
   return gulp.src([
     'node_modules/jquery/dist/jquery.js',
@@ -59,7 +40,6 @@ function scripts() {
     .pipe(gulp.dest('web.out/assets/js'));
 }
 
-
 // concatenate css files
 function styles() {
   return gulp.src([
@@ -73,7 +53,6 @@ function styles() {
     .pipe(maps.write())
     .pipe(gulp.dest('web.out/assets/css'));
 }
-
 
 // minify js
 function minify() {
@@ -116,26 +95,26 @@ function criticalTask() {
 */
 
 function static() {
-    return gulp.src([
-          './tranmere-web/data/*',
-          './tranmere-web/favicon.ico',
-          './tranmere-web/_headers',
-          './tranmere-web/_redirects'],  {base: './tranmere-web/'})
-      .pipe(gulp.dest('./web.out/'));
+  return gulp.src([
+    './tranmere-web/data/*',
+    './tranmere-web/favicon.ico',
+    './tranmere-web/_headers',
+    './tranmere-web/_redirects'],  {base: './tranmere-web/'})
+  .pipe(gulp.dest('./web.out/'));
 }
 
 function publish() {
-    return gulp.src([
-          './tranmere-web/assets/fonts/*',
-          './tranmere-web/assets/icons/*',
-          './tranmere-web/assets/images/*',
-          './tranmere-web/assets/logos/*',
-          './tranmere-web/assets/players/*',
-          './tranmere-web/assets/shirts/*',
-          './tranmere-web/assets/templates/*',
-          './tranmere-web/assets/js/*.js',
-      ],  {base: './tranmere-web/assets/'})
-      .pipe(gulp.dest('./web.out/assets/'));
+  return gulp.src([
+    './tranmere-web/assets/fonts/*',
+    './tranmere-web/assets/icons/*',
+    './tranmere-web/assets/images/*',
+    './tranmere-web/assets/logos/*',
+    './tranmere-web/assets/players/*',
+    './tranmere-web/assets/shirts/*',
+    './tranmere-web/assets/templates/*',
+    './tranmere-web/assets/js/*.js',
+  ],  {base: './tranmere-web/assets/'})
+  .pipe(gulp.dest('./web.out/assets/'));
 }
 
 function swap_version() {
@@ -144,16 +123,6 @@ function swap_version() {
     .pipe(gulp.dest('./web.out/assets/js/app-v'));
 }
 
-// watch for changes
-function watch() {
-  gulp.watch('tranmere-web/assets/scss/**/*', gulp.series(css,  reload));
-  gulp.watch(['tranmere-web/assets/js/*'], gulp.series(publish, reload));
-  gulp.watch(['tranmere-web/assets/templates/*'], gulp.series(publish, reload));
-  gulp.watch('gulpfile.js', gulp.series(scripts, styles, minify, reload));
-}
-
-
-const build = gulp.series(static, publish, swap_version, css, scripts, styles, minify, minifyCss, gulp.parallel(watch, serve));
 const deploy = gulp.series(static, publish, swap_version, css, scripts, styles, minify, minifyCss);
 
 // tasks
@@ -166,4 +135,4 @@ exports.deploy = deploy;
 exports.swap_version = swap_version;
 //exports.criticalTask = criticalTask;
 
-exports.default = build;
+exports.default = deploy;

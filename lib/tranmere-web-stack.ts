@@ -72,6 +72,7 @@ export class TranmereWebStack extends cdk.Stack {
       environment: env_variables,
       bundling: {
         minify: true,
+        sourceMap: true,
         externalModules: ['aws-sdk'],
       }
     });
@@ -91,6 +92,7 @@ export class TranmereWebStack extends cdk.Stack {
       environment: env_variables,
       bundling: {
         minify: true,
+        sourceMap: true,
         externalModules: ['aws-sdk'],
       }
     });
@@ -109,6 +111,7 @@ export class TranmereWebStack extends cdk.Stack {
       environment: env_variables,
       bundling: {
         minify: true,
+        sourceMap: true,
         externalModules: ['aws-sdk'],
       }
     });
@@ -127,6 +130,7 @@ export class TranmereWebStack extends cdk.Stack {
       environment: env_variables,
       bundling: {
         minify: true,
+        sourceMap: true,
         externalModules: ['aws-sdk'],
       }
     });
@@ -146,6 +150,7 @@ export class TranmereWebStack extends cdk.Stack {
       environment: env_variables,
       bundling: {
         minify: true,
+        sourceMap: true,
         externalModules: ['aws-sdk'],
         commandHooks: {
           beforeBundling(inputDir: string, outputDir: string): string[] {
@@ -170,6 +175,7 @@ export class TranmereWebStack extends cdk.Stack {
       environment: env_variables,
       bundling: {
         minify: true,
+        sourceMap: true,
         externalModules: ['aws-sdk'],
       }
     }); 
@@ -183,6 +189,7 @@ export class TranmereWebStack extends cdk.Stack {
       environment: env_variables,
       bundling: {
         minify: true,
+        sourceMap: true,
         externalModules: ['aws-sdk'],
         commandHooks: {
           beforeBundling(inputDir: string, outputDir: string): string[] {
@@ -207,6 +214,7 @@ export class TranmereWebStack extends cdk.Stack {
       environment: env_variables,
       bundling: {
         minify: true,
+        sourceMap: true,
         externalModules: ['aws-sdk'],
       }
     });  
@@ -220,6 +228,7 @@ export class TranmereWebStack extends cdk.Stack {
       environment: env_variables,
       bundling: {
         minify: true,
+        sourceMap: true,
         externalModules: ['aws-sdk'],
       }
     });  
@@ -233,6 +242,7 @@ export class TranmereWebStack extends cdk.Stack {
       environment: env_variables,
       bundling: {
         minify: true,
+        sourceMap: true,
         externalModules: ['aws-sdk'],
         commandHooks: {
           beforeBundling(inputDir: string, outputDir: string): string[] {
@@ -257,6 +267,7 @@ export class TranmereWebStack extends cdk.Stack {
       environment: env_variables,
       bundling: {
         minify: true,
+        sourceMap: true,
         externalModules: ['aws-sdk'],
       }
     });       
