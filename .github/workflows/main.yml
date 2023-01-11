@@ -53,14 +53,12 @@ jobs:
           AWS_REGION: eu-west-1
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          ENVIRONMENT: prod
           EMAIL_ADDRESS: ${{ secrets.EMAIL_ADDRESS }}
           CF_SPACE: ${{ secrets.CF_SPACE }}
           CF_KEY: ${{ secrets.CF_KEY }}
           SCRAPE_ID: ${{ secrets.SCRAPE_ID }}
           SCRAPE_SEASON: ${{ secrets.SCRAPE_SEASON }}
           SCRAPE_URL: ${{ secrets.SCRAPE_URL }}
-          VERSION: ${{needs.build_test_and_package.outputs.version}}
           DD_TAGS: git.commit.sha:${{ github.sha }},git.repository_url:github.com/${{ github.repository }}
 
   data_dog:

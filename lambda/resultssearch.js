@@ -16,38 +16,7 @@ exports.handler = async function(event, context){
 
     const data = await getResults(season, competition, opposition, date, manager, venue, pens, sort, or);
     var results = [];
-    var h2hresults = [
-        {
-            venue: "Home",
-            pld: 0,
-            wins: 0,
-            draws: 0,
-            lost: 0,
-            for: 0,
-            against: 0,
-            diff: 0
-        },
-        {
-            venue: "Away",
-            pld: 0,
-            wins: 0,
-            draws: 0,
-            lost: 0,
-            for: 0,
-            against: 0,
-            diff: 0
-        },
-        {
-            venue: "Neutral",
-            pld: 0,
-            wins: 0,
-            draws: 0,
-            lost: 0,
-            for: 0,
-            against: 0,
-            diff: 0
-        }
-    ];
+    var h2hresults = [buildDefaultSummary("Home"), buildDefaultSummary("Away"), buildDefaultSummary("Neutral")];
     for(var i=0; i < data.length; i++) {
         var match = data[i];
         if(match.home == "Tranmere Rovers") {
@@ -117,6 +86,10 @@ exports.handler = async function(event, context){
         if(match.attendance == 0)
             match.attendance = null;
         results.push(match)
+    }
+
+    if(h2hresults[2].pld == 0) {
+        h2hresults.pop();
     }
 
     if(sort && (decodeURIComponent(sort) == "Top Attendance")) {
@@ -254,6 +227,19 @@ function buildQuery(query, attribute, attributeName) {
     query.FilterExpression = query.FilterExpression ? query.FilterExpression + ` and ${attributeName} = :${attributeName}` : `${attributeName} = :${attributeName}`;
     query.ExpressionAttributeValues[`:${attributeName}`] = decodeURIComponent(attribute);
     return query;
+}
+
+function buildDefaultSummary(label) {
+    return {
+        venue: label,
+        pld: 0,
+        wins: 0,
+        draws: 0,
+        lost: 0,
+        for: 0,
+        against: 0,
+        diff: 0
+    };
 }
 
 async function getGoals(date, season) {

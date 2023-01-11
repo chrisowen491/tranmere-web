@@ -11,17 +11,13 @@ import * as targets from 'aws-cdk-lib/aws-events-targets'
 import * as appsync from '@aws-cdk/aws-appsync-alpha';
 import { MappingTemplate } from '@aws-cdk/aws-appsync-alpha';
 
-const ENVIRONMENT : string = process.env.ENVIRONMENT!;
 const CF_KEY : string = process.env.CF_KEY!;
 const CF_SPACE : string = process.env.CF_SPACE!;
 const EMAIL_ADDRESS : string = process.env.EMAIL_ADDRESS!;
 const SCRAPE_ID : string = process.env.SCRAPE_ID!;
 const SCRAPE_SEASON : string = process.env.SCRAPE_SEASON!;
 const SCRAPE_URL : string = process.env.SCRAPE_URL!;
-const VERSION : string = process.env.VERSION!;
 const DD_TAGS : string = process.env.DD_TAGS!;
-
-import * as pack from '../package.json';
 
 export class TranmereWebStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
