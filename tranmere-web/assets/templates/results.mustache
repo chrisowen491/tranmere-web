@@ -14,6 +14,7 @@
     </tr>
     </thead>
     <tbody>
+{{/h2hresults.length}}
     {{#h2hresults}}
     <tr>
         <td>{{venue}}</td>
@@ -26,6 +27,19 @@
         <td>{{diff}}</td>
     </tr>
     {{/h2hresults}}
+    {{#h2htotal}}
+    <tr>
+        <td><strong>{{venue}}</strong></td>
+        <td><strong>{{pld}}</strong></td>
+        <td><strong>{{wins}}</strong></td>
+        <td><strong>{{draws}}</strong></td>
+        <td><strong>{{lost}}</strong></td>
+        <td><strong>{{for}}</strong></td>
+        <td><strong>{{against}}</strong></td>
+        <td><strong>{{diff}}</strong></td>
+    </tr>
+    {{/h2htotal}}
+{{#h2hresults.length}}
     </tbody>
 </table>
 <h2>Results</h2>

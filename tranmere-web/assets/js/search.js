@@ -17,9 +17,10 @@ function search() {
   $.getJSON(url, function(data) {
     var view = {
         results: data.results,
-        h2hresults: data.h2hresults
+        h2hresults: data.h2hresults,
+        h2htotal: data.h2htotal
     };
-    $.get("/assets/templates/results.mustache", function(template) {
+    $.get("/assets/templates/results.mustache"+ '?c=' + dateobj.getDate(), function(template) {
       var article = Mustache.render( template, view );
       $("#content").html(article);
       $("#loading").hide();
