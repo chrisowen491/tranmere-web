@@ -29,7 +29,7 @@ function search() {
   var re2 = /\/\d\d\d\dgk\//gm;
   var re3 = /\/\d\d\d\d[A-Za-z]\//gm;
   $.getJSON(url, function(view) {
-    $.get("/assets/templates/players.mustache" + dateobj.getDate(), function(template) {
+    $.get("/assets/templates/players.mustache?c=" + dateobj.getDate(), function(template) {
 
       if($('#season').val() && $('#season').val() > 1976) {
           for(var i=0; i < view.players.length; i++) {
