@@ -62,7 +62,7 @@
     "autocomplete.js": "^0.38.0",
     "aws-sdk": "^2.1291.0",
     "axios": "^0.27.2",
-    "bootstrap": "^4.6.1",
+    "bootstrap": "^5.2.3",
     "bootstrap-select": "^1.13.2",
     "cheerio": "^1.0.0-rc.3",
     "ci": "^2.2.0",
