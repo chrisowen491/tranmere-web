@@ -13,7 +13,7 @@ exports.handler = async function (event, context) {
         today.setFullYear(year);
         var result = await getResults(i, today.toISOString().slice(0, 10))
 
-        if(result.programme != "#N/A") {
+        if(result && result.programme != "#N/A") {
             results.push(result);
             result.day = result.date.substr(5);
             insertUpdateItem(result, utils.ON_THIS_DAY_TABLE);

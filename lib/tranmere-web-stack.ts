@@ -44,6 +44,7 @@ export class TranmereWebStack extends cdk.Stack {
     const TranmereWebHatTricks = ddb.Table.fromTableAttributes(this,'TranmereWebHatTricks',{tableName: 'TranmereWebHatTricks',grantIndexPermissions: true});
 
     const TranmereWebOnThisDay = new ddb.Table(this, 'TranmereWebOnThisDay', {
+      tableName: "TranmereWebOnThisDay",
       partitionKey: { name: 'day', type: ddb.AttributeType.STRING },
       billingMode: ddb.BillingMode.PAY_PER_REQUEST,
     });
