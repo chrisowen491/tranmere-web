@@ -1,15 +1,11 @@
 import * as cdk from 'aws-cdk-lib';
-import * as lambda from 'aws-cdk-lib/aws-lambda';
-import {NodejsFunction} from 'aws-cdk-lib/aws-lambda-nodejs';
 import { aws_apigateway as apigw} from 'aws-cdk-lib'; 
 import { Construct } from 'constructs';
 import * as acm from "aws-cdk-lib/aws-certificatemanager"
 import * as ddb from 'aws-cdk-lib/aws-dynamodb';
 import * as iam from 'aws-cdk-lib/aws-iam';
-import * as events from 'aws-cdk-lib/aws-events'
-import * as targets from 'aws-cdk-lib/aws-events-targets'
-import * as appsync from '@aws-cdk/aws-appsync-alpha';
-import { MappingTemplate } from '@aws-cdk/aws-appsync-alpha';
+import { TranmereWebLambda } from './tranmere-web-lambda'
+import { TranmereWebGraphQL } from './tranmere-web-graphql'
 
 const CF_KEY : string = process.env.CF_KEY!;
 const CF_SPACE : string = process.env.CF_SPACE!;
@@ -35,6 +31,23 @@ export class TranmereWebStack extends cdk.Stack {
       "DD_TAGS": DD_TAGS
     }
 
+    const TranmereWebPlayerTable = ddb.Table.fromTableAttributes(this,'TranmereWebPlayerTable',{tableName: 'TranmereWebPlayerTable',grantIndexPermissions: true});
+    const TranmereWebAppsTable = ddb.Table.fromTableAttributes(this,'TranmereWebAppsTable',{tableName: 'TranmereWebAppsTable',grantIndexPermissions: true});
+    const TranmereWebGoalsTable = ddb.Table.fromTableArn(this, "TranmereWebGoalsTable", `arn:aws:dynamodb:${this.region}:${this.account}:table/TranmereWebGoalsTable`);
+    const TranmereWebPlayerSeasonSummaryTable = ddb.Table.fromTableAttributes(this,'TranmereWebPlayerSeasonSummaryTable',{tableName: 'TranmereWebPlayerSeasonSummaryTable',grantIndexPermissions: true});
+    const TranmereWebMediaSyncTable = ddb.Table.fromTableArn(this, "TranmereWebMediaSyncTable", `arn:aws:dynamodb:${this.region}:${this.account}:table/TranmereWebMediaSyncTable`);
+    const TranmereWebGames = ddb.Table.fromTableAttributes(this,'TranmereWebGames',{tableName: 'TranmereWebGames',grantIndexPermissions: true});
+    const TranmereWebClubs = ddb.Table.fromTableArn(this, "TranmereWebClubs", `arn:aws:dynamodb:${this.region}:${this.account}:table/TranmereWebClubs`);
+    const TranmereWebCompetitions = ddb.Table.fromTableArn(this, "TranmereWebCompetitions", `arn:aws:dynamodb:${this.region}:${this.account}:table/TranmereWebCompetitions`);
+    const TranmereWebManagers = ddb.Table.fromTableArn(this, "TranmereWebManagers", `arn:aws:dynamodb:${this.region}:${this.account}:table/TranmereWebManagers`);
+    const TranmereWebStarsTable = ddb.Table.fromTableArn(this, "TranmereWebStarsTable", `arn:aws:dynamodb:${this.region}:${this.account}:table/TranmereWebStarsTable`);
+    const TranmereWebHatTricks = ddb.Table.fromTableAttributes(this,'TranmereWebHatTricks',{tableName: 'TranmereWebHatTricks',grantIndexPermissions: true});
+
+    const TranmereWebOnThisDay = new ddb.Table(this, 'TranmereWebOnThisDay', {
+      partitionKey: { name: 'day', type: ddb.AttributeType.STRING },
+      billingMode: ddb.BillingMode.PAY_PER_REQUEST,
+    });
+
     // Base API gateway
     const api = new apigw.RestApi(this, 'tranmere-web', {
       // 👇 enable CORS
@@ -58,229 +71,9 @@ export class TranmereWebStack extends cdk.Stack {
       },
     });
 
-    
-    const contact_us_lambda =new NodejsFunction(this, 'ContactUsFunction', {
-      entry: './lambda/contactus.js',
-      handler: 'handler', 
-      memorySize: 1024,
-      runtime: lambda.Runtime.NODEJS_16_X,
-      timeout: cdk.Duration.seconds(300),
-      environment: env_variables,
-      bundling: {
-        minify: true,
-        sourceMap: true,
-        externalModules: ['aws-sdk'],
-      }
-    });
-
-    contact_us_lambda.addToRolePolicy(new iam.PolicyStatement({
-      actions: ['ses:SendEmail', 'SES:SendRawEmail'],
-      resources: ['*'],
-      effect: iam.Effect.ALLOW,
-    }));
-
-    const update_job_lambda = new NodejsFunction(this, 'UpdateJobFunction', {
-      entry: './lambda/updateJob.js',
-      handler: 'handler', 
-      memorySize: 1024,
-      runtime: lambda.Runtime.NODEJS_16_X,
-      timeout: cdk.Duration.seconds(600),
-      environment: env_variables,
-      bundling: {
-        minify: true,
-        sourceMap: true,
-        externalModules: ['aws-sdk'],
-      }
-    });
-
-    new events.Rule(this,'UpdateJobFunctionRule',{
-      targets: [new targets.LambdaFunction(update_job_lambda)],
-      schedule: events.Schedule.cron({minute: '45', hour: '23'}),
-    });
-
-    const hat_trick_job_lambda = new NodejsFunction(this, 'HatTrickJobFunction', {
-      entry: './lambda/hatTrickJob.js',
-      handler: 'handler', 
-      memorySize: 1024,
-      runtime: lambda.Runtime.NODEJS_16_X,
-      timeout: cdk.Duration.seconds(600),
-      environment: env_variables,
-      bundling: {
-        minify: true,
-        sourceMap: true,
-        externalModules: ['aws-sdk'],
-      }
-    });
-
-    new events.Rule(this,'HatTrickJobFunctionRule',{
-      targets: [new targets.LambdaFunction(hat_trick_job_lambda)],
-      schedule: events.Schedule.cron({minute: '45', hour: '23'}),
-    });
-
-    const scraper_job_lambda = new NodejsFunction(this, 'ScraperJobFunction', {
-      entry: './lambda/scraper.js',
-      handler: 'handler', 
-      memorySize: 1024,
-      runtime: lambda.Runtime.NODEJS_16_X,
-      timeout: cdk.Duration.seconds(600),
-      environment: env_variables,
-      bundling: {
-        minify: true,
-        sourceMap: true,
-        externalModules: ['aws-sdk'],
-      }
-    });
-
-    new events.Rule(this,'ScraperJobFunctionRule',{
-      targets: [new targets.LambdaFunction(scraper_job_lambda)],
-      schedule: events.Schedule.cron({minute: '45', hour: '23'}),
-    });
-
-
-    const match_page_lambda =new NodejsFunction(this, 'MatchPageFunction', {
-      entry: './lambda/matchpage.js',
-      handler: 'handler', 
-      memorySize: 1024,
-      runtime: lambda.Runtime.NODEJS_16_X,
-      timeout: cdk.Duration.seconds(300),
-      environment: env_variables,
-      bundling: {
-        minify: true,
-        sourceMap: true,
-        externalModules: ['aws-sdk'],
-        commandHooks: {
-          beforeBundling(inputDir: string, outputDir: string): string[] {
-            return [];
-          },
-          afterBundling(inputDir: string, outputDir: string): string[] {
-            return [`mkdir ${outputDir}/templates && cp -R ${inputDir}/templates/* ${outputDir}/templates`];
-          },
-          beforeInstall() {
-            return [];
-          },
-        },
-      }
-    });
-
-    const match_update_lambda =new NodejsFunction(this, 'MatchUpdateFunction', {
-      entry: './lambda/matchupdate.js',
-      handler: 'handler', 
-      memorySize: 1024,
-      runtime: lambda.Runtime.NODEJS_16_X,
-      timeout: cdk.Duration.seconds(300),
-      environment: env_variables,
-      bundling: {
-        minify: true,
-        sourceMap: true,
-        externalModules: ['aws-sdk'],
-      }
-    }); 
-    
-    const page_lambda =new NodejsFunction(this, 'DynamicPageFunction', {
-      entry: './lambda/page.js',
-      handler: 'handler', 
-      memorySize: 1024,
-      runtime: lambda.Runtime.NODEJS_16_X,
-      timeout: cdk.Duration.seconds(300),
-      environment: env_variables,
-      bundling: {
-        minify: true,
-        sourceMap: true,
-        externalModules: ['aws-sdk'],
-        commandHooks: {
-          beforeBundling(inputDir: string, outputDir: string): string[] {
-            return [];
-          },
-          afterBundling(inputDir: string, outputDir: string): string[] {
-            return [`mkdir ${outputDir}/templates && cp -R ${inputDir}/templates/* ${outputDir}/templates`];
-          },
-          beforeInstall() {
-            return [];
-          },
-        },
-      }
-    });     
-
-    const player_search_lambda =new NodejsFunction(this, 'PlayerSearchFunction', {
-      entry: './lambda/playersearch.js',
-      handler: 'handler', 
-      memorySize: 1024,
-      runtime: lambda.Runtime.NODEJS_16_X,
-      timeout: cdk.Duration.seconds(300),
-      environment: env_variables,
-      bundling: {
-        minify: true,
-        sourceMap: true,
-        externalModules: ['aws-sdk'],
-      }
-    });  
-    
-    const results_search_lambda =new NodejsFunction(this, 'ResultsSearchFunction', {
-      entry: './lambda/resultssearch.js',
-      handler: 'handler', 
-      memorySize: 1024,
-      runtime: lambda.Runtime.NODEJS_16_X,
-      timeout: cdk.Duration.seconds(300),
-      environment: env_variables,
-      bundling: {
-        minify: true,
-        sourceMap: true,
-        externalModules: ['aws-sdk'],
-      }
-    });  
-
-    const player_builder_lambda =new NodejsFunction(this, 'PlayerBuilderFunction', {
-      entry: './lambda/playerbuilder.js',
-      handler: 'handler', 
-      memorySize: 1024,
-      runtime: lambda.Runtime.NODEJS_16_X,
-      timeout: cdk.Duration.seconds(300),
-      environment: env_variables,
-      bundling: {
-        minify: true,
-        sourceMap: true,
-        externalModules: ['aws-sdk'],
-        commandHooks: {
-          beforeBundling(inputDir: string, outputDir: string): string[] {
-            return [];
-          },
-          afterBundling(inputDir: string, outputDir: string): string[] {
-            return [`mkdir ${outputDir}/assets && cp -R ${inputDir}/lambda/assets/* ${outputDir}/assets`];
-          },
-          beforeInstall() {
-            return [];
-          },
-        },
-      }
-    });   
-    
-    const media_sync_lambda =new NodejsFunction(this, 'MediaSyncFunction', {
-      entry: './lambda/mediasync.js',
-      handler: 'handler', 
-      memorySize: 1024,
-      runtime: lambda.Runtime.NODEJS_16_X,
-      timeout: cdk.Duration.seconds(300),
-      environment: env_variables,
-      bundling: {
-        minify: true,
-        sourceMap: true,
-        externalModules: ['aws-sdk'],
-      }
-    });       
-
     const contact_us = api.root.addResource('contact-us');
-    contact_us.addMethod(
-      'POST',
-      new apigw.LambdaIntegration(contact_us_lambda, {proxy: true}),
-    );
-
     const media_sync = api.root.addResource('media-sync');
     const type = media_sync.addResource('{type}');
-    type.addMethod(
-      'POST',
-      new apigw.LambdaIntegration(media_sync_lambda, {proxy: true}),
-    );
-
     const builder = api.root.addResource('builder');
     const kit = builder.addResource('{kit}');
     const hair = kit.addResource('{hair}');
@@ -290,177 +83,159 @@ export class TranmereWebStack extends cdk.Stack {
     const neckColour = hairColour.addResource('{neckColour}');
     const background = neckColour.addResource('{background}');
     const highlights = background.addResource('{highlights}');
-    
-    highlights.addMethod(
-      'GET',
-      new apigw.LambdaIntegration(player_builder_lambda, {proxy: true}),
-    );
-
     const match = api.root.addResource('match');
     const season = match.addResource('{season}');
     const date = season.addResource('{date}');
-    date.addMethod(
-      'GET',
-      new apigw.LambdaIntegration(match_page_lambda, {proxy: true}),
-    );
-    date.addMethod(
-      'POST',
-      new apigw.LambdaIntegration(match_update_lambda, {proxy: true}),
-    );
-
     const page = api.root.addResource('page');
     const pageName = page.addResource('{pageName}');
     const classifier = pageName.addResource('{classifier}');
-    classifier.addMethod(
-      'GET',
-      new apigw.LambdaIntegration(page_lambda, {proxy: true}),
-    );
-
     const player_search = api.root.addResource('player-search');
-    player_search.addMethod(
-      'GET',
-      new apigw.LambdaIntegration(player_search_lambda, {proxy: true}),
-    );
-
     const result_search = api.root.addResource('result-search');
-    result_search.addMethod(
-      'GET',
-      new apigw.LambdaIntegration(results_search_lambda, {proxy: true}),
-    );
+    const on = api.root.addResource('on');
 
-    const TranmereWebPlayerTable = ddb.Table.fromTableAttributes(this,'TranmereWebPlayerTable',{tableName: 'TranmereWebPlayerTable',grantIndexPermissions: true});
-    const TranmereWebAppsTable = ddb.Table.fromTableAttributes(this,'TranmereWebAppsTable',{tableName: 'TranmereWebAppsTable',grantIndexPermissions: true});
-    const TranmereWebGoalsTable = ddb.Table.fromTableArn(this, "TranmereWebGoalsTable", `arn:aws:dynamodb:${this.region}:${this.account}:table/TranmereWebGoalsTable`);
-    const TranmereWebPlayerSeasonSummaryTable = ddb.Table.fromTableAttributes(this,'TranmereWebPlayerSeasonSummaryTable',{tableName: 'TranmereWebPlayerSeasonSummaryTable',grantIndexPermissions: true});
-    const TranmereWebMediaSyncTable = ddb.Table.fromTableArn(this, "TranmereWebMediaSyncTable", `arn:aws:dynamodb:${this.region}:${this.account}:table/TranmereWebMediaSyncTable`);
-    const TranmereWebGames = ddb.Table.fromTableAttributes(this,'TranmereWebGames',{tableName: 'TranmereWebGames',grantIndexPermissions: true});
-    const TranmereWebClubs = ddb.Table.fromTableArn(this, "TranmereWebClubs", `arn:aws:dynamodb:${this.region}:${this.account}:table/TranmereWebClubs`);
-    const TranmereWebCompetitions = ddb.Table.fromTableArn(this, "TranmereWebCompetitions", `arn:aws:dynamodb:${this.region}:${this.account}:table/TranmereWebCompetitions`);
-    const TranmereWebManagers = ddb.Table.fromTableArn(this, "TranmereWebManagers", `arn:aws:dynamodb:${this.region}:${this.account}:table/TranmereWebManagers`);
-    const TranmereWebStarsTable = ddb.Table.fromTableArn(this, "TranmereWebStarsTable", `arn:aws:dynamodb:${this.region}:${this.account}:table/TranmereWebStarsTable`);
-    const TranmereWebHatTricks = ddb.Table.fromTableAttributes(this,'TranmereWebHatTricks',{tableName: 'TranmereWebHatTricks',grantIndexPermissions: true});
-
-    TranmereWebPlayerTable.grantReadData(player_search_lambda);
-    TranmereWebPlayerSeasonSummaryTable.grantReadData(player_search_lambda);
-
-    TranmereWebGames.grantReadData(results_search_lambda);
-    
-    TranmereWebAppsTable.grantReadData(page_lambda);
-    TranmereWebPlayerSeasonSummaryTable.grantReadData(page_lambda);
-    TranmereWebPlayerTable.grantReadData(page_lambda);
-
-    TranmereWebGames.grantReadWriteData(match_update_lambda);
-
-    TranmereWebPlayerTable.grantReadData(match_page_lambda);
-    TranmereWebGames.grantReadData(match_page_lambda);
-    TranmereWebGoalsTable.grantReadData(match_page_lambda);
-    TranmereWebAppsTable.grantReadData(match_page_lambda);
-
-    TranmereWebMediaSyncTable.grantReadWriteData(media_sync_lambda);
-    TranmereWebPlayerTable.grantReadWriteData(media_sync_lambda);
-    TranmereWebStarsTable.grantReadWriteData(media_sync_lambda);
-
-    TranmereWebPlayerSeasonSummaryTable.grantReadWriteData(update_job_lambda);
-    TranmereWebGoalsTable.grantReadData(update_job_lambda);
-    TranmereWebAppsTable.grantReadData(update_job_lambda);
-
-    TranmereWebGoalsTable.grantReadData(hat_trick_job_lambda);
-    TranmereWebHatTricks.grantReadWriteData(hat_trick_job_lambda);
-
-    TranmereWebGoalsTable.grantReadWriteData(scraper_job_lambda);
-    TranmereWebAppsTable.grantReadWriteData(scraper_job_lambda);
-    TranmereWebGames.grantReadWriteData(scraper_job_lambda);
-
-    const graphqltables = [
-      TranmereWebClubs,
-      TranmereWebCompetitions,
-      TranmereWebManagers,
-      TranmereWebPlayerTable,
-      TranmereWebStarsTable,
-      TranmereWebHatTricks
-    ];
-
-    const graphql = new appsync.GraphqlApi(this, 'Api', {
-      name: 'tranmere-web-appsync-api',
-      schema: appsync.SchemaFile.fromAsset('graphql/schema.graphql'),
-      authorizationConfig: {
-        defaultAuthorization: {
-          authorizationType: appsync.AuthorizationType.IAM,
-        },
-      },
-      xrayEnabled: true,
+    new TranmereWebLambda(this, 'ContactUsFunction', {      
+      environment: env_variables,
+      lambdaFile: './lambda/contactus.js',
+      apiResource: contact_us,
+      apiMethod: 'POST',
+      policy: new iam.PolicyStatement({
+        actions: ['ses:SendEmail', 'SES:SendRawEmail'],
+        resources: ['*'],
+        effect: iam.Effect.ALLOW,
+      }),
     });
 
-    const appsyncrole = new iam.Role(this, "appsyncrole", {
-      assumedBy: new iam.ServicePrincipal("apigateway.amazonaws.com"),
-      inlinePolicies: {
-        allowAppSync: new iam.PolicyDocument({
-          statements: [
-            new iam.PolicyStatement({
-              effect: iam.Effect.ALLOW,
-              actions: ["appsync:GraphQL"],
-              resources: [graphql.arn + "/types/*/fields/*"]
-            })
-          ]
-        })
+    new TranmereWebLambda(this, 'UpdateJobFunction', {      
+      environment: env_variables,
+      lambdaFile: './lambda/updateJob.js',
+      schedule: {minute: '45', hour: '23'},
+      readTables: [TranmereWebGoalsTable, TranmereWebAppsTable],
+      readWriteTables: [TranmereWebPlayerSeasonSummaryTable]
+    });
+
+    new TranmereWebLambda(this, 'HatTrickJobFunction', {      
+      environment: env_variables,
+      lambdaFile: './lambda/hatTrickJob.js',
+      schedule: {minute: '45', hour: '23'},
+      readTables: [TranmereWebGoalsTable],
+      readWriteTables: [TranmereWebHatTricks]
+    });
+
+    new TranmereWebLambda(this, 'ScraperJobFunction', {      
+      environment: env_variables,
+      lambdaFile: './lambda/scraper.js',
+      schedule: {minute: '45', hour: '23'},
+      readWriteTables: [TranmereWebGoalsTable, TranmereWebAppsTable, TranmereWebGames]
+    });
+
+    new TranmereWebLambda(this, 'MatchUpdateFunction', {      
+      environment: env_variables,
+      apiResource: date,
+      apiMethod: 'POST',
+      lambdaFile: './lambda/matchupdate.js',
+      readWriteTables: [TranmereWebGames]
+    });
+
+    new TranmereWebLambda(this, 'PlayerSearchFunction', {      
+      environment: env_variables,
+      lambdaFile: './lambda/playersearch.js',
+      apiResource: player_search,
+      apiMethod: 'GET',
+      readTables: [TranmereWebPlayerTable, TranmereWebPlayerSeasonSummaryTable]
+    });
+
+    new TranmereWebLambda(this, 'ResultsSearchFunction', {      
+      environment: env_variables,
+      lambdaFile: './lambda/resultssearch.js',
+      apiResource: result_search,
+      apiMethod: 'GET',
+      readTables: [TranmereWebGames]
+    });
+
+    new TranmereWebLambda(this, 'OnThisDayFunction', {      
+      environment: env_variables,
+      lambdaFile: './lambda/onThisDayJob.js',
+      apiResource: on,
+      apiMethod: 'GET',
+      readWriteTables: [TranmereWebOnThisDay],
+      readTables: [TranmereWebGames]
+    });
+
+    new TranmereWebLambda(this, 'MediaSyncFunction', {      
+      environment: env_variables,
+      lambdaFile: './lambda/mediasync.js',
+      apiResource: type,
+      apiMethod: 'POST',
+      readWriteTables: [TranmereWebMediaSyncTable, TranmereWebPlayerTable, TranmereWebStarsTable]
+    });
+
+    new TranmereWebLambda(this, 'MatchPageFunction', {      
+      environment: env_variables,
+      lambdaFile: './lambda/matchpage.js',
+      apiResource: date,
+      apiMethod: 'GET',
+      readTables: [TranmereWebPlayerTable, TranmereWebGames, TranmereWebGoalsTable, TranmereWebAppsTable],
+      commandHooks: {
+        beforeBundling(inputDir: string, outputDir: string): string[] {
+          return [];
+        },
+        afterBundling(inputDir: string, outputDir: string): string[] {
+          return [`mkdir ${outputDir}/templates && cp -R ${inputDir}/templates/* ${outputDir}/templates`];
+        },
+        beforeInstall() {
+          return [];
+        },
       }
     });
 
-    // Prints out the AppSync GraphQL endpoint to the terminal
-    new cdk.CfnOutput(this, "GraphQLAPIURL", {
-      value: graphql.graphqlUrl
-      });
-  
-      // Prints out the AppSync GraphQL API key to the terminal
-    new cdk.CfnOutput(this, "GraphQLAPIKey", {
-      value: graphql.apiKey || ''
+    new TranmereWebLambda(this, 'DynamicPageFunction', {      
+      environment: env_variables,
+      lambdaFile: './lambda/page.js',
+      apiResource: classifier,
+      apiMethod: 'GET',
+      readTables: [TranmereWebAppsTable, TranmereWebPlayerSeasonSummaryTable, TranmereWebPlayerTable],
+      commandHooks: {
+        beforeBundling(inputDir: string, outputDir: string): string[] {
+          return [];
+        },
+        afterBundling(inputDir: string, outputDir: string): string[] {
+          return [`mkdir ${outputDir}/templates && cp -R ${inputDir}/templates/* ${outputDir}/templates`];
+        },
+        beforeInstall() {
+          return [];
+        },
+      }
     });
 
-    const graph_ql = api.root.addResource('graphql');
-    graph_ql.addMethod("GET", new apigw.AwsIntegration({
-      service: 'appsync-api',
-      region: this.region,
-      subdomain: "ndshdu4npzcldgpb7vxap2iwty",
-      integrationHttpMethod: 'GET',
-      path: 'graphql',
-      options: {
-        credentialsRole: appsyncrole,
-        requestParameters: {
-          'integration.request.querystring.query': 'method.request.querystring.query'
+    new TranmereWebLambda(this, 'PlayerBuilderFunction', {      
+      environment: env_variables,
+      lambdaFile: './lambda/playerbuilder.js',
+      apiResource: highlights,
+      apiMethod: 'GET',
+      commandHooks: {
+        beforeBundling(inputDir: string, outputDir: string): string[] {
+          return [];
         },
-        integrationResponses: [
-          {
-            statusCode: '200',
-          }
-        ]
-      },
-    }),
-    {
-      requestParameters: {
-        'method.request.querystring.query': true,
-      },
-      methodResponses: [
-        {
-          statusCode: '200',
-          responseModels: {
-            'application/json': apigw.Model.EMPTY_MODEL
-          }
+        afterBundling(inputDir: string, outputDir: string): string[] {
+          return [`mkdir ${outputDir}/assets && cp -R ${inputDir}/lambda/assets/* ${outputDir}/assets`];
         },
-      ]
-     });
+        beforeInstall() {
+          return [];
+        },
+      },
+    });  
 
-  
-    for(var i=0; i < graphqltables.length; i++) {
-      const tableName = graphqltables[i].tableName;
-      const table = graphqltables[i]
-      const dynamoDataSources = graphql.addDynamoDbDataSource(tableName, table);
-      table.grantReadData(new iam.ServicePrincipal("appsync.amazonaws.com"));
-      dynamoDataSources.createResolver(tableName + "resolver", {
-        typeName: "Query",
-        fieldName: "list" + tableName,
-        requestMappingTemplate: MappingTemplate.fromFile("graphql/template.json"),
-        responseMappingTemplate: MappingTemplate.fromString("$util.toJson($context.result)")
-      });
-    }
+    new TranmereWebGraphQL(this, 'TranmereWebGraphQL', {      
+      region: this.region,
+      api: api,
+      tables: [
+        TranmereWebClubs,
+        TranmereWebCompetitions,
+        TranmereWebManagers,
+        TranmereWebPlayerTable,
+        TranmereWebStarsTable,
+        TranmereWebHatTricks
+      ]
+    });
   }
 }

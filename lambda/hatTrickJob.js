@@ -11,7 +11,7 @@ exports.handler = async function (event, context) {
         
         // Get All Goals
         var goalsQuery = {
-            TableName:"TranmereWebGoalsTable",
+            TableName: utils.GOALS_TABLE_NAME,
             KeyConditionExpression :  "Season = :season",
             ExpressionAttributeValues: {
                 ":season" : i.toString()
