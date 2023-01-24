@@ -57,13 +57,13 @@ export class TranmereWebGraphQL extends Construct {
             graph_ql.addMethod("GET", new apigw.AwsIntegration({
                 service: 'appsync-api',
                 region: props.region,
-                subdomain: "ndshdu4npzcldgpb7vxap2iwty",
+                subdomain: "clllxcsjtbdujahnszk5grceuu",
                 integrationHttpMethod: 'GET',
                 path: 'graphql',
                 options: {
                     credentialsRole: appsyncrole,
                     requestParameters: {
-                    'integration.request.querystring.query': 'method.request.querystring.query'
+                        'integration.request.querystring.query': 'method.request.querystring.query'
                     },
                     integrationResponses: [
                     {
