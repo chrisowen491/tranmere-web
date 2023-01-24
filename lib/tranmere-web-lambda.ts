@@ -50,7 +50,7 @@ export class TranmereWebLambda extends Construct {
 
         if(props.readWriteTables) {
             for(var i=0; i < props.readWriteTables?.length; i++) {
-                props.readWriteTables[i].grantReadData(the_lambda);
+                props.readWriteTables[i].grantReadWriteData(the_lambda);
             }
         }
 
