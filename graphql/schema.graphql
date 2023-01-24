@@ -9,11 +9,28 @@ type Query {
   listTranmereWebPlayerTable(filter: TableSimpleFilterInput, limit: Int, nextToken: String): TranmereWebPlayerTableConnection
   listTranmereWebStarsTable(filter: TableSimpleFilterInput, limit: Int, nextToken: String): TranmereWebStarsTableConnection
   listTranmereWebHatTricks(filter: TableSimpleFilterInput, limit: Int, nextToken: String): TranmereWebHatTricksConnection
+  listTranmereWebOnThisDay(filter: TableSimpleFilterInput, limit: Int, nextToken: String): TranmereWebOnThisDayConnection
 }
 
 type TranmereWebClubs {
   id: String!
   name: String!
+}
+
+type TranmereWebOnThisDay {
+  day: String!
+  date: String!
+  programme: String!
+  hgoal: String!
+  season: String!
+  tier: String!
+  vgoal: String!
+  division: String!
+  opposition: String!
+  competition: String!
+  visitor: String!
+  home: String!
+  pens: String!
 }
 
 type TranmereWebCompetitions {
@@ -81,6 +98,11 @@ type TranmereWebStarsTableConnection {
 
 type TranmereWebPlayerTableConnection {
   items: [TranmereWebPlayerTable]
+  nextToken: String
+}
+
+type TranmereWebOnThisDayConnection {
+  items: [TranmereWebOnThisDay]
   nextToken: String
 }
 

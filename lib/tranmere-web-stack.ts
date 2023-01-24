@@ -42,12 +42,15 @@ export class TranmereWebStack extends cdk.Stack {
     const TranmereWebManagers = ddb.Table.fromTableArn(this, "TranmereWebManagers", `arn:aws:dynamodb:${this.region}:${this.account}:table/TranmereWebManagers`);
     const TranmereWebStarsTable = ddb.Table.fromTableArn(this, "TranmereWebStarsTable", `arn:aws:dynamodb:${this.region}:${this.account}:table/TranmereWebStarsTable`);
     const TranmereWebHatTricks = ddb.Table.fromTableAttributes(this,'TranmereWebHatTricks',{tableName: 'TranmereWebHatTricks',grantIndexPermissions: true});
+    const TranmereWebOnThisDay = ddb.Table.fromTableAttributes(this,'TranmereWebOnThisDay',{tableName: 'TranmereWebHatTricks',grantIndexPermissions: true});
 
+    /*
     const TranmereWebOnThisDay = new ddb.Table(this, 'TranmereWebOnThisDay', {
       tableName: "TranmereWebOnThisDay",
       partitionKey: { name: 'day', type: ddb.AttributeType.STRING },
       billingMode: ddb.BillingMode.PAY_PER_REQUEST,
     });
+    */
 
     // Base API gateway
     const api = new apigw.RestApi(this, 'tranmere-web', {
@@ -157,6 +160,7 @@ export class TranmereWebStack extends cdk.Stack {
       environment: env_variables,
       lambdaFile: './lambda/onThisDayJob.js',
       apiResource: on,
+      schedule: {minute: '45', hour: '23'},
       apiMethod: 'GET',
       readWriteTables: [TranmereWebOnThisDay],
       readTables: [TranmereWebGames]
@@ -235,7 +239,8 @@ export class TranmereWebStack extends cdk.Stack {
         TranmereWebManagers,
         TranmereWebPlayerTable,
         TranmereWebStarsTable,
-        TranmereWebHatTricks
+        TranmereWebHatTricks,
+        TranmereWebOnThisDay
       ]
     });
   }

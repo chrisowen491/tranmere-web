@@ -16,8 +16,12 @@ exports.handler = async function (event, context) {
         if(result && result.programme != "#N/A") {
             results.push(result);
             result.day = result.date.substr(5);
-            insertUpdateItem(result, utils.ON_THIS_DAY_TABLE);
         }
+    }
+
+    if(results.length > 0) {
+        var random = getRndInteger(0, results.length);
+        insertUpdateItem(results[random], utils.ON_THIS_DAY_TABLE);
     }
 
     return utils.sendResponse(200, results)
@@ -45,4 +49,8 @@ async function insertUpdateItem(item, type){
 	};
 
 	return await dynamo.put(params).promise();
+}
+
+function getRndInteger(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) ) + min;
 }
