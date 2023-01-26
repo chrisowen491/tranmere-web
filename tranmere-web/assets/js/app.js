@@ -224,8 +224,9 @@ window.DD_RUM.startSessionReplayRecording();
   jQuery(function () {
     if ($('#onthisday').length) {
       var dateobj = new Date();
+      var day = dateobj.toISOString().slice(0, 10).substr(5);
       var base = "";
-      var url = base + '/graphql?query=' + encodeURIComponent('{listTranmereWebOnThisDay(limit:1){items{opposition programme hgoal vgoal season date}}}');
+      var url = base + '/graphql?query=' + encodeURIComponent(`{getTranmereWebOnThisDayById(day: "${day}"){opposition programme hgoal vgoal season}}`);
       $.getJSON(url, function(response) {
         if(response && response.data.listTranmereWebOnThisDay.items.length > 0) {
           var view = response.data.listTranmereWebOnThisDay.items[0];
