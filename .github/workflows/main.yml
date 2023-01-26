@@ -20,6 +20,8 @@ jobs:
         run: npm run test
         env:
           DD_KEY: ${{ secrets.DD_KEY }}
+      - name: Gulp Test
+        run: gulp   
       - name: Automated Version Bump
         uses: phips28/gh-action-bump-version@master
         with:

@@ -4,21 +4,28 @@ schema {
 
 type Query {
   listTranmereWebClubs(filter: TableSimpleFilterInput, limit: Int, nextToken: String): TranmereWebClubsConnection
+  getTranmereWebClubsById(name: String!): TranmereWebClubs
   listTranmereWebCompetitions(filter: TableSimpleFilterInput, limit: Int, nextToken: String): TranmereWebCompetitionsConnection
+  getTranmereWebCompetitionsById(name: String!): TranmereWebCompetitions
   listTranmereWebManagers(filter: TableSimpleFilterInput, limit: Int, nextToken: String): TranmereWebManagersConnection
+  getTranmereWebManagersById(name: String!): TranmereWebManagers
   listTranmereWebPlayerTable(filter: TableSimpleFilterInput, limit: Int, nextToken: String): TranmereWebPlayerTableConnection
+  getTranmereWebPlayerTableById(id: String!): TranmereWebPlayerTable
   listTranmereWebStarsTable(filter: TableSimpleFilterInput, limit: Int, nextToken: String): TranmereWebStarsTableConnection
+  getTranmereWebStarsTableById(name: String!): TranmereWebStarsTable
   listTranmereWebHatTricks(filter: TableSimpleFilterInput, limit: Int, nextToken: String): TranmereWebHatTricksConnection
+  getTranmereWebHatTricksById(Season: String!): TranmereWebHatTricks
   listTranmereWebOnThisDay(filter: TableSimpleFilterInput, limit: Int, nextToken: String): TranmereWebOnThisDayConnection
+  getTranmereWebOnThisDayById(day: String!): TranmereWebOnThisDay
 }
 
 type TranmereWebClubs {
   id: String!
-  name: String!
+  name: ID!
 }
 
 type TranmereWebOnThisDay {
-  day: String!
+  id: ID!
   date: String!
   programme: String!
   hgoal: String!
@@ -35,11 +42,11 @@ type TranmereWebOnThisDay {
 
 type TranmereWebCompetitions {
   id: String!
-  name: String!
+  name: ID!
 }
 
 type TranmereWebPlayerTable {
-  id: String!
+  id: ID!
   name: String!
   position: String!
   picLink: String!
@@ -48,14 +55,14 @@ type TranmereWebPlayerTable {
 type TranmereWebHatTricks {
   id: String!
   Player: String!
-  Season: String!
+  Season: ID!
   Date: String!
   Opposition: String!
   Goals: Int!    
 }
 
 type TranmereWebStarsTable {
-  id: String!
+  id: ID!
   name: String!
   match: String!
   date: String!
@@ -66,7 +73,7 @@ type TranmereWebStarsTable {
 
 type TranmereWebManagers {
   id: String!
-  name: String!
+  name: ID!
   dateJoined: String!
   dateLeft: String!
 }

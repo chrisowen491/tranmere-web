@@ -7,9 +7,14 @@ import * as iam from 'aws-cdk-lib/aws-iam';
 import * as ddb from 'aws-cdk-lib/aws-dynamodb';
 
 export interface TranmereWebGraphQLProps {
-    readonly tables?: Array<ddb.ITable>; 
+    readonly tables?: Array<TranmereWebDynamoDBTableProps>; 
     readonly api?: apigw.RestApi;
     readonly region?: string;
+}
+
+export interface TranmereWebDynamoDBTableProps {
+    readonly table: ddb.ITable;
+    readonly keyColumn: string;
 }
   
 export class TranmereWebGraphQL extends Construct {
@@ -89,8 +94,8 @@ export class TranmereWebGraphQL extends Construct {
         
         if(props.tables) {
             for(var i=0; i < props.tables.length; i++) {
-                const tableName = props.tables[i].tableName;
-                const table = props.tables[i]
+                const tableName = props.tables[i].table.tableName;
+                const table = props.tables[i].table;
                 const dynamoDataSources = graphql.addDynamoDbDataSource(tableName, table);
                 table.grantReadData(new iam.ServicePrincipal("appsync.amazonaws.com"));
                 dynamoDataSources.createResolver(tableName + "resolver", {
@@ -98,6 +103,13 @@ export class TranmereWebGraphQL extends Construct {
                     fieldName: "list" + tableName,
                     requestMappingTemplate: MappingTemplate.fromFile("graphql/template.json"),
                     responseMappingTemplate: MappingTemplate.fromString("$util.toJson($context.result)")
+                });
+
+                dynamoDataSources.createResolver(tableName + "GetByIdResolver", {
+                    typeName: "Query",
+                    fieldName: "get" + tableName + "ById",
+                    requestMappingTemplate: MappingTemplate.dynamoDbGetItem(props.tables[i].keyColumn, props.tables[i].keyColumn),
+                    responseMappingTemplate: MappingTemplate.dynamoDbResultItem(),
                 });
             }
         }

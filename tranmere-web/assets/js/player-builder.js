@@ -11,6 +11,6 @@ function draw() {
 }
 
 
-$(document).ready(function() {
+jQuery(function () {
     draw();
 });

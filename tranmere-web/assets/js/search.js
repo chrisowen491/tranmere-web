@@ -33,7 +33,7 @@ $.urlParam = function (name) {
     return (results !== null) ? results[1] || 0 : false;
 }
 
-$(document).ready(function() {
+jQuery(function () {
 
     if($.urlParam('season'))
         $('#season').val($.urlParam('season'));

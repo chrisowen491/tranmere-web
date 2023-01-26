@@ -160,7 +160,7 @@ export class TranmereWebStack extends cdk.Stack {
       environment: env_variables,
       lambdaFile: './lambda/onThisDayJob.js',
       apiResource: on,
-      schedule: {minute: '45', hour: '23'},
+      schedule: {minute: '25', hour: '00'},
       apiMethod: 'GET',
       readWriteTables: [TranmereWebOnThisDay],
       readTables: [TranmereWebGames]
@@ -234,13 +234,34 @@ export class TranmereWebStack extends cdk.Stack {
       region: this.region,
       api: api,
       tables: [
-        TranmereWebClubs,
-        TranmereWebCompetitions,
-        TranmereWebManagers,
-        TranmereWebPlayerTable,
-        TranmereWebStarsTable,
-        TranmereWebHatTricks,
-        TranmereWebOnThisDay
+        {
+          table: TranmereWebClubs,
+          keyColumn: "name"
+        },
+        {
+          table: TranmereWebCompetitions,
+          keyColumn: "name"
+        },
+        {
+          table: TranmereWebManagers,
+          keyColumn: "name"
+        },
+        {
+          table: TranmereWebPlayerTable,
+          keyColumn: "id"
+        },
+        {
+          table: TranmereWebStarsTable,
+          keyColumn: "id"
+        },
+        {
+          table: TranmereWebHatTricks,
+          keyColumn: "Season"
+        },       
+        {
+          table: TranmereWebOnThisDay,
+          keyColumn: "day"
+        }
       ]
     });
   }

@@ -15,7 +15,6 @@ var seasonMapping = {
 var theDate = new Date();
 var theYear = theDate.getUTCMonth() > 6 ? theDate.getFullYear() : theDate.getFullYear() -1;
 
-
 function search() {
   $("#loading").show();
   $("#content").hide();
@@ -43,7 +42,6 @@ function search() {
           }
       }
 
-
       var article = Mustache.render( template, view );
       $("#content").html(article);
       $("#loading").hide();
@@ -58,7 +56,7 @@ $.urlParam = function (name) {
     return (results !== null) ? results[1] || 0 : false;
 }
 
-$(document).ready(function() {
+jQuery(function () {
 
     if($.urlParam('season'))
         $('#season').val($.urlParam('season'));

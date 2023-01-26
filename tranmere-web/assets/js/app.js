@@ -90,8 +90,8 @@ window.DD_RUM.startSessionReplayRecording();
 
     // Overlay Menu
     Overlay: function() {
-      $(document).ready(function(){
-        $('.overlay-menu-open').click(function(){
+      jQuery(function () {
+        $('.overlay-menu-open').on('click',function(){
           $(this).toggleClass('active');
           $('html').toggleClass('active');
           $('.overlay-menu').toggleClass('active');
@@ -101,43 +101,41 @@ window.DD_RUM.startSessionReplayRecording();
 
     Auth: function() {
 
-        $(document).ready(function(){
-            var authData = {
-                ClientId : "3civek6bpngorkivrntf5ai4ro",
-                AppWebDomain : 'auth.tranmere-web.com',
-                TokenScopesArray : ['TranmereWeb/matches.read'],
-                RedirectUriSignIn : 'https://www.tranmere-web.com/',
-                RedirectUriSignOut : 'https://www.tranmere-web.com/',
-                UserPoolId : "eu-west-1_GAF4md6wn"
-            };
-            var auth = new AmazonCognitoIdentity.CognitoAuth(authData);
-            window.auth = auth;
-            auth.userhandler = {
-                onSuccess: function(result) {
-                    $("#loginout").html('Sign Out');
-                    auth.setState("signedIn");
-                    $('#edit').show();
-                },
-                onFailure: function(err) {
-                    alert("Error!" + err);
-                }
-            };
-            if(auth.storage['CognitoIdentityServiceProvider.3civek6bpngorkivrntf5ai4ro.LastAuthUser']) {
+      jQuery(function () {
+        var authData = {
+            ClientId : "3civek6bpngorkivrntf5ai4ro",
+            AppWebDomain : 'auth.tranmere-web.com',
+            TokenScopesArray : ['TranmereWeb/matches.read'],
+            RedirectUriSignIn : 'https://www.tranmere-web.com/',
+            RedirectUriSignOut : 'https://www.tranmere-web.com/',
+            UserPoolId : "eu-west-1_GAF4md6wn"
+        };
+        var auth = new AmazonCognitoIdentity.CognitoAuth(authData);
+        window.auth = auth;
+        auth.userhandler = {
+            onSuccess: function(result) {
+                $("#loginout").html('Sign Out');
+                auth.setState("signedIn");
                 $('#edit').show();
+            },
+            onFailure: function(err) {
+                alert("Error!" + err);
+            }
+        };
+        if(auth.storage['CognitoIdentityServiceProvider.3civek6bpngorkivrntf5ai4ro.LastAuthUser']) {
+            $('#edit').show();
+            auth.getSession();
+        }
+        $(document).on('click', '#loginout', function() {
+            if ($("#loginout").html() === "Sign Out") {
+                auth.signOut();
+                $("#loginout").html('Sign In');
+            } else {
                 auth.getSession();
             }
-            $(document).on('click', '#loginout', function() {
-                if ($("#loginout").html() === "Sign Out") {
-                    auth.signOut();
-                    $("#loginout").html('Sign In');
-                } else {
-                    auth.getSession();
-                }
-            });
-
-            var curUrl = window.location.href;
-            auth.parseCognitoWebResponse(window.location.href);
         });
+        auth.parseCognitoWebResponse(window.location.href);
+      });
     },
 
     // File Tree
@@ -185,7 +183,7 @@ window.DD_RUM.startSessionReplayRecording();
     Apps: function () {
 
       // accordion
-      $(document).ready(function() {
+      jQuery(function () {
 
         $('.collapse').on('show.bs.collapse', function () {
             $(this).parent().addClass('active');
@@ -200,7 +198,7 @@ window.DD_RUM.startSessionReplayRecording();
       // tooltips
       $('[data-toggle="tooltip"]').tooltip()
 
-      $(document).ready(function(){
+      jQuery(function () {
           var window_width = jQuery( window ).width();
 
           // recalc on collapse
@@ -219,8 +217,30 @@ window.DD_RUM.startSessionReplayRecording();
     }
   };
 
-  $(document).ready(function () {
+  jQuery(function () {
     fn.Launch();
+  });
+
+  jQuery(function () {
+    if ($('#onthisday').length) {
+      var dateobj = new Date();
+      var base = "";
+      var url = base + '/graphql?query=' + encodeURIComponent('{listTranmereWebOnThisDay(limit:1){items{opposition programme hgoal vgoal season date}}}');
+      $.getJSON(url, function(response) {
+        if(response && response.data.listTranmereWebOnThisDay.items.length > 0) {
+          var view = response.data.listTranmereWebOnThisDay.items[0];
+          var largeBody = {
+              "bucket": 'trfc-programmes',
+              "key": view.programme,
+          };
+          view.largeprogramme = btoa(JSON.stringify(largeBody));
+          $.get("/assets/templates/onthisday.mustache"+ '?c=' + dateobj.getDate(), function(template) {
+            var article = Mustache.render( template, view );
+            $("#onthisday").html(article);
+          });
+        }
+      });
+    }
   });
 
 })(jQuery);
