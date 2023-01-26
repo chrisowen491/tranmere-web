@@ -228,8 +228,8 @@ window.DD_RUM.startSessionReplayRecording();
       var base = "";
       var url = base + '/graphql?query=' + encodeURIComponent(`{getTranmereWebOnThisDayById(day: "${day}"){opposition programme hgoal vgoal season}}`);
       $.getJSON(url, function(response) {
-        if(response && response.data.listTranmereWebOnThisDay.items.length > 0) {
-          var view = response.data.listTranmereWebOnThisDay.items[0];
+        if(response && response.data.getTranmereWebOnThisDayById) {
+          var view = response.data.getTranmereWebOnThisDayById;
           var largeBody = {
               "bucket": 'trfc-programmes',
               "key": view.programme,
