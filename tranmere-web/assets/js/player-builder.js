@@ -17,5 +17,8 @@ function draw() {
 jQuery(function () {
   if ($('#builder').length) {
     draw();
+    $('.btn-player-builder').on('click',function(){
+      draw();
+  });
   }
 });

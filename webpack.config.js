@@ -5,15 +5,13 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const glob = require('glob');
 const FileManagerPlugin = require('filemanager-webpack-plugin');
 const TranmereWebPlugin = require('./lib/tranmere-web-plugin.js');
-const TemplateWatcherPlugin = require('./lib/template-watcher-plugin.js');
+const { TRUE } = require('sass');
 
 let config = {
   entry: {
     'vendor': [
       'jquery',
       'bootstrap',
-      'video.js',
-      'videojs-youtube',
       '@datadog/browser-logs',
       '@datadog/browser-rum',
       'mustache',
@@ -21,7 +19,6 @@ let config = {
       'algoliasearch/lite',
       '@algolia/autocomplete-theme-classic'
     ],
-
     // Auto-detect all pages in directory.
     'tranmere-web': glob.sync(__dirname + '/tranmere-web/assets/js/*.js'),
     modernizr: __dirname + '/lib/modernizr.js'
@@ -31,6 +28,11 @@ let config = {
     port: 8080,
     hot: true,
     open: true,
+    compress: true,
+    watchFiles: ['templates/**/*'],
+    client: {
+      overlay: false,
+    },
     headers: [
       {
         key: 'X-Custom',
@@ -126,7 +128,6 @@ let config = {
     filename: './assets/scripts/bundle--[name].js'
   },
   plugins: [
-    new TemplateWatcherPlugin({ path: __dirname }),
     new MiniCssExtractPlugin({
       filename: "./assets/styles/[name].css",
       chunkFilename: "./assets/styles/[id].css",

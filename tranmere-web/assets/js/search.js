@@ -40,7 +40,6 @@ $.urlParam = function (name) {
 jQuery(function () {
 
     if ($('#results-search').length) {
-
         if($.urlParam('season'))
             $('#season').val($.urlParam('season'));
         if($.urlParam('opposition'))
@@ -57,6 +56,10 @@ jQuery(function () {
             $('#manager').val($.urlParam('manager'));
         if(!$('#season').val() && !$.urlParam('manager') && !$.urlParam('opposition') && !$.urlParam('competition') && !$.urlParam('venue') && !$.urlParam('pens') && !$.urlParam('sort'))
             $('#season').val(theYear);
-        search();
+        
+        search();    
+        $('.btn-results-search').on('click',function(){
+            search();
+        });
     }
 });

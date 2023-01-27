@@ -43,3 +43,9 @@ function submitToAPI() {
       $("#fail-alert").show();
     }});
 }
+
+jQuery(function () {
+  $('.contact-us-button').on('click',function(){
+    submitToAPI();
+  });
+});

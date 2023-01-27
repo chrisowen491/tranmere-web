@@ -26,7 +26,7 @@
     </div>
 </section>
 
-<section class="match">
+<section class="match" id="match">
     <div class="container overlay-item-top">
         <div class="row">
             <div class="col-md-12" id="edit" style="display: none;">
@@ -124,20 +124,7 @@
                                 {{/strikers}}
                                 <br/>
                                 Scorers: <strong>{{formattedGoals}}</strong>
-                                {{#youtube}}
-                                <br/>
-                                <a href="{{youtube}}">You Tube Link</a>
-                                <video
-                                    id="video"
-                                    class="youtube video-js vjs-default-skin video-16-9"
-                                    controls
-                                    width="640" height="264"
-                                    data-setup='{ "techOrder": ["youtube"], "sources": [{ "type": "video/youtube", "src": "{{youtube}}"}], "youtube": { "ytControls": 2 } }'
-                                >
-                                </video>
-                                {{/youtube}}
                             </div>
-
                         </aside>
                         <article class="col-md-8 content-body tranmere-results">
                             
@@ -262,69 +249,11 @@
         </div>
     </div>
 </section>
-
-{{>footer}}
 <script>
-    function search(or) {
-      $(`#${or}-five-loading`).show();
-      $(`#${or}-five-content`).hide();
-      var dateobj = new Date();
-      var base = "";
-      var url = base + `/result-search/?season={{season}}&date={{date}}&or=${or}` 
-                  + '&c=' + dateobj.getDate();
-      $.getJSON(url, function(data) {
-        var view = {
-            results: data.results
-        };
-        $.get("/assets/templates/results.mustache?v={{random}}", function(template) {
-          var article = Mustache.render( template, view );
-          $(`#${or}-five-content`).html(article);
-          $(`#${or}-five-loading`).hide();
-          $(`#${or}-five-content`).show();
-        });
-      });
-    }
-    $.urlParam = function (name) {
-        var results = new RegExp('[?&]' + name + '=([^&#]*)').exec(window.location.search);
-        return (results !== null) ? results[1] || 0 : false;
-    }
-    
-    $(document).ready(function() {
-        search('next');
-        search('previous');
-    });
-    $(document).on('click', '#editbutton2', function() {
-    
-        var data = {
-            programme : $("#programme").val(),
-            attendance : $("#attendance").val(),
-            youtube : $("#youtube").val(),
-            home : $("#home").val(),
-            visitor : $("#visitor").val(),
-            opposition : $("#opposition").val(),
-            pens : $("#pens").val(),
-            venue : $("#venue").val(),
-            hgoal : $("#hgoal").val(),
-            vgoal : $("#vgoal").val(),
-        };
-    
-        $.ajax({
-            type: "POST",
-            dataType: "json",
-            crossDomain: "true",
-            contentType: "application/json; charset=utf-8",
-            data: JSON.stringify(data),
-            headers: {
-                "Authorization": window.auth.getCachedSession().getAccessToken().getJwtToken()
-            },
-            success: function () {
-                window.location.href =  window.location.href + "?v=" + Math.floor(Math.random() * 10);
-            },
-            error: function () {
-                alert('fail')
-            }});
-    });
-    </script>
-    
+    window.season = {{season}};
+    window.date = "{{date}}";
+</script>
+
+{{>footer}} 
 </body>
 </html>

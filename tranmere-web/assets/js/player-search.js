@@ -72,5 +72,8 @@ jQuery(function () {
         if($.urlParam('filter'))
             $('#filter').val(decodeURIComponent($.urlParam('filter')));
         search();
+        $('.btn-player-search').on('click',function(){
+            search();
+        });
     }
 });
