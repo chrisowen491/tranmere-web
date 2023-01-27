@@ -42,4 +42,4 @@ function submitToAPI() {
       // show an error message
       $("#fail-alert").show();
     }});
- }
+}

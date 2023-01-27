@@ -27,7 +27,7 @@ export VERSION=
 ```bash
 $ npm install
 $ npm run build-web
-$ gulp deploy
+$ npm run build
 ```
 
 ### Local Testing (Using production backend)

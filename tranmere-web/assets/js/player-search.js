@@ -1,3 +1,7 @@
+const Mustache = require("mustache");
+import '../templates/players.mustache';
+const pack = require('../../../package.json');
+
 var seasonMapping = {
     "1978": 1977,
     "1984": 1983,
@@ -28,7 +32,7 @@ function search() {
   var re2 = /\/\d\d\d\dgk\//gm;
   var re3 = /\/\d\d\d\d[A-Za-z]\//gm;
   $.getJSON(url, function(view) {
-    $.get("/assets/templates/players.mustache?c=" + dateobj.getDate(), function(template) {
+    $.get("/assets/templates/players.mustache?v=" + pack.version, function(template) {
 
       if($('#season').val() && $('#season').val() > 1976) {
           for(var i=0; i < view.players.length; i++) {
@@ -43,9 +47,9 @@ function search() {
       }
 
       var article = Mustache.render( template, view );
-      $("#content").html(article);
+      $("#player-search").html(article);
       $("#loading").hide();
-      $("#content").show();
+      $("#player-search").show();
     });
   });
 }
@@ -58,13 +62,15 @@ $.urlParam = function (name) {
 
 jQuery(function () {
 
-    if($.urlParam('season'))
-        $('#season').val($.urlParam('season'));
+    if ($('#player-search').length) {
+        if($.urlParam('season'))
+            $('#season').val($.urlParam('season'));
 
-    $('#sort').val(decodeURIComponent($.urlParam('sort')));
-    if(!$('#season').val() && (!$.urlParam('sort') && !$.urlParam('filter') ))
-        $('#season').val(theYear);
-    if($.urlParam('filter'))
-        $('#filter').val(decodeURIComponent($.urlParam('filter')));
-    search();
+        $('#sort').val(decodeURIComponent($.urlParam('sort')));
+        if(!$('#season').val() && (!$.urlParam('sort') && !$.urlParam('filter') ))
+            $('#season').val(theYear);
+        if($.urlParam('filter'))
+            $('#filter').val(decodeURIComponent($.urlParam('filter')));
+        search();
+    }
 });

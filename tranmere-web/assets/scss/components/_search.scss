@@ -1,4 +1,13 @@
+.aa-Panel {
+    z-index: 100;
+}
+
+.aa-Form {
+    border: none!important;
+}
+
 .algolia-autocomplete {
+    
     width: 100%;
 
     .aa-input{
@@ -15,10 +24,9 @@
         background-color: #fff;
         border: 1px solid #999;
         border-top: none;
-      }
+    }
 
-      .aa-dropdown-menu {
-
+    .aa-dropdown-menu {
         .aa-suggestion {
             cursor: pointer;
             padding: 5px 4px;
@@ -28,11 +36,9 @@
                 font-style: normal;
             }
         }
-      }
+    }
 
-      .aa-cursor {
-          background-color: #B2D7FF;
-      }
+    .aa-cursor {
+        background-color: #B2D7FF;
+    }
 }
-
-
