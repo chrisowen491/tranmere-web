@@ -10,7 +10,7 @@ const searchClient = algoliasearch(appId, apiKey);
 if ($('#autocomplete').length) {
   autocomplete({
     container: '#autocomplete',
-    placeholder: 'Start typing here ...',
+    placeholder: 'Enter a player, opposition team, year etc ...',
     classNames: {
 
     },
