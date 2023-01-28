@@ -21,9 +21,6 @@ let config = {
     open: true,
     compress: true,
     watchFiles: ['templates/**/*'],
-    client: {
-      overlay: false,
-    },
     headers: [
       {
         key: 'X-Custom',

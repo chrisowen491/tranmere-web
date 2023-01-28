@@ -8,7 +8,6 @@ import '../logos/square_v1.png';
 
 require('bootstrap');
 
-
 // accordion
 jQuery(function () {
   $('.collapse').on('show.bs.collapse', function () {
