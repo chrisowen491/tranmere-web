@@ -6,6 +6,8 @@ import '../logos/logo_white_transparent.png';
 import '../logos/logo_white_transparent.png';
 import '../logos/square_v1.png';
 
+require('bootstrap');
+
 // accordion
 jQuery(function () {
   $('.collapse').on('show.bs.collapse', function () {

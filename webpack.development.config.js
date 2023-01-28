@@ -15,6 +15,68 @@ let config = {
     modernizr: __dirname + '/lib/modernizr.js'
   },
 
+  devServer: {
+    port: 8080,
+    hot: true,
+    open: true,
+    compress: true,
+    watchFiles: ['templates/**/*'],
+    client: {
+      overlay: false,
+    },
+    headers: [
+      {
+        key: 'X-Custom',
+        value: 'foo',
+      },
+      {
+        key: 'Y-Custom',
+        value: 'bar',
+      },
+    ],
+    static: {
+      directory: __dirname + '/local.out',
+    },
+    proxy: {
+      '/result-search': {
+           target: 'http://localhost:8080',
+           router: () => 'http://localhost:3000',
+           logLevel: 'debug' /*optional*/
+      },
+      '/player-search': {
+        target: 'http://localhost:8080',
+        router: () => 'http://localhost:3000',
+        logLevel: 'debug' /*optional*/
+      },
+      '/page': {
+        target: 'http://localhost:8080',
+        router: () => 'http://localhost:3000',
+        logLevel: 'debug' /*optional*/
+      },
+      '/match': {
+        target: 'http://localhost:8080',
+        router: () => 'http://localhost:3000',
+        logLevel: 'debug' /*optional*/
+      },
+      '/builder': {
+        target: 'http://localhost:8080',
+        router: () => 'http://localhost:3000',
+        logLevel: 'debug' /*optional*/
+      },
+      '/contact-us': {
+        target: 'http://localhost:8080',
+        router: () => 'http://localhost:3000',
+        logLevel: 'debug' /*optional*/
+      },
+      '/graphql': {
+        target: 'https://api.prod.tranmere-web.com',
+        headers: {
+          'host': 'api.prod.tranmere-web.com'
+        },
+        secure: false,
+      },
+    },
+  },
   module: {
     rules: [
       // CSS: scss, css
@@ -53,7 +115,7 @@ let config = {
     ]
   },
   output: {
-    path:  __dirname + '/web.out',
+    path:  __dirname + '/local.out',
     filename: './assets/scripts/bundle--[name].js'
   },
   plugins: [
@@ -62,15 +124,13 @@ let config = {
       chunkFilename: "./assets/styles/[id].css",
     }),
     new webpack.ProvidePlugin({$: "jquery",jQuery: "jquery",'window.jQuery': 'jquery'}),
-    new TranmereWebPlugin({ index: true }),
+    new TranmereWebPlugin({ index: false }),
     new FileManagerPlugin({
       events: {
         onEnd: [
           {
             copy: [
-              { source: __dirname + '/tranmere-web/_redirects', destination: __dirname + '/web.out/', options: {overwrite: true, nodir: true} },
-              { source: __dirname + '/tranmere-web/_headers', destination: __dirname + '/web.out/', options: {overwrite: true, nodir: true} },
-              { source: __dirname + '/tranmere-web/favicon.ico', destination: __dirname + '/web.out/', options: {overwrite: true, nodir: true} },
+              { source: __dirname + '/tranmere-web/favicon.ico', destination: __dirname + '/local.out/', options: {overwrite: true, nodir: true} },
             ],
           },
         ],

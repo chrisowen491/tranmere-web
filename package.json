@@ -10,12 +10,11 @@
     "node": ">=16.18.1"
   },
   "scripts": {
-    "build": "webpack --mode production",
-    "start": "webpack serve --mode production",
+    "build": "webpack",
+    "start": "webpack serve --mode development --config webpack.development.config.js",
     "test": "jest",
     "cdk": "cdk",
     "local-api": "cdk synth && sam local start-api -t ./cdk.out/TranmereWebStack.template.json",
-    "local-web-prod": "http-server web.out/ --proxy https://www.tranmere-web.com --proxy-options.secure false",
     "acceptance-test": "newman run ./api_tests/postman-collection.json -e ./api_tests/env/aws-prod.json --env-var 'testApiKey=123'",
     "local-acceptance-test": "newman run ./api_tests/postman-collection.json -e ./api_tests/env/sam-local.json"
   },
