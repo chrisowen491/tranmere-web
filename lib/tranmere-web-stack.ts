@@ -64,6 +64,18 @@ export class TranmereWebStack extends cdk.Stack {
         allowCredentials: true,
         allowOrigins: ['*'],
       },
+      deployOptions: {
+        methodOptions: {
+          "/page/{pageName}/{classifier}/GET": {
+            cachingEnabled: true,
+            cacheTtl: cdk.Duration.minutes(30)
+          },
+          "/match/{season}/{date}/GET": {
+            cachingEnabled: true,
+            cacheTtl: cdk.Duration.minutes(60)
+          }
+        },
+      },
       domainName: {
         domainName: `api.prod.${rootDomain}`,
         certificate: acm.Certificate.fromCertificateArn(
@@ -159,7 +171,6 @@ export class TranmereWebStack extends cdk.Stack {
     new TranmereWebLambda(this, 'OnThisDayFunction', {      
       environment: env_variables,
       lambdaFile: './lambda/onThisDayJob.js',
-      apiResource: on,
       schedule: {minute: '25', hour: '00'},
       apiMethod: 'GET',
       readWriteTables: [TranmereWebOnThisDay],
@@ -180,6 +191,9 @@ export class TranmereWebStack extends cdk.Stack {
       apiResource: date,
       apiMethod: 'GET',
       readTables: [TranmereWebPlayerTable, TranmereWebGames, TranmereWebGoalsTable, TranmereWebAppsTable],
+      cacheKeyParameters:[
+        "method.request.path.season","method.request.path.date"
+      ],
       commandHooks: {
         beforeBundling(inputDir: string, outputDir: string): string[] {
           return [];
@@ -199,6 +213,9 @@ export class TranmereWebStack extends cdk.Stack {
       apiResource: classifier,
       apiMethod: 'GET',
       readTables: [TranmereWebAppsTable, TranmereWebPlayerSeasonSummaryTable, TranmereWebPlayerTable],
+      cacheKeyParameters:[
+        "method.request.path.page","method.request.path.classifier"
+      ],
       commandHooks: {
         beforeBundling(inputDir: string, outputDir: string): string[] {
           return [];

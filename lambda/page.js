@@ -15,7 +15,7 @@ exports.handler = async function (event, context) {
     var view = {};
 
     if(pageName === "home") {
-        const content = await client.getEntries({'content_type': 'blogPost', order: '-sys.createdAt'});
+        const content = await client.getEntries({'content_type': 'blogPost', order: '-sys.createdAt', limit: 5});
         view = {
             title: "Home",
             pageType:"WebPage",

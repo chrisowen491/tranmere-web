@@ -19,6 +19,7 @@ export interface TranmereWebLambdaProps {
     readonly readWriteTables?: Array<ddb.ITable>; 
     readonly extraDirectory?: string;
     readonly commandHooks?: ICommandHooks;
+    readonly cacheKeyParameters?: string[];
     apiResource?: apigw.Resource;
     apiMethod?: string;
 }
@@ -68,7 +69,7 @@ export class TranmereWebLambda extends Construct {
         if(props.apiResource && props.apiMethod) {
             props.apiResource.addMethod(
                 props.apiMethod,
-                new apigw.LambdaIntegration(the_lambda, {proxy: true}),
+                new apigw.LambdaIntegration(the_lambda, {proxy: true, cacheKeyParameters: props.cacheKeyParameters} ),
               );
         }
     }
