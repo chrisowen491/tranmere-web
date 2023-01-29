@@ -214,7 +214,7 @@ export class TranmereWebStack extends cdk.Stack {
       apiMethod: 'GET',
       readTables: [TranmereWebAppsTable, TranmereWebPlayerSeasonSummaryTable, TranmereWebPlayerTable],
       cacheKeyParameters:[
-        "method.request.path.page","method.request.path.classifier"
+        "method.request.path.pageName","method.request.path.classifier"
       ],
       commandHooks: {
         beforeBundling(inputDir: string, outputDir: string): string[] {
