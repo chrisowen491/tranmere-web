@@ -191,9 +191,9 @@ export class TranmereWebStack extends cdk.Stack {
       apiResource: date,
       apiMethod: 'GET',
       readTables: [TranmereWebPlayerTable, TranmereWebGames, TranmereWebGoalsTable, TranmereWebAppsTable],
-      cacheKeyParameters:[
-        "method.request.path.season","method.request.path.date"
-      ],
+      //cacheKeyParameters:[
+      //  "method.request.path.season","method.request.path.date"
+      //],
       commandHooks: {
         beforeBundling(inputDir: string, outputDir: string): string[] {
           return [];
@@ -213,9 +213,9 @@ export class TranmereWebStack extends cdk.Stack {
       apiResource: classifier,
       apiMethod: 'GET',
       readTables: [TranmereWebAppsTable, TranmereWebPlayerSeasonSummaryTable, TranmereWebPlayerTable],
-      cacheKeyParameters:[
-        "method.request.path.pageName","method.request.path.classifier"
-      ],
+      //cacheKeyParameters:[
+      //  "method.request.path.pageName","method.request.path.classifier"
+      //],
       commandHooks: {
         beforeBundling(inputDir: string, outputDir: string): string[] {
           return [];
