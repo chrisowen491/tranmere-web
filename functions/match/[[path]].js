@@ -14,7 +14,7 @@ export async function onRequest(context) {
   new_request.headers.set("x-api-key", env.API_KEY)
   
   // If not in cache, get it from origin
-  let response = await fetch(new_request)
+  let response = await fetch(new_request, { cf: { cacheEverything: true } });
 
   if(response.status < 400) {
     return response;
