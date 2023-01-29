@@ -64,18 +64,6 @@ export class TranmereWebStack extends cdk.Stack {
         allowCredentials: true,
         allowOrigins: ['*'],
       },
-      deployOptions: {
-        methodOptions: {
-          "/page/{pageName}/{classifier}/GET": {
-            cachingEnabled: true,
-            cacheTtl: cdk.Duration.minutes(30)
-          },
-          "/match/{season}/{date}/GET": {
-            cachingEnabled: true,
-            cacheTtl: cdk.Duration.minutes(60)
-          }
-        },
-      },
       domainName: {
         domainName: `api.prod.${rootDomain}`,
         certificate: acm.Certificate.fromCertificateArn(
