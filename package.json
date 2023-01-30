@@ -65,7 +65,7 @@
     "bootstrap-select": "^1.13.2",
     "cheerio": "^1.0.0-rc.3",
     "ci": "^2.2.0",
-    "constructs": "^10.1.228",
+    "constructs": "^10.1.235",
     "contentful": "^9.2.14",
     "csvtojson": "^2.0.10",
     "jquery": "^3.6.2",
