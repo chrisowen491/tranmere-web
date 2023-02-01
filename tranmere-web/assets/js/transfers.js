@@ -42,7 +42,9 @@ function submitToAPI() {
       crossDomain: "true",
       contentType: "application/json; charset=utf-8",
       data: JSON.stringify(data),
-  
+      headers: {
+        "Authorization": window.auth.getCachedSession().getAccessToken().getJwtToken()
+      },
       success: function () {
         // clear form and show a success message
         $("#contact-form").hide();
