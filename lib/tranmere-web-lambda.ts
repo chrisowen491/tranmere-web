@@ -84,6 +84,7 @@ export class TranmereWebLambda extends Construct {
                     {proxy: true, cacheKeyParameters: props.cacheKeyParameters},
                 ),
                 {
+                    authorizationScopes: [props.apiUserPool],
                     authorizer: cognitoAuthorizer
                 }
             );
