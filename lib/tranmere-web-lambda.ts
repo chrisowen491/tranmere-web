@@ -5,6 +5,7 @@ import * as lambda from 'aws-cdk-lib/aws-lambda';
 import {NodejsFunction, ICommandHooks} from 'aws-cdk-lib/aws-lambda-nodejs';
 import * as cdk from 'aws-cdk-lib';
 import * as iam from 'aws-cdk-lib/aws-iam';
+import * as cognito from 'aws-cdk-lib/aws-cognito';
 import * as ddb from 'aws-cdk-lib/aws-dynamodb';
 import { aws_apigateway as apigw} from 'aws-cdk-lib'; 
 
@@ -22,6 +23,7 @@ export interface TranmereWebLambdaProps {
     readonly cacheKeyParameters?: string[];
     apiResource?: apigw.Resource;
     apiMethod?: string;
+    apiUserPool?: string;
 }
   
 export class TranmereWebLambda extends Construct {
@@ -66,11 +68,31 @@ export class TranmereWebLambda extends Construct {
             the_lambda.addToRolePolicy(props.policy);
         }
         
-        if(props.apiResource && props.apiMethod) {
+        if(props.apiUserPool && props.apiResource && props.apiMethod) {
+            const userPool = new cognito.UserPool(this, "TranmereWebUserPool")
+            // Authorizer for your userpool
+            const cognitoAuthorizer = new apigw.CognitoUserPoolsAuthorizer(
+                this,
+                id + "CognitoAuthorierOnLambda",
+                {
+                    cognitoUserPools: [userPool],
+                }
+            );
+            props.apiResource.addMethod(
+                props.apiMethod,
+                new apigw.LambdaIntegration(the_lambda, 
+                    {proxy: true, cacheKeyParameters: props.cacheKeyParameters},
+                ),
+                {
+                    authorizer: cognitoAuthorizer
+                }
+            );
+        }
+        else if(props.apiResource && props.apiMethod) {
             props.apiResource.addMethod(
                 props.apiMethod,
                 new apigw.LambdaIntegration(the_lambda, {proxy: true, cacheKeyParameters: props.cacheKeyParameters} ),
-              );
+            );
         }
     }
 }

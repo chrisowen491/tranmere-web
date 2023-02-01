@@ -43,12 +43,33 @@ export class TranmereWebStack extends cdk.Stack {
     const TranmereWebStarsTable = ddb.Table.fromTableArn(this, "TranmereWebStarsTable", `arn:aws:dynamodb:${this.region}:${this.account}:table/TranmereWebStarsTable`);
     const TranmereWebHatTricks = ddb.Table.fromTableAttributes(this,'TranmereWebHatTricks',{tableName: 'TranmereWebHatTricks',grantIndexPermissions: true});
     const TranmereWebOnThisDay = ddb.Table.fromTableAttributes(this,'TranmereWebOnThisDay',{tableName: 'TranmereWebOnThisDay',grantIndexPermissions: true});
+    const TranmereWebPlayerTransfers = ddb.Table.fromTableAttributes(this,'TranmereWebPlayerTransfers',{tableName: 'TranmereWebPlayerTransfers',grantIndexPermissions: true});
 
     /*
     const TranmereWebOnThisDay = new ddb.Table(this, 'TranmereWebOnThisDay', {
       tableName: "TranmereWebOnThisDay",
       partitionKey: { name: 'day', type: ddb.AttributeType.STRING },
       billingMode: ddb.BillingMode.PAY_PER_REQUEST,
+    });
+    */
+
+    /*
+    const TranmereWebPlayerTransfers = new ddb.Table(this, 'TranmereWebPlayerTransfers', {
+      tableName: "TranmereWebPlayerTransfers",
+      partitionKey: { name: 'id', type: ddb.AttributeType.STRING },
+      billingMode: ddb.BillingMode.PAY_PER_REQUEST,
+    });
+    TranmereWebPlayerTransfers.addGlobalSecondaryIndex({
+      indexName: 'ByNameIndex',
+      partitionKey: {
+        name: 'name',
+        type: ddb.AttributeType.STRING,
+      },
+      projectionType: ddb.ProjectionType.ALL,
+      sortKey: {
+        name: 'date',
+        type: ddb.AttributeType.STRING,
+      }
     });
     */
 
@@ -90,6 +111,7 @@ export class TranmereWebStack extends cdk.Stack {
     const match = api.root.addResource('match');
     const season = match.addResource('{season}');
     const date = season.addResource('{date}');
+    const transfers = api.root.addResource('transfers');
     const page = api.root.addResource('page');
     const pageName = page.addResource('{pageName}');
     const classifier = pageName.addResource('{classifier}');
@@ -137,7 +159,17 @@ export class TranmereWebStack extends cdk.Stack {
       apiResource: date,
       apiMethod: 'POST',
       lambdaFile: './lambda/matchupdate.js',
-      readWriteTables: [TranmereWebGames]
+      readWriteTables: [TranmereWebGames],
+      apiUserPool: "TranmereWeb/matches.read"
+    });
+
+    new TranmereWebLambda(this, 'TransferUpdateFunction', {      
+      environment: env_variables,
+      apiResource: transfers,
+      apiMethod: 'POST',
+      lambdaFile: './lambda/transferinsert.js',
+      readWriteTables: [TranmereWebPlayerTransfers],
+      apiUserPool: "TranmereWeb/matches.read"
     });
 
     new TranmereWebLambda(this, 'PlayerSearchFunction', {      
@@ -179,9 +211,6 @@ export class TranmereWebStack extends cdk.Stack {
       apiResource: date,
       apiMethod: 'GET',
       readTables: [TranmereWebPlayerTable, TranmereWebGames, TranmereWebGoalsTable, TranmereWebAppsTable],
-      //cacheKeyParameters:[
-      //  "method.request.path.season","method.request.path.date"
-      //],
       commandHooks: {
         beforeBundling(inputDir: string, outputDir: string): string[] {
           return [];
@@ -200,10 +229,7 @@ export class TranmereWebStack extends cdk.Stack {
       lambdaFile: './lambda/page.js',
       apiResource: classifier,
       apiMethod: 'GET',
-      readTables: [TranmereWebAppsTable, TranmereWebPlayerSeasonSummaryTable, TranmereWebPlayerTable],
-      //cacheKeyParameters:[
-      //  "method.request.path.pageName","method.request.path.classifier"
-      //],
+      readTables: [TranmereWebAppsTable, TranmereWebPlayerSeasonSummaryTable, TranmereWebPlayerTable, TranmereWebPlayerTransfers],
       commandHooks: {
         beforeBundling(inputDir: string, outputDir: string): string[] {
           return [];

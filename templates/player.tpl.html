@@ -91,23 +91,20 @@
                     <thead>
                     <tr>
                         <th scope="col">Date</th>
-                        <th scope="col">Club</th>
+                        <th scope="col">From</th>
+                        <th scope="col">To</th>
                         <th scope="col">Fee</th>
                     </tr>
                     </thead>
                     <tbody>
-                    {{#player.transfers}}
+                    {{#transfers}}
                     <tr>
                         <td><small><time datetime="{{date}}" class="text-muted d-block">{{date}}</time></small></td>
-                        <td><small>{{^incoming}}<span class="icon-arrow-right text-danger"></span>{{/incoming}}{{#incoming}}<span class="icon-arrow-left text-success"></span>{{/incoming}}{{club}}</small></td>
-                        <td><small>
-                            {{^noFee}}
-                            {{#currencyFormat}}{{fee}}{{/currencyFormat}}
-                            {{/noFee}}
-                            {{#other}} {{type}} {{/other}}
-                        </small></td>
+                        <td><small><span class="icon-arrow-left text-danger"></span>{{from}}</small></td>
+                        <td><small><span class="icon-arrow-right text-success"></span>{{to}}</small></td>
+                        <td><small>{{value}}</small></td>
                     </tr>
-                    {{/player.transfers}}
+                    {{/transfers}}
                 </table>
             </div>
             <div class="tab-pane fade" id="links" role="tabpanel" aria-labelledby="links-tab">

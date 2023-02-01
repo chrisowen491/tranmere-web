@@ -64,6 +64,11 @@ let config = {
         target: 'http://localhost:8080',
         router: () => 'http://localhost:3000',
         logLevel: 'debug' /*optional*/
+      },      
+      '/transfers': {
+        target: 'http://localhost:8080',
+        router: () => 'http://localhost:3000',
+        logLevel: 'debug' /*optional*/
       },
       '/graphql': {
         target: 'https://api.prod.tranmere-web.com',
