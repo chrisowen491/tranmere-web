@@ -70,7 +70,7 @@ export class TranmereWebLambda extends Construct {
             the_lambda.addToRolePolicy(props.policy);
         }
         
-        if(props.apiUserPool && props.apiResource && props.apiMethod) {
+        if(props.apiUserPool && props.apiResource && props.apiMethod && props.scopes) {
 
             const cognitoAuthorizer = new apigw.CognitoUserPoolsAuthorizer(
                 this,
