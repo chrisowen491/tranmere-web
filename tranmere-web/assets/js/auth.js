@@ -15,14 +15,14 @@ jQuery(function () {
         onSuccess: function(result) {
             $("#loginout").html('Sign Out');
             auth.setState("signedIn");
-            $('#edit').show();
+            $('.edit').show();
         },
         onFailure: function(err) {
             alert("Error!" + err);
         }
     };
     if(auth.storage['CognitoIdentityServiceProvider.3civek6bpngorkivrntf5ai4ro.LastAuthUser']) {
-        $('#edit').show();
+        $('.edit').show();
         auth.getSession();
     }
     $(document).on('click', '#loginout', function() {

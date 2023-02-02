@@ -1,0 +1,45 @@
+<div class="container edit" style="display: none;">
+    <div class="alert alert-warning alert-dismissible fade show" role="alert" style="display:none" id="link-fail-alert">
+        <i class="icon-check2"></i>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
+        <h4 class="fs-22">Oops - Something has gone wrong</h4>
+        <p>Please try again later</p>
+    </div>
+    <div class="alert alert-success alert-dismissible fade show" role="alert" style="display:none" id="link-success-alert">
+        <i class="icon-check2"></i>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
+        <h4 class="fs-22">Done</h4>
+    </div>
+    <div class="row" id="transfer-form">
+        <div class="col">
+            <h3>Add Link</h3>
+            <div class="row gutter-1 gutter-md-2">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="linkname">Name</label>
+                        <input id="linkname" class="form-control" type="text" value="{{name}}"">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="link">Link</label>
+                        <input id="link" class="form-control" type="text" placeholder="https://somelink">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="linkdescription">Description</label>
+                        <input id="linkdescription" class="form-control" type="text" placeholder="Link Description">
+                    </div>
+                </div>
+                <div class="col-md-12 mt-1">
+                    <button class="btn btn-primary px-3 add-link-button">Insert</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

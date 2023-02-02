@@ -77,6 +77,18 @@ exports.handler = async function (event, context) {
             }
         }).promise();
 
+        var links = await dynamo.query({
+            TableName : utils.LINKS_TABLE,
+            KeyConditionExpression :  "#name = :name",
+            IndexName: "ByNameIndex",
+            ExpressionAttributeNames:{
+                "#name": "name"
+            },
+            ExpressionAttributeValues: {
+                ":name" : decodeURIComponent(playerName)
+            }
+        }).promise();
+
         var pl = playerSearch.Items.length == 1 ? playerSearch.Items[0] : null 
 
         if(playerSearch.Items.length == 0 && debutSearch.Items.length == 0 && summarySearch.Items.length == 0){
@@ -88,6 +100,8 @@ exports.handler = async function (event, context) {
             debut: debutSearch.Items[0],
             seasons: summarySearch.Items,
             transfers: transfers.Items,
+            links: links.Items,
+            teams: await utils.findAllTeams(),
             player: pl,
             url: `/page/${pageName}/${classifier}`
         };

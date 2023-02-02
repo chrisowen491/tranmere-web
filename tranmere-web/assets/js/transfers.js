@@ -47,7 +47,7 @@ function submitToAPI() {
       },
       success: function () {
         // clear form and show a success message
-        $("#contact-form").hide();
+
         $("#success-alert").show();
       },
       error: function () {

@@ -28,51 +28,7 @@
 
 <section class="match" id="match">
     <div class="container overlay-item-top">
-        <div class="row">
-            <div class="col-md-12" id="edit" style="display: none;">
-                <div class="form-group">
-                    <label for="youtube">Youtube</label>
-                    <input type="text" name="youtube" id="youtube" value="{{youtube}}"/>
-                </div>
-                <div class="form-group">
-                    <label for="attendance">Attendance</label>
-                    <input type="text" name="attendance" id="attendance" value="{{attendance}}"/>
-                </div>
-                <div class="form-group">
-                    <label for="programme">Programme</label>
-                    <input type="text" name="programme" id="programme" value="{{programme}}"/>
-                </div>
-                <div class="form-group">
-                    <label for="programme">Venue</label>
-                    <input type="text" name="venue" id="venue" value="{{venue}}"/>
-                </div>
-                <div class="form-group">
-                    <label for="programme">Pens</label>
-                    <input type="text" name="pens" id="pens" value="{{pens}}"/>
-                </div>
-                <div class="form-group">
-                    <label for="programme">Home</label>
-                    <input type="text" name="home" id="home" value="{{home}}"/>
-                </div>
-                <div class="form-group">
-                    <label for="programme">Visitor</label>
-                    <input type="text" name="visitor" id="visitor" value="{{visitor}}"/>
-                </div> 
-                <div class="form-group">
-                    <label for="programme">Opposition</label>
-                    <input type="text" name="opposition" id="opposition" value="{{opposition}}"/>
-                </div>
-                <div class="form-group">
-                    <label for="programme">Home Goals</label>
-                    <input type="text" name="hgoal" id="hgoal" value="{{hgoal}}"/>
-                </div>  
-                <div class="form-group">
-                    <label for="programme">Away Goals</label>
-                    <input type="text" name="vgoal" id="vgoal" value="{{vgoal}}"/>
-                </div>                                  
-                <button id="editbutton2" class="btn btn-primary px-3">Submit</button>
-            </div>
-        </div>
+        {{>match-edit}}
         <div class="row">
             <div class="col">
                 <div class="content boxed">
