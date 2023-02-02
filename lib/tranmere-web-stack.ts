@@ -4,6 +4,7 @@ import { Construct } from 'constructs';
 import * as acm from "aws-cdk-lib/aws-certificatemanager"
 import * as ddb from 'aws-cdk-lib/aws-dynamodb';
 import * as iam from 'aws-cdk-lib/aws-iam';
+import * as cognito from 'aws-cdk-lib/aws-cognito';
 import { TranmereWebLambda } from './tranmere-web-lambda'
 import { TranmereWebGraphQL } from './tranmere-web-graphql'
 
@@ -44,6 +45,7 @@ export class TranmereWebStack extends cdk.Stack {
     const TranmereWebHatTricks = ddb.Table.fromTableAttributes(this,'TranmereWebHatTricks',{tableName: 'TranmereWebHatTricks',grantIndexPermissions: true});
     const TranmereWebOnThisDay = ddb.Table.fromTableAttributes(this,'TranmereWebOnThisDay',{tableName: 'TranmereWebOnThisDay',grantIndexPermissions: true});
     const TranmereWebPlayerTransfers = ddb.Table.fromTableAttributes(this,'TranmereWebPlayerTransfers',{tableName: 'TranmereWebPlayerTransfers',grantIndexPermissions: true});
+    const TranmereWebUserPool = cognito.UserPool.fromUserPoolArn(this, "TranmereWebUserPool", `arn:aws:cognito-idp:${this.region}:${this.account}:userpool/eu-west-1_GAF4md6wn`);
 
     /*
     const TranmereWebOnThisDay = new ddb.Table(this, 'TranmereWebOnThisDay', {
@@ -160,7 +162,8 @@ export class TranmereWebStack extends cdk.Stack {
       apiMethod: 'POST',
       lambdaFile: './lambda/matchupdate.js',
       readWriteTables: [TranmereWebGames],
-      apiUserPool: "TranmereWeb/matches.read"
+      apiUserPool: TranmereWebUserPool,
+      scopes: "TranmereWeb/matches.read"
     });
 
     new TranmereWebLambda(this, 'TransferUpdateFunction', {      
@@ -169,7 +172,8 @@ export class TranmereWebStack extends cdk.Stack {
       apiMethod: 'POST',
       lambdaFile: './lambda/transferinsert.js',
       readWriteTables: [TranmereWebPlayerTransfers],
-      apiUserPool: "TranmereWeb/matches.read"
+      apiUserPool: TranmereWebUserPool,
+      scopes: "TranmereWeb/matches.read"
     });
 
     new TranmereWebLambda(this, 'PlayerSearchFunction', {      
