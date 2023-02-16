@@ -12,10 +12,11 @@ exports.handler = async function (event, context) {
         Item: {
             'id' : uuidv4(),
             'name' : body.name,
-            'date' : body.date,
+            'season' : parseInt(body.season),
             'from' : body.from,
             'to' : body.to,
             'value' : body.value,
+            'cost' : parseInt(body.cost),
         }
     };
 

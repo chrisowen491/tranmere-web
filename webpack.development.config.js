@@ -70,6 +70,11 @@ let config = {
         router: () => 'http://localhost:3000',
         logLevel: 'debug' /*optional*/
       },
+      '/goal': {
+        target: 'http://localhost:8080',
+        router: () => 'http://localhost:3000',
+        logLevel: 'debug' /*optional*/
+      },
       '/links': {
         target: 'http://localhost:8080',
         router: () => 'http://localhost:3000',

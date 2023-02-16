@@ -5,8 +5,8 @@ function submitToAPI() {
                   alert ("Name can not less than 2 char");
         return;
     }
-    if ($("#date").val()=="") {
-        alert ("Please enter a date");
+    if ($("#season").val()=="") {
+        alert ("Please enter a season");
         return;
     }
     if ($("#from").val()=="") {
@@ -21,18 +21,24 @@ function submitToAPI() {
         alert ("Please enter a value for the transfer");
         return;
     }
+    if ($("#cost").val()=="") {
+      alert ("Please enter a cost for the transfer");
+      return;
+  }
 
     var name = $("#name").val();
-    var date = $("#date").val();
+    var season = $("#season").val();
     var from = $("#from").val();
     var to = $("#to").val();
     var value = $("#value").val();
+    var cost = $("#cost").val();
     var data = {
       name : name,
-      date : date,
+      season : season,
       from : from,
       to : to,
-      value : value
+      value : value,
+      cost: cost
     };
   
     $.ajax({

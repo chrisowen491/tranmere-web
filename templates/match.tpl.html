@@ -78,6 +78,12 @@
                                 {{/strikers}}
                                 <br/>
                                 Scorers: <strong>{{formattedGoals}}</strong>
+                                <div class="edit">
+                                    <h3>Edit Goals</h3>
+                                    {{#goals}}
+                                    <a href="/edit-goal.html?season={{Season}}&id={{id}}">{{Scorer}}</a><br/>
+                                    {{/goals}}
+                                </div>
                             </div>
                         </aside>
                         <article class="col-md-8 content-body tranmere-results">

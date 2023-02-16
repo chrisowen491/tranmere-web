@@ -77,11 +77,25 @@ export class TranmereWebStack extends cdk.Stack {
       },
       projectionType: ddb.ProjectionType.ALL,
       sortKey: {
-        name: 'date',
-        type: ddb.AttributeType.STRING,
+        name: 'season',
+        type: ddb.AttributeType.NUMBER,
       }
     });
+    TranmereWebPlayerTransfers.addGlobalSecondaryIndex({
+      indexName: 'ByValueIndex',
+      partitionKey: {
+        name: 'season',
+        type: ddb.AttributeType.NUMBER,
+      },
+      projectionType: ddb.ProjectionType.ALL,
+      sortKey: {
+        name: 'cost',
+        type: ddb.AttributeType.NUMBER,
+      }
+    });
+    */
 
+    /*
     const TranmereWebPlayerLinks = new ddb.Table(this, 'TranmereWebPlayerLinks', {
       tableName: "TranmereWebPlayerLinks",
       partitionKey: { name: 'id', type: ddb.AttributeType.STRING },
@@ -135,6 +149,9 @@ export class TranmereWebStack extends cdk.Stack {
     const match = api.root.addResource('match');
     const season = match.addResource('{season}');
     const date = season.addResource('{date}');
+    const goal = api.root.addResource('goal');
+    const goalseason = goal.addResource('{season}');
+    const goalid = goalseason.addResource('{id}');
     const transfers = api.root.addResource('transfers');
     const links = api.root.addResource('links');
     const page = api.root.addResource('page');
@@ -187,6 +204,24 @@ export class TranmereWebStack extends cdk.Stack {
       readWriteTables: [TranmereWebGames],
       authorizer: cognitoAuthorizer,
       scopes: "TranmereWeb/matches.read"
+    });
+
+    new TranmereWebLambda(this, 'GoalUpdateFunction', {      
+      environment: env_variables,
+      apiResource: goalid,
+      apiMethod: 'POST',
+      lambdaFile: './lambda/goalupdate.js',
+      readWriteTables: [TranmereWebGoalsTable],
+      authorizer: cognitoAuthorizer,
+      scopes: "TranmereWeb/matches.read"
+    });
+
+    new TranmereWebLambda(this, 'GoalFunction', {      
+      environment: env_variables,
+      apiResource: goalid,
+      apiMethod: 'GET',
+      lambdaFile: './lambda/goal.js',
+      readTables: [TranmereWebGoalsTable]
     });
 
     new TranmereWebLambda(this, 'TransferUpdateFunction', {      
