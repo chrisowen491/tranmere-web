@@ -1,0 +1,25 @@
+
+<table class="table">
+    <thead class="thead-dark">
+    <tr>
+        <th scope="col">Name</th>
+        <th scope="col" class="text-center">Season</th>
+        <th scope="col" class="text-center">From</th>
+        <th scope="col" class="text-center">To</th>
+        <th scope="col" class="text-center">Value</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{#transfers}}
+    <tr>
+        <td>
+            <a href="/page/player/{{name}}">{{name}}</a>
+        </td>
+        <td class="text-center">{{season}}</td>
+        <td class="text-center">{{from}}</td>
+        <td class="text-center">{{to}}</td>
+        <td class="text-center">{{value}}</td>
+    </tr>
+    {{/transfers}}
+    </tbody>
+</table>

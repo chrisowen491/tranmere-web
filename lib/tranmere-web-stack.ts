@@ -159,6 +159,7 @@ export class TranmereWebStack extends cdk.Stack {
     const classifier = pageName.addResource('{classifier}');
     const player_search = api.root.addResource('player-search');
     const result_search = api.root.addResource('result-search');
+    const transfer_search = api.root.addResource('transfer-search');
     const on = api.root.addResource('on');
 
     new TranmereWebLambda(this, 'ContactUsFunction', {      
@@ -258,6 +259,14 @@ export class TranmereWebStack extends cdk.Stack {
       apiResource: result_search,
       apiMethod: 'GET',
       readTables: [TranmereWebGames]
+    });
+
+    new TranmereWebLambda(this, 'TransferSearchFunction', {      
+      environment: env_variables,
+      lambdaFile: './lambda/transfersearch.js',
+      apiResource: transfer_search,
+      apiMethod: 'GET',
+      readTables: [TranmereWebPlayerTransfers]
     });
 
     new TranmereWebLambda(this, 'OnThisDayFunction', {      

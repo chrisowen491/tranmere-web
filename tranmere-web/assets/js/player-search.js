@@ -29,7 +29,6 @@ function search() {
               + '&filter=' + $('#filter').val()
               + '&c=' + dateobj.getDate();
   var re = /\/\d\d\d\d\//gm;
-  var re2 = /\/\d\d\d\dgk\//gm;
   var re3 = /\/\d\d\d\d[A-Za-z]\//gm;
   $.getJSON(url, function(view) {
     $.get("/assets/templates/players.mustache?v=" + pack.version, function(template) {
@@ -54,7 +53,7 @@ function search() {
   });
 }
 $.urlParam = function (name) {
-    var results = new RegExp('[\?&]' + name + '=([^&#]*)')
+    var results = new RegExp('[?&]' + name + '=([^&#]*)')
                       .exec(window.location.search);
 
     return (results !== null) ? results[1] || 0 : false;
