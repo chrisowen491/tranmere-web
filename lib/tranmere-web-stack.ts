@@ -161,6 +161,7 @@ export class TranmereWebStack extends cdk.Stack {
     const result_search = api.root.addResource('result-search');
     const transfer_search = api.root.addResource('transfer-search');
     const on = api.root.addResource('on');
+    const upload = api.root.addResource('upload');
 
     new TranmereWebLambda(this, 'ContactUsFunction', {      
       environment: env_variables,
@@ -196,6 +197,27 @@ export class TranmereWebStack extends cdk.Stack {
       schedule: {minute: '45', hour: '23'},
       readWriteTables: [TranmereWebGoalsTable, TranmereWebAppsTable, TranmereWebGames]
     });
+
+    /*
+    new TranmereWebLambda(this, 'UploadJobFunction', {      
+      environment: env_variables,
+      lambdaFile: './lambda/upload.js',
+      readWriteTables: [TranmereWebPlayerTransfers],
+      apiResource: upload,
+      apiMethod: 'GET',
+      commandHooks: {
+        beforeBundling(inputDir: string, outputDir: string): string[] {
+          return [];
+        },
+        afterBundling(inputDir: string, outputDir: string): string[] {
+          return [`mkdir ${outputDir}/csv && cp -R ${inputDir}/csv/* ${outputDir}/csv`];
+        },
+        beforeInstall() {
+          return [];
+        },
+      }
+    });
+    */
 
     new TranmereWebLambda(this, 'MatchUpdateFunction', {      
       environment: env_variables,

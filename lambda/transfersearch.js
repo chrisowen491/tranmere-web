@@ -10,6 +10,7 @@ exports.handler = async function (event, context) {
     var query = {
         TableName: utils.TRANSFER_TABLE,
         IndexName: "ByValueIndex",
+        ScanIndexForward: false,
         ExpressionAttributeNames: {},
         ExpressionAttributeValues: {}
     }
@@ -41,5 +42,17 @@ exports.handler = async function (event, context) {
     var result = season ? await dynamo.query(query).promise() : await dynamo.scan(query).promise();
     var results = result.Items;
 
+    for(var i=0; i < results.length; i++) {
+        results[i].team = results[i].from != "Tranmere Rovers" ?  results[i].from : results[i].to;
+        results[i].type = results[i].from != "Tranmere Rovers" ?  "in" : "out";
+    }
+
+    if(!season) {
+        results.sort(function(a, b) {
+            if (a.cost < b.cost) return 1
+            if (a.cost > b.cost) return -1
+            return 0
+          });
+    }
     return utils.sendResponse(200, {transfers: results});
 };

@@ -9,6 +9,7 @@ cdk.out
 web.out
 local.out
 guidebook/
+csv/
 
 /tmp
 /tranmere-web/output/site/*.html
