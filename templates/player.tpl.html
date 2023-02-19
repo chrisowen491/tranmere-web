@@ -91,8 +91,7 @@
                     <thead>
                     <tr>
                         <th scope="col">Season</th>
-                        <th scope="col">From</th>
-                        <th scope="col">To</th>
+                        <th scope="col">In/Out</th>
                         <th scope="col">Fee</th>
                     </tr>
                     </thead>
@@ -100,8 +99,7 @@
                     {{#transfers}}
                     <tr>
                         <td><small><time datetime="{{season}}" class="text-muted d-block">{{season}}</time></small></td>
-                        <td><small><span class="icon-arrow-left text-danger"></span>{{from}}</small></td>
-                        <td><small><span class="icon-arrow-right text-success"></span>{{to}}</small></td>
+                        <td><small><span class="icon-arrow-{{type}}"></span>{{club}}</small></td>
                         <td><small>{{value}}</small></td>
                     </tr>
                     {{/transfers}}

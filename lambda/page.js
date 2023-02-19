@@ -77,6 +77,14 @@ exports.handler = async function (event, context) {
             }
         }).promise();
 
+        var amendedTansfers = [];
+        for(var i=0; i < transfers.Items.length; i++) {
+            var transfer = transfers.Items[i];
+            transfer.club = transfer.from == "Tranmere Rovers" ? transfer.to : transfer.from;
+            transfer.type = transfer.from == "Tranmere Rovers" ? "right": "left";
+            amendedTansfers.push(transfer);
+        }
+
         var links = await dynamo.query({
             TableName : utils.LINKS_TABLE,
             KeyConditionExpression :  "#name = :name",
@@ -99,7 +107,7 @@ exports.handler = async function (event, context) {
             name: decodeURIComponent(playerName),
             debut: debutSearch.Items[0],
             seasons: summarySearch.Items,
-            transfers: transfers.Items,
+            transfers: amendedTansfers,
             links: links.Items,
             teams: await utils.findAllTeams(),
             player: pl,

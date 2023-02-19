@@ -2,8 +2,6 @@ const Mustache = require("mustache");
 import '../templates/transfers.mustache';
 const pack = require('../../../package.json');
 
-var theDate = new Date();
-
 function search() {
   $("#loading").show();
   $("#content").hide();
@@ -11,6 +9,7 @@ function search() {
   var base = "";
   var url = base + '/transfer-search/?season='+ $('#season').val()
               + '&filter=' + $('#filter').val()
+              + '&club=' + $('#club').val()
               + '&c=' + dateobj.getDate();
   $.getJSON(url, function(view) {
     $.get("/assets/templates/transfers.mustache?v=" + pack.version, function(template) {
@@ -36,9 +35,12 @@ jQuery(function () {
             $('#season').val($.urlParam('season'));
         if($.urlParam('filter'))
             $('#filter').val(decodeURIComponent($.urlParam('filter')));
+        if($.urlParam('club'))
+            $('#club').val(decodeURIComponent($.urlParam('club')));
         search();
         $('.btn-transfer-search').on('click',function(){
             search();
         });
+        
     }
 });

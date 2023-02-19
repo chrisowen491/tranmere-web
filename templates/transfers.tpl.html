@@ -41,6 +41,13 @@
                         <option>Out</option>
                       </select>
                     </div>
+                    <div class="form-group">
+                        <label for="season">Club</label>
+                        <select class="form-control form-control-sm" id="club">
+                          <option value="">All</option>
+                          {{#teams}}<option>{{name}}</option>{{/teams}}
+                        </select>
+                      </div>
                     <button type="button" class="btn btn-sm btn-primary btn-rounded btn-transfer-search">Search</button>
                   </div>
 
