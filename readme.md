@@ -2,8 +2,19 @@
 
 This site is a demo site using Tarnmere Rovers data to demonstrate all sorts of website functionality. It is not meant as a commercial entity, and is purely for fun. 
 
+Most functionality is provided using free tools, but the the AWS Backend and [DataDog](https://www.datadoghq.com/) monitoring require paid for subscriptions.
+
 ## Frontend - Static HTML, JQuery, Saas
-Source code for Tranmere-Web.com. The site is a static site designed to be deployed via cloudflare pages.
+Source code for [Tranmere-Web.com](https://www.tranmere-web.com). 
+
+The site is a static site designed to be deployed via [cloudflare pages](https://pages.cloudflare.com/).
+
+Site search is powered by [algloia](https://www.algolia.com/) - with pages indexed at build time.
+
+## Backend - AWS Serverless
+
+Dynamic elements are powered using a combination of AWS Lambda, AppSync, DynamoDb and [Contentful CMS](https://www.contentful.com/). Builds are executed using [GitHub Actions](https://github.com/features/actions).
+
 
 ### Prerequisites
 
