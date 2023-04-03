@@ -65,7 +65,7 @@
     "cheerio": "^1.0.0-rc.3",
     "ci": "^2.2.0",
     "constructs": "^10.1.264",
-    "contentful": "^9.3.3",
+    "contentful": "^9.3.5",
     "contentful-management": "^10.30.0",
     "csvtojson": "^2.0.10",
     "jquery": "^3.6.2",
