@@ -76,7 +76,7 @@
     "source-map-support": "^0.5.21",
     "uuid": "^9.0.0",
     "video.js": "^7.21.3",
-    "videojs-youtube": "^2.6.0"
+    "videojs-youtube": "^3.0.0"
   },
   "eslintConfig": {
     "env": {
