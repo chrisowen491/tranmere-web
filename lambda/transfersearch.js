@@ -21,15 +21,30 @@ exports.handler = async function (event, context) {
         query.ExpressionAttributeValues[":season"] = parseInt(season)
     }
 
-    if(filter) {
+    if(filter || club) {
         if(filter == "In") {
             query.FilterExpression = "#to = :team";
             query.ExpressionAttributeNames["#to"] = "to";
             query.ExpressionAttributeValues[":team"] = "Tranmere Rovers"
+            if(club) {
+                query.FilterExpression += "AND #from = :opposition"
+                query.ExpressionAttributeNames["#from"] = "from";
+                query.ExpressionAttributeValues[":opposition"] = club
+            }
         } else if(filter == "Out") {
             query.FilterExpression = "#from = :team";
             query.ExpressionAttributeNames["#from"] = "from";
             query.ExpressionAttributeValues[":team"] = "Tranmere Rovers"
+            if(club) {
+                query.FilterExpression += "AND #to = :opposition"
+                query.ExpressionAttributeNames["#to"] = "to";
+                query.ExpressionAttributeValues[":opposition"] = club
+            }
+        } else {
+            query.FilterExpression = "#from = :team OR #to = :team";
+            query.ExpressionAttributeNames["#from"] = "from";
+            query.ExpressionAttributeNames["#to"] = "to";
+            query.ExpressionAttributeValues[":team"] = club
         }
     } else {
         delete query.ExpressionAttributeNames;
@@ -46,10 +61,7 @@ exports.handler = async function (event, context) {
     for(var i=0; i < results.length; i++) {
         results[i].team = results[i].from != "Tranmere Rovers" ?  results[i].from : results[i].to;
         results[i].type = results[i].from != "Tranmere Rovers" ?  "in" : "out";
-        
-        if((club && club == results[i].team) || (!club)) {
-            amendedResults.push(results[i]);
-        }
+        amendedResults.push(results[i]);
     }
 
     if(!season) {

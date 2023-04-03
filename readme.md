@@ -10,66 +10,50 @@ Source code for Tranmere-Web.com. The site is a static site designed to be deplo
  * Scripts are designed for Linux/Mac
  * Node v16+, NPM
 
-### Building
-
-Set Key Env variables
-
-```bash
-export ENVIRONMENT=local
-export CF_SPACE=
-export CF_KEY=
-export AL_SPACE=
-export AL_KEY=
-export AL_INDEX=
-export VERSION=
-```
+### Install
 
 ```bash
 $ npm install
-$ npm run build-web
-$ npm run build
 ```
 
-### Local Testing (Using production backend)
+### Local Testing/DEvelopment (Using CDK backend)
+
+
+In a terminal - set Key Env variables
 
 ```bash
-$ npm run local-web-prod
+export ENVIRONMENT=local
+export CF_SPACE=<<Contentful Space Id>>
+export CF_KEY=CF_SPACE=<<Contentful  API Key>>
+export AL_SPACE=<<Algolia Space Id>>
+export AL_KEY=<<Algolia API Key>>
+export AL_INDEX=<<Algolia Index Name>>
 ```
 
-## Backend - AWS Lambda, AppSync, CDK
-
-Set Key Env variables
 
 ```bash
-export ENVIRONMENT=
-export EMAIL_ADDRESS=
-export CF_SPACE=
-export CF_KEY=
-export SCRAPE_ID=
-export SCRAPE_SEASON=
-export SCRAPE_ID=
-export DD_KEY=
-export VERSION=
+$ npm run start
 ```
 
-### Deployment
-
-```bash
-$ cdk deploy
-```
-
-### Local Testing
-
-
-Make sure AWS SAM is installed
+In another terminal make sure AWS SAM is installed. You will need docker runing too.
 
 ```bash
 $ brew tap aws/tap
 $ brew install aws-sam-cli
 $ sam --version
 ```
+Set Key Env variables
 
-You will need docker runing too.
+```bash
+export ENVIRONMENT=local
+export EMAIL_ADDRESS=
+export CF_SPACE=
+export CF_KEY=
+export SCRAPE_ID=
+export SCRAPE_SEASON=
+export SCRAPE_ID=
+export VERSION=1.0.0
+```
 
 ```bash
 $ npm run local-api
@@ -80,6 +64,27 @@ $ npm run local-api
 ```bash
 $ npm run local-acceptance-test
 ```
+
+### Deployment
+
+Set Key Env variables
+
+```bash
+export ENVIRONMENT=local
+export EMAIL_ADDRESS=
+export CF_SPACE=
+export CF_KEY=
+export SCRAPE_ID=
+export SCRAPE_SEASON=
+export SCRAPE_ID=
+export DD_KEY=
+export VERSION=1.0.0
+```
+
+```bash
+$ cdk deploy
+```
+
 
 ## Deploying Images
 

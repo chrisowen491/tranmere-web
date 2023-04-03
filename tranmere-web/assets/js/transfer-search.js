@@ -9,7 +9,7 @@ function search() {
   var base = "";
   var url = base + '/transfer-search/?season='+ $('#season').val()
               + '&filter=' + $('#filter').val()
-              + '&club=' + $('#club').val()
+              + '&club=' + encodeURIComponent($('#club').val())
               + '&c=' + dateobj.getDate();
   $.getJSON(url, function(view) {
     $.get("/assets/templates/transfers.mustache?v=" + pack.version, function(template) {
