@@ -53,7 +53,7 @@
   "dependencies": {
     "@algolia/autocomplete-js": "^1.8.1",
     "@algolia/autocomplete-theme-classic": "^1.8.0",
-    "@contentful/rich-text-html-renderer": "^16.0.2",
+    "@contentful/rich-text-html-renderer": "^16.0.3",
     "@datadog/browser-logs": "^4.34.2",
     "@datadog/browser-rum": "^4.34.2",
     "algoliasearch": "^4.16.0",
