@@ -51,7 +51,7 @@
     "webpack-dev-server": "^4.11.1"
   },
   "dependencies": {
-    "@algolia/autocomplete-js": "^1.8.1",
+    "@algolia/autocomplete-js": "^1.8.3",
     "@algolia/autocomplete-theme-classic": "^1.8.0",
     "@contentful/rich-text-html-renderer": "^16.0.2",
     "@datadog/browser-logs": "^4.34.2",
