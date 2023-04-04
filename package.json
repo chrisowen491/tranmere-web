@@ -68,7 +68,7 @@
     "contentful": "^9.3.3",
     "contentful-management": "^10.30.0",
     "csvtojson": "^2.0.10",
-    "jquery": "^3.6.2",
+    "jquery": "^3.6.4",
     "lavalamp": "^2.0.0",
     "magnific-popup": "^1.1.0",
     "mustache": "^4.2.0",
