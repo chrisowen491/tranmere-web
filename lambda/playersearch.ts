@@ -1,46 +1,43 @@
-const AWS = require('aws-sdk');
-let dynamo = new AWS.DynamoDB.DocumentClient();
-const utils = require('../lib/utils')();
+import { APIGatewayEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
+import { TranmereWebUtils, DataTables } from '../lib/tranmere-web-utils';
+import {DynamoDB} from 'aws-sdk';
+let utils = new TranmereWebUtils();
+const dynamo = new DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
 
-exports.handler = async function (event, context) {
+exports.handler = async (event : APIGatewayEvent, context: Context): Promise<APIGatewayProxyResult> =>{
 
-    var squadSearch = await dynamo.scan({TableName:utils.PLAYER_TABLE_NAME}).promise();
-    var playerHash = {};
-    for(var i=0; i < squadSearch.Items.length; i++) {
-        playerHash[squadSearch.Items[i].name] = squadSearch.Items[i];
+    let squadSearch = await dynamo.scan({TableName: DataTables.PLAYER_TABLE_NAME}).promise();
+    var playerHash : any = {};
+    for(var i=0; i < squadSearch.Items!.length; i++) {
+        playerHash[squadSearch.Items![i].name] = squadSearch.Items![i];
     }
 
     var season = event.queryStringParameters ? event.queryStringParameters.season : null;
     var sort = event.queryStringParameters ? event.queryStringParameters.sort : null;
     var player = event.queryStringParameters ? event.queryStringParameters.player : null;
     var filter = event.queryStringParameters ? event.queryStringParameters.filter : null;
-
-    var query = {};
-
-    if(player) {
-        query = {
-            TableName: utils.SUMMARY_TABLE_NAME,
-            IndexName: "ByPlayerIndex",
-            KeyConditionExpression :  "Player = :player",
-            ExpressionAttributeValues: {
-                ":player" : player
-            }
-        };
-    } else {
-        if(!season)
-            season = "TOTAL";
-
-        query = {
-            TableName: utils.SUMMARY_TABLE_NAME,
-            KeyConditionExpression :  "Season = :season",
-            ExpressionAttributeValues: {
-                ":season" : season
-            }
-        };
-    }
+    
+    if(!season)
+        season = "TOTAL";
+    
+        var query = player ? {
+                TableName: DataTables.SUMMARY_TABLE_NAME,
+                IndexName: "ByPlayerIndex",
+                KeyConditionExpression :  "Player = :player",
+                ExpressionAttributeValues: {
+                    ":player" : player
+                }
+            } : 
+            {
+                TableName: DataTables.SUMMARY_TABLE_NAME,
+                KeyConditionExpression :  "Season = :season",
+                ExpressionAttributeValues: {
+                    ":season" : season
+                }
+            };
 
     var result = await dynamo.query(query).promise();
-    var results = result.Items;
+    var results = result.Items!;
 
     for(var x=0; x < results.length; x++ ) {
         delete results[x].TimeToLive;
@@ -56,9 +53,8 @@ exports.handler = async function (event, context) {
         }
     }
 
-
     if(filter) {
-        var newResults = [];
+        var newResults : Array<any> = [];
         for(var i=0; i < results.length; i++) {
             if(filter == "OnlyOneApp" && results[i].Apps == 1) {
                 newResults.push(results[i]);

@@ -1,7 +1,12 @@
-const fs = require("fs");
+import { APIGatewayEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
+import fs from 'fs';
 
-exports.handler = async function (event, context) {
+exports.handler = async (event : APIGatewayEvent, context: Context): Promise<APIGatewayProxyResult> =>{
     console.log('Received event:', event);
+
+    if(!event.pathParameters) {
+        throw new Error('No Path Parameters Supplied');
+    }
 
     const start = '<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">';
     const background = `<g><title>background</title><rect fill="${event.pathParameters.background}" id="canvas_background" height="514" width="514" y="-1" x="-1"/></g>`
@@ -22,12 +27,12 @@ exports.handler = async function (event, context) {
     svg = svg.replace(/#HIGHLIGHTS/g, `#${event.pathParameters.highlights}`);   
 
     return {
-        "headers": { 
+        headers: { 
             "Content-Type": "image/svg+xml", 
             "Access-Control-Allow-Origin": "*",
             "Cache-Control": "public, max-age=2592000"
         },
-        "statusCode": 200,
-        "body": svg
+        statusCode: 200,
+        body: svg
      };
 };

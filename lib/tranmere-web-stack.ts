@@ -223,7 +223,7 @@ export class TranmereWebStack extends cdk.Stack {
       environment: env_variables,
       apiResource: date,
       apiMethod: 'POST',
-      lambdaFile: './lambda/matchupdate.js',
+      lambdaFile: './lambda/matchupdate.ts',
       readWriteTables: [TranmereWebGames],
       authorizer: cognitoAuthorizer,
       scopes: "TranmereWeb/matches.read"
@@ -233,7 +233,7 @@ export class TranmereWebStack extends cdk.Stack {
       environment: env_variables,
       apiResource: goalid,
       apiMethod: 'POST',
-      lambdaFile: './lambda/goalupdate.js',
+      lambdaFile: './lambda/goalupdate.ts',
       readWriteTables: [TranmereWebGoalsTable],
       authorizer: cognitoAuthorizer,
       scopes: "TranmereWeb/matches.read"
@@ -243,7 +243,7 @@ export class TranmereWebStack extends cdk.Stack {
       environment: env_variables,
       apiResource: goalid,
       apiMethod: 'GET',
-      lambdaFile: './lambda/goal.js',
+      lambdaFile: './lambda/goal.ts',
       readTables: [TranmereWebGoalsTable]
     });
 
@@ -251,7 +251,7 @@ export class TranmereWebStack extends cdk.Stack {
       environment: env_variables,
       apiResource: transfers,
       apiMethod: 'POST',
-      lambdaFile: './lambda/transferinsert.js',
+      lambdaFile: './lambda/transferinsert.ts',
       readWriteTables: [TranmereWebPlayerTransfers],
       authorizer: cognitoAuthorizer,
       scopes: "TranmereWeb/matches.read"
@@ -261,7 +261,7 @@ export class TranmereWebStack extends cdk.Stack {
       environment: env_variables,
       apiResource: links,
       apiMethod: 'POST',
-      lambdaFile: './lambda/linksinsert.js',
+      lambdaFile: './lambda/linksinsert.ts',
       readWriteTables: [TranmereWebPlayerLinks],
       authorizer: cognitoAuthorizer,
       scopes: "TranmereWeb/matches.read"
@@ -269,7 +269,7 @@ export class TranmereWebStack extends cdk.Stack {
 
     new TranmereWebLambda(this, 'PlayerSearchFunction', {      
       environment: env_variables,
-      lambdaFile: './lambda/playersearch.js',
+      lambdaFile: './lambda/playersearch.ts',
       apiResource: player_search,
       apiMethod: 'GET',
       readTables: [TranmereWebPlayerTable, TranmereWebPlayerSeasonSummaryTable]
@@ -348,7 +348,7 @@ export class TranmereWebStack extends cdk.Stack {
 
     new TranmereWebLambda(this, 'PlayerBuilderFunction', {      
       environment: env_variables,
-      lambdaFile: './lambda/playerbuilder.js',
+      lambdaFile: './lambda/playerbuilder.ts',
       apiResource: highlights,
       apiMethod: 'GET',
       commandHooks: {

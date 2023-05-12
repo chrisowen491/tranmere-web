@@ -5,10 +5,8 @@ import * as lambda from 'aws-cdk-lib/aws-lambda';
 import {NodejsFunction, ICommandHooks} from 'aws-cdk-lib/aws-lambda-nodejs';
 import * as cdk from 'aws-cdk-lib';
 import * as iam from 'aws-cdk-lib/aws-iam';
-import * as cognito from 'aws-cdk-lib/aws-cognito';
 import * as ddb from 'aws-cdk-lib/aws-dynamodb';
 import { aws_apigateway as apigw} from 'aws-cdk-lib'; 
-import { IUserPool } from 'aws-cdk-lib/aws-cognito';
 import { IAuthorizer } from 'aws-cdk-lib/aws-apigateway';
 
 export interface TranmereWebLambdaProps {

@@ -1,6 +1,6 @@
- import * as cdk from 'aws-cdk-lib';
- import { Template } from 'aws-cdk-lib/assertions';
- import * as TranmereWeb from '../lib/tranmere-web-stack';
+import * as cdk from 'aws-cdk-lib';
+import { Template } from 'aws-cdk-lib/assertions';
+import * as TranmereWeb from '../lib/tranmere-web-stack';
 
 test('API Gateway Created', () => {
    const app = new cdk.App();

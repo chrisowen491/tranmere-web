@@ -1,7 +1,8 @@
 .idea
-*.d.ts
 node_modules
 bin/*.js
+
+lib/build/*
 
 # CDK asset staging directory
 .cdk.staging

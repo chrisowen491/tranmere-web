@@ -1,6 +1,11 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:base", ":automergeMinor", ":automergePr", ":separateMajorReleases", "group:allNonMajor", "schedule:daily"
+    "config:base", 
+    ":automergeMajor", 
+    ":automergePr", 
+    ":separateMajorReleases", 
+    "group:all", 
+    "schedule:daily"
   ]
 }

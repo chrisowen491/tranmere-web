@@ -1,15 +1,17 @@
-const AWS = require('aws-sdk');
-let dynamo = new AWS.DynamoDB.DocumentClient();
-const utils = require('../lib/utils')();
+import { APIGatewayEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
+import { TranmereWebUtils, DataTables } from '../lib/tranmere-web-utils';
+import {DynamoDB} from 'aws-sdk';
+let utils = new TranmereWebUtils();
+const dynamo = new DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
 
-exports.handler = async function (event, context) {
+exports.handler = async (event : APIGatewayEvent, context: Context): Promise<APIGatewayProxyResult> =>{
 
-    const id = event.pathParameters.id;
-    const season = event.pathParameters.season;
-    const body = JSON.parse(event.body)
+    const id = event.pathParameters!.id;
+    const season = event.pathParameters!.season;
+    const body = JSON.parse(event.body!)
 
     var params = {
-        TableName: utils.GOALS_TABLE_NAME,
+        TableName: DataTables.GOALS_TABLE_NAME,
         Key:{
             "Season": season,
             "id": id
