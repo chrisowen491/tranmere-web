@@ -42,7 +42,7 @@ export class TranmereWebUtils  {
     }
 
     getSeasons(): Array<number> {
-        var seasons = [];
+        let seasons : Array<number> = [];
         for(var i = this.getYear(); i > 1920; i--) {
           seasons.push(i);
         }
