@@ -10,7 +10,7 @@
         "esModuleInterop": true, 
         "declaration": true,
         "strict": true,
-        "noImplicitAny": false,
+        "noImplicitAny": true,
         "strictNullChecks": true,
         "noImplicitThis": true,
         "alwaysStrict": true,

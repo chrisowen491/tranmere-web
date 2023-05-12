@@ -139,11 +139,11 @@ export class TranmereWebUtils  {
       return Mustache.render(fs.readFileSync(tpl).toString(), view, this.loadSharedPartials());
     }
 
-    async getBlogs(client: contentful.ContentfulClientApi) : Promise<any> {
+    async getBlogs(client: any) : Promise<any> {
       return await client.getEntries({'content_type': 'blogPost', order: '-fields.datePosted', limit: 5});
     }
 
-    async getPages(client: contentful.ContentfulClientApi) : Promise<any> {
+    async getPages(client: any) : Promise<any> {
       return await client.getEntries({'content_type': 'pageMetaData'});
     }
 
