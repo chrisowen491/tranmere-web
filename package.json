@@ -67,12 +67,12 @@
     "amazon-cognito-auth-js": "^1.3.3",
     "aws-sdk": "^2.1326.0",
     "axios": "^1.3.4",
-    "bootstrap": "^4.6.2",
+    "bootstrap": "^5.0.0",
     "bootstrap-select": "^1.13.2",
     "cheerio": "^1.0.0-rc.3",
     "ci": "^2.2.0",
     "constructs": "^10.2.21",
-    "contentful": "^9.3.5",
+    "contentful": "^10.0.0",
     "contentful-management": "^10.30.0",
     "csvtojson": "^2.0.10",
     "jquery": "^3.6.4",
@@ -82,7 +82,7 @@
     "owl.carousel": "^2.3.4",
     "source-map-support": "^0.5.21",
     "uuid": "^9.0.0",
-    "video.js": "^7.21.3",
+    "video.js": "^8.0.0",
     "videojs-youtube": "^3.0.0"
   },
   "eslintConfig": {
