@@ -1,8 +1,11 @@
-const AWS = require('aws-sdk');
-let dynamo = new AWS.DynamoDB.DocumentClient();
-const utils = require('../lib/utils')();
+import { APIGatewayEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
+import { TranmereWebUtils, DataTables, ProgrammeImage } from '../lib/tranmere-web-utils';
+import {DynamoDB} from 'aws-sdk';
+let utils = new TranmereWebUtils();
 
-exports.handler = async function(event, context){
+const dynamo = new DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
+
+exports.handler = async (event : APIGatewayEvent, context: Context): Promise<APIGatewayProxyResult> =>{
 
     const season = event.queryStringParameters ? event.queryStringParameters.season : null;
     const competition = event.queryStringParameters ? event.queryStringParameters.competition : null;
@@ -15,11 +18,11 @@ exports.handler = async function(event, context){
     const or = event.queryStringParameters ? event.queryStringParameters.or : null;
 
     const data = await getResults(season, competition, opposition, date, manager, venue, pens, sort, or);
-    var results = [];
+    var results : Array<any> = [];
     var h2hresults = [buildDefaultSummary("Home"), buildDefaultSummary("Away"), buildDefaultSummary("Neutral")];
     var h2hTotal = [buildDefaultSummary("Total")];
-    for(var i=0; i < data.length; i++) {
-        var match = data[i];
+    for(var i=0; i < data!.length; i++) {
+        var match = data![i];
         if(match.home == "Tranmere Rovers") {
             var haindex = 0;
             if(match.venue == "Wembley Stadium") {
@@ -60,29 +63,22 @@ exports.handler = async function(event, context){
             h2hresults[haindex].diff += (parseInt(match.vgoal) - parseInt(match.hgoal));            
         }
         if(match.programme && match.programme != "#N/A") {
-
-             var smallBody = {
-              "bucket": 'trfc-programmes',
-              "key": match.programme,
-              "edits": {
-                "resize": {
-                  "width": 100,
-                  "fit": "contain"
+            var smallBody = new ProgrammeImage(match.programme );
+            smallBody.edits = {
+                resize: {
+                  width: 100,
+                  fit: "contain"
                 }
-              }
             };
-            var largeBody = {
-                "bucket": 'trfc-programmes',
-                "key": match.programme,
-            };
-            match.programme = Buffer.from(JSON.stringify(smallBody)).toString('base64');
-            match.largeProgramme = Buffer.from(JSON.stringify(largeBody)).toString('base64');
+            var largeBody = new ProgrammeImage( match.programme ); 
+            match.programme = smallBody.imagestring();
+            match.largeProgramme = largeBody.imagestring();
         } else {
             delete match.programme;
         }
         if(date && !or) {
-            match.goals = await getGoals(date, match.season);
-            match.apps = await getApps(date, match.season);
+            match.goals = await utils.getGoalsBySeason(match.season, date);
+            match.apps = await utils.getAppsBySeason(match.season, date);
         }
         if(match.attendance == 0)
             match.attendance = null;
@@ -126,30 +122,30 @@ exports.handler = async function(event, context){
 async function getResults(season, competition, opposition, date, manager, venue, pens, sort, or) {
 
     var query = false;
-    var params = {
-        TableName : utils.RESULTS_TABLE,
+    var params : DynamoDB.DocumentClient.QueryInput = {
+        TableName : DataTables.RESULTS_TABLE,
         ExpressionAttributeValues: {},
         ExpressionAttributeNames: {}
     };
 
     if(season) {
         params.KeyConditionExpression =  "season = :season",
-        params.ExpressionAttributeValues[":season"] = decodeURIComponent(season);
+        params.ExpressionAttributeValues![":season"] = decodeURIComponent(season);
         query = true;
     } else if(opposition) {
         params.IndexName = "OppositionIndex";
         params.KeyConditionExpression =  "opposition = :opposition",
-        params.ExpressionAttributeValues[":opposition"] = decodeURIComponent(opposition);
+        params.ExpressionAttributeValues![":opposition"] = decodeURIComponent(opposition);
         query = true;
     } else if(competition) {
         params.IndexName = "CompetitionIndex";
         params.KeyConditionExpression =  "competition = :competition",
-        params.ExpressionAttributeValues[":competition"] = decodeURIComponent(competition);
+        params.ExpressionAttributeValues![":competition"] = decodeURIComponent(competition);
         query = true;
     } else if(venue && (decodeURIComponent(sort) != "Top Attendance")) {
         params.IndexName = "VenueIndex";
         params.KeyConditionExpression =  "venue = :venue",
-        params.ExpressionAttributeValues[":venue"] = decodeURIComponent(venue);
+        params.ExpressionAttributeValues![":venue"] = decodeURIComponent(venue);
         query = true;
     } else if(sort && (decodeURIComponent(sort) == "Top Attendance")) {
         params.IndexName = "AttendanceIndex";
@@ -171,14 +167,14 @@ async function getResults(season, competition, opposition, date, manager, venue,
     
     if(manager) {
         var dates = manager.split(',');
-        if(query && !params.ExpressionAttributeValues[":static"]) {
+        if(query && !params.ExpressionAttributeValues![":static"]) {
             params.KeyConditionExpression =  params.KeyConditionExpression + " and #date BETWEEN :from and :to";
         } else {
             params.FilterExpression = "#date BETWEEN :from and :to";
         }
-        params.ExpressionAttributeNames["#date"] = "date";
-        params.ExpressionAttributeValues[":from"] = decodeURIComponent(dates[0]);
-        params.ExpressionAttributeValues[":to"] = decodeURIComponent(dates[1]);
+        params.ExpressionAttributeNames!["#date"] = "date";
+        params.ExpressionAttributeValues![":from"] = decodeURIComponent(dates[0]);
+        params.ExpressionAttributeValues![":to"] = decodeURIComponent(dates[1]);
     }
 
     if(or) {
@@ -188,9 +184,9 @@ async function getResults(season, competition, opposition, date, manager, venue,
             params.ScanIndexForward = false;
         }
         params.KeyConditionExpression =  `season = :season and #date ${modifier} :date`,
-        params.ExpressionAttributeValues[":season"] = decodeURIComponent(season);
-        params.ExpressionAttributeNames["#date"] = "date";
-        params.ExpressionAttributeValues[":date"] = decodeURIComponent(date);
+        params.ExpressionAttributeValues![":season"] = decodeURIComponent(season);
+        params.ExpressionAttributeNames!["#date"] = "date";
+        params.ExpressionAttributeValues![":date"] = decodeURIComponent(date);
         params.Limit = 5;
 
     }
@@ -200,8 +196,8 @@ async function getResults(season, competition, opposition, date, manager, venue,
         } else {
             params.FilterExpression = params.FilterExpression ? params.FilterExpression + " and #date = :date" : "#date = :date";
         }
-        params.ExpressionAttributeNames["#date"] = "date";
-        params.ExpressionAttributeValues[":date"] = decodeURIComponent(date);
+        params.ExpressionAttributeNames!["#date"] = "date";
+        params.ExpressionAttributeValues![":date"] = decodeURIComponent(date);
     }
 
     if(season && opposition)
@@ -218,10 +214,10 @@ async function getResults(season, competition, opposition, date, manager, venue,
 
     if(pens) {
         params.FilterExpression = params.FilterExpression ? params.FilterExpression + " and pens <> :pens" : "pens <> :pens";
-        params.ExpressionAttributeValues[":pens"] = "";
+        params.ExpressionAttributeValues![":pens"] = "";
     }
     
-    if(!Object.keys(params.ExpressionAttributeNames).length)
+    if(!Object.keys(params.ExpressionAttributeNames!).length)
         delete params.ExpressionAttributeNames;
 
     var result = query ? await dynamo.query(params).promise() : await dynamo.scan(params).promise();
@@ -229,7 +225,7 @@ async function getResults(season, competition, opposition, date, manager, venue,
     if (typeof result.LastEvaluatedKey != "undefined" && !or) {
         params.ExclusiveStartKey = result.LastEvaluatedKey;
         var nextResults =  query ? await dynamo.query(params).promise() : await dynamo.scan(params).promise();
-        items = items.concat(nextResults.Items);
+        items = items!.concat(nextResults.Items!);
     }
     return items;
 };
@@ -252,41 +248,3 @@ function buildDefaultSummary(label) {
         diff: 0
     };
 }
-
-async function getGoals(date, season) {
-
-    var params = {
-        TableName : utils.GOALS_TABLE_NAME,
-        KeyConditionExpression :  "Season = :season",
-        FilterExpression : "#Date = :date",
-        ExpressionAttributeNames : {
-            "#Date" : "Date"
-        },
-        ExpressionAttributeValues: {
-            ":date" : decodeURIComponent(date),
-            ":season" : decodeURIComponent(season)
-        }
-    }
-
-    var result = await dynamo.query(params).promise();
-    return result.Items;
-};
-
-async function getApps(date, season) {
-
-    var params = {
-        TableName : utils.APPS_TABLE_NAME,
-        KeyConditionExpression :  "Season = :season",
-        FilterExpression : "#Date = :date",
-        ExpressionAttributeNames : {
-            "#Date" : "Date"
-        },
-        ExpressionAttributeValues: {
-            ":date" : decodeURIComponent(date),
-            ":season" : decodeURIComponent(season)
-        }
-    }
-
-    var result = await dynamo.query(params).promise();
-    return result.Items;
-};

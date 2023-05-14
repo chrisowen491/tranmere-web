@@ -165,7 +165,7 @@ export class TranmereWebStack extends cdk.Stack {
 
     new TranmereWebLambda(this, 'ContactUsFunction', {      
       environment: env_variables,
-      lambdaFile: './lambda/contactus.js',
+      lambdaFile: './lambda/contactus.ts',
       apiResource: contact_us,
       apiMethod: 'POST',
       policy: new iam.PolicyStatement({
@@ -177,7 +177,7 @@ export class TranmereWebStack extends cdk.Stack {
 
     new TranmereWebLambda(this, 'UpdateJobFunction', {      
       environment: env_variables,
-      lambdaFile: './lambda/updateJob.js',
+      lambdaFile: './lambda/updateJob.ts',
       schedule: {minute: '45', hour: '23'},
       readTables: [TranmereWebGoalsTable, TranmereWebAppsTable],
       readWriteTables: [TranmereWebPlayerSeasonSummaryTable]
@@ -185,7 +185,7 @@ export class TranmereWebStack extends cdk.Stack {
 
     new TranmereWebLambda(this, 'HatTrickJobFunction', {      
       environment: env_variables,
-      lambdaFile: './lambda/hatTrickJob.js',
+      lambdaFile: './lambda/hatTrickJob.ts',
       schedule: {minute: '45', hour: '23'},
       readTables: [TranmereWebGoalsTable],
       readWriteTables: [TranmereWebHatTricks]
@@ -193,8 +193,8 @@ export class TranmereWebStack extends cdk.Stack {
 
     new TranmereWebLambda(this, 'ScraperJobFunction', {      
       environment: env_variables,
-      lambdaFile: './lambda/scraper.js',
-      schedule: {minute: '45', hour: '23'},
+      lambdaFile: './lambda/scraper.ts',
+      schedule: {minute: '45', hour: '22'},
       readWriteTables: [TranmereWebGoalsTable, TranmereWebAppsTable, TranmereWebGames]
     });
 
@@ -277,7 +277,7 @@ export class TranmereWebStack extends cdk.Stack {
 
     new TranmereWebLambda(this, 'ResultsSearchFunction', {      
       environment: env_variables,
-      lambdaFile: './lambda/resultssearch.js',
+      lambdaFile: './lambda/resultssearch.ts',
       apiResource: result_search,
       apiMethod: 'GET',
       readTables: [TranmereWebGames]
@@ -285,7 +285,7 @@ export class TranmereWebStack extends cdk.Stack {
 
     new TranmereWebLambda(this, 'TransferSearchFunction', {      
       environment: env_variables,
-      lambdaFile: './lambda/transfersearch.js',
+      lambdaFile: './lambda/transfersearch.ts',
       apiResource: transfer_search,
       apiMethod: 'GET',
       readTables: [TranmereWebPlayerTransfers]
@@ -293,7 +293,7 @@ export class TranmereWebStack extends cdk.Stack {
 
     new TranmereWebLambda(this, 'OnThisDayFunction', {      
       environment: env_variables,
-      lambdaFile: './lambda/onThisDayJob.js',
+      lambdaFile: './lambda/onThisDayJob.ts',
       schedule: {minute: '25', hour: '00'},
       apiMethod: 'GET',
       readWriteTables: [TranmereWebOnThisDay],
@@ -302,7 +302,7 @@ export class TranmereWebStack extends cdk.Stack {
 
     new TranmereWebLambda(this, 'MediaSyncFunction', {      
       environment: env_variables,
-      lambdaFile: './lambda/mediasync.js',
+      lambdaFile: './lambda/mediasync.ts',
       apiResource: type,
       apiMethod: 'POST',
       readWriteTables: [TranmereWebMediaSyncTable, TranmereWebPlayerTable, TranmereWebStarsTable]
@@ -310,7 +310,7 @@ export class TranmereWebStack extends cdk.Stack {
 
     new TranmereWebLambda(this, 'MatchPageFunction', {      
       environment: env_variables,
-      lambdaFile: './lambda/matchpage.js',
+      lambdaFile: './lambda/matchpage.ts',
       apiResource: date,
       apiMethod: 'GET',
       readTables: [TranmereWebPlayerTable, TranmereWebGames, TranmereWebGoalsTable, TranmereWebAppsTable],
@@ -329,7 +329,7 @@ export class TranmereWebStack extends cdk.Stack {
 
     new TranmereWebLambda(this, 'DynamicPageFunction', {      
       environment: env_variables,
-      lambdaFile: './lambda/page.js',
+      lambdaFile: './lambda/page.ts',
       apiResource: classifier,
       apiMethod: 'GET',
       readTables: [TranmereWebAppsTable, TranmereWebPlayerSeasonSummaryTable, TranmereWebPlayerTable, TranmereWebPlayerTransfers, TranmereWebPlayerLinks],

@@ -1,32 +1,36 @@
-const AWS = require('aws-sdk');
-let dynamo = new AWS.DynamoDB.DocumentClient();
-const utils = require('../lib/utils')();
-const contentful = require("contentful");
-const contentfulSDK = require('@contentful/rich-text-html-renderer');
+import { APIGatewayEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
+import { TranmereWebUtils, DataTables } from '../lib/tranmere-web-utils';
+import {DynamoDB} from 'aws-sdk';
+import { createClient } from "contentful";
+import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
+import {IBlogPost} from '../lib/contentful'
+let utils = new TranmereWebUtils();
+const dynamo = new DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
 
-const client = contentful.createClient({
-  space: process.env.CF_SPACE,
-  accessToken: process.env.CF_KEY
+const client = createClient({
+  space: process.env.CF_SPACE!,
+  accessToken: process.env.CF_KEY!
 });
 
-exports.handler = async function (event, context) {
-    var pageName = event.pathParameters.pageName;
-    var classifier = event.pathParameters.classifier;
-    var view = {};
+exports.handler = async (event : APIGatewayEvent, context: Context): Promise<APIGatewayProxyResult> =>{
+
+    var pageName = event.pathParameters!.pageName;
+    var classifier = event.pathParameters!.classifier;
+    var view : any = {};
 
     if(pageName === "home") {
-        const content = await client.getEntries({'content_type': 'blogPost', order: '-sys.createdAt', limit: 5});
+        const blogs = await utils.getBlogs(client);
         view = {
             title: "Home",
             pageType:"WebPage",
             description: "Tranmere-Web.com is a website full of data, statistics and information about Tranmere Rovers FC",
-            blogs: content.items
+            blogs: blogs.items
         };
     } else if(pageName === "player") {
-        var playerName = classifier;
+        var playerName = classifier!;
         var playerSearch = await dynamo.query(
             {
-                TableName: utils.PLAYER_TABLE_NAME,
+                TableName: DataTables.PLAYER_TABLE_NAME,
                 KeyConditionExpression: "#name = :name",
                 ExpressionAttributeNames:{
                     "#name": "name"
@@ -40,7 +44,7 @@ exports.handler = async function (event, context) {
 
         var debutSearch = await dynamo.query(
             {
-                TableName: utils.APPS_TABLE_NAME,
+                TableName: DataTables.APPS_TABLE_NAME,
                 KeyConditionExpression: "#name = :name",
                 IndexName: "ByPlayerIndex",
                 ExpressionAttributeNames:{
@@ -54,7 +58,7 @@ exports.handler = async function (event, context) {
 
         var summarySearch = await dynamo.query(
             {
-                TableName: utils.SUMMARY_TABLE_NAME,
+                TableName: DataTables.SUMMARY_TABLE_NAME,
                 KeyConditionExpression: "#player = :player",
                 IndexName: "ByPlayerIndex",
                 ExpressionAttributeNames:{
@@ -66,7 +70,7 @@ exports.handler = async function (event, context) {
             }).promise();
         
         var transfers = await dynamo.query({
-            TableName : utils.TRANSFER_TABLE,
+            TableName : DataTables.TRANSFER_TABLE,
             KeyConditionExpression :  "#name = :name",
             IndexName: "ByNameIndex",
             ExpressionAttributeNames:{
@@ -77,16 +81,16 @@ exports.handler = async function (event, context) {
             }
         }).promise();
 
-        var amendedTansfers = [];
-        for(var i=0; i < transfers.Items.length; i++) {
-            var transfer = transfers.Items[i];
+        var amendedTansfers : Array<any> = [];
+        for(var i=0; i < transfers.Items!.length; i++) {
+            var transfer = transfers.Items![i];
             transfer.club = transfer.from == "Tranmere Rovers" ? transfer.to : transfer.from;
             transfer.type = transfer.from == "Tranmere Rovers" ? "right": "left";
             amendedTansfers.push(transfer);
         }
 
         var links = await dynamo.query({
-            TableName : utils.LINKS_TABLE,
+            TableName : DataTables.LINKS_TABLE,
             KeyConditionExpression :  "#name = :name",
             IndexName: "ByNameIndex",
             ExpressionAttributeNames:{
@@ -97,15 +101,15 @@ exports.handler = async function (event, context) {
             }
         }).promise();
 
-        var pl = playerSearch.Items.length == 1 ? playerSearch.Items[0] : null 
+        var pl = playerSearch.Items!.length == 1 ? playerSearch.Items![0] : null 
 
-        if(playerSearch.Items.length == 0 && debutSearch.Items.length == 0 && summarySearch.Items.length == 0){
+        if(playerSearch.Items!.length == 0 && debutSearch.Items!.length == 0 && summarySearch.Items!.length == 0){
             throw new Error("Player has no records")
         }
 
         view = {
             name: decodeURIComponent(playerName),
-            debut: debutSearch.Items[0],
+            debut: debutSearch.Items![0],
             seasons: summarySearch.Items,
             transfers: amendedTansfers,
             links: links.Items,
@@ -121,9 +125,9 @@ exports.handler = async function (event, context) {
 
     } else if(pageName === "tag") {
         
-        var tagId = decodeURIComponent(classifier);
+        var tagId = decodeURIComponent(classifier!);
         var items = await client.getEntries({'fields.tags': tagId, 'content_type': 'blogPost', order: '-sys.createdAt'});
-
+        
         view = {
             items: items.items,
             pageType: "SearchResultsPage",
@@ -133,19 +137,20 @@ exports.handler = async function (event, context) {
         }
     } else if(pageName === "blog") {
         
-        var blogId = decodeURIComponent(classifier);
-        var content = await client.getEntry(blogId);
-        var blogs = await client.getEntries({'content_type': 'blogPost', order: '-sys.createdAt'});
+        var blogId = decodeURIComponent(classifier!);
+        var request = await client.getEntry(blogId);
+        var blog = request as IBlogPost;
+        var blogs = await utils.getBlogs(client);
         let options = {
           renderNode: {
             'embedded-asset-block': (node) =>
               `<img src="${node.data.target.fields.file.url}?h=400"/>`
           }
         }
-        view = content.fields;
+        view = blog.fields;
         view.pageType = "AboutPage";
-        view.description = "Blog Page | " + content.fields.title;
-        view.blogContent = contentfulSDK.documentToHtmlString(content.fields.blog, options);
+        view.description = "Blog Page | " + view.title;
+        view.blogContent = documentToHtmlString(view.blog, options);
         view.blogs = blogs.items;
         view.url =  `/page/${pageName}/${classifier}`;
         view.carousel = [];
@@ -166,21 +171,19 @@ exports.handler = async function (event, context) {
             delete view.gallery;
         }
 
-        if(view.galleryTag) {
-            
+        if(view.galleryTag) {    
             var pictures = await client.getAssets({'metadata.tags.sys.id[in]': view.galleryTag, order: 'sys.createdAt'});
             for(var i=0; i < pictures.items.length; i++) {
-               var image = {
-                   imagePath: pictures.items[i].fields.file.url,
-                   linkPath: pictures.items[i].fields.file.url,
-                   name: pictures.items[i].fields.title,
-                   description: pictures.items[i].fields.title
-               }
-               view.carousel.push(image);
-           }
-           pageName = "gallery";
-           delete view.gallery;
-       }
+               view.carousel.push({
+                imagePath: pictures.items[i].fields.file.url,
+                linkPath: pictures.items[i].fields.file.url,
+                name: pictures.items[i].fields.title,
+                description: pictures.items[i].fields.title
+            });
+            }
+            pageName = "gallery";
+            delete view.gallery;
+        }
 
         if(view.blocks) {
             var blockContent = "";

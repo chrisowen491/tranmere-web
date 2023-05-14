@@ -1,6 +1,8 @@
-const AWS = require('aws-sdk');
-let dynamo = new AWS.DynamoDB.DocumentClient();
-const utils = require('../lib/utils')();
+import { APIGatewayEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
+import { TranmereWebUtils, ProgrammeImage } from '../lib/tranmere-web-utils';
+import { MatchView } from '../lib/tranmere-web-types';
+let utils = new TranmereWebUtils();
+
 var playerMap = {};
 
 const re = /\/\d\d\d\d\//gm;
@@ -19,27 +21,26 @@ const seasonMapping = {
     "2008": 2007
 }
 
-exports.handler = async function (event, context) {
-
-    const date = event.pathParameters.date;
-    const season = event.pathParameters.season;
+exports.handler = async (event : APIGatewayEvent, context: Context): Promise<APIGatewayProxyResult> =>{
+    
+    const date = event.pathParameters!.date;
+    const season = parseInt(event.pathParameters!.season!);
 
     if(!playerMap["John Aldridge"]) {
-        var squadSearch = await dynamo.scan({TableName:utils.PLAYER_TABLE_NAME}).promise();
-        for(var i=0; i < squadSearch.Items.length; i++) {
-            playerMap[squadSearch.Items[i].name] = squadSearch.Items[i];
+        var squadSearch = await utils.getAllPlayersFromDb();
+        for(var i=0; i < squadSearch.length; i++) {
+            playerMap[squadSearch[i].name] = squadSearch[i];
         }
     }
 
-    var view = await getResults(season, date);
-    view.goals = await getGoals(date, season);
-    view.apps = await getApps(date, season);
+    var match = await utils.getResultForDate(season, date!);
+    
+    var view : MatchView = match!;
+    view.goals = await utils.getGoalsBySeason(season, date);
+    view.apps = await utils.getAppsBySeason(season, date);
     if(view.programme && view.programme != "#N/A") {
-      var largeBody = {
-        "bucket": 'trfc-programmes',
-        "key": view.programme,
-      };
-      view.largeProgramme = Buffer.from(JSON.stringify(largeBody)).toString('base64');
+      var largeBody = new ProgrammeImage(view.programme)
+      view.largeProgramme = largeBody.imagestring();
     } else {
         delete view.programme;
     }
@@ -52,12 +53,12 @@ exports.handler = async function (event, context) {
     view.wingers2 = [];
     view.strikers = [];
     view.formattedGoals = formatGoals(view.goals);
-    if(view.attendance > 0) 
+    if(view.attendance! > 0) 
       view.hasAttendance = true;
     if(view.venue  && view.venue != 'Unknown') 
       view.hasVenue = true;
 
-    var noPositionList = [];
+    var noPositionList : Array<any>= [];
     for(var i=0; i < view.apps.length; i++) {
         var app = view.apps[i];
         if(playerMap[app.Name]) {
@@ -70,28 +71,32 @@ exports.handler = async function (event, context) {
                 app.bio.picLink = app.bio.picLink.replace(re, '/' + theSeason + '/');
                 app.bio.picLink = app.bio.picLink.replace(re3, '/' + theSeason + '/');
             }
-
-            if(app.bio.position == "Goalkeeper") {
-                view.goalkeepers.push(app);
-            } else if(app.bio.position == "Central Defender") {
-                view.defenders.push(app);
-            } else if(app.bio.position == "Full Back" && view.fullback1.length == 0) {
-                view.fullback1.push(app);
-            } else if(app.bio.position == "Full Back" && view.fullback2.length == 0) {
-                view.fullback2.push(app);
-            } else if(app.bio.position == "Central Midfielder") {
-                view.midfielders.push(app);
-            } else if(app.bio.position == "Winger" && view.wingers1.length == 0) {
-                view.wingers1.push(app);
-            } else if(app.bio.position == "Winger" && view.wingers2.length == 0) {
-                view.wingers2.push(app);
-            } else if(app.bio.position == "Striker") {
-                view.strikers.push(app);
+            if(app.bio) {
+                if(app.bio.position == "Goalkeeper") {
+                    view.goalkeepers.push(app);
+                } else if(app.bio.position == "Central Defender") {
+                    view.defenders.push(app);
+                } else if(app.bio.position == "Full Back" && view.fullback1.length == 0) {
+                    view.fullback1.push(app);
+                } else if(app.bio.position == "Full Back" && view.fullback2.length == 0) {
+                    view.fullback2.push(app);
+                } else if(app.bio.position == "Central Midfielder") {
+                    view.midfielders.push(app);
+                } else if(app.bio.position == "Winger" && view.wingers1.length == 0) {
+                    view.wingers1.push(app);
+                } else if(app.bio.position == "Winger" && view.wingers2.length == 0) {
+                    view.wingers2.push(app);
+                } else if(app.bio.position == "Striker") {
+                    view.strikers.push(app);
+                } else {
+                    noPositionList.push(app)
+                }
             } else {
-                noPositionList.push(app)
+                noPositionList.push(app);
             }
         } else {
             app.bio = {
+                name: app.Name,
                 picLink: "https://images.ctfassets.net/pz711f8blqyy/1GOdp93iMC7T3l9L9UUqaM/0ea20a8950cdfb6f0239788f93747d74/blank.svg"
             }         
             noPositionList.push(app);
@@ -126,8 +131,8 @@ exports.handler = async function (event, context) {
     view.title = "Match Summary";
     view.pageType = "AboutPage";
     view.description = "Match Summary";
-    view.date = date;
-    view.season = season;
+    view.date = date!;
+    view.season = season!;
       
     var page = utils.buildPage(view, './templates/match.tpl.html');
 
@@ -159,54 +164,3 @@ function formatGoals(goals) {
     }
     return output;
 }
-
-async function getResults(season, date) {
-
-    var params = {
-        TableName : utils.RESULTS_TABLE,
-        KeyConditionExpression:  "season = :season and #date = :date",
-        ExpressionAttributeValues: {
-        ":season": decodeURIComponent(season),
-        ":date": decodeURIComponent(date)
-        },
-        ExpressionAttributeNames: { "#date": "date" }
-    }      
-    var result = await dynamo.query(params).promise();
-    return result.Items[0];
-};
-
-async function getGoals(date, season) {
-
-    var params = {
-        TableName : utils.GOALS_TABLE_NAME,
-        KeyConditionExpression :  "Season = :season",
-        FilterExpression : "#Date = :date",
-        ExpressionAttributeNames : {
-            "#Date" : "Date"
-        },
-        ExpressionAttributeValues: {
-            ":date" : decodeURIComponent(date),
-            ":season" : decodeURIComponent(season)
-        }
-    }
-    var result = await dynamo.query(params).promise();
-    return result.Items;
-};
-
-async function getApps(date, season) {
-
-    var params = {
-        TableName : utils.APPS_TABLE_NAME,
-        KeyConditionExpression :  "Season = :season",
-        FilterExpression : "#Date = :date",
-        ExpressionAttributeNames : {
-            "#Date" : "Date"
-        },
-        ExpressionAttributeValues: {
-            ":date" : decodeURIComponent(date),
-            ":season" : decodeURIComponent(season)
-        }
-    }
-    var result = await dynamo.query(params).promise();
-    return result.Items;
-};

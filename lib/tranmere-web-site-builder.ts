@@ -3,7 +3,7 @@ import Mustache from 'mustache';
 import contentful from 'contentful';
 import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
 import webpack from 'webpack';
-import { SiteMapEntry, Page, BaseEntity } from './tranmere-web-types'
+import { SiteMapEntry, BaseEntity } from './tranmere-web-types'
 import { TranmereWebUtils } from './tranmere-web-utils';
 
 const utils = new TranmereWebUtils();
@@ -13,9 +13,23 @@ export class SiteBuilder  {
     pages: Array<SiteMapEntry> = new Array<SiteMapEntry>();
 
     addSiteMapEntry(url: string ) {
-      this.pages.push(utils.buildSitemapEntry(url));
+      this.pages.push(this.buildSitemapEntry(url));
+    }
+    
+    pad(a: any,b: any): any{
+      return(1e15+a+"").slice(-b)
     }
 
+    buildSitemapEntry(page: string) : SiteMapEntry {
+      var m = new Date();
+      var dateString = m.getUTCFullYear() +"-"+ this.pad(m.getUTCMonth()+1,2) +"-"+this.pad(m.getUTCDate(),2);
+      return {
+          url: page.replace(/&/g, '&amp;'),
+          date: dateString,
+          priority: 0.5,
+          changes: "monthly"
+      };
+    };
     buildPageView (view: any, pageTpl: string, path: string, noindex: boolean) : string {
       view.url = path;
       view.random = Math.ceil(Math.random() * 100000);
@@ -29,7 +43,7 @@ export class SiteBuilder  {
 
       var pageHTML = Mustache.render(fs.readFileSync(pageTpl).toString(), view, utils.loadSharedPartials());
       if(!noindex)
-          this.pages.push(utils.buildSitemapEntry(view.url));
+          this.pages.push(this.buildSitemapEntry(view.url));
 
       return pageHTML;
     }
@@ -48,7 +62,8 @@ export class SiteBuilder  {
       let hatTricks = await utils.findAllHatTricks(20);
   
       for(var i=0; i < pages.items.length; i++) {
-        let page : Page = pages.items[i].fields;
+
+        let page : any = pages.items[i].fields;
         page.blogs = blogs.items;
         let options = {
           renderNode: {
@@ -56,7 +71,7 @@ export class SiteBuilder  {
               `<img src="${node.data.target.fields.file.url}"/>`
           }
         }
-        page.content =  documentToHtmlString(page.body, options);
+        page.content =  documentToHtmlString(page.body!, options);
         page.topScorers = topScorers;
         page.hatTricks = hatTricks;
         page.managers = managers;
@@ -89,14 +104,14 @@ export class SiteBuilder  {
             }
             page.cardBlocksHTML = blockContent;
         }
-        var fileName = page.key.toLowerCase();
+        var fileName = page.key!.toLowerCase();
         compilation.emitAsset(
           `${fileName}.html`,
           new webpack.sources.RawSource(this.buildPageView(page,`./templates/${page.template}`, `/${fileName}.html`, false))
         );
         if(index) {
           var pageMeta : BaseEntity = {
-            objectID: "Page-" + page.key.toLowerCase(),
+            objectID: "Page-" + page.key!.toLowerCase(),
             link: `https://www.tranmere-web.com/${fileName}.html`,
             name: page.description,
             meta: page.name,

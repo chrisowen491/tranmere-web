@@ -1,38 +1,17 @@
-const AWS = require('aws-sdk');
-let dynamo = new AWS.DynamoDB.DocumentClient();
-const utils = require('../lib/utils')();
+import { APIGatewayEvent, Context } from 'aws-lambda';
+import { TranmereWebUtils, DataTables } from '../lib/tranmere-web-utils';
+let utils = new TranmereWebUtils();
 
-exports.handler = async function (event, context) {
-   console.log('Received event:', event);
+exports.handler = async (event : APIGatewayEvent, context: Context) =>{
 
     var playerTotalsHash = {};
 
     for(var i = 1977; i <= utils.getYear(); i++) {
         var playerHash = {};
-        var appsQuery = {
-            TableName: utils.APPS_TABLE_NAME,
-            KeyConditionExpression :  "Season = :season",
-            ExpressionAttributeValues: {
-                ":season" : i.toString()
-            }
-        };
-        var goalsQuery = {
-            TableName: utils.GOALS_TABLE_NAME,
-            KeyConditionExpression :  "Season = :season",
-            ExpressionAttributeValues: {
-                ":season" : i.toString()
-            }
-        };
 
-        var appsResult = await dynamo.query(appsQuery).promise();
+        var apps = await utils.getAppsBySeason(i)
+        var goals = await utils.getGoalsBySeason(i);
 
-        var goalsResult = await dynamo.query(goalsQuery).promise();
-
-        var apps = appsResult.Items ? appsResult.Items : [];
-        var goals = goalsResult.Items ? goalsResult.Items : [];
-
-        console.log("Found " + apps.length + " for season " + i);
-        console.log("Found " + goals.length + " for season " + i);
         for(var a=0; a < apps.length; a++) {
             var app = apps[a];
             if(!playerHash[app.Name]) {
@@ -83,7 +62,7 @@ exports.handler = async function (event, context) {
         for (var key in playerHash) {
             if (Object.prototype.hasOwnProperty.call(playerHash, key)) {
                 if(key != "")
-                    await dynamo.put({Item: playerHash[key], TableName: utils.SUMMARY_TABLE_NAME}).promise();
+                    await utils.insertUpdateItem(playerHash[key], DataTables.SUMMARY_TABLE_NAME);
 
                 console.log("Updated DB for " + key + " during season "  + i);
                 if(!playerTotalsHash[key]) {
@@ -106,7 +85,7 @@ exports.handler = async function (event, context) {
     for (var key in playerTotalsHash) {
         if (Object.prototype.hasOwnProperty.call(playerTotalsHash, key)) {
             if(key != "")
-                await dynamo.put({Item: playerTotalsHash[key], TableName: utils.SUMMARY_TABLE_NAME}).promise();
+                await utils.insertUpdateItem(playerTotalsHash[key], DataTables.SUMMARY_TABLE_NAME);
         }
     }
 

@@ -16,7 +16,8 @@
     "cdk": "cdk",
     "local-api": "cdk synth && sam local start-api -t ./cdk.out/TranmereWebStack.template.json",
     "acceptance-test": "newman run ./api_tests/postman-collection.json -e ./api_tests/env/aws-prod.json --env-var 'testApiKey=123'",
-    "local-acceptance-test": "newman run ./api_tests/postman-collection.json -e ./api_tests/env/sam-local.json"
+    "local-acceptance-test": "newman run ./api_tests/postman-collection.json -e ./api_tests/env/sam-local.json",
+    "contentful-typescript-codegen": "contentful-typescript-codegen --output types/generated/contentful.d.ts"
   },
   "author": "Chris Owen",
   "license": "ISC",
@@ -30,10 +31,12 @@
     "@types/mocha": "^10.0.1",
     "@types/mustache": "^4.2.2",
     "@types/node": "^18.16.8",
+    "@types/uuid": "^9.0.1",
     "aws-cdk": "2.79.1",
     "aws-cdk-lib": "2.79.1",
     "browser-sync": "^2.28.1",
     "chai": "^4.3.7",
+    "contentful-typescript-codegen": "^3.4.0",
     "css-loader": "^6.7.3",
     "esbuild": "^0.17.10",
     "filemanager-webpack-plugin": "^8.0.0",

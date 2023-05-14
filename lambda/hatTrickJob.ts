@@ -1,26 +1,14 @@
-const AWS = require('aws-sdk');
-const { v4: uuidv4 } = require('uuid');
-let dynamo = new AWS.DynamoDB.DocumentClient();
-const utils = require('../lib/utils')();
+import  {v4 as uuidv4} from 'uuid'
+import { APIGatewayEvent, Context } from 'aws-lambda';
+import { TranmereWebUtils, DataTables } from '../lib/tranmere-web-utils';
+let utils = new TranmereWebUtils();
+exports.handler = async (event : APIGatewayEvent, context: Context) =>{
 
-exports.handler = async function (event, context) {
    console.log('Received event:', event);
 
     for(var i = 1977; i <= utils.getYear(); i++) {
-        var dateMap = {};
-        
-        // Get All Goals
-        var goalsQuery = {
-            TableName: utils.GOALS_TABLE_NAME,
-            KeyConditionExpression :  "Season = :season",
-            ExpressionAttributeValues: {
-                ":season" : i.toString()
-            }
-        };
-
-        var goalsResult = await dynamo.query(goalsQuery).promise();
-
-        var goals = goalsResult.Items ? goalsResult.Items : [];
+        var dateMap = {};        
+        var goals = await utils.getGoalsBySeason(i);
 
         for(var g=0; g < goals.length; g++) {
             var goal = goals[g];
@@ -63,7 +51,7 @@ exports.handler = async function (event, context) {
                                     Opposition: playerMap[player][0].Opposition, 
                                     Goals: playerMap[player].length
                                 }
-                                await dynamo.put({Item: entry, TableName: utils.HAT_TRICKS_TABLE}).promise();
+                                await utils.insertUpdateItem(entry, DataTables.HAT_TRICKS_TABLE);
                             }
                         }
                     }
