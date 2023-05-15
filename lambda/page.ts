@@ -1,13 +1,13 @@
 import { APIGatewayEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
 import { TranmereWebUtils, DataTables } from '../lib/tranmere-web-utils';
 import {DynamoDB} from 'aws-sdk';
-import contentful from 'contentful';
+import { createClient } from "contentful";
 import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
 import {IBlogPost} from '../lib/contentful'
 let utils = new TranmereWebUtils();
 const dynamo = new DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
 
-const client = contentful.createClient({
+const client = createClient({
   space: process.env.CF_SPACE!,
   accessToken: process.env.CF_KEY!
 });
