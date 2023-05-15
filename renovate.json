@@ -7,5 +7,6 @@
     ":separateMajorReleases", 
     "group:all", 
     "schedule:daily"
-  ]
+  ],
+  "ignoreDeps": ["contentful","bootstrap"]
 }

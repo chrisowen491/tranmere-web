@@ -105,8 +105,9 @@ export interface Match {
     scrape_id?: string,
     id?: string;
     date: string;
-    competition: string;
+    competition?: string;
     programme?: string;
+    youtube?: string;
     pens?: string;
     home?: string;
     visitor?: string;

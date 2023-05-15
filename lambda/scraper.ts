@@ -27,7 +27,7 @@ exports.handler = async (event : APIGatewayEvent, context: Context): Promise<API
             }
         }
         if(!found) {
-            let result = utils.extractSquadFromHTML(res.data, matches[i].date, matches[i].competition, theSeason!);
+            let result = utils.extractSquadFromHTML(res.data, matches[i].date, matches[i].competition!, theSeason!);
             
             result.apps.forEach(async function (a) {
                 await utils.insertUpdateItem(a, DataTables.APPS_TABLE_NAME);

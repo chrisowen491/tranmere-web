@@ -1,5 +1,5 @@
 import { APIGatewayEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
-import { TranmereWebUtils, DataTables } from '../lib/tranmere-web-utils';
+import { TranmereWebUtils } from '../lib/tranmere-web-utils';
 let utils = new TranmereWebUtils();
 
 exports.handler = async (event : APIGatewayEvent, context: Context): Promise<APIGatewayProxyResult> =>{

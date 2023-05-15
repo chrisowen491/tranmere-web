@@ -1,5 +1,6 @@
 import { APIGatewayEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
 import { TranmereWebUtils, DataTables } from '../lib/tranmere-web-utils';
+import { Match } from '../lib/tranmere-web-types';
 import {DynamoDB} from 'aws-sdk';
 let utils = new TranmereWebUtils();
 const dynamo = new DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
@@ -8,7 +9,7 @@ exports.handler = async (event : APIGatewayEvent, context: Context): Promise<API
 
     const date = event.pathParameters!.date;
     const season = event.pathParameters!.season;
-    const body = JSON.parse(event.body!)
+    const body = JSON.parse(event.body!) as Match;
 
     var params = {
         TableName: DataTables.RESULTS_TABLE,
@@ -25,7 +26,7 @@ exports.handler = async (event : APIGatewayEvent, context: Context): Promise<API
             ":x": body.pens,
             ":f": body.hgoal,
             ":g": body.vgoal,
-            ":a": parseInt(body.attendance),
+            ":a": body.attendance,
             ":p": body.programme
         },
         ReturnValues:"UPDATED_NEW"

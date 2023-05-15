@@ -85,7 +85,7 @@
     "owl.carousel": "^2.3.4",
     "source-map-support": "^0.5.21",
     "uuid": "^9.0.0",
-    "video.js": "^7.21.3",
+    "video.js": "^8.0.0",
     "videojs-youtube": "^3.0.0"
   },
   "eslintConfig": {

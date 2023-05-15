@@ -1,9 +1,9 @@
 import { APIGatewayEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
 import { TranmereWebUtils, } from '../lib/tranmere-web-utils';
-import { createClient } from "contentful";
+import contentful from 'contentful';
 let utils = new TranmereWebUtils();
 
-const client = createClient({
+const client = contentful.createClient({
   space: process.env.CF_SPACE!,
   accessToken: process.env.CF_KEY!
 });

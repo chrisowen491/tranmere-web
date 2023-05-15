@@ -9,7 +9,7 @@ exports.handler = async (event : APIGatewayEvent, context: Context): Promise<API
 
     const id = event.pathParameters!.id;
     const season = event.pathParameters!.season;
-    const body : Goal = JSON.parse(event.body!)
+    const body = JSON.parse(event.body!) as Goal;
 
     var params = {
         TableName: DataTables.GOALS_TABLE_NAME,

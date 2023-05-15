@@ -346,13 +346,11 @@ export class TranmereWebUtils  {
     }
 
     async getBlogs(client: ContentfulClientApi) : Promise<EntryCollection<IBlogPost>> {
-      var blogs = await client.getEntries({'content_type': 'blogPost', order: '-fields.datePosted', limit: 5});
-      return blogs as EntryCollection<IBlogPost>;
+      return await client.getEntries<IBlogPost>({'content_type': 'blogPost', order: '-fields.datePosted', limit: 5});
     }
 
     async getPages(client: ContentfulClientApi) : Promise<EntryCollection<IPageMetaData>> {
-      var pages = await client.getEntries({'content_type': 'pageMetaData'});
-      return pages as EntryCollection<IPageMetaData>;
+      return await client.getEntries<IPageMetaData>({'content_type': 'pageMetaData'});
     }
 
     async findAllPlayers() : Promise<Array<Player>> {
@@ -381,11 +379,11 @@ export class TranmereWebUtils  {
           manager.dateLeftText = dateLeft;
           managers.push(manager)
       }
-        managers.sort(function(a, b) {
-          if (a.dateJoined < b.dateJoined) return 1
-          if (a.dateJoined > b.dateJoined) return -1
-          return 0
-        });
+      managers.sort(function(a, b) {
+        if (a.dateJoined < b.dateJoined) return 1
+        if (a.dateJoined > b.dateJoined) return -1
+        return 0
+      });
       return managers;
     }
 
@@ -437,11 +435,11 @@ export class TranmereWebUtils  {
 
     async getResultsForSeason(season: string): Promise<Array<Match>> {
       var params = {
-          TableName: DataTables.RESULTS_TABLE,
-          KeyConditionExpression: "season = :season",
-          ExpressionAttributeValues: {
-              ":season": season
-          }
+        TableName: DataTables.RESULTS_TABLE,
+        KeyConditionExpression: "season = :season",
+        ExpressionAttributeValues: {
+            ":season": season
+        }
       };
       var result = await dynamo.query(params).promise();
       return result.Items!.map(m => m as Match);
@@ -488,7 +486,6 @@ export class TranmereWebUtils  {
     }
 
     async getGoalsById(id, season) : Promise<Goal> {
-
       var params = {
           TableName : DataTables.GOALS_TABLE_NAME,
           KeyConditionExpression :  "Season = :season and #id = :id",
@@ -505,7 +502,6 @@ export class TranmereWebUtils  {
     };
 
     async getGoalsBySeason(season: number, date?: string, ) : Promise<Array<Goal>> {
-
       var params : DynamoDB.DocumentClient.QueryInput = {
           TableName : DataTables.GOALS_TABLE_NAME,
           KeyConditionExpression :  "Season = :season",

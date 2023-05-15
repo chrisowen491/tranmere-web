@@ -1,13 +1,13 @@
 import { APIGatewayEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
 import { TranmereWebUtils, DataTables } from '../lib/tranmere-web-utils';
 import {DynamoDB} from 'aws-sdk';
-import { createClient } from "contentful";
+import contentful from 'contentful';
 import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
 import {IBlogPost} from '../lib/contentful'
 let utils = new TranmereWebUtils();
 const dynamo = new DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
 
-const client = createClient({
+const client = contentful.createClient({
   space: process.env.CF_SPACE!,
   accessToken: process.env.CF_KEY!
 });
@@ -138,8 +138,7 @@ exports.handler = async (event : APIGatewayEvent, context: Context): Promise<API
     } else if(pageName === "blog") {
         
         var blogId = decodeURIComponent(classifier!);
-        var request = await client.getEntry(blogId);
-        var blog = request as IBlogPost;
+        var blog = await client.getEntry<IBlogPost>(blogId);
         var blogs = await utils.getBlogs(client);
         let options = {
           renderNode: {
