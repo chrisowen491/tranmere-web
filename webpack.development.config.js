@@ -36,60 +36,68 @@ let config = {
     },
     proxy: {
       '/result-search': {
-           target: 'http://localhost:8080',
-           router: () => 'http://localhost:3000',
-           logLevel: 'debug' /*optional*/
+        target: 'http://127.0.0.1:3000',
+        changeOrigin: true,
+        secure: false,
+        logLevel: 'debug' /*optional*/
       },
       '/player-search': {
-        target: 'http://localhost:8080',
-        router: () => 'http://localhost:3000',
+        target: 'http://127.0.0.1:3000',
+        changeOrigin: true,
+        secure: false,
         logLevel: 'debug' /*optional*/
       },
       '/transfer-search': {
-        target: 'http://localhost:8080',
-        router: () => 'http://localhost:3000',
+        target: 'http://127.0.0.1:3000',
+        changeOrigin: true,
+        secure: false,
         logLevel: 'debug' /*optional*/
       },
       '/page': {
-        target: 'http://localhost:8080',
-        router: () => 'http://localhost:3000',
+        target: 'http://127.0.0.1:3000',
+        changeOrigin: true,
+        secure: false,
         logLevel: 'debug' /*optional*/
       },
       '/match': {
-        target: 'http://localhost:8080',
-        router: () => 'http://localhost:3000',
+        target: 'http://127.0.0.1:3000',
+        changeOrigin: true,
+        secure: false,
         logLevel: 'debug' /*optional*/
       },
       '/builder': {
-        target: 'http://localhost:8080',
-        router: () => 'http://localhost:3000',
+        target: 'http://127.0.0.1:3000',
+        changeOrigin: true,
+        secure: false,
         logLevel: 'debug' /*optional*/
       },
       '/contact-us': {
-        target: 'http://localhost:8080',
-        router: () => 'http://localhost:3000',
+        target: 'http://127.0.0.1:3000',
+        changeOrigin: true,
+        secure: false,
         logLevel: 'debug' /*optional*/
       },      
       '/transfers': {
-        target: 'http://localhost:8080',
-        router: () => 'http://localhost:3000',
+        target: 'http://127.0.0.1:3000',
+        changeOrigin: true,
+        secure: false,
         logLevel: 'debug' /*optional*/
       },
       '/goal': {
-        target: 'http://localhost:8080',
-        router: () => 'http://localhost:3000',
+        target: 'http://127.0.0.1:3000',
+        changeOrigin: true,
+        secure: false,
         logLevel: 'debug' /*optional*/
       },
       '/links': {
-        target: 'http://localhost:8080',
-        router: () => 'http://localhost:3000',
+        target: 'http://127.0.0.1:3000',
+        changeOrigin: true,
+        secure: false,
         logLevel: 'debug' /*optional*/
       },
       '/graphql': {
         target: 'https://api.prod.tranmere-web.com',
-        headers: {
-          'host': 'api.prod.tranmere-web.com'
-        },
+        changeOrigin: true,
         secure: false,
       },
     },
