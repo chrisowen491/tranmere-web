@@ -3,9 +3,9 @@ import { TranmereWebUtils, DataTables } from '../lib/tranmere-web-utils';
 
 import axios from 'axios';
 let utils = new TranmereWebUtils();
-const theSeason = process.env.SCRAPE_SEASON;
-const id = process.env.SCRAPE_ID;
-const baseUrl = process.env.SCRAPE_URL;
+const theSeason = process.env.SCRAPE_SEASON?.toString();
+const id = process.env.SCRAPE_ID?.toString();
+const baseUrl = process.env.SCRAPE_URL?.toString();
 var today = new Date();
 today.setHours(0,0,0,0);
 
