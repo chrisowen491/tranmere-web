@@ -74,7 +74,7 @@ export class TranmereWebUtils  {
         return seasons;
     }
 
-    extractMatchesFromHTML(html : string): Array<Match> {
+    extractMatchesFromHTML(html: string): Array<Match> {
       const $ = load(html);
     
       var games : Array<Match> = [];
@@ -266,7 +266,7 @@ export class TranmereWebUtils  {
     
       match.venue = homeTeam == "Tranmere" ? "Prenton Park" : "Unknown";
       match.static = "static";
-      match.season = parseInt(season);
+      match.season = season;
       match.hgoal = homeScore;
       match.vgoal = awayScore;
       match.ft = homeScore + '-' +awayScore

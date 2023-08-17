@@ -7,7 +7,7 @@
   },
   "engines": {
     "npm": ">=9.5.0",
-    "node": ">=16.18.1"
+    "node": ">=18.16.0"
   },
   "scripts": {
     "build": "tsc -b && webpack",
@@ -15,6 +15,7 @@
     "test": "jest",
     "cdk": "cdk",
     "local-api": "cdk synth && sam local start-api -t ./cdk.out/TranmereWebStack.template.json",
+    "scraper": "cdk synth && sam local invoke -t ./cdk.out/TranmereWebStack.template.json ScraperJobFunction4A8DAC15",
     "acceptance-test": "newman run ./api_tests/postman-collection.json -e ./api_tests/env/aws-prod.json --env-var 'testApiKey=123'",
     "local-acceptance-test": "newman run ./api_tests/postman-collection.json -e ./api_tests/env/sam-local.json",
     "contentful-typescript-codegen": "contentful-typescript-codegen --output types/generated/contentful.d.ts"
