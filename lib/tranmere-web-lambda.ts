@@ -41,7 +41,6 @@ export class TranmereWebLambda extends Construct {
             bundling: {
               minify: true,
               sourceMap: true,
-              externalModules: ['aws-sdk'],
               commandHooks: props.commandHooks
             }
         });
