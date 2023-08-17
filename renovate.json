@@ -6,7 +6,7 @@
     ":automergePr", 
     ":separateMajorReleases", 
     "group:all", 
-    "schedule:daily"
+    "schedule:earlyMondays"
   ],
   "ignoreDeps": ["contentful","bootstrap"]
 }

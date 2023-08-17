@@ -4,11 +4,11 @@
 @use 'sass:math';
 
 //
-// Rem Calculator
+// Remainder Calculator
 //
-@function rem($size) {
-  $rem: math.div($size, 16);
-  @return #{$rem}rem;
+@function remainder($size) {
+  $remainder: math.div($size, 16);
+  @return #{$remainder}remainder;
 }
 
 @function px($size) {
@@ -41,7 +41,7 @@
 //
 @each $size in $font-size-list {
 	.fs-#{$size} {
-		font-size: rem($size)!important;
+		font-size: remainder($size)!important;
 		line-height: 1.4em;
 	}
 }
