@@ -374,7 +374,7 @@ export function translatePlayerName(input: string) : string {
         'S Ramsbottom':'Sam Ramsbottom',
         'S Davies':'Scott Davies',
         'S Fenwick':'Scott Fenwick',
-        'S Taylor':'Sam Taylor',
+        'S Taylor':'Samuel Taylor',
         'S Wootton':'Scott Wootton',
         'S Connelly':'Sean Connelly',
         'S Flynn':'Sean Flynn',
