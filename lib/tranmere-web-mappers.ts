@@ -490,7 +490,7 @@ export function translatePlayerName(input: string) : string {
         "R Hendry": "Regan Hendry",
         "L Norris": "Luke Norris",
         "K Dennis": "Kristian Dennis",
-        "J Leake": "Jake Leakes",
+        "J Leake": "Jake Leake",
         "J Yarney": "Josef Yarney",
         "L McGee": "Luke McGee"
     }
