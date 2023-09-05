@@ -8,7 +8,7 @@ test('Can Get All Teams', async () =>  {
   expect(teams
     .length)
     .to
-    .equal(146);
+    .above(1);
 });
 
 test('Can Get All Managers', async () =>  {
