@@ -492,7 +492,11 @@ export function translatePlayerName(input: string) : string {
         "K Dennis": "Kristian Dennis",
         "J Leake": "Jake Leake",
         "J Yarney": "Josef Yarney",
-        "L McGee": "Luke McGee"
+        "L McGee": "Luke McGee",
+        "D Pike": "Dan Pike",
+        "J Norris": "James Norris",
+        "R Apter": "Robert Apter"
+
     }
     return mapping[input.trim()] ? mapping[input.trim()] : input.trim();
 }
@@ -520,7 +524,8 @@ export function translateTeamName(input: string) : string {
         'Crawley': 'Crawley Town',
         'Colchester': 'Colchester United',
         'Bradford': 'Bradford City',
-        'Doncaster': 'Doncaster Rovers'
+        'Doncaster': 'Doncaster Rovers',
+        'MK Dons': 'Milton Keynes Dons'
     }
     return mapping[lookup] ? mapping[lookup] : lookup;
 }
