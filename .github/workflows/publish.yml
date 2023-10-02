@@ -25,14 +25,13 @@ jobs:
           AL_KEY: ${{ secrets.AL_KEY }}
           AL_SPACE: ${{ secrets.AL_SPACE }}
           AL_INDEX: ${{ secrets.AL_INDEX }}
+      - name: Install Wrangler App
+        run: npm install wrangler
       - name: Create App
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_AUTH_KEY }}
-          postCommands: |
-            echo "*** post commands ***"
-            wrangler pages project create test-site-3 --production-branch master
-            echo "******"          
+        run: npx wrangler pages project create test-site-3 --production-branch master
+        env:
+          CF_API_TOKEN: ${{ secrets.CLOUDFLARE_AUTH_KEY }}
+          CF_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
       - name: Publish to Cloudflare Pages
         uses: cloudflare/pages-action@v1
         continue-on-error: true
