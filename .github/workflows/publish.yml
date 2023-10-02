@@ -1,0 +1,36 @@
+name: Publish
+
+on: [push]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    name: Publish to Cloudflare Pages
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      # Run a build step here if your project requires
+      - name: Install
+        run: npm install
+      - name: Build
+        run: npm run build
+        env:
+          CF_SPACE: ${{ secrets.CF_SPACE }}
+          CF_KEY: ${{ secrets.CF_KEY }}
+          API_KEY: ${{ secrets.API_KEY }}
+          AL_KEY: ${{ secrets.AL_KEY }}
+          AL_SPACE: ${{ secrets.AL_SPACE }}
+          AL_INDEX: ${{ secrets.AL_INDEX }}
+      - name: Publish to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_AUTH_KEY }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: Test_Site
+          directory: web.out
+          # Optional: Enable this if you want to have GitHub Deployments triggered
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
