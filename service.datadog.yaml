@@ -19,4 +19,3 @@ tags: []
 integrations:
  pagerduty:
    service-url: https://datadog.pagerduty.com/service-directory/XXXXXXX
-External Resources (Optional)
