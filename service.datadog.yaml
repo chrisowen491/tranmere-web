@@ -1,10 +1,10 @@
 schema-version: v2.1
 dd-service: tranmere-web
-team: shopist
+team: tranmereweb
 contacts:
  - type: slack
    contact: https://datadogincidents.slack.com/archives/XXXXX
-application: shopist
+application: tranmereweb
 description: important cron job for shopist backend
 tier: tier1
 lifecycle: production
@@ -15,7 +15,8 @@ links:
  - name: Disabling Deployments
    type: runbook
    url: https://datadoghq.atlassian.net/wiki/
+ - name: Source Code
+   type: repo
+   url: https://github.com/chrisowen491/tranmere-web
+   provider: Github
 tags: []
-integrations:
- pagerduty:
-   service-url: https://datadog.pagerduty.com/service-directory/XXXXXXX
