@@ -1,0 +1,22 @@
+schema-version: v2.1
+dd-service: tranmereweb
+team: shopist
+contacts:
+ - type: slack
+   contact: https://datadogincidents.slack.com/archives/XXXXX
+application: shopist
+description: important cron job for shopist backend
+tier: tier1
+lifecycle: production
+links:
+ - name: Common Operations
+   type: runbook
+   url: https://datadoghq.atlassian.net/wiki/
+ - name: Disabling Deployments
+   type: runbook
+   url: https://datadoghq.atlassian.net/wiki/
+tags: []
+integrations:
+ pagerduty:
+   service-url: https://datadog.pagerduty.com/service-directory/XXXXXXX
+External Resources (Optional)
