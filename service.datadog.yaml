@@ -1,5 +1,5 @@
 schema-version: v2.1
-dd-service: tranmereweb
+dd-service: tranmere-web
 team: shopist
 contacts:
  - type: slack
