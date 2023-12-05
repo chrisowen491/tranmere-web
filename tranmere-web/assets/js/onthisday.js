@@ -10,22 +10,22 @@ jQuery(function () {
         var url = base + '/graphql?query=' + encodeURIComponent(`{getTranmereWebOnThisDayById(day: "${day}"){opposition programme hgoal vgoal season date}}`);
         $.getJSON(url, function(response) {
             if(response && response.data.getTranmereWebOnThisDayById) {
-            var view = response.data.getTranmereWebOnThisDayById;
-            var largeBody = {
-                "bucket": 'trfc-programmes',
-                "key": view.programme,
-                "edits": {
-                    "resize": {
-                    "width": 200,
-                    "fit": "contain"
+                var view = response.data.getTranmereWebOnThisDayById;
+                var largeBody = {
+                    "bucket": 'trfc-programmes',
+                    "key": view.programme,
+                    "edits": {
+                        "resize": {
+                        "width": 200,
+                        "fit": "contain"
+                        }
                     }
-                }
-            };
-            view.largeprogramme = btoa(JSON.stringify(largeBody));
-            $.get("/assets/templates/onthisday.mustache?v=" + pack.version, function(template) {
-                var article = Mustache.render( template, view );
-                $("#onthisday").html(article);
-            });
+                };
+                view.largeprogramme = btoa(JSON.stringify(largeBody));
+                $.get("/assets/templates/onthisday.mustache?v=" + pack.version, function(template) {
+                    var article = Mustache.render( template, view );
+                    $("#onthisday").html(article);
+                });
             }
         });
     }

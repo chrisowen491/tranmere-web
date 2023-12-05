@@ -17,8 +17,6 @@ type Query {
   getTranmereWebHatTricksById(Season: String!): TranmereWebHatTricks
   listTranmereWebOnThisDay(filter: TableSimpleFilterInput, limit: Int, nextToken: String): TranmereWebOnThisDayConnection
   getTranmereWebOnThisDayById(day: String!): TranmereWebOnThisDay
-  listTranmereWebGames(scanIndexForward: Boolean, filter: TableSimpleFilterInput, limit: Int, nextToken: String): TranmereWebGames
-  getTranmereWebGamesById(season: String!): TranmereWebOnThisDay
 }
 
 type TranmereWebClubs {
@@ -27,22 +25,6 @@ type TranmereWebClubs {
 }
 
 type TranmereWebOnThisDay {
-  id: ID!
-  date: String!
-  programme: String!
-  hgoal: String!
-  season: String!
-  tier: String!
-  vgoal: String!
-  division: String!
-  opposition: String!
-  competition: String!
-  visitor: String!
-  home: String!
-  pens: String!
-}
-
-type TranmereWebGames {
   id: ID!
   date: String!
   programme: String!
@@ -131,16 +113,9 @@ type TranmereWebOnThisDayConnection {
   nextToken: String
 }
 
-type TranmereWebGamesConnection {
-  items: [TranmereWebGames]
-  nextToken: String
-}
-
-
 input TableSimpleFilterInput {
   id: TableStringFilterInput
   name: TableStringFilterInput
-  season: TableStringFilterInput
 }
 
 input TableBooleanFilterInput {
