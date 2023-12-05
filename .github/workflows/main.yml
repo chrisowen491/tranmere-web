@@ -13,11 +13,11 @@ jobs:
       - uses: actions/checkout@v4
       - name: Install AWS CDK
         run: | 
-          npm install -g aws-cdk
+          yarn global add aws-cdk
       - name: Install
-        run: npm install
+        run: yarn
       - name: Unit Test
-        run: npm run test
+        run: yarn test
         env:
           DD_KEY: ${{ secrets.DD_KEY }}
           CF_SPACE: ${{ secrets.CF_SPACE }}
@@ -45,9 +45,9 @@ jobs:
       - uses: actions/checkout@v4
       - name: Install AWS CDK
         run: | 
-          npm install -g aws-cdk
+          yarn global add aws-cdk
       - name: Install
-        run: npm install                   
+        run: yarn                  
       - name: Deploy CDK
         run: |
           cdk deploy --require-approval never "*"
@@ -69,7 +69,7 @@ jobs:
     steps:
       - name: Install Data Dog CI
         run: | 
-          npm i -g @datadog/datadog-ci@2.23.0
+          yarn global add @datadog/datadog-ci@2.23.0
       - name: Instrument
         run: | 
           datadog-ci lambda instrument --functions-regex "^TranmereWebStack" -r eu-west-1 -v 99 -e 49 --service tranmere-web --env prod --version ${{needs.build_test_and_package.outputs.version}} --merge-xray-traces false
@@ -87,7 +87,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Install Newman
         run: | 
-          npm install -g newman
+          yarn global add newman
       - name: Post Deploy Checks
         run: 
           newman run ./api_tests/postman-collection.json -e ./api_tests/env/aws-prod.json --env-var "testApiKey=${{ secrets.API_KEY }}"
@@ -99,7 +99,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Install Newman
         run: | 
-          npm install -g newman
+          yarn global add newman
       - name: Post Deploy Checks
         run: 
           newman run ./api_tests/postman-collection.json -e ./api_tests/env/cf-prod.json --env-var "testApiKey=${{ secrets.API_KEY }}"

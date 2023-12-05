@@ -395,6 +395,10 @@ export class TranmereWebStack extends cdk.Stack {
         {
           table: TranmereWebOnThisDay,
           keyColumn: "day"
+        },
+        {
+          table: TranmereWebGames,
+          keyColumn: "season"
         }
       ]
     });

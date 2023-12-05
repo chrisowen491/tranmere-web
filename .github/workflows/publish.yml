@@ -17,9 +17,9 @@ jobs:
 
       # Run a build step here if your project requires
       - name: Install
-        run: npm install
+        run: yarn
       - name: Build
-        run: npm run build
+        run: yarn build
         env:
           CF_SPACE: ${{ secrets.CF_SPACE }}
           CF_KEY: ${{ secrets.CF_KEY }}

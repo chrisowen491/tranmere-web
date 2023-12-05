@@ -12,6 +12,7 @@ local.out
 guidebook/
 csv/
 
+
 /tmp
 /tranmere-web/output/site/*.html
 /tranmere-web/node_modules/
@@ -28,5 +29,8 @@ csv/
 /tranmere-web-api/sam/search/package-lock.json
 
 set_env.sh
+set_env.bat
 template.yml
 .aws-sam
+
+npm-debug.log
