@@ -140,6 +140,7 @@ type TranmereWebGamesConnection {
 input TableSimpleFilterInput {
   id: TableStringFilterInput
   name: TableStringFilterInput
+  season: TableStringFilterInput
 }
 
 input TableBooleanFilterInput {
