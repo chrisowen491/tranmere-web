@@ -36,12 +36,12 @@ jobs:
       - id: bump
         run: echo "version=$(node tag.js)" >> $GITHUB_OUTPUT
 
-  trigger_web_deploy:
-    runs-on: ubuntu-latest
-    needs: build_test_and_package
-    steps:
-      - name: Call Web Hook
-        run: curl -X POST https://api.cloudflare.com/client/v4/pages/webhooks/deploy_hooks/d244ae02-7152-4c32-b6c8-d75c023e735c       
+  #trigger_web_deploy:
+  #  runs-on: ubuntu-latest
+  #  needs: build_test_and_package
+  #  steps:
+  #    - name: Call Web Hook
+  #      run: curl -X POST https://api.cloudflare.com/client/v4/pages/webhooks/deploy_hooks/d244ae02-7152-4c32-b6c8-d75c023e735c       
 
   aws_cdk:
     runs-on: ubuntu-latest

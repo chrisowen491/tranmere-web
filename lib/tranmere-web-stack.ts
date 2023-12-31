@@ -156,9 +156,11 @@ export class TranmereWebStack extends cdk.Stack {
     const background = neckColour.addResource('{background}');
     const highlights = background.addResource('{highlights}');
     const match = api.root.addResource('match');
+    const report = match.addResource('report');
+    const day = report.addResource('{day}');
+    const reportId = day.addResource('{reportId}');
     const season = match.addResource('{season}');
     const date = season.addResource('{date}');
-    const reportId = date.addResource('{reportId}');
     const goal = api.root.addResource('goal');
     const goalseason = goal.addResource('{season}');
     const goalid = goalseason.addResource('{id}');

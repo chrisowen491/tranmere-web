@@ -12,8 +12,7 @@ exports.handler = async (event : APIGatewayEvent, context: Context): Promise<API
     // Format AI Request.
     // Make AI Call
 
-    const date = event.pathParameters!.date;
-    const season = event.pathParameters!.season;
+    const day = event.pathParameters!.day;
     const reportId = event.pathParameters!.reportId;
     const events : MatchEvent[] = []    
     let page = 1;
@@ -69,7 +68,7 @@ exports.handler = async (event : APIGatewayEvent, context: Context): Promise<API
     var params = {
         TableName: DataTables.REPORT_TABLE,
         Key:{
-            "day": date
+            "day": day
         },
         UpdateExpression: "set report = :r",
         ExpressionAttributeValues:{
