@@ -462,15 +462,15 @@ export class TranmereWebUtils  {
       return result.Items && result.Items[0] ? result.Items[0] as Match : null;
     };
 
-    async getReportForDate(date: string): Promise<Report | null>  {
+    async getReportForDate(day: string): Promise<Report | null>  {
     
       var params = {
           TableName : DataTables.REPORT_TABLE,
-          KeyConditionExpression:  "#date = :date",
+          KeyConditionExpression:  "#day = :day",
           ExpressionAttributeValues: {
-              ":date": decodeURIComponent(date)
+              ":day": decodeURIComponent(day)
           },
-          ExpressionAttributeNames: { "#date": "date" }
+          ExpressionAttributeNames: { "#day": "day" }
       }      
       var result = await dynamo.query(params).promise();
       

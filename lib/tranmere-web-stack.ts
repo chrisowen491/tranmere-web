@@ -46,6 +46,7 @@ export class TranmereWebStack extends cdk.Stack {
     const TranmereWebOnThisDay = ddb.Table.fromTableAttributes(this,'TranmereWebOnThisDay',{tableName: 'TranmereWebOnThisDay',grantIndexPermissions: true});
     const TranmereWebPlayerTransfers = ddb.Table.fromTableAttributes(this,'TranmereWebPlayerTransfers',{tableName: 'TranmereWebPlayerTransfers',grantIndexPermissions: true});
     const TranmereWebPlayerLinks = ddb.Table.fromTableAttributes(this,'TranmereWebPlayerLinks',{tableName: 'TranmereWebPlayerLinks',grantIndexPermissions: true});
+    const TranmereWebMatchReport = ddb.Table.fromTableAttributes(this,'TranmereWebMatchReport',{tableName: 'TranmereWebMatchReport',grantIndexPermissions: true});
     
     const TranmereWebUserPool = cognito.UserPool.fromUserPoolArn(this, "TranmereWebUserPool", `arn:aws:cognito-idp:${this.region}:${this.account}:userpool/eu-west-1_GAF4md6wn`);
     const cognitoAuthorizer = new apigw.CognitoUserPoolsAuthorizer(
@@ -55,13 +56,14 @@ export class TranmereWebStack extends cdk.Stack {
           cognitoUserPools: [TranmereWebUserPool],
       }
     );
-
+    
+    /*
     const TranmereWebMatchReport = new ddb.Table(this, 'TranmereWebMatchReport', {
       tableName: "TranmereWebMatchReport",
       partitionKey: { name: 'day', type: ddb.AttributeType.STRING },
       billingMode: ddb.BillingMode.PAY_PER_REQUEST,
     });
-
+    */
     /*
     const TranmereWebOnThisDay = new ddb.Table(this, 'TranmereWebOnThisDay', {
       tableName: "TranmereWebOnThisDay",
@@ -156,7 +158,7 @@ export class TranmereWebStack extends cdk.Stack {
     const match = api.root.addResource('match');
     const season = match.addResource('{season}');
     const date = season.addResource('{date}');
-    const report = date.addResource('{report}');
+    const reportId = date.addResource('{reportId}');
     const goal = api.root.addResource('goal');
     const goalseason = goal.addResource('{season}');
     const goalid = goalseason.addResource('{id}');
@@ -239,7 +241,7 @@ export class TranmereWebStack extends cdk.Stack {
 
     new TranmereWebLambda(this, 'MatchReportFunction', {      
       environment: env_variables,
-      apiResource: report,
+      apiResource: reportId,
       apiMethod: 'GET',
       lambdaFile: './lambda/matchreport.ts',
       readWriteTables: [TranmereWebMatchReport],

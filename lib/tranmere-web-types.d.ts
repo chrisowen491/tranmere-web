@@ -102,8 +102,14 @@ export interface Page extends IPageMetaDataFields {
 }
 
 export interface Report {
-    date: string;
-    rport: string;
+    day: string;
+    report: string;
+}
+
+export interface MatchEvent {
+    time: string;
+    eventType?: string;
+    description: string;
 }
 
 export interface Match {
