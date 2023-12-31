@@ -39,7 +39,7 @@
     "chai": "^4.3.7",
     "contentful-typescript-codegen": "^3.4.0",
     "css-loader": "^6.7.3",
-    "esbuild": "^0.19.0",
+    "esbuild": "^0.19.11",
     "filemanager-webpack-plugin": "^8.0.0",
     "jest": "^29.4.3",
     "json-loader": "^0.5.7",
