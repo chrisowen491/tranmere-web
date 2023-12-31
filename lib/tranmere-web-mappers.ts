@@ -495,7 +495,11 @@ export function translatePlayerName(input: string) : string {
         "L McGee": "Luke McGee",
         "D Pike": "Dan Pike",
         "J Norris": "James Norris",
-        "R Apter": "Robert Apter"
+        "R Apter": "Robert Apter",
+        "C Wood": "Connor Wood",
+        "J Belehouan": "Jean Belehouan",
+        "M Davies": "Mikey Davies",
+        "J Starbuck": "Joe Starbuck"
 
     }
     return mapping[input.trim()] ? mapping[input.trim()] : input.trim();

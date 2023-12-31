@@ -3,6 +3,11 @@ name: Deploy
 on:
   push:
     branches: [ master ]
+    paths:
+      - 'graphql/**'
+      - 'lambda/**'
+      - 'lib/**' 
+      - '.github/workflows/**'   
 
 jobs:
   build_test_and_package:

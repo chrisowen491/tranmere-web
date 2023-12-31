@@ -3,6 +3,11 @@ name: Publish
 on:
   push:
     branches: [ master ]
+    paths:
+      - 'tranmere-web/**'
+      - 'functions/**'
+      - 'templates/**'
+      - '.github/workflows/**'
 
 jobs:
   publish:
