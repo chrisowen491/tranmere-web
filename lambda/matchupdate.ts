@@ -10,6 +10,11 @@ exports.handler = async (event : APIGatewayEvent, context: Context): Promise<API
     const date = event.pathParameters!.date;
     const season = event.pathParameters!.season;
     const body = JSON.parse(event.body!) as Match;
+    let attendance = 0;
+
+    if(body.attendance)
+        attendance = parseInt(body.attendance.toString())
+    
 
     var params = {
         TableName: DataTables.RESULTS_TABLE,
@@ -26,7 +31,7 @@ exports.handler = async (event : APIGatewayEvent, context: Context): Promise<API
             ":x": body.pens,
             ":f": body.hgoal,
             ":g": body.vgoal,
-            ":a": body.attendance,
+            ":a": attendance,
             ":p": body.programme
         },
         ReturnValues:"UPDATED_NEW"
