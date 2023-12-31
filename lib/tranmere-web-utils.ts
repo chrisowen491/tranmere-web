@@ -8,7 +8,7 @@ import { APIGatewayProxyResult } from 'aws-lambda';
 import {DynamoDB} from 'aws-sdk';
 import { ContentfulClientApi, EntryCollection } from "contentful";
 const dynamo = new DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
-import { Goal, Player, Team, Competition, Manager, HatTrick, ImageEdits, Appearance, Match} from './tranmere-web-types'
+import { Goal, Player, Team, Competition, Manager, HatTrick, ImageEdits, Appearance, Match, Report} from './tranmere-web-types'
 import {translateTeamName, translatePlayerName} from './tranmere-web-mappers'
 import {IBlogPost, IPageMetaData} from './contentful'
 
@@ -34,6 +34,7 @@ export enum DataTables {
     SUMMARY_TABLE_NAME = "TranmereWebPlayerSeasonSummaryTable",
     HAT_TRICKS_TABLE =  "TranmereWebHatTricks",
     ON_THIS_DAY_TABLE = "TranmereWebOnThisDay",
+    REPORT_TABLE = "TranmereWebMatchReport",
 }
 
 export class ProgrammeImage {
@@ -459,6 +460,21 @@ export class TranmereWebUtils  {
       var result = await dynamo.query(params).promise();
       
       return result.Items && result.Items[0] ? result.Items[0] as Match : null;
+    };
+
+    async getReportForDate(date: string): Promise<Report | null>  {
+    
+      var params = {
+          TableName : DataTables.REPORT_TABLE,
+          KeyConditionExpression:  "#date = :date",
+          ExpressionAttributeValues: {
+              ":date": decodeURIComponent(date)
+          },
+          ExpressionAttributeNames: { "#date": "date" }
+      }      
+      var result = await dynamo.query(params).promise();
+      
+      return result.Items && result.Items[0] ? result.Items[0] as Report : null;
     };
 
     async insertUpdateItem(item: any, type: string): Promise<any>{

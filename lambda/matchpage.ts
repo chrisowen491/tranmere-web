@@ -34,8 +34,10 @@ exports.handler = async (event : APIGatewayEvent, context: Context): Promise<API
     }
 
     var match = await utils.getResultForDate(season, date!);
+    var report = await utils.getReportForDate(date!);
     
     var view : MatchView = match!;
+    view.report = report;
     view.goals = await utils.getGoalsBySeason(season, date);
     view.apps = await utils.getAppsBySeason(season, date);
     if(view.programme && view.programme != "#N/A") {
@@ -132,7 +134,7 @@ exports.handler = async (event : APIGatewayEvent, context: Context): Promise<API
     view.pageType = "AboutPage";
     view.description = "Match Summary";
     view.date = date!;
-    view.season = season!;
+    view.season = season!.toString();
       
     var page = utils.buildPage(view, './templates/match.tpl.html');
 

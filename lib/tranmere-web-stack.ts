@@ -55,6 +55,13 @@ export class TranmereWebStack extends cdk.Stack {
           cognitoUserPools: [TranmereWebUserPool],
       }
     );
+
+    const TranmereWebMatchReport = new ddb.Table(this, 'TranmereWebMatchReport', {
+      tableName: "TranmereWebMatchReport",
+      partitionKey: { name: 'day', type: ddb.AttributeType.STRING },
+      billingMode: ddb.BillingMode.PAY_PER_REQUEST,
+    });
+
     /*
     const TranmereWebOnThisDay = new ddb.Table(this, 'TranmereWebOnThisDay', {
       tableName: "TranmereWebOnThisDay",
@@ -149,6 +156,7 @@ export class TranmereWebStack extends cdk.Stack {
     const match = api.root.addResource('match');
     const season = match.addResource('{season}');
     const date = season.addResource('{date}');
+    const report = date.addResource('{report}');
     const goal = api.root.addResource('goal');
     const goalseason = goal.addResource('{season}');
     const goalid = goalseason.addResource('{id}');
@@ -228,6 +236,17 @@ export class TranmereWebStack extends cdk.Stack {
       authorizer: cognitoAuthorizer,
       scopes: "TranmereWeb/matches.read"
     });
+
+    new TranmereWebLambda(this, 'MatchReportFunction', {      
+      environment: env_variables,
+      apiResource: report,
+      apiMethod: 'GET',
+      lambdaFile: './lambda/matchreport.ts',
+      readWriteTables: [TranmereWebMatchReport],
+      authorizer: cognitoAuthorizer,
+      scopes: "TranmereWeb/matches.read"
+    });
+
 
     new TranmereWebLambda(this, 'GoalUpdateFunction', {      
       environment: env_variables,
@@ -313,7 +332,7 @@ export class TranmereWebStack extends cdk.Stack {
       lambdaFile: './lambda/matchpage.ts',
       apiResource: date,
       apiMethod: 'GET',
-      readTables: [TranmereWebPlayerTable, TranmereWebGames, TranmereWebGoalsTable, TranmereWebAppsTable],
+      readTables: [TranmereWebPlayerTable, TranmereWebGames, TranmereWebGoalsTable, TranmereWebAppsTable, TranmereWebMatchReport],
       commandHooks: {
         beforeBundling(inputDir: string, outputDir: string): string[] {
           return [];

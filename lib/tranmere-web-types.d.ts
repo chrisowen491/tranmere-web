@@ -101,6 +101,11 @@ export interface Page extends IPageMetaDataFields {
     seasons: Array<number>;
 }
 
+export interface Report {
+    date: string;
+    rport: string;
+}
+
 export interface Match {
     scrape_id?: string,
     id?: string;
@@ -145,6 +150,7 @@ export interface MatchView extends Match  {
     title?: string;
     pageType?: string;
     description?: string;
+    report?: Report | null;
 }
 
 export interface Goal {
