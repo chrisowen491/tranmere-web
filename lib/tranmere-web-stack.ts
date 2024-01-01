@@ -15,6 +15,7 @@ const SCRAPE_ID : string = process.env.SCRAPE_ID!;
 const SCRAPE_SEASON : string = process.env.SCRAPE_SEASON!;
 const SCRAPE_URL : string = process.env.SCRAPE_URL!;
 const DD_TAGS : string = process.env.DD_TAGS!;
+const OPENAI_API_KEY : string = process.env.OPENAI_API_KEY!;
 
 export class TranmereWebStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -29,7 +30,8 @@ export class TranmereWebStack extends cdk.Stack {
       "SCRAPE_ID": SCRAPE_ID,
       "SCRAPE_SEASON": SCRAPE_SEASON,
       "SCRAPE_URL": SCRAPE_URL,
-      "DD_TAGS": DD_TAGS
+      "DD_TAGS": DD_TAGS,
+      "OPENAI_API_KEY": OPENAI_API_KEY
     }
 
     const TranmereWebPlayerTable = ddb.Table.fromTableAttributes(this,'TranmereWebPlayerTable',{tableName: 'TranmereWebPlayerTable',grantIndexPermissions: true});
@@ -158,7 +160,6 @@ export class TranmereWebStack extends cdk.Stack {
     const match = api.root.addResource('match');
     const report = match.addResource('report');
     const day = report.addResource('{day}');
-    const reportId = day.addResource('{reportId}');
     const season = match.addResource('{season}');
     const date = season.addResource('{date}');
     const goal = api.root.addResource('goal');
@@ -243,12 +244,11 @@ export class TranmereWebStack extends cdk.Stack {
 
     new TranmereWebLambda(this, 'MatchReportFunction', {      
       environment: env_variables,
-      apiResource: reportId,
+      apiResource: day,
       apiMethod: 'GET',
       lambdaFile: './lambda/matchreport.ts',
-      readWriteTables: [TranmereWebMatchReport],
-      authorizer: cognitoAuthorizer,
-      scopes: "TranmereWeb/matches.read"
+      schedule: {minute: '50', hour: '22'},
+      readWriteTables: [TranmereWebMatchReport]
     });
 
 
