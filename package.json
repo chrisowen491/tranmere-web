@@ -36,7 +36,7 @@
     "aws-cdk": "2.117.0",
     "aws-cdk-lib": "2.117.0",
     "browser-sync": "^3.0.0",
-    "chai": "^4.3.7",
+    "chai": "^5.0.0",
     "contentful-typescript-codegen": "^3.4.0",
     "css-loader": "^6.7.3",
     "esbuild": "^0.19.0",
