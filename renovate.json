@@ -8,5 +8,5 @@
     "group:all", 
     "schedule:earlyMondays"
   ],
-  "ignoreDeps": ["contentful","bootstrap"]
+  "ignoreDeps": ["contentful","bootstrap", "chai"]
 }
