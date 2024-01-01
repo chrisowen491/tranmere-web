@@ -12,7 +12,7 @@ const chatModel = new ChatOpenAI({modelName: "gpt-4-1106-preview"});
 
 exports.handler = async (event : APIGatewayEvent, context: Context): Promise<APIGatewayProxyResult> =>{    
     
-    const day = event.pathParameters ? event.pathParameters!.day : moment(new Date()).format('YYYY-MM-dd');
+    const day = event.pathParameters ? event.pathParameters!.day : moment(new Date()).format('YYYY-MM-DD');
     const theDate = new Date(day!);
 
     const dateString = moment(theDate).format('dddd-Do-MMMM')
