@@ -1,7 +1,7 @@
 import { APIGatewayEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
 import { TranmereWebUtils, DataTables } from '../lib/tranmere-web-utils';
 import { MatchEvent, Match, Appearance, Goal } from '../lib/tranmere-web-types';
-import {translateTeamName, translatePlayerName} from '../lib/tranmere-web-mappers'
+import {translateTeamName, translatePlayerName, translateCompetition} from '../lib/tranmere-web-mappers'
 import axios from 'axios';
 import { ChatPromptTemplate } from "@langchain/core/prompts";
 import { DynamoDB } from 'aws-sdk';
@@ -71,8 +71,11 @@ exports.handler = async (event : APIGatewayEvent, context: Context): Promise<API
         hgoal: hscore,
         vgoal: vscore,
         ft: hscore + '-' + vscore,
-        competition: utils.getCompetition(competition)
+        competition: translateCompetition(competition)
     }
+
+    if(fixtures.data.payload[0].body.matchData[0].tournamentDatesWithEvents[dateString][0].events[0].eventOutcomeType === 'shootout')
+        theMatch.pens = fixtures.data.payload[0].body.matchData[0].tournamentDatesWithEvents[dateString][0].events[0].comment;
 
     await utils.insertUpdateItem(theMatch, DataTables.RESULTS_TABLE);
 
@@ -85,7 +88,7 @@ exports.handler = async (event : APIGatewayEvent, context: Context): Promise<API
                 id: uuidv4(),
                 Date: day!,
                 Opposition: theMatch.opposition!,
-                Competition:  utils.getCompetition(competition),
+                Competition:  translateCompetition(competition),
                 Season: utils.getYear().toString(),
                 Name: translatePlayerName(element.name.full),
                 Number: element.meta.uniformNumber,

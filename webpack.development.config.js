@@ -20,7 +20,7 @@ let config = {
     hot: true,
     open: true,
     compress: true,
-    watchFiles: ['templates/**/*'],
+    watchFiles: ['./templates/**/*'],
     headers: [
       {
         key: 'X-Custom',

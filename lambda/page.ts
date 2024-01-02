@@ -20,11 +20,44 @@ exports.handler = async (event : APIGatewayEvent, context: Context): Promise<API
 
     if(pageName === "home") {
         const blogs = await utils.getBlogs(client);
+        let players = await utils.findAllPlayers();
+        let random = Math.floor(Math.random() * (players.length-1));
+        let randomplayer = players[random];
+        var debutSearch = await dynamo.query(
+            {
+                TableName: DataTables.APPS_TABLE_NAME,
+                KeyConditionExpression: "#name = :name",
+                IndexName: "ByPlayerIndex",
+                ExpressionAttributeNames:{
+                    "#name": "Name"
+                },
+                ExpressionAttributeValues: {
+                    ":name": decodeURIComponent(randomplayer.name),
+                },
+                Limit : 1
+            }).promise();
+
+        var apps_query = await dynamo.query({
+            TableName: DataTables.SUMMARY_TABLE_NAME,
+            IndexName: "ByPlayerIndex",
+            KeyConditionExpression :  "Player = :player",
+            ExpressionAttributeValues: {
+                ":player" : randomplayer.name
+            }
+        }).promise();
+
         view = {
             title: "Home",
             pageType:"WebPage",
             description: "Tranmere-Web.com is a website full of data, statistics and information about Tranmere Rovers FC",
-            blogs: blogs.items
+            blogs: blogs.items,
+            randomplayer: {
+                name: randomplayer.name,
+                picLink: randomplayer.picLink,
+                debut: debutSearch.Items![0],
+                apps: apps_query.Items![0].Apps,
+                goals: apps_query.Items![0].goals,
+            }
         };
     } else if(pageName === "player") {
         var playerName = classifier!;

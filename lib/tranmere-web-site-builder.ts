@@ -60,7 +60,7 @@ export class SiteBuilder  {
       let managers = await utils.findAllTranmereManagers();
       let topScorers = await utils.getTopScorersBySeason();
       let hatTricks = await utils.findAllHatTricks(20);
-  
+
       for(var i=0; i < pages.items.length; i++) {
 
         let page : any = pages.items[i].fields;

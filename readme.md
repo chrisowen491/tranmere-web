@@ -24,7 +24,7 @@ Dynamic elements are powered using a combination of AWS Lambda, AppSync, DynamoD
 ### Install
 
 ```bash
-$ npm install
+$ yarn
 ```
 
 ### Local Testing/DEvelopment (Using CDK backend)
@@ -43,7 +43,7 @@ export AL_INDEX=<<Algolia Index Name>>
 
 
 ```bash
-$ npm run start
+$ yarn start
 ```
 
 In another terminal make sure AWS SAM is installed. You will need docker runing too.
@@ -68,13 +68,13 @@ export VERSION=1.0.0
 
 
 ```bash
-$ npm run local-api
+$ yarn local-api
 ```
 
 ### Running Local Acceptance Tests 
 
 ```bash
-$ npm run local-acceptance-test
+$ yarn local-acceptance-test
 ```
 
 ### Deployment

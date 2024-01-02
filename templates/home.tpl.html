@@ -50,6 +50,24 @@
                         <!-- content -->
                         <article class="col-md-8 content-body">
                             <div class="row justify-content-center justify-content-lg-start gutter-2">
+                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                    <div class="card stacked" style="margin-bottom:50px">
+                                        <div class="card-body" style="background-image:url({{randomplayer.picLink}});background-position-x: right;background-size: contain;background-repeat: no-repeat;">
+                                            <div class="row gutter-2 align-items-center">
+                                                <div class="col">
+                                                    <h3 class="font-weight-normal mb-2">Player Of The Day</h3>
+                                                    <h4 class="font-weight-normal mb-3">{{randomplayer.name}}</h4>
+                                                    <p><strong>Debut:</strong> {{randomplayer.debut.Opposition}} {{randomplayer.debut.Date}}</p>
+                                                    <p class="card-text mb-2">{{randomplayer.apps}} apps</p>
+                                                    <p class="card-text mb-2">{{randomplayer.goals}} goals</p>
+                                                    <a href="/page/player/{{randomplayer.name}}" class="action mt-1 text-blue">View Profile</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>                                     
+                                </div>          
+                            </div>
+                            <div class="row justify-content-center justify-content-lg-start gutter-2">
                                 <div class="col-lg-6 col-md-12 col-sm-12">
                                     <div class="card stacked">
                                         <div class="card-body">
