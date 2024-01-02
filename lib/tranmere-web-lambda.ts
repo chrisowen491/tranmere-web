@@ -84,7 +84,7 @@ export class TranmereWebLambda extends Construct {
         else if(props.apiResource && props.apiMethod) {
             props.apiResource.addMethod(
                 props.apiMethod,
-                new apigw.LambdaIntegration(the_lambda, {proxy: true, cacheKeyParameters: props.cacheKeyParameters} ),
+                new apigw.LambdaIntegration(the_lambda, {proxy: true, cacheKeyParameters: props.cacheKeyParameters, timeout: cdk.Duration.seconds(25) } ),
             );
         }
     }
