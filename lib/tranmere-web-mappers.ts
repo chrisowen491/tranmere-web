@@ -529,7 +529,15 @@ export function translateTeamName(input: string) : string {
         'Colchester': 'Colchester United',
         'Bradford': 'Bradford City',
         'Doncaster': 'Doncaster Rovers',
-        'MK Dons': 'Milton Keynes Dons'
+        'MK Dons': 'Milton Keynes Dons',
+        'Stevenage ': 'Stevege Borough',
+        'Notts Co': 'Notts County',
+        'Sutton Utd': 'Sutton United',
+        'Forest Green': 'Forest Green Rovers',
+        'Wigan ': 'Wigan Athletic',
+        'AFC W\'bledon': 'AFC Wimbledon',
+        'Leicester': 'Leicester City',
+        'Fleetwood': 'Fleetwood Town'
     }
     return mapping[lookup] ? mapping[lookup] : lookup;
 }
