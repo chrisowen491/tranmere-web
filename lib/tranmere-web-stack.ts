@@ -11,9 +11,6 @@ import { TranmereWebGraphQL } from './tranmere-web-graphql'
 const CF_KEY : string = process.env.CF_KEY!;
 const CF_SPACE : string = process.env.CF_SPACE!;
 const EMAIL_ADDRESS : string = process.env.EMAIL_ADDRESS!;
-const SCRAPE_ID : string = process.env.SCRAPE_ID!;
-const SCRAPE_SEASON : string = process.env.SCRAPE_SEASON!;
-const SCRAPE_URL : string = process.env.SCRAPE_URL!;
 const DD_TAGS : string = process.env.DD_TAGS!;
 const OPENAI_API_KEY : string = process.env.OPENAI_API_KEY!;
 
@@ -27,9 +24,6 @@ export class TranmereWebStack extends cdk.Stack {
       "EMAIL_ADDRESS": EMAIL_ADDRESS,
       "CF_SPACE": CF_SPACE,
       "CF_KEY": CF_KEY,
-      "SCRAPE_ID": SCRAPE_ID,
-      "SCRAPE_SEASON": SCRAPE_SEASON,
-      "SCRAPE_URL": SCRAPE_URL,
       "DD_TAGS": DD_TAGS,
       "OPENAI_API_KEY": OPENAI_API_KEY
     }
@@ -204,13 +198,6 @@ export class TranmereWebStack extends cdk.Stack {
       readWriteTables: [TranmereWebHatTricks]
     });
 
-    new TranmereWebLambda(this, 'ScraperJobFunction', {      
-      environment: env_variables,
-      lambdaFile: './lambda/scraper.ts',
-      schedule: {minute: '45', hour: '22'},
-      readWriteTables: [TranmereWebGoalsTable, TranmereWebAppsTable, TranmereWebGames]
-    });
-
     /*
     new TranmereWebLambda(this, 'UploadJobFunction', {      
       environment: env_variables,
@@ -248,7 +235,7 @@ export class TranmereWebStack extends cdk.Stack {
       apiMethod: 'GET',
       lambdaFile: './lambda/matchreport.ts',
       schedule: {minute: '50', hour: '22'},
-      readWriteTables: [TranmereWebMatchReport]
+      readWriteTables: [TranmereWebMatchReport, TranmereWebGames, TranmereWebAppsTable, TranmereWebGoalsTable]
     });
 
 

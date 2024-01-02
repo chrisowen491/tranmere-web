@@ -131,6 +131,8 @@ export interface Match {
     ft?: string;
     day?: string;
     attendance?: number;
+    referee?: string;
+    formation?: string;
 }
 
 export interface MatchView extends Match  {

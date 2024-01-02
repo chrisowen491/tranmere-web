@@ -55,21 +55,3 @@ $(document).on('click', '#editbutton2', function() {
         }
     });
 });
-
-$(document).on('click', '#generate_match_report', function() {
-
-    $.ajax('/match/report/'+window.date, {
-        type: "GET",
-        dataType: "json",
-        crossDomain: "true",
-        headers: {
-            "Authorization": window.auth.getCachedSession().getAccessToken().getJwtToken()
-        },
-        success: function () {
-            window.location.href =  window.location.href + "?v=" + Math.floor(Math.random() * 10);
-        },
-        error: function () {
-            alert('fail')
-        }
-    });
-});

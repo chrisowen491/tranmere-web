@@ -74,7 +74,6 @@
     "axios": "^1.6.3",
     "bootstrap": "^4.6.2",
     "bootstrap-select": "^1.13.2",
-    "cheerio": "^1.0.0-rc.3",
     "ci": "^2.2.0",
     "constructs": "^10.2.21",
     "contentful": "^9.3.5",

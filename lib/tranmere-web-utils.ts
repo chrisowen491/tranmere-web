@@ -2,14 +2,11 @@ import axios from 'axios';
 import fs from 'fs';
 import Mustache from 'mustache';
 import path from 'path';
-import {load} from 'cheerio';
-import  {v4 as uuidv4} from 'uuid';
 import { APIGatewayProxyResult } from 'aws-lambda';
 import {DynamoDB} from 'aws-sdk';
 import { ContentfulClientApi, EntryCollection } from "contentful";
 const dynamo = new DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
 import { Goal, Player, Team, Competition, Manager, HatTrick, ImageEdits, Appearance, Match, Report} from './tranmere-web-types'
-import {translateTeamName, translatePlayerName} from './tranmere-web-mappers'
 import {IBlogPost, IPageMetaData} from './contentful'
 
 const APP_SYNC_URL = "https://api.prod.tranmere-web.com";
@@ -73,206 +70,6 @@ export class TranmereWebUtils  {
           seasons.push(i);
         }
         return seasons;
-    }
-
-    extractMatchesFromHTML(html: string): Array<Match> {
-      const $ = load(html);
-    
-      var games : Array<Match> = [];
-      const matches = $('tr.match');
-
-      matches.each((i, el) => {
-        var date = $($(el).find('span.hide')[0]).text();
-        var dateRegex = /\d\d\d\d-\d\d-\d\d/g;
-        var compRegex = /[\w\s]+/g
-        const dateMatch = date.match(dateRegex);
-        const compMatch = date.match(compRegex);
-        var comp = compMatch![0];
-    
-        if(comp.indexOf('EFL Cup') > 0) {
-            comp = "League Cup"
-        } else if(comp.indexOf('League Cup') > 0) {
-            comp = "League Cup"
-        } else if(comp.indexOf('FA Cup') > 0) {
-            comp = "FA Cup"
-        } else if(comp.indexOf('League One') > 0) {
-            comp = "League"
-        } else if(comp.indexOf('League Two') > 0) {
-            comp = "League"
-        } else if(comp.indexOf('Football League Trophy') > 0) {
-            comp = "FL Trophy"
-        } else if(comp.indexOf('National League') > 0) {
-            comp = "Conference"
-        } else if(comp.indexOf('Play') > 0) {
-            comp = "Play Offs"
-        } else if(comp.indexOf('FA Trophy') > 0) {
-            comp = "FA Trophy"
-        } else if(comp.indexOf('Football League Div 1') > 0) {
-            comp = "League"
-        } else if(comp.indexOf('Football League Div 2') > 0) {
-            comp = "League"
-        } else if(comp.indexOf('Capital One Cup') > 0) {
-            comp = "League Cup"
-        } else if(comp.indexOf('Carling Cup') > 0) {
-            comp = "League Cup"
-        } else if(comp.indexOf('JP Trophy') > 0) {
-            comp = "FL Trophy"
-        } else if(comp.indexOf('EFL Trophy') > 0) {
-            comp = "FL Trophy"
-        }
-    
-        var match : Match = {
-            scrape_id : $(el).attr('id')!.replace('tgc',''),
-            id: uuidv4(),
-            date: dateMatch![0],
-            competition: comp,
-            programme: "#N/A",
-            pens: ""
-        };
-        games.push(match);
-      });
-    
-      return games;
-    }
-
-    extractSquadFromHTML(html: string, date: string, competition:string, season:string): {apps: Array<Appearance>, goals: Array<Goal>} {
-      const $ = load(html);
-    
-      const homeTeam = $('span.teamA').text().trim().replace(/\s\d+/, '');
-      const awayTeam = $('span.teamB').text().trim().replace(/\d+\s/, '');
-    
-      const scorersItems = awayTeam == "Tranmere" ? $('div.goalscorers div.teamB span') : $('div.goalscorers div.teamA span');
-    
-      const rows = awayTeam == "Tranmere" ? $('.teamB tr') : $('.teamA tr');
-      var goals : Array<Goal> = [];
-      scorersItems.each((i, el) => {
-        var minRegex = /[\w\s-]+/g;
-        var timeRegex = /\d+/g;
-        var text = $(el).text();
-        var minute : RegExpMatchArray = text.match(timeRegex)!;
-    
-        for(var i=0; i < minute.length; i ++) {
-            var goal : Goal = {
-                id: uuidv4(),
-                Date: date,
-                Opposition: awayTeam == "Tranmere" ? homeTeam : awayTeam,
-                Season: season,
-                Scorer: translatePlayerName(text.match(minRegex)![0]),
-                //Assist: null,
-                GoalType: '',
-                //AssistType: null,
-                Minute: minute[i],
-            }
-            console.log("Opp:" + goal.Opposition);
-            goal.Opposition = translateTeamName(goal.Opposition);
-    
-            if(text.indexOf('(pen') > 0)
-                goal.GoalType = "Penalty"
-    
-            if(text.indexOf('(og') > 0)
-                goal.Scorer = "Own Goal"
-    
-            if(text.indexOf('s/o') == -1)
-                goals.push(goal);
-        }
-      });
-    
-    
-      const apps: Array<Appearance> = [];
-      rows.each((i, el) => {
-    
-        // Extract information from each row of the jobs table
-        if(i != 0 &&  i != 12 ) {
-    
-            var playerIndex = awayTeam == "Tranmere" ? 3 : 0;
-            var numberIndex = awayTeam == "Tranmere" ? 1 : 2;
-            var cardIndex = awayTeam == "Tranmere" ? 0 : 3;
-    
-            const regex = /\s+\(\d+\)/g;
-            const minRegex = /\d+/g
-            var originalText = $($(el).find("td")[playerIndex]).text()
-            var text = originalText.replace(regex, '')
-    
-            var yellowCard = $($(el).find("td")[cardIndex]).children().first() ? $($(el).find("td")[cardIndex]).children().first().attr('title') : null;
-            var yellow : string | null = null;
-            var red : string | null = null;
-    
-            if(yellowCard && yellowCard.indexOf('ellow') > -1) {
-                yellow = 'TRUE'
-            }
-            if(yellowCard && yellowCard.indexOf('Red') > -1) {
-                red = 'TRUE'
-            }
-    
-            const sub = originalText.match(minRegex);
-            var subMin;
-            if(sub && !red) {            
-                subMin = sub[0];
-            }
-            var app : Appearance = {
-                id: uuidv4(),
-                Date: date,
-                Opposition: awayTeam == "Tranmere" ? homeTeam : awayTeam,
-                Competition:  competition,
-                Season: season,
-                Name: translatePlayerName(text),
-                Number: $($(el).find("td")[numberIndex]).text(),
-                SubbedBy: null,
-                SubTime: subMin,
-                YellowCard: yellow,
-                RedCard: red,
-                SubYellow: null,
-                SubRed: null
-            }
-    
-            app.Opposition = translateTeamName(app.Opposition);
-    
-            if(app.Number == "N/A")
-                app.Number = null;
-    
-            if(i < 12)
-                apps.push(app);
-            else if(subMin) {
-                for(var y=0; y < apps.length; y++) {
-                    if(apps[y].SubTime == subMin && !apps[y].SubbedBy) {
-                       var subName = text.replace(/\(.*\)\s/, '');
-                       apps[y].SubbedBy = translatePlayerName(subName);
-                       apps[y].SubYellow = yellow;
-                       apps[y].SubRed= red;
-                       break;
-                    }
-                }
-            }
-        }
-      });
-    
-      return {goals: goals, apps: apps};
-    }
-
-    extractExtraFromHTML(html : string, season : string, match : Match) : any {
-      const $ = load(html);
-    
-      const homeTeam = $('span.teamA').text().trim().replace(/\s\d+/, '');
-      const homeScore = $('span.teamA em').text().trim().replace(/\s\d+/, '');
-      const awayTeam = $('span.teamB').text().trim().replace(/\d+\s/, '');
-      const awayScore = $('span.teamB em').text().trim().replace(/\s\d+/, '');
-    
-      match.home = homeTeam == "Tranmere" ? "Tranmere Rovers" : homeTeam;
-      match.visitor = awayTeam == "Tranmere" ? "Tranmere Rovers" : awayTeam;
-      match.opposition = awayTeam == "Tranmere" ? homeTeam : awayTeam;
-    
-      match.home = translateTeamName(match.home);
-      match.visitor = translateTeamName(match.visitor);
-      match.opposition = translateTeamName(match.opposition);
-    
-      match.venue = homeTeam == "Tranmere" ? "Prenton Park" : "Unknown";
-      match.static = "static";
-      match.season = season;
-      match.hgoal = homeScore;
-      match.vgoal = awayScore;
-      match.ft = homeScore + '-' +awayScore
-    
-      return match;
     }
 
     sendResponse(code: number, obj: any): APIGatewayProxyResult {
@@ -554,4 +351,43 @@ export class TranmereWebUtils  {
       var result = await dynamo.query(params).promise();
       return result.Items!.map(a => a as Appearance);
   };
+
+  getCompetition(comp: string) : string {
+    if(comp.indexOf('EFL Cup') > 0) {
+      comp = "League Cup"
+    } else if(comp.indexOf('League Cup') > 0) {
+        comp = "League Cup"
+    } else if(comp.indexOf('FA Cup') > 0) {
+        comp = "FA Cup"
+    } else if(comp.indexOf('League One') > 0) {
+        comp = "League"
+      } else if(comp.indexOf('League 1') > 0) {
+        comp = "League"        
+    } else if(comp.indexOf('League Two') > 0) {
+        comp = "League"
+      } else if(comp.indexOf('League 2') > 0) {
+        comp = "League"        
+    } else if(comp.indexOf('Football League Trophy') > 0) {
+        comp = "FL Trophy"
+    } else if(comp.indexOf('National League') > 0) {
+        comp = "Conference"
+    } else if(comp.indexOf('Play') > 0) {
+        comp = "Play Offs"
+    } else if(comp.indexOf('FA Trophy') > 0) {
+        comp = "FA Trophy"
+    } else if(comp.indexOf('Football League Div 1') > 0) {
+        comp = "League"
+    } else if(comp.indexOf('Football League Div 2') > 0) {
+        comp = "League"
+    } else if(comp.indexOf('Capital One Cup') > 0) {
+        comp = "League Cup"
+    } else if(comp.indexOf('Carling Cup') > 0) {
+        comp = "League Cup"
+    } else if(comp.indexOf('JP Trophy') > 0) {
+        comp = "FL Trophy"
+    } else if(comp.indexOf('EFL Trophy') > 0) {
+        comp = "FL Trophy"
+    }
+    return comp;
+  }
 }
