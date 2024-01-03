@@ -1,11 +1,12 @@
 import { APIGatewayEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
 import { TranmereWebUtils, DataTables } from '../lib/tranmere-web-utils';
-import {DynamoDB} from 'aws-sdk';
+import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
+import { DynamoDB } from "@aws-sdk/client-dynamodb";
 import { createClient } from "contentful";
 import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
 import {IBlogPost} from '../lib/contentful'
 let utils = new TranmereWebUtils();
-const dynamo = new DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
+const dynamo = DynamoDBDocument.from(new DynamoDB({apiVersion: '2012-08-10'}));
 
 const client = createClient({
   space: process.env.CF_SPACE!,
@@ -23,19 +24,18 @@ exports.handler = async (event : APIGatewayEvent, context: Context): Promise<API
         let players = await utils.findAllPlayers();
         let random = Math.floor(Math.random() * (players.length-1));
         let randomplayer = players[random];
-        var debutSearch = await dynamo.query(
-            {
-                TableName: DataTables.APPS_TABLE_NAME,
-                KeyConditionExpression: "#name = :name",
-                IndexName: "ByPlayerIndex",
-                ExpressionAttributeNames:{
-                    "#name": "Name"
-                },
-                ExpressionAttributeValues: {
-                    ":name": decodeURIComponent(randomplayer.name),
-                },
-                Limit : 1
-            }).promise();
+        var debutSearch = await dynamo.query({
+            TableName: DataTables.APPS_TABLE_NAME,
+            KeyConditionExpression: "#name = :name",
+            IndexName: "ByPlayerIndex",
+            ExpressionAttributeNames:{
+                "#name": "Name"
+            },
+            ExpressionAttributeValues: {
+                ":name": decodeURIComponent(randomplayer.name),
+            },
+            Limit : 1
+        });
 
         var apps_query = await dynamo.query({
             TableName: DataTables.SUMMARY_TABLE_NAME,
@@ -44,7 +44,7 @@ exports.handler = async (event : APIGatewayEvent, context: Context): Promise<API
             ExpressionAttributeValues: {
                 ":player" : randomplayer.name
             }
-        }).promise();
+        });
 
         view = {
             title: "Home",
@@ -61,46 +61,43 @@ exports.handler = async (event : APIGatewayEvent, context: Context): Promise<API
         };
     } else if(pageName === "player") {
         var playerName = classifier!;
-        var playerSearch = await dynamo.query(
-            {
-                TableName: DataTables.PLAYER_TABLE_NAME,
-                KeyConditionExpression: "#name = :name",
-                ExpressionAttributeNames:{
-                    "#name": "name"
-                },
-                ExpressionAttributeValues: {
-                    ":name": decodeURIComponent(playerName),
-                },
-                IndexName: "ByNameIndex",
-                Limit : 1
-            }).promise();
+        var playerSearch = await dynamo.query({
+            TableName: DataTables.PLAYER_TABLE_NAME,
+            KeyConditionExpression: "#name = :name",
+            ExpressionAttributeNames:{
+                "#name": "name"
+            },
+            ExpressionAttributeValues: {
+                ":name": decodeURIComponent(playerName),
+            },
+            IndexName: "ByNameIndex",
+            Limit : 1
+        });
 
-        var debutSearch = await dynamo.query(
-            {
-                TableName: DataTables.APPS_TABLE_NAME,
-                KeyConditionExpression: "#name = :name",
-                IndexName: "ByPlayerIndex",
-                ExpressionAttributeNames:{
-                    "#name": "Name"
-                },
-                ExpressionAttributeValues: {
-                    ":name": decodeURIComponent(playerName),
-                },
-                Limit : 1
-            }).promise();
+        var debutSearch = await dynamo.query({
+            TableName: DataTables.APPS_TABLE_NAME,
+            KeyConditionExpression: "#name = :name",
+            IndexName: "ByPlayerIndex",
+            ExpressionAttributeNames:{
+                "#name": "Name"
+            },
+            ExpressionAttributeValues: {
+                ":name": decodeURIComponent(playerName),
+            },
+            Limit : 1
+        });
 
-        var summarySearch = await dynamo.query(
-            {
-                TableName: DataTables.SUMMARY_TABLE_NAME,
-                KeyConditionExpression: "#player = :player",
-                IndexName: "ByPlayerIndex",
-                ExpressionAttributeNames:{
-                    "#player": "Player"
-                },
-                ExpressionAttributeValues: {
-                    ":player": decodeURIComponent(playerName),
-                }
-            }).promise();
+        var summarySearch = await dynamo.query({
+            TableName: DataTables.SUMMARY_TABLE_NAME,
+            KeyConditionExpression: "#player = :player",
+            IndexName: "ByPlayerIndex",
+            ExpressionAttributeNames:{
+                "#player": "Player"
+            },
+            ExpressionAttributeValues: {
+                ":player": decodeURIComponent(playerName),
+            }
+        });
         
         var transfers = await dynamo.query({
             TableName : DataTables.TRANSFER_TABLE,
@@ -112,7 +109,7 @@ exports.handler = async (event : APIGatewayEvent, context: Context): Promise<API
             ExpressionAttributeValues: {
                 ":name" : decodeURIComponent(playerName)
             }
-        }).promise();
+        });
 
         var amendedTansfers : Array<any> = [];
         for(var i=0; i < transfers.Items!.length; i++) {
@@ -132,7 +129,7 @@ exports.handler = async (event : APIGatewayEvent, context: Context): Promise<API
             ExpressionAttributeValues: {
                 ":name" : decodeURIComponent(playerName)
             }
-        }).promise();
+        });
 
         var pl = playerSearch.Items!.length == 1 ? playerSearch.Items![0] : null 
 

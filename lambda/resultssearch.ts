@@ -1,9 +1,10 @@
 import { APIGatewayEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
 import { TranmereWebUtils, DataTables, ProgrammeImage } from '../lib/tranmere-web-utils';
-import {DynamoDB} from 'aws-sdk';
+import { DynamoDBDocument, QueryCommandInput } from "@aws-sdk/lib-dynamodb";
+import { DynamoDB } from "@aws-sdk/client-dynamodb";
 let utils = new TranmereWebUtils();
 
-const dynamo = new DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
+const dynamo = DynamoDBDocument.from(new DynamoDB({apiVersion: '2012-08-10'}));
 
 exports.handler = async (event : APIGatewayEvent, context: Context): Promise<APIGatewayProxyResult> =>{
 
@@ -122,7 +123,7 @@ exports.handler = async (event : APIGatewayEvent, context: Context): Promise<API
 async function getResults(season, competition, opposition, date, manager, venue, pens, sort, or) {
 
     var query = false;
-    var params : DynamoDB.DocumentClient.QueryInput = {
+    var params : QueryCommandInput = {
         TableName : DataTables.RESULTS_TABLE,
         ExpressionAttributeValues: {},
         ExpressionAttributeNames: {}
@@ -220,15 +221,15 @@ async function getResults(season, competition, opposition, date, manager, venue,
     if(!Object.keys(params.ExpressionAttributeNames!).length)
         delete params.ExpressionAttributeNames;
 
-    var result = query ? await dynamo.query(params).promise() : await dynamo.scan(params).promise();
+    var result = query ? await dynamo.query(params) : await dynamo.scan(params);
     var items = result.Items;
     if (typeof result.LastEvaluatedKey != "undefined" && !or) {
         params.ExclusiveStartKey = result.LastEvaluatedKey;
-        var nextResults =  query ? await dynamo.query(params).promise() : await dynamo.scan(params).promise();
+        var nextResults =  query ? await dynamo.query(params) : await dynamo.scan(params);
         items = items!.concat(nextResults.Items!);
     }
     return items;
-};
+}
 
 function buildQuery(query, attribute, attributeName) {
     query.FilterExpression = query.FilterExpression ? query.FilterExpression + ` and ${attributeName} = :${attributeName}` : `${attributeName} = :${attributeName}`;

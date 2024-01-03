@@ -3,9 +3,10 @@ import fs from 'fs';
 import Mustache from 'mustache';
 import path from 'path';
 import { APIGatewayProxyResult } from 'aws-lambda';
-import {DynamoDB} from 'aws-sdk';
+import { DynamoDBDocument, QueryCommandInput } from "@aws-sdk/lib-dynamodb";
+import { DynamoDB } from "@aws-sdk/client-dynamodb";
 import { ContentfulClientApi, EntryCollection } from "contentful";
-const dynamo = new DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
+const dynamo = DynamoDBDocument.from(new DynamoDB({apiVersion: '2012-08-10'}));
 import { Goal, Player, Team, Competition, Manager, HatTrick, ImageEdits, Appearance, Match, Report} from './tranmere-web-types'
 import {IBlogPost, IPageMetaData} from './contentful'
 
@@ -239,7 +240,7 @@ export class TranmereWebUtils  {
             ":season": season
         }
       };
-      var result = await dynamo.query(params).promise();
+      var result = await dynamo.query(params);
       return result.Items!.map(m => m as Match);
     }
 
@@ -254,7 +255,7 @@ export class TranmereWebUtils  {
           },
           ExpressionAttributeNames: { "#date": "date" }
       }      
-      var result = await dynamo.query(params).promise();
+      var result = await dynamo.query(params);
       
       return result.Items && result.Items[0] ? result.Items[0] as Match : null;
     };
@@ -269,7 +270,7 @@ export class TranmereWebUtils  {
           },
           ExpressionAttributeNames: { "#day": "day" }
       }      
-      var result = await dynamo.query(params).promise();
+      var result = await dynamo.query(params);
       
       return result.Items && result.Items[0] ? result.Items[0] as Report : null;
     };
@@ -279,7 +280,7 @@ export class TranmereWebUtils  {
         TableName: type,
         Item: item
       };
-      return await dynamo.put(params).promise();
+      return await dynamo.put(params);
     }
 
     async deleteItem(id, type){
@@ -290,11 +291,11 @@ export class TranmereWebUtils  {
                 "id": id
             },
       };
-      return await dynamo.delete(params).promise();
+      return await dynamo.delete(params);
     }
 
     async getAllPlayersFromDb() : Promise<Array<Player>> {
-      var squadSearch = await dynamo.scan({TableName: DataTables.PLAYER_TABLE_NAME}).promise();
+      var squadSearch = await dynamo.scan({TableName: DataTables.PLAYER_TABLE_NAME});
       return squadSearch.Items!.map(p => p as Player);
     }
 
@@ -310,12 +311,12 @@ export class TranmereWebUtils  {
               ":season" : decodeURIComponent(season)
           }
       }
-      var result = await dynamo.query(params).promise();
+      var result = await dynamo.query(params);
       return result.Items![0] as Goal;
     };
 
     async getGoalsBySeason(season: number, date?: string, ) : Promise<Array<Goal>> {
-      var params : DynamoDB.DocumentClient.QueryInput = {
+      var params : QueryCommandInput = {
           TableName : DataTables.GOALS_TABLE_NAME,
           KeyConditionExpression :  "Season = :season",
           ExpressionAttributeValues: {
@@ -329,12 +330,12 @@ export class TranmereWebUtils  {
         params.ExpressionAttributeValues![":date"] = decodeURIComponent(date);
       }
   
-      var result = await dynamo.query(params).promise();
+      var result = await dynamo.query(params);
       return result.Items!.map(g => g as Goal);
   };
 
   async getAppsBySeason(season: number, date?: string) : Promise<Array<Appearance>> {  
-      var params  : DynamoDB.DocumentClient.QueryInput = {
+      var params  : QueryCommandInput = {
           TableName : DataTables.APPS_TABLE_NAME,
           KeyConditionExpression :  "Season = :season",
           ExpressionAttributeValues: {
@@ -348,7 +349,7 @@ export class TranmereWebUtils  {
         params.ExpressionAttributeValues![":date"] = decodeURIComponent(date);
       }
   
-      var result = await dynamo.query(params).promise();
+      var result = await dynamo.query(params);
       return result.Items!.map(a => a as Appearance);
   };
 }

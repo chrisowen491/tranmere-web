@@ -19,7 +19,7 @@ Dynamic elements are powered using a combination of AWS Lambda, AppSync, DynamoD
 ### Prerequisites
 
  * Scripts are designed for Linux/Mac
- * Node v16+, NPM
+ * Node v18+, NPM
 
 ### Install
 
@@ -60,9 +60,6 @@ export ENVIRONMENT=local
 export EMAIL_ADDRESS=
 export CF_SPACE=
 export CF_KEY=
-export SCRAPE_ID=
-export SCRAPE_SEASON=
-export SCRAPE_ID=
 export VERSION=1.0.0
 ```
 
@@ -86,9 +83,6 @@ export ENVIRONMENT=local
 export EMAIL_ADDRESS=
 export CF_SPACE=
 export CF_KEY=
-export SCRAPE_ID=
-export SCRAPE_SEASON=
-export SCRAPE_ID=
 export DD_KEY=
 export VERSION=1.0.0
 ```

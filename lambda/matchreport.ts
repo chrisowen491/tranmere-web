@@ -4,10 +4,11 @@ import { MatchEvent, Match, Appearance, Goal } from '../lib/tranmere-web-types';
 import {translateTeamName, translatePlayerName, translateCompetition} from '../lib/tranmere-web-mappers'
 import axios from 'axios';
 import { ChatPromptTemplate } from "@langchain/core/prompts";
-import { DynamoDB } from 'aws-sdk';
+import { DynamoDBDocument, UpdateCommand } from "@aws-sdk/lib-dynamodb";
+import { DynamoDB } from "@aws-sdk/client-dynamodb";
 import moment from 'moment'
 let utils = new TranmereWebUtils();
-const dynamo = new DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
+const dynamo = DynamoDBDocument.from(new DynamoDB({apiVersion: '2012-08-10'}));
 import { ChatOpenAI } from "langchain/chat_models/openai";
 import { PromptTemplate } from "langchain/prompts";
 import { RunnableSequence } from "@langchain/core/runnables";
@@ -139,7 +140,7 @@ exports.handler = async (event : APIGatewayEvent, context: Context): Promise<API
     
     const output = response.content.toString().replace(/\n/g, "<br />")
 
-    const params = {
+    const params = new UpdateCommand({
         TableName: DataTables.REPORT_TABLE,
         Key:{
             "day": day
@@ -149,8 +150,8 @@ exports.handler = async (event : APIGatewayEvent, context: Context): Promise<API
             ":r": output,
         },
         ReturnValues:"UPDATED_NEW"
-    };
-    await dynamo.update(params).promise();
+    });
+    await dynamo.send(params);
 
     const parser = StructuredOutputParser.fromZodSchema(
         z.object({

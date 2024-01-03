@@ -1,8 +1,9 @@
 import { APIGatewayEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
 import { TranmereWebUtils, DataTables } from '../lib/tranmere-web-utils';
-import {DynamoDB} from 'aws-sdk';
+import { DynamoDBDocument, QueryCommandInput } from "@aws-sdk/lib-dynamodb";
+import { DynamoDB } from "@aws-sdk/client-dynamodb";
 let utils = new TranmereWebUtils();
-const dynamo = new DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
+const dynamo = DynamoDBDocument.from(new DynamoDB({apiVersion: '2012-08-10'}));
 
 exports.handler = async (event : APIGatewayEvent, context: Context): Promise<APIGatewayProxyResult> =>{
 
@@ -10,7 +11,7 @@ exports.handler = async (event : APIGatewayEvent, context: Context): Promise<API
     var filter = event.queryStringParameters ? event.queryStringParameters.filter : null;
     var club = event.queryStringParameters ? event.queryStringParameters.club : null;
 
-    var query : DynamoDB.DocumentClient.QueryInput = {
+    var query : QueryCommandInput = {
         TableName: DataTables.TRANSFER_TABLE,
         IndexName: "ByValueIndex",
         ScanIndexForward: false,
@@ -55,7 +56,7 @@ exports.handler = async (event : APIGatewayEvent, context: Context): Promise<API
         }
     }
 
-    var result = season ? await dynamo.query(query).promise() : await dynamo.scan(query).promise();
+    var result = season ? await dynamo.query(query) : await dynamo.scan(query);
     var results = result.Items;
     var amendedResults : Array<any> = [];
     for(var i=0; i < results!.length; i++) {

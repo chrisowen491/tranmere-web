@@ -3,7 +3,7 @@ const SENDER = 'admin@tranmere-web.com';
 
 import { APIGatewayEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
 import { TranmereWebUtils } from '../lib/tranmere-web-utils';
-import { SES } from 'aws-sdk';
+import { SES } from '@aws-sdk/client-ses';
 const ses = new SES();
 let utils = new TranmereWebUtils();
 

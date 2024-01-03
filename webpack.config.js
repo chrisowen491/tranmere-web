@@ -9,6 +9,7 @@ const { TRUE } = require('sass');
 
 let config = {
 
+  mode: 'production',
   entry: {
     // Auto-detect all pages in directory.
     'tranmere-web': glob.sync(__dirname + '/tranmere-web/assets/js/*.js'),

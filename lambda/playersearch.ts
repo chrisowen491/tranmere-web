@@ -1,12 +1,13 @@
 import { APIGatewayEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
 import { TranmereWebUtils, DataTables } from '../lib/tranmere-web-utils';
-import {DynamoDB} from 'aws-sdk';
+import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
+import { DynamoDB } from "@aws-sdk/client-dynamodb";
 let utils = new TranmereWebUtils();
-const dynamo = new DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
+const dynamo = DynamoDBDocument.from(new DynamoDB({apiVersion: '2012-08-10'}));
 
 exports.handler = async (event : APIGatewayEvent, context: Context): Promise<APIGatewayProxyResult> =>{
 
-    let squadSearch = await dynamo.scan({TableName: DataTables.PLAYER_TABLE_NAME}).promise();
+    let squadSearch = await dynamo.scan({TableName: DataTables.PLAYER_TABLE_NAME});
     var playerHash : any = {};
     for(var i=0; i < squadSearch.Items!.length; i++) {
         playerHash[squadSearch.Items![i].name] = squadSearch.Items![i];
@@ -36,7 +37,7 @@ exports.handler = async (event : APIGatewayEvent, context: Context): Promise<API
                 }
             };
 
-    var result = await dynamo.query(query).promise();
+    var result = await dynamo.query(query);
     var results = result.Items!;
 
     for(var x=0; x < results.length; x++ ) {
