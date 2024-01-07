@@ -1,6 +1,6 @@
 {
   "name": "tranmere-web",
-  "version": "3.0.144",
+  "version": "3.0.145",
   "description": "",
   "bin": {
     "tranmere-web": "bin/tranmere-web.js"
@@ -16,7 +16,7 @@
     "cdk": "cdk",
     "local-api": "cdk synth && sam local start-api -t ./cdk.out/TranmereWebStack.template.json",
     "scraper": "cdk synth && sam local invoke -t ./cdk.out/TranmereWebStack.template.json ScraperJobFunction4A8DAC15",
-    "synth": "cdk synth --quiet", 
+    "synth": "cdk synth --quiet",
     "acceptance-test": "newman run ./api_tests/postman-collection.json -e ./api_tests/env/aws-prod.json --env-var 'testApiKey=123'",
     "local-acceptance-test": "newman run ./api_tests/postman-collection.json -e ./api_tests/env/sam-local.json",
     "contentful-typescript-codegen": "contentful-typescript-codegen --output types/generated/contentful.d.ts"
