@@ -48,7 +48,7 @@ export class SiteBuilder  {
       return pageHTML;
     }
 
-    async buildSite(client: contentful.ContentfulClientApi, name: string, 
+    async buildSite(client: contentful.ContentfulClientApi<undefined>, name: string, 
       version: string, compilation: any, index: boolean, search_index: any) {
 
       let blogs = await utils.getBlogs(client);

@@ -156,7 +156,7 @@ exports.handler = async (event : APIGatewayEvent, context: Context): Promise<API
     } else if(pageName === "tag") {
         
         var tagId = decodeURIComponent(classifier!);
-        var items = await client.getEntries({'fields.tags': tagId, 'content_type': 'blogPost', order: '-sys.createdAt'});
+        var items = await client.getEntries({'fields.tags': tagId, 'content_type': 'blogPost', order: ['-sys.createdAt']});
         
         view = {
             items: items.items,
@@ -201,11 +201,11 @@ exports.handler = async (event : APIGatewayEvent, context: Context): Promise<API
         }
 
         if(view.galleryTag) {    
-            var pictures = await client.getAssets({'metadata.tags.sys.id[in]': view.galleryTag, order: 'sys.createdAt'});
+            var pictures = await client.getAssets({'metadata.tags.sys.id[in]': view.galleryTag, order: ['sys.createdAt']});
             for(var i=0; i < pictures.items.length; i++) {
                view.carousel.push({
-                imagePath: pictures.items[i].fields.file.url,
-                linkPath: pictures.items[i].fields.file.url,
+                imagePath: pictures.items[i].fields.file!.url,
+                linkPath: pictures.items[i].fields.file!.url,
                 name: pictures.items[i].fields.title,
                 description: pictures.items[i].fields.title
             });

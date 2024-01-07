@@ -37,6 +37,7 @@ export interface IBlogPostFields {
 /** A blog post on the site */
 
 export interface IBlogPost extends Entry<IBlogPostFields> {
+  contentTypeId: string;
   sys: {
     id: string;
     type: string;
@@ -65,6 +66,7 @@ export interface ICustomerFields {
 }
 
 export interface ICustomer extends Entry<ICustomerFields> {
+  contentTypeId: string;
   sys: {
     id: string;
     type: string;
@@ -186,6 +188,7 @@ export interface IPageMetaDataFields {
 }
 
 export interface IPageMetaData extends Entry<IPageMetaDataFields> {
+  contentTypeId: string;
   sys: {
     id: string;
     type: string;

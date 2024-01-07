@@ -4,9 +4,8 @@ const pack = require('../../../package.json');
 
 jQuery(function () {
     if ($('#lastmatch').length) {
-        console.log('hey')
-        var base = "";
-        var url = base + '/result-search/?season=2023&competition=&opposition=&manager=&venue=&pens=&sort=Date';
+        var dateobj = new Date();
+        var url = '/result-search/?season=2023&competition=&opposition=&manager=&venue=&pens=&sort=Date'+ '&c=' + dateobj.getDate();
         $.getJSON(url, function(response) {
             if(response && response.results) {
                 var idx = response.results.length;

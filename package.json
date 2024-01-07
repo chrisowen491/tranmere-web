@@ -79,7 +79,7 @@
     "bootstrap-select": "^1.13.2",
     "ci": "^2.2.0",
     "constructs": "^10.2.21",
-    "contentful": "^9.3.5",
+    "contentful": "^10.6.15",
     "contentful-management": "^11.0.0",
     "csvtojson": "^2.0.10",
     "jquery": "^3.6.4",
