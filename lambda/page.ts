@@ -25,11 +25,6 @@ exports.handler = async (event : APIGatewayEvent, context: Context): Promise<API
         let random = Math.floor(Math.random() * (players.length-1));
         let randomplayer = players[random];
 
-        while (!randomplayer.picLink || randomplayer.picLink === '' || randomplayer.picLink === 'https://www.tranmere-web.com/builder/2022/simple/cccccc/none/cccccc/cccccc/none/cccccc') {
-            random = Math.floor(Math.random() * (players.length-1));
-            randomplayer = players[random];
-        }
-        console.log(JSON.stringify(randomplayer))
         var debutSearch = await dynamo.query({
             TableName: DataTables.APPS_TABLE_NAME,
             KeyConditionExpression: "#name = :name",
@@ -52,6 +47,27 @@ exports.handler = async (event : APIGatewayEvent, context: Context): Promise<API
                 ":season" : 'TOTAL',
             }
         });
+        var seasonMapping = {
+            "1978": 1977,
+            "1984": 1983,
+            "1990": 1989,
+            "1992": 1991,
+            "1994": 1993,
+            "1996": 1995,
+            "1998": 1997,
+            "2001": 2000,
+            "2003": 2002,
+            "2005": 2006,
+            "2008": 2007
+        }
+        var re = /\/\d\d\d\d\//gm;
+        var re3 = /\/\d\d\d\d[A-Za-z]\//gm;
+        let season = debutSearch.Items![0].Season;
+        if(seasonMapping[season])
+            season = seasonMapping[season]
+
+        randomplayer.picLink = randomplayer.picLink!.replace(re, '/'+season+'/')
+        randomplayer.picLink = randomplayer.picLink!.replace(re3, '/'+season+'/')
 
         view = {
             title: "Home",
