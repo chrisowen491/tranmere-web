@@ -13,7 +13,6 @@ function draw() {
     $("#builder").html(article);
   });
 }
-
 jQuery(function () {
   if ($('#builder').length) {
     draw();
