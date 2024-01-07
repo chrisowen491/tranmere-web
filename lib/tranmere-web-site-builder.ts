@@ -23,15 +23,17 @@ export class SiteBuilder  {
     buildSitemapEntry(page: string) : SiteMapEntry {
       var m = new Date();
       var dateString = m.getUTCFullYear() +"-"+ this.pad(m.getUTCMonth()+1,2) +"-"+this.pad(m.getUTCDate(),2);
+      var url = page.replace(/&/g, '&amp;');
+      url = page.replace('.html', '/');
       return {
-          url: page.replace(/&/g, '&amp;'),
+          url: url,
           date: dateString,
           priority: 0.5,
           changes: "monthly"
       };
     };
     buildPageView (view: any, pageTpl: string, path: string, noindex: boolean) : string {
-      view.url = path;
+      view.url = path.replace('.html', '/');
       view.random = Math.ceil(Math.random() * 100000);
 
       if(view.carousel) {
@@ -112,7 +114,7 @@ export class SiteBuilder  {
         if(index) {
           var pageMeta : BaseEntity = {
             objectID: "Page-" + page.key!.toLowerCase(),
-            link: `https://www.tranmere-web.com/${fileName}.html`,
+            link: `https://www.tranmere-web.com/${fileName}`,
             name: page.description,
             meta: page.name,
             description: "Blog Page",
@@ -124,10 +126,10 @@ export class SiteBuilder  {
   
       if(index) {
         for(var i = 0; i < seasons.length; i++) {
-          this.addSiteMapEntry("/results.html?season="+seasons[i]);
+          this.addSiteMapEntry("/results?season="+seasons[i]);
           var seasonResults: BaseEntity = {
               objectID: "Season-" + seasons[i],
-              link: "https://www.tranmere-web.com/results.html?season=" + seasons[i],
+              link: "https://www.tranmere-web.com/results?season=" + seasons[i],
               name: `Season ${seasons[i]}/${seasons[i]+1}`,
               description: "Results Breakdown",
               picLink: "/assets/images/square_v1.png"
@@ -147,7 +149,7 @@ export class SiteBuilder  {
 
         for(var i=0; i< teams.length; i++) {
             teams[i].objectID = "Team-" + teams[i].name;
-            teams[i].link = "https://www.tranmere-web.com/results.html?opposition=" + teams[i].name;
+            teams[i].link = "https://www.tranmere-web.com/results?opposition=" + teams[i].name;
             teams[i].name = teams[i].name;
             teams[i].picLink = "/assets/images/square_v1.png";
             teams[i].description = "Results Breakdown";   
@@ -156,7 +158,7 @@ export class SiteBuilder  {
     
         for(var i=0; i< competitions.length; i++) {
             competitions[i].objectID = "Competition-" + competitions[i].name;
-            competitions[i].link = "https://www.tranmere-web.com/results.html?competition=" + competitions[i].name;
+            competitions[i].link = "https://www.tranmere-web.com/results?competition=" + competitions[i].name;
             competitions[i].name = competitions[i].name;
             competitions[i].picLink = "/assets/images/square_v1.png";
             competitions[i].description = "Results Breakdown"; 
