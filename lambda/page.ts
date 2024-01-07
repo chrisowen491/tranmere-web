@@ -24,6 +24,12 @@ exports.handler = async (event : APIGatewayEvent, context: Context): Promise<API
         let players = await utils.findAllPlayers();
         let random = Math.floor(Math.random() * (players.length-1));
         let randomplayer = players[random];
+
+        while (!randomplayer.picLink || randomplayer.picLink === '' || randomplayer.picLink === 'https://www.tranmere-web.com/builder/2022/simple/cccccc/none/cccccc/cccccc/none/cccccc') {
+            random = Math.floor(Math.random() * (players.length-1));
+            randomplayer = players[random];
+        }
+        console.log(JSON.stringify(randomplayer))
         var debutSearch = await dynamo.query({
             TableName: DataTables.APPS_TABLE_NAME,
             KeyConditionExpression: "#name = :name",
@@ -40,9 +46,10 @@ exports.handler = async (event : APIGatewayEvent, context: Context): Promise<API
         var apps_query = await dynamo.query({
             TableName: DataTables.SUMMARY_TABLE_NAME,
             IndexName: "ByPlayerIndex",
-            KeyConditionExpression :  "Player = :player",
+            KeyConditionExpression :  "Player = :player and Season = :season",
             ExpressionAttributeValues: {
-                ":player" : randomplayer.name
+                ":player" : randomplayer.name,
+                ":season" : 'TOTAL',
             }
         });
 

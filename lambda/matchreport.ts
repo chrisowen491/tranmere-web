@@ -46,7 +46,7 @@ exports.handler = async (event : APIGatewayEvent, context: Context): Promise<API
     }
 
     const reportId = fixtures.data.payload[0].body.matchData[0].tournamentDatesWithEvents[dateString][0].events[0].eventKey;
-    const competition =  fixtures.data.payload[0].body.matchData[0].tournamentMeta.tournamentName.first;
+    const competition =  translateCompetition(fixtures.data.payload[0].body.matchData[0].tournamentMeta.tournamentName.first);
     const venue = fixtures.data.payload[0].body.matchData[0].tournamentDatesWithEvents[dateString][0].events[0].venue.name.first;
     const hscore = fixtures.data.payload[0].body.matchData[0].tournamentDatesWithEvents[dateString][0].events[0].homeTeam.scores.score;
     const vscore = fixtures.data.payload[0].body.matchData[0].tournamentDatesWithEvents[dateString][0].events[0].awayTeam.scores.score;
@@ -72,7 +72,7 @@ exports.handler = async (event : APIGatewayEvent, context: Context): Promise<API
         hgoal: hscore,
         vgoal: vscore,
         ft: hscore + '-' + vscore,
-        competition: translateCompetition(competition)
+        competition: competition
     }
 
     if(fixtures.data.payload[0].body.matchData[0].tournamentDatesWithEvents[dateString][0].events[0].eventOutcomeType === 'shootout')
@@ -89,7 +89,7 @@ exports.handler = async (event : APIGatewayEvent, context: Context): Promise<API
                 id: uuidv4(),
                 Date: day!,
                 Opposition: theMatch.opposition!,
-                Competition:  translateCompetition(competition),
+                Competition:  competition,
                 Season: utils.getYear().toString(),
                 Name: translatePlayerName(element.name.full),
                 Number: element.meta.uniformNumber,
