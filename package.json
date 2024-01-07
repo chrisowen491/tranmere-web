@@ -67,7 +67,7 @@
     "@algolia/client-search": "^4.20.0",
     "@aws-sdk/client-dynamodb": "^3.484.0",
     "@aws-sdk/client-ses": "^3.484.0",
-    "@aws-sdk/lib-dynamodb": "^3.484.0",
+    "@aws-sdk/lib-dynamodb": "^3.485.0",
     "@contentful/rich-text-html-renderer": "^16.0.3",
     "@datadog/browser-logs": "^5.0.0",
     "@datadog/browser-rum": "^5.0.0",
