@@ -33,7 +33,7 @@ export class SiteBuilder  {
       };
     };
     buildPageView (view: any, pageTpl: string, path: string, noindex: boolean) : string {
-      view.url = path.replace('.html', '/');
+      view.url = path.replace('.html', '');
       view.random = Math.ceil(Math.random() * 100000);
 
       if(view.carousel) {

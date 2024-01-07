@@ -17,7 +17,6 @@ function submitToAPI() {
       alert ("Please enter an opposition");
       return;
   }
-
   var data = {
     Scorer : $("#scorer").val(),
     Date : $("#date").val(),
