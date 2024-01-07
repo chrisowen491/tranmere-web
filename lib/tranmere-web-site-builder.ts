@@ -24,7 +24,7 @@ export class SiteBuilder  {
       var m = new Date();
       var dateString = m.getUTCFullYear() +"-"+ this.pad(m.getUTCMonth()+1,2) +"-"+this.pad(m.getUTCDate(),2);
       var url = page.replace(/&/g, '&amp;');
-      url = page.replace('.html', '/');
+      url = page.replace('.html', '');
       return {
           url: url,
           date: dateString,
