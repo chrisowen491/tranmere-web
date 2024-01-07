@@ -8,8 +8,11 @@ export async function onRequest(context) {
   } = context;
   
   let url = new URL(request.url)  
-  url.host = "api.prod.tranmere-web.com"
+  url.host = env.API_DOMAIN
+  url.protocol = env.API_PROTOCOL
+  url.port = env.API_PORT
 
+  console.log(url)
   let new_request = new Request(url, request)
   new_request.headers.set("x-api-key", env.API_KEY)
   

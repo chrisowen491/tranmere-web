@@ -157,7 +157,7 @@ let config = {
         onEnd: [
           {
             copy: [
-              { source: __dirname + '/tranmere-web/favicon.ico', destination: __dirname + '/local.out/', options: {overwrite: true, nodir: true} },
+              { source: __dirname + '/tranmere-web/favicon.ico', destination: __dirname + '/web.out/', options: {overwrite: true, nodir: true} },
             ],
           },
         ],

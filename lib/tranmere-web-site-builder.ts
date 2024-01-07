@@ -165,6 +165,15 @@ export class SiteBuilder  {
             search_index.saveObject(competitions[i]);
         }
 
+        /*
+        const matches = utils.getAllGames();
+
+        compilation.emitAsset(
+          `matches-sitemap.xml`,
+          new webpack.sources.RawSource(this.buildPageView({urls:matches}, "./templates/matches-sitemap.tpl.xml", `/matches-sitemap.xml`, true))
+        );
+        */ 
+
         compilation.emitAsset(
           `sitemap.xml`,
           new webpack.sources.RawSource(this.buildPageView({urls:this.pages}, "./templates/sitemap.tpl.xml", `/sitemap.xml`, true))

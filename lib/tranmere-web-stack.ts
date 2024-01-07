@@ -13,6 +13,7 @@ const CF_SPACE : string = process.env.CF_SPACE!;
 const EMAIL_ADDRESS : string = process.env.EMAIL_ADDRESS!;
 const DD_TAGS : string = process.env.DD_TAGS!;
 const OPENAI_API_KEY : string = process.env.OPENAI_API_KEY!;
+const IS_WINDOWS : boolean = process.env.IS_WINDOWS ? true : false;
 
 export class TranmereWebStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -329,7 +330,12 @@ export class TranmereWebStack extends cdk.Stack {
           return [];
         },
         afterBundling(inputDir: string, outputDir: string): string[] {
-          return [`mkdir ${outputDir}/templates && cp -R ${inputDir}/templates/* ${outputDir}/templates`];
+          if(process.env.IS_WINDOWS) {
+            //return [];
+            return [`mkdir ${outputDir}\\templates && xcopy ${inputDir}\\templates\\*  ${outputDir}\\templates`];
+          } else {
+            return [`mkdir ${outputDir}/templates && cp -R ${inputDir}/templates/* ${outputDir}/templates`];
+          }
         },
         beforeInstall() {
           return [];
@@ -348,7 +354,13 @@ export class TranmereWebStack extends cdk.Stack {
           return [];
         },
         afterBundling(inputDir: string, outputDir: string): string[] {
-          return [`mkdir ${outputDir}/templates && cp -R ${inputDir}/templates/* ${outputDir}/templates`];
+          if(process.env.IS_WINDOWS) {
+            //return [];
+            return [`mkdir ${outputDir}\\templates && xcopy ${inputDir}\\templates\\* ${outputDir}\\templates /E`];
+          } else {
+            return [`mkdir ${outputDir}/templates && cp -R ${inputDir}/templates/* ${outputDir}/templates`];
+          }
+
         },
         beforeInstall() {
           return [];
@@ -366,7 +378,11 @@ export class TranmereWebStack extends cdk.Stack {
           return [];
         },
         afterBundling(inputDir: string, outputDir: string): string[] {
-          return [`mkdir ${outputDir}/assets && cp -R ${inputDir}/lambda/assets/* ${outputDir}/assets`];
+          if(process.env.IS_WINDOWS) {
+            return [`mkdir ${outputDir}\\assets && xcopy ${inputDir}\\lambda\\assets\\* ${outputDir}\\assets /E`];
+          } else {
+            return [`mkdir ${outputDir}/assets && cp -R ${inputDir}/lambda/assets/* ${outputDir}/assets`];
+          }
         },
         beforeInstall() {
           return [];

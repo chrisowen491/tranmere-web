@@ -11,11 +11,12 @@
   },
   "scripts": {
     "build": "tsc -b && webpack",
-    "start": "tsc -b && webpack serve --mode development --config webpack.development.config.js",
+    "start": "tsc -b && webpack && wrangler pages dev web.out --binding API_PORT=3000 --binding API_PROTOCOL=http --binding API_DOMAIN=127.0.0.1 ",
     "test": "jest",
     "cdk": "cdk",
     "local-api": "cdk synth && sam local start-api -t ./cdk.out/TranmereWebStack.template.json",
     "scraper": "cdk synth && sam local invoke -t ./cdk.out/TranmereWebStack.template.json ScraperJobFunction4A8DAC15",
+    "synth": "cdk synth --quiet", 
     "acceptance-test": "newman run ./api_tests/postman-collection.json -e ./api_tests/env/aws-prod.json --env-var 'testApiKey=123'",
     "local-acceptance-test": "newman run ./api_tests/postman-collection.json -e ./api_tests/env/sam-local.json",
     "contentful-typescript-codegen": "contentful-typescript-codegen --output types/generated/contentful.d.ts"
@@ -59,7 +60,8 @@
     "typescript": "~5.3.0",
     "webpack": "^5.76.3",
     "webpack-cli": "^5.0.1",
-    "webpack-dev-server": "^4.11.1"
+    "webpack-dev-server": "^4.11.1",
+    "wrangler": "^3.22.3"
   },
   "dependencies": {
     "@algolia/autocomplete-js": "^1.8.3",

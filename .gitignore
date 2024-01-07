@@ -34,3 +34,6 @@ template.yml
 .aws-sam
 
 npm-debug.log
+
+tmp
+.wrangler

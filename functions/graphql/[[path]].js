@@ -9,7 +9,8 @@ export async function onRequest(context) {
 
   let url = new URL(request.url)
   url.host = "api.prod.tranmere-web.com";
-
+  url.protocol = "https"
+  url.port = "443"
   let new_request = new Request(url, request)
   new_request.headers.set("x-api-key", "da2-upnumdu7inamne5prs2wsuxfnq")
 

@@ -206,6 +206,12 @@ export class TranmereWebUtils  {
       return results;
     }
 
+    async getAllGames() : Promise<Array<Match>> {
+      var result = await axios.get("https://api.prod.tranmere-web.com/result-search/?season=&competition=&opposition=&manager=&venue=Prenton Park&pens=&sort=Date", apiOptions);
+      var results: Array<Match> = result.data.results as Array<Match>;
+      return results;
+    }
+
     async getTopScorersBySeason() : Promise<Array<Player>> {
       var results: Array<Player> = [];
       
