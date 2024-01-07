@@ -1,6 +1,6 @@
 {
   "name": "tranmere-web",
-  "version": "3.0.140",
+  "version": "3.0.141",
   "description": "",
   "bin": {
     "tranmere-web": "bin/tranmere-web.js"
