@@ -305,6 +305,70 @@ export class TranmereWebUtils  {
       return squadSearch.Items!.map(p => p as Player);
     }
 
+    async getAppsByPlayer(Player) : Promise<Appearance[]> {
+      let apps : Appearance[] = [];
+      var params = {
+          TableName : DataTables.APPS_TABLE_NAME,
+          KeyConditionExpression :  "#Name = :name",
+          IndexName: "ByPlayerIndex",
+          ExpressionAttributeNames : {
+              "#Name" : "Name"
+          },
+          ExpressionAttributeValues: {
+              ":name" : Player,
+          }
+      }
+      var result = await dynamo.query(params);
+      let starts =  result.Items!.map(a => a as Appearance);
+      starts.forEach(a => {a.Type = "Start"; a.Goals = 0;});
+      
+      apps.push(...starts);
+
+      var sub_params = {
+        TableName : DataTables.APPS_TABLE_NAME,
+        KeyConditionExpression :  "#SubbedBy = :subbedBy",
+        IndexName: "BySubbedByindex",
+        ExpressionAttributeNames : {
+            "#SubbedBy" : "SubbedBy"
+        },
+        ExpressionAttributeValues: {
+            ":subbedBy" : Player,
+        }
+      }
+      var sub_result = await dynamo.query(sub_params);
+      let sub_apps =  sub_result.Items!.map(a => a as Appearance);
+      sub_apps.forEach(a => {a.Type = "Sub"; a.Goals = 0; a.SubbedBy = a.Name});
+
+      var goals_params = {
+        TableName : DataTables.GOALS_TABLE_NAME,
+        KeyConditionExpression :  "#Scorer = :scorer",
+        IndexName: "ByScorerIndex",
+        ExpressionAttributeNames : {
+            "#Scorer" : "Scorer"
+        },
+        ExpressionAttributeValues: {
+            ":scorer" : Player,
+        }
+      }
+      var goals_result = await dynamo.query(goals_params);
+      let goals =  goals_result.Items!.map(a => a as Goal);
+
+      
+      apps.push(...sub_apps);
+      apps.sort(function(a : Appearance, b : Appearance) {
+        if (a.Date < b.Date) return -1
+        if (a.Date > b.Date) return 1
+        return 0
+      });
+
+      goals.forEach(g => {
+        apps.find(a => a.Date == g.Date)!.Goals! ++;
+      });
+
+      return apps;
+    };
+
+    
     async getGoalsById(id, season) : Promise<Goal> {
       var params = {
           TableName : DataTables.GOALS_TABLE_NAME,

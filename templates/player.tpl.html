@@ -52,6 +52,9 @@
             <li class="nav-item">
                 <a class="nav-link" id="links-tab" data-toggle="tab" href="#links" role="tab" aria-controls="links" aria-selected="false">Links</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" id="apps-tab" data-toggle="tab" href="#apps" role="tab" aria-controls="apps" aria-selected="false">Apps</a>
+            </li>
         </ul>
         <div class="tab-content" id="myTabContent">
 
@@ -117,6 +120,34 @@
                 </table>
                 {{>link-form}}
             </div>
+            <div class="tab-pane fade" id="apps" role="tabpanel" aria-labelledby="apps-tab">
+                <table class="table table-striped boxed">
+                    <thead>
+                        <tr>
+                            <th>Season</th>
+                            <th>Competition</th>
+                            <th>Start/Sub</th>
+                            <th>Opposition</th>
+                            <th class="text-center">Goals</th>
+                            <th>Subbed By/For</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#appearances}}
+                        <tr>
+                            <td><a href="/results?season={{Season}}">{{Season}}</a></td>
+                            <td>{{Competition}}</td>
+                            <td>{{Type}}</td>
+                            <td><a href="/match/{{Season}}/{{Date}}">{{Opposition}} ({{Date}})</a></td>
+                            <td class="text-center">{{Goals}}</td>
+                            <td><a href="/page/player/{{SubbedBy}}">{{SubbedBy}}</a></td>
+                        </tr>
+                        {{/appearances}}
+                    </tbody>
+                </table>
+            </div>
+
+
         </div>
     </div>
 

@@ -188,6 +188,8 @@ export interface Appearance {
     SubYellow: string | null | undefined;
     SubRed: string | null | undefined;
     bio?: Player;
+    Type?: string;
+    Goals?: number;
 }
 
 export interface Transfer {

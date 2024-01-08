@@ -19,7 +19,8 @@ import { StructuredOutputParser } from "langchain/output_parsers";
 
 exports.handler = async (event : APIGatewayEvent, context: Context): Promise<APIGatewayProxyResult> =>{    
     
-    const day = event.pathParameters ? event.pathParameters!.day : moment(new Date()).format('YYYY-MM-DD');
+    const day = event.pathParameters ? event.pathParameters!.date : moment(new Date()).format('YYYY-MM-DD');
+    const season = event.pathParameters ? event.pathParameters!.season : utils.getYear().toString();
     const theDate = new Date(day!);
     const options = {
         headers: {
@@ -67,7 +68,7 @@ exports.handler = async (event : APIGatewayEvent, context: Context): Promise<API
         visitor: translateTeamName(lineups.data.payload[0].body.teams.awayTeam.name),
         opposition: lineups.data.payload[0].body.teams.homeTeam.name === "Tranmere Rovers" ? translateTeamName(lineups.data.payload[0].body.teams.awayTeam.name) : translateTeamName(lineups.data.payload[0].body.teams.homeTeam.name),
         static: "static",
-        season: utils.getYear().toString(),
+        season: season,
         venue: venue,
         hgoal: hscore,
         vgoal: vscore,
@@ -90,7 +91,7 @@ exports.handler = async (event : APIGatewayEvent, context: Context): Promise<API
                 Date: day!,
                 Opposition: theMatch.opposition!,
                 Competition:  competition,
-                Season: utils.getYear().toString(),
+                Season: season!,
                 Name: translatePlayerName(element.name.full),
                 Number: element.meta.uniformNumber,
                 SubbedBy: element.substitutions.length > 0 ? translatePlayerName(element.substitutions[0].replacedBy.name.full) : null,
@@ -100,6 +101,8 @@ exports.handler = async (event : APIGatewayEvent, context: Context): Promise<API
                 SubYellow: element.substitutions.length > 0 && element.substitutions[0].replacedBy.bookings.find((el) => el.type === "yellow-card") ? 'TRUE' : null,
                 SubRed: element.substitutions.length > 0 && element.substitutions[0].replacedBy.bookings.find((el) => el.type === "red-card") ? 'TRUE' : null,
             }
+            if(element.substitutions.length == 0)
+                delete app.SubbedBy;
             await utils.insertUpdateItem(app, DataTables.APPS_TABLE_NAME);
         }
     };
@@ -190,7 +193,7 @@ exports.handler = async (event : APIGatewayEvent, context: Context): Promise<API
             Scorer: translatePlayerName(obj.Scorer),
             Assist: obj.Assist!,
             AssistType: obj.AssistType?.valueOf(),
-            Season: utils.getYear().toString(),
+            Season: season,
         };
         await utils.insertUpdateItem(goal, DataTables.GOALS_TABLE_NAME);
     }

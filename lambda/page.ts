@@ -134,6 +134,8 @@ exports.handler = async (event : APIGatewayEvent, context: Context): Promise<API
             }
         });
 
+        var appearances = await utils.getAppsByPlayer(decodeURIComponent(playerName));
+
         var amendedTansfers : Array<any> = [];
         for(var i=0; i < transfers.Items!.length; i++) {
             var transfer = transfers.Items![i];
@@ -168,6 +170,7 @@ exports.handler = async (event : APIGatewayEvent, context: Context): Promise<API
             links: links.Items,
             teams: await utils.findAllTeams(),
             player: pl,
+            appearances: appearances,
             url: `/page/${pageName}/${classifier}`
         };
 
