@@ -362,7 +362,10 @@ export class TranmereWebUtils  {
       });
 
       goals.forEach(g => {
-        apps.find(a => a.Date == g.Date)!.Goals! ++;
+        if(apps.find(a => a.Date == g.Date))
+          apps.find(a => a.Date == g.Date)!.Goals! ++;
+        else 
+          console.log('Could not find app for goal on' + g.Date)
       });
 
       return apps;
