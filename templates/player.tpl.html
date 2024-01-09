@@ -63,14 +63,14 @@
                     <thead>
                     <tr>
                         <th scope="col">Season</th>
-                        <th scope="col"  class="text-center">Starts</th>
-                        <th scope="col"  class="text-center">Goals</th>
-                        <th scope="col"  class="text-center d-none d-md-table-cell">Assists</th>
-                        <th scope="col"  class="text-center d-none d-lg-table-cell">Headers</th>
-                        <th scope="col"  class="text-center d-none d-lg-table-cell">Free Kicks</th>
-                        <th scope="col"  class="text-center d-none d-lg-table-cell">Penalties</th>
-                        <th scope="col"  class="text-center d-none d-md-table-cell">Yellow Cards</th>
-                        <th scope="col"  class="text-center d-none d-md-table-cell">Red Cards</th>
+                        <th scope="col" class="text-center">Starts</th>
+                        <th scope="col" class="text-center">Goals</th>
+                        <th scope="col" class="text-center d-none d-md-table-cell">Assists</th>
+                        <th scope="col" class="text-center d-none d-lg-table-cell">Headers</th>
+                        <th scope="col" class="text-center d-none d-lg-table-cell">Free Kicks</th>
+                        <th scope="col" class="text-center d-none d-lg-table-cell">Penalties</th>
+                        <th scope="col" class="text-center d-none d-md-table-cell">Yellow Cards</th>
+                        <th scope="col" class="text-center d-none d-md-table-cell">Red Cards</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -124,23 +124,23 @@
                 <table class="table table-striped boxed">
                     <thead>
                         <tr>
-                            <th>Season</th>
-                            <th>Competition</th>
-                            <th>Start/Sub</th>
-                            <th>Opposition</th>
-                            <th class="text-center">Goals</th>
-                            <th>Subbed By/For</th>
+                            <th scope="col">Season</th>
+                            <th scope="col" class="text-center d-none d-md-table-cell">Competition</th>
+                            <th scope="col" class="text-center d-none d-md-table-cell">Start/Sub</th>
+                            <th scope="col">Opposition</th>
+                            <th scope="col" class="text-center">Goals</th>
+                            <th scope="col" class="text-center d-none d-md-table-cell">Subbed By/For</th>
                         </tr>
                     </thead>
                     <tbody>
                         {{#appearances}}
                         <tr>
-                            <td><a href="/results?season={{Season}}">{{Season}}</a></td>
-                            <td>{{Competition}}</td>
-                            <td>{{Type}}</td>
-                            <td><a href="/match/{{Season}}/{{Date}}">{{Opposition}} ({{Date}})</a></td>
-                            <td class="text-center">{{Goals}}</td>
-                            <td><a href="/page/player/{{SubbedBy}}">{{SubbedBy}}</a></td>
+                            <td scope="col"><a href="/results?season={{Season}}">{{Season}}</a></td>
+                            <td scope="col" class="text-center d-none d-md-table-cell">{{Competition}}</td>
+                            <td scope="col" class="text-center d-none d-md-table-cell">{{Type}}</td>
+                            <td scope="col"><a href="/match/{{Season}}/{{Date}}">{{Opposition}} ({{Date}})</a></td>
+                            <td scope="col" class="text-center">{{Goals}}</td>
+                            <td scope="col" class="text-center d-none d-md-table-cell"><a href="/page/player/{{SubbedBy}}">{{SubbedBy}}</a></td>
                         </tr>
                         {{/appearances}}
                     </tbody>
