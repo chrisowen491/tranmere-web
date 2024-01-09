@@ -97,19 +97,6 @@ exports.handler = async (event : APIGatewayEvent, context: Context): Promise<API
             Limit : 1
         });
 
-        var debutSearch = await dynamo.query({
-            TableName: DataTables.APPS_TABLE_NAME,
-            KeyConditionExpression: "#name = :name",
-            IndexName: "ByPlayerIndex",
-            ExpressionAttributeNames:{
-                "#name": "Name"
-            },
-            ExpressionAttributeValues: {
-                ":name": decodeURIComponent(playerName),
-            },
-            Limit : 1
-        });
-
         var summarySearch = await dynamo.query({
             TableName: DataTables.SUMMARY_TABLE_NAME,
             KeyConditionExpression: "#player = :player",
@@ -158,13 +145,13 @@ exports.handler = async (event : APIGatewayEvent, context: Context): Promise<API
 
         var pl = playerSearch.Items!.length == 1 ? playerSearch.Items![0] : null 
 
-        if(playerSearch.Items!.length == 0 && debutSearch.Items!.length == 0 && summarySearch.Items!.length == 0){
+        if(playerSearch.Items!.length == 0 && summarySearch.Items!.length == 0){
             throw new Error("Player has no records")
         }
 
         view = {
             name: decodeURIComponent(playerName),
-            debut: debutSearch.Items![0],
+            debut: appearances[0],
             seasons: summarySearch.Items,
             transfers: amendedTansfers,
             links: links.Items,
