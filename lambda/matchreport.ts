@@ -46,6 +46,10 @@ exports.handler = async (event : APIGatewayEvent, context: Context): Promise<API
         return utils.sendResponse(200, {'message': 'nothing'});
     }
 
+    if(fixtures.data.payload[0].body.matchData[0].tournamentDatesWithEvents[dateString][0].events[0].eventProgress.status === "POSTPONED") {
+        return utils.sendResponse(200, {'message': 'postponed'});
+    }
+
     const reportId = fixtures.data.payload[0].body.matchData[0].tournamentDatesWithEvents[dateString][0].events[0].eventKey;
     const competition =  translateCompetition(fixtures.data.payload[0].body.matchData[0].tournamentMeta.tournamentName.first);
     const venue = fixtures.data.payload[0].body.matchData[0].tournamentDatesWithEvents[dateString][0].events[0].venue.name.first;
