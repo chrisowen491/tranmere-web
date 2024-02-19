@@ -36,7 +36,7 @@
     "@types/uuid": "^9.0.1",
     "aws-cdk": "2.128.0",
     "aws-cdk-lib": "2.128.0",
-    "aws-sdk-js-codemod": "^1.0.0",
+    "aws-sdk-js-codemod": "^1.0.1",
     "browser-sync": "^3.0.0",
     "chai": "^4.3.7",
     "contentful-typescript-codegen": "^3.4.0",
