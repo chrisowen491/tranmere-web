@@ -85,7 +85,7 @@
     "contentful-management": "^11.8.0",
     "csvtojson": "^2.0.10",
     "jquery": "^3.6.4",
-    "langchain": "^0.1.0",
+    "langchain": "^0.1.22",
     "lavalamp": "^2.0.0",
     "magnific-popup": "^1.1.0",
     "moment": "^2.30.1",
