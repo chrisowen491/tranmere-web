@@ -61,7 +61,7 @@
     "webpack": "^5.76.3",
     "webpack-cli": "^5.0.1",
     "webpack-dev-server": "^5.0.0",
-    "wrangler": "^3.22.3"
+    "wrangler": "^3.42.0"
   },
   "dependencies": {
     "@algolia/autocomplete-js": "^1.8.3",
