@@ -1,11 +1,13 @@
 <div class="row justify-content-center justify-content-lg-start gutter-2 player-of-day">
     <div class="col-lg-12 col-md-12 col-sm-12">
-        <div class="card stacked">
+        <div class="card stacked" itemscope itemtype ="https://schema.org/SportsTeam">
+            <meta itemprop="name" content="Tranmere Rovers" />
             <div class="card-body" style="background-image:url({{randomplayer.picLink}});">
                 <div class="row gutter-2 align-items-center">
-                    <div class="col">
+                    <div class="col" itemprop="member" itemscope itemtype="https://schema.org/athlete">
+                        <meta itemprop="image" content="{{randomplayer.picLink}}" />
                         <h3 class="font-weight-normal mb-2">Player Of The Day</h3>
-                        <h4 class="font-weight-normal mb-3">{{randomplayer.name}}</h4>
+                        <h4 class="font-weight-normal mb-3" itemprop="name">{{randomplayer.name}}</h4>
                         <p><strong>Debut:</strong> {{randomplayer.debut.Opposition}} {{randomplayer.debut.Date}}</p>
                         <p class="card-text mb-2">{{randomplayer.apps}} apps</p>
                         <p class="card-text mb-2">{{randomplayer.goals}} goals</p>

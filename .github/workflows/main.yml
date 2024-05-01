@@ -6,7 +6,8 @@ on:
     paths:
       - 'graphql/**'
       - 'lambda/**'
-      - 'lib/**' 
+      - 'lib/**'
+      - 'templates/**' 
       - '.github/workflows/**'   
 
 jobs:
