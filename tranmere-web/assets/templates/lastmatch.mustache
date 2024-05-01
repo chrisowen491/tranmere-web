@@ -4,7 +4,9 @@
         {{#largeprogramme}}<meta itemprop="image" content="https://images.tranmere-web.com/{{.}}" />{{/largeprogramme}}
         <meta itemprop="startDate" content="{{date}}" />
         <meta itemprop="awayTeam" content="{{visitor}}" />
-        <meta itemprop="homeeam" content="{{home}}" />
+        <meta itemprop="homeTeam" content="{{home}}" />
+        <meta itemprop="name" content="{{home}} {{ft}} {{visitor}} " />
+        <meta itemprop="location" content="{{venue}} " />
         <h4>{{opposition}} ({{ft}})</h4>
         {{#largeprogramme}}<p class="mt-2"> <img src="https://images.tranmere-web.com/{{.}}"/></p>{{/largeprogramme}}
         <a href="/match/{{season}}/{{date}}" class="btn btn-primary">Match Report</a> 

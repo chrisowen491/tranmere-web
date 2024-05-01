@@ -1,5 +1,11 @@
-<div class="card bordered text-center">
+<div class="card bordered text-center" itemscope itemtype ="https://schema.org/SportsEvent">
     <div class="card-body pr-8">
+        {{#largeprogramme}}<meta itemprop="image" content="https://images.tranmere-web.com/{{.}}" />{{/largeprogramme}}
+        <meta itemprop="startDate" content="{{date}}" />
+        <meta itemprop="awayTeam" content="{{visitor}}" />
+        <meta itemprop="homeTeam" content="{{home}}" />
+        <meta itemprop="name" content="{{home}} {{ft}} {{visitor}} " />
+        <meta itemprop="location" content="{{venue}} " />
         <h3 class="fs-28 text-dark"><b>On This Day</b> </h3>
         <h4>{{opposition}} ({{season}})</h4>
         <p class="mt-2"> <img src="https://images.tranmere-web.com/{{largeprogramme}}"/></p>
