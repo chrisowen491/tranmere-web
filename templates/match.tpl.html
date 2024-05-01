@@ -1,4 +1,4 @@
-{{>head}}
+{{>matchHead}}
 <body data-spy="scroll" data-target="#toc" class="tranmere-results">
 
 
@@ -57,31 +57,33 @@
                                     Attendance: <strong>{{attendance}}</strong>
                                 {{/hasAttendance}}
                                 <br/>
-                                Rovers:
-                                {{#goalkeepers}}
-                                <a href="/page/player/{{Name}}">{{Name}}</a>{{#SubbedBy}} (<a href="/page/player/{{SubbedBy}}">{{SubbedBy}}</a> {{SubTime}}){{/SubbedBy}}, 
-                                {{/goalkeepers}}
-                                {{#fullback1}}
-                                <a href="/page/player/{{Name}}">{{Name}}</a>{{#SubbedBy}} (<a href="/page/player/{{SubbedBy}}">{{SubbedBy}}</a> {{SubTime}}){{/SubbedBy}}, 
-                                {{/fullback1}}
-                                {{#defenders}}
-                                <a href="/page/player/{{Name}}">{{Name}}</a>{{#SubbedBy}} (<a href="/page/player/{{SubbedBy}}">{{SubbedBy}}</a> {{SubTime}}){{/SubbedBy}}, 
-                                {{/defenders}}
-                                {{#fullback2}}
-                                <a href="/page/player/{{Name}}">{{Name}}</a>{{#SubbedBy}} (<a href="/page/player/{{SubbedBy}}">{{SubbedBy}}</a> {{SubTime}}){{/SubbedBy}}, 
-                                {{/fullback2}}
-                                {{#wingers1}}
-                                <a href="/page/player/{{Name}}">{{Name}}</a>{{#SubbedBy}} (<a href="/page/player/{{SubbedBy}}">{{SubbedBy}}</a> {{SubTime}}){{/SubbedBy}}, 
-                                {{/wingers1}}
-                                {{#midfielders}}
-                                <a href="/page/player/{{Name}}">{{Name}}</a>{{#SubbedBy}} (<a href="/page/player/{{SubbedBy}}">{{SubbedBy}}</a> {{SubTime}}){{/SubbedBy}}, 
-                                {{/midfielders}}
-                                {{#wingers2}}
-                                <a href="/page/player/{{Name}}">{{Name}}</a>{{#SubbedBy}} (<a href="/page/player/{{SubbedBy}}">{{SubbedBy}}</a> {{SubTime}}){{/SubbedBy}}, 
-                                {{/wingers2}}
-                                {{#strikers}}
-                                <a href="/page/player/{{Name}}">{{Name}}</a>{{#SubbedBy}} (<a href="/page/player/{{SubbedBy}}">{{SubbedBy}}</a> {{SubTime}}){{/SubbedBy}}, 
-                                {{/strikers}}
+                                <div itemscope itemtype ="https://schema.org/SportsTeam">
+                                    <span itemprop="name">Tranmere Rovers:</span>
+                                    {{#goalkeepers}}
+                                    <a href="/page/player/{{Name}}" itemprop="member" itemscope itemtype="https://schema.org/athlete"><span itemprop="name">{{Name}}</span></a>{{#SubbedBy}} (<a href="/page/player/{{SubbedBy}}">{{SubbedBy}}</a> {{SubTime}}){{/SubbedBy}}, 
+                                    {{/goalkeepers}}
+                                    {{#fullback1}}
+                                    <a href="/page/player/{{Name}}" itemprop="member" itemscope itemtype="https://schema.org/athlete"><span itemprop="name">{{Name}}</span></a>{{#SubbedBy}} (<a href="/page/player/{{SubbedBy}}">{{SubbedBy}}</a> {{SubTime}}){{/SubbedBy}}, 
+                                    {{/fullback1}}
+                                    {{#defenders}}
+                                    <a href="/page/player/{{Name}}" itemprop="member" itemscope itemtype="https://schema.org/athlete"><span itemprop="name">{{Name}}</span></a>{{#SubbedBy}} (<a href="/page/player/{{SubbedBy}}">{{SubbedBy}}</a> {{SubTime}}){{/SubbedBy}}, 
+                                    {{/defenders}}
+                                    {{#fullback2}}
+                                    <a href="/page/player/{{Name}}" itemprop="member" itemscope itemtype="https://schema.org/athlete"><span itemprop="name">{{Name}}</span></a>{{#SubbedBy}} (<a href="/page/player/{{SubbedBy}}">{{SubbedBy}}</a> {{SubTime}}){{/SubbedBy}}, 
+                                    {{/fullback2}}
+                                    {{#wingers1}}
+                                    <a href="/page/player/{{Name}}" itemprop="member" itemscope itemtype="https://schema.org/athlete"><span itemprop="name">{{Name}}</span></a>{{#SubbedBy}} (<a href="/page/player/{{SubbedBy}}">{{SubbedBy}}</a> {{SubTime}}){{/SubbedBy}}, 
+                                    {{/wingers1}}
+                                    {{#midfielders}}
+                                    <a href="/page/player/{{Name}}" itemprop="member" itemscope itemtype="https://schema.org/athlete"><span itemprop="name">{{Name}}</span></a>{{#SubbedBy}} (<a href="/page/player/{{SubbedBy}}">{{SubbedBy}}</a> {{SubTime}}){{/SubbedBy}}, 
+                                    {{/midfielders}}
+                                    {{#wingers2}}
+                                    <a href="/page/player/{{Name}}" itemprop="member" itemscope itemtype="https://schema.org/athlete"><span itemprop="name">{{Name}}</span></a>{{#SubbedBy}} (<a href="/page/player/{{SubbedBy}}">{{SubbedBy}}</a> {{SubTime}}){{/SubbedBy}}, 
+                                    {{/wingers2}}
+                                    {{#strikers}}
+                                    <a href="/page/player/{{Name}}" itemprop="member" itemscope itemtype="https://schema.org/athlete"><span itemprop="name">{{Name}}</span></a>{{#SubbedBy}} (<a href="/page/player/{{SubbedBy}}">{{SubbedBy}}</a> {{SubTime}}){{/SubbedBy}}, 
+                                    {{/strikers}}
+                                </div>
                                 <br/>
                                 Scorers: <strong>{{formattedGoals}}</strong>
                                 <div class="edit" style="display: none;">

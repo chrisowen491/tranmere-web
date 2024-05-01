@@ -1,19 +1,20 @@
 
-<table class="table">
+<table class="table" itemscope itemtype ="https://schema.org/SportsTeam">
+    <meta itemprop="name" content="Tranmere Rovers" />
     <thead class="thead-dark">
-    <tr>
-        <th scope="col">Name</th>
-        <th scope="col" class="text-center">Starts</th>
-        <th scope="col" class="text-center">Goals</th>
-        <th scope="col" class="text-center d-none d-sm-table-cell">Assists</th>
-        <th scope="col" class="text-center">Pic</th>
-    </tr>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col" class="text-center">Starts</th>
+            <th scope="col" class="text-center">Goals</th>
+            <th scope="col" class="text-center d-none d-sm-table-cell">Assists</th>
+            <th scope="col" class="text-center">Pic</th>
+        </tr>
     </thead>
     <tbody>
     {{#players}}
-    <tr>
+    <tr itemprop="member" itemscope itemtype="https://schema.org/athlete" scope="row">
         <td>
-            <a href="/page/player/{{Player}}">{{Player}}</a>
+            <a href="/page/player/{{Player}}" itemprop="name">{{Player}}</a>
         </td>
         <td class="text-center">{{starts}} {{#subs}}({{subs}}){{/subs}}</td>
         <td class="text-center">{{goals}}</td>
