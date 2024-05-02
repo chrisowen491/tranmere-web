@@ -7,7 +7,7 @@ jQuery(function () {
         var dateobj = new Date();
         var day = dateobj.toISOString().slice(0, 10).substr(5);
         var base = "";
-        var url = base + '/graphql?query=' + encodeURIComponent(`{getTranmereWebOnThisDayById(day: "${day}"){opposition programme hgoal vgoal season date}}`);
+        var url = base + '/graphql?query=' + encodeURIComponent(`{getTranmereWebOnThisDayById(day: "${day}"){opposition programme hgoal vgoal season date home visitor}}`);
         $.getJSON(url, function(response) {
             if(response && response.data.getTranmereWebOnThisDayById) {
                 var view = response.data.getTranmereWebOnThisDayById;

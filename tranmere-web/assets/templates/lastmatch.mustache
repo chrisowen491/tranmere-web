@@ -6,10 +6,10 @@
         <meta itemprop="awayTeam" content="{{visitor}}" />
         <meta itemprop="homeTeam" content="{{home}}" />
         <meta itemprop="name" content="{{home}} {{ft}} {{visitor}} " />
-        <meta itemprop="location" content="{{venue}} " />
+        <meta itemprop="location" content="{{home}}" />
         <h4>{{opposition}} ({{ft}})</h4>
         {{#largeprogramme}}<p class="mt-2"> <img src="https://images.tranmere-web.com/{{.}}"/></p>{{/largeprogramme}}
-        <a href="/match/{{season}}/{{date}}" class="btn btn-primary">Match Report</a> 
+        <a itemprop="url" href="/match/{{season}}/{{date}}" class="btn btn-primary">Match Report</a> 
         <i class="icon-trophy icon-background"></i>
     </div> 
 </div>
