@@ -1,20 +1,18 @@
-import { strict as assert } from "assert"
-import { createClient } from "contentful-management"
-import { EnvironmentGetter } from "contentful-typescript-codegen"
+import { strict as assert } from 'assert';
+import { createClient } from 'contentful-management';
+import { EnvironmentGetter } from 'contentful-typescript-codegen';
 
-const { CF_MANANGEMENT_KEY, CF_SPACE } = process.env
+const { CF_MANANGEMENT_KEY, CF_SPACE } = process.env;
 
-assert(CF_MANANGEMENT_KEY)
-assert(CF_SPACE)
+assert(CF_MANANGEMENT_KEY);
+assert(CF_SPACE);
 
-const getContentfulEnvironment: EnvironmentGetter = () => {
+export const getContentfulEnvironment: EnvironmentGetter = () => {
   const contentfulClient = createClient({
-    accessToken: CF_MANANGEMENT_KEY,
-  })
+    accessToken: CF_MANANGEMENT_KEY
+  });
 
   return contentfulClient
     .getSpace(CF_SPACE)
-    .then(space => space.getEnvironment('master'))
-}
-
-module.exports = getContentfulEnvironment
+    .then((space) => space.getEnvironment('master'));
+};
