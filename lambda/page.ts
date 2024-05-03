@@ -297,9 +297,9 @@ exports.handler = async (
       view.description = `Tranmere Rovers FC Results In Penalty Shootouts`;
       view.pens = 'Penalty Shootout';
     } else {
-      view.title = `Results vs ${classifier}`;
-      view.description = `Tranmere Rovers FC Results against ${classifier}`;
-      view.opposition = classifier;
+      view.title = `Results vs ${decodeURIComponent(classifier!)}`;
+      view.description = `Tranmere Rovers FC Results against ${decodeURIComponent(classifier!)}`;
+      view.opposition = decodeURIComponent(classifier!);
     }
   }
   view.random = Math.ceil(Math.random() * 100000);

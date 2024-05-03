@@ -42,6 +42,7 @@ jQuery(function () {
 
     if ($('#results-search').length) {
         if($("meta[name='season-ssr-id']") != null)  {         
+            $('#season').val($("meta[name='season-ssr-id']").attr("content"));
         }
         if($("meta[name='venue-ssr-id']") != null)  {         
             $('#venue').val($("meta[name='venue-ssr-id']").attr("content"));
