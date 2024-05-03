@@ -504,4 +504,8 @@ export class TranmereWebUtils {
   async buildProfile(name: string): Promise<string> {
     return '';
   }
+
+  isNumeric(value: string): boolean {
+    return /^-?\d+$/.test(value);
+  }
 }

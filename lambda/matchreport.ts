@@ -121,6 +121,7 @@ exports.handler = async (
     season: season,
     venue: venue,
     hgoal: hscore,
+    pens: '',
     vgoal: vscore,
     ft: hscore + '-' + vscore,
     competition: competition
@@ -130,12 +131,12 @@ exports.handler = async (
     fixtures.data.payload[0].body.matchData[0].tournamentDatesWithEvents[
       dateString
     ][0].events[0].eventOutcomeType === 'shootout'
-  )
+  ) {
     theMatch.pens =
       fixtures.data.payload[0].body.matchData[0].tournamentDatesWithEvents[
         dateString
       ][0].events[0].comment;
-
+  }
   await utils.insertUpdateItem(theMatch, DataTables.RESULTS_TABLE);
 
   let team = theMatch.home === 'Tranmere Rovers' ? 'homeTeam' : 'awayTeam';

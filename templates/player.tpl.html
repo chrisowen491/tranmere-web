@@ -75,7 +75,7 @@
                     </thead>
                     <tbody>
                     {{#seasons}}
-                    <td><a href="/results?season={{Season}}">{{Season}}</a></td>
+                    <td><a href="/games/{{Season}}">{{Season}}</a></td>
                     <td class="text-center">{{starts}} ({{subs}})</td>
                     <td class="text-center">{{goals}}</td>
                     <td class="text-center d-none d-md-table-cell">{{assists}}</td>
@@ -135,7 +135,7 @@
                     <tbody>
                         {{#appearances}}
                         <tr>
-                            <td scope="col"><a href="/results?season={{Season}}">{{Season}}</a></td>
+                            <td scope="col"><a href="/games/{{Season}}">{{Season}}</a></td>
                             <td scope="col" class="text-center d-none d-md-table-cell">{{Competition}}</td>
                             <td scope="col" class="text-center d-none d-md-table-cell">{{Type}}</td>
                             <td scope="col"><a href="/match/{{Season}}/{{Date}}">{{Opposition}} ({{Date}})</a></td>

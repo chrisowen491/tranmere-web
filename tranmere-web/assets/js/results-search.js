@@ -39,7 +39,19 @@ $.urlParam = function (name) {
 
 jQuery(function () {
 
+
     if ($('#results-search').length) {
+        if($("meta[name='season-ssr-id']") != null)  {         
+        }
+        if($("meta[name='venue-ssr-id']") != null)  {         
+            $('#venue').val($("meta[name='venue-ssr-id']").attr("content"));
+        }
+        if($("meta[name='pens-ssr-id']") != null)  {         
+            $('#pens').val($("meta[name='pens-ssr-id']").attr("content"));
+        }
+        if($("meta[name='opposition-ssr-id']") != null)  {         
+            $('#opposition').val($("meta[name='opposition-ssr-id']").attr("content"));
+        }
         if($.urlParam('season'))
             $('#season').val($.urlParam('season'));
         if($.urlParam('opposition'))
@@ -54,7 +66,7 @@ jQuery(function () {
             $('#sort').val(decodeURIComponent($.urlParam('sort')));
         if($.urlParam('manager'))
             $('#manager').val($.urlParam('manager'));
-        if(!$('#season').val() && !$.urlParam('manager') && !$.urlParam('opposition') && !$.urlParam('competition') && !$.urlParam('venue') && !$.urlParam('pens') && !$.urlParam('sort'))
+        if(!$('#season').val() && !$('#manager').val() && !$('#opposition').val() && !$('#competition').val() && !$('#venue').val() && !$('#pens').val() && !$.urlParam('sort'))
             $('#season').val(theYear);
         
         search();    

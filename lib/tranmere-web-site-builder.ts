@@ -173,10 +173,10 @@ export class SiteBuilder {
 
     if (index) {
       for (var i = 0; i < seasons.length; i++) {
-        this.addSiteMapEntry('/results?season=' + seasons[i]);
+        this.addSiteMapEntry(`/games/${seasons[i]}`);
         var seasonResults: BaseEntity = {
           objectID: 'Season-' + seasons[i],
-          link: 'https://www.tranmere-web.com/results?season=' + seasons[i],
+          link: `https://www.tranmere-web.com/games/seasons[i]`,
           name: `Season ${seasons[i]}/${seasons[i] + 1}`,
           description: 'Results Breakdown',
           picLink: '/assets/images/square_v1.png'
@@ -196,9 +196,10 @@ export class SiteBuilder {
       }
 
       for (var i = 0; i < teams.length; i++) {
+        this.addSiteMapEntry('/games/' + encodeURIComponent(teams[i].name));
         teams[i].objectID = 'Team-' + teams[i].name;
         teams[i].link =
-          'https://www.tranmere-web.com/results?opposition=' + teams[i].name;
+          'https://www.tranmere-web.com/games/' + teams[i].name;
         teams[i].name = teams[i].name;
         teams[i].picLink = '/assets/images/square_v1.png';
         teams[i].description = 'Results Breakdown';

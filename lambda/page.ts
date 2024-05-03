@@ -269,6 +269,38 @@ exports.handler = async (
       }
       view.cardBlocksHTML = blockContent;
     }
+  } else if (pageName === 'games') {
+    pageName = 'results-home';
+    const seasons = utils.getSeasons();
+    const teams = await utils.findAllTeams();
+    const competitions = await utils.getAllCupCompetitions();
+    const managers = await utils.findAllTranmereManagers();
+    view = {
+      title: `Results - ${classifier}`,
+      pageType: 'WebPage',
+      url: `/results/${classifier}`,
+      teams: teams,
+      competitions: competitions,
+      managers: managers,
+      seasons: seasons,
+      description: `Tranmere Rovers FC Results For Season ${classifier}`
+    };
+
+    if (utils.isNumeric(classifier!)) {
+      view.season = classifier;
+    } else if (classifier === 'at-wembley') {
+      view.title = `Results At Wembley`;
+      view.description = `Tranmere Rovers FC Results At Wembley Stadium`;
+      view.venue = 'Wembley Stadium';
+    } else if (classifier === 'penalty-shootouts') {
+      view.title = `Results - Penalty Shootouts`;
+      view.description = `Tranmere Rovers FC Results In Penalty Shootouts`;
+      view.pens = 'Penalty Shootout';
+    } else {
+      view.title = `Results vs ${classifier}`;
+      view.description = `Tranmere Rovers FC Results against ${classifier}`;
+      view.opposition = classifier;
+    }
   }
   view.random = Math.ceil(Math.random() * 100000);
   const maxAge = pageName === 'player' ? 86400 : 2592000;
