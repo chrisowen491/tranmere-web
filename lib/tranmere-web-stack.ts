@@ -8,12 +8,14 @@ import * as cognito from 'aws-cdk-lib/aws-cognito';
 import { TranmereWebLambda } from './tranmere-web-lambda';
 import { TranmereWebGraphQL } from './tranmere-web-graphql';
 
-const CF_KEY: string = process.env.CF_KEY!;
-const CF_SPACE: string = process.env.CF_SPACE!;
-const EMAIL_ADDRESS: string = process.env.EMAIL_ADDRESS!;
-const DD_TAGS: string = process.env.DD_TAGS!;
-const OPENAI_API_KEY: string = process.env.OPENAI_API_KEY!;
-const IS_WINDOWS: boolean = process.env.IS_WINDOWS ? true : false;
+const CF_KEY = process.env.CF_KEY!;
+const CF_SPACE = process.env.CF_SPACE!;
+const CF_MANANGEMENT_KEY = process.env.CF_MANANGEMENT_KEY!;
+const EMAIL_ADDRESS = process.env.EMAIL_ADDRESS!;
+const DD_TAGS = process.env.DD_TAGS!;
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY!;
+const IS_WINDOWS = process.env.IS_WINDOWS ? true : false;
+const TAVILY_API_KEY = process.env.TAVILY_API_KEY!;
 
 export class TranmereWebStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -25,8 +27,10 @@ export class TranmereWebStack extends cdk.Stack {
       EMAIL_ADDRESS: EMAIL_ADDRESS,
       CF_SPACE: CF_SPACE,
       CF_KEY: CF_KEY,
+      CF_MANANGEMENT_KEY: CF_MANANGEMENT_KEY,
       DD_TAGS: DD_TAGS,
-      OPENAI_API_KEY: OPENAI_API_KEY
+      OPENAI_API_KEY: OPENAI_API_KEY,
+      TAVILY_API_KEY: TAVILY_API_KEY
     };
 
     const TranmereWebPlayerTable = ddb.Table.fromTableAttributes(
@@ -228,6 +232,8 @@ export class TranmereWebStack extends cdk.Stack {
     const goalseason = goal.addResource('{season}');
     const goalid = goalseason.addResource('{id}');
     const transfers = api.root.addResource('transfers');
+    const profile = api.root.addResource('profile');
+    const playerName = profile.addResource('{playerName}');
     const links = api.root.addResource('links');
     const page = api.root.addResource('page');
     const pageName = page.addResource('{pageName}');
@@ -339,6 +345,15 @@ export class TranmereWebStack extends cdk.Stack {
       scopes: 'TranmereWeb/matches.read'
     });
 
+    new TranmereWebLambda(this, 'ProfileBuilderFunction', {
+      environment: env_variables,
+      apiResource: playerName,
+      apiMethod: 'GET',
+      lambdaFile: './lambda/profileBuilder.ts',
+      authorizer: cognitoAuthorizer,
+      scopes: 'TranmereWeb/matches.read'
+    });
+
     new TranmereWebLambda(this, 'LinksUpdateFunction', {
       environment: env_variables,
       apiResource: links,
@@ -411,7 +426,7 @@ export class TranmereWebStack extends cdk.Stack {
           return [];
         },
         afterBundling(inputDir: string, outputDir: string): string[] {
-          if (process.env.IS_WINDOWS) {
+          if (IS_WINDOWS) {
             //return [];
             return [
               `mkdir ${outputDir}\\templates && xcopy ${inputDir}\\templates\\*  ${outputDir}\\templates`
@@ -446,7 +461,7 @@ export class TranmereWebStack extends cdk.Stack {
           return [];
         },
         afterBundling(inputDir: string, outputDir: string): string[] {
-          if (process.env.IS_WINDOWS) {
+          if (IS_WINDOWS) {
             //return [];
             return [
               `mkdir ${outputDir}\\templates && xcopy ${inputDir}\\templates\\* ${outputDir}\\templates /E`
@@ -473,7 +488,7 @@ export class TranmereWebStack extends cdk.Stack {
           return [];
         },
         afterBundling(inputDir: string, outputDir: string): string[] {
-          if (process.env.IS_WINDOWS) {
+          if (IS_WINDOWS) {
             return [
               `mkdir ${outputDir}\\assets && xcopy ${inputDir}\\lambda\\assets\\* ${outputDir}\\assets /E`
             ];

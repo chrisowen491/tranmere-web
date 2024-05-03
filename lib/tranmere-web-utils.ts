@@ -500,4 +500,8 @@ export class TranmereWebUtils {
     var result = await dynamo.query(params);
     return result.Items!.map((a) => a as Appearance);
   }
+
+  async buildProfile(name: string): Promise<string> {
+    return '';
+  }
 }
