@@ -107,14 +107,5 @@
     "uuid": "^9.0.0",
     "video.js": "^8.0.0",
     "videojs-youtube": "^3.0.0"
-  },
-  "eslintConfig": {
-    "env": {
-      "node": true,
-      "es6": true
-    },
-    "parserOptions": {
-      "ecmaVersion": 8
-    }
   }
 }
