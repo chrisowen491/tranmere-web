@@ -1,5 +1,5 @@
 import { TranmereWebUtils } from '../lib/tranmere-web-utils';
-const contentful = require('contentful');
+import { createClient } from 'contentful';
 import { expect } from 'chai';
 
 test('Can Get All Teams', async () => {
@@ -16,15 +16,15 @@ test('Can Get All Managers', async () => {
 
 test('Can Get All Hat Tricks', async () => {
   const utils = new TranmereWebUtils();
-  const hattricks = await utils.findAllHatTricks(10);
+  const hattricks = await utils.findAllHatTricks();
   expect(hattricks.length).to.above(1);
 });
 
 test('Can Get Pages From Contentful', async () => {
   const utils = new TranmereWebUtils();
-  const client = contentful.createClient({
-    space: process.env.CF_SPACE,
-    accessToken: process.env.CF_KEY
+  const client = createClient({
+    space: process.env.CF_SPACE!,
+    accessToken: process.env.CF_KEY!
   });
 
   const pages = await utils.getPages(client);

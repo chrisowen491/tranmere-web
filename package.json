@@ -34,7 +34,7 @@
     "@types/aws-lambda": "^8.10.115",
     "@types/axios": "^0.14.0",
     "@types/chai": "^4.3.5",
-    "@types/jest": "^29.4.0",
+    "@types/jest": "^29.5.12",
     "@types/mocha": "^10.0.1",
     "@types/mustache": "^4.2.2",
     "@types/node": "^20.0.0",
