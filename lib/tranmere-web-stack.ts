@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 import * as cdk from 'aws-cdk-lib';
 import { aws_apigateway as apigw } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
@@ -243,8 +241,8 @@ export class TranmereWebStack extends cdk.Stack {
     const player_search = api.root.addResource('player-search');
     const result_search = api.root.addResource('result-search');
     const transfer_search = api.root.addResource('transfer-search');
-    const on = api.root.addResource('on');
-    const upload = api.root.addResource('upload');
+    //const on = api.root.addResource('on');
+    //const upload = api.root.addResource('upload');
 
     new TranmereWebLambda(this, 'ContactUsFunction', {
       environment: env_variables,
@@ -424,7 +422,7 @@ export class TranmereWebStack extends cdk.Stack {
         TranmereWebMatchReport
       ],
       commandHooks: {
-        beforeBundling(inputDir: string, outputDir: string): string[] {
+        beforeBundling(): string[] {
           return [];
         },
         afterBundling(inputDir: string, outputDir: string): string[] {
@@ -459,7 +457,7 @@ export class TranmereWebStack extends cdk.Stack {
         TranmereWebPlayerLinks
       ],
       commandHooks: {
-        beforeBundling(inputDir: string, outputDir: string): string[] {
+        beforeBundling(): string[] {
           return [];
         },
         afterBundling(inputDir: string, outputDir: string): string[] {
@@ -486,7 +484,7 @@ export class TranmereWebStack extends cdk.Stack {
       apiResource: highlights,
       apiMethod: 'GET',
       commandHooks: {
-        beforeBundling(inputDir: string, outputDir: string): string[] {
+        beforeBundling(): string[] {
           return [];
         },
         afterBundling(inputDir: string, outputDir: string): string[] {

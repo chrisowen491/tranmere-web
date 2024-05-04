@@ -1,4 +1,4 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { IPageMetaDataFields } from './contentful';
 
@@ -47,9 +47,9 @@ export interface Manager {
   dateLeftText?: string;
 }
 
-export interface Team extends BaseEntity {}
+export type Team = BaseEntity;
 
-export interface Competition extends BaseEntity {}
+export type Competition = BaseEntity;
 
 export interface Season {
   verbose?: boolean;
@@ -99,13 +99,13 @@ export interface Page extends IPageMetaDataFields {
   dd_app?: string;
   dd_version?: string;
   image?: string;
-  topScorers: Array<Player>;
-  hatTricks: Array<HatTrick>;
-  managers: Array<Manager>;
-  players: Array<Player>;
-  teams: Array<Team>;
-  competitions: Array<Competition>;
-  seasons: Array<number>;
+  topScorers: Player[];
+  hatTricks: HatTrick[];
+  managers: Manager[];
+  players: Player[];
+  teams: Team[];
+  competitions: Competition[];
+  seasons: number[];
 }
 
 export interface Report {
@@ -143,17 +143,17 @@ export interface Match {
 }
 
 export interface MatchView extends Match {
-  goals?: Array<Goal>;
-  apps?: Array<Appearance>;
+  goals?: Goal[];
+  apps?: Appearance[];
   largeProgramme?: string;
-  goalkeepers?: Array<Appearance>;
-  fullback1?: Array<Appearance>;
-  fullback2?: Array<Appearance>;
-  defenders?: Array<Appearance>;
-  midfielders?: Array<Appearance>;
-  wingers1?: Array<Appearance>;
-  wingers2?: Array<Appearance>;
-  strikers?: Array<Appearance>;
+  goalkeepers?: Appearance[];
+  fullback1?: Appearance[];
+  fullback2?: Appearance[];
+  defenders?: Appearance[];
+  midfielders?: Appearance[];
+  wingers1?: Appearance[];
+  wingers2?: Appearance[];
+  strikers?: Appearance[];
   formattedGoals?: string;
   hasVenue?: boolean;
   hasAttendance?: boolean;

@@ -11,13 +11,11 @@ import { IAuthorizer } from 'aws-cdk-lib/aws-apigateway';
 
 export interface TranmereWebLambdaProps {
   readonly lambdaFile?: string;
-  readonly environment?: {
-    [key: string]: string;
-  };
+  readonly environment?: Record<string, string>;
   readonly schedule?: events.CronOptions;
   readonly policy?: iam.PolicyStatement;
-  readonly readTables?: Array<ddb.ITable>;
-  readonly readWriteTables?: Array<ddb.ITable>;
+  readonly readTables?: ddb.ITable[];
+  readonly readWriteTables?: ddb.ITable[];
   readonly extraDirectory?: string;
   readonly commandHooks?: ICommandHooks;
   readonly cacheKeyParameters?: string[];

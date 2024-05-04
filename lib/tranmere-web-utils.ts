@@ -1,4 +1,4 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import axios from 'axios';
 import fs from 'fs';
@@ -192,10 +192,9 @@ export class TranmereWebUtils {
       `${APP_SYNC_URL}/graphql?query=${query}`,
       APP_SYNC_OPTIONS
     );
-    const players =
-      results.data.data.listTranmereWebPlayerTable.items!.map(
-        (p) => p as Player
-      );
+    const players = results.data.data.listTranmereWebPlayerTable.items!.map(
+      (p) => p as Player
+    );
 
     players.sort(function (a: Player, b: Player) {
       if (a.name < b.name) return -1;
@@ -215,13 +214,7 @@ export class TranmereWebUtils {
     );
 
     const managers: Manager[] = [];
-    for (
-      let i = 0;
-      i < results.data.data.listTranmereWebManagers.items.length;
-      i++
-    ) {
-      const manager: Manager =
-        results.data.data.listTranmereWebManagers.items[i];
+    for (const manager of results.data.data.listTranmereWebManagers.items) {
       let dateLeft = 'now';
       if (manager.dateLeft) dateLeft = manager.dateLeft;
       manager.dateLeftText = dateLeft;
@@ -235,7 +228,7 @@ export class TranmereWebUtils {
     return managers;
   }
 
-  async findAllTeams(): Promise<Array<Team>> {
+  async findAllTeams(): Promise<Team[]> {
     const query: string = encodeURIComponent(
       '{listTranmereWebClubs(limit:500){items{name}}}'
     );
@@ -243,7 +236,7 @@ export class TranmereWebUtils {
       `${APP_SYNC_URL}/graphql?query=${query}`,
       APP_SYNC_OPTIONS
     );
-    const results: Array<Team> = result.data.data.listTranmereWebClubs.items;
+    const results: Team[] = result.data.data.listTranmereWebClubs.items;
 
     results.sort(function (a: Team, b: Team) {
       if (a.name < b.name) return -1;
@@ -253,7 +246,7 @@ export class TranmereWebUtils {
     return results;
   }
 
-  async getAllCupCompetitions(): Promise<Array<Competition>> {
+  async getAllCupCompetitions(): Promise<Competition[]> {
     const query = encodeURIComponent(
       '{listTranmereWebCompetitions(limit:500){items{name}}}'
     );
@@ -261,22 +254,22 @@ export class TranmereWebUtils {
       `${APP_SYNC_URL}/graphql?query=${query}`,
       APP_SYNC_OPTIONS
     );
-    const results: Array<Competition> =
+    const results: Competition[] =
       competitions.data.data.listTranmereWebCompetitions.items;
     return results;
   }
 
-  async getAllGames(): Promise<Array<Match>> {
+  async getAllGames(): Promise<Match[]> {
     const result = await axios.get(
       'https://api.prod.tranmere-web.com/result-search/?season=&competition=&opposition=&manager=&venue=Prenton Park&pens=&sort=Date',
       apiOptions
     );
-    const results: Array<Match> = result.data.results as Array<Match>;
+    const results: Match[] = result.data.results as Match[];
     return results;
   }
 
-  async getTopScorersBySeason(): Promise<Array<Player>> {
-    const results: Array<Player> = [];
+  async getTopScorersBySeason(): Promise<Player[]> {
+    const results: Player[] = [];
 
     for (let i = 1977; i <= this.getYear(); i++) {
       const result = await axios.get(
@@ -291,7 +284,7 @@ export class TranmereWebUtils {
     return results;
   }
 
-  async findAllHatTricks(): Promise<Array<HatTrick>> {
+  async findAllHatTricks(): Promise<HatTrick[]> {
     const query = encodeURIComponent(
       '{listTranmereWebHatTricks(limit:500){items{Date Player Opposition Goals Season}}}'
     );
@@ -299,8 +292,7 @@ export class TranmereWebUtils {
       `${APP_SYNC_URL}/graphql?query=${query}`,
       APP_SYNC_OPTIONS
     );
-    const results: Array<HatTrick> =
-      result.data.data.listTranmereWebHatTricks.items;
+    const results: HatTrick[] = result.data.data.listTranmereWebHatTricks.items;
 
     results.sort(function (a, b) {
       if (a.Date < b.Date) return -1;
@@ -310,7 +302,7 @@ export class TranmereWebUtils {
     return results;
   }
 
-  async getResultsForSeason(season: string): Promise<Array<Match>> {
+  async getResultsForSeason(season: string): Promise<Match[]> {
     const params = {
       TableName: DataTables.RESULTS_TABLE,
       KeyConditionExpression: 'season = :season',
@@ -370,7 +362,7 @@ export class TranmereWebUtils {
     return await dynamo.delete(params);
   }
 
-  async getAllPlayersFromDb(): Promise<Array<Player>> {
+  async getAllPlayersFromDb(): Promise<Player[]> {
     const squadSearch = await dynamo.scan({
       TableName: DataTables.PLAYER_TABLE_NAME
     });
@@ -464,7 +456,7 @@ export class TranmereWebUtils {
     return result.Items![0] as Goal;
   }
 
-  async getGoalsBySeason(season: number, date?: string): Promise<Array<Goal>> {
+  async getGoalsBySeason(season: number, date?: string): Promise<Goal[]> {
     const params: QueryCommandInput = {
       TableName: DataTables.GOALS_TABLE_NAME,
       KeyConditionExpression: 'Season = :season',
@@ -483,10 +475,7 @@ export class TranmereWebUtils {
     return result.Items!.map((g) => g as Goal);
   }
 
-  async getAppsBySeason(
-    season: number,
-    date?: string
-  ): Promise<Array<Appearance>> {
+  async getAppsBySeason(season: number, date?: string): Promise<Appearance[]> {
     const params: QueryCommandInput = {
       TableName: DataTables.APPS_TABLE_NAME,
       KeyConditionExpression: 'Season = :season',

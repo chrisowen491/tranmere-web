@@ -8,7 +8,7 @@ exports.handler = async (
 ): Promise<APIGatewayProxyResult> => {
   console.log('Received event:', event);
 
-  const results: Array<Match> = [];
+  const results: Match[] = [];
 
   for (const season of utils.getSeasons()) {
     const today = new Date();
@@ -33,6 +33,6 @@ exports.handler = async (
   return utils.sendResponse(200, results);
 };
 
-function getRndInteger(min : number, max: number) {
+function getRndInteger(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }

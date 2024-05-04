@@ -1,4 +1,4 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { APIGatewayEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { TranmereWebUtils, DataTables } from '../lib/tranmere-web-utils';
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
@@ -54,14 +54,14 @@ exports.handler = async (
   const result = await dynamo.query(query);
   let results = result.Items!;
 
-  for (let x = 0; x < results.length; x++) {
-    delete results[x].TimeToLive;
-    results[x].bio = playerHash[results[x].Player];
-    if (results[x].bio && results[x].bio.picLink) {
-      results[x].bio.pic = {
+  for (const result of results) {
+    delete result.TimeToLive;
+    result.bio = playerHash[result.Player];
+    if (result.bio && result.bio.picLink) {
+      result.bio.pic = {
         fields: {
           file: {
-            url: results[x].bio.picLink
+            url: result.bio.picLink
           }
         }
       };
@@ -69,7 +69,7 @@ exports.handler = async (
   }
 
   if (filter) {
-    const newResults: Array<any> = [];
+    const newResults: any[] = [];
     for (const match of results) {
       if (filter == 'OnlyOneApp' && match.Apps == 1) {
         newResults.push(match);

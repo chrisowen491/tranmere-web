@@ -1,4 +1,4 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { APIGatewayEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { TranmereWebUtils, DataTables } from '../lib/tranmere-web-utils';
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
@@ -135,9 +135,8 @@ exports.handler = async (
       decodeURIComponent(playerName)
     );
 
-    const amendedTansfers: Array<any> = [];
-    for (let i = 0; i < transfers.Items!.length; i++) {
-      const transfer = transfers.Items![i];
+    const amendedTansfers: any[] = [];
+    for (const transfer of transfers.Items!) {
       transfer.club =
         transfer.from == 'Tranmere Rovers' ? transfer.to : transfer.from;
       transfer.type = transfer.from == 'Tranmere Rovers' ? 'right' : 'left';
@@ -244,28 +243,22 @@ exports.handler = async (
 
     if (view.blocks) {
       let blockContent = '';
-      for (let b = 0; b < view.blocks.length; b++) {
+      for (const block of view.blocks) {
         blockContent =
           blockContent +
           '\n' +
-          utils.renderFragment(
-            view.blocks[b].fields,
-            view.blocks[b].sys.contentType.sys.id
-          );
+          utils.renderFragment(block.fields, block.sys.contentType.sys.id);
       }
       view.blockHTML = blockContent;
     }
 
     if (view.cardBlocks) {
       let blockContent = '';
-      for (let b = 0; b < view.cardBlocks.length; b++) {
+      for (const block of view.cardBlock) {
         blockContent =
           blockContent +
           '\n' +
-          utils.renderFragment(
-            view.cardBlocks[b].fields,
-            view.cardBlocks[b].sys.contentType.sys.id
-          );
+          utils.renderFragment(block.fields, block.sys.contentType.sys.id);
       }
       view.cardBlocksHTML = blockContent;
     }

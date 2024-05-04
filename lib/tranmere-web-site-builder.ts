@@ -1,4 +1,4 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import fs from 'fs';
 import Mustache from 'mustache';
 import contentful from 'contentful';
@@ -10,7 +10,7 @@ import { TranmereWebUtils } from './tranmere-web-utils';
 const utils = new TranmereWebUtils();
 
 export class SiteBuilder {
-  pages: Array<SiteMapEntry> = new Array<SiteMapEntry>();
+  pages: SiteMapEntry[] = new Array<SiteMapEntry>();
 
   addSiteMapEntry(url: string) {
     this.pages.push(this.buildSitemapEntry(url));

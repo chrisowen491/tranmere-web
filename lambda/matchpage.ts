@@ -59,11 +59,10 @@ exports.handler = async (
   if (view.attendance! > 0) view.hasAttendance = true;
   if (view.venue && view.venue != 'Unknown') view.hasVenue = true;
 
-  const noPositionList: Array<Appearance> = [];
-  for (let i = 0; i < view.apps.length; i++) {
-    const app = view.apps[i];
+  const noPositionList: Appearance[] = [];
+  for (const app of view.apps) {
     if (playerMap[app.Name]) {
-      app.bio = playerMap[view.apps[i].Name];
+      app.bio = playerMap[app.Name];
 
       if (app.bio && app.bio.picLink) {
         let theSeason = season;
@@ -110,23 +109,23 @@ exports.handler = async (
     }
   }
 
-  for (let i = 0; i < noPositionList.length; i++) {
+  for (const position of noPositionList) {
     if (view.goalkeepers.length == 0) {
-      view.goalkeepers.push(noPositionList[i]);
+      view.goalkeepers.push(position);
     } else if (view.fullback1.length == 0) {
-      view.fullback1.push(noPositionList[i]);
+      view.fullback1.push(position);
     } else if (view.fullback2.length == 0) {
-      view.fullback2.push(noPositionList[i]);
+      view.fullback2.push(position);
     } else if (view.defenders.length < 2) {
-      view.defenders.push(noPositionList[i]);
+      view.defenders.push(position);
     } else if (view.wingers1.length == 0) {
-      view.wingers1.push(noPositionList[i]);
+      view.wingers1.push(position);
     } else if (view.wingers2.length == 0) {
-      view.wingers2.push(noPositionList[i]);
+      view.wingers2.push(position);
     } else if (view.midfielders.length < 2) {
-      view.midfielders.push(noPositionList[i]);
+      view.midfielders.push(position);
     } else {
-      view.strikers.push(noPositionList[i]);
+      view.strikers.push(position);
     }
   }
 

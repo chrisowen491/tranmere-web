@@ -1,4 +1,4 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { APIGatewayEvent, APIGatewayProxyResult } from 'aws-lambda';
 import {
   TranmereWebUtils,
@@ -55,7 +55,7 @@ exports.handler = async (
     sort,
     or
   );
-  const results: Array<any> = [];
+  const results: any[] = [];
   const h2hresults = [
     buildDefaultSummary('Home'),
     buildDefaultSummary('Away'),

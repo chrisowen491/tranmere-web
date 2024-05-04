@@ -7,7 +7,7 @@ import * as iam from 'aws-cdk-lib/aws-iam';
 import * as ddb from 'aws-cdk-lib/aws-dynamodb';
 
 export interface TranmereWebGraphQLProps {
-  readonly tables?: Array<TranmereWebDynamoDBTableProps>;
+  readonly tables?: TranmereWebDynamoDBTableProps[];
   readonly api?: apigw.RestApi;
   readonly region?: string;
 }

@@ -1,4 +1,4 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { APIGatewayEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { TranmereWebUtils, DataTables } from '../lib/tranmere-web-utils';
 import { DynamoDBDocument, QueryCommandInput } from '@aws-sdk/lib-dynamodb';
@@ -68,13 +68,12 @@ exports.handler = async (
 
   const result = season ? await dynamo.query(query) : await dynamo.scan(query);
   const results = result.Items;
-  const amendedResults: Array<any> = [];
-  results?.forEach(result => {
-    result.team =
-      result!.from != 'Tranmere Rovers' ? result!.from : result!.to;
+  const amendedResults: any[] = [];
+  results?.forEach((result) => {
+    result.team = result!.from != 'Tranmere Rovers' ? result!.from : result!.to;
     result!.type = result!.from != 'Tranmere Rovers' ? 'in' : 'out';
-    amendedResults.push(result!);    
-  })
+    amendedResults.push(result!);
+  });
 
   if (!season) {
     amendedResults.sort(function (a, b) {
