@@ -1,11 +1,12 @@
-import { APIGatewayEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+import { APIGatewayEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { TranmereWebUtils, DataTables } from '../lib/tranmere-web-utils';
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import { DynamoDB } from '@aws-sdk/client-dynamodb';
 import { createClient } from 'contentful';
 import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
 import { IBlogPost } from '../lib/contentful';
-let utils = new TranmereWebUtils();
+const utils = new TranmereWebUtils();
 const dynamo = DynamoDBDocument.from(
   new DynamoDB({ apiVersion: '2012-08-10' })
 );
@@ -16,20 +17,19 @@ const client = createClient({
 });
 
 exports.handler = async (
-  event: APIGatewayEvent,
-  context: Context
+  event: APIGatewayEvent
 ): Promise<APIGatewayProxyResult> => {
-  var pageName = event.pathParameters!.pageName;
-  var classifier = event.pathParameters!.classifier;
-  var view: any = {};
+  let pageName = event.pathParameters!.pageName;
+  const classifier = event.pathParameters!.classifier;
+  let view: any = {};
 
   if (pageName === 'home') {
     const blogs = await utils.getBlogs(client);
-    let players = await utils.findAllPlayers();
-    let random = Math.floor(Math.random() * (players.length - 1));
-    let randomplayer = players[random];
+    const players = await utils.findAllPlayers();
+    const random = Math.floor(Math.random() * (players.length - 1));
+    const randomplayer = players[random];
 
-    var debutSearch = await dynamo.query({
+    const debutSearch = await dynamo.query({
       TableName: DataTables.APPS_TABLE_NAME,
       KeyConditionExpression: '#name = :name',
       IndexName: 'ByPlayerIndex',
@@ -42,7 +42,7 @@ exports.handler = async (
       Limit: 1
     });
 
-    var apps_query = await dynamo.query({
+    const apps_query = await dynamo.query({
       TableName: DataTables.SUMMARY_TABLE_NAME,
       IndexName: 'ByPlayerIndex',
       KeyConditionExpression: 'Player = :player and Season = :season',
@@ -51,7 +51,7 @@ exports.handler = async (
         ':season': 'TOTAL'
       }
     });
-    var seasonMapping = {
+    const seasonMapping = {
       '1978': 1977,
       '1984': 1983,
       '1990': 1989,
@@ -64,8 +64,8 @@ exports.handler = async (
       '2005': 2006,
       '2008': 2007
     };
-    var re = /\/\d\d\d\d\//gm;
-    var re3 = /\/\d\d\d\d[A-Za-z]\//gm;
+    const re = /\/\d\d\d\d\//gm;
+    const re3 = /\/\d\d\d\d[A-Za-z]\//gm;
     let season = debutSearch.Items![0].Season;
     if (seasonMapping[season]) season = seasonMapping[season];
 
@@ -93,8 +93,8 @@ exports.handler = async (
       }
     };
   } else if (pageName === 'player') {
-    var playerName = classifier!;
-    var playerSearch = await dynamo.query({
+    const playerName = classifier!;
+    const playerSearch = await dynamo.query({
       TableName: DataTables.PLAYER_TABLE_NAME,
       KeyConditionExpression: '#name = :name',
       ExpressionAttributeNames: {
@@ -107,7 +107,7 @@ exports.handler = async (
       Limit: 1
     });
 
-    var summarySearch = await dynamo.query({
+    const summarySearch = await dynamo.query({
       TableName: DataTables.SUMMARY_TABLE_NAME,
       KeyConditionExpression: '#player = :player',
       IndexName: 'ByPlayerIndex',
@@ -119,7 +119,7 @@ exports.handler = async (
       }
     });
 
-    var transfers = await dynamo.query({
+    const transfers = await dynamo.query({
       TableName: DataTables.TRANSFER_TABLE,
       KeyConditionExpression: '#name = :name',
       IndexName: 'ByNameIndex',
@@ -131,20 +131,20 @@ exports.handler = async (
       }
     });
 
-    var appearances = await utils.getAppsByPlayer(
+    const appearances = await utils.getAppsByPlayer(
       decodeURIComponent(playerName)
     );
 
-    var amendedTansfers: Array<any> = [];
-    for (var i = 0; i < transfers.Items!.length; i++) {
-      var transfer = transfers.Items![i];
+    const amendedTansfers: Array<any> = [];
+    for (let i = 0; i < transfers.Items!.length; i++) {
+      const transfer = transfers.Items![i];
       transfer.club =
         transfer.from == 'Tranmere Rovers' ? transfer.to : transfer.from;
       transfer.type = transfer.from == 'Tranmere Rovers' ? 'right' : 'left';
       amendedTansfers.push(transfer);
     }
 
-    var links = await dynamo.query({
+    const links = await dynamo.query({
       TableName: DataTables.LINKS_TABLE,
       KeyConditionExpression: '#name = :name',
       IndexName: 'ByNameIndex',
@@ -156,7 +156,7 @@ exports.handler = async (
       }
     });
 
-    var pl = playerSearch.Items!.length == 1 ? playerSearch.Items![0] : null;
+    const pl = playerSearch.Items!.length == 1 ? playerSearch.Items![0] : null;
 
     if (playerSearch.Items!.length == 0 && summarySearch.Items!.length == 0) {
       throw new Error('Player has no records');
@@ -179,8 +179,8 @@ exports.handler = async (
     view.pageType = 'AboutPage';
     view.description = 'Player Profile for ' + decodeURIComponent(playerName);
   } else if (pageName === 'tag') {
-    var tagId = decodeURIComponent(classifier!);
-    var items = await client.getEntries({
+    const tagId = decodeURIComponent(classifier!);
+    const items = await client.getEntries({
       'fields.tags': tagId,
       content_type: 'blogPost',
       order: ['-sys.createdAt']
@@ -194,10 +194,10 @@ exports.handler = async (
       url: `/page/${pageName}/${classifier}`
     };
   } else if (pageName === 'blog') {
-    var blogId = decodeURIComponent(classifier!);
-    var blog = await client.getEntry<IBlogPost>(blogId);
-    var blogs = await utils.getBlogs(client);
-    let options = {
+    const blogId = decodeURIComponent(classifier!);
+    const blog = await client.getEntry<IBlogPost>(blogId);
+    const blogs = await utils.getBlogs(client);
+    const options = {
       renderNode: {
         'embedded-asset-block': (node) =>
           `<img src="${node.data.target.fields.file.url}?h=400"/>`
@@ -212,39 +212,39 @@ exports.handler = async (
     view.carousel = [];
 
     if (view.gallery) {
-      for (var i = 0; i < view.gallery.length; i++) {
-        var image = {
-          imagePath: view.gallery[i].fields.file.url,
-          linkPath: view.gallery[i].fields.file.url,
-          name: view.gallery[i].fields.title,
-          description: view.gallery[i].fields.description
+      view.gallery.forEach((gallery) => {
+        const image = {
+          imagePath: gallery.fields.file.url,
+          linkPath: gallery.fields.file.url,
+          name: gallery.fields.title,
+          description: gallery.fields.description
         };
         view.carousel.push(image);
-      }
+      });
       pageName = 'gallery';
       delete view.gallery;
     }
 
     if (view.galleryTag) {
-      var pictures = await client.getAssets({
+      const pictures = await client.getAssets({
         'metadata.tags.sys.id[in]': view.galleryTag,
         order: ['sys.createdAt']
       });
-      for (var i = 0; i < pictures.items.length; i++) {
+      pictures.items.forEach((picture) => {
         view.carousel.push({
-          imagePath: pictures.items[i].fields.file!.url,
-          linkPath: pictures.items[i].fields.file!.url,
-          name: pictures.items[i].fields.title,
-          description: pictures.items[i].fields.title
+          imagePath: picture.fields.file!.url,
+          linkPath: picture.fields.file!.url,
+          name: picture.fields.title,
+          description: picture.fields.title
         });
-      }
+      });
       pageName = 'gallery';
       delete view.gallery;
     }
 
     if (view.blocks) {
-      var blockContent = '';
-      for (var b = 0; b < view.blocks.length; b++) {
+      let blockContent = '';
+      for (let b = 0; b < view.blocks.length; b++) {
         blockContent =
           blockContent +
           '\n' +
@@ -257,8 +257,8 @@ exports.handler = async (
     }
 
     if (view.cardBlocks) {
-      var blockContent = '';
-      for (var b = 0; b < view.cardBlocks.length; b++) {
+      let blockContent = '';
+      for (let b = 0; b < view.cardBlocks.length; b++) {
         blockContent =
           blockContent +
           '\n' +
@@ -296,6 +296,15 @@ exports.handler = async (
       view.title = `Results - Penalty Shootouts`;
       view.description = `Tranmere Rovers FC Results In Penalty Shootouts`;
       view.pens = 'Penalty Shootout';
+    } else if (classifier === 'top-attendances') {
+      view.title = `Top Attendences`;
+      view.description = `Tranmere Rovers FC Results Top Attendences`;
+      view.sort = 'Top Attendance';
+    } else if (classifier === 'top-home-attendances') {
+      view.title = `Top Home Attendences`;
+      view.description = `Tranmere Rovers FC Results Top Attendences At Home Prenton Park`;
+      view.sort = 'Top Attendance';
+      view.venue = 'Prenton Park';
     } else {
       view.title = `Results vs ${decodeURIComponent(classifier!)}`;
       view.description = `Tranmere Rovers FC Results against ${decodeURIComponent(classifier!)}`;
@@ -304,6 +313,6 @@ exports.handler = async (
   }
   view.random = Math.ceil(Math.random() * 100000);
   const maxAge = pageName === 'player' ? 86400 : 2592000;
-  const page = utils.buildPage(view, `./templates/${pageName}.tpl.html`);
+  const page = utils.buildPage(view, `./templates/${pageName}.mustache`);
   return utils.sendHTMLResponse(page, maxAge);
 };

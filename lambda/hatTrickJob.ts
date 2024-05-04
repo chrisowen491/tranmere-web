@@ -1,38 +1,34 @@
 import { v4 as uuidv4 } from 'uuid';
-import { APIGatewayEvent, Context } from 'aws-lambda';
+import { APIGatewayEvent } from 'aws-lambda';
 import { TranmereWebUtils, DataTables } from '../lib/tranmere-web-utils';
-let utils = new TranmereWebUtils();
-exports.handler = async (event: APIGatewayEvent, context: Context) => {
+const utils = new TranmereWebUtils();
+exports.handler = async (event: APIGatewayEvent) => {
   console.log('Received event:', event);
 
-  for (var i = 1977; i <= utils.getYear(); i++) {
-    var dateMap = {};
-    var goals = await utils.getGoalsBySeason(i);
+  for (let i = 1977; i <= utils.getYear(); i++) {
+    const dateMap = {};
+    const goals = await utils.getGoalsBySeason(i);
 
-    for (var g = 0; g < goals.length; g++) {
-      var goal = goals[g];
-
+    goals.forEach((goal) => {
       if (!dateMap[goal.Date]) {
         dateMap[goal.Date] = [goal];
       } else {
         dateMap[goal.Date].push(goal);
       }
-    }
-
-    for (var key in dateMap) {
+    });
+    for (const key in dateMap) {
       if (Object.prototype.hasOwnProperty.call(dateMap, key)) {
         if (dateMap[key].length >= 3) {
-          var playerMap = {};
-          for (var g = 0; g < dateMap[key].length; g++) {
-            var goal = dateMap[key][g];
+          const playerMap = {};
+          dateMap[key].array.forEach((goal) => {
             if (!playerMap[goal.Scorer]) {
               playerMap[goal.Scorer] = [goal];
             } else {
               playerMap[goal.Scorer].push(goal);
             }
-          }
+          });
 
-          for (var player in playerMap) {
+          for (const player in playerMap) {
             if (Object.prototype.hasOwnProperty.call(playerMap, player)) {
               if (playerMap[player].length >= 3) {
                 console.log(
@@ -44,7 +40,7 @@ exports.handler = async (event: APIGatewayEvent, context: Context) => {
                 const expirationTime =
                   secondsSinceEpoch + 24 * SECONDS_IN_AN_HOUR;
 
-                var entry = {
+                const entry = {
                   id: uuidv4(),
                   TimeToLive: expirationTime,
                   Season: playerMap[player][0].Season,

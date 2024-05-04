@@ -1,15 +1,15 @@
 export function translatePlayerName(input: string): string {
   const regex = /\s*\(s\/o\s\d+\)\s*/g;
   input = input.replace(regex, '');
-  var mapping = {
+  const mapping = {
     'Rob Apter': 'Robert Apter'
   };
   return mapping[input.trim()] ? mapping[input.trim()] : input.trim();
 }
 
 export function translateTeamName(input: string): string {
-  var lookup = input ? input.trim() : '';
-  var mapping = {
+  const lookup = input ? input.trim() : '';
+  const mapping = {
     'Stevenage Borough': 'Stevege Borough',
     Stevenage: 'Stevege Borough'
   };

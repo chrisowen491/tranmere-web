@@ -50,13 +50,13 @@ export class TranmereWebLambda extends Construct {
     });
 
     if (props.readTables) {
-      for (var i = 0; i < props.readTables?.length; i++) {
+      for (let i = 0; i < props.readTables?.length; i++) {
         props.readTables[i].grantReadData(the_lambda);
       }
     }
 
     if (props.readWriteTables) {
-      for (var i = 0; i < props.readWriteTables?.length; i++) {
+      for (let i = 0; i < props.readWriteTables?.length; i++) {
         props.readWriteTables[i].grantReadWriteData(the_lambda);
       }
     }

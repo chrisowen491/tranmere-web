@@ -101,7 +101,7 @@ export class TranmereWebGraphQL extends Construct {
     }
 
     if (props.tables) {
-      for (var i = 0; i < props.tables.length; i++) {
+      for (let i = 0; i < props.tables.length; i++) {
         const tableName = props.tables[i].table.tableName;
         const table = props.tables[i].table;
         const dynamoDataSources = graphql.addDynamoDbDataSource(

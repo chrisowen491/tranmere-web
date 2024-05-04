@@ -1,4 +1,4 @@
-import { TranmereWebUtils } from './tranmere-web-utils';
+import { TranmereWebUtils } from '../lib/tranmere-web-utils';
 import contentful from 'contentful-management';
 import { richTextFromMarkdown } from '@contentful/rich-text-from-markdown';
 import { ChatOpenAI } from '@langchain/openai';
@@ -157,9 +157,9 @@ const utils = new TranmereWebUtils();
 
 export class ProfileBuilder {
   async buildProfiles() {
-    let players = await utils.findAllPlayers();
+    const players = await utils.findAllPlayers();
 
-    for (var i = 0; i < players.length; i++) {
+    for (let i = 0; i < players.length; i++) {
       try {
         const cm_entry = entries.items.find(
           (p) => p.fields.name && p.fields.name['en-GB'] === players[i].name

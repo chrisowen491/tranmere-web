@@ -1,9 +1,8 @@
-import { APIGatewayEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
+import { APIGatewayEvent, APIGatewayProxyResult } from 'aws-lambda';
 import fs from 'fs';
 
 exports.handler = async (
-  event: APIGatewayEvent,
-  context: Context
+  event: APIGatewayEvent
 ): Promise<APIGatewayProxyResult> => {
   console.log('Received event:', event);
 
@@ -60,7 +59,7 @@ exports.handler = async (
         .replace(end, '')
     : null;
 
-  var svg = `${start}${background}${hairBg}${kit}${body}${hair}${features}${collar}${end}`;
+  let svg = `${start}${background}${hairBg}${kit}${body}${hair}${features}${collar}${end}`;
 
   svg = svg.replace(/#SKIN/g, `#${event.pathParameters.body}`);
   svg = svg.replace(/#HAIR/g, `#${event.pathParameters.hairColour}`);

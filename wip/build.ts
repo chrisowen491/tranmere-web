@@ -1,4 +1,4 @@
-import { ProfileBuilder } from './lib/tranmere-web-profile-builder';
+import { ProfileBuilder } from './tranmere-web-profile-builder';
 
 const profileBuilderInstance = new ProfileBuilder();
 

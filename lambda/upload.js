@@ -1,12 +1,11 @@
 const { v4: uuidv4 } = require('uuid');
 const csv=require('csvtojson');
-const AWS = require('aws-sdk');
-const fs = require("fs");
+import AWS from 'aws-sdk';
 const utils = require('../lib/utils')();
 const docClient = new AWS.DynamoDB.DocumentClient();
 
-exports.handler = (event, context) => {
-   var tableName = utils.TRANSFER_TABLE;
+exports.handler = () => {
+   const tableName = utils.TRANSFER_TABLE;
 
     csv().fromFile("./csv/transfers.csv")
         .on('data', (row) => {

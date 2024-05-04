@@ -1,4 +1,4 @@
-import { APIGatewayEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
+import { APIGatewayEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { TranmereWebUtils, DataTables } from '../lib/tranmere-web-utils';
 import { MatchEvent, Match, Appearance, Goal } from '../lib/tranmere-web-types';
 import {
@@ -11,7 +11,7 @@ import { ChatPromptTemplate } from '@langchain/core/prompts';
 import { DynamoDBDocument, UpdateCommand } from '@aws-sdk/lib-dynamodb';
 import { DynamoDB } from '@aws-sdk/client-dynamodb';
 import moment from 'moment';
-let utils = new TranmereWebUtils();
+const utils = new TranmereWebUtils();
 const dynamo = DynamoDBDocument.from(
   new DynamoDB({ apiVersion: '2012-08-10' })
 );
@@ -24,8 +24,7 @@ import { z } from 'zod';
 import { StructuredOutputParser } from 'langchain/output_parsers';
 
 exports.handler = async (
-  event: APIGatewayEvent,
-  context: Context
+  event: APIGatewayEvent
 ): Promise<APIGatewayProxyResult> => {
   const day = event.pathParameters
     ? event.pathParameters!.date
@@ -93,13 +92,13 @@ exports.handler = async (
     ][0].events[0].awayTeam.scores.score;
 
   const lineup_url = `https://push.api.bbci.co.uk/batch?t=%2Fdata%2Fbbc-morph-sport-football-team-lineups-data%2Fevent%2F${reportId}%2Fversion%2F1.0.8`;
-  let lineups = await axios.get(lineup_url, options);
+  const lineups = await axios.get(lineup_url, options);
 
   const attendance = lineups.data.payload[0].body.meta.attendance
     ? parseInt(lineups.data.payload[0].body.meta.attendance.replace(/,/g, ''))
     : 0;
 
-  let theMatch: Match = {
+  const theMatch: Match = {
     date: day!,
     attendance: attendance,
     referee: lineups.data.payload[0].body.meta.referee,
@@ -139,11 +138,11 @@ exports.handler = async (
   }
   await utils.insertUpdateItem(theMatch, DataTables.RESULTS_TABLE);
 
-  let team = theMatch.home === 'Tranmere Rovers' ? 'homeTeam' : 'awayTeam';
+  const team = theMatch.home === 'Tranmere Rovers' ? 'homeTeam' : 'awayTeam';
   for await (const element of lineups.data.payload[0].body.teams[team]
     .players) {
     if (element.meta.status === 'starter') {
-      var app: Appearance = {
+      const app: Appearance = {
         id: uuidv4(),
         Date: day!,
         Opposition: theMatch.opposition!,
@@ -186,9 +185,9 @@ exports.handler = async (
   }
 
   const events: MatchEvent[] = [];
-  let page = 1;
+  const page = 1;
 
-  let url = `https://push.api.bbci.co.uk/batch?t=%2Fdata%2Fbbc-morph-lx-commentary-data-paged%2Fdiscipline%2Fsoccer%2FeventId%2F${reportId}%2FisUk%2Ffalse%2Flimit%2F20%2FnitroKey%2Flx-nitro%2FpageNumber%2F${page}%2Fversion%2F1.5.6`;
+  const url = `https://push.api.bbci.co.uk/batch?t=%2Fdata%2Fbbc-morph-lx-commentary-data-paged%2Fdiscipline%2Fsoccer%2FeventId%2F${reportId}%2FisUk%2Ffalse%2Flimit%2F20%2FnitroKey%2Flx-nitro%2FpageNumber%2F${page}%2Fversion%2F1.5.6`;
 
   const summary = await axios.get(url, options);
 
@@ -207,8 +206,8 @@ exports.handler = async (
       page <= summary.data.payload[0].body.numberOfPages;
       page++
     ) {
-      let url = `https://push.api.bbci.co.uk/batch?t=%2Fdata%2Fbbc-morph-lx-commentary-data-paged%2Fdiscipline%2Fsoccer%2FeventId%2F${reportId}%2FisUk%2Ffalse%2Flimit%2F20%2FnitroKey%2Flx-nitro%2FpageNumber%2F${page}%2Fversion%2F1.5.6`;
-      let next_page = await axios.get(url, options);
+      const url = `https://push.api.bbci.co.uk/batch?t=%2Fdata%2Fbbc-morph-lx-commentary-data-paged%2Fdiscipline%2Fsoccer%2FeventId%2F${reportId}%2FisUk%2Ffalse%2Flimit%2F20%2FnitroKey%2Flx-nitro%2FpageNumber%2F${page}%2Fversion%2F1.5.6`;
+      const next_page = await axios.get(url, options);
       next_page.data.payload[0].body.results.forEach((element) => {
         if (element.time && element.time.trim() !== '')
           events.unshift({
@@ -291,8 +290,8 @@ exports.handler = async (
     format_instructions: parser.getFormatInstructions()
   });
 
-  for await (let obj of goal_response.goals) {
-    let goal: Goal = {
+  for await (const obj of goal_response.goals) {
+    const goal: Goal = {
       id: uuidv4(),
       Date: day!,
       GoalType: obj.GoalType?.valueOf(),

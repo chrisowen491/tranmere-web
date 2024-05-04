@@ -11,24 +11,27 @@ require('bootstrap');
 // accordion
 jQuery(function () {
   $('.collapse').on('show.bs.collapse', function () {
-      $(this).parent().addClass('active');
+    $(this).parent().addClass('active');
   });
 
   $('.collapse').on('hide.bs.collapse', function () {
-      $(this).parent().removeClass('active');
+    $(this).parent().removeClass('active');
   });
 
   //$('[data-toggle="tooltip"]').tooltip()
 
-  var window_width = jQuery( window ).width();
+  var window_width = jQuery(window).width();
 
   // recalc on collapse
-  $('.nav-item .collapse').on('shown.bs.collapse hidden.bs.collapse', function () {
-    $(".sticky").trigger("sticky_kit:recalc");
-  });
+  $('.nav-item .collapse').on(
+    'shown.bs.collapse hidden.bs.collapse',
+    function () {
+      $('.sticky').trigger('sticky_kit:recalc');
+    }
+  );
 });
 
-(function(){
+(function () {
   if (typeof self === 'undefined' || !self.Prism || !self.document) {
     return;
   }

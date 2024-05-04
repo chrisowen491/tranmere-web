@@ -1,17 +1,16 @@
-import { APIGatewayEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
+import { APIGatewayEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { TranmereWebUtils, DataTables } from '../lib/tranmere-web-utils';
 import { Match } from '../lib/tranmere-web-types';
 import { DynamoDBDocument, UpdateCommand } from '@aws-sdk/lib-dynamodb';
 
 import { DynamoDB } from '@aws-sdk/client-dynamodb';
-let utils = new TranmereWebUtils();
+const utils = new TranmereWebUtils();
 const dynamo = DynamoDBDocument.from(
   new DynamoDB({ apiVersion: '2012-08-10' })
 );
 
 exports.handler = async (
-  event: APIGatewayEvent,
-  context: Context
+  event: APIGatewayEvent
 ): Promise<APIGatewayProxyResult> => {
   const date = event.pathParameters!.date;
   const season = event.pathParameters!.season;
@@ -20,7 +19,7 @@ exports.handler = async (
 
   if (body.attendance) attendance = parseInt(body.attendance.toString());
 
-  var params = new UpdateCommand({
+  const params = new UpdateCommand({
     TableName: DataTables.RESULTS_TABLE,
     Key: {
       season: season,

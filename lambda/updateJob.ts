@@ -1,18 +1,17 @@
-import { APIGatewayEvent, Context } from 'aws-lambda';
 import { TranmereWebUtils, DataTables } from '../lib/tranmere-web-utils';
-let utils = new TranmereWebUtils();
+const utils = new TranmereWebUtils();
 
-exports.handler = async (event: APIGatewayEvent, context: Context) => {
-  var playerTotalsHash = {};
+exports.handler = async () => {
+  const playerTotalsHash = {};
 
-  for (var i = 1977; i <= utils.getYear(); i++) {
-    var playerHash = {};
+  for (let i = 1977; i <= utils.getYear(); i++) {
+    const playerHash = {};
 
-    var apps = await utils.getAppsBySeason(i);
-    var goals = await utils.getGoalsBySeason(i);
+    const apps = await utils.getAppsBySeason(i);
+    const goals = await utils.getGoalsBySeason(i);
 
-    for (var a = 0; a < apps.length; a++) {
-      var app = apps[a];
+    for (let a = 0; a < apps.length; a++) {
+      const app = apps[a];
       if (!playerHash[app.Name]) {
         playerHash[app.Name] = buildNewPlayer(i, app.Name);
       }
@@ -33,8 +32,8 @@ exports.handler = async (event: APIGatewayEvent, context: Context) => {
         if (app.SubRed) playerHash[app.SubbedBy].red++;
       }
     }
-    for (var g = 0; g < goals.length; g++) {
-      var goal = goals[g];
+    for (let g = 0; g < goals.length; g++) {
+      const goal = goals[g];
       if (!playerHash[goal.Scorer]) {
         playerHash[goal.Scorer] = buildNewPlayer(i, goal.Scorer);
       }
@@ -54,7 +53,7 @@ exports.handler = async (event: APIGatewayEvent, context: Context) => {
       }
     }
 
-    for (var key in playerHash) {
+    for (const key in playerHash) {
       if (Object.prototype.hasOwnProperty.call(playerHash, key)) {
         if (key != '')
           await utils.insertUpdateItem(
@@ -90,7 +89,7 @@ exports.handler = async (event: APIGatewayEvent, context: Context) => {
     }
   }
 
-  for (var key in playerTotalsHash) {
+  for (const key in playerTotalsHash) {
     if (Object.prototype.hasOwnProperty.call(playerTotalsHash, key)) {
       if (key != '')
         await utils.insertUpdateItem(

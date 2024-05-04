@@ -1,5 +1,5 @@
 jQuery(function () {
-    if(location.hostname === "localhost") {
-        $('.edit').show();
-    }
+  if (location.hostname === 'localhost') {
+    $('.edit').show();
+  }
 });

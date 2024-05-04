@@ -1,7 +1,7 @@
-import { APIGatewayEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
+import { APIGatewayEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { TranmereWebUtils } from '../lib/tranmere-web-utils';
 import { createClient } from 'contentful';
-let utils = new TranmereWebUtils();
+const utils = new TranmereWebUtils();
 
 const client = createClient({
   space: process.env.CF_SPACE!,
@@ -9,8 +9,7 @@ const client = createClient({
 });
 
 exports.handler = async (
-  event: APIGatewayEvent,
-  context: Context
+  event: APIGatewayEvent
 ): Promise<APIGatewayProxyResult> => {
   console.log('Received event:', event);
   console.log(event.pathParameters!.type);
@@ -20,7 +19,7 @@ exports.handler = async (
 
     if (body.sys.type === 'Entry') {
       const content = await client.getEntry(body.sys.id);
-      var item: any = content.fields;
+      const item = content.fields;
       item.id = body.sys.id;
       await utils.insertUpdateItem(item, event.pathParameters!.type!);
     } else if (body.sys.type === 'DeletedEntry') {

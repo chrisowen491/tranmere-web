@@ -11,9 +11,7 @@ if ($('#autocomplete').length) {
   autocomplete({
     container: '#autocomplete',
     placeholder: 'Enter a player, opposition, year etc ...',
-    classNames: {
-
-    },
+    classNames: {},
     getSources({ query }) {
       return [
         {
@@ -24,9 +22,9 @@ if ($('#autocomplete').length) {
               queries: [
                 {
                   indexName: 'TranmereWeb',
-                  query,
-                },
-              ],
+                  query
+                }
+              ]
             });
           },
           onSelect({ item }) {
@@ -55,14 +53,14 @@ if ($('#autocomplete').length) {
                       ${components.Highlight({ hit: item, attribute: 'name' })}
                     </div>
                     <div class="aa-ItemContentDescription">
-                    ${item.description}
+                      ${item.description}
                     </div>
                   </div>
                 </div>
               </div>`;
-            },
-          },
-        },
+            }
+          }
+        }
       ];
     },
     render({ children, render, html }, root) {
@@ -70,7 +68,7 @@ if ($('#autocomplete').length) {
     },
     renderNoResults({ children, render, html }, root) {
       render(html`<div class="aa-NoResults">${children}</div>`, root);
-    },
+    }
   });
 }
 
@@ -78,9 +76,7 @@ if ($('#navsearch').length) {
   autocomplete({
     container: '#navsearch',
     placeholder: 'Search ...',
-    classNames: {
-
-    },
+    classNames: {},
     getSources({ query }) {
       return [
         {
@@ -91,9 +87,9 @@ if ($('#navsearch').length) {
               queries: [
                 {
                   indexName: 'TranmereWeb',
-                  query,
-                },
-              ],
+                  query
+                }
+              ]
             });
           },
           onSelect({ item }) {
@@ -107,15 +103,13 @@ if ($('#navsearch').length) {
               return html`<div class="aa-ItemWrapper">
                 <div class="aa-ItemContent">
                   <div class="aa-ItemContentBody">
-                    <div class="aa-ItemContentTitle">
-                      ${item.name}
-                    </div>
+                    <div class="aa-ItemContentTitle">${item.name}</div>
                   </div>
                 </div>
               </div>`;
-            },
-          },
-        },
+            }
+          }
+        }
       ];
     },
     render({ children, render, html }, root) {
@@ -123,6 +117,6 @@ if ($('#navsearch').length) {
     },
     renderNoResults({ children, render, html }, root) {
       render(html`<div class="aa-NoResults">${children}</div>`, root);
-    },
+    }
   });
 }

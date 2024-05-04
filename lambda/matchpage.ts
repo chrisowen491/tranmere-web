@@ -1,9 +1,9 @@
-import { APIGatewayEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
+import { APIGatewayEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { TranmereWebUtils, ProgrammeImage } from '../lib/tranmere-web-utils';
-import { MatchView } from '../lib/tranmere-web-types';
-let utils = new TranmereWebUtils();
+import { Appearance, MatchView } from '../lib/tranmere-web-types';
+const utils = new TranmereWebUtils();
 
-var playerMap = {};
+const playerMap = {};
 
 const re = /\/\d\d\d\d\//gm;
 const re3 = /\/\d\d\d\d[A-Za-z]\//gm;
@@ -22,28 +22,27 @@ const seasonMapping = {
 };
 
 exports.handler = async (
-  event: APIGatewayEvent,
-  context: Context
+  event: APIGatewayEvent
 ): Promise<APIGatewayProxyResult> => {
   const date = event.pathParameters!.date;
   const season = parseInt(event.pathParameters!.season!);
 
   if (!playerMap['John Aldridge']) {
-    var squadSearch = await utils.getAllPlayersFromDb();
-    for (var i = 0; i < squadSearch.length; i++) {
-      playerMap[squadSearch[i].name] = squadSearch[i];
-    }
+    const squadSearch = await utils.getAllPlayersFromDb();
+    squadSearch.forEach((player) => {
+      playerMap[player.name] = player;
+    });
   }
 
-  var match = await utils.getResultForDate(season, date!);
-  var report = await utils.getReportForDate(date!);
+  const match = await utils.getResultForDate(season, date!);
+  const report = await utils.getReportForDate(date!);
 
-  var view: MatchView = match!;
+  const view: MatchView = match!;
   view.report = report;
   view.goals = await utils.getGoalsBySeason(season, date);
   view.apps = await utils.getAppsBySeason(season, date);
   if (view.programme && view.programme != '#N/A') {
-    var largeBody = new ProgrammeImage(view.programme);
+    const largeBody = new ProgrammeImage(view.programme);
     view.largeProgramme = largeBody.imagestring();
   } else {
     delete view.programme;
@@ -60,14 +59,14 @@ exports.handler = async (
   if (view.attendance! > 0) view.hasAttendance = true;
   if (view.venue && view.venue != 'Unknown') view.hasVenue = true;
 
-  var noPositionList: Array<any> = [];
-  for (var i = 0; i < view.apps.length; i++) {
-    var app = view.apps[i];
+  const noPositionList: Array<Appearance> = [];
+  for (let i = 0; i < view.apps.length; i++) {
+    const app = view.apps[i];
     if (playerMap[app.Name]) {
       app.bio = playerMap[view.apps[i].Name];
 
       if (app.bio && app.bio.picLink) {
-        var theSeason = season;
+        let theSeason = season;
         if (seasonMapping[season]) theSeason = seasonMapping[season];
         app.bio.picLink = app.bio.picLink.replace(re, '/' + theSeason + '/');
         app.bio.picLink = app.bio.picLink.replace(re3, '/' + theSeason + '/');
@@ -111,7 +110,7 @@ exports.handler = async (
     }
   }
 
-  for (var i = 0; i < noPositionList.length; i++) {
+  for (let i = 0; i < noPositionList.length; i++) {
     if (view.goalkeepers.length == 0) {
       view.goalkeepers.push(noPositionList[i]);
     } else if (view.fullback1.length == 0) {
@@ -146,33 +145,35 @@ exports.handler = async (
   view.date = date!;
   view.season = season!.toString();
 
-  var page = utils.buildPage(view, './templates/match.tpl.html');
+  const page = utils.buildPage(view, './templates/match.mustache');
 
-  var maxAge = season == 2021 ? 86400 : 2592000;
+  const maxAge = season == 2021 ? 86400 : 2592000;
 
   return utils.sendHTMLResponse(page, maxAge);
 };
 
 function formatGoals(goals) {
-  var output = '';
-  var scorers = {};
-  for (var i = 0; i < goals.length; i++) {
-    if (scorers[goals[i].Scorer]) {
-      scorers[goals[i].Scorer] = scorers[goals[i].Scorer] + 1;
+  let output = '';
+  const scorers = {};
+  goals.forEach((goal) => {
+    if (scorers[goal.Scorer]) {
+      scorers[goal.Scorer] = scorers[goal.Scorer] + 1;
     } else {
-      scorers[goals[i].Scorer] = 1;
+      scorers[goal.Scorer] = 1;
     }
-  }
+  });
+
   const keys = Object.keys(scorers);
-  for (var x = 0; x < keys.length; x++) {
-    if (scorers[keys[x]] > 1) {
-      output = output + keys[x] + ' ' + scorers[keys[x]];
+
+  keys.forEach((key, index) => {
+    if (scorers[key] > 1) {
+      output = `${output}${key} ${scorers[key]}`;
     } else {
-      output = output + keys[x];
+      output = output + key;
     }
-    if (x != keys.length - 1) {
-      output = output + ', ';
+    if (index != keys.length - 1) {
+      output = `${output}, `;
     }
-  }
+  });
   return output;
 }

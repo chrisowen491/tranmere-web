@@ -1,27 +1,27 @@
-import { APIGatewayEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+import { APIGatewayEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { TranmereWebUtils, DataTables } from '../lib/tranmere-web-utils';
 import { DynamoDBDocument, QueryCommandInput } from '@aws-sdk/lib-dynamodb';
 import { DynamoDB } from '@aws-sdk/client-dynamodb';
-let utils = new TranmereWebUtils();
+const utils = new TranmereWebUtils();
 const dynamo = DynamoDBDocument.from(
   new DynamoDB({ apiVersion: '2012-08-10' })
 );
 
 exports.handler = async (
-  event: APIGatewayEvent,
-  context: Context
+  event: APIGatewayEvent
 ): Promise<APIGatewayProxyResult> => {
-  var season = event.queryStringParameters
+  const season = event.queryStringParameters
     ? event.queryStringParameters.season
     : null;
-  var filter = event.queryStringParameters
+  const filter = event.queryStringParameters
     ? event.queryStringParameters.filter
     : null;
-  var club = event.queryStringParameters
+  const club = event.queryStringParameters
     ? event.queryStringParameters.club
     : null;
 
-  var query: QueryCommandInput = {
+  const query: QueryCommandInput = {
     TableName: DataTables.TRANSFER_TABLE,
     IndexName: 'ByValueIndex',
     ScanIndexForward: false,
@@ -66,15 +66,15 @@ exports.handler = async (
     }
   }
 
-  var result = season ? await dynamo.query(query) : await dynamo.scan(query);
-  var results = result.Items;
-  var amendedResults: Array<any> = [];
-  for (var i = 0; i < results!.length; i++) {
-    results![i].team =
-      results![i].from != 'Tranmere Rovers' ? results![i].from : results![i].to;
-    results![i]!.type = results![i].from != 'Tranmere Rovers' ? 'in' : 'out';
-    amendedResults.push(results![i]);
-  }
+  const result = season ? await dynamo.query(query) : await dynamo.scan(query);
+  const results = result.Items;
+  const amendedResults: Array<any> = [];
+  results?.forEach(result => {
+    result.team =
+      result!.from != 'Tranmere Rovers' ? result!.from : result!.to;
+    result!.type = result!.from != 'Tranmere Rovers' ? 'in' : 'out';
+    amendedResults.push(result!);    
+  })
 
   if (!season) {
     amendedResults.sort(function (a, b) {

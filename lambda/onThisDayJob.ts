@@ -1,21 +1,21 @@
-import { APIGatewayEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
+import { APIGatewayEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { TranmereWebUtils, DataTables } from '../lib/tranmere-web-utils';
-let utils = new TranmereWebUtils();
+import { Match } from '../lib/tranmere-web-types';
+const utils = new TranmereWebUtils();
 
 exports.handler = async (
-  event: APIGatewayEvent,
-  context: Context
+  event: APIGatewayEvent
 ): Promise<APIGatewayProxyResult> => {
   console.log('Received event:', event);
 
-  var results: Array<any> = [];
+  const results: Array<Match> = [];
 
-  for (var i = 1977; i < utils.getYear(); i++) {
-    var today = new Date();
-    var year = today.getUTCMonth() > 5 ? i : i + 1;
+  for (const season of utils.getSeasons()) {
+    const today = new Date();
+    const year = today.getUTCMonth() > 5 ? season : season + 1;
     today.setFullYear(year);
-    var result = await utils.getResultForDate(
-      i,
+    const result = await utils.getResultForDate(
+      season,
       today.toISOString().slice(0, 10)
     );
 
@@ -26,13 +26,13 @@ exports.handler = async (
   }
 
   if (results.length > 0) {
-    var random = getRndInteger(0, results.length);
+    const random = getRndInteger(0, results.length);
     utils.insertUpdateItem(results[random], DataTables.ON_THIS_DAY_TABLE);
   }
 
   return utils.sendResponse(200, results);
 };
 
-function getRndInteger(min, max) {
+function getRndInteger(min : number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }

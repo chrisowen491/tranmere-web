@@ -3,11 +3,11 @@
   "version": "3.0.157",
   "description": "",
   "bin": {
-    "tranmere-web": "bin/tranmere-web.js"
+    "tranmere-web": "bin/tranmere-web.mjs"
   },
   "engines": {
     "npm": ">=9.5.0",
-    "node": ">=18.16.0"
+    "node": ">=21.1.0"
   },
   "scripts": {
     "build": "tsc -b && webpack",
@@ -20,13 +20,16 @@
     "acceptance-test": "newman run ./api_tests/postman-collection.json -e ./api_tests/env/aws-prod.json --env-var 'testApiKey=123'",
     "local-acceptance-test": "newman run ./api_tests/postman-collection.json -e ./api_tests/env/sam-local.json",
     "contentful-typescript-codegen": "contentful-typescript-codegen --output types/generated/contentful.d.ts",
-    "prettier": "prettier '*.ts' 'lib/**/*.ts' 'lambda/**/*.ts' 'types/**/*.ts' 'test/**/*.ts' --write"
+    "prettier": "prettier '*.ts' 'lib/**/*.ts' 'lambda/**/*.ts' 'types/**/*.ts' 'test/**/*.ts' 'functions/**/*.ts' 'tranmere-web/assets/js/**/*.js' --write",
+    "prepare": "husky"
   },
   "author": "Chris Owen",
   "license": "ISC",
   "devDependencies": {
     "@aws-cdk/aws-appsync-alpha": "^2.59.0-alpha.0",
+    "@cloudflare/workers-types": "^4.20240502.0",
     "@contentful/rich-text-from-markdown": "^15.16.15",
+    "@eslint/js": "^9.2.0",
     "@tsconfig/node16": "^16.0.0",
     "@types/aws-lambda": "^8.10.115",
     "@types/axios": "^0.14.0",
@@ -44,8 +47,10 @@
     "contentful-typescript-codegen": "^3.4.0",
     "css-loader": "^7.0.0",
     "esbuild": "^0.20.0",
+    "eslint": "^9.2.0",
     "esrun": "^3.2.26",
     "filemanager-webpack-plugin": "^8.0.0",
+    "husky": "^9.0.11",
     "jest": "^29.4.3",
     "json-loader": "^0.5.7",
     "lodash.template": ">=4.5.0",
@@ -60,7 +65,8 @@
     "sass-loader": "^14.0.0",
     "style-loader": "^4.0.0",
     "ts-jest": "^29.0.5",
-    "typescript": "~5.4.0",
+    "typescript": "^5.4.5",
+    "typescript-eslint": "^7.8.0",
     "webpack": "^5.76.3",
     "webpack-cli": "^5.0.1",
     "webpack-dev-server": "^5.0.0",

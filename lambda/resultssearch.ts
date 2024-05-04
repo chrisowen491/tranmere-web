@@ -1,4 +1,5 @@
-import { APIGatewayEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+import { APIGatewayEvent, APIGatewayProxyResult } from 'aws-lambda';
 import {
   TranmereWebUtils,
   DataTables,
@@ -6,15 +7,14 @@ import {
 } from '../lib/tranmere-web-utils';
 import { DynamoDBDocument, QueryCommandInput } from '@aws-sdk/lib-dynamodb';
 import { DynamoDB } from '@aws-sdk/client-dynamodb';
-let utils = new TranmereWebUtils();
+const utils = new TranmereWebUtils();
 
 const dynamo = DynamoDBDocument.from(
   new DynamoDB({ apiVersion: '2012-08-10' })
 );
 
 exports.handler = async (
-  event: APIGatewayEvent,
-  context: Context
+  event: APIGatewayEvent
 ): Promise<APIGatewayProxyResult> => {
   const season = event.queryStringParameters
     ? event.queryStringParameters.season
@@ -55,17 +55,17 @@ exports.handler = async (
     sort,
     or
   );
-  var results: Array<any> = [];
-  var h2hresults = [
+  const results: Array<any> = [];
+  const h2hresults = [
     buildDefaultSummary('Home'),
     buildDefaultSummary('Away'),
     buildDefaultSummary('Neutral')
   ];
-  var h2hTotal = [buildDefaultSummary('Total')];
-  for (var i = 0; i < data!.length; i++) {
-    var match = data![i];
+  const h2hTotal = [buildDefaultSummary('Total')];
+  for (let i = 0; i < data!.length; i++) {
+    const match = data![i];
     if (match.home == 'Tranmere Rovers') {
-      var haindex = 0;
+      let haindex = 0;
       if (match.venue == 'Wembley Stadium') {
         match.location = 'N';
         haindex = 2;
@@ -84,10 +84,10 @@ exports.handler = async (
       h2hresults[haindex].against += parseInt(match.vgoal);
       h2hresults[haindex].diff += parseInt(match.hgoal) - parseInt(match.vgoal);
     } else {
-      haindex = 1;
+      let haindex = 1;
       if (match.venue == 'Wembley Stadium') {
         match.location = 'N';
-        var haindex = 2;
+        haindex = 2;
       } else {
         match.location = 'A';
       }
@@ -104,14 +104,14 @@ exports.handler = async (
       h2hresults[haindex].diff += parseInt(match.vgoal) - parseInt(match.hgoal);
     }
     if (match.programme && match.programme != '#N/A') {
-      var smallBody = new ProgrammeImage(match.programme);
+      const smallBody = new ProgrammeImage(match.programme);
       smallBody.edits = {
         resize: {
           width: 100,
           fit: 'contain'
         }
       };
-      var largeBody = new ProgrammeImage(match.programme);
+      const largeBody = new ProgrammeImage(match.programme);
       match.programme = smallBody.imagestring();
       match.largeProgramme = largeBody.imagestring();
     } else {
@@ -129,7 +129,7 @@ exports.handler = async (
     h2hresults.pop();
   }
 
-  for (var i = 0; i < h2hresults.length; i++) {
+  for (let i = 0; i < h2hresults.length; i++) {
     h2hTotal[0].pld += h2hresults[i].pld;
     h2hTotal[0].wins += h2hresults[i].wins;
     h2hTotal[0].draws += h2hresults[i].draws;
@@ -174,8 +174,8 @@ async function getResults(
   sort,
   or
 ) {
-  var query = false;
-  var params: QueryCommandInput = {
+  let query = false;
+  let params: QueryCommandInput = {
     TableName: DataTables.RESULTS_TABLE,
     ExpressionAttributeValues: {},
     ExpressionAttributeNames: {}
@@ -222,7 +222,7 @@ async function getResults(
   }
 
   if (manager) {
-    var dates = manager.split(',');
+    const dates = manager.split(',');
     if (query && !params.ExpressionAttributeValues![':static']) {
       params.KeyConditionExpression =
         params.KeyConditionExpression + ' and #date BETWEEN :from and :to';
@@ -235,7 +235,7 @@ async function getResults(
   }
 
   if (or) {
-    var modifier = '>';
+    let modifier = '>';
     if (or == 'previous') {
       modifier = '<';
       params.ScanIndexForward = false;
@@ -281,11 +281,11 @@ async function getResults(
   if (!Object.keys(params.ExpressionAttributeNames!).length)
     delete params.ExpressionAttributeNames;
 
-  var result = query ? await dynamo.query(params) : await dynamo.scan(params);
-  var items = result.Items;
+  const result = query ? await dynamo.query(params) : await dynamo.scan(params);
+  let items = result.Items;
   if (typeof result.LastEvaluatedKey != 'undefined' && !or) {
     params.ExclusiveStartKey = result.LastEvaluatedKey;
-    var nextResults = query
+    const nextResults = query
       ? await dynamo.query(params)
       : await dynamo.scan(params);
     items = items!.concat(nextResults.Items!);

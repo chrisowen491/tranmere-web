@@ -1,40 +1,40 @@
-import { APIGatewayEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+import { APIGatewayEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { TranmereWebUtils, DataTables } from '../lib/tranmere-web-utils';
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import { DynamoDB } from '@aws-sdk/client-dynamodb';
-let utils = new TranmereWebUtils();
+const utils = new TranmereWebUtils();
 const dynamo = DynamoDBDocument.from(
   new DynamoDB({ apiVersion: '2012-08-10' })
 );
 
 exports.handler = async (
-  event: APIGatewayEvent,
-  context: Context
+  event: APIGatewayEvent
 ): Promise<APIGatewayProxyResult> => {
-  let squadSearch = await dynamo.scan({
+  const squadSearch = await dynamo.scan({
     TableName: DataTables.PLAYER_TABLE_NAME
   });
-  var playerHash: any = {};
-  for (var i = 0; i < squadSearch.Items!.length; i++) {
-    playerHash[squadSearch.Items![i].name] = squadSearch.Items![i];
+  const playerHash: any = {};
+  for (const member of squadSearch.Items!) {
+    playerHash[member.name] = member;
   }
 
-  var season = event.queryStringParameters
+  let season = event.queryStringParameters
     ? event.queryStringParameters.season
     : null;
-  var sort = event.queryStringParameters
+  const sort = event.queryStringParameters
     ? event.queryStringParameters.sort
     : null;
-  var player = event.queryStringParameters
+  const player = event.queryStringParameters
     ? event.queryStringParameters.player
     : null;
-  var filter = event.queryStringParameters
+  const filter = event.queryStringParameters
     ? event.queryStringParameters.filter
     : null;
 
   if (!season) season = 'TOTAL';
 
-  var query = player
+  const query = player
     ? {
         TableName: DataTables.SUMMARY_TABLE_NAME,
         IndexName: 'ByPlayerIndex',
@@ -51,10 +51,10 @@ exports.handler = async (
         }
       };
 
-  var result = await dynamo.query(query);
-  var results = result.Items!;
+  const result = await dynamo.query(query);
+  let results = result.Items!;
 
-  for (var x = 0; x < results.length; x++) {
+  for (let x = 0; x < results.length; x++) {
     delete results[x].TimeToLive;
     results[x].bio = playerHash[results[x].Player];
     if (results[x].bio && results[x].bio.picLink) {
@@ -69,52 +69,36 @@ exports.handler = async (
   }
 
   if (filter) {
-    var newResults: Array<any> = [];
-    for (var i = 0; i < results.length; i++) {
-      if (filter == 'OnlyOneApp' && results[i].Apps == 1) {
-        newResults.push(results[i]);
+    const newResults: Array<any> = [];
+    for (const match of results) {
+      if (filter == 'OnlyOneApp' && match.Apps == 1) {
+        newResults.push(match);
       }
-      if (
-        filter == 'GK' &&
-        results[i].bio &&
-        results[i].bio.position == 'Goalkeeper'
-      ) {
-        newResults.push(results[i]);
+      if (filter == 'GK' && match.bio && match.bio.position == 'Goalkeeper') {
+        newResults.push(match);
       }
-      if (
-        filter == 'STR' &&
-        results[i].bio &&
-        results[i].bio.position == 'Striker'
-      ) {
-        newResults.push(results[i]);
+      if (filter == 'STR' && match.bio && match.bio.position == 'Striker') {
+        newResults.push(match);
       }
       if (
         filter == 'CM' &&
-        results[i].bio &&
-        results[i].bio.position == 'Central Midfielder'
+        match.bio &&
+        match.bio.position == 'Central Midfielder'
       ) {
-        newResults.push(results[i]);
+        newResults.push(match);
       }
-      if (
-        filter == 'WIN' &&
-        results[i].bio &&
-        results[i].bio.position == 'Winger'
-      ) {
-        newResults.push(results[i]);
+      if (filter == 'WIN' && match.bio && match.bio.position == 'Winger') {
+        newResults.push(match);
       }
-      if (
-        filter == 'FB' &&
-        results[i].bio &&
-        results[i].bio.position == 'Full Back'
-      ) {
-        newResults.push(results[i]);
+      if (filter == 'FB' && match.bio && match.bio.position == 'Full Back') {
+        newResults.push(match);
       }
       if (
         filter == 'CD' &&
-        results[i].bio &&
-        results[i].bio.position == 'Central Defender'
+        match.bio &&
+        match.bio.position == 'Central Defender'
       ) {
-        newResults.push(results[i]);
+        newResults.push(match);
       }
     }
     results = newResults;

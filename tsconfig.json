@@ -23,7 +23,9 @@
         "experimentalDecorators": true,
         "strictPropertyInitialization": true,
         "skipLibCheck": true,
-        "typeRoots": ["./types", "./node_modules/@types"],    
+        "typeRoots": ["./types", "./node_modules/@types"],  
+        "types": ["node"]  
     },
-    "files": ["./lib/tranmere-web-site-builder.ts"]
+    "include": ["lib/*.ts", "lambda/**/*.ts", "bin/*.ts"],
+    "exclude": ["functions/**/*"]
 }

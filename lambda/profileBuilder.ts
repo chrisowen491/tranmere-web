@@ -1,4 +1,4 @@
-import { APIGatewayEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
+import { APIGatewayEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { createClient } from 'contentful-management';
 import { richTextFromMarkdown } from '@contentful/rich-text-from-markdown';
 import { ChatOpenAI } from '@langchain/openai';
@@ -8,6 +8,7 @@ import { pull } from 'langchain/hub';
 import { TranmereWebUtils } from '../lib/tranmere-web-utils';
 import { z } from 'zod';
 import { DynamicStructuredTool } from '@langchain/core/tools';
+import { TavilyResponse } from '../lib/tranmere-web-types';
 
 const llm = new ChatOpenAI({
   model: 'gpt-4-1106-preview',
@@ -19,7 +20,7 @@ const client = createClient({
   accessToken: process.env.CF_MANANGEMENT_KEY!
 });
 
-let utils = new TranmereWebUtils();
+const utils = new TranmereWebUtils();
 
 const tools = [
   new DynamicStructuredTool({
@@ -46,7 +47,7 @@ const tools = [
         })
       });
 
-      const response = await request.json();
+      const response = (await request.json()) as TavilyResponse;
       return response.answer;
     }
   }),
@@ -125,8 +126,7 @@ const tools = [
 ];
 
 exports.handler = async (
-  event: APIGatewayEvent,
-  context: Context
+  event: APIGatewayEvent
 ): Promise<APIGatewayProxyResult> => {
   const playerName = event.pathParameters!.playerName;
   console.log('Received event:', event);

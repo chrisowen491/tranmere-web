@@ -1,5 +1,17 @@
-import { Document } from '@contentful/rich-text-types';
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+
 import { IPageMetaDataFields } from './contentful';
+
+interface CloudflareEnv {
+  API_DOMAIN: string;
+  API_PROTOCOL: string;
+  API_PORT: string;
+  API_KEY: string;
+}
+
+export interface TavilyResponse {
+  answer: string;
+}
 
 export interface BaseView {
   name: string;

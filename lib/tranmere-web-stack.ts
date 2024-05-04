@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import * as cdk from 'aws-cdk-lib';
 import { aws_apigateway as apigw } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
