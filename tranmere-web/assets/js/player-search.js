@@ -1,5 +1,5 @@
 const Mustache = require('mustache');
-import '../templates/players.mustache';
+import '../../../templates/partials/players.mustache';
 const pack = require('../../../package.json');
 
 var seasonMapping = {

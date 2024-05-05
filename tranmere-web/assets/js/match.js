@@ -1,5 +1,5 @@
 const Mustache = require('mustache');
-import '../templates/results.mustache';
+import '../../../templates/partials/results.mustache';
 const pack = require('../../../package.json');
 
 function search(or) {

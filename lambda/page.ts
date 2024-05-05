@@ -298,13 +298,6 @@ exports.handler = async (
       view.description = `Tranmere Rovers FC Results In Penalty Shootouts`;
       view.pens = 'Penalty Shootout';
       pens = 'Penalty Shootout';
-      view.results = await utils.getResults(
-        '',
-        '',
-        '',
-        'Date',
-        'Penalty Shootout'
-      );
     } else if (classifier === 'top-attendances') {
       view.title = `Top Attendences`;
       view.description = `Tranmere Rovers FC Results Top Attendences`;

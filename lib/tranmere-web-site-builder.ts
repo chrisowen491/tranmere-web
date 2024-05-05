@@ -80,12 +80,12 @@ export class SiteBuilder {
     const blogs = await utils.getBlogs(client);
     const pages = await utils.getPages(client);
     const seasons = utils.getSeasons();
-    //const teams = await utils.findAllTeams();
-    //const competitions = await utils.getAllCupCompetitions();
-    //const players = await utils.findAllPlayers();
-    //const managers = await utils.findAllTranmereManagers();
-    //const topScorers = await utils.getTopScorersBySeason();
-    //const hatTricks = await utils.findAllHatTricks();
+    const teams = await utils.findAllTeams();
+    const competitions = await utils.getAllCupCompetitions();
+    const players = await utils.findAllPlayers();
+    const managers = await utils.findAllTranmereManagers();
+    const topScorers = await utils.getTopScorersBySeason();
+    const hatTricks = await utils.findAllHatTricks();
 
     for (let i = 0; i < pages.items.length; i++) {
       const page: any = pages.items[i].fields;
@@ -97,13 +97,13 @@ export class SiteBuilder {
         }
       };
       page.content = documentToHtmlString(page.body!, options);
-      //page.topScorers = topScorers;
-      //page.hatTricks = hatTricks;
-      //page.managers = managers;
-      //page.players = players;
-      //page.teams = teams;
-      //page.competitions = competitions;
-      //page.seasons = seasons;
+      page.topScorers = topScorers;
+      page.hatTricks = hatTricks;
+      page.managers = managers;
+      page.players = players;
+      page.teams = teams;
+      page.competitions = competitions;
+      page.seasons = seasons;
       page.image = utils.buildImagePath('photos/kop.jpg', 1920, 1080);
       page.dd_app = name;
       page.dd_version = version;
@@ -186,19 +186,15 @@ export class SiteBuilder {
         search_index.saveObject(seasonResults);
       }
 
-      /*
       for (const player of players) {
         this.addSiteMapEntry('/page/player/' + player.name);
         player.objectID = 'Player-' + player.name;
-        player.link =
-          `https://www.tranmere-web.com/page/player/${player.name}`;
-        if (!player.picLink)
-          player.picLink = '/assets/images/square_v1.png';
+        player.link = `https://www.tranmere-web.com/page/player/${player.name}`;
+        if (!player.picLink) player.picLink = '/assets/images/square_v1.png';
         player.description = 'Player Profile';
         search_index.saveObject(player);
       }
 
-      
       for (const team of teams) {
         this.addSiteMapEntry('/games/' + encodeURIComponent(team.name));
         team.objectID = 'Team-' + team.name;
@@ -210,13 +206,11 @@ export class SiteBuilder {
 
       for (const competition of competitions) {
         competition.objectID = 'Competition-' + competition.name;
-        competition.link =
-          `https://www.tranmere-web.com/results?competition=${competition.name}`;
+        competition.link = `https://www.tranmere-web.com/results?competition=${competition.name}`;
         competition.picLink = '/assets/images/square_v1.png';
         competition.description = 'Results Breakdown';
         search_index.saveObject(competition);
       }
-      */
 
       /*
         const matches = utils.getAllGames();

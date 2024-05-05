@@ -1,5 +1,5 @@
 const Mustache = require('mustache');
-import '../templates/onthisday.mustache';
+import '../../../templates/partials/onthisday.mustache';
 const pack = require('../../../package.json');
 
 jQuery(function () {

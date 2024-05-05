@@ -126,8 +126,8 @@ export class TranmereWebUtils {
     for (let i = 0, l = files.length; i < l; i++) {
       const file = files[i];
 
-      if (file.match(/\.partial\.mustache$/)) {
-        const name = path.basename(file, '.partial.mustache');
+      if (file.match(/\.mustache$/)) {
+        const name = path.basename(file, '.mustache');
         partials[name] = fs.readFileSync('./templates/partials/' + file, {
           encoding: 'utf8'
         });
@@ -160,7 +160,7 @@ export class TranmereWebUtils {
     if (view.chart) {
       view.chart = JSON.stringify(view.chart);
     }
-    const tpl = `./templates/partials/${templateKey}.partial.mustache`;
+    const tpl = `./templates/partials/${templateKey}.mustache`;
     return Mustache.render(
       fs.readFileSync(tpl).toString(),
       view,
@@ -278,7 +278,7 @@ export class TranmereWebUtils {
     pens: string
   ) {
     const result = await axios.get(
-      `https://api.prod.tranmere-web.com/result-search/?season=${season}&competition=&opposition${opposition}=&manager=&venue=${venue}&pens=${pens}&sort=${sort}`,
+      `https://api.prod.tranmere-web.com/result-search/?season=${season}&competition=&opposition=${opposition}&manager=&venue=${venue}&pens=${pens}&sort=${sort}`,
       apiOptions
     );
     const results: Match[] = result.data.results as Match[];

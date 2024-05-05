@@ -1,5 +1,5 @@
 const Mustache = require('mustache');
-import '../templates/lastmatch.mustache';
+import '../../../templates/partials/lastmatch.mustache';
 const pack = require('../../../package.json');
 
 jQuery(function () {

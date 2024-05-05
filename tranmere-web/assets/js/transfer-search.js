@@ -1,5 +1,5 @@
 const Mustache = require('mustache');
-import '../templates/transfers.mustache';
+import '../../../templates/partials/transfers.mustache';
 const pack = require('../../../package.json');
 
 function search() {

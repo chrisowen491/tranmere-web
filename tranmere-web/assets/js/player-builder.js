@@ -1,5 +1,5 @@
 const Mustache = require('mustache');
-import '../templates/builder.mustache';
+import '../../../templates/partials/builder.mustache';
 const pack = require('../../../package.json');
 
 function draw() {
