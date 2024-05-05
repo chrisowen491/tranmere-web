@@ -80,12 +80,12 @@ export class SiteBuilder {
     const blogs = await utils.getBlogs(client);
     const pages = await utils.getPages(client);
     const seasons = utils.getSeasons();
-    const teams = await utils.findAllTeams();
-    const competitions = await utils.getAllCupCompetitions();
-    const players = await utils.findAllPlayers();
-    const managers = await utils.findAllTranmereManagers();
-    const topScorers = await utils.getTopScorersBySeason();
-    const hatTricks = await utils.findAllHatTricks();
+    //const teams = await utils.findAllTeams();
+    //const competitions = await utils.getAllCupCompetitions();
+    //const players = await utils.findAllPlayers();
+    //const managers = await utils.findAllTranmereManagers();
+    //const topScorers = await utils.getTopScorersBySeason();
+    //const hatTricks = await utils.findAllHatTricks();
 
     for (let i = 0; i < pages.items.length; i++) {
       const page: any = pages.items[i].fields;
@@ -97,13 +97,13 @@ export class SiteBuilder {
         }
       };
       page.content = documentToHtmlString(page.body!, options);
-      page.topScorers = topScorers;
-      page.hatTricks = hatTricks;
-      page.managers = managers;
-      page.players = players;
-      page.teams = teams;
-      page.competitions = competitions;
-      page.seasons = seasons;
+      //page.topScorers = topScorers;
+      //page.hatTricks = hatTricks;
+      //page.managers = managers;
+      //page.players = players;
+      //page.teams = teams;
+      //page.competitions = competitions;
+      //page.seasons = seasons;
       page.image = utils.buildImagePath('photos/kop.jpg', 1920, 1080);
       page.dd_app = name;
       page.dd_version = version;
@@ -169,51 +169,54 @@ export class SiteBuilder {
       }
     }
 
-    for (let i = 0; i < blogs.items.length; i++) {
-      this.addSiteMapEntry('/page/blog/' + blogs.items[i].sys.id);
+    for (const blog of blogs.items) {
+      this.addSiteMapEntry('/page/blog/' + blog.sys.id);
     }
 
     if (index) {
-      for (let i = 0; i < seasons.length; i++) {
-        this.addSiteMapEntry(`/games/${seasons[i]}`);
+      for (const season of seasons) {
+        this.addSiteMapEntry(`/games/${season}`);
         const seasonResults: BaseEntity = {
-          objectID: 'Season-' + seasons[i],
-          link: `https://www.tranmere-web.com/games/${seasons[i]}`,
-          name: `Season ${seasons[i]}/${seasons[i] + 1}`,
+          objectID: 'Season-' + season,
+          link: `https://www.tranmere-web.com/games/${season}`,
+          name: `Season ${season}/${season + 1}`,
           description: 'Results Breakdown',
           picLink: '/assets/images/square_v1.png'
         };
         search_index.saveObject(seasonResults);
       }
 
-      for (let i = 0; i < players.length; i++) {
-        this.addSiteMapEntry('/page/player/' + players[i].name);
-        players[i].objectID = 'Player-' + players[i].name;
-        players[i].link =
-          `https://www.tranmere-web.com/page/player/${players[i].name}`;
-        if (!players[i].picLink)
-          players[i].picLink = '/assets/images/square_v1.png';
-        players[i].description = 'Player Profile';
-        search_index.saveObject(players[i]);
+      /*
+      for (const player of players) {
+        this.addSiteMapEntry('/page/player/' + player.name);
+        player.objectID = 'Player-' + player.name;
+        player.link =
+          `https://www.tranmere-web.com/page/player/${player.name}`;
+        if (!player.picLink)
+          player.picLink = '/assets/images/square_v1.png';
+        player.description = 'Player Profile';
+        search_index.saveObject(player);
       }
 
-      for (let i = 0; i < teams.length; i++) {
-        this.addSiteMapEntry('/games/' + encodeURIComponent(teams[i].name));
-        teams[i].objectID = 'Team-' + teams[i].name;
-        teams[i].link = `https://www.tranmere-web.com/games/${teams[i].name}`;
-        teams[i].picLink = '/assets/images/square_v1.png';
-        teams[i].description = 'Results Breakdown';
-        search_index.saveObject(teams[i]);
+      
+      for (const team of teams) {
+        this.addSiteMapEntry('/games/' + encodeURIComponent(team.name));
+        team.objectID = 'Team-' + team.name;
+        team.link = `https://www.tranmere-web.com/games/${team.name}`;
+        team.picLink = '/assets/images/square_v1.png';
+        team.description = 'Results Breakdown';
+        search_index.saveObject(team);
       }
 
-      for (let i = 0; i < competitions.length; i++) {
-        competitions[i].objectID = 'Competition-' + competitions[i].name;
-        competitions[i].link =
-          `https://www.tranmere-web.com/results?competition=${competitions[i].name}`;
-        competitions[i].picLink = '/assets/images/square_v1.png';
-        competitions[i].description = 'Results Breakdown';
-        search_index.saveObject(competitions[i]);
+      for (const competition of competitions) {
+        competition.objectID = 'Competition-' + competition.name;
+        competition.link =
+          `https://www.tranmere-web.com/results?competition=${competition.name}`;
+        competition.picLink = '/assets/images/square_v1.png';
+        competition.description = 'Results Breakdown';
+        search_index.saveObject(competition);
       }
+      */
 
       /*
         const matches = utils.getAllGames();

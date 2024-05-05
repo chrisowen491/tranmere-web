@@ -89,7 +89,11 @@
                       <span class="sr-only">Loading...</span>
                     </div>
                   </div>
-                  <div id="results-search"></div>
+                  <div id="results-search">
+                  {{#results.length }}
+                    {{>results}}
+                  {{/results.length }}
+                  </div>
 
                 </article>
 

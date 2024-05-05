@@ -6,6 +6,7 @@ const glob = require('glob');
 const FileManagerPlugin = require('filemanager-webpack-plugin');
 const TranmereWebPlugin = require('./lib/tranmere-web-plugin.js');
 const { TRUE } = require('sass');
+// Include only the reset
 
 let config = {
 

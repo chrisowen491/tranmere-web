@@ -10,5 +10,14 @@ export const onRequest: PagesFunction<CloudflareEnv> = async (context) => {
   const new_request = new Request(url, context.request);
   new_request.headers.set('x-api-key', context.env.API_KEY);
 
-  return await fetch(new_request);
+  // If not in cache, get it from origin
+  const response = await fetch(new_request, { cf: { cacheEverything: true } });
+
+  if (response.status < 400) {
+    return response;
+  } else {
+    const url = new URL(context.request.url);
+    url.pathname = 'error.html';
+    return await fetch(new Request(url, context.request));
+  }
 };

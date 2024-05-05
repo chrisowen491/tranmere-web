@@ -9,5 +9,8 @@ export const onRequest: PagesFunction<CloudflareEnv> = async (context) => {
   const new_request = new Request(url, context.request);
   new_request.headers.set('x-api-key', context.env.API_KEY);
 
-  return await fetch(new_request);
+  return await fetch(ProxyWorker());
 };
+function ProxyWorker(): RequestInfo<unknown, CfProperties<unknown>> {
+  throw new Error('Function not implemented.');
+}

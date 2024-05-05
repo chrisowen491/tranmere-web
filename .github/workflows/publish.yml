@@ -34,14 +34,6 @@ jobs:
           AL_KEY: ${{ secrets.AL_KEY }}
           AL_SPACE: ${{ secrets.AL_SPACE }}
           AL_INDEX: ${{ secrets.AL_INDEX }}
-    #  - name: Install Wrangler App
-    #    run: npm install wrangler
-    #  - name: Create App
-    #    run: npx wrangler pages project create tranmere-web --production-branch master
-    #    continue-on-error: true
-    #    env:
-    #      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_AUTH_KEY }}
-    #      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
       - name: Publish to Cloudflare Pages
         uses: cloudflare/pages-action@v1.5.0
         with:

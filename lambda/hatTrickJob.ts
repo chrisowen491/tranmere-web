@@ -9,24 +9,28 @@ exports.handler = async (event: APIGatewayEvent) => {
     const dateMap = {};
     const goals = await utils.getGoalsBySeason(i);
 
-    goals.forEach((goal) => {
+    for (let g = 0; g < goals.length; g++) {
+      const goal = goals[g];
+
       if (!dateMap[goal.Date]) {
         dateMap[goal.Date] = [goal];
       } else {
         dateMap[goal.Date].push(goal);
       }
-    });
+    }
+
     for (const key in dateMap) {
       if (Object.prototype.hasOwnProperty.call(dateMap, key)) {
         if (dateMap[key].length >= 3) {
           const playerMap = {};
-          dateMap[key].array.forEach((goal) => {
+          for (let g = 0; g < dateMap[key].length; g++) {
+            const goal = dateMap[key][g];
             if (!playerMap[goal.Scorer]) {
               playerMap[goal.Scorer] = [goal];
             } else {
               playerMap[goal.Scorer].push(goal);
             }
-          });
+          }
 
           for (const player in playerMap) {
             if (Object.prototype.hasOwnProperty.call(playerMap, player)) {

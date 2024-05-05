@@ -279,30 +279,61 @@ exports.handler = async (
       description: `Tranmere Rovers FC Results For Season ${classifier}`
     };
 
+    let season = '';
+    let opposition = '';
+    let venue = '';
+    let sort = 'Date';
+    let pens = '';
+
     if (utils.isNumeric(classifier!)) {
       view.season = classifier;
+      season = classifier!;
     } else if (classifier === 'at-wembley') {
       view.title = `Results At Wembley`;
       view.description = `Tranmere Rovers FC Results At Wembley Stadium`;
       view.venue = 'Wembley Stadium';
+      venue = 'Wembley Stadium';
     } else if (classifier === 'penalty-shootouts') {
       view.title = `Results - Penalty Shootouts`;
       view.description = `Tranmere Rovers FC Results In Penalty Shootouts`;
       view.pens = 'Penalty Shootout';
+      pens = 'Penalty Shootout';
+      view.results = await utils.getResults(
+        '',
+        '',
+        '',
+        'Date',
+        'Penalty Shootout'
+      );
     } else if (classifier === 'top-attendances') {
       view.title = `Top Attendences`;
       view.description = `Tranmere Rovers FC Results Top Attendences`;
       view.sort = 'Top Attendance';
+      sort = 'Top Attendance';
     } else if (classifier === 'top-home-attendances') {
       view.title = `Top Home Attendences`;
       view.description = `Tranmere Rovers FC Results Top Attendences At Home Prenton Park`;
       view.sort = 'Top Attendance';
       view.venue = 'Prenton Park';
+      sort = 'Top Attendance';
+      venue = 'Prenton Park';
     } else {
       view.title = `Results vs ${decodeURIComponent(classifier!)}`;
       view.description = `Tranmere Rovers FC Results against ${decodeURIComponent(classifier!)}`;
       view.opposition = decodeURIComponent(classifier!);
+      opposition = decodeURIComponent(classifier!);
     }
+
+    const results = await utils.getResults(
+      season,
+      opposition,
+      venue,
+      sort,
+      pens
+    );
+    view.results = results.results;
+    view.h2hresults = results.h2hresults;
+    view.h2htotal = results.h2htotal;
   }
   view.random = Math.ceil(Math.random() * 100000);
   const maxAge = pageName === 'player' ? 86400 : 2592000;

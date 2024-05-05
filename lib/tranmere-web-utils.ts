@@ -21,7 +21,9 @@ import {
   ImageEdits,
   Appearance,
   Match,
-  Report
+  Report,
+  H2HResult,
+  H2HTotal
 } from './tranmere-web-types';
 import { IBlogPost, IPageMetaData } from './contentful';
 
@@ -268,6 +270,23 @@ export class TranmereWebUtils {
     return results;
   }
 
+  async getResults(
+    season: string,
+    opposition: string,
+    venue: string,
+    sort: string,
+    pens: string
+  ) {
+    const result = await axios.get(
+      `https://api.prod.tranmere-web.com/result-search/?season=${season}&competition=&opposition${opposition}=&manager=&venue=${venue}&pens=${pens}&sort=${sort}`,
+      apiOptions
+    );
+    const results: Match[] = result.data.results as Match[];
+    const h2htotal: H2HTotal[] = result.data.h2htotal as H2HTotal[];
+    const h2hresults: H2HResult[] = result.data.h2hresults as H2HResult[];
+    return { results, h2htotal, h2hresults };
+  }
+
   async getTopScorersBySeason(): Promise<Player[]> {
     const results: Player[] = [];
 
@@ -292,6 +311,7 @@ export class TranmereWebUtils {
       `${APP_SYNC_URL}/graphql?query=${query}`,
       APP_SYNC_OPTIONS
     );
+
     const results: HatTrick[] = result.data.data.listTranmereWebHatTricks.items;
 
     results.sort(function (a, b) {

@@ -11,6 +11,7 @@ export default tseslint.config(
       '**/*.config.js',
       '**/tag.js',
       '**/lib/tranmere-web-plugin.js',
+      '**/lib/contentful.d.ts',
       '**/lib/modernizr.js',
       '**/lambda/upload.js',
       '**/node_modules/**',

@@ -142,6 +142,28 @@ export interface Match {
   formation?: string;
 }
 
+export interface H2HResult {
+  venue: string;
+  pld: number;
+  wins: number;
+  draws: number;
+  lost: number;
+  for: number;
+  against: number;
+  diff: number;
+}
+
+export interface H2HTotal {
+  venue: string;
+  pld: number;
+  wins: number;
+  draws: number;
+  lost: number;
+  for: number;
+  against: number;
+  diff: number;
+}
+
 export interface MatchView extends Match {
   goals?: Goal[];
   apps?: Appearance[];

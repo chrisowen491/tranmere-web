@@ -37,7 +37,7 @@ export class TranmereWebLambda extends Construct {
       entry: props.lambdaFile,
       handler: 'handler',
       memorySize: 1024,
-      runtime: lambda.Runtime.NODEJS_20_X,
+      runtime: lambda.Runtime.NODEJS_18_X,
       timeout: cdk.Duration.seconds(600),
       environment: props.environment,
       bundling: {

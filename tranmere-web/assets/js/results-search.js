@@ -93,7 +93,11 @@ jQuery(function () {
     )
       $('#season').val(theYear);
 
-    search();
+    if (!$("meta[name='results-ssr-id']")) {
+      search();
+    } else {
+      $('#loading').hide();
+    }
     $('.btn-results-search').on('click', function () {
       search();
     });
