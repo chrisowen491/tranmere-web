@@ -270,6 +270,14 @@ export class TranmereWebUtils {
     return results;
   }
 
+  async getPlayers(season: string, filter: string, sort: string) {
+    const result = await axios.get(
+      `https://api.prod.tranmere-web.com/player-search/?season=${season}&sort=${sort}&filter=${filter}`,
+      apiOptions
+    );
+    return result.data.players;
+  }
+
   async getResults(
     season: string,
     opposition: string,

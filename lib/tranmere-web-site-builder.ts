@@ -100,7 +100,6 @@ export class SiteBuilder {
       page.topScorers = topScorers;
       page.hatTricks = hatTricks;
       page.managers = managers;
-      page.players = players;
       page.teams = teams;
       page.competitions = competitions;
       page.seasons = seasons;

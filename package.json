@@ -18,7 +18,7 @@
     "synth": "cdk synth --quiet",
     "acceptance-test": "newman run ./api_tests/postman-collection.json -e ./api_tests/env/aws-prod.json --env-var 'testApiKey=123'",
     "local-acceptance-test": "newman run ./api_tests/postman-collection.json -e ./api_tests/env/sam-local.json",
-    "prettier": "prettier '*.ts' 'lib/**/*.ts' 'lambda/**/*.ts' 'types/**/*.ts' 'test/**/*.ts' 'functions/**/*.ts' 'tranmere-web/assets/js/**/*.js' --write",
+    "prettier": "prettier 'lib/**/*.ts' 'lambda/**/*.ts' 'types/**/*.ts' 'test/**/*.ts' 'functions/**/*.ts' 'tranmere-web/assets/js/**/*.js' --write",
     "prepare": "husky"
   },
   "author": "Chris Owen",

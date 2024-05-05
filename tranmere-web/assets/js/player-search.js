@@ -76,14 +76,39 @@ $.urlParam = function (name) {
 
 jQuery(function () {
   if ($('#player-search').length) {
-    if ($.urlParam('season')) $('#season').val($.urlParam('season'));
+    if ($("meta[name='season-ssr-id']").length) {
+      $('#season').val($("meta[name='season-ssr-id']").attr('content'));
+    }
+    if ($("meta[name='filter-ssr-id']").length) {
+      $('#filter').val($("meta[name='filter-ssr-id']").attr('content'));
+    }
+    if ($("meta[name='sort-ssr-id']").length) {
+      $('#sort').val($("meta[name='sort-ssr-id']").attr('content'));
+    }
 
-    $('#sort').val(decodeURIComponent($.urlParam('sort')));
-    if (!$('#season').val() && !$.urlParam('sort') && !$.urlParam('filter'))
-      $('#season').val(theYear);
+    if ($.urlParam('season')) {
+      $('#season').val($.urlParam('season'));
+    }
+
+    if ($.urlParam('sort'))
+      $('#sort').val(decodeURIComponent($.urlParam('sort')));
+
     if ($.urlParam('filter'))
       $('#filter').val(decodeURIComponent($.urlParam('filter')));
-    search();
+
+    if (!$('#season').val() && !$('#filter').val() && !$('#sort').val()) {
+      $('#season').val(theYear);
+    }
+
+    if ($("meta[name='players-ssr-id']").length) {
+      $('#loading').hide();
+    } else {
+      if (!$.urlParam('season')) {
+        $('#season').val(theYear);
+      }
+      search();
+    }
+
     $('.btn-player-search').on('click', function () {
       search();
     });

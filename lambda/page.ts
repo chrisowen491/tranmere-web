@@ -262,6 +262,45 @@ exports.handler = async (
       }
       view.cardBlocksHTML = blockContent;
     }
+  } else if (pageName === 'player-records') {
+    pageName = 'player-search';
+    const seasons = utils.getSeasons();
+
+    view = {
+      title: `Season Player Records - ${classifier}`,
+      pageType: 'WebPage',
+      url: `/player-records/${classifier}`,
+      seasons: seasons,
+      description: `Tranmere Rovers FC Player Records For Season ${classifier}`
+    };
+
+    let season = '';
+    let sort = 'Date';
+    let filter = '';
+
+    if (utils.isNumeric(classifier!)) {
+      view.season = classifier;
+      season = classifier!;
+    } else if (classifier === 'top-scorers') {
+      view.title = `Tranmere Record Goalscorers`;
+      view.description = `Tranmere Rovers FC All Time Top Scorers`;
+      view.sort = 'Goals';
+      sort = 'Goals';
+    } else if (classifier === 'most-appearances') {
+      view.title = `Tranmere Record Appearances`;
+      view.description = `Tranmere Rovers FC All Time Top Appearances`;
+      view.sort = 'Starts';
+      sort = 'Starts';
+    } else if (classifier === 'only-one-appearance') {
+      view.title = `Only Played Once For Tranmere `;
+      view.description = `Tranmere Rovers FC Players Who Only Played Once`;
+      view.filter = 'OnlyOneApp';
+      filter = 'OnlyOneApp';
+    }
+
+    const results = await utils.getPlayers(season, filter, sort);
+
+    view.players = results;
   } else if (pageName === 'games') {
     pageName = 'results-home';
     const seasons = utils.getSeasons();

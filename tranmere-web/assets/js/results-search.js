@@ -55,19 +55,19 @@ $.urlParam = function (name) {
 
 jQuery(function () {
   if ($('#results-search').length) {
-    if ($("meta[name='season-ssr-id']").length ) {
+    if ($("meta[name='season-ssr-id']").length) {
       $('#season').val($("meta[name='season-ssr-id']").attr('content'));
     }
-    if ($("meta[name='venue-ssr-id']").length ) {
+    if ($("meta[name='venue-ssr-id']").length) {
       $('#venue').val($("meta[name='venue-ssr-id']").attr('content'));
     }
-    if ($("meta[name='pens-ssr-id']").length ) {
+    if ($("meta[name='pens-ssr-id']").length) {
       $('#pens').val($("meta[name='pens-ssr-id']").attr('content'));
     }
-    if ($("meta[name='opposition-ssr-id']").length ) {
+    if ($("meta[name='opposition-ssr-id']").length) {
       $('#opposition').val($("meta[name='opposition-ssr-id']").attr('content'));
     }
-    if ($("meta[name='sort-ssr-id']").length ) {
+    if ($("meta[name='sort-ssr-id']").length) {
       $('#sort').val($("meta[name='sort-ssr-id']").attr('content'));
     }
     if ($.urlParam('season')) $('#season').val($.urlParam('season'));
@@ -89,7 +89,7 @@ jQuery(function () {
       !$('#competition').val() &&
       !$('#venue').val() &&
       !$('#pens').val() &&
-      (!$('#sort').val() || $('#sort').val() == "Date")
+      (!$('#sort').val() || $('#sort').val() == 'Date')
     )
       $('#season').val(theYear);
 

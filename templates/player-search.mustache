@@ -63,7 +63,11 @@
                       <span class="sr-only">Loading...</span>
                     </div>
                   </div>
-                  <div id="player-search"></div>
+                  <div id="player-search">
+                    {{#players.length }}
+                      {{>players}}
+                    {{/players.length }}
+                  </div>
                 </article>
 
               </div>
@@ -74,6 +78,15 @@
     </section>
     <!-- / sidebar layout -->
 
+    {{#season}}
+    <meta name="season-ssr-id" content="{{season}}">
+    {{/season}}
+    {{#filter}}
+    <meta name="filter-ssr-id" content="{{venue}}">
+    {{/filter}}
+    {{#sort}}
+    <meta name="sort-ssr-id" content="{{sort}}">
+    {{/sort}}
     {{>footer}}
   </body>
 </html>
