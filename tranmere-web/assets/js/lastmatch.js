@@ -1,14 +1,13 @@
 const Mustache = require('mustache');
-import '../../../templates/partials/lastmatch.mustache';
+import '../../../templates/partials/last-match.mustache';
 const pack = require('../../../package.json');
 
 jQuery(function () {
   if ($('#lastmatch').length) {
     var dateobj = new Date();
+    var theYear = dateobj.getUTCMonth() > 6 ? dateobj.getFullYear() : dateobj.getFullYear() - 1;
     var url =
-      '/result-search/?season=2023&competition=&opposition=&manager=&venue=&pens=&sort=Date' +
-      '&c=' +
-      dateobj.getDate();
+      `/result-search/?season=${theYear}&competition=&opposition=&manager=&venue=&pens=&sort=Date&c=${dateobj.getDate()}`;
     $.getJSON(url, function (response) {
       if (response && response.results) {
         var idx = response.results.length;
@@ -27,7 +26,7 @@ jQuery(function () {
           view.largeprogramme = btoa(JSON.stringify(largeBody));
         }
         $.get(
-          '/assets/templates/lastmatch.mustache?v=' + pack.version,
+          '/assets/templates/last-match.mustache?v=' + pack.version,
           function (template) {
             var article = Mustache.render(template, view);
             $('#lastmatch').html(article);

@@ -3,7 +3,6 @@ import algoliasearch from 'algoliasearch/lite';
 import instantsearch from 'instantsearch.js';
 import { searchBox, hits, refinementList } from 'instantsearch.js/es/widgets';
 import 'instantsearch.css/themes/reset.css';
-// or include the full Satellite theme
 import 'instantsearch.css/themes/satellite.css';
 
 import '@algolia/autocomplete-theme-classic';

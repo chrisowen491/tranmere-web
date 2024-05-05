@@ -254,7 +254,7 @@ exports.handler = async (
 
     if (view.cardBlocks) {
       let blockContent = '';
-      for (const block of view.cardBlock) {
+      for (const block of view.cardBlocks) {
         blockContent =
           blockContent +
           '\n' +

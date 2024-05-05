@@ -73,6 +73,7 @@ let config = {
               { source: __dirname + '/tranmere-web/_redirects', destination: __dirname + '/web.out/', options: {overwrite: true, nodir: true} },
               { source: __dirname + '/tranmere-web/_headers', destination: __dirname + '/web.out/', options: {overwrite: true, nodir: true} },
               { source: __dirname + '/tranmere-web/favicon.ico', destination: __dirname + '/web.out/', options: {overwrite: true, nodir: true} },
+              { source: __dirname + '/tranmere-web/robots.txt', destination: __dirname + '/web.out/', options: {overwrite: true, nodir: true} },
             ],
           },
         ],

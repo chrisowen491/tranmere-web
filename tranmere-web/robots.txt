@@ -1,0 +1,5 @@
+Disallow: /*?*
+Disallow: /404
+Disallow: /error
+Disallow: /edit*
+Sitemap: https://www.tranmere-web.com/sitemap.xml

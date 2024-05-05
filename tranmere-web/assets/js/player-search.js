@@ -16,14 +16,13 @@ var seasonMapping = {
   2008: 2007
 };
 
-var theDate = new Date();
+var dateobj = new Date();
 var theYear =
-  theDate.getUTCMonth() > 6 ? theDate.getFullYear() : theDate.getFullYear() - 1;
+  dateobj.getUTCMonth() > 6 ? dateobj.getFullYear() : dateobj.getFullYear() - 1;
 
 function search() {
   $('#loading').show();
   $('#content').hide();
-  var dateobj = new Date();
   var base = '';
   var url =
     base +

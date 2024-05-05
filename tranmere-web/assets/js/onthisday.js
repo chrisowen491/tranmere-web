@@ -1,5 +1,5 @@
 const Mustache = require('mustache');
-import '../../../templates/partials/onthisday.mustache';
+import '../../../templates/partials/on-this-day.mustache';
 const pack = require('../../../package.json');
 
 jQuery(function () {
@@ -28,7 +28,7 @@ jQuery(function () {
         };
         view.largeprogramme = btoa(JSON.stringify(largeBody));
         $.get(
-          '/assets/templates/onthisday.mustache?v=' + pack.version,
+          '/assets/templates/on-this-day.mustache?v=' + pack.version,
           function (template) {
             var article = Mustache.render(template, view);
             $('#onthisday').html(article);

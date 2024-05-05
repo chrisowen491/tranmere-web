@@ -172,7 +172,18 @@ export class SiteBuilder {
       this.addSiteMapEntry('/page/blog/' + blog.sys.id);
     }
 
+
     if (index) {
+    
+      for (const player of players) {
+        this.addSiteMapEntry('/page/player/' + encodeURIComponent(player.name));
+        player.objectID = 'Player-' + player.name;
+        player.link = `https://www.tranmere-web.com/page/player/${player.name}`;
+        if (!player.picLink) player.picLink = '/assets/images/square_v1.png';
+        player.description = 'Player Profile';
+        search_index.saveObject(player);
+      }
+      
       for (const season of seasons) {
         this.addSiteMapEntry(`/games/${season}`);
         const seasonResults: BaseEntity = {
@@ -183,15 +194,6 @@ export class SiteBuilder {
           picLink: '/assets/images/square_v1.png'
         };
         search_index.saveObject(seasonResults);
-      }
-
-      for (const player of players) {
-        this.addSiteMapEntry('/page/player/' + player.name);
-        player.objectID = 'Player-' + player.name;
-        player.link = `https://www.tranmere-web.com/page/player/${player.name}`;
-        if (!player.picLink) player.picLink = '/assets/images/square_v1.png';
-        player.description = 'Player Profile';
-        search_index.saveObject(player);
       }
 
       for (const team of teams) {
