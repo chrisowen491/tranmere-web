@@ -1,3 +1,4 @@
+
 import Mustache from 'mustache';
 import '../../../templates/partials/players.mustache';
 import pack from '../../../package.json';

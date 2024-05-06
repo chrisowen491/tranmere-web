@@ -1,4 +1,5 @@
-import Mustache from 'mustache';;
+import Mustache from 'mustache';
+;
 import '../../../templates/partials/results.mustache';
 import pack from '../../../package.json';
 
