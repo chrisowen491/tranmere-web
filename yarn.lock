@@ -2036,24 +2036,10 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
-"@langchain/community@^0.0.54":
-  version "0.0.54"
-  resolved "https://registry.yarnpkg.com/@langchain/community/-/community-0.0.54.tgz#9ada3eee7d72cebfa57684d4047f028ba3acb309"
-  integrity sha512-Cw2euQbgkHz8Lox1YOtUlGhUyeQ+zxGXI4eEB2LM9qHkMrCJQwGYa7qpKnm7vgUC73T6o7ayHVW/QfbQhSs7ww==
-  dependencies:
-    "@langchain/core" "~0.1.60"
-    "@langchain/openai" "~0.0.28"
-    expr-eval "^2.0.2"
-    flat "^5.0.2"
-    langsmith "~0.1.1"
-    uuid "^9.0.0"
-    zod "^3.22.3"
-    zod-to-json-schema "^3.22.5"
-
-"@langchain/community@~0.0.47":
-  version "0.0.53"
-  resolved "https://registry.yarnpkg.com/@langchain/community/-/community-0.0.53.tgz#a9aaedffa0ed2977e8d302d74e9f90a49a6da037"
-  integrity sha512-iFqZPt4MRssGYsQoKSXWJQaYTZCC7WNuilp2JCCs3wKmJK3l6mR0eV+PDrnT+TaDHUVxt/b0rwgM0sOiy0j2jA==
+"@langchain/community@^0.0.55", "@langchain/community@~0.0.47":
+  version "0.0.55"
+  resolved "https://registry.yarnpkg.com/@langchain/community/-/community-0.0.55.tgz#e0f50193225ecf8223dc1e734213fe50ff9a74b8"
+  integrity sha512-JMlmzsOtdexQavFWPRZHAnlTnEKnYqlqFXo7YSVOGclW0pAaePT6oH+BNLhX9uCb2wZYBFUgdKm5eN2CpHb3eg==
   dependencies:
     "@langchain/core" "~0.1.60"
     "@langchain/openai" "~0.0.28"
@@ -10810,15 +10796,10 @@ zod-to-json-schema@^3.22.3, zod-to-json-schema@^3.22.5:
   resolved "https://registry.yarnpkg.com/zod-to-json-schema/-/zod-to-json-schema-3.23.0.tgz#4fc60e88d3c709eedbfaae3f92f8a7bf786469f2"
   integrity sha512-az0uJ243PxsRIa2x1WmNE/pnuA05gUq/JB8Lwe1EDCCL/Fz9MgjYQ0fPlyc2Tcv6aF2ZA7WM5TWaRZVEFaAIag==
 
-zod@^3.20.6:
+zod@^3.20.6, zod@^3.22.3, zod@^3.22.4:
   version "3.23.6"
   resolved "https://registry.yarnpkg.com/zod/-/zod-3.23.6.tgz#c08a977e2255dab1fdba933651584a05fcbf19e1"
   integrity sha512-RTHJlZhsRbuA8Hmp/iNL7jnfc4nZishjsanDAfEY1QpDQZCahUp3xDzl+zfweE9BklxMUcgBgS1b7Lvie/ZVwA==
-
-zod@^3.22.3, zod@^3.22.4:
-  version "3.23.4"
-  resolved "https://registry.yarnpkg.com/zod/-/zod-3.23.4.tgz#c63805b2f39e10d4ab3d55eb3c8cdb472c79dfb1"
-  integrity sha512-/AtWOKbBgjzEYYQRNfoGKHObgfAZag6qUJX1VbHo2PRBgS+wfWagEY2mizjfyAPcGesrJOcx/wcl0L9WnVrHFw==
 
 zwitch@^1.0.0:
   version "1.0.5"
