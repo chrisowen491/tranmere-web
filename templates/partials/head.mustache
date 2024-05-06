@@ -15,30 +15,14 @@
             "@context": "https://schema.org",
             "@type": "{{pageType}}",
             "name": "{{title}} | Tranmere-Web",
-            {{#headline}}"headline": "{{.}}",{{/headline}}
             "url": "https://www.tranmere-web.com{{{url}}}",
-            {{#datePosted}}"datePublished": "{{.}}",{{/datePosted}}
             "description": "{{{description}}}",
-            {{#author}}"author": [{
-                "@type": "Person",
-                "name": "{{.}}",
-                "url": "https://www.tranmere-web.com/about"
-            }],{{/author}}
-            {{#carousel.length}}
-            "image": [
-                {{#carousel}}
-                "{{{imagePath}}}",
-                {{/carousel}}
-            ],
-            {{/carousel.length}}
-            {{^carousel.length}}
             "image": {
                 "@type": "ImageObject",
                 "url": "https://www.tranmere-web.com/assets/images/logo_v1.png",
                 "width": 450,
                 "height": 260
             }
-            {{/carousel.length}}
         }
     </script>
 </head>

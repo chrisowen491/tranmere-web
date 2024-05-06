@@ -1,5 +1,5 @@
 {{>head}}
-<body data-spy="scroll" data-target="#toc">
+<body data-spy="scroll" data-target="#toc" itemscope itemtype="https://schema.org/BlogPosting">
 
 <!-- header -->
 {{>homenav}}
@@ -25,6 +25,7 @@
                 {{#carousel}}
                 <figure class="photo">
                   <a class="lightbox" href="{{linkPath}}" title="{{name}} - {{description}}">
+                    <meta itemprop="image" content="{{imagePath}}" />
                     <img src="{{imagePath}}?h=400" alt="Image">
                   </a>
                 </figure>

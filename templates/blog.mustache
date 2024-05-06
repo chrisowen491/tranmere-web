@@ -1,6 +1,6 @@
 {{>head}}
 
-<body>
+<body itemscope itemtype="https://schema.org/NewsArticle">
 
 <!-- header -->
 {{>homenav}}
@@ -14,12 +14,13 @@
             <div class="col-md-6 text-white mb-3 mb-md-0">
                 <div class="row gutter-2">
                     <div class="col-12">
-                        <h1 class="h2 font-weight-normal">{{title}}</h1>
-                        <h3 class="h3 font-weight-normal">{{datePosted}}</h3>
+                        <h1 class="h2 font-weight-normal" itemprop="headline">{{title}}</h1>
+                        <h3 class="h3 font-weight-normal" itemprop="datePublished">{{datePosted}}</h3>
                     </div>
                 </div>
             </div>
             <div class="col-md-6 pl-md-5">
+                <meta itemprop="image" content="{{pic.fields.file.url}}" />
                 <img src="{{pic.fields.file.url}}?h=300" alt="Image" class="overlay-item-bottom">
             </div>
             {{/pic}}
