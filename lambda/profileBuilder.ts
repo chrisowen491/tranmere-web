@@ -70,7 +70,6 @@ const tools = [
         .enum([
           'Goalkeeper',
           'Striker',
-          'Midfielder',
           'Winger',
           'Full Back',
           'Central Defender',

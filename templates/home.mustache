@@ -51,87 +51,83 @@
                         <!-- content -->
                         <article class="col-md-8 content-body">    
                             {{>player-of-the-day}}
-                            <div class="row justify-content-center justify-content-lg-start gutter-2">
-                                <div class="col-lg-6 col-md-12 col-sm-12">
-                                    <div class="card stacked">
-                                        <div class="card-body">
-                                          <div class="row gutter-2 align-items-center">
-                                            <div class="col">
-                                              <h3 class="font-weight-normal mb-2">Results</h3>
-                                              <ul class="list-group list-group-minimal">
-                                                <li class="list-group-item">All first team results since 1921</li>
-                                                <li class="list-group-item">Appearance and goal data since 1977</li>
-                                              </ul>
-                                              <a href="/results" class="action mt-1 text-blue">View All</a>
-                                            </div>
-                                          </div>
-                                          <i class="icon-table icon-background text-blue"></i>
-                                        </div>
-                                    </div>                                      
+                            <h2>Frequently Asked Questions</h2>
+                            <div class="accordion accordion-stack" id="accordionExample">
+                                <div class="card" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                                <div class="card-header" id="headingOne">
+                                    <h5 class="mb-0">
+                                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" itemprop="name">
+                                        Can I create my own player avatar?
+                                    </button>
+                                    </h5>
                                 </div>
-                                <div class="col-lg-6 col-md-12 col-sm-12">
-                                    <div class="card stacked">
-                                        <div class="card-body">
-                                            <div class="row gutter-2 align-items-center">
-                                                <div class="col">
-                                                    <h3 class="font-weight-normal mb-2">Programmes</h3>
-                                                    <ul class="list-group list-group-minimal">
-                                                    <li class="list-group-item">Over 2000 programme covers</li>
-                                                    <li class="list-group-item">Nearly every home game since 1960 (missing about 20!)</li>
-                                                    </ul>
-                                                    <a href="/results" class="action mt-1 text-blue">View All</a>
-                                                </div>
-                                            </div>
-                                            <i class="icon-image icon-background text-blue"></i>
-                                        </div>
-                                    </div>                                      
-                                </div>          
+        
+                                <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                                    <div class="card-body" itemprop="text">
+                                    Yes, checkout the custom tool for customizing you own avatar <a href="https://www.tranmere-web.com/player-builder">here</a>
+                                    </div>
+                                </div>
+                                </div>
+                                <div class="card" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                                <div class="card-header" id="headingTwo">
+                                    <h5 class="mb-0">
+                                    <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" itemprop="name">
+                                        Do you have every Tranmere Rovers result?
+                                    </button>
+                                    </h5>
+                                </div>
+                                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                                    <div class="card-body" itemprop="text">
+                                    We have all first team results since 1921. With appearance and goal data since 1977. Assist data is patchy since it's not definitively recorded.
+                                    </div>
+                                </div>
+                                </div>
+                                <div class="card" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                                <div class="card-header" id="headingThree">
+                                    <h5 class="mb-0">
+                                    <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree" itemprop="name">
+                                        How are match reports written?
+                                    </button>
+                                    </h5>
+                                </div>
+                                <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                                    <div class="card-body" itemprop="text">
+                                    All our match reports are written using Generative AI.
+                                    </div>
+                                </div>
+                                </div>
+                                <div class="card" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                                <div class="card-header" id="headingFour">
+                                    <h5 class="mb-0">
+                                    <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour" itemprop="name">
+                                        Where do you get your statistics and results information from?
+                                    </button>
+                                    </h5>
+                                </div>
+                                <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordionExample" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                                    <div class="card-body" itemprop="text">
+                                    Results data is primarily sourced from James P. Curley (2016). engsoccerdata: English Soccer Data 1871-2016 on <a href="https://github.com/jalapic/engsoccerdata/">GitHub</a>. Player apperance data is from various books and internet sources.
+                                    </div>
+                                </div>
+                                </div>
+                            
+                                <div class="card" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                                    <div class="card-header" id="headingFive">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive" itemprop="name">
+                                        Where do the programme pictures come from?
+                                        </button>
+                                    </h5>
+                                    </div>
+                                    <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#accordionExample" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                                    <div class="card-body" itemprop="text">
+                                        I've scanned these in from my own personal collection. There's over 2000 programme covers, including nearly every home game since 1960 (missing about 20!).
+                                    </div>
+                                    </div>
+                                </div>
                             </div>
                         </article>    
-                        <!--
-                        
-                        <article class="col-md-8 content-body">
-                            <h2>Site Features</h2>
-                            <ul class="list-group list-group-lines">
-                                <li class="list-group-item d-flex align-items-center boxed">
-                                    <i class="icon-check2 mr-2 text-primary fs-24"></i>
-                                    All First Team Results Since 1921
-                                    <span class="badge badge-green">New</span>
-                                </li>
-                                <li class="list-group-item d-flex align-items-center">
-                                    <i class="icon-check2 mr-2 text-primary fs-24"></i>
-                                    Programme Covers from over 1500 Tranmere games
-                                    <span class="badge badge-green">New</span>
-                                </li>
-                                <li class="list-group-item d-flex align-items-center">
-                                    <i class="icon-check2 mr-2 text-primary fs-24"></i>
-                                    Appearance Data Since 1985
-                                    <span class="badge badge-green">New</span>
-                                </li>
-                                <li class="list-group-item d-flex align-items-center">
-                                    <i class="icon-check2 mr-2 text-primary fs-24"></i>
-                                    Goals Data Since 1985
-                                    <span class="badge badge-green">New</span>
-                                </li>
-                                <li class="list-group-item d-flex align-items-center">
-                                    <i class="icon-check2 mr-2 text-primary fs-24"></i>
-                                    Assist Data Since 1989
-                                    <span class="badge badge-yellow">In progress</span>
-                                </li>
-                                <li class="list-group-item d-flex align-items-center">
-                                    <i class="icon-check2 mr-2 text-primary fs-24"></i>
-                                    Attendances
-                                    <span class="badge badge-yellow">In progress</span>
-                                </li>
-                                <li class="list-group-item d-flex align-items-center">
-                                    <i class="icon-check2 mr-2 text-primary fs-24"></i>
-                                    Memorabilia Galleries
-                                    <span class="badge badge-green">New</span>
-                                </li>
-                            </ul>
-                        </article>
-                        -->
-                        <!-- / content -->
+ 
                     </div>
                 </div>
             </div>

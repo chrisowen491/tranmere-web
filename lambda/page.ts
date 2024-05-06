@@ -203,8 +203,8 @@ exports.handler = async (
       }
     };
     view = blog.fields;
-    view.pageType = 'AboutPage';
-    view.description = 'Blog Page | ' + view.title;
+    view.pageType = 'blogPost';
+    view.headline = view.title;
     view.blogContent = documentToHtmlString(view.blog, options);
     view.blogs = blogs.items;
     view.url = `/page/${pageName}/${classifier}`;
@@ -283,17 +283,17 @@ exports.handler = async (
       season = classifier!;
     } else if (classifier === 'top-scorers') {
       view.title = `Tranmere Record Goalscorers`;
-      view.description = `Tranmere Rovers FC All Time Top Scorers`;
+      view.description = `Tranmere Rovers FC Top Scorers Since 1977`;
       view.sort = 'Goals';
       sort = 'Goals';
     } else if (classifier === 'most-appearances') {
       view.title = `Tranmere Record Appearances`;
-      view.description = `Tranmere Rovers FC All Time Top Appearances`;
+      view.description = `Tranmere Rovers FC Top Appearances Since 1977`;
       view.sort = 'Starts';
       sort = 'Starts';
     } else if (classifier === 'only-one-appearance') {
       view.title = `Only Played Once For Tranmere `;
-      view.description = `Tranmere Rovers FC Players Who Only Played Once`;
+      view.description = `Tranmere Rovers FC Players Who Only Played Once Since 1977`;
       view.filter = 'OnlyOneApp';
       filter = 'OnlyOneApp';
     }
@@ -367,6 +367,7 @@ exports.handler = async (
     view.h2hresults = results.h2hresults;
     view.h2htotal = results.h2htotal;
   }
+
   view.random = Math.ceil(Math.random() * 100000);
   const maxAge = pageName === 'player' ? 86400 : 2592000;
   const page = utils.buildPage(view, `./templates/${pageName}.mustache`);

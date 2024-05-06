@@ -140,7 +140,7 @@ exports.handler = async (
   view.url = `/match/${season}/${date}`;
   view.title = 'Match Summary';
   view.pageType = 'AboutPage';
-  view.description = 'Match Summary';
+  view.description = `Match Summary For ${match?.home} ${match?.ft} ${match?.visitor} - ${match?.date}`;
   view.date = date!;
   view.season = season!.toString();
 
