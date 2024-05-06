@@ -1,6 +1,6 @@
-const Mustache = require('mustache');
+import Mustache from 'mustache';
 import '../../../templates/partials/builder.mustache';
-const pack = require('../../../package.json');
+import pack from '../../../package.json';
 
 function draw() {
   var base = '/builder/';

@@ -1,4 +1,4 @@
-const pack = require('../../../package.json');
+import pack from '../../../package.json';
 import { datadogRum } from '@datadog/browser-rum';
 import { datadogLogs } from '@datadog/browser-logs';
 
@@ -14,7 +14,6 @@ datadogRum.init({
   trackResources: true,
   trackLongTasks: true,
   trackUserInteractions: true,
-  trackResources: true,
   defaultPrivacyLevel: 'mask-user-input',
   allowedTracingOrigins: [
     'https://www.tranmere-web.com',

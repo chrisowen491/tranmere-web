@@ -6,6 +6,7 @@ import '../logos/logo_white_transparent.png';
 import '../logos/logo_white_transparent.png';
 import '../logos/square_v1.png';
 
+//eslint-disable-next-line no-undef
 require('bootstrap');
 
 // accordion
@@ -20,8 +21,6 @@ jQuery(function () {
 
   //$('[data-toggle="tooltip"]').tooltip()
 
-  var window_width = jQuery(window).width();
-
   // recalc on collapse
   $('.nav-item .collapse').on(
     'shown.bs.collapse hidden.bs.collapse',
@@ -35,5 +34,4 @@ jQuery(function () {
   if (typeof self === 'undefined' || !self.Prism || !self.document) {
     return;
   }
-  var callbacks = [];
 })();

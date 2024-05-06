@@ -1,12 +1,12 @@
 
 import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
-
-
+import globals from "globals";
+import html from "@html-eslint/eslint-plugin";
+import parser from "@html-eslint/parser";
 
 export default tseslint.config(
   {
-    // config with just ignores is the replacement for `.eslintignore`
     ignores: [
       '**/*.config.js',
       '**/tag.js',
@@ -23,11 +23,21 @@ export default tseslint.config(
       '**/guidebook/**',
       '**/api_tests/**',
       '**/.wrangler/**',
-      '**/tranmere-web/**',
       '**/build/**',
       '**/wip/**',
     ],
   },
+  {
+    languageOptions: {
+      globals: {
+        $owl: true,
+        d3: true,
+        ...globals.jquery,
+        ...globals.browser,
+      },
+    },
+  },
+  html.configs["flat/recommended"],
   eslint.configs.recommended,
   ...tseslint.configs.recommended,
 );

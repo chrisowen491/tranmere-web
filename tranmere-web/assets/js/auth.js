@@ -1,4 +1,4 @@
-var AmazonCognitoIdentity = require('amazon-cognito-auth-js');
+import AmazonCognitoIdentity from 'amazon-cognito-auth-js';
 
 jQuery(function () {
   var authData = {
@@ -12,7 +12,7 @@ jQuery(function () {
   var auth = new AmazonCognitoIdentity.CognitoAuth(authData);
   window.auth = auth;
   auth.userhandler = {
-    onSuccess: function (result) {
+    onSuccess: function () {
       $('#loginout').html('Sign Out');
       auth.setState('signedIn');
       $('.edit').show();

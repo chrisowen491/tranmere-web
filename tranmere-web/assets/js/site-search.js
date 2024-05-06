@@ -1,7 +1,7 @@
 import { autocomplete, getAlgoliaResults } from '@algolia/autocomplete-js';
 import algoliasearch from 'algoliasearch/lite';
 import instantsearch from 'instantsearch.js';
-import { searchBox, hits, refinementList } from 'instantsearch.js/es/widgets';
+import { searchBox, hits } from 'instantsearch.js/es/widgets';
 import 'instantsearch.css/themes/reset.css';
 import 'instantsearch.css/themes/satellite.css';
 
@@ -182,7 +182,7 @@ if ($('#navsearch').length) {
             return item.link;
           },
           templates: {
-            item({ item, components, html }) {
+            item({ item, html }) {
               return html`<div class="aa-ItemWrapper">
                 <div class="aa-ItemContent">
                   <div class="aa-ItemContentBody">

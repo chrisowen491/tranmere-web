@@ -1,6 +1,6 @@
-const Mustache = require('mustache');
+import Mustache from 'mustache';;
 import '../../../templates/partials/results.mustache';
-const pack = require('../../../package.json');
+import pack from '../../../package.json';
 
 var dateobj = new Date();
 var theYear =

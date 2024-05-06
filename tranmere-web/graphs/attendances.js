@@ -62,7 +62,7 @@ d3.csv("/data/Average Home League Attendances.csv",
       .style("padding", "5px")
 
       // Three function that change the tooltip when user hover / move / leave a cell
-      var mouseover = function(d) {
+      var mouseover = function() {
         Tooltip
           .style("opacity", 1)
       }
@@ -72,7 +72,7 @@ d3.csv("/data/Average Home League Attendances.csv",
           .style("left", (d3.mouse(this)[0]+70) + "px")
           .style("top", (d3.mouse(this)[1]) + "px")
       }
-      var mouseleave = function(d) {
+      var mouseleave = function() {
         Tooltip
           .style("opacity", 0)
       }

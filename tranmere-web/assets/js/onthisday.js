@@ -1,6 +1,6 @@
-const Mustache = require('mustache');
+import Mustache from 'mustache';
 import '../../../templates/partials/on-this-day.mustache';
-const pack = require('../../../package.json');
+import pack from '../../../package.json';
 
 jQuery(function () {
   if ($('#onthisday').length) {

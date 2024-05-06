@@ -9,7 +9,7 @@ function submitToAPI() {
     return;
   }
 
-  var reeamil = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,6})?$/;
+  var reeamil = /^([\w-.]+@([\w-]+\.)+[\w-]{2,6})?$/;
   if (!reeamil.test($('#email').val())) {
     alert('Please enter valid email address');
     return;

@@ -1,6 +1,6 @@
-const Mustache = require('mustache');
+import Mustache from 'mustache';
 import '../../../templates/partials/players.mustache';
-const pack = require('../../../package.json');
+import pack from '../../../package.json';
 
 var seasonMapping = {
   1978: 1977,
