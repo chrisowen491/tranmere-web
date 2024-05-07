@@ -106,6 +106,25 @@ export class SiteBuilder {
       page.image = utils.buildImagePath('photos/kop.jpg', 1920, 1080);
       page.dd_app = name;
       page.dd_version = version;
+      page.breadcrumbs = [
+        {
+          link: [
+            {
+              link: '/',
+              position: 1,
+              title: 'Home'
+            }
+          ]
+        },
+        {
+          active: [
+            {
+              position: 2,
+              title: page.title
+            }
+          ]
+        }
+      ];
       if (page.sections) {
         let sectionContent = '';
         for (let s = 0; s < page.sections.length; s++) {
@@ -172,9 +191,7 @@ export class SiteBuilder {
       this.addSiteMapEntry('/page/blog/' + blog.sys.id);
     }
 
-
     if (index) {
-    
       for (const player of players) {
         this.addSiteMapEntry('/page/player/' + encodeURIComponent(player.name));
         player.objectID = 'Player-' + player.name;
@@ -183,7 +200,7 @@ export class SiteBuilder {
         player.description = 'Player Profile';
         search_index.saveObject(player);
       }
-      
+
       for (const season of seasons) {
         this.addSiteMapEntry(`/games/${season}`);
         const seasonResults: BaseEntity = {

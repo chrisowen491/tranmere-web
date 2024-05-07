@@ -3,8 +3,14 @@
         <h1 class="h2 pb-1">{{title}}</h1>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb breadcrumb-minimal" itemscope="" itemtype="http://schema.org/BreadcrumbList">
-                <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem" class="breadcrumb-item"><a href="/" itemprop="item"><span itemprop="name">Home<meta itemprop="position" content="1"></span></a></li>
-                <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem" class="breadcrumb-item active" aria-current="page"><span itemprop="name">{{title}}</span><meta itemprop="position" content="1"></li>
+                {{#breadcrumbs}}
+                    {{#link}}
+                    <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem" class="breadcrumb-item"><a href="{{link}}" itemprop="item"><span itemprop="name">{{title}}<meta itemprop="position" content="{{position}}"></span></a></li>
+                    {{/link}}
+                    {{#active}}
+                    <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem" class="breadcrumb-item active" aria-current="page"><span itemprop="name">{{title}}</span><meta itemprop="position" content="{{position}}"></li>
+                    {{/active}}
+                {{/breadcrumbs}}
             </ol>
         </nav>
     </div>

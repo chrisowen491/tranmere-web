@@ -1,11 +1,10 @@
 import Mustache from 'mustache';
-;
 import '../../../templates/partials/results.mustache';
 import pack from '../../../package.json';
 
 var dateobj = new Date();
 var theYear =
-dateobj.getUTCMonth() > 6 ? dateobj.getFullYear() : dateobj.getFullYear() - 1;
+  dateobj.getUTCMonth() > 6 ? dateobj.getFullYear() : dateobj.getFullYear() - 1;
 
 function search() {
   $('#loading').show();

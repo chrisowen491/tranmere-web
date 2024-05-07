@@ -5,9 +5,11 @@ import pack from '../../../package.json';
 jQuery(function () {
   if ($('#lastmatch').length) {
     var dateobj = new Date();
-    var theYear = dateobj.getUTCMonth() > 6 ? dateobj.getFullYear() : dateobj.getFullYear() - 1;
-    var url =
-      `/result-search/?season=${theYear}&competition=&opposition=&manager=&venue=&pens=&sort=Date&c=${dateobj.getDate()}`;
+    var theYear =
+      dateobj.getUTCMonth() > 6
+        ? dateobj.getFullYear()
+        : dateobj.getFullYear() - 1;
+    var url = `/result-search/?season=${theYear}&competition=&opposition=&manager=&venue=&pens=&sort=Date&c=${dateobj.getDate()}`;
     $.getJSON(url, function (response) {
       if (response && response.results) {
         var idx = response.results.length;
