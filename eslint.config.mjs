@@ -23,6 +23,7 @@ export default [
       '**/.wrangler/**',
       '**/build/**',
       '**/wip/**',
+      '**/tranmere-web/assets/js/auth.js',
       '**/templates/**',
       '**/web.out/assets/scripts/**',
     ],
