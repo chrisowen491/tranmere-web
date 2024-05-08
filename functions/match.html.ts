@@ -8,6 +8,8 @@ export const onRequest: PagesFunction<CloudflareEnv> = async (context) => {
     return Response.redirect(destinationURL, statusCode);
   }
   else {
-    return await fetch(context.request);
+    const destinationURL = `https://www.tranmere-web.com/404`;
+    const statusCode = 301;
+    return Response.redirect(destinationURL, statusCode);
   }
 };
