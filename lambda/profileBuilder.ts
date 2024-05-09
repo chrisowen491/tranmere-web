@@ -5,10 +5,11 @@ import { ChatOpenAI } from '@langchain/openai';
 import type { ChatPromptTemplate } from '@langchain/core/prompts';
 import { createOpenAIFunctionsAgent, AgentExecutor } from 'langchain/agents';
 import { pull } from 'langchain/hub';
-import { TranmereWebUtils } from '../lib/tranmere-web-utils';
+import { TranmereWebUtils, DataTables } from '../lib/tranmere-web-utils';
 import { z } from 'zod';
 import { DynamicStructuredTool } from '@langchain/core/tools';
 import { TavilyResponse } from '../lib/tranmere-web-types';
+import { v4 as uuidv4 } from 'uuid';
 
 const llm = new ChatOpenAI({
   model: 'gpt-4-1106-preview',
@@ -42,7 +43,7 @@ const tools = [
           search_depth: 'basic',
           include_answer: true,
           include_images: false,
-          include_raw_content: false,
+          include_raw_content: true,
           max_results: 10
         })
       });
@@ -76,7 +77,14 @@ const tools = [
           'Central Midfielder'
         ])
         .nullable()
-        .describe('The position the players as a footballer')
+        .describe('The position the players as a footballer'),
+      links: z
+        .object({
+          url: z.string().describe('The hyperlink url'),
+          sitename: z.string().describe('The name of the website')
+        })
+        .array()
+        .describe('A list of hyperlinks information has been sourced from')
     }),
     func: async ({
       biography,
@@ -84,41 +92,84 @@ const tools = [
       dateOfBirth,
       position,
       height,
-      playerName
+      playerName,
+      links
     }) => {
       const space = await client.getSpace(process.env.CF_SPACE!);
       const environment = await space.getEnvironment('master');
 
+      const player = await utils.getPlayer(playerName!);
       const document = await richTextFromMarkdown(biography);
-      let entry = await environment.createEntry('player', {
-        fields: {
-          name: {
-            'en-GB': playerName
-          },
-          biography: {
-            'en-GB': document
-          },
-          picLink: {
-            'en-GB':
-              'https://www.tranmere-web.com/builder/2023/simple/cccccc/none/cccccc/cccccc/none/cccccc'
-          },
-          placeOfBirth: {
-            'en-GB': placeOfBirth
-          },
-          position: {
-            'en-GB': position
-          },
-          height: {
-            'en-GB': height
-          },
-          dateOfBirth: {
-            'en-GB': dateOfBirth
-          }
-        }
-      });
 
-      entry = await entry.publish();
-      console.log(entry.sys.id);
+      if (player) {
+        let entry = await environment.getEntry(player.id!);
+        (entry.fields.biography = {
+          'en-GB': document
+        }),
+          (entry.fields.placeOfBirth = {
+            'en-GB': placeOfBirth
+          }),
+          (entry.fields.position = {
+            'en-GB': position
+          }),
+          (entry.fields.height = {
+            'en-GB': height
+          }),
+          (entry.fields.dateOfBirth = {
+            'en-GB': dateOfBirth
+          });
+
+        entry = await entry.update();
+        entry = await entry.publish();
+      } else {
+        const pic =
+          position === 'Goalkeeper'
+            ? 'https://www.tranmere-web.com/builder/1981gk/simple/cccccc/none/cccccc/cccccc/none/cccccc'
+            : 'https://www.tranmere-web.com/builder/2023/simple/cccccc/none/cccccc/cccccc/none/cccccc';
+
+        let entry = await environment.createEntry('player', {
+          fields: {
+            name: {
+              'en-GB': playerName
+            },
+            biography: {
+              'en-GB': document
+            },
+            picLink: {
+              'en-GB': pic
+            },
+            placeOfBirth: {
+              'en-GB': placeOfBirth
+            },
+            position: {
+              'en-GB': position
+            },
+            height: {
+              'en-GB': height
+            },
+            dateOfBirth: {
+              'en-GB': dateOfBirth
+            }
+          }
+        });
+
+        entry = await entry.publish();
+      }
+
+      const db_links = await utils.getPlayerLinks(playerName!);
+
+      for (const link of links) {
+        if (!db_links.find((db_link) => db_link.link == link.url)) {
+          const item = {
+            id: uuidv4(),
+            name: playerName,
+            link: link.url,
+            description: link.sitename
+          };
+
+          await utils.insertUpdateItem(item, DataTables.LINKS_TABLE);
+        }
+      }
       return `${playerName} created`;
     }
   })
@@ -129,6 +180,7 @@ exports.handler = async (
 ): Promise<APIGatewayProxyResult> => {
   const playerName = event.pathParameters!.playerName;
   console.log('Received event:', event);
+
   const prompt = await pull<ChatPromptTemplate>(
     'hwchase17/openai-functions-agent'
   );

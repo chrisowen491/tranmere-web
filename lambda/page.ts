@@ -104,18 +104,7 @@ exports.handler = async (
     };
   } else if (pageName === 'player') {
     const playerName = classifier!;
-    const playerSearch = await dynamo.query({
-      TableName: DataTables.PLAYER_TABLE_NAME,
-      KeyConditionExpression: '#name = :name',
-      ExpressionAttributeNames: {
-        '#name': 'name'
-      },
-      ExpressionAttributeValues: {
-        ':name': decodeURIComponent(playerName)
-      },
-      IndexName: 'ByNameIndex',
-      Limit: 1
-    });
+    const player = await utils.getPlayer(playerName);
 
     const summarySearch = await dynamo.query({
       TableName: DataTables.SUMMARY_TABLE_NAME,
@@ -129,45 +118,23 @@ exports.handler = async (
       }
     });
 
-    const transfers = await dynamo.query({
-      TableName: DataTables.TRANSFER_TABLE,
-      KeyConditionExpression: '#name = :name',
-      IndexName: 'ByNameIndex',
-      ExpressionAttributeNames: {
-        '#name': 'name'
-      },
-      ExpressionAttributeValues: {
-        ':name': decodeURIComponent(playerName)
-      }
-    });
+    const transfers = await utils.getPlayerTransfers(playerName);
 
     const appearances = await utils.getAppsByPlayer(
       decodeURIComponent(playerName)
     );
 
     const amendedTansfers: any[] = [];
-    for (const transfer of transfers.Items!) {
+    for (const transfer of transfers!) {
       transfer.club =
         transfer.from == 'Tranmere Rovers' ? transfer.to : transfer.from;
       transfer.type = transfer.from == 'Tranmere Rovers' ? 'right' : 'left';
       amendedTansfers.push(transfer);
     }
 
-    const links = await dynamo.query({
-      TableName: DataTables.LINKS_TABLE,
-      KeyConditionExpression: '#name = :name',
-      IndexName: 'ByNameIndex',
-      ExpressionAttributeNames: {
-        '#name': 'name'
-      },
-      ExpressionAttributeValues: {
-        ':name': decodeURIComponent(playerName)
-      }
-    });
+    const links = await utils.getPlayerLinks(playerName);
 
-    const pl = playerSearch.Items!.length == 1 ? playerSearch.Items![0] : null;
-
-    if (playerSearch.Items!.length == 0 && summarySearch.Items!.length == 0) {
+    if (player) {
       throw new Error('Player has no records');
     }
 
@@ -176,9 +143,9 @@ exports.handler = async (
       debut: appearances[0],
       seasons: summarySearch.Items,
       transfers: amendedTansfers,
-      links: links.Items,
+      links: links,
       teams: await utils.findAllTeams(),
-      player: pl,
+      player: player,
       breadcrumbs: [
         {
           link: [

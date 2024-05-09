@@ -11,9 +11,11 @@ function search(or) {
     $.get(
       '/assets/templates/results.mustache?v=' + pack.version,
       function (template) {
-        $(`#${or}-five-content`).html(
-          Mustache.render(template, { results: data.results })
-        );
+        if(data.results.length > 0) {
+          $(`#${or}-five-content`).html(
+            Mustache.render(template, { results: data.results })
+          );
+        }
         $(`#${or}-five-loading`).hide();
         $(`#${or}-five-content`).show();
       }

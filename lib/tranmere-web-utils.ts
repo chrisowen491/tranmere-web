@@ -6,7 +6,7 @@ import Mustache from 'mustache';
 import path from 'path';
 import { APIGatewayProxyResult } from 'aws-lambda';
 import { DynamoDBDocument, QueryCommandInput } from '@aws-sdk/lib-dynamodb';
-import { DynamoDB } from '@aws-sdk/client-dynamodb';
+import { DynamoDB, QueryCommandOutput } from '@aws-sdk/client-dynamodb';
 import { ContentfulClientApi, EntryCollection } from 'contentful';
 const dynamo = DynamoDBDocument.from(
   new DynamoDB({ apiVersion: '2012-08-10' })
@@ -23,9 +23,11 @@ import {
   Match,
   Report,
   H2HResult,
-  H2HTotal
+  H2HTotal,
+  Transfer,
+  Link
 } from './tranmere-web-types';
-import { IBlogPost, IPageMetaData } from './contentful';
+import { IBlogPost, IPageMetaData, IPlayerFields } from './contentful';
 
 const APP_SYNC_URL = 'https://api.prod.tranmere-web.com';
 const APP_SYNC_OPTIONS = {
@@ -377,6 +379,55 @@ export class TranmereWebUtils {
       Item: item
     };
     return await dynamo.put(params);
+  }
+
+  async getPlayer(playerName: string): Promise<IPlayerFields | null> {
+    const playerSearch = await dynamo.query({
+      TableName: DataTables.PLAYER_TABLE_NAME,
+      KeyConditionExpression: '#name = :name',
+      ExpressionAttributeNames: {
+        '#name': 'name'
+      },
+      ExpressionAttributeValues: {
+        ':name': decodeURIComponent(playerName)
+      },
+      IndexName: 'ByNameIndex',
+      Limit: 1
+    });
+
+    const players = playerSearch.Items as IPlayerFields[];
+    return players.length > 0 ? players[0] : null;
+  }
+
+  async getPlayerLinks(playerName: string): Promise<Link[]> {
+    const links = await dynamo.query({
+      TableName: DataTables.LINKS_TABLE,
+      KeyConditionExpression: '#name = :name',
+      IndexName: 'ByNameIndex',
+      ExpressionAttributeNames: {
+        '#name': 'name'
+      },
+      ExpressionAttributeValues: {
+        ':name': decodeURIComponent(playerName)
+      }
+    });
+
+    return links.Items as Link[];
+  }
+
+  async getPlayerTransfers(playerName: string): Promise<Transfer[]> {
+    const transfers = await dynamo.query({
+      TableName: DataTables.TRANSFER_TABLE,
+      KeyConditionExpression: '#name = :name',
+      IndexName: 'ByNameIndex',
+      ExpressionAttributeNames: {
+        '#name': 'name'
+      },
+      ExpressionAttributeValues: {
+        ':name': decodeURIComponent(playerName)
+      }
+    });
+    return transfers.Items as Transfer[];
   }
 
   async deleteItem(id, type) {

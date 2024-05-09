@@ -351,7 +351,8 @@ export class TranmereWebStack extends cdk.Stack {
       apiMethod: 'GET',
       lambdaFile: './lambda/profileBuilder.ts',
       authorizer: cognitoAuthorizer,
-      scopes: 'TranmereWeb/matches.read'
+      scopes: 'TranmereWeb/matches.read',
+      readWriteTables: [TranmereWebPlayerLinks, TranmereWebPlayerTable]
     });
 
     new TranmereWebLambda(this, 'LinksUpdateFunction', {

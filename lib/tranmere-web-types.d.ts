@@ -100,6 +100,13 @@ export interface HatTrick {
   Season: number;
 }
 
+export interface Link {
+  id: string;
+  link: string;
+  name: string;
+  description: string;
+}
+
 export interface Page extends IPageMetaDataFields {
   name: string;
   description: string;
@@ -243,6 +250,8 @@ export interface Transfer {
   to: string;
   value: string;
   cost: number;
+  type?: string;
+  club?: string;
 }
 
 export interface BasePageView {

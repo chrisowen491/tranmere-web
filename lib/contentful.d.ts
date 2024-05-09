@@ -206,6 +206,9 @@ export interface IPageMetaData extends Entry<IPageMetaDataFields> {
 }
 
 export interface IPlayerFields {
+  /** id */
+  id?: string | undefined;
+
   /** Name */
   name?: string | undefined;
 
@@ -231,7 +234,6 @@ export interface IPlayerFields {
   position?:
     | 'Goalkeeper'
     | 'Striker'
-    | 'Midfielder'
     | 'Winger'
     | 'Central Defender'
     | 'Central Midfielder'
