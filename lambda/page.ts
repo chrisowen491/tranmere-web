@@ -134,7 +134,7 @@ exports.handler = async (
 
     const links = await utils.getPlayerLinks(playerName);
 
-    if (player) {
+    if (!player) {
       throw new Error('Player has no records');
     }
 
