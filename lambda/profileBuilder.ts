@@ -7,14 +7,13 @@ import { createOpenAIFunctionsAgent, AgentExecutor } from 'langchain/agents';
 import { pull } from 'langchain/hub';
 import { TranmereWebUtils, DataTables } from '../lib/tranmere-web-utils';
 import { z } from 'zod';
-import { DynamicStructuredTool } from '@langchain/core/tools';
+import { DynamicStructuredTool, DynamicTool } from '@langchain/core/tools';
 import { TavilyResponse } from '../lib/tranmere-web-types';
 import { v4 as uuidv4 } from 'uuid';
 
 const llm = new ChatOpenAI({
-  model: 'gpt-4-1106-preview',
-  verbose: false,
-  temperature: 0
+  model: 'gpt-4o',
+  temperature: 0.5
 });
 
 const client = createClient({
@@ -24,14 +23,11 @@ const client = createClient({
 const utils = new TranmereWebUtils();
 
 const tools = [
-  new DynamicStructuredTool({
-    name: 'player-biography',
+  new DynamicTool({
+    name: 'player-research',
     description:
-      'gets biographical information about Tranmere Rovers footballers',
-    schema: z.object({
-      name: z.string().describe('The name of the player')
-    }),
-    func: async ({ name }) => {
+      'gets research information about a Tranmere Rovers footballer. Input should be a player name',
+    func: async (input) => {
       const request = await fetch('https://api.tavily.com/search', {
         method: 'POST',
         headers: {
@@ -39,7 +35,7 @@ const tools = [
         },
         body: JSON.stringify({
           api_key: process.env.TAVILY_API_KEY,
-          query: `Write a profile about footballer ${name}, especially focussing on their career with Tranmere Rovers and biographical information.`,
+          query: `Write a profile about footballer ${input}, especially focussing on their career with Tranmere Rovers and other relevant biographical information.`,
           search_depth: 'basic',
           include_answer: true,
           include_images: false,
@@ -52,11 +48,46 @@ const tools = [
       return response.answer;
     }
   }),
+  new DynamicTool({
+    name: 'player-statistics',
+    description:
+      'gets Tranmere Rovers appearance information a footballer. Input should be a player name',
+    func: async (input) => {
+      const summary = await utils.getPlayerSummaryForSeason(input, 'TOTAL');
+      return `Apearance Data: ${input} made ${summary!.Apps} appearances for Tranmere Rovers, including ${summary!.starts} starts, ${summary!.subs} substitute appearnces. They scored ${summary!.goals}.`;
+    }
+  }),
+  new DynamicTool({
+    name: 'player-transfers',
+    description:
+      'gets Tranmere Rovers transfer information a footballer. Input should be a player name',
+    func: async (input) => {
+      const transfers = await utils.getPlayerTransfers(input);
+      let output = `Tranmere Transfer History:\n`;
+      for (const transfer of transfers!) {
+        output += `From: ${transfer.from}, To: ${transfer.to}, Date: ${transfer.season}, Value: ${transfer.value} \n`;
+      }
+      return output;
+    }
+  }),
+  new DynamicTool({
+    name: 'player-debut',
+    description:
+      'gets debut information about a Tranmere Rovers footballer. Input should be a player name',
+    func: async (input) => {
+      const appearances = await utils.getAppsByPlayer(input);
+      return `Debut Data: ${input} made their Tranmere debut v ${appearances[0].Opposition} on ${appearances[0].Date}. They scored ${appearances[0].Goals} goals`;
+    }
+  }),
   new DynamicStructuredTool({
     name: 'tranmere-web-player-creator',
     description: 'Create a TranmereWeb profile for a footballer',
     schema: z.object({
-      biography: z.string().describe('A biography of the player'),
+      biography: z
+        .string()
+        .describe(
+          'A brief biography of the player - should be sourced using a combination of research, statistical, transfer and debut information'
+        ),
       playerName: z.string().describe('The name of  the player'),
       placeOfBirth: z
         .string()
@@ -74,7 +105,8 @@ const tools = [
           'Winger',
           'Full Back',
           'Central Defender',
-          'Central Midfielder'
+          'Central Midfielder',
+          'Midfielder'
         ])
         .nullable()
         .describe('The position the players as a footballer'),
@@ -101,6 +133,9 @@ const tools = [
       const player = await utils.getPlayer(playerName!);
       const document = await richTextFromMarkdown(biography);
 
+      const new_position =
+        position === 'Midfielder' ? 'Central Midfielder' : position;
+
       if (player) {
         let entry = await environment.getEntry(player.id!);
         (entry.fields.biography = {
@@ -110,7 +145,7 @@ const tools = [
             'en-GB': placeOfBirth
           }),
           (entry.fields.position = {
-            'en-GB': position
+            'en-GB': new_position
           }),
           (entry.fields.height = {
             'en-GB': height
@@ -127,7 +162,7 @@ const tools = [
             ? 'https://www.tranmere-web.com/builder/1981gk/simple/cccccc/none/cccccc/cccccc/none/cccccc'
             : 'https://www.tranmere-web.com/builder/2023/simple/cccccc/none/cccccc/cccccc/none/cccccc';
 
-        let entry = await environment.createEntry('player', {
+        const entry = await environment.createEntry('player', {
           fields: {
             name: {
               'en-GB': playerName
@@ -153,7 +188,7 @@ const tools = [
           }
         });
 
-        entry = await entry.publish();
+        await entry.publish();
       }
 
       const db_links = await utils.getPlayerLinks(playerName!);
@@ -196,8 +231,9 @@ exports.handler = async (
     tools,
     verbose: false
   });
+
   const result2 = await agentExecutor.invoke({
-    input: `Create a TranmereWeb profile for ${playerName} filling as much information as possible.`
+    input: `Create a TranmereWeb profile for ${decodeURIComponent(playerName!)} filling as much information as possible. If no research infomration can be found, use the provided debut, appearance and transfer data to build a biograohy.`
   });
 
   return utils.sendResponse(200, result2.output);

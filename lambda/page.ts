@@ -1,15 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { APIGatewayEvent, APIGatewayProxyResult } from 'aws-lambda';
-import { TranmereWebUtils, DataTables } from '../lib/tranmere-web-utils';
-import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
-import { DynamoDB } from '@aws-sdk/client-dynamodb';
+import { TranmereWebUtils } from '../lib/tranmere-web-utils';
+import {
+  View,
+  PlayerView,
+  TagView,
+  SeasonResultsView,
+  BlogView,
+  SeasonPlayerStatisticsView,
+  HomeView
+} from '../lib/tranmere-web-view-types';
 import { createClient } from 'contentful';
 import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
 import { IBlogPost } from '../lib/contentful';
 const utils = new TranmereWebUtils();
-const dynamo = DynamoDBDocument.from(
-  new DynamoDB({ apiVersion: '2012-08-10' })
-);
 
 const client = createClient({
   space: process.env.CF_SPACE!,
@@ -21,102 +25,26 @@ exports.handler = async (
 ): Promise<APIGatewayProxyResult> => {
   let pageName = event.pathParameters!.pageName;
   const classifier = event.pathParameters!.classifier;
-  let view: any = {};
+  let view: View = {};
 
   if (pageName === 'home') {
     const blogs = await utils.getBlogs(client);
-    const players = await utils.findAllPlayers();
-    const random = Math.floor(Math.random() * (players.length - 1));
-    const randomplayer = players[random];
-
-    const debutSearch = await dynamo.query({
-      TableName: DataTables.APPS_TABLE_NAME,
-      KeyConditionExpression: '#name = :name',
-      IndexName: 'ByPlayerIndex',
-      ExpressionAttributeNames: {
-        '#name': 'Name'
-      },
-      ExpressionAttributeValues: {
-        ':name': decodeURIComponent(randomplayer.name)
-      },
-      Limit: 1
-    });
-
-    const apps_query = await dynamo.query({
-      TableName: DataTables.SUMMARY_TABLE_NAME,
-      IndexName: 'ByPlayerIndex',
-      KeyConditionExpression: 'Player = :player and Season = :season',
-      ExpressionAttributeValues: {
-        ':player': randomplayer.name,
-        ':season': 'TOTAL'
-      }
-    });
-    const seasonMapping = {
-      '1978': 1977,
-      '1984': 1983,
-      '1990': 1989,
-      '1992': 1991,
-      '1994': 1993,
-      '1996': 1995,
-      '1998': 1997,
-      '2001': 2000,
-      '2003': 2002,
-      '2005': 2006,
-      '2008': 2007
-    };
-    const re = /\/\d\d\d\d\//gm;
-    const re3 = /\/\d\d\d\d[A-Za-z]\//gm;
-    let season = debutSearch.Items![0].Season;
-    if (seasonMapping[season]) season = seasonMapping[season];
-
-    randomplayer.picLink = randomplayer.picLink!.replace(
-      re,
-      '/' + season + '/'
-    );
-    randomplayer.picLink = randomplayer.picLink!.replace(
-      re3,
-      '/' + season + '/'
-    );
-
-    view = {
+    const homeview: HomeView = {
       title: 'Home',
       pageType: 'WebPage',
       description:
         'Tranmere-Web.com is a website full of data, statistics and information about Tranmere Rovers FC',
       blogs: blogs.items,
-      breadcrumbs: [
-        {
-          active: [
-            {
-              position: 1,
-              title: 'Home'
-            }
-          ]
-        }
-      ],
-      randomplayer: {
-        name: randomplayer.name,
-        picLink: randomplayer.picLink,
-        debut: debutSearch.Items![0],
-        apps: apps_query.Items![0].Apps,
-        goals: apps_query.Items![0].goals
-      }
+      breadcrumbs: [utils.getActiveBreadcrumb('Home', 1)],
+      randomplayer: await utils.getRandomPlayer()
     };
+
+    view = homeview;
   } else if (pageName === 'player') {
     const playerName = classifier!;
     const player = await utils.getPlayer(playerName);
 
-    const summarySearch = await dynamo.query({
-      TableName: DataTables.SUMMARY_TABLE_NAME,
-      KeyConditionExpression: '#player = :player',
-      IndexName: 'ByPlayerIndex',
-      ExpressionAttributeNames: {
-        '#player': 'Player'
-      },
-      ExpressionAttributeValues: {
-        ':player': decodeURIComponent(playerName)
-      }
-    });
+    const summarySearch = await utils.getPlayerSummary(playerName);
 
     const transfers = await utils.getPlayerTransfers(playerName);
 
@@ -138,24 +66,19 @@ exports.handler = async (
       throw new Error('Player has no records');
     }
 
-    view = {
-      name: decodeURIComponent(playerName),
+    const playerview: PlayerView = {
       debut: appearances[0],
-      seasons: summarySearch.Items,
+      seasons: summarySearch,
       transfers: amendedTansfers,
       links: links,
+      image: utils.buildImagePath('photos/kop.jpg', 1920, 1080),
+      title: 'Player Profile ' + decodeURIComponent(playerName),
+      pageType: 'AboutPage',
+      description: 'Player Profile for ' + decodeURIComponent(playerName),
       teams: await utils.findAllTeams(),
       player: player,
       breadcrumbs: [
-        {
-          link: [
-            {
-              link: '/',
-              position: 1,
-              title: 'Home'
-            }
-          ]
-        },
+        utils.getHomeBreadCrumb(),
         {
           link: [
             {
@@ -165,23 +88,13 @@ exports.handler = async (
             }
           ]
         },
-        {
-          active: [
-            {
-              position: 3,
-              title: decodeURIComponent(playerName)
-            }
-          ]
-        }
+        utils.getActiveBreadcrumb(playerName, 3)
       ],
       appearances: appearances,
       url: `/page/${pageName}/${classifier}`
     };
 
-    view.image = utils.buildImagePath('photos/kop.jpg', 1920, 1080);
-    view.title = 'Player Profile ' + decodeURIComponent(playerName);
-    view.pageType = 'AboutPage';
-    view.description = 'Player Profile for ' + decodeURIComponent(playerName);
+    view = playerview;
   } else if (pageName === 'tag') {
     const tagId = decodeURIComponent(classifier!);
     const items = await client.getEntries({
@@ -190,32 +103,19 @@ exports.handler = async (
       order: ['-sys.createdAt']
     });
 
-    view = {
+    const tagview: TagView = {
       items: items.items,
       pageType: 'SearchResultsPage',
       title: 'All blogs for ' + tagId,
       description: 'All blogs for ' + tagId,
       url: `/page/${pageName}/${classifier}`,
       breadcrumbs: [
-        {
-          link: [
-            {
-              link: '/',
-              position: 1,
-              title: 'Home'
-            }
-          ]
-        },
-        {
-          active: [
-            {
-              position: 2,
-              title: tagId
-            }
-          ]
-        }
+        utils.getHomeBreadCrumb(),
+        utils.getActiveBreadcrumb(tagId, 2)
       ]
     };
+
+    view = tagview;
   } else if (pageName === 'blog') {
     const blogId = decodeURIComponent(classifier!);
     const blog = await client.getEntry<IBlogPost>(blogId);
@@ -226,105 +126,112 @@ exports.handler = async (
           `<img src="${node.data.target.fields.file.url}?h=400"/>`
       }
     };
-    view = blog.fields;
-    view.pageType = 'blogPost';
-    view.headline = view.title;
-    view.blogContent = documentToHtmlString(view.blog, options);
-    view.blogs = blogs.items;
-    view.url = `/page/${pageName}/${classifier}`;
-    view.carousel = [];
-    view.breadcrumbs = [
-      {
-        link: [
-          {
-            link: '/',
-            position: 1,
-            title: 'Home'
-          }
-        ]
-      },
-      {
-        active: [
-          {
-            position: 2,
-            title: view.title
-          }
-        ]
-      }
+
+    const blogview = blog.fields as BlogView;
+
+    blogview.pageType = 'blogPost';
+    blogview.headline = blogview.title;
+    blogview.blogContent = documentToHtmlString(blogview.blog!, options);
+    blogview.blogs = blogs.items;
+    blogview.url = `/page/${pageName}/${classifier}`;
+    blogview.carousel = [];
+    blogview.breadcrumbs = [
+      utils.getHomeBreadCrumb(),
+      utils.getActiveBreadcrumb(view.title!, 2)
     ];
 
-    if (view.gallery) {
-      view.gallery.forEach((gallery) => {
-        const image = {
-          imagePath: gallery.fields.file.url,
-          linkPath: gallery.fields.file.url,
-          name: gallery.fields.title,
-          description: gallery.fields.description
-        };
-        view.carousel.push(image);
-      });
-      pageName = 'gallery';
-      delete view.gallery;
-    }
-
-    if (view.galleryTag) {
-      const pictures = await client.getAssets({
-        'metadata.tags.sys.id[in]': view.galleryTag,
-        order: ['sys.createdAt']
-      });
-      pictures.items.forEach((picture) => {
-        view.carousel.push({
-          imagePath: picture.fields.file!.url,
-          linkPath: picture.fields.file!.url,
-          name: picture.fields.title,
-          description: picture.fields.title
+    if (blogview.gallery) {
+      blogview.gallery.forEach((gallery) => {
+        blogview.carousel!.push({
+          imagePath: `${gallery.fields.file!.url}`,
+          linkPath: `${gallery.fields.file!.url}`,
+          name: `${gallery.fields.title}`,
+          description: `${gallery.fields.description}`
         });
       });
       pageName = 'gallery';
-      delete view.gallery;
+      delete blogview.gallery;
     }
 
-    if (view.blocks) {
+    if (blogview.galleryTag) {
+      const pictures = await client.getAssets({
+        'metadata.tags.sys.id[in]': [blogview.galleryTag],
+        order: ['sys.createdAt']
+      });
+      pictures.items.forEach((picture) => {
+        blogview.carousel!.push({
+          imagePath: `${picture.fields.file!.url}`,
+          linkPath: `${picture.fields.file!.url}`,
+          name: `${picture.fields.title}`,
+          description: `${picture.fields.description}`
+        });
+      });
+      pageName = 'gallery';
+      delete blogview.gallery;
+    }
+
+    if (blogview.blocks) {
       let blockContent = '';
-      for (const block of view.blocks) {
+      for (const block of blogview.blocks) {
         blockContent =
           blockContent +
           '\n' +
           utils.renderFragment(block.fields, block.sys.contentType.sys.id);
       }
-      view.blockHTML = blockContent;
+      blogview.blockHTML = blockContent;
     }
 
-    if (view.cardBlocks) {
+    if (blogview.cardBlocks) {
       let blockContent = '';
-      for (const block of view.cardBlocks) {
+      for (const block of blogview.cardBlocks) {
         blockContent =
           blockContent +
           '\n' +
           utils.renderFragment(block.fields, block.sys.contentType.sys.id);
       }
-      view.cardBlocksHTML = blockContent;
+      blogview.cardBlocksHTML = blockContent;
     }
+
+    view = blogview;
   } else if (pageName === 'player-records') {
     pageName = 'player-search';
     const seasons = utils.getSeasons();
+    let season: string | null = null;
+    let filter: string | null = null;
+    let sort = 'Date';
+    let title = `Season Player Records - ${classifier}`;
+    let description = `Tranmere Rovers FC Player Records For Season ${classifier}`;
 
-    view = {
-      title: `Season Player Records - ${classifier}`,
+    if (utils.isNumeric(classifier!)) {
+      season = classifier!;
+    } else if (classifier === 'top-scorers') {
+      title = `Tranmere Record Goalscorers`;
+      description = `Tranmere Rovers FC Top Scorers Since 1977`;
+      sort = 'Goals';
+    } else if (classifier === 'most-appearances') {
+      title = `Tranmere Record Appearances`;
+      description = `Tranmere Rovers FC Top Appearances Since 1977`;
+      sort = 'Starts';
+    } else if (classifier === 'only-one-appearance') {
+      title = `Only Played Once For Tranmere `;
+      description = `Tranmere Rovers FC Players Who Only Played Once Since 1977`;
+      filter = 'OnlyOneApp';
+    }
+
+    const results = await utils.getPlayers(season!, filter!, sort);
+
+    const playerview: SeasonPlayerStatisticsView = {
+      title: title,
       pageType: 'WebPage',
       url: `/player-records/${classifier}`,
       seasons: seasons,
-      description: `Tranmere Rovers FC Player Records For Season ${classifier}`,
+      season: season,
+      sort: sort,
+      filter: filter,
+      players: results,
+      description: description,
       breadcrumbs: [
-        {
-          link: [
-            {
-              link: '/',
-              position: 1,
-              title: 'Home'
-            }
-          ]
-        },
+        utils.getHomeBreadCrumb(),
         {
           link: [
             {
@@ -334,137 +241,93 @@ exports.handler = async (
             }
           ]
         },
-        {
-          active: [
-            {
-              position: 3,
-              title: classifier
-            }
-          ]
-        }
+        utils.getActiveBreadcrumb(classifier!, 3)
       ]
     };
 
-    let season = '';
-    let sort = 'Date';
-    let filter = '';
-
-    if (utils.isNumeric(classifier!)) {
-      view.season = classifier;
-      season = classifier!;
-    } else if (classifier === 'top-scorers') {
-      view.title = `Tranmere Record Goalscorers`;
-      view.description = `Tranmere Rovers FC Top Scorers Since 1977`;
-      view.sort = 'Goals';
-      sort = 'Goals';
-    } else if (classifier === 'most-appearances') {
-      view.title = `Tranmere Record Appearances`;
-      view.description = `Tranmere Rovers FC Top Appearances Since 1977`;
-      view.sort = 'Starts';
-      sort = 'Starts';
-    } else if (classifier === 'only-one-appearance') {
-      view.title = `Only Played Once For Tranmere `;
-      view.description = `Tranmere Rovers FC Players Who Only Played Once Since 1977`;
-      view.filter = 'OnlyOneApp';
-      filter = 'OnlyOneApp';
-    }
-
-    const results = await utils.getPlayers(season, filter, sort);
-
-    view.players = results;
+    view = playerview;
   } else if (pageName === 'games') {
     pageName = 'results-home';
     const seasons = utils.getSeasons();
     const teams = await utils.findAllTeams();
     const competitions = await utils.getAllCupCompetitions();
     const managers = await utils.findAllTranmereManagers();
-    view = {
-      title: `Results - ${classifier}`,
-      pageType: 'WebPage',
-      url: `/results/${classifier}`,
-      teams: teams,
-      competitions: competitions,
-      managers: managers,
-      seasons: seasons,
-      description: `Tranmere Rovers FC Results For Season ${classifier}`
-    };
 
-    let season = '';
-    let opposition = '';
-    let venue = '';
+    let season: string | null = null;
+    let opposition: string | null = null;
+    let venue: string | null = null;
     let sort = 'Date';
-    let pens = '';
+    let pens: string | null = null;
+    let title = `Results - ${classifier}`;
+    let description = `Tranmere Rovers FC Results For Season ${classifier}`;
 
     if (utils.isNumeric(classifier!)) {
-      view.season = classifier;
       season = classifier!;
     } else if (classifier === 'at-wembley') {
-      view.title = `Results At Wembley`;
-      view.description = `Tranmere Rovers FC Results At Wembley Stadium`;
-      view.venue = 'Wembley Stadium';
+      title = `Results At Wembley`;
+      description = `Tranmere Rovers FC Results At Wembley Stadium`;
       venue = 'Wembley Stadium';
     } else if (classifier === 'penalty-shootouts') {
-      view.title = `Results - Penalty Shootouts`;
-      view.description = `Tranmere Rovers FC Results In Penalty Shootouts`;
-      view.pens = 'Penalty Shootout';
+      title = `Results - Penalty Shootouts`;
+      description = `Tranmere Rovers FC Results In Penalty Shootouts`;
       pens = 'Penalty Shootout';
     } else if (classifier === 'top-attendances') {
-      view.title = `Top Attendences`;
-      view.description = `Tranmere Rovers FC Results Top Attendences`;
-      view.sort = 'Top Attendance';
+      title = `Top Attendences`;
+      description = `Tranmere Rovers FC Results Top Attendences`;
+      sort = 'Top Attendance';
       sort = 'Top Attendance';
     } else if (classifier === 'top-home-attendances') {
-      view.title = `Top Home Attendences`;
-      view.description = `Tranmere Rovers FC Results Top Attendences At Home Prenton Park`;
-      view.sort = 'Top Attendance';
-      view.venue = 'Prenton Park';
+      title = `Top Home Attendences`;
+      description = `Tranmere Rovers FC Results Top Attendences At Home Prenton Park`;
       sort = 'Top Attendance';
       venue = 'Prenton Park';
     } else {
-      view.title = `Results vs ${decodeURIComponent(classifier!)}`;
-      view.description = `Tranmere Rovers FC Results against ${decodeURIComponent(classifier!)}`;
-      view.opposition = decodeURIComponent(classifier!);
+      title = `Results vs ${decodeURIComponent(classifier!)}`;
+      description = `Tranmere Rovers FC Results against ${decodeURIComponent(classifier!)}`;
       opposition = decodeURIComponent(classifier!);
     }
 
     const results = await utils.getResults(
-      season,
-      opposition,
-      venue,
+      season!,
+      opposition!,
+      venue!,
       sort,
-      pens
+      pens!
     );
-    view.results = results.results;
-    view.h2hresults = results.h2hresults;
-    view.h2htotal = results.h2htotal;
-    view.breadcrumbs = [
-      {
-        link: [
-          {
-            link: '/',
-            position: 1,
-            title: 'Home'
-          }
-        ]
-      },
-      {
-        link: [
-          {
-            link: '/results',
-            position: 2,
-            title: 'Results'
-          }
-        ]
-      },
-      {
-        active: [
-          {
-            position: 3,
-            title: view.title
-          }
-        ]
-      }
-    ];
+
+    const resultsView: SeasonResultsView = {
+      title: title,
+      pageType: 'WebPage',
+      url: `/results/${classifier}`,
+      teams: teams,
+      competitions: competitions,
+      opposition: opposition,
+      sort: sort,
+      venue: venue,
+      season: season,
+      pens: pens,
+      managers: managers,
+      seasons: seasons,
+      results: results.results,
+      h2hresults: results.h2hresults,
+      h2htotal: results.h2htotal,
+      description: description,
+      breadcrumbs: [
+        utils.getHomeBreadCrumb(),
+        {
+          link: [
+            {
+              link: '/results',
+              position: 2,
+              title: 'Results'
+            }
+          ]
+        },
+        utils.getActiveBreadcrumb(title!, 3)
+      ]
+    };
+
+    view = resultsView;
   }
 
   view.random = Math.ceil(Math.random() * 100000);

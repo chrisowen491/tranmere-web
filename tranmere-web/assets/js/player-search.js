@@ -85,26 +85,17 @@ jQuery(function () {
       $('#sort').val($("meta[name='sort-ssr-id']").attr('content'));
     }
 
-    if ($.urlParam('season')) {
-      $('#season').val($.urlParam('season'));
-    }
-
-    if ($.urlParam('sort'))
-      $('#sort').val(decodeURIComponent($.urlParam('sort')));
-
-    if ($.urlParam('filter'))
-      $('#filter').val(decodeURIComponent($.urlParam('filter')));
-
-    if (!$('#season').val() && !$('#filter').val() && !$('#sort').val()) {
+    if (
+      !$("meta[name='filter-ssr-id']").length &&
+      !$("meta[name='sort-ssr-id']").length &&
+      !$("meta[name='season-ssr-id']").length
+    ) {
       $('#season').val(theYear);
     }
 
     if ($("meta[name='players-ssr-id']").length) {
       $('#loading').hide();
     } else {
-      if (!$.urlParam('season')) {
-        $('#season').val(theYear);
-      }
       search();
     }
 

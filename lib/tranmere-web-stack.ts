@@ -352,7 +352,12 @@ export class TranmereWebStack extends cdk.Stack {
       lambdaFile: './lambda/profileBuilder.ts',
       authorizer: cognitoAuthorizer,
       scopes: 'TranmereWeb/matches.read',
-      readWriteTables: [TranmereWebPlayerLinks, TranmereWebPlayerTable]
+      readWriteTables: [
+        TranmereWebPlayerLinks,
+        TranmereWebPlayerTable,
+        TranmereWebPlayerSeasonSummaryTable,
+        TranmereWebPlayerTransfers
+      ]
     });
 
     new TranmereWebLambda(this, 'LinksUpdateFunction', {

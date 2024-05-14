@@ -1,6 +1,8 @@
 import { APIGatewayEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { TranmereWebUtils, ProgrammeImage } from '../lib/tranmere-web-utils';
-import { Appearance, MatchView } from '../lib/tranmere-web-types';
+import { Appearance, Goal } from '../lib/tranmere-web-types';
+import { MatchView } from '../lib/tranmere-web-view-types';
+
 const utils = new TranmereWebUtils();
 
 const playerMap = {};
@@ -151,7 +153,7 @@ exports.handler = async (
   return utils.sendHTMLResponse(page, maxAge);
 };
 
-function formatGoals(goals) {
+function formatGoals(goals: Goal[]) {
   let output = '';
   const scorers = {};
   goals.forEach((goal) => {

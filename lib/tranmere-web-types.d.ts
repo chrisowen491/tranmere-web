@@ -185,32 +185,6 @@ export interface H2HTotal {
   diff: number;
 }
 
-export interface MatchView extends Match {
-  goals?: Goal[];
-  apps?: Appearance[];
-  largeProgramme?: string;
-  goalkeepers?: Appearance[];
-  fullback1?: Appearance[];
-  fullback2?: Appearance[];
-  defenders?: Appearance[];
-  midfielders?: Appearance[];
-  wingers1?: Appearance[];
-  wingers2?: Appearance[];
-  strikers?: Appearance[];
-  formattedGoals?: string;
-  hasVenue?: boolean;
-  hasAttendance?: boolean;
-  defColspan?: number;
-  midColspan?: number;
-  strColspan?: number;
-  random?: number;
-  url?: string;
-  title?: string;
-  pageType?: string;
-  description?: string;
-  report?: Report | null;
-}
-
 export interface Goal {
   id?: string;
   Date: string;
@@ -302,4 +276,20 @@ export interface BlogView extends BasePageView {
   player?: any;
   url?: string;
   image?: string;
+}
+
+export interface PlayerSeasonSummary {
+  Season: string;
+  Player: string;
+  Apps: number;
+  goals: number;
+  assists: number;
+  yellow: number;
+  red: number;
+  penalties: number;
+  headers: number;
+  starts: number;
+  subs: number;
+  freekicks: number;
+  penalties: number;
 }

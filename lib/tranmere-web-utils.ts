@@ -6,7 +6,7 @@ import Mustache from 'mustache';
 import path from 'path';
 import { APIGatewayProxyResult } from 'aws-lambda';
 import { DynamoDBDocument, QueryCommandInput } from '@aws-sdk/lib-dynamodb';
-import { DynamoDB, QueryCommandOutput } from '@aws-sdk/client-dynamodb';
+import { DynamoDB } from '@aws-sdk/client-dynamodb';
 import { ContentfulClientApi, EntryCollection } from 'contentful';
 const dynamo = DynamoDBDocument.from(
   new DynamoDB({ apiVersion: '2012-08-10' })
@@ -25,9 +25,12 @@ import {
   H2HResult,
   H2HTotal,
   Transfer,
-  Link
+  Link,
+  PlayerSeasonSummary,
+  BreadCrumbItem
 } from './tranmere-web-types';
-import { IBlogPost, IPageMetaData, IPlayerFields } from './contentful';
+import { IBlogPost, IPageMetaData } from './contentful';
+import { RandomPlayer } from './tranmere-web-view-types';
 
 const APP_SYNC_URL = 'https://api.prod.tranmere-web.com';
 const APP_SYNC_OPTIONS = {
@@ -90,7 +93,29 @@ export class TranmereWebUtils {
     return seasons;
   }
 
-  //
+  getHomeBreadCrumb(): BreadCrumbItem {
+    return {
+      link: [
+        {
+          link: '/',
+          position: 1,
+          title: 'Home'
+        }
+      ]
+    };
+  }
+
+  getActiveBreadcrumb(title: string, count: number): BreadCrumbItem {
+    return {
+      active: [
+        {
+          position: count,
+          title: decodeURIComponent(title)
+        }
+      ]
+    };
+  }
+
   sendResponse(code: number, obj: any): APIGatewayProxyResult {
     return {
       isBase64Encoded: false,
@@ -272,12 +297,16 @@ export class TranmereWebUtils {
     return results;
   }
 
-  async getPlayers(season: string, filter: string, sort: string) {
+  async getPlayers(
+    season: string,
+    filter: string,
+    sort: string
+  ): Promise<Player[]> {
     const result = await axios.get(
       `https://api.prod.tranmere-web.com/player-search/?season=${season}&sort=${sort}&filter=${filter}`,
       apiOptions
     );
-    return result.data.players;
+    return result.data.players as Player[];
   }
 
   async getResults(
@@ -381,7 +410,7 @@ export class TranmereWebUtils {
     return await dynamo.put(params);
   }
 
-  async getPlayer(playerName: string): Promise<IPlayerFields | null> {
+  async getPlayer(playerName: string): Promise<Player | null> {
     const playerSearch = await dynamo.query({
       TableName: DataTables.PLAYER_TABLE_NAME,
       KeyConditionExpression: '#name = :name',
@@ -395,7 +424,7 @@ export class TranmereWebUtils {
       Limit: 1
     });
 
-    const players = playerSearch.Items as IPlayerFields[];
+    const players = playerSearch.Items as Player[];
     return players.length > 0 ? players[0] : null;
   }
 
@@ -413,6 +442,90 @@ export class TranmereWebUtils {
     });
 
     return links.Items as Link[];
+  }
+
+  async getPlayerSummary(playerName: string): Promise<PlayerSeasonSummary[]> {
+    const summarySearch = await dynamo.query({
+      TableName: DataTables.SUMMARY_TABLE_NAME,
+      KeyConditionExpression: '#player = :player',
+      IndexName: 'ByPlayerIndex',
+      ExpressionAttributeNames: {
+        '#player': 'Player'
+      },
+      ExpressionAttributeValues: {
+        ':player': decodeURIComponent(playerName)
+      }
+    });
+    return summarySearch.Items as PlayerSeasonSummary[];
+  }
+
+  async getPlayerSummaryForSeason(
+    playerName: string,
+    season: string
+  ): Promise<PlayerSeasonSummary> {
+    const summary = await this.getPlayerSummary(playerName);
+    return summary.find((s) => s.Season == season)!;
+  }
+
+  async getPlayerDebut(playerName: string): Promise<Appearance> {
+    const debutSearch = await dynamo.query({
+      TableName: DataTables.APPS_TABLE_NAME,
+      KeyConditionExpression: '#name = :name',
+      IndexName: 'ByPlayerIndex',
+      ExpressionAttributeNames: {
+        '#name': 'Name'
+      },
+      ExpressionAttributeValues: {
+        ':name': decodeURIComponent(playerName)
+      },
+      Limit: 1
+    });
+    return debutSearch.Items![0] as Appearance;
+  }
+
+  async getRandomPlayer(): Promise<RandomPlayer> {
+    const players = await this.findAllPlayers();
+    const random = Math.floor(Math.random() * (players.length - 1));
+    const randomplayer = players[random];
+    const debut = await this.getPlayerDebut(randomplayer.name);
+    const apps_query = await this.getPlayerSummaryForSeason(
+      randomplayer.name,
+      'TOTAL'
+    );
+    const seasonMapping = {
+      '1978': 1977,
+      '1984': 1983,
+      '1990': 1989,
+      '1992': 1991,
+      '1994': 1993,
+      '1996': 1995,
+      '1998': 1997,
+      '2001': 2000,
+      '2003': 2002,
+      '2005': 2006,
+      '2008': 2007
+    };
+    const re = /\/\d\d\d\d\//gm;
+    const re3 = /\/\d\d\d\d[A-Za-z]\//gm;
+    let season = debut.Season;
+    if (seasonMapping[season]) season = seasonMapping[season];
+
+    randomplayer.picLink = randomplayer.picLink!.replace(
+      re,
+      '/' + season + '/'
+    );
+    randomplayer.picLink = randomplayer.picLink!.replace(
+      re3,
+      '/' + season + '/'
+    );
+
+    return {
+      name: randomplayer.name,
+      picLink: randomplayer.picLink,
+      debut: debut,
+      apps: apps_query.Apps,
+      goals: apps_query.goals
+    };
   }
 
   async getPlayerTransfers(playerName: string): Promise<Transfer[]> {
