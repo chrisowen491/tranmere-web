@@ -63,7 +63,7 @@
     "style-loader": "^4.0.0",
     "ts-jest": "^29.0.5",
     "typescript": "^5.4.5",
-    "typescript-eslint": "^7.8.0",
+    "typescript-eslint": "^7.10.0",
     "webpack": "^5.76.3",
     "webpack-cli": "^5.0.1",
     "webpack-dev-server": "^5.0.0",
