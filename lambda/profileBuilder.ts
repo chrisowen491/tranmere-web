@@ -13,7 +13,11 @@ import { v4 as uuidv4 } from 'uuid';
 
 const llm = new ChatOpenAI({
   model: 'gpt-4o',
-  temperature: 0.5
+  temperature: 0.5,
+  configuration: {
+    baseURL:
+      'https://gateway.ai.cloudflare.com/v1/5411bb1d842d66317f9306513b9d0093/tranmereweb/openai'
+  }
 });
 
 const client = createClient({
@@ -45,7 +49,12 @@ const tools = [
       });
 
       const response = (await request.json()) as TavilyResponse;
-      return response.answer;
+      return JSON.stringify({
+        research: response.answer,
+        links: response.results.forEach((link) => {
+          return { link: link.url, title: link.title };
+        })
+      });
     }
   }),
   new DynamicTool({
@@ -116,7 +125,7 @@ const tools = [
           sitename: z.string().describe('The name of the website')
         })
         .array()
-        .describe('A list of hyperlinks information has been sourced from')
+        .describe('A list of hyperlinks with information about this player')
     }),
     func: async ({
       biography,
@@ -223,13 +232,14 @@ exports.handler = async (
   const agent = await createOpenAIFunctionsAgent({
     llm,
     tools,
-    prompt
+    prompt,
   });
 
   const agentExecutor = new AgentExecutor({
     agent,
     tools,
-    verbose: false
+    verbose: false,
+    returnIntermediateSteps: true,
   });
 
   const result2 = await agentExecutor.invoke({

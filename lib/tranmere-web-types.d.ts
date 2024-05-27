@@ -25,6 +25,12 @@ export interface BreadCrumbLink extends BreadCrumb {
 
 export interface TavilyResponse {
   answer: string;
+  results: TavilyResult[];
+}
+
+export interface TavilyResult {
+  title: string;
+  url: string;
 }
 
 export interface BaseView {
