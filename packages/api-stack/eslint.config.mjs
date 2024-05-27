@@ -5,8 +5,7 @@ export default [
   {
     ignores: [
       '**/*.config.js',
-      '**/build/**',
-      '**/contentful.d.ts',
+      '**/lambda/upload.js',
       '**/node_modules/**',
     ],
   },

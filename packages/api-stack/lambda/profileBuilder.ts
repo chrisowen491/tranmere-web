@@ -5,7 +5,10 @@ import { ChatOpenAI } from '@langchain/openai';
 import type { ChatPromptTemplate } from '@langchain/core/prompts';
 import { createOpenAIFunctionsAgent, AgentExecutor } from 'langchain/agents';
 import { pull } from 'langchain/hub';
-import { TranmereWebUtils, DataTables } from '@tranmere-web/lib/src/tranmere-web-utils';
+import {
+  TranmereWebUtils,
+  DataTables
+} from '@tranmere-web/lib/src/tranmere-web-utils';
 import { z } from 'zod';
 import { DynamicStructuredTool, DynamicTool } from '@langchain/core/tools';
 import { TavilyResponse } from '@tranmere-web/lib/src/tranmere-web-types';

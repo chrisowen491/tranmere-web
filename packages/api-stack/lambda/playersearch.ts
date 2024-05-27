@@ -1,6 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { APIGatewayEvent, APIGatewayProxyResult } from 'aws-lambda';
-import { TranmereWebUtils, DataTables } from '@tranmere-web/lib/src/tranmere-web-utils';
+import {
+  TranmereWebUtils,
+  DataTables
+} from '@tranmere-web/lib/src/tranmere-web-utils';
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import { DynamoDB } from '@aws-sdk/client-dynamodb';
 const utils = new TranmereWebUtils();

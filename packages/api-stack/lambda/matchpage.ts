@@ -1,5 +1,8 @@
 import { APIGatewayEvent, APIGatewayProxyResult } from 'aws-lambda';
-import { TranmereWebUtils, ProgrammeImage } from '@tranmere-web/lib/src/tranmere-web-utils';
+import {
+  TranmereWebUtils,
+  ProgrammeImage
+} from '@tranmere-web/lib/src/tranmere-web-utils';
 import { Appearance, Goal } from '@tranmere-web/lib/src/tranmere-web-types';
 import { MatchView } from '@tranmere-web/lib/src/tranmere-web-view-types';
 

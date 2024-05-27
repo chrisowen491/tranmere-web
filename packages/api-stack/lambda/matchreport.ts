@@ -1,6 +1,14 @@
 import { APIGatewayEvent, APIGatewayProxyResult } from 'aws-lambda';
-import { TranmereWebUtils, DataTables } from '@tranmere-web/lib/src/tranmere-web-utils';
-import { MatchEvent, Match, Appearance, Goal } from '@tranmere-web/lib/src/tranmere-web-types';
+import {
+  TranmereWebUtils,
+  DataTables
+} from '@tranmere-web/lib/src/tranmere-web-utils';
+import {
+  MatchEvent,
+  Match,
+  Appearance,
+  Goal
+} from '@tranmere-web/lib/src/tranmere-web-types';
 import {
   translateTeamName,
   translatePlayerName,

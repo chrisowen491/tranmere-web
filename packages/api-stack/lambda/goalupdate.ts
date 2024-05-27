@@ -1,5 +1,8 @@
 import { APIGatewayEvent, APIGatewayProxyResult } from 'aws-lambda';
-import { TranmereWebUtils, DataTables } from '@tranmere-web/lib/src/tranmere-web-utils';
+import {
+  TranmereWebUtils,
+  DataTables
+} from '@tranmere-web/lib/src/tranmere-web-utils';
 import { Goal } from '@tranmere-web/lib/src/tranmere-web-types';
 import { DynamoDBDocument, UpdateCommand } from '@aws-sdk/lib-dynamodb';
 import { DynamoDB } from '@aws-sdk/client-dynamodb';
