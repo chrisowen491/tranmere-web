@@ -1,3 +1,4 @@
+/// <reference types="@types/jest" />;
 import { TranmereWebUtils } from '../src/tranmere-web-utils';
 import { createClient } from 'contentful';
 
