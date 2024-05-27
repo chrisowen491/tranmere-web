@@ -1,4 +1,4 @@
-name: Publish
+name: Web
 
 on:
   push:
@@ -26,7 +26,7 @@ jobs:
       - name: Install
         run: yarn --frozen-lockfile 
       - name: Build
-        run: npx lerna run build
+        run: yarn run build
         env:
           CF_SPACE: ${{ secrets.CF_SPACE }}
           CF_KEY: ${{ secrets.CF_KEY }}
