@@ -1,0 +1,24 @@
+{
+  "name": "@tranmere-web/lib",
+  "version": "0.0.0",
+  "description": "",
+  "scripts": {
+    "build": "tsc -b",
+    "test": "jest"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {   
+    "axios": "^1.6.3", 
+    "mustache": "^4.2.0",
+    "@aws-sdk/client-dynamodb": "^3.485.0",
+    "@aws-sdk/client-ses": "^3.485.0",
+    "@aws-sdk/lib-dynamodb": "^3.485.0",
+    "contentful": "^10.6.15",
+    "contentful-management": "^11.8.0"
+  },
+  "devDependencies": {
+    "@contentful/rich-text-from-markdown": "^15.16.15",
+    "jest": "^29.4.3"
+  }
+}

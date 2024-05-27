@@ -14,7 +14,7 @@ jobs:
         run: | 
           yarn global add aws-cdk
       - name: Install
-        run: yarn
+        run: yarn --frozen-lockfile 
       - name: Unit Test
         run: yarn test
         env:
