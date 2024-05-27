@@ -58,9 +58,9 @@
   integrity sha512-7su4KH/2q2Fhud2VujUNhCMbIh7yp6wqWR3UuVje5P3kDRhTotPRmg3iRQi48YRYkk9o+airsrLl+rxJ/9FWng==
 
 "@algolia/autocomplete-theme-classic@^1.8.0":
-  version "1.17.0"
-  resolved "https://registry.yarnpkg.com/@algolia/autocomplete-theme-classic/-/autocomplete-theme-classic-1.17.0.tgz#bbd79df8f5240b3ddd3f9cdc9b8273753f15cd25"
-  integrity sha512-FsW/J/mG1YIPv93/QQ7KxMVNXAiVi9accGgoK2y3zDz58WpVgUug97SUoQzP4I9EMZAZAHQo0QbWXxpqTWkcOA==
+  version "1.17.1"
+  resolved "https://registry.yarnpkg.com/@algolia/autocomplete-theme-classic/-/autocomplete-theme-classic-1.17.1.tgz#35fc7caf111e519bda5f2c951740f5d5eb017f8a"
+  integrity sha512-ueR4sACTg65qUGVtZVbzCCPUlw7/DQer8Z18goIBQVtYoJeSysBxKcTn2q4MHwWjlsmeJr1Q0wizfTnyVfyp4Q==
 
 "@algolia/cache-browser-local-storage@4.23.3":
   version "4.23.3"
