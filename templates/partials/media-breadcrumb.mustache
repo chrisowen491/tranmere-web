@@ -3,6 +3,8 @@
         <div class="row">
             <div class="col-md-8 text-white mb-3">
                 <h1 class="h2 font-weight-normal" itemprop="headline">{{title}}</h1>
+                {{#datePosted}}<h3 class="h3 font-weight-normal">{{.}}</h3>{{/datePosted}}
+                {{#author}}<h3 class="h3 font-weight-normal">{{.}}</h3>{{/author}}
                 <meta itemprop="datePublished" content="{{datePosted}}" />
                 <meta itemprop="author" content="{{author}}" />
                 <nav aria-label="breadcrumb">
