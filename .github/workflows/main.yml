@@ -4,9 +4,7 @@ on:
   push:
     branches: [ master ]
     paths:
-      - 'graphql/**'
-      - 'lambda/**'
-      - 'lib/**'
+      - 'packages/api-stack/**'
       - 'templates/**' 
       - '.github/workflows/**'   
 
@@ -21,13 +19,10 @@ jobs:
         with:
           node-version: '21.1.0'
       - uses: actions/checkout@v4
-      - name: Install AWS CDK
-        run: | 
-          yarn global add aws-cdk
       - name: Install
-        run: yarn
+        run: yarn --frozen-lockfile
       - name: Unit Test
-        run: yarn test
+        run: yarn workspace @tranmere-web/api-stack test
         env:
           DD_KEY: ${{ secrets.DD_KEY }}
           CF_SPACE: ${{ secrets.CF_SPACE }}
@@ -56,14 +51,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '21.1.0'      
-      - name: Install AWS CDK
-        run: | 
-          yarn global add aws-cdk
       - name: Install
-        run: yarn                  
+        run: yarn --frozen-lockfile                 
       - name: Deploy CDK
         run: |
-          cdk deploy --require-approval never "*"
+          yarn workspace @tranmere-web/api-stack cdk deploy --require-approval never "*"
         env:
           AWS_REGION: eu-west-1
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -103,12 +95,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '21.1.0'      
-      - name: Install Newman
-        run: | 
-          yarn global add newman
       - name: Post Deploy Checks
         run: 
-          newman run ./api_tests/postman-collection.json -e ./api_tests/env/aws-prod.json --env-var "testApiKey=${{ secrets.API_KEY }}"
+          yarn workspace @tranmere-web/api-tests api
 
   web_acceptance_test:
     runs-on: ubuntu-latest
@@ -118,9 +107,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '21.1.0'      
-      - name: Install Newman
-        run: | 
-          yarn global add newman
       - name: Post Deploy Checks
         run: 
-          newman run ./api_tests/postman-collection.json -e ./api_tests/env/cf-prod.json --env-var "testApiKey=${{ secrets.API_KEY }}"
+          yarn workspace @tranmere-web/api-tests web

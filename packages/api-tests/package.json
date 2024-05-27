@@ -1,0 +1,15 @@
+{
+  "name": "@tranmere-web/api-tests",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "web": "newman run ./postman-collection.json -e ./env/cf-prod.json",
+    "api": "newman run ./postman-collection.json -e ./env/aws-prod.json"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "newman": "^6.0.0"
+  }
+}

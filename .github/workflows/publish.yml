@@ -10,7 +10,7 @@ on:
       - '.github/workflows/**'
 
 jobs:
-  publish:
+  publish_site:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -24,7 +24,7 @@ jobs:
           node-version: '21.1.0'
       # Run a build step here if your project requires
       - name: Install
-        run: yarn
+        run: yarn --frozen-lockfile 
       - name: Build
         run: yarn build
         env:

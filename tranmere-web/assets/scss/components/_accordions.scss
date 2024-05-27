@@ -208,6 +208,10 @@
 						@include rotate(0deg);
 					}
 				}
+
+				@include media-breakpoint-down(md) {
+					font-size: 0.9rem;
+				}
 			}
 		}
 

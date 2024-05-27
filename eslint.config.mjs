@@ -26,6 +26,8 @@ export default [
       '**/tranmere-web/assets/js/auth.js',
       '**/templates/**',
       '**/web.out/assets/scripts/**',
+      '**/.vercel/**',
+      '**/.next/**',
     ],
   },
   {
