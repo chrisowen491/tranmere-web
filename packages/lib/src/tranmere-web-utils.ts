@@ -543,7 +543,7 @@ export class TranmereWebUtils {
     return transfers.Items as Transfer[];
   }
 
-  async deleteItem(id, type) {
+  async deleteItem(id: string, type: string) {
     console.log(id);
     const params = {
       TableName: type,
@@ -561,7 +561,7 @@ export class TranmereWebUtils {
     return squadSearch.Items!.map((p) => p as Player);
   }
 
-  async getAppsByPlayer(Player): Promise<Appearance[]> {
+  async getAppsByPlayer(playerName: string): Promise<Appearance[]> {
     const apps: Appearance[] = [];
     const params = {
       TableName: DataTables.APPS_TABLE_NAME,
@@ -571,7 +571,7 @@ export class TranmereWebUtils {
         '#Name': 'Name'
       },
       ExpressionAttributeValues: {
-        ':name': Player
+        ':name': playerName
       }
     };
     const result = await dynamo.query(params);
@@ -591,7 +591,7 @@ export class TranmereWebUtils {
         '#SubbedBy': 'SubbedBy'
       },
       ExpressionAttributeValues: {
-        ':subbedBy': Player
+        ':subbedBy': playerName
       }
     };
     const sub_result = await dynamo.query(sub_params);
@@ -610,7 +610,7 @@ export class TranmereWebUtils {
         '#Scorer': 'Scorer'
       },
       ExpressionAttributeValues: {
-        ':scorer': Player
+        ':scorer': playerName
       }
     };
     const goals_result = await dynamo.query(goals_params);
@@ -632,7 +632,7 @@ export class TranmereWebUtils {
     return apps;
   }
 
-  async getGoalsById(id, season): Promise<Goal> {
+  async getGoalsById(id: string, season: string): Promise<Goal> {
     const params = {
       TableName: DataTables.GOALS_TABLE_NAME,
       KeyConditionExpression: 'Season = :season and #id = :id',

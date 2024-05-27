@@ -79,3 +79,5 @@ next-env.d.ts
 .wrangler
 build
 packages/chat/.next/
+
+*.log
