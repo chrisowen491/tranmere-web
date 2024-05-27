@@ -6,9 +6,9 @@
     "tranmere-web": "bin/tranmere-web.mjs"
   },
   "scripts": {
-    "cdk": "npx cdk",
-    "local-api": "npx cdk synth --quiet && sam local start-api -t ./cdk.out/TranmereWebStack.template.json",
-    "synth": "npx cdk synth --quiet",
+    "cdk": "cdk",
+    "local-api": "cdk synth --quiet && sam local start-api -t ./cdk.out/TranmereWebStack.template.json",
+    "synth": "cdk synth --quiet",
     "test": "jest"
   },
   "author": "",

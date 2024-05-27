@@ -55,7 +55,7 @@ jobs:
         run: yarn --frozen-lockfile                 
       - name: Deploy CDK
         run: |
-          yarn workspace @tranmere-web/api-stack npx cdk deploy --require-approval never "*"
+          yarn workspace @tranmere-web/api-stack cdk deploy --require-approval never "*"
         env:
           AWS_REGION: eu-west-1
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
