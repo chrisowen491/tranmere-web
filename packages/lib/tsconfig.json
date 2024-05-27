@@ -23,7 +23,6 @@
         "experimentalDecorators": true,
         "strictPropertyInitialization": true,
         "skipLibCheck": true,
-        "types": ["@types/jest"],
         "typeRoots": ["./types", "./node_modules/@types"]
     },
     "include": ["src/*.ts", "test/*.ts"]
