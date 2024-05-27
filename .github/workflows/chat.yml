@@ -8,7 +8,7 @@ on:
 
 
 jobs:
-  build_test_and_package:
+  chat_deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/setup-node@v4

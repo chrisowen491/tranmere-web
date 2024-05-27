@@ -22,7 +22,7 @@ jobs:
       - name: Install
         run: yarn --frozen-lockfile
       - name: Unit Test
-        run: yarn test
+        run: yarn workspace @tranmere-web/api-stack test
         env:
           DD_KEY: ${{ secrets.DD_KEY }}
           CF_SPACE: ${{ secrets.CF_SPACE }}
