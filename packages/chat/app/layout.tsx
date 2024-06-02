@@ -12,25 +12,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <title>LangChain + Next.js Template</title>
+        <title>Tranmere Web Chat Bot</title>
         <link rel="shortcut icon" href="/images/favicon.ico" />
-        <meta
-          name="description"
-          content="Starter template showing how to use LangChain in Next.js projects. See source code and deploy your own at https://github.com/langchain-ai/langchain-nextjs-template!"
-        />
-        <meta property="og:title" content="LangChain + Next.js Template" />
-        <meta
-          property="og:description"
-          content="Starter template showing how to use LangChain in Next.js projects. See source code and deploy your own at https://github.com/langchain-ai/langchain-nextjs-template!"
-        />
-        <meta property="og:image" content="/images/og-image.png" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="LangChain + Next.js Template" />
-        <meta
-          name="twitter:description"
-          content="Starter template showing how to use LangChain in Next.js projects. See source code and deploy your own at https://github.com/langchain-ai/langchain-nextjs-template!"
-        />
-        <meta name="twitter:image" content="/images/og-image.png" />
       </head>
       <body>
         <div>
@@ -39,6 +22,8 @@ export default function RootLayout({
         </div>
 
         <Footer></Footer>
+        <script async src="https://www.tranmere-web.com//assets/scripts/bundle--modernizr.js?r=91208"></script>
+        <script async src="https://www.tranmere-web.com//assets/scripts/bundle--tranmere-web.js?r=91208"></script>
       </body>
     </html>
   );

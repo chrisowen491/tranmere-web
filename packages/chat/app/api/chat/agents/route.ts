@@ -4,12 +4,27 @@ import { Message as VercelChatMessage, StreamingTextResponse } from "ai";
 import { AgentExecutor, createToolCallingAgent } from "langchain/agents";
 import { ChatOpenAI } from "@langchain/openai";
 import { AIMessage, ChatMessage, HumanMessage } from "@langchain/core/messages";
-import { tools } from "./tools";
+import { createRetrieverTool } from "langchain/tools/retriever";
+import { getRequestContext } from "@cloudflare/next-on-pages";
+import {
+  CloudflareVectorizeStore,
+  CloudflareWorkersAIEmbeddings,
+} from "@langchain/cloudflare";
+import type {
+  Fetcher,
+} from '@cloudflare/workers-types';
+import { BaseRetrieverInterface } from "@langchain/core/retrievers";
+import { ResultsTool } from "@/tools/ResultsTool"
+import { MatchTool } from "@/tools/MatchTool"
+
+
 
 import {
   ChatPromptTemplate,
   MessagesPlaceholder,
 } from "@langchain/core/prompts";
+import { TransferTool } from "@/tools/TransferTool";
+import { getSystemPrompt } from "@/prompts/system";
 
 export const runtime = "edge";
 
@@ -23,35 +38,61 @@ const convertVercelMessageToLangChainMessage = (message: VercelChatMessage) => {
   }
 };
 
-const AGENT_SYSTEM_TEMPLATE = `You are a chatbot for fans of Tranmere Rovers Football Club. All final responses must be how a person from Merseyside would respond. !`;
-
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
+    const body = await req.json() as {
+      messages: VercelChatMessage[]
+    };
+
+    const avatar = req.headers.get("x-avatar") ? req.headers.get("x-avatar") : "Generic";
 
     const messages = (body.messages ?? []).filter(
       (message: VercelChatMessage) =>
         message.role === "user" || message.role === "assistant",
     );
-    const returnIntermediateSteps = true;
+    const returnIntermediateSteps = false;
     const previousMessages = messages
       .slice(0, -1)
       .map(convertVercelMessageToLangChainMessage);
     const currentMessageContent = messages[messages.length - 1].content;
 
     const chat = new ChatOpenAI({
-      modelName: "gpt-3.5-turbo-1106",
+      modelName: "gpt-4-1106-preview",
       temperature: 0,
       // IMPORTANT: Must "streaming: true" on OpenAI to enable final output streaming below.
       streaming: true,
+      configuration: {
+        baseURL: "https://gateway.ai.cloudflare.com/v1/5411bb1d842d66317f9306513b9d0093/tranmereweb/openai"
+      }
     });
 
     const prompt = ChatPromptTemplate.fromMessages([
-      ["system", AGENT_SYSTEM_TEMPLATE],
+      ["system", getSystemPrompt(avatar)],
       new MessagesPlaceholder("chat_history"),
       ["human", "{input}"],
       new MessagesPlaceholder("agent_scratchpad"),
     ]);
+
+    const embeddings = new CloudflareWorkersAIEmbeddings({
+      binding: getRequestContext().env.AI as unknown as Fetcher,
+      model: "@cf/baai/bge-base-en-v1.5",
+    });
+    
+    
+    const db = new CloudflareVectorizeStore(embeddings, {
+      index: getRequestContext().env.VECTORIZE_INDEX,
+    });
+    
+    const tools = [
+      ResultsTool,
+      MatchTool,
+      TransferTool,
+      createRetrieverTool(db.asRetriever() as unknown as BaseRetrieverInterface, {
+        name: "tranmere-player-qa",
+        description:
+          "Answers questions about Tranmere Rovers players.",
+      }),
+    ];
 
     const agent = await createToolCallingAgent({
       llm: chat,
@@ -91,7 +132,7 @@ export async function POST(req: NextRequest) {
         },
       });
 
-      return new StreamingTextResponse(transformStream);
+      return new StreamingTextResponse(transformStream, { headers: {"x-avatar": avatar!} });
     } else {
       const result = await agentExecutor.invoke({
         input: currentMessageContent,

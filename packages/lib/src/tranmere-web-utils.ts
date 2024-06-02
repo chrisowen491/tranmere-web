@@ -196,12 +196,14 @@ export class TranmereWebUtils {
   }
 
   async getBlogs(
-    client: ContentfulClientApi<undefined>
+    client: ContentfulClientApi<undefined>,
+    limit?: number
   ): Promise<EntryCollection<IBlogPost>> {
+    const realLimit = limit ? limit : 5;
     return await client.getEntries<IBlogPost>({
       content_type: 'blogPost',
       order: ['-sys.createdAt'],
-      limit: 5
+      limit: realLimit
     });
   }
 

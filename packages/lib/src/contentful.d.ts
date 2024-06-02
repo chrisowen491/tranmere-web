@@ -13,6 +13,9 @@ export interface IBlogPostFields {
   /** Date Posted */
   datePosted?: string | undefined;
 
+  /** Author */
+  author?: string | undefined;
+
   /** Picture */
   pic?: Asset | undefined;
 
@@ -30,7 +33,7 @@ export interface IBlogPostFields {
 
   /** Tags */
   tags?:
-    | ('Site Stuff' | 'Tranmere News' | 'Gallery' | 'Stats' | 'Reviews')[]
+    | ('Site Stuff' | 'Tranmere News' | 'Gallery' | 'Stats' | 'Reviews' | 'Magazine Articles')[]
     | undefined;
 }
 
@@ -87,7 +90,7 @@ export interface IGraphFields {
   /** Title */
   title?: string | undefined;
 
-  /** chart */
+  // eslint-disable-next-line
   chart?: Record<string, any> | undefined;
 }
 
@@ -137,7 +140,7 @@ export interface ILinkBlockFields {
   /** Title */
   title?: string | undefined;
 
-  /** Links */
+  // eslint-disable-next-line
   links?: Record<string, any> | undefined;
 }
 
@@ -264,10 +267,10 @@ export interface IQuestionBlockFields {
   /** Name */
   name?: string | undefined;
 
-  /** Block */
+  // eslint-disable-next-line
   block?: Record<string, any> | undefined;
 
-  /** OptionsBlock */
+  // eslint-disable-next-line
   optionsBlock?: Record<string, any> | undefined;
 }
 

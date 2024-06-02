@@ -25,6 +25,7 @@ exports.handler = async (
 ): Promise<APIGatewayProxyResult> => {
   let pageName = event.pathParameters!.pageName;
   const classifier = event.pathParameters!.classifier;
+
   let view: View = {};
 
   if (pageName === 'home') {

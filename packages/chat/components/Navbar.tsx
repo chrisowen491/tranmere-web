@@ -20,58 +20,63 @@ export function Navbar() {
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul className="navbar-nav mr-auto">
                         <li className="nav-item dropdown">
-                            <a className="nav-link dropdown-toggle" href="#" id="dropdown-1" role="button" data-toggle="dropdown"
+                            <a className="nav-link dropdown-toggle" href="#" id="resultsNav" role="button" data-toggle="dropdown"
                                aria-haspopup="true" aria-expanded="false">
                                 Results
                             </a>
-                            <div className="dropdown-menu" aria-labelledby="dropdown-1">
-                                <a className="dropdown-item" href="/results">Results Home</a>
-                                <a className="dropdown-item" href="/games/at-wembley">Tranmere At Wembley</a>
-                                <a className="dropdown-item" href="/games/penalty-shootouts">Penalty Shootouts</a>
+                            <div className="dropdown-menu" aria-labelledby="resultsNav">
+                                <a className="dropdown-item" href="https://www.tranmere-web.com/results">Results Home</a>
+                                <a className="dropdown-item" href="https://www.tranmere-web.com/games/at-wembley">Tranmere At Wembley</a>
+                                <a className="dropdown-item" href="https://www.tranmere-web.com/games/penalty-shootouts">Penalty Shootouts</a>
                             </div>
                         </li>
                         <li className="nav-item dropdown">
-                            <a className="nav-link dropdown-toggle" href="#" id="dropdown-2" role="button" data-toggle="dropdown"
+                            <a className="nav-link dropdown-toggle" href="#" id="playerNav" role="button" data-toggle="dropdown"
                                aria-haspopup="true" aria-expanded="false">
                                 Players
                             </a>
-                            <div className="dropdown-menu" aria-labelledby="dropdown-2">
-                                <a className="dropdown-item" href="/playersearch">Players Home</a>
-                                <a className="dropdown-item" href="/player-records/most-appearances">Most Tranmere Appearances</a>
-                                <a className="dropdown-item" href="/player-records/top-scorers">Most Tranmere Goals</a>
-                                <a className="dropdown-item" href="/player-records/only-one-appearance">Only Played Once</a>
-                                <a className="dropdown-item" href="/top-scorers-by-season">Top Scorers By Season</a>
-                                <a className="dropdown-item" href="/hat-tricks">Hat Tricks</a>
-                                <a className="dropdown-item" href="/super-stars">Opposition Stars</a>
-                                <a className="dropdown-item" href="/transfer-central">Transfers</a>
+                            <div className="dropdown-menu" aria-labelledby="playerNav">
+                                <a className="dropdown-item" href="https://www.tranmere-web.com/playersearch">Players Home</a>
+                                <a className="dropdown-item" href="https://www.tranmere-web.com/player-records/most-appearances">Most Tranmere Appearances</a>
+                                <a className="dropdown-item" href="https://www.tranmere-web.com/player-records/top-scorers">Most Tranmere Goals</a>
+                                <a className="dropdown-item" href="https://www.tranmere-web.com/player-records/only-one-appearance">Only Played Once</a>
+                                <a className="dropdown-item" href="https://www.tranmere-web.com/top-scorers-by-season">Top Scorers By Season</a>
+                                <a className="dropdown-item" href="https://www.tranmere-web.com/hat-tricks">Hat Tricks</a>
+                                <a className="dropdown-item" href="https://www.tranmere-web.com/super-stars">Opposition Stars</a>
+                                <a className="dropdown-item" href="https://www.tranmere-web.com/transfer-central">Transfers</a>
                             </div>
                         </li>
                         <li className="nav-item dropdown">
-                            <a className="nav-link dropdown-toggle" href="#" id="dropdown-3" role="button" data-toggle="dropdown"
+                            <a className="nav-link dropdown-toggle" href="#" id="statsNav" role="button" data-toggle="dropdown"
                                aria-haspopup="true" aria-expanded="false">
                                 Stats
                             </a>
-                            <div className="dropdown-menu" aria-labelledby="dropdown-3">
-                                <a className="dropdown-item" href="/page/blog/2VrsLTKALyi2vgAQMLDoIT">Stats Home</a>
-                                <a className="dropdown-item" href="/games/top-attendances">Highest Tranmere Attendances</a>
-                                <a className="dropdown-item" href="/games/top-home-attendances">Highest Tranmere Attendances at Prenton Park</a>
+                            <div className="dropdown-menu" aria-labelledby="statsNav">
+                                <a className="dropdown-item" href="https://www.tranmere-web.com/page/blog/2VrsLTKALyi2vgAQMLDoIT">Stats Home</a>
+                                <a className="dropdown-item" href="https://www.tranmere-web.com/games/top-attendances">Highest Tranmere Attendances</a>
+                                <a className="dropdown-item" href="https://www.tranmere-web.com/games/top-home-attendances">Highest Tranmere Attendances at Prenton Park</a>
                             </div>
                         </li>
                         <li className="nav-item dropdown">
-                            <a className="nav-link dropdown-toggle" href="#" id="dropdown-4" role="button" data-toggle="dropdown"
+                            <a className="nav-link dropdown-toggle" href="#" id="mediaNav" role="button" data-toggle="dropdown"
                                aria-haspopup="true" aria-expanded="false">
                                 Media
                             </a>
-                            <div className="dropdown-menu" aria-labelledby="dropdown-4">
-                                <a className="dropdown-item" href="/page/blog/7wtrOLaYqaK7Dhvodz1Gv0">Media Home</a>
-                                <a className="dropdown-item" href="/page/blog/7GNQCz3dEPOCvuyfcHTWvA">Books</a>
-                                <a className="dropdown-item" href="/page/blog/7gk4gmq9N6ibfree9KOl1j">Football Cards</a>
-                                <a className="dropdown-item" href="/page/blog/5uUGSyqn2uTrGx4c24mhly">Testimonials & Benefit Matches</a>
-                                <a className="dropdown-item" href="/player-builder">Player Avatar Builder</a>
+                            <div className="dropdown-menu" aria-labelledby="mediaNav">
+                                <a className="dropdown-item" href="https://www.tranmere-web.com/page/blog/7wtrOLaYqaK7Dhvodz1Gv0">Media Home</a>
+                                <a className="dropdown-item" href="https://www.tranmere-web.com/page/blog/7GNQCz3dEPOCvuyfcHTWvA">Books</a>
+                                <a className="dropdown-item" href="https://www.tranmere-web.com/page/blog/7gk4gmq9N6ibfree9KOl1j">Football Cards</a>
+                                <a className="dropdown-item" href="https://www.tranmere-web.com/page/blog/5uUGSyqn2uTrGx4c24mhly">Testimonials & Benefit Matches</a>
+                                <a className="dropdown-item" href="https://www.tranmere-web.com/player-builder">Player Avatar Builder</a>
                             </div>
                         </li>
+                        <li className="nav-item dropdown">
+                            <a className="nav-link" href="https://chat.tranmere-web.com" id="chat" role="button"
+                               aria-haspopup="false" aria-expanded="false">
+                                Tranmere AI
+                            </a>
+                        </li>
                     </ul>
-                    <div id="navsearch"></div>
                 </div>
             </nav>
         </div>

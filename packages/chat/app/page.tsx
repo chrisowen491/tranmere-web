@@ -6,9 +6,8 @@ export default function AgentsPage() {
     <ChatWindow
       endpoint="api/chat/agents"
       emptyStateComponent={InfoCard}
-      placeholder="Alright mate! Ask me anything Tranmere Rovers related"
-      titleText="Rover the Dog"
-      emoji="🐶"
+      placeholder="Ask me anything Tranmere Rovers related"
+      titleText="Tranmere-Web AI"
     ></ChatWindow>
   );
 }

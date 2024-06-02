@@ -8,37 +8,36 @@ import { useRef, useState, ReactElement } from "react";
 import type { FormEvent } from "react";
 
 import { ChatMessageBubble } from "@/components/ChatMessageBubble";
-import { UploadDocumentsForm } from "@/components/UploadDocumentsForm";
-import { IntermediateStep } from "./IntermediateStep";
-import type { AgentStep } from 'langchain/agents';
 
 export function ChatWindow(props: {
   endpoint: string,
   emptyStateComponent: ReactElement,
   placeholder?: string,
   titleText?: string,
-  emoji?: string;
   showIngestForm?: boolean,
 }) {
   const messageContainerRef = useRef<HTMLDivElement | null>(null);
 
-  const { endpoint, emptyStateComponent, placeholder, titleText = "An LLM", showIngestForm, emoji } = props;
+  const { endpoint, emptyStateComponent, placeholder, titleText = "An LLM", showIngestForm } = props;
 
-  const [intermediateStepsLoading, setIntermediateStepsLoading] = useState(false);
-  const ingestForm = showIngestForm && <UploadDocumentsForm></UploadDocumentsForm>;
+  const avatarMap = new Map();
+  avatarMap.set('Generic', "/images/1989a.png")
+  avatarMap.set('Aldo', "https://www.tranmere-web.com/builder/1991/side-parting/ffd3b3/thick-tache/7f3f00/fcb98b/none/bc8a00")
+  avatarMap.set('Nors', "https://www.tranmere-web.com/builder/2018/balding/ffd3b3/small-beard/512904/fcb98b/none/8e740c")
+  avatarMap.set('Goodison', "https://www.tranmere-web.com/builder/2010/dreads/7f3f00/none/000000/5b2d01/none/8e740c")
+  avatarMap.set('Yates',"https://www.tranmere-web.com/builder/2000/mousse/ffd3b3/none/efef64/fcb98b/none/bc8a00")
+  avatarMap.set('Muir',"https://www.tranmere-web.com/builder/1989/side-parting-left-small/ffd3b3/none/bc9d00/fcb98b/none/bc8a00")
+  const [avatar, setAvatar] = useState<string>("Generic");
 
-  const [sourcesForMessages, setSourcesForMessages] = useState<Record<string, any>>({});
+  const handleSelectionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setAvatar(e.target.value);
+  };
 
   const { messages, input, setInput, handleInputChange, handleSubmit, isLoading: chatEndpointIsLoading, setMessages } =
     useChat({
       api: endpoint,
-      onResponse(response) {
-        const sourcesHeader = response.headers.get("x-sources");
-        const sources = sourcesHeader ? JSON.parse((Buffer.from(sourcesHeader, 'base64')).toString('utf8')) : [];
-        const messageIndexHeader = response.headers.get("x-message-index");
-        if (sources.length && messageIndexHeader !== null) {
-          setSourcesForMessages({...sourcesForMessages, [messageIndexHeader]: sources});
-        }
+      headers: {
+        'x-avatar': avatar
       },
       streamMode: "text",
       onError: (e) => {
@@ -56,62 +55,48 @@ export function ChatWindow(props: {
     if (!messages.length) {
       await new Promise(resolve => setTimeout(resolve, 300));
     }
-    if (chatEndpointIsLoading ?? intermediateStepsLoading) {
+    if (chatEndpointIsLoading) {
       return;
     }
-
-    setIntermediateStepsLoading(true);
-    setInput("");
-    const messagesWithUserReply = messages.concat({ id: messages.length.toString(), content: input, role: "user" });
-    setMessages(messagesWithUserReply);
-    const response = await fetch(endpoint, {
-      method: "POST",
-      body: JSON.stringify({
-        messages: messagesWithUserReply,
-        show_intermediate_steps: true
-      })
-    });
-    const json = await response.json();
-    setIntermediateStepsLoading(false);
-    if (response.status === 200) {
-      // Represent intermediate steps as system messages for display purposes
-      const intermediateStepMessages = (json.intermediate_steps ?? []).map((intermediateStep: AgentStep, i: number) => {
-        return {id: (messagesWithUserReply.length + i).toString(), content: JSON.stringify(intermediateStep), role: "system"};
-      });
-      const newMessages = messagesWithUserReply;
-      for (const message of intermediateStepMessages) {
-        newMessages.push(message);
-        setMessages([...newMessages]);
-        await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 1000));
-      }
-      setMessages([...newMessages, { id: (newMessages.length + intermediateStepMessages.length).toString(), content: json.output, role: "assistant" }]);
-    } else {
-      if (json.error) {
-        toast(json.error, {
-          theme: "dark"
-        });
-        throw new Error(json.error);
-      }
-    }
+    handleSubmit(e);
   }
 
   return (
     <section>
       <div className='container'>
-        <h2 className={`${messages.length > 0 ? "" : "hidden"} text-2xl`}>{emoji} {titleText}</h2>
+        <h3 className={`font-weight-normal mb-2`} style={{ color: "#001489"}}>{titleText}</h3>
           <form onSubmit={sendMessage}>
             <div className="form-group row">
-              <div className="col-sm-10">
+              <div className="col-sm-8">
                 <input
-                  className="form-control form-control-lg"
+                  className="form-control form-control"
                   value={input}
-                  placeholder={placeholder ?? "What's it like to be a pirate?"}
+                  placeholder={placeholder ?? ""}
                   onChange={handleInputChange}
                 />
               </div>
               <div className="col-md-2">
+                <select
+                  className="form-control form-control"
+                  value={avatar}
+                  onChange={handleSelectionChange}
+                  >
+                    <option value={"Generic"}>Generic</option>
+                    <option value={"Aldo"}>Aldo</option>
+                    <option value={"Goodison"}>Goodison</option>
+                    <option value={"Nors"}>Nors</option>
+                    <option value={"Yates"}>Yates</option>
+                    <option value={"Muir"}>Muir</option>
+                </select>
+              </div>
+              <div className="col-md-2">
                 <button type="submit" className="btn btn-primary">
-                  Send
+                  <div role="status" className={`${(chatEndpointIsLoading) ? "" : "hidden"} flex justify-center`}>
+                    <div className="spinner-border text-light">
+                      <span className="sr-only">Loading...</span>
+                    </div>
+                  </div>
+                  <span className={(chatEndpointIsLoading) ? "hidden" : ""}>Send</span>
                 </button>
               </div>
             </div>
@@ -125,16 +110,17 @@ export function ChatWindow(props: {
           {messages.length > 0 ? (
             [...messages]
               .reverse()
-              .map((m, i) => {
-                const sourceKey = (messages.length - 1 - i).toString();
-                return (m.role === "system" ? <IntermediateStep key={m.id} message={m} aiEmoji={emoji} sources={sourcesForMessages[sourceKey]}></IntermediateStep> : <ChatMessageBubble key={m.id} message={m} aiEmoji={emoji} sources={sourcesForMessages[sourceKey]}></ChatMessageBubble>)
+              .map((m) => {
+                console.log(m)
+                const robotAvatar = avatarMap.get(avatar)
+                return (<ChatMessageBubble key={m.id} message={m} botAvatar={robotAvatar}></ChatMessageBubble>)
               })
           ) : (
             ""
           )}
         </div>
 
-      {messages.length === 0 && ingestForm}
+      {messages.length === 0}
 
       </div>
     </section>

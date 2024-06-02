@@ -5,12 +5,10 @@ export default [
   {
     ignores: [
       '**/*.config.js',
-      '**/lambda/upload.js',
-      '**/node_modules/**',
-      '**/cdk.out/**',
+      '**/.wrangler/**',
     ],
   },
   eslint.configs.recommended,
-  ...tseslint.configs.recommended
+  ...tseslint.configs.recommended,
 ];
 

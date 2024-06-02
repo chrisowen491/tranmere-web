@@ -31,6 +31,7 @@ exports.handler = async (
 ): Promise<APIGatewayProxyResult> => {
   const date = event.pathParameters!.date;
   const season = parseInt(event.pathParameters!.season!);
+  const jsonview = event.queryStringParameters && event.queryStringParameters['json'] ? event.queryStringParameters['json'] : null;
 
   if (!playerMap['John Aldridge']) {
     const squadSearch = await utils.getAllPlayersFromDb();
@@ -148,6 +149,26 @@ exports.handler = async (
   view.description = `Match Summary For ${match?.home} ${match?.ft} ${match?.visitor} - ${match?.date}`;
   view.date = date!;
   view.season = season!.toString();
+
+
+  if(jsonview) {
+
+    return utils.sendResponse(200, {
+      season: view.season,
+      score: view.ft,
+      date: view.date,
+      attendance: view.attendance,
+      referee: view.referee,
+      competition: view.competition,
+      pens: view.pens,
+      homeTeam: view.home,
+      awayTeam: view.visitor,
+      report: view.report ? view.report.report : null,
+      team: view.apps.map( a => a.Name),
+      goals: view.goals.map( g => g.Scorer),
+      substitutes: view.apps.filter( a => a.SubbedBy).map( s=> s.SubbedBy + ' for ' + s.Name)
+    })
+  }
 
   const page = utils.buildPage(view, './templates/match.mustache');
 

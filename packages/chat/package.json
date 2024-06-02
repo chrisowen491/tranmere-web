@@ -3,12 +3,13 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "chat": "next dev",
+    "chat": "next dev -p 3001",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "format": "prettier --write \"app\"",
-    "cloudflare": " npx @cloudflare/next-on-pages@1"
+    "cloudflare-build": "npx @cloudflare/next-on-pages@1",
+    "cloudflare-deploy": "npx wrangler pages deploy"
   },
   "dependencies": {
     "@cloudflare/next-on-pages": "^1.11.3",
@@ -34,7 +35,10 @@
     "react-toastify": "^10.0.0",
     "typescript": "^5.4.5",
     "zod": "^3.22.3",
-    "zod-to-json-schema": "^3.21.4"
+    "zod-to-json-schema": "^3.21.4",
+    "@langchain/cloudflare": "^0.0.6",
+    "@tranmere-web/lib": "*",
+    "@cloudflare/workers-types": "^4.20240502.0"
   },
   "devDependencies": {
     "prettier": "3.2.5",

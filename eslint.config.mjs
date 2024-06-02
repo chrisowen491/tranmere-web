@@ -23,7 +23,7 @@ export default [
       '**/wip/**',
       '**/tranmere-web/assets/js/auth.js',
       '**/templates/**',
-      '**/web.out/assets/scripts/**'
+      '**/web.out/assets/scripts/**',ler
     ],
   },
   {

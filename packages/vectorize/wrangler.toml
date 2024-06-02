@@ -1,0 +1,15 @@
+name = "langchain-test"
+main = "src/worker.ts"
+compatibility_date = "2024-01-10"
+node_compat = true
+
+[[vectorize]]
+binding = "VECTORIZE_INDEX"
+index_name = "tranmere-web"
+
+[ai]
+binding = "AI"
+
+[vars]
+CF_SPACE = ""
+CF_KEY = ""
