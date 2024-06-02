@@ -4,7 +4,6 @@
   "description": "",
   "scripts": {
     "worker": "npx wrangler dev --remote",
-    "test": "jest",
     "lint": "eslint .",
     "format": "prettier --write \"src\""
   },
