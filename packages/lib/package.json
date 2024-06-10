@@ -20,7 +20,7 @@
     "contentful-management": "^11.8.0"
   },
   "devDependencies": {
-    "prettier": "3.2.5",
+    "prettier": "3.3.1",
     "@types/jest": "^29.5.12",
     "ts-jest": "^29.0.5",
     "typescript": "^5.4.5",
