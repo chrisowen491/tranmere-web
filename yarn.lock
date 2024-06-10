@@ -3927,12 +3927,7 @@
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.12.tgz#12bb1e2be27293c1406acb6af1c3f3a1481d98c6"
   integrity sha512-5zvhXYtRNRluoE/jAp4GVsSduVUzNWKkOZrCDBWYtE7biZywwdC2AcEzg+cSMLFRfVgeAFqpfNabiPjxFddV1Q==
 
-"@types/qs@*":
-  version "6.9.14"
-  resolved "https://registry.yarnpkg.com/@types/qs/-/qs-6.9.14.tgz#169e142bfe493895287bee382af6039795e9b75b"
-  integrity sha512-5khscbd3SwWMhFqylJBLQ0zIu7c1K6Vz0uBIt915BI3zV0q1nfjRQD3RqSBcPaO6PHEF4ov/t9y89fSiyThlPA==
-
-"@types/qs@^6.5.3":
+"@types/qs@*", "@types/qs@^6.5.3":
   version "6.9.15"
   resolved "https://registry.yarnpkg.com/@types/qs/-/qs-6.9.15.tgz#adde8a060ec9c305a82de1babc1056e73bd64dce"
   integrity sha512-uXHQKES6DQKKCLh441Xv/dwxOq1TVS3JPUMlEqoEglvlhR6Mxnlew/Xq/LRVHpLyk7iK3zODe1qYHIMltO7XGg==
@@ -9090,9 +9085,9 @@ instantsearch.css@^8.1.0:
   integrity sha512-FjzM8u/nwY48hG+GqBeadHvQxd3mXH0+TMMgNAtD06Gffms/YX0GBvttKytlggF4Hf5AuZkvjnE/JpvoFrG0YQ==
 
 instantsearch.js@^4.68.0:
-  version "4.71.0"
-  resolved "https://registry.yarnpkg.com/instantsearch.js/-/instantsearch.js-4.71.0.tgz#00ea17669c879cf93981b7e32db3e3db807a3db0"
-  integrity sha512-mh/bSw5Q4/xKUwYRuFQAeTX5olz2h7uCBHSvqtYfA4D8HDCYQfeWPx0ilaGTfaZFCi/twzAbAE/pFIkLVXO3LQ==
+  version "4.71.1"
+  resolved "https://registry.yarnpkg.com/instantsearch.js/-/instantsearch.js-4.71.1.tgz#367a10c2da2f423aaeef42d7e59845f2bfa9c367"
+  integrity sha512-4AvEPadnDBf0NsCCw+a1GjmMFEZ3zQzQhCe51cFPLYRXnRyKw5bLvRVaNQckiDG+vl7bPyJrWn5YAh5UhBwA+w==
   dependencies:
     "@algolia/events" "^4.0.1"
     "@types/dom-speech-recognition" "^0.0.1"
