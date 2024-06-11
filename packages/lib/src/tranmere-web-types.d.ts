@@ -298,4 +298,6 @@ export interface PlayerSeasonSummary {
   starts: number;
   subs: number;
   freekicks: number;
+  bio?: Player;
+  picLink?: any;
 }

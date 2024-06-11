@@ -18,8 +18,9 @@ export const TransferTool = new DynamicStructuredTool({
         ),
         club: z
         .string()
+        .nullable()
         .describe(
-          'The club other than Tranmere Rovers involved in the transfer '
+          'The club other than Tranmere Rovers involved in the transfer - leave null for any club'
         )
     }),
     func: async ({

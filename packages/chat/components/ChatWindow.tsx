@@ -8,6 +8,8 @@ import { useRef, useState, ReactElement } from "react";
 import type { FormEvent } from "react";
 
 import { ChatMessageBubble } from "@/components/ChatMessageBubble";
+import { ComplexChatResponse, ExtendedMessage, MatchToolResponse } from './Types';
+import { PlayerSeasonSummary } from '@tranmere-web/lib/src/tranmere-web-types';
 
 export function ChatWindow(props: {
   endpoint: string,
@@ -18,15 +20,9 @@ export function ChatWindow(props: {
 }) {
   const messageContainerRef = useRef<HTMLDivElement | null>(null);
 
-  const { endpoint, emptyStateComponent, placeholder, titleText = "An LLM", showIngestForm } = props;
+  const { endpoint, emptyStateComponent, placeholder, titleText = "An LLM" } = props;
+  const [intermediateStepsLoading, setIntermediateStepsLoading] = useState(false);
 
-  const avatarMap = new Map();
-  avatarMap.set('Generic', "/images/1989a.png")
-  avatarMap.set('Aldo', "https://www.tranmere-web.com/builder/1991/side-parting/ffd3b3/thick-tache/7f3f00/fcb98b/none/bc8a00")
-  avatarMap.set('Nors', "https://www.tranmere-web.com/builder/2018/balding/ffd3b3/small-beard/512904/fcb98b/none/8e740c")
-  avatarMap.set('Goodison', "https://www.tranmere-web.com/builder/2010/dreads/7f3f00/none/000000/5b2d01/none/8e740c")
-  avatarMap.set('Yates',"https://www.tranmere-web.com/builder/2000/mousse/ffd3b3/none/efef64/fcb98b/none/bc8a00")
-  avatarMap.set('Muir',"https://www.tranmere-web.com/builder/1989/side-parting-left-small/ffd3b3/none/bc9d00/fcb98b/none/bc8a00")
   const [avatar, setAvatar] = useState<string>("Generic");
 
   const handleSelectionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -58,7 +54,72 @@ export function ChatWindow(props: {
     if (chatEndpointIsLoading) {
       return;
     }
-    handleSubmit(e);
+    const showIntermediateSteps = true;
+    if (!showIntermediateSteps) {
+      handleSubmit(e);
+    // Some extra work to show intermediate steps properly
+    } else {
+      setIntermediateStepsLoading(true);
+      setInput("");
+      const messagesWithUserReply = messages.concat({ id: messages.length.toString(), content: input, role: "user" });
+      setMessages(messagesWithUserReply);
+      const response = await fetch(endpoint, {
+        method: "POST",
+        body: JSON.stringify({
+          messages: messagesWithUserReply.map(m => {
+            return {
+              content: m.content,
+              id: m.content,
+              role: m.role
+            }
+          }),
+        }),
+        headers: {
+          "x-avatar": avatar
+        }
+      });
+      setIntermediateStepsLoading(false);
+      const json = await response.json() as ComplexChatResponse;
+
+      if (response.status === 200) {
+
+        const newMessages = messagesWithUserReply;
+        const basereply : ExtendedMessage = { id: `${newMessages.length}`, content: json.output, role: "assistant", avatar: json.avatar };
+        const extraMesages : ExtendedMessage[] = [];        
+
+        if(json.intermediate_steps.filter( step => step.action.tool === "tranmere-web-match-tool").length > 0) {
+          const steps = json.intermediate_steps.filter( step => step.action.tool === "tranmere-web-match-tool");
+          if(steps.length > 0 && steps[0].observation !== "") {
+            const game = JSON.parse(steps[0].observation) as MatchToolResponse
+
+            const match : ExtendedMessage = { id: `${newMessages.length}`, content: basereply.content, match: game , role: "assistant", avatar: json.avatar, type: "match" };
+            extraMesages.push(match)
+          }
+        } else if(json.intermediate_steps.filter( step => step.action.tool === "tranmere-web-player-stats-tool").length > 0) {
+          const steps = json.intermediate_steps.filter( step => step.action.tool === "tranmere-web-player-stats-tool");
+          if(steps.length > 0 && steps[0].observation !== "") {
+            const players = JSON.parse(steps[0].observation) as PlayerSeasonSummary[]
+            if(players.length == 1) {
+              const message : ExtendedMessage = { id: `${newMessages.length}`, content: basereply.content, player: players[0] , role: "assistant", avatar: json.avatar, type: "player" };
+              extraMesages.push(message)
+            } else {
+              extraMesages.push(basereply)
+            }
+          }
+        } else {
+          extraMesages.push(basereply)
+        }
+        setMessages([...newMessages, ...extraMesages]);
+
+      } else {
+        if (json.error) {
+          toast(json.error, {
+            theme: "dark"
+          });
+          throw new Error(json.error);
+        }
+      }
+    }
   }
 
   return (
@@ -91,12 +152,12 @@ export function ChatWindow(props: {
               </div>
               <div className="col-md-2">
                 <button type="submit" className="btn btn-primary">
-                  <div role="status" className={`${(chatEndpointIsLoading) ? "" : "hidden"} flex justify-center`}>
+                  <div role="status" className={`${(chatEndpointIsLoading || intermediateStepsLoading) ? "" : "hidden"} flex justify-center`}>
                     <div className="spinner-border text-light">
                       <span className="sr-only">Loading...</span>
                     </div>
                   </div>
-                  <span className={(chatEndpointIsLoading) ? "hidden" : ""}>Send</span>
+                  <span className={(chatEndpointIsLoading || intermediateStepsLoading) ? "hidden" : ""}>Send</span>
                 </button>
               </div>
             </div>
@@ -111,9 +172,11 @@ export function ChatWindow(props: {
             [...messages]
               .reverse()
               .map((m) => {
-                console.log(m)
-                const robotAvatar = avatarMap.get(avatar)
-                return (<ChatMessageBubble key={m.id} message={m} botAvatar={robotAvatar}></ChatMessageBubble>)
+                if(m.role === "system") {
+                  return ""
+                } else {
+                  return <ChatMessageBubble key={m.id} message={m}></ChatMessageBubble>
+                }
               })
           ) : (
             ""
@@ -126,3 +189,4 @@ export function ChatWindow(props: {
     </section>
   );
 }
+

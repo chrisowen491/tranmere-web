@@ -10,15 +10,15 @@ export function Footer() {
         <div className="container">
             <div className="row gutter-3">
                 <div className="col-12 col-md-2">
-                    <a href="/"><img src="https://www.tranmere-web.com/assets/images/logo_white_transparent.png" alt="Logo" /></a>
+                    <a href="https://www.tranmere-web.com/"><img src="https://www.tranmere-web.com/assets/images/logo_white_transparent.png" alt="Logo" /></a>
                 </div>
                 <div className="col-12 col-md-6 text-white">
                     <div className="row">
                         <div className="col">
                             <ul className="list-group list-group-minimal">
-                                <li className="list-group-item"><a href="/about" className="link">About the site</a></li>
+                                <li className="list-group-item"><a href="https://www.tranmere-web.com/about" className="link">About the site</a></li>
                                 <li className="list-group-item"><a href="https://github.com/chrisowen491/tranmere-web" className="link">Sourcecode</a></li>
-                                <li className="list-group-item"><a href="/contact" className="link">Contact Us</a></li>
+                                <li className="list-group-item"><a href="https://www.tranmere-web.com/contact" className="link">Contact Us</a></li>
                                 <li className="list-group-item"><a href="https://portal.tranmere-web.com/" className="link">API</a></li>
                                 <li className="list-group-item"><button id="loginout" type="button" className="btn btn-link">Sign-In</button></li>
 
