@@ -1,6 +1,6 @@
 {
   "name": "tranmere-web",
-  "version": "3.0.184",
+  "version": "3.0.185",
   "description": "",
   "private": "true",
   "engines": {
@@ -47,7 +47,7 @@
     "json-loader": "^0.5.7",
     "lodash.template": ">=4.5.0",
     "mini-css-extract-plugin": "^2.7.2",
-    "nyc": "^15.1.0",
+    "nyc": "^17.0.0",
     "prettier": "^3.2.5",
     "sass": "^1.60.0",
     "sass-loader": "^14.0.0",
@@ -89,7 +89,7 @@
     "owl.carousel": "^2.3.4",
     "popper.js": "^1.16.1",
     "source-map-support": "^0.5.21",
-    "uuid": "^9.0.0",
+    "uuid": "^10.0.0",
     "video.js": "^8.0.0",
     "videojs-youtube": "^3.0.0"
   }
