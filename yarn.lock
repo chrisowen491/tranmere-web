@@ -5088,10 +5088,10 @@ available-typed-arrays@^1.0.7:
   dependencies:
     possible-typed-array-names "^1.0.0"
 
-aws-cdk-lib@2.147.0:
-  version "2.147.0"
-  resolved "https://registry.yarnpkg.com/aws-cdk-lib/-/aws-cdk-lib-2.147.0.tgz#cff9f40cf2a0b064418e7b43da620911d54aa0cf"
-  integrity sha512-0dzUEeWxpuLeeQvqwR4Vz2ja/V0nzzgndgPdp56nc9CsghbrFtMATtno3ec5INHiJz/Mj6/NXQ5t9vrffd6Mgw==
+aws-cdk-lib@2.147.1:
+  version "2.147.1"
+  resolved "https://registry.yarnpkg.com/aws-cdk-lib/-/aws-cdk-lib-2.147.1.tgz#ec640b8d4a9bacc352ea4d53eb6abc1224a76808"
+  integrity sha512-LQBvfq91kW2Sr94Rh07dZqfcZcd8udNpiaaoxmeGYPU1Cu7UD8cAtoYLg8XWDdqeXDPoIsZYUWCzbAVV7j+u9Q==
   dependencies:
     "@aws-cdk/asset-awscli-v1" "^2.2.202"
     "@aws-cdk/asset-kubectl-v20" "^2.1.2"
@@ -11125,7 +11125,7 @@ minimatch@3.0.5:
   dependencies:
     brace-expansion "^1.1.7"
 
-minimatch@9.0.3, minimatch@^9.0.1:
+minimatch@9.0.3:
   version "9.0.3"
   resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-9.0.3.tgz#a6e00c3de44c3a542bfaae70abfc22420a6da825"
   integrity sha512-RHiac9mvaRw0x3AYRgDC1CxAP7HTcNrrECeA8YYJeWnpo+2Q5CegtZjaotWTWxDG3UeGA1coE05iH1mPjT/2mg==
@@ -11153,7 +11153,7 @@ minimatch@^8.0.2:
   dependencies:
     brace-expansion "^2.0.1"
 
-minimatch@^9.0.0, minimatch@^9.0.4:
+minimatch@^9.0.0, minimatch@^9.0.1, minimatch@^9.0.4:
   version "9.0.4"
   resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-9.0.4.tgz#8e49c731d1749cbec05050ee5145147b32496a51"
   integrity sha512-KqWh+VchfxcMNRAJjj2tnsSJdNbHsVgnkBhTNrW7AjVo6OvLtxw8zfT9oLw1JSohlFzJ8jCoTgaoXvJ+kHt6fw==
@@ -13539,14 +13539,14 @@ semver@7.3.5:
   dependencies:
     lru-cache "^6.0.0"
 
-semver@7.5.4, semver@^7.3.4, semver@^7.5.3:
+semver@7.5.4:
   version "7.5.4"
   resolved "https://registry.yarnpkg.com/semver/-/semver-7.5.4.tgz#483986ec4ed38e1c6c48c34894a9182dbff68a6e"
   integrity sha512-1bCSESV6Pv+i21Hvpxp3Dx+pSD8lIPt8uVjRrxAUt/nbswYc+tK6Y2btiULjd4+fnq15PX+nqQDC7Oft7WkwcA==
   dependencies:
     lru-cache "^6.0.0"
 
-semver@7.6.2, semver@^7.0.0, semver@^7.1.1, semver@^7.3.5, semver@^7.3.7, semver@^7.3.8, semver@^7.5.2, semver@^7.5.4, semver@^7.6.0, semver@^7.6.2:
+semver@7.6.2, semver@^7.0.0, semver@^7.1.1, semver@^7.3.4, semver@^7.3.5, semver@^7.3.7, semver@^7.3.8, semver@^7.5.2, semver@^7.5.3, semver@^7.5.4, semver@^7.6.0, semver@^7.6.2:
   version "7.6.2"
   resolved "https://registry.yarnpkg.com/semver/-/semver-7.6.2.tgz#1e3b34759f896e8f14d6134732ce798aeb0c6e13"
   integrity sha512-FNAIBWCx9qcRhoHcgcJ0gvU7SN1lYU2ZXuSfl04bSC5OpvDHFyJCjdNHomPXxjQlCBU67YW64PzY7/VIEH7F2w==
