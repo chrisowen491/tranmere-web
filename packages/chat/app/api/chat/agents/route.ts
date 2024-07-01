@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Message as VercelChatMessage, StreamingTextResponse } from "ai";
-
 import { AgentExecutor, createToolCallingAgent } from "langchain/agents";
 import { ChatOpenAI } from "@langchain/openai";
 import { AIMessage, ChatMessage, HumanMessage } from "@langchain/core/messages";
+
 import { createRetrieverTool } from "langchain/tools/retriever";
 import { getRequestContext } from "@cloudflare/next-on-pages";
 import {
@@ -25,6 +25,7 @@ import { TransferTool } from "@/tools/TransferTool";
 import { getSystemPrompt } from "@/prompts/system";
 import { z } from "zod";
 import { PlayerStatsTool } from "@/tools/PlayerStatsTool";
+import { BaseChatModel } from "@langchain/core/language_models/chat_models";
 
 export const runtime = "edge";
 
@@ -64,7 +65,9 @@ export async function POST(req: NextRequest) {
       .map(convertVercelMessageToLangChainMessage);
     const currentMessageContent = messages[messages.length - 1].content;
 
-    const chat = new ChatOpenAI({
+
+    
+    const model = new ChatOpenAI({
       modelName: "gpt-4o",
       temperature: 0,
       // IMPORTANT: Must "streaming: true" on OpenAI to enable final output streaming below.
@@ -104,8 +107,8 @@ export async function POST(req: NextRequest) {
       //}),
     ];
 
-    const agent = await createToolCallingAgent({
-      llm: chat,
+    const agent = createToolCallingAgent({
+      llm: model as unknown as BaseChatModel,
       tools,
       prompt,
     });
@@ -115,6 +118,7 @@ export async function POST(req: NextRequest) {
       tools,
       // Set this if you want to receive all intermediate steps in the output of .invoke().
       returnIntermediateSteps : true,
+      maxIterations: 3,
     });
 
     const result = await agentExecutor.invoke({

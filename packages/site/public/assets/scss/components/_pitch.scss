@@ -1,0 +1,51 @@
+.pitch {
+    background-color:#006400; width: 100%;
+
+    td {
+        text-align:center;
+        color:#ffffff;
+        vertical-align: top;
+
+        img {
+            @include media-breakpoint-up(md) {
+                width: 100px;
+            }
+
+            @include media-breakpoint-down(sm) {
+                width: 50px;
+            }
+        }
+
+        a {
+            display: block;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: x-small;
+            padding-top: 2px;
+
+            @include media-breakpoint-down(sm) {
+                font-size: 0.7rem;
+            }
+        }
+
+        a.yellow {
+            display: block;
+            color: #FFFF00;
+            text-decoration: none;
+
+            @include media-breakpoint-down(sm) {
+                font-size: 0.7rem;
+            }
+        }
+
+        a.red {
+            display: block;
+            color: #ff0000;
+            text-decoration: none;
+
+            @include media-breakpoint-down(sm) {
+                font-size: 0.7rem;
+            }
+        }
+    }
+}

@@ -1,0 +1,44 @@
+.aa-Panel {
+    z-index: 100;
+}
+
+.aa-Form {
+    border: none!important;
+}
+
+.algolia-autocomplete {
+    
+    width: 100%;
+
+    .aa-input{
+        width: 200px;
+    }
+
+    .aa-hint {
+        color: #999;
+        width: 100%;
+    }
+
+    .aa-dropdown-menu {
+        width: 100%;
+        background-color: #fff;
+        border: 1px solid #999;
+        border-top: none;
+    }
+
+    .aa-dropdown-menu {
+        .aa-suggestion {
+            cursor: pointer;
+            padding: 5px 4px;
+
+            em {
+                font-weight: bold;
+                font-style: normal;
+            }
+        }
+    }
+
+    .aa-cursor {
+        background-color: #B2D7FF;
+    }
+}

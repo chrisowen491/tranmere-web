@@ -328,8 +328,8 @@ export class TranmereWebUtils {
     return { results, h2htotal, h2hresults };
   }
 
-  async getTopScorersBySeason(): Promise<Player[]> {
-    const results: Player[] = [];
+  async getTopScorersBySeason(): Promise<PlayerSeasonSummary[]> {
+    const results: PlayerSeasonSummary[] = [];
 
     for (let i = 1977; i <= this.getYear(); i++) {
       const result = await axios.get(
@@ -338,7 +338,7 @@ export class TranmereWebUtils {
           '&sort=Goals',
         apiOptions
       );
-      const player: Player = result.data.players[0];
+      const player: PlayerSeasonSummary = result.data.players[0];
       if (player) results.push(player);
     }
     return results;

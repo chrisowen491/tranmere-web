@@ -1,0 +1,16 @@
+name = "tranmere-web-site"
+compatibility_flags = ["nodejs_compat"]
+compatibility_date = "2024-01-10"
+pages_build_output_dir = ".vercel/output/static"
+
+[vars]
+CONTENTFUL_SPACE_ID = "pz711f8blqyy"
+CONTENTFUL_ACCESS_TOKEN = "kXG52DaIS0e8R8gWqErmmadoTjxcC2xyFaSFnOEWou0"
+
+[[vectorize]]
+binding = "VECTORIZE_INDEX"
+index_name = "tranmere-web"
+
+[ai]
+binding = "AI"
+

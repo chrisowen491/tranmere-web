@@ -9,7 +9,7 @@ export const TransferTool = new DynamicStructuredTool({
         .number()
         .nullable()
         .describe(
-          'The season the transfer occured - should be the year the season started e.g. the 1993-94 season should be supplied as 1993'
+          'The season the transfer occured - should be the year the season started e.g. the 1993-94 season should be supplied as 1993 - leave blank for all time records'
         ),
         type: z
         .enum(['In', 'Out'])
@@ -18,9 +18,9 @@ export const TransferTool = new DynamicStructuredTool({
         ),
         club: z
         .string()
-        .nullable()
+        .default('')
         .describe(
-          'The club other than Tranmere Rovers involved in the transfer - leave null for any club'
+          'The club other than Tranmere Rovers involved in the transfer - leave blank for any club'
         )
     }),
     func: async ({

@@ -1,5 +1,3 @@
-import { CloudflareEnv } from '../lib/tranmere-web-types';
-
 export const onRequest: PagesFunction<CloudflareEnv> = async (context) => {
   const url = new URL(context.request.url);
   if (url.searchParams.get('season')) {

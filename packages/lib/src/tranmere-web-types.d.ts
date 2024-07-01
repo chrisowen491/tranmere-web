@@ -59,11 +59,12 @@ export interface Player extends BaseEntity {
   links?: string;
   pic?: string;
   position?: string;
+  
 }
 
 export interface Manager {
   name: string;
-  dateJoined: number;
+  dateJoined: string;
   dateLeft: string;
   dateLeftText?: string;
 }
@@ -168,6 +169,7 @@ export interface Match {
   attendance?: number;
   referee?: string;
   formation?: string;
+  largeprogramme: string;
 }
 
 export interface H2HResult {

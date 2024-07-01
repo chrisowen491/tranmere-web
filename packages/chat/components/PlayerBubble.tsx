@@ -1,4 +1,5 @@
 import { ExtendedMessage } from "./Types";
+import Link from 'next/link'
 
 export function PlayerBubble(props: { message: ExtendedMessage}) {
   return (
@@ -11,7 +12,7 @@ export function PlayerBubble(props: { message: ExtendedMessage}) {
                             <h3 className="font-weight-normal mb-2">{props.message.player?.Player}</h3>
                             <p className="card-text mb-2">{props.message.player?.Apps} apps</p>
                             <p className="card-text mb-2">{props.message.player?.goals} goals</p>
-                            <a href="https://www.tranmere-web.com/page/player/{props.message.player?.Player}" className="action mt-1 text-blue">View Profile</a>
+                            <Link href={`https://www.tranmere-web.com/page/player/${props.message.player?.Player}`} className="action mt-1 text-blue">View Profile</Link>
                         </div>
                     </div>
                 </div>
