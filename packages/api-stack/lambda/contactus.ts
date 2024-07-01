@@ -7,6 +7,7 @@ import { SES } from '@aws-sdk/client-ses';
 const ses = new SES();
 const utils = new TranmereWebUtils();
 
+
 exports.handler = async (
   event: APIGatewayEvent
 ): Promise<APIGatewayProxyResult> => {
