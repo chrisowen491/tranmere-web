@@ -39,7 +39,7 @@
     "browser-sync": "^3.0.0",
     "contentful-typescript-codegen": "^3.4.0",
     "css-loader": "^7.0.0",
-    "esbuild": "^0.22.0",
+    "esbuild": "^0.21.0",
     "eslint": "^9.2.0",
     "esrun": "^3.2.26",
     "filemanager-webpack-plugin": "^8.0.0",

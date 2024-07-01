@@ -11,7 +11,8 @@ updates:
       interval: "weekly"
     ignore:
       - dependency-name: "bootstrap"  
-      - dependency-name: "chai"    
+      - dependency-name: "chai"  
+      - dependency-name: "esbuild"          
   - package-ecosystem: "npm" # See documentation for possible values
     directory: "/packages/api-stack" # Location of package manifests
     schedule:
