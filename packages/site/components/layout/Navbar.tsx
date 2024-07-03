@@ -170,6 +170,9 @@ export function Navbar(props: { showSearch: boolean }) {
                     <a className="dropdown-item" href="/page/blog/books">
                       Books
                     </a>
+                    <a className="dropdown-item" href="/page/tag/Magazine%20Articles">
+                      Magazine Articles
+                    </a>
                     <a
                       className="dropdown-item"
                       href="/page/blog/football-cards"

@@ -58,7 +58,13 @@ export default async function BlogPage({
                         className="h3 font-weight-normal"
                         itemProp="datePublished"
                       >
-                        {article.datePosted}
+                        Date: {article.datePosted.substring(0, 10)}
+                      </h3>
+                      <h3
+                        className="h3 font-weight-normal"
+                        itemProp="datePublished"
+                      >
+                        Author: {article.author}
                       </h3>
                     </div>
                   </div>
@@ -77,9 +83,18 @@ export default async function BlogPage({
                 <div className="row gutter-2">
                   <div className="col-12">
                     <h1 className="h2 font-weight-normal">{article.title}</h1>
-                    <h3 className="h3 font-weight-normal">
-                      {article.datePosted}
-                    </h3>
+                    <h3
+                        className="h3 font-weight-normal"
+                        itemProp="datePublished"
+                      >
+                        Date: {article.datePosted.substring(0, 10)}
+                      </h3>
+                      <h3
+                        className="h3 font-weight-normal"
+                        itemProp="datePublished"
+                      >
+                        Author: {article.author}
+                      </h3>
                   </div>
                 </div>
               </div>
@@ -96,6 +111,7 @@ export default async function BlogPage({
                 <div className="col-12">
                   {documentToReactComponents(article.blog.json)}
                   {gallery ? <Gallery gallery={gallery}></Gallery> : ""}
+                  {article.galleryCollection && article.galleryCollection.items.length > 0 ? <Gallery gallery={article.galleryCollection.items}></Gallery> : ""}
                 </div>
               </div>
               <div className="row gutter-2"></div>

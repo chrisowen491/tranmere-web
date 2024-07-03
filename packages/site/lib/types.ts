@@ -8,6 +8,18 @@ import {
 } from "@tranmere-web/lib/src/tranmere-web-types";
 import type { Message } from "ai/react";
 
+export interface PlayerName {
+  name: string;
+}
+
+export interface GraphQLPlayerResponse {
+  data: {
+    playerCollection: {
+      items: PlayerName[];
+    };
+  };
+}
+
 export interface GraphQLBlogResponse {
   data: {
     blogPostCollection: {
@@ -36,6 +48,9 @@ export interface BlogItem {
   slug: string;
   description: string;
   author: string;
+  galleryCollection: {
+    items: GalleryImage[]
+  }
   pic: Pic;
   blog: Blog;
   galleryTag?: string;

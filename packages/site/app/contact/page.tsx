@@ -6,6 +6,7 @@ import { GetAllTeams, GetBaseUrl } from "@/lib/apiFunctions";
 import { getRequestContext } from "@cloudflare/next-on-pages";
 import { Transfer } from "@tranmere-web/lib/src/tranmere-web-types";
 import { Metadata } from "next";
+import { ContactForm } from "@/components/apps/ContactForm";
 export const runtime = "edge";
 
 export const metadata: Metadata = {
@@ -14,25 +15,18 @@ export const metadata: Metadata = {
 };
 
 export default async function Transfers() {
-  const base = GetBaseUrl(getRequestContext().env) + "/transfer-search/";
-  
-  const request = await fetch(base);
-  const results = (await request.json()) as {
-    transfers: Transfer[];
-  };
-
-  const teams = await GetAllTeams();
   
   return <>
     <Navbar showSearch={true}></Navbar>
-    <section className="hero bg-blue">
+    <section>
       <div className="container">
-        <Title title="Transfers Home"></Title>
+        <div className="row">
+          <div className="col">
+            <h1>Contact us!</h1>
+          </div>
+        </div>
+        <ContactForm></ContactForm>
       </div>
-    </section>
-
-    <section className="overlay">
-      <TransferSearch default={results.transfers} teams={teams} />
     </section>
     <Footer></Footer>
   </>;

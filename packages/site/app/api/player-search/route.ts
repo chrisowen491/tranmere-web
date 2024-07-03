@@ -4,12 +4,16 @@ export const runtime = "edge";
 
 export async function GET(req: NextRequest) {
   const url = new URL(req.url.replace("/api", ""));
-  url.host = getRequestContext().env.API_DOMAIN;
-  url.protocol = getRequestContext().env.API_PROTOCOL;
-  url.port = getRequestContext().env.API_PORT;
+  
+  
+  const env = getRequestContext().env.API_DOMAIN ? getRequestContext().env : process.env as unknown as CloudflareEnv;
+
+  url.host = env.API_DOMAIN;
+  url.protocol = env.API_PROTOCOL;
+  url.port = env.API_PORT;
 
   const new_request = new Request(url, req);
-  new_request.headers.set("x-api-key", getRequestContext().env.API_KEY);
+  new_request.headers.set("x-api-key", env.API_KEY);
 
   const data = await fetch(url);
   const results = await data.json();

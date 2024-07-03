@@ -1,34 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { APIGatewayEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { TranmereWebUtils } from '@tranmere-web/lib/src/tranmere-web-utils';
-import {
-  View,
-  PlayerView,
-  TagView,
-  SeasonResultsView,
-  BlogView,
-  SeasonPlayerStatisticsView,
-  HomeView
-} from '@tranmere-web/lib/src/tranmere-web-view-types';
-import { createClient } from 'contentful';
-import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
-import { IBlogPost } from '@tranmere-web/lib/src/contentful';
+import { PlayerView } from '@tranmere-web/lib/src/tranmere-web-view-types';
 const utils = new TranmereWebUtils();
-
-const client = createClient({
-  space: process.env.CF_SPACE!,
-  accessToken: process.env.CF_KEY!
-});
 
 exports.handler = async (
   event: APIGatewayEvent
 ): Promise<APIGatewayProxyResult> => {
-  let pageName = event.pathParameters!.pageName;
   const classifier = event.pathParameters!.classifier;
-  const jsonview = event.queryStringParameters && event.queryStringParameters['json'] ? event.queryStringParameters['json'] : null;
-
-  let view: View = {};
-
 
     const playerName = classifier!;
     const player = await utils.getPlayer(playerName);

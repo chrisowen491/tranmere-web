@@ -19,7 +19,7 @@ import { Panel } from '@/components/Panel';
 
 const client = algoliasearch('DZJXSVOWI3', 'c050f0bd17ccfde9aa78a3563d552db2');
 
-type HitProps = {
+type HitProps = {  
   hit: AlgoliaHit<{
     name: string;
     picLink: string;

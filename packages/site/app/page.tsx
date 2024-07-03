@@ -7,11 +7,15 @@ import { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Tranmere-Web: A Tranmere Rovers fansite",
   description: "Tranmere-Web.com is a website full of data, statistics and information about Tranmere Rovers FC",
+  metadataBase: new URL('https://www.tranmere-web.com/'),
+  alternates: {
+    canonical: '/'
+  },
   openGraph: {
     title: "Tranmere-Web: A Tranmere Rovers fansite",
     type: "website",
     images: "/assets/images/square_v1.png",
-    url: "https://www.tranmere-web.com/"
+    url: "/"
   },
 };
 

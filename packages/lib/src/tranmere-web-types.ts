@@ -1,15 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { Entry } from 'contentful';
-import { IBlogPost, IPageMetaDataFields } from './contentful';
-
-interface CloudflareEnv {
-  API_DOMAIN: string;
-  API_PROTOCOL: string;
-  API_PORT: string;
-  API_KEY: string;
-}
-
 export interface BreadCrumbItem {
   link?: BreadCrumbLink[];
   active?: BreadCrumb[];
@@ -115,28 +105,6 @@ export interface Link {
   link: string;
   name: string;
   description: string;
-}
-
-export interface Page extends IPageMetaDataFields {
-  name: string;
-  description: string;
-
-  content?: string;
-  blogs: any;
-  sectionHTML?: string;
-  blockHTML?: string;
-  cardBlocksHTML?: string;
-
-  dd_app?: string;
-  dd_version?: string;
-  image?: string;
-  topScorers: Player[];
-  hatTricks: HatTrick[];
-  managers: Manager[];
-  players: Player[];
-  teams: Team[];
-  competitions: Competition[];
-  seasons: number[];
 }
 
 export interface Report {
@@ -246,10 +214,6 @@ export interface BasePageView {
   description?: string;
 }
 
-export interface HomeView extends BasePageView {
-  blogs?: Entry<IBlogPost>[];
-}
-
 export interface TagView extends BasePageView {
   items?: any;
   url?: string;
@@ -260,24 +224,6 @@ export interface PlayerView extends BasePageView {
   title?: string;
   pageType?: string;
   description?: string;
-  blogs?: Entry<IBlogPost>[];
-  name?: string;
-  debut?: any;
-  seasons?: any;
-  transfers?: any;
-  links?: any;
-  teams?: Team[];
-  player?: any;
-  url?: string;
-  image?: string;
-}
-
-// ToDo
-export interface BlogView extends BasePageView {
-  title?: string;
-  pageType?: string;
-  description?: string;
-  blogs?: Entry<IBlogPost>[];
   name?: string;
   debut?: any;
   seasons?: any;

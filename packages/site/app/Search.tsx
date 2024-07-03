@@ -57,8 +57,8 @@ function Hit({ hit }: HitProps) {
               <img
                   src={hit.picLink}
                   alt={hit.name}
-                  width="40"
-                  height="40"
+                  width="100"
+                  height="100"
               />
             </div>
           ) : (
@@ -67,10 +67,10 @@ function Hit({ hit }: HitProps) {
           
             <div className="aa-ItemContentBody">
                 <div className="aa-ItemContentTitle">
-                    <Highlight hit={hit} attribute="name" className="Hit-label" />
+                    <h2><Highlight hit={hit} attribute="name" className="Hit-label" /></h2>
                 </div>
                 <div className="aa-ItemContentDescription">
-                    {hit.description}
+                    <h3>{hit.description}</h3>
                 </div>
             </div>
         </div>

@@ -1,6 +1,6 @@
 // Set a variable that contains all the fields needed for articles when a fetch for
 
-import { GraphQLAssetsResponse, GraphQLBlogResponse } from "./types";
+import { GraphQLAssetsResponse, GraphQLBlogResponse, GraphQLPlayerResponse } from "./types";
 
 // content is performed
 const ARTICLE_GRAPHQL_FIELDS = `
@@ -12,6 +12,13 @@ const ARTICLE_GRAPHQL_FIELDS = `
   tags
   datePosted
   description
+  galleryCollection {
+    items {
+      url
+      title
+      description
+    }
+  }
   galleryTag
   blog {
     json
@@ -39,6 +46,10 @@ async function fetchGraphQL(query: string) {
   ).then((response) => response.json());
 }
 
+function extractPlayerEntries(fetchResponse: GraphQLPlayerResponse) {
+  return fetchResponse?.data?.playerCollection?.items;
+}
+
 function extractArticleEntries(fetchResponse: GraphQLBlogResponse) {
   return fetchResponse?.data?.blogPostCollection?.items;
 }
@@ -61,6 +72,20 @@ export async function getAssetsByTag(tag: string) {
   );
 
   return extractGalleryImageEntries(articles as GraphQLAssetsResponse);
+}
+
+export async function getAllPlayers(limit = 500) {
+  const players = await fetchGraphQL(
+    `query {
+      playerCollection(limit: ${limit}) {
+        items {
+          name
+        }
+      }
+    }`,
+  );
+
+  return extractPlayerEntries(players as GraphQLPlayerResponse);
 }
 
 export async function getAllArticles(limit = 3) {

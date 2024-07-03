@@ -1,5 +1,4 @@
-import DataDog from "@/components/DataDog";
-import "./globals.css";
+import "../globals.css";
 import "@/public/assets/scss/chat.scss";
 
 export default function RootLayout({
@@ -12,8 +11,8 @@ export default function RootLayout({
       <head>
         <link rel="shortcut icon" href="/images/favicon.ico" />
       </head>
-      <body>
-        <DataDog />
+      <body className="away">
+        
         {children}
 
       </body>

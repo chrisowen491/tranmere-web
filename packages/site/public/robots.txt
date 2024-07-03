@@ -1,0 +1,26 @@
+# *
+User-agent: *
+Allow: /
+Disallow: /*?*
+Disallow: /404
+Disallow: /error
+Disallow: /edit*
+Disallow: /match/192*
+Disallow: /match/193*
+Disallow: /match/194*
+Disallow: /match/195*
+Disallow: /match/196*
+Disallow: /match/1970*
+Disallow: /match/1971*
+Disallow: /match/1972*
+Disallow: /match/1973*
+Disallow: /match/1974*
+Disallow: /match/1975*
+Disallow: /match/1976*
+
+# Host
+Host: https://www.tranmere-web.com
+
+# Sitemaps
+Sitemap: https://www.tranmere-web.com/sitemap.xml
+Sitemap: https://www.tranmere-web.com/dynamic-sitemap.xml

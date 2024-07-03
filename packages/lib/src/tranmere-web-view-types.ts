@@ -14,8 +14,6 @@ import {
   PlayerSeasonSummary,
   Competition
 } from './tranmere-web-types';
-import { IBlogPost, IBlogPostFields } from './contentful';
-import { Entry, ChainModifiers } from 'contentful';
 
 export interface View {
   random?: number;
@@ -23,17 +21,7 @@ export interface View {
   title?: string;
   pageType?: string;
   description?: string;
-  blogs?: Entry<IBlogPost, ChainModifiers, string>[];
   breadcrumbs?: BreadCrumbItem[];
-}
-
-export interface HomeView extends View {
-  title: string;
-  pageType: string;
-  description: string;
-  blogs: Entry<IBlogPost, ChainModifiers, string>[];
-  breadcrumbs: BreadCrumbItem[];
-  randomplayer: RandomPlayer;
 }
 
 export interface RandomPlayer {
@@ -49,18 +37,6 @@ export interface GalleryImage {
   linkPath?: string;
   name?: string;
   description?: string;
-}
-
-export interface TagView extends View {
-  items?: Entry[];
-}
-
-export interface BlogView extends IBlogPostFields, View {
-  headline?: string;
-  blogContent?: string;
-  carousel?: GalleryImage[];
-  blockHTML?: string;
-  cardBlocksHTML?: string;
 }
 
 export interface SeasonResultsView extends View {
