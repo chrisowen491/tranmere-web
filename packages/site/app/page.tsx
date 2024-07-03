@@ -1,9 +1,25 @@
 import { SideBar } from "@/components/sidebar/SideBar";
+import Search from "./Search";
+import { Navbar } from "@/components/layout/Navbar";
+import { Footer } from "@/components/layout/Footer";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Tranmere-Web: A Tranmere Rovers fansite",
+  description: "Tranmere-Web.com is a website full of data, statistics and information about Tranmere Rovers FC",
+  openGraph: {
+    title: "Tranmere-Web: A Tranmere Rovers fansite",
+    type: "website",
+    images: "/assets/images/square_v1.png",
+    url: "https://www.tranmere-web.com/"
+  },
+};
 
 export default async function Home() {
 
   return (
     <>
+        <Navbar showSearch={false}></Navbar>
         <section className="hero bg-blue overlay home-hero">
             <div className="container">
                 <div className="row align-items-end justify-content-between">
@@ -25,7 +41,7 @@ export default async function Home() {
                     <div className="col-12">
                         <div className="card">
                             <div className="card-body py-2">
-                                <div id="autocomplete"></div>
+                              <Search />
                             </div>
                         </div>
                     </div>
@@ -70,7 +86,7 @@ export default async function Home() {
                                         </div>
                                         <div id="collapseTwo" className="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample" itemScope itemProp="acceptedAnswer" itemType="https://schema.org/Answer">
                                             <div className="card-body" itemProp="text">
-                                            We have all first team results since 1921. With appearance and goal data since 1977. Assist data is patchy since it's not definitively recorded.
+                                            We have all first team results since 1921. With appearance and goal data since 1977. Assist data is patchy since it is not definitively recorded.
                                             </div>
                                         </div>
                                         </div>
@@ -113,7 +129,7 @@ export default async function Home() {
                                             </div>
                                             <div id="collapseFive" className="collapse" aria-labelledby="headingFive" data-parent="#accordionExample" itemScope itemProp="acceptedAnswer" itemType="https://schema.org/Answer">
                                             <div className="card-body" itemProp="text">
-                                                I've scanned these in from my own personal collection. There's over 2000 programme covers, including nearly every home game since 1960 (missing about 20!).
+                                                I have scanned these in from my own personal collection. There are over 2000 programme covers, including nearly every home game since 1960 (missing about 20!).
                                             </div>
                                             </div>
                                         </div>
@@ -126,6 +142,7 @@ export default async function Home() {
                 </div>
             </div>
         </section>
+        <Footer></Footer>
     </>
   );
 }

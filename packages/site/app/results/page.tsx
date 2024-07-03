@@ -1,109 +1,68 @@
-export default function AgentsPage() {
+import { ResultsSearch } from "@/components/apps/Results";
+import { Title } from "@/components/layout/Title";
+import {
+  GetAllTeams,
+  GetAllCupCompetitions,
+  GetAllTranmereManagers,
+  GetBaseUrl,
+} from "@/lib/apiFunctions";
+import {
+  H2HResult,
+  H2HTotal,
+  Match,
+} from "@tranmere-web/lib/src/tranmere-web-types";
+import { getRequestContext } from "@cloudflare/next-on-pages";
+import { Metadata } from "next";
+import { Navbar } from "@/components/layout/Navbar";
+import { Footer } from "@/components/layout/Footer";
+export const runtime = "edge";
+
+export const metadata: Metadata = {
+  title: "Results Home - Tranmere-Web",
+  description: "Tranmere Rovers results infomation index",
+};
+
+export default async function ResultsSearchPage() {
+  const base = GetBaseUrl(getRequestContext().env) + "/result-search/";
+
+  var dateobj = new Date();
+  var theYear =
+    dateobj.getUTCMonth() > 6
+      ? dateobj.getFullYear()
+      : dateobj.getFullYear() - 1;
+
+  const competitions = await GetAllCupCompetitions();
+  const managers = await GetAllTranmereManagers();
+  const teams = await GetAllTeams();
+
+  const latestSeasonRequest = await fetch(base + `?season=${theYear}`);
+  const results = (await latestSeasonRequest.json()) as {
+    results: Match[];
+    h2hresults: H2HResult[];
+    h2htotal: H2HTotal[];
+  };
+
   return (
-    <div>
+    <>
+      <Navbar showSearch={true}></Navbar>
       <section className="hero bg-blue">
-        <div className="container"></div>
+        <div className="container">
+          <Title title="Results Home"></Title>
+        </div>
       </section>
 
       <section className="overlay">
-        <div className="container overlay-item-top">
-          <div className="row">
-            <div className="col">
-              <div className="content boxed">
-                <div className="row separated">
-                  <aside className="col-md-3 content-aside bg-light">
-                    <div className="widget">
-                      <h3 className="widget-title">Filter</h3>
-                      <div className="form-group">
-                        <label htmlFor="season">Season</label>
-                        <select
-                          className="form-control form-control-sm"
-                          id="season"
-                        >
-                          <option value="">All</option>
-                        </select>
-                      </div>
-                      <div className="form-group">
-                        <label htmlFor="competition">Competition</label>
-                        <select
-                          className="form-control form-control-sm"
-                          id="competition"
-                        >
-                          <option value="">All</option>
-                          <option value="League">League</option>
-                        </select>
-                      </div>
-                      <div className="form-group">
-                        <label htmlFor="opposition">Opposition</label>
-                        <select
-                          className="form-control form-control-sm"
-                          id="opposition"
-                        >
-                          <option value="">All</option>
-                        </select>
-                      </div>
-                      <div className="form-group">
-                        <label htmlFor="manager">Manager</label>
-                        <select
-                          className="form-control form-control-sm"
-                          id="manager"
-                        >
-                          <option value="">All</option>
-                        </select>
-                      </div>
-                      <div className="form-group">
-                        <label htmlFor="venue">Venue</label>
-                        <select
-                          className="form-control form-control-sm"
-                          id="venue"
-                        >
-                          <option value="">All</option>
-                          <option>Prenton Park</option>
-                          <option>Wembley Stadium</option>
-                        </select>
-                      </div>
-                      <div className="form-group">
-                        <label htmlFor="pens">Penalties</label>
-                        <select
-                          className="form-control form-control-sm"
-                          id="pens"
-                        >
-                          <option value="">No</option>
-                          <option>Penalty Shootout</option>
-                        </select>
-                      </div>
-                      <div className="form-group">
-                        <label htmlFor="sort">Sort</label>
-                        <select
-                          className="form-control form-control-sm"
-                          id="sort"
-                        >
-                          <option>Date</option>
-                          <option>Top Attendance</option>
-                        </select>
-                      </div>
-                      <button
-                        type="button"
-                        className="btn btn-sm btn-primary btn-rounded btn-results-search"
-                      >
-                        Search
-                      </button>
-                    </div>
-                  </aside>
-                  <article className="col-md-9 content-body tranmere-results">
-                    <div id="loading">
-                      <div className="spinner-grow text-primary" role="status">
-                        <span className="sr-only">Loading...</span>
-                      </div>
-                    </div>
-                    <div id="results-search"></div>
-                  </article>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <ResultsSearch
+          teams={teams}
+          managers={managers}
+          competitions={competitions}
+          results={results.results}
+          h2hresults={results.h2hresults}
+          h2htotal={results.h2htotal}
+          season={theYear.toString()}
+        />
       </section>
-    </div>
+      <Footer></Footer>
+    </>
   );
 }

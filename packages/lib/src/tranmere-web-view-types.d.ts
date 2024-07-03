@@ -89,7 +89,6 @@ export interface SeasonPlayerStatisticsView extends View {
 export interface PlayerView extends View {
   image: string;
   player: Player;
-  teams: Team[];
   links: Link[];
   debut: Appearance;
   transfers: Transfer[];

@@ -10,7 +10,9 @@ export function Footer() {
             <a href="/">
               <Image
                 src="/assets/images/logo_white_transparent.png"
-                alt="TranmereWeb.com Logo" width={160} height={93}
+                alt="TranmereWeb.com Logo"
+                width={160}
+                height={93}
               />
             </a>
           </div>
@@ -19,10 +21,7 @@ export function Footer() {
               <div className="col">
                 <ul className="list-group list-group-minimal">
                   <li className="list-group-item">
-                    <a
-                      href="/about"
-                      className="link"
-                    >
+                    <a href="/about" className="link">
                       About the site
                     </a>
                   </li>
@@ -35,10 +34,7 @@ export function Footer() {
                     </a>
                   </li>
                   <li className="list-group-item">
-                    <a
-                      href="/contact"
-                      className="link"
-                    >
+                    <a href="/contact" className="link">
                       Contact Us
                     </a>
                   </li>
@@ -46,15 +42,6 @@ export function Footer() {
                     <a href="https://portal.tranmere-web.com/" className="link">
                       API
                     </a>
-                  </li>
-                  <li className="list-group-item">
-                    <button
-                      id="loginout"
-                      type="button"
-                      className="btn btn-link"
-                    >
-                      Sign-In
-                    </button>
                   </li>
 
                   <li className="list-group-item">

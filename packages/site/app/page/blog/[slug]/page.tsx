@@ -1,9 +1,13 @@
 export const runtime = "edge";
 
-import { getAllArticles, getArticle } from "@/lib/api";
+import { Gallery } from "@/components/Gallery";
+import { SideBar } from "@/components/sidebar/SideBar";
+import { getAllArticles, getArticle, getAssetsByTag } from "@/lib/api";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
-import Image from "next/image";
+import { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { Navbar } from "@/components/layout/Navbar";
+import { Footer } from "@/components/layout/Footer";
 
 export async function generateStaticParams() {
   const allArticles = await getAllArticles();
@@ -12,6 +16,11 @@ export async function generateStaticParams() {
     slug: article.slug,
   }));
 }
+
+export var metadata: Metadata = {
+  title: "Match Summary - Tranmere-Web",
+  description: "Match Summary",
+};
 
 export default async function BlogPage({
   params,
@@ -24,36 +33,89 @@ export default async function BlogPage({
     notFound();
   }
 
+  metadata.title = article.title;
+  metadata.description = article.description;
+
+  const gallery = article.galleryTag
+    ? await getAssetsByTag(article.galleryTag)
+    : null;
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24 bg-white">
-      <section className="w-full">
-        <div className="container space-y-12 px-4 md:px-6">
-          <div className="space-y-4">
-            <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl">
-              {article.title}
-            </h1>
-            <p className="max-w-[900px] text-zinc-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-zinc-400">
-              {article.description}
-            </p>
-          </div>
-          <div className="space-y-8 lg:space-y-10">
-            <Image
-              alt="Article Image"
-              className="aspect-video w-full overflow-hidden rounded-xl object-cover"
-              height="365"
-              src={article.pic.url}
-              width="650"
-            />
-            <div className="space-y-4 md:space-y-6">
-              <div className="space-y-2">
-                <div className="max-w-[900px] text-zinc-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-zinc-400">
-                  {documentToReactComponents(article.blog.json)}
+    <>
+      <Navbar showSearch={true}></Navbar>
+      <section className="hero bg-blue overlay">
+        <div className="container">
+          <div className="row align-items-end justify-content-between">
+            {article.pic ? (
+              <>
+                <div className="col-md-6 text-white mb-3 mb-md-0">
+                  <div className="row gutter-2">
+                    <div className="col-12">
+                      <h1 className="h2 font-weight-normal" itemProp="headline">
+                        {article.title}
+                      </h1>
+                      <h3
+                        className="h3 font-weight-normal"
+                        itemProp="datePublished"
+                      >
+                        {article.datePosted}
+                      </h3>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-md-6 pl-md-5">
+                  <meta itemProp="image" content={article.pic.url} />
+                  <img
+                    src={`${article.pic.url}?h=300`}
+                    alt="Image"
+                    className="overlay-item-bottom"
+                  />
+                </div>
+              </>
+            ) : (
+              <div className="col-md-12 text-white mb-3 mb-md-0">
+                <div className="row gutter-2">
+                  <div className="col-12">
+                    <h1 className="h2 font-weight-normal">{article.title}</h1>
+                    <h3 className="h3 font-weight-normal">
+                      {article.datePosted}
+                    </h3>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </section>
-    </main>
+
+      <section className="bg-white" style={{ padding: "0px" }}>
+        <div className="container">
+          <div className="row">
+            <article className="col-md-8 content-body">
+              <div className="row">
+                <div className="col-12">
+                  {documentToReactComponents(article.blog.json)}
+                  {gallery ? <Gallery gallery={gallery}></Gallery> : ""}
+                </div>
+              </div>
+              <div className="row gutter-2"></div>
+              <div className="row">
+                <div className="col-12">
+                  {article.tags.map((tag, idx) => (
+                    <><span className="badge badge-primary" key={idx}>
+                      <a href={`/page/tag/${tag}`} style={{ color: "white" }}>
+                        {tag}
+                      </a>
+                    </span>&nbsp;</>
+                  ))}
+                </div>
+              </div>
+            </article>
+            <SideBar></SideBar>
+          </div>
+        </div>
+      </section>
+      <Footer></Footer>
+    </>
   );
 }

@@ -1,6 +1,6 @@
 // Set a variable that contains all the fields needed for articles when a fetch for
 
-import { GraphQLResponse } from "./types";
+import { GraphQLAssetsResponse, GraphQLBlogResponse } from "./types";
 
 // content is performed
 const ARTICLE_GRAPHQL_FIELDS = `
@@ -9,7 +9,10 @@ const ARTICLE_GRAPHQL_FIELDS = `
   }
   title
   slug
+  tags
+  datePosted
   description
+  galleryTag
   blog {
     json
   }
@@ -36,8 +39,28 @@ async function fetchGraphQL(query: string) {
   ).then((response) => response.json());
 }
 
-function extractArticleEntries(fetchResponse: GraphQLResponse) {
+function extractArticleEntries(fetchResponse: GraphQLBlogResponse) {
   return fetchResponse?.data?.blogPostCollection?.items;
+}
+
+function extractGalleryImageEntries(fetchResponse: GraphQLAssetsResponse) {
+  return fetchResponse?.data?.assetCollection?.items;
+}
+
+export async function getAssetsByTag(tag: string) {
+  const articles = await fetchGraphQL(
+    `query {
+      assetCollection(where:{contentfulMetadata:{ tags: { id_contains_all: "${tag}"}}} , order: sys_publishedAt_DESC ) {
+        items {
+          title
+          description
+          url
+        }
+      }# add your query
+    }`,
+  );
+
+  return extractGalleryImageEntries(articles as GraphQLAssetsResponse);
 }
 
 export async function getAllArticles(limit = 3) {
@@ -53,7 +76,7 @@ export async function getAllArticles(limit = 3) {
 
   //console.log(JSON.stringify(articles))
 
-  return extractArticleEntries(articles as GraphQLResponse);
+  return extractArticleEntries(articles as GraphQLBlogResponse);
 }
 
 export async function getArticle(slug: string) {
@@ -66,5 +89,5 @@ export async function getArticle(slug: string) {
         }
       }`,
   );
-  return extractArticleEntries(article as GraphQLResponse)[0];
+  return extractArticleEntries(article as GraphQLBlogResponse)[0];
 }

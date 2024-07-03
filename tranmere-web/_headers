@@ -1,9 +1,0 @@
-/*
-  X-Frame-Options: DENY
-  X-Content-Type-Options: nosniff
-  X-XSS-Protection: 1; mode=block
-  Referrer-Policy: strict-origin-when-cross-origin
-  Permissions-Policy: document-domain=()
-  Strict-Transport-Security: max-age=1000
-  Content-Security-Policy: default-src 'none'; font-src 'self' data:; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://www.youtube.com https://static.cloudflareinsights.com https://www.datadoghq-browser-agent.com https://session-replay.browser-intake-datadoghq.eu https://rum.browser-intake-datadoghq.eu https://*.algolianet.com https://*.algolia.net; connect-src 'self' https://browser-intake-datadoghq.eu https://*.browser-intake-datadoghq.eu https://*.algolianet.com https://*.algolia.net; img-src 'self' data: w3.org/svg/2000 https://images.tranmere-web.com https://www.tranmere-web.com; style-src 'unsafe-inline' 'self'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests; worker-src blob:;
-            

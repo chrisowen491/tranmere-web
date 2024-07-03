@@ -1,0 +1,23 @@
+.mySwiper .carousel .control-next.control-arrow:before {
+  border-left: 50px solid #001489 !important;
+}
+.mySwiper .carousel .control-prev.control-arrow:before {
+  border-right: 50px solid #001489 !important;
+}
+
+#navsearch {
+    position: relative;
+}
+
+#navsearch .ais-Hits {
+    position: absolute;
+    top: 50;
+    left: 0;
+    width: 100%;
+    cursor: pointer;
+}
+
+#navsearch .ais-Hits-item:hover {
+    background-color: #064cdb;
+    color: #fff;
+}

@@ -6,6 +6,10 @@ pages_build_output_dir = ".vercel/output/static"
 [vars]
 CONTENTFUL_SPACE_ID = "pz711f8blqyy"
 CONTENTFUL_ACCESS_TOKEN = "kXG52DaIS0e8R8gWqErmmadoTjxcC2xyFaSFnOEWou0"
+API_PORT = "3000"
+API_PROTOCOL = "http" 
+API_DOMAIN = "localhost"
+API_KEY = ""
 
 [[vectorize]]
 binding = "VECTORIZE_INDEX"

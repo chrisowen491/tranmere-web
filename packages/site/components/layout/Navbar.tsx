@@ -1,12 +1,14 @@
 "use client";
 
 import { useEffect } from "react";
+import SearchBar from "../SearchBar";
 
-export function Navbar() {
-
+export function Navbar(props: { showSearch: boolean }) {
   useEffect(() => {
-    typeof document !== undefined ? require('bootstrap/dist/js/bootstrap') : null
-}, [])
+    typeof document !== undefined
+      ? require("bootstrap/dist/js/bootstrap")
+      : null;
+  }, []);
 
   return (
     <header className="header header-sticky header-transparent" id="homenav">
@@ -57,16 +59,10 @@ export function Navbar() {
                     Results
                   </a>
                   <div className="dropdown-menu" aria-labelledby="resultsNav">
-                    <a
-                      className="dropdown-item"
-                      href="/results"
-                    >
+                    <a className="dropdown-item" href="/results">
                       Results Home
                     </a>
-                    <a
-                      className="dropdown-item"
-                      href="/games/at-wembley"
-                    >
+                    <a className="dropdown-item" href="/games/at-wembley">
                       Tranmere At Wembley
                     </a>
                     <a
@@ -90,10 +86,7 @@ export function Navbar() {
                     Players
                   </a>
                   <div className="dropdown-menu" aria-labelledby="playerNav">
-                    <a
-                      className="dropdown-item"
-                      href="/playersearch"
-                    >
+                    <a className="dropdown-item" href="/playersearch">
                       Players Home
                     </a>
                     <a
@@ -114,28 +107,16 @@ export function Navbar() {
                     >
                       Only Played Once
                     </a>
-                    <a
-                      className="dropdown-item"
-                      href="/top-scorers-by-season"
-                    >
+                    <a className="dropdown-item" href="/top-scorers-by-season">
                       Top Scorers By Season
                     </a>
-                    <a
-                      className="dropdown-item"
-                      href="/hat-tricks"
-                    >
+                    <a className="dropdown-item" href="/hat-tricks">
                       Hat Tricks
                     </a>
-                    <a
-                      className="dropdown-item"
-                      href="/super-stars"
-                    >
+                    <a className="dropdown-item" href="/super-stars">
                       Opposition Stars
                     </a>
-                    <a
-                      className="dropdown-item"
-                      href="/transfer-central"
-                    >
+                    <a className="dropdown-item" href="/transfer-central">
                       Transfers
                     </a>
                   </div>
@@ -153,16 +134,10 @@ export function Navbar() {
                     Stats
                   </a>
                   <div className="dropdown-menu" aria-labelledby="statsNav">
-                    <a
-                      className="dropdown-item"
-                      href="/page/blog/2VrsLTKALyi2vgAQMLDoIT"
-                    >
+                    <a className="dropdown-item" href="/page/tag/stats">
                       Stats Home
                     </a>
-                    <a
-                      className="dropdown-item"
-                      href="/games/top-attendances"
-                    >
+                    <a className="dropdown-item" href="/games/top-attendances">
                       Highest Tranmere Attendances
                     </a>
                     <a
@@ -186,34 +161,25 @@ export function Navbar() {
                     Media
                   </a>
                   <div className="dropdown-menu" aria-labelledby="mediaNav">
-                    <a
-                      className="dropdown-item"
-                      href="/page/blog/7wtrOLaYqaK7Dhvodz1Gv0"
-                    >
+                    <a className="dropdown-item" href="/page/tag/media">
                       Media Home
                     </a>
-                    <a
-                      className="dropdown-item"
-                      href="/page/blog/7GNQCz3dEPOCvuyfcHTWvA"
-                    >
+                    <a className="dropdown-item" href="/page/blog">
+                      Blog Index
+                    </a>
+                    <a className="dropdown-item" href="/page/blog/books">
                       Books
                     </a>
                     <a
                       className="dropdown-item"
-                      href="/page/blog/7gk4gmq9N6ibfree9KOl1j"
+                      href="/page/blog/football-cards"
                     >
                       Football Cards
                     </a>
-                    <a
-                      className="dropdown-item"
-                      href="/page/blog/5uUGSyqn2uTrGx4c24mhly"
-                    >
+                    <a className="dropdown-item" href="/page/blog/testimonials">
                       Testimonials & Benefit Matches
                     </a>
-                    <a
-                      className="dropdown-item"
-                      href="/player-builder"
-                    >
+                    <a className="dropdown-item" href="/player-builder">
                       Player Avatar Builder
                     </a>
                   </div>
@@ -221,7 +187,7 @@ export function Navbar() {
                 <li className="nav-item dropdown">
                   <a
                     className="nav-link"
-                    href="https://chat.tranmere-web.com"
+                    href="/chat"
                     id="chat"
                     role="button"
                     aria-haspopup="false"
@@ -231,6 +197,12 @@ export function Navbar() {
                   </a>
                 </li>
               </ul>
+              {props.showSearch ? (
+                <SearchBar />
+              ) : (
+                ""
+              )}
+              
             </div>
           </nav>
         </div>

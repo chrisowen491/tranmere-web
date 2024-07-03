@@ -59,6 +59,8 @@ export interface Player extends BaseEntity {
   links?: string;
   pic?: string;
   position?: string;
+  dateOfBirth?: string;
+  placeOfBirth?: string;
   
 }
 
@@ -169,7 +171,7 @@ export interface Match {
   attendance?: number;
   referee?: string;
   formation?: string;
-  largeprogramme: string;
+  largeProgramme?: string;
 }
 
 export interface H2HResult {
