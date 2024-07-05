@@ -1,0 +1,37 @@
+.mySwiper .carousel .control-next.control-arrow:before {
+  border-left: 50px solid #001489 !important;
+}
+.mySwiper .carousel .control-prev.control-arrow:before {
+  border-right: 50px solid #001489 !important;
+}
+
+#navsearch {
+    position: relative;
+}
+
+#navsearch .ais-Hits {
+    position: absolute;
+    top: 50;
+    left: 0;
+    width: 100%;
+    cursor: pointer;
+}
+
+#autocomplete .ais-Hits {
+    cursor: pointer;
+}
+
+
+#autocomplete .aa-ItemIcon {
+    float:left;
+    padding-bottom: 30px;
+    padding-right:20px;
+}
+
+#autocomplete .aa-ItemContentBody {
+    width: 500px;
+}
+#navsearch .ais-Hits-item:hover {
+    background-color: #064cdb;
+    color: #fff;
+}

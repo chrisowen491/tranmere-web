@@ -4,9 +4,7 @@ on:
   push:
     branches: [ master ]
     paths:
-      - 'tranmere-web/**'
-      - 'functions/**'
-      - 'templates/**'
+      - 'packages/site/**'
       - '.github/workflows/**'
 
 jobs:
@@ -21,25 +19,22 @@ jobs:
         uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '22.2.0'
+          node-version: '20'
       # Run a build step here if your project requires
       - name: Install
         run: yarn --frozen-lockfile 
       - name: Build
-        run: yarn run build
+        run: yarn cloudflare-build
         env:
-          CF_SPACE: ${{ secrets.CF_SPACE }}
-          CF_KEY: ${{ secrets.CF_KEY }}
           API_KEY: ${{ secrets.API_KEY }}
-          AL_KEY: ${{ secrets.AL_KEY }}
-          AL_SPACE: ${{ secrets.AL_SPACE }}
-          AL_INDEX: ${{ secrets.AL_INDEX }}
-      - name: Publish to Cloudflare Pages
-        uses: cloudflare/pages-action@v1.5.0
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_AUTH_KEY }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: tranmere-web
-          directory: web.out
-          # Optional: Enable this if you want to have GitHub Deployments triggered
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          CONTENTFUL_SPACE_ID: ${{ secrets.CF_SPACE }}
+          CONTENTFUL_ACCESS_TOKEN: ${{ secrets.CF_KEY }}
+          API_PORT: "443"
+          API_PROTOCOL: "https" 
+          API_DOMAIN: "api.prod.tranmere-web.com"
+
+      - name: Build
+        run: yarn cloudflare-deploy
+        env:
+          CF_API_TOKEN: ${{ secrets.CLOUDFLARE_AUTH_KEY }}
+          CF_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

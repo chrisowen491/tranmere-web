@@ -81,3 +81,4 @@ build
 packages/chat/.next/
 
 *.log
+.next

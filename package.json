@@ -5,18 +5,15 @@
   "private": "true",
   "engines": {
     "npm": ">=9.5.0",
-    "node": ">=22.2.0"
+    "node": ">=20.14.0"
   },
   "scripts": {
-    "build": "yarn workspace @tranmere-web/lib build && webpack",
     "api": "yarn workspace @tranmere-web/api-stack local-api",
-    "chat-build": "yarn workspace @tranmere-web/chat cloudflare-build",
-    "chat-deploy": "yarn workspace @tranmere-web/chat cloudflare-deploy",
-    "chat": "yarn workspace @tranmere-web/chat chat",
-    "start": "yarn build && wrangler pages dev web.out --binding API_PORT=3000 --binding API_PROTOCOL=http --binding API_DOMAIN=127.0.0.1 ",
-    "format": "prettier 'functions/**/*.ts' 'tranmere-web/assets/js/**/*.js' --write",
+    "cloudflare-build": "yarn workspace @tranmere-web/site cloudflare-build",
+    "cloudflare-deploy": "yarn workspace @tranmere-web/site cloudflare-deploy",
+    "site": "yarn workspace @tranmere-web/site site",
     "prepare": "husky",
-    "lint": "eslint ."
+    "lint": "npx lerna run lint"
   },
   "workspaces": [
     "packages/*"
@@ -40,7 +37,6 @@
     "contentful-typescript-codegen": "^3.4.0",
     "css-loader": "^7.0.0",
     "esbuild": "^0.21.0",
-    "eslint": "^9.2.0",
     "esrun": "^3.2.26",
     "filemanager-webpack-plugin": "^8.0.0",
     "husky": "^9.0.11",
@@ -54,10 +50,7 @@
     "style-loader": "^4.0.0",
     "typescript": "^5.4.5",
     "typescript-eslint": "^7.10.0",
-    "webpack": "^5.76.3",
-    "webpack-cli": "^5.0.1",
-    "webpack-dev-server": "^5.0.0",
-    "wrangler": "^3.22.3"
+    "wrangler": "^3.60.1"
   },
   "dependencies": {
     "@algolia/autocomplete-js": "^1.8.3",
@@ -68,7 +61,6 @@
     "@datadog/browser-rum": "^5.0.0",
     "@tranmere-web/lib": "*",
     "algoliasearch": "^4.17.0",
-    "amazon-cognito-auth-js": "^1.3.3",
     "axios": "^1.6.3",
     "bootstrap": "^4.6.2",
     "bootstrap-select": "^1.13.2",
@@ -78,15 +70,9 @@
     "contentful-management": "^11.8.0",
     "csvtojson": "^2.0.10",
     "globals": "^15.1.0",
-    "instantsearch.css": "^8.1.0",
-    "instantsearch.js": "^4.68.0",
-    "jquery": "^3.6.4",
-    "lavalamp": "^2.0.0",
     "lerna": "^8.1.3",
-    "magnific-popup": "^1.1.0",
     "moment": "^2.30.1",
     "mustache": "^4.2.0",
-    "owl.carousel": "^2.3.4",
     "popper.js": "^1.16.1",
     "source-map-support": "^0.5.21",
     "uuid": "^10.0.0",

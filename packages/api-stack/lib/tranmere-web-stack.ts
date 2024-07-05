@@ -426,27 +426,7 @@ export class TranmereWebStack extends cdk.Stack {
         TranmereWebGoalsTable,
         TranmereWebAppsTable,
         TranmereWebMatchReport
-      ],
-      commandHooks: {
-        beforeBundling(): string[] {
-          return [];
-        },
-        afterBundling(inputDir: string, outputDir: string): string[] {
-          if (IS_WINDOWS) {
-            //return [];
-            return [
-              `mkdir ${outputDir}\\templates && xcopy ${inputDir}\\templates\\*  ${outputDir}\\templates`
-            ];
-          } else {
-            return [
-              `mkdir ${outputDir}/templates && cp -R ${inputDir}/templates/* ${outputDir}/templates`
-            ];
-          }
-        },
-        beforeInstall() {
-          return [];
-        }
-      }
+      ]
     });
 
     new TranmereWebLambda(this, 'DynamicPageFunction', {
@@ -461,27 +441,7 @@ export class TranmereWebStack extends cdk.Stack {
         TranmereWebPlayerTable,
         TranmereWebPlayerTransfers,
         TranmereWebPlayerLinks
-      ],
-      commandHooks: {
-        beforeBundling(): string[] {
-          return [];
-        },
-        afterBundling(inputDir: string, outputDir: string): string[] {
-          if (IS_WINDOWS) {
-            //return [];
-            return [
-              `mkdir ${outputDir}\\templates && xcopy ${inputDir}\\templates\\* ${outputDir}\\templates /E`
-            ];
-          } else {
-            return [
-              `mkdir ${outputDir}/templates && cp -R ${inputDir}/templates/* ${outputDir}/templates`
-            ];
-          }
-        },
-        beforeInstall() {
-          return [];
-        }
-      }
+      ]
     });
 
     new TranmereWebLambda(this, 'PlayerBuilderFunction', {

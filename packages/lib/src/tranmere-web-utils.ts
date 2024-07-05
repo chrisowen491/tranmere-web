@@ -7,7 +7,6 @@ import path from 'path';
 import { APIGatewayProxyResult } from 'aws-lambda';
 import { DynamoDBDocument, QueryCommandInput } from '@aws-sdk/lib-dynamodb';
 import { DynamoDB } from '@aws-sdk/client-dynamodb';
-import { ContentfulClientApi, EntryCollection } from 'contentful';
 const dynamo = DynamoDBDocument.from(
   new DynamoDB({ apiVersion: '2012-08-10' })
 );
@@ -29,7 +28,6 @@ import {
   PlayerSeasonSummary,
   BreadCrumbItem
 } from './tranmere-web-types';
-import { IBlogPost, IPageMetaData } from './contentful';
 import { RandomPlayer } from './tranmere-web-view-types';
 
 const APP_SYNC_URL = 'https://api.prod.tranmere-web.com';
@@ -195,26 +193,6 @@ export class TranmereWebUtils {
     );
   }
 
-  async getBlogs(
-    client: ContentfulClientApi<undefined>,
-    limit?: number
-  ): Promise<EntryCollection<IBlogPost>> {
-    const realLimit = limit ? limit : 5;
-    return await client.getEntries<IBlogPost>({
-      content_type: 'blogPost',
-      order: ['-sys.createdAt'],
-      limit: realLimit
-    });
-  }
-
-  async getPages(
-    client: ContentfulClientApi<undefined>
-  ): Promise<EntryCollection<IPageMetaData>> {
-    return await client.getEntries<IPageMetaData>({
-      content_type: 'pageMetaData'
-    });
-  }
-
   async findAllPlayers(): Promise<Player[]> {
     const query = encodeURIComponent(
       '{listTranmereWebPlayerTable(limit:700){items{name picLink}}}'
@@ -328,8 +306,8 @@ export class TranmereWebUtils {
     return { results, h2htotal, h2hresults };
   }
 
-  async getTopScorersBySeason(): Promise<Player[]> {
-    const results: Player[] = [];
+  async getTopScorersBySeason(): Promise<PlayerSeasonSummary[]> {
+    const results: PlayerSeasonSummary[] = [];
 
     for (let i = 1977; i <= this.getYear(); i++) {
       const result = await axios.get(
@@ -338,7 +316,7 @@ export class TranmereWebUtils {
           '&sort=Goals',
         apiOptions
       );
-      const player: Player = result.data.players[0];
+      const player: PlayerSeasonSummary = result.data.players[0];
       if (player) results.push(player);
     }
     return results;
