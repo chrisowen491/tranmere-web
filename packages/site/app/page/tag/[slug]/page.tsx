@@ -4,6 +4,7 @@ import { getAllArticlesForTag } from "@/lib/api";
 import { ToTitleCase } from "@/lib/apiFunctions";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import Link from "next/link";
 
 export const runtime = "edge";
 
@@ -40,37 +41,45 @@ export default async function TagPage({
         </div>
       </section>
 
-      <section className="overlay">
-        <div className="container overlay-item-top">
+      <section className="bg-white" style={{ padding: "0px" }}>
+        <div className="container">
           <div className="row">
-            <div className="col">
-              <div className="content boxed">
-                <div className="row separated">
-                  <article className="col-md-8 content-body">
-                    <div className="list-group list-group-related">
-                      {list && list.length > 0 ? (
-                        <>
-                          {list.map((article, idx) => (
-                            <a
-                              href={`/page/blog/${article.slug}`}
-                              key={idx}
-                              className="list-group-item list-group-item-action d-flex align-items-center active"
+            <article className="col-md-8 content-body">
+              <div className="row">
+                <div className="col-12">
+                  {articles.map((article) => (
+                    <div
+                      className="card stacked"
+                      style={{ marginBottom: "50px" }}
+                      key={article.sys.id}
+                    >
+                      <div className="card-body">
+                        <div className="row gutter-2 align-items-center">
+                          <div className="col">
+                            <Link href={`/page/blog/${article.slug}`}>
+                              <h3>{article.title}</h3>
+                            </Link>
+                            <p>{article.description}</p>
+                            <p>Written by: {article.author}</p>
+                            <Link
+                              href={`/page/blog/${article.slug.toLowerCase()}`}
                             >
-                              <i className="fs-20 icon-file-text2 text-primary mr-1"></i>
-                              {article.title}
-                            </a>
-                          ))}
-                        </>
-                      ) : (
-                        <p>No Tagged Article</p>
-                      )}
+                              Read More →
+                            </Link>
+                            <i className="icon-pencil icon-background"></i>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    <div className="row gutter-2"></div>
-                  </article>
-                  <SideBar />
+                  ))}
                 </div>
               </div>
-            </div>
+              <div className="row gutter-2"></div>
+              <div className="row">
+                <div className="col-12"></div>
+              </div>
+            </article>
+            <SideBar></SideBar>
           </div>
         </div>
       </section>

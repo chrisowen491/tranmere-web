@@ -34,3 +34,7 @@
   background-color: #064cdb;
   color: #fff;
 }
+
+.carousel .slide img {
+    width: 300px!important
+}

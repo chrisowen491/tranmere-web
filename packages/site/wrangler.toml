@@ -1,4 +1,4 @@
-name = "tranmere-web-site"
+name = "tranmere-web"
 compatibility_flags = ["nodejs_compat"]
 compatibility_date = "2024-01-10"
 pages_build_output_dir = ".vercel/output/static"

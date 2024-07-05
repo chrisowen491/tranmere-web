@@ -23,5 +23,29 @@ module.exports = withPlugins([[withBundleAnalyzer]], {
   },
   sassOptions: {
     includePaths: [path.join(__dirname, 'styles')],
-  }
+  },
+  async rewrites() {
+		return [
+			{
+				source: '/builder/:path*',
+				destination: `https://api.prod.tranmere-web.com/builder/:path*`,
+			},
+      {
+				source: '/api/contact-us/:path*',
+				destination: `https://api.prod.tranmere-web.com/contact-us/:path*`,
+			},
+      {
+				source: '/api/player-search/:path*',
+				destination: `https://api.prod.tranmere-web.com/player-search/:path*`,
+			},
+      {
+				source: '/api/result-search/:path*',
+				destination: `https://api.prod.tranmere-web.com/result-search/:path*`,
+			},
+      {
+				source: '/transfer-search/:path*',
+				destination: `https://api.prod.tranmere-web.com/transfer-search/:path*`,
+			},
+		]
+	},
 });

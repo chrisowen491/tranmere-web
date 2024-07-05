@@ -1,9 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
-import axios from 'axios';
-import fs from 'fs';
-import Mustache from 'mustache';
-import path from 'path';
 import { APIGatewayProxyResult } from 'aws-lambda';
 import { DynamoDBDocument, QueryCommandInput } from '@aws-sdk/lib-dynamodb';
 import { DynamoDB } from '@aws-sdk/client-dynamodb';
@@ -13,22 +8,14 @@ const dynamo = DynamoDBDocument.from(
 import {
   Goal,
   Player,
-  Team,
-  Competition,
-  Manager,
-  HatTrick,
   ImageEdits,
   Appearance,
   Match,
   Report,
-  H2HResult,
-  H2HTotal,
   Transfer,
   Link,
   PlayerSeasonSummary,
-  BreadCrumbItem
 } from './tranmere-web-types';
-import { RandomPlayer } from './tranmere-web-view-types';
 
 const APP_SYNC_URL = 'https://api.prod.tranmere-web.com';
 const APP_SYNC_OPTIONS = {
@@ -83,37 +70,6 @@ export class TranmereWebUtils {
     }
   }
 
-  getSeasons(): number[] {
-    const seasons: number[] = [];
-    for (let i = this.getYear(); i > 1920; i--) {
-      seasons.push(i);
-    }
-    return seasons;
-  }
-
-  getHomeBreadCrumb(): BreadCrumbItem {
-    return {
-      link: [
-        {
-          link: '/',
-          position: 1,
-          title: 'Home'
-        }
-      ]
-    };
-  }
-
-  getActiveBreadcrumb(title: string, count: number): BreadCrumbItem {
-    return {
-      active: [
-        {
-          position: count,
-          title: decodeURIComponent(title)
-        }
-      ]
-    };
-  }
-
   sendResponse(code: number, obj: any): APIGatewayProxyResult {
     return {
       isBase64Encoded: false,
@@ -127,40 +83,6 @@ export class TranmereWebUtils {
     };
   }
 
-  sendHTMLResponse(page: any, maxAge: number): APIGatewayProxyResult {
-    return {
-      isBase64Encoded: false,
-      headers: {
-        'Content-Type': 'text/html',
-        'Content-Security-Policy': 'upgrade-insecure-requests',
-        'Strict-Transport-Security': 'max-age=1000',
-        'X-Xss-Protection': '1; mode=block',
-        'X-Frame-Options': 'DENY',
-        'X-Content-Type-Options': 'nosniff',
-        'Referrer-Policy': 'strict-origin-when-cross-origin',
-        'Cache-Control': 'public, max-age=' + maxAge
-      },
-      statusCode: 200,
-      body: page
-    };
-  }
-
-  loadSharedPartials(): any {
-    const partials: any = {};
-    const files = fs.readdirSync('./templates/partials');
-    for (let i = 0, l = files.length; i < l; i++) {
-      const file = files[i];
-
-      if (file.match(/\.mustache$/)) {
-        const name = path.basename(file, '.mustache');
-        partials[name] = fs.readFileSync('./templates/partials/' + file, {
-          encoding: 'utf8'
-        });
-      }
-    }
-    return partials;
-  }
-
   buildImagePath(image: string, width: number, height: number): string {
     const programme = new ProgrammeImage(image, {
       resize: {
@@ -170,187 +92,6 @@ export class TranmereWebUtils {
       }
     });
     return 'https://images.tranmere-web.com/' + programme.imagestring();
-  }
-
-  buildPage(view: any, pageTpl: string): string {
-    const pageHTML = Mustache.render(
-      fs.readFileSync(pageTpl).toString(),
-      view,
-      this.loadSharedPartials()
-    );
-    return pageHTML;
-  }
-
-  renderFragment(view: any, templateKey: string): string {
-    if (view.chart) {
-      view.chart = JSON.stringify(view.chart);
-    }
-    const tpl = `./templates/partials/${templateKey}.mustache`;
-    return Mustache.render(
-      fs.readFileSync(tpl).toString(),
-      view,
-      this.loadSharedPartials()
-    );
-  }
-
-  async findAllPlayers(): Promise<Player[]> {
-    const query = encodeURIComponent(
-      '{listTranmereWebPlayerTable(limit:700){items{name picLink}}}'
-    );
-    const results = await axios.get(
-      `${APP_SYNC_URL}/graphql?query=${query}`,
-      APP_SYNC_OPTIONS
-    );
-    const players = results.data.data.listTranmereWebPlayerTable.items!.map(
-      (p) => p as Player
-    );
-
-    players.sort(function (a: Player, b: Player) {
-      if (a.name < b.name) return -1;
-      if (a.name > b.name) return 1;
-      return 0;
-    });
-    return players;
-  }
-
-  async findAllTranmereManagers(): Promise<Manager[]> {
-    const query = encodeURIComponent(
-      '{listTranmereWebManagers(limit:300){items{name dateLeft dateJoined}}}'
-    );
-    const results = await axios.get(
-      `${APP_SYNC_URL}/graphql?query=${query}`,
-      APP_SYNC_OPTIONS
-    );
-
-    const managers: Manager[] = [];
-    for (const manager of results.data.data.listTranmereWebManagers.items) {
-      let dateLeft = 'now';
-      if (manager.dateLeft) dateLeft = manager.dateLeft;
-      manager.dateLeftText = dateLeft;
-      managers.push(manager);
-    }
-    managers.sort(function (a, b) {
-      if (a.dateJoined < b.dateJoined) return 1;
-      if (a.dateJoined > b.dateJoined) return -1;
-      return 0;
-    });
-    return managers;
-  }
-
-  async findAllTeams(): Promise<Team[]> {
-    const query: string = encodeURIComponent(
-      '{listTranmereWebClubs(limit:500){items{name}}}'
-    );
-    const result = await axios.get(
-      `${APP_SYNC_URL}/graphql?query=${query}`,
-      APP_SYNC_OPTIONS
-    );
-    const results: Team[] = result.data.data.listTranmereWebClubs.items;
-
-    results.sort(function (a: Team, b: Team) {
-      if (a.name < b.name) return -1;
-      if (a.name > b.name) return 1;
-      return 0;
-    });
-    return results;
-  }
-
-  async getAllCupCompetitions(): Promise<Competition[]> {
-    const query = encodeURIComponent(
-      '{listTranmereWebCompetitions(limit:500){items{name}}}'
-    );
-    const competitions = await axios.get(
-      `${APP_SYNC_URL}/graphql?query=${query}`,
-      APP_SYNC_OPTIONS
-    );
-    const results: Competition[] =
-      competitions.data.data.listTranmereWebCompetitions.items;
-    return results;
-  }
-
-  async getAllGames(): Promise<Match[]> {
-    const result = await axios.get(
-      'https://api.prod.tranmere-web.com/result-search/?season=&competition=&opposition=&manager=&venue=Prenton Park&pens=&sort=Date',
-      apiOptions
-    );
-    const results: Match[] = result.data.results as Match[];
-    return results;
-  }
-
-  async getPlayers(
-    season: string,
-    filter: string,
-    sort: string
-  ): Promise<Player[]> {
-    const result = await axios.get(
-      `https://api.prod.tranmere-web.com/player-search/?season=${season}&sort=${sort}&filter=${filter}`,
-      apiOptions
-    );
-    return result.data.players as Player[];
-  }
-
-  async getResults(
-    season: string,
-    opposition: string,
-    venue: string,
-    sort: string,
-    pens: string
-  ) {
-    const result = await axios.get(
-      `https://api.prod.tranmere-web.com/result-search/?season=${season}&competition=&opposition=${opposition}&manager=&venue=${venue}&pens=${pens}&sort=${sort}`,
-      apiOptions
-    );
-    const results: Match[] = result.data.results as Match[];
-    const h2htotal: H2HTotal[] = result.data.h2htotal as H2HTotal[];
-    const h2hresults: H2HResult[] = result.data.h2hresults as H2HResult[];
-    return { results, h2htotal, h2hresults };
-  }
-
-  async getTopScorersBySeason(): Promise<PlayerSeasonSummary[]> {
-    const results: PlayerSeasonSummary[] = [];
-
-    for (let i = 1977; i <= this.getYear(); i++) {
-      const result = await axios.get(
-        'https://api.prod.tranmere-web.com/player-search/?season=' +
-          i +
-          '&sort=Goals',
-        apiOptions
-      );
-      const player: PlayerSeasonSummary = result.data.players[0];
-      if (player) results.push(player);
-    }
-    return results;
-  }
-
-  async findAllHatTricks(): Promise<HatTrick[]> {
-    const query = encodeURIComponent(
-      '{listTranmereWebHatTricks(limit:500){items{Date Player Opposition Goals Season}}}'
-    );
-    const result = await axios.get(
-      `${APP_SYNC_URL}/graphql?query=${query}`,
-      APP_SYNC_OPTIONS
-    );
-
-    const results: HatTrick[] = result.data.data.listTranmereWebHatTricks.items;
-
-    results.sort(function (a, b) {
-      if (a.Date < b.Date) return -1;
-      if (a.Date > b.Date) return 1;
-      return 0;
-    });
-    return results;
-  }
-
-  async getResultsForSeason(season: string): Promise<Match[]> {
-    const params = {
-      TableName: DataTables.RESULTS_TABLE,
-      KeyConditionExpression: 'season = :season',
-      ExpressionAttributeValues: {
-        ':season': season
-      }
-    };
-    const result = await dynamo.query(params);
-    return result.Items!.map((m) => m as Match);
   }
 
   async getResultForDate(season: number, date: string): Promise<Match | null> {
@@ -461,51 +202,6 @@ export class TranmereWebUtils {
       Limit: 1
     });
     return debutSearch.Items![0] as Appearance;
-  }
-
-  async getRandomPlayer(): Promise<RandomPlayer> {
-    const players = await this.findAllPlayers();
-    const random = Math.floor(Math.random() * (players.length - 1));
-    const randomplayer = players[random];
-    const debut = await this.getPlayerDebut(randomplayer.name);
-    const apps_query = await this.getPlayerSummaryForSeason(
-      randomplayer.name,
-      'TOTAL'
-    );
-    const seasonMapping = {
-      '1978': 1977,
-      '1984': 1983,
-      '1990': 1989,
-      '1992': 1991,
-      '1994': 1993,
-      '1996': 1995,
-      '1998': 1997,
-      '2001': 2000,
-      '2003': 2002,
-      '2005': 2006,
-      '2008': 2007
-    };
-    const re = /\/\d\d\d\d\//gm;
-    const re3 = /\/\d\d\d\d[A-Za-z]\//gm;
-    let season = debut.Season;
-    if (seasonMapping[season]) season = seasonMapping[season];
-
-    randomplayer.picLink = randomplayer.picLink!.replace(
-      re,
-      '/' + season + '/'
-    );
-    randomplayer.picLink = randomplayer.picLink!.replace(
-      re3,
-      '/' + season + '/'
-    );
-
-    return {
-      name: randomplayer.name,
-      picLink: randomplayer.picLink,
-      debut: debut,
-      apps: apps_query.Apps,
-      goals: apps_query.goals
-    };
   }
 
   async getPlayerTransfers(playerName: string): Promise<Transfer[]> {

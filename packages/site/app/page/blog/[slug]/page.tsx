@@ -2,9 +2,8 @@ export const runtime = "edge";
 
 import { Gallery } from "@/components/Gallery";
 import { SideBar } from "@/components/sidebar/SideBar";
-import { getAllArticles, getArticle, getAssetsByTag } from "@/lib/api";
+import { getArticle, getAssetsByTag } from "@/lib/api";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
-import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -163,8 +162,8 @@ export default async function BlogPage({
                   {article.tags ? (
                     <>
                       {article.tags.map((tag, idx) => (
-                        <>
-                          <span className="badge badge-primary" key={idx}>
+                        <span key={idx}>
+                          <span className="badge badge-primary">
                             <a
                               href={`/page/tag/${tag}`}
                               style={{ color: "white" }}
@@ -173,7 +172,7 @@ export default async function BlogPage({
                             </a>
                           </span>
                           &nbsp;
-                        </>
+                        </span>
                       ))}
                     </>
                   ) : (

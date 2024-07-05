@@ -10,7 +10,7 @@
     "lint": "next lint",
     "format": "prettier --write \"app\" --write \"lib\" --write \"components\"",
     "cloudflare-build": "npx @cloudflare/next-on-pages@1",
-    "cloudflare-deploy": "npx wrangler pages deploy --branch=main"
+    "cloudflare-deploy": "npx wrangler pages deploy --branch=master"
   },
   "dependencies": {
     "@algolia/autocomplete-js": "^1.17.2",

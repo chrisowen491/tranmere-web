@@ -137,9 +137,6 @@ export function Navbar(props: { showSearch: boolean }) {
                     Stats
                   </a>
                   <div className="dropdown-menu" aria-labelledby="statsNav">
-                    <a className="dropdown-item" href="/page/tag/stats">
-                      Stats Home
-                    </a>
                     <a className="dropdown-item" href="/games/top-attendances">
                       Highest Tranmere Attendances
                     </a>
@@ -164,10 +161,10 @@ export function Navbar(props: { showSearch: boolean }) {
                     Media
                   </a>
                   <div className="dropdown-menu" aria-labelledby="mediaNav">
-                    <a className="dropdown-item" href="/page/tag/media">
-                      Media Home
+                    <a className="dropdown-item" href="/page/tag/Gallery">
+                      Galleries Home
                     </a>
-                    <a className="dropdown-item" href="/page/blog">
+                    <a className="dropdown-item" href="/blog">
                       Blog Index
                     </a>
                     <a className="dropdown-item" href="/page/blog/books">
