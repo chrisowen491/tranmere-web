@@ -18,8 +18,8 @@ export async function generateMetadata({
 }) {
   const article = await getArticle(params.slug);
   return {
-    title: article.title,
-    description: article.description,
+    title: article ? article.title : "",
+    description: article? article.description : ""
   };
 }
 

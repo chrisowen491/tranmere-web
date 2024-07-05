@@ -21,7 +21,7 @@ export function Footer() {
               <div className="col">
                 <ul className="list-group list-group-minimal">
                   <li className="list-group-item">
-                    <a href="/about" className="link">
+                    <a href="/page/blog/about" className="link">
                       About the site
                     </a>
                   </li>
