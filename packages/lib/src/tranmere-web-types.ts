@@ -1,19 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
-export interface BreadCrumbItem {
-  link?: BreadCrumbLink[];
-  active?: BreadCrumb[];
-}
-
-export interface BreadCrumb {
-  position: number;
-  title: string;
-}
-
-export interface BreadCrumbLink extends BreadCrumb {
-  link: string;
-}
-
 export interface TavilyResponse {
   answer: string;
   results: TavilyResult[];

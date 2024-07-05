@@ -3,7 +3,6 @@ import {
   Goal,
   Match,
   Report,
-  BreadCrumbItem,
   H2HResult,
   H2HTotal,
   Player,
@@ -21,7 +20,6 @@ export interface View {
   title?: string;
   pageType?: string;
   description?: string;
-  breadcrumbs?: BreadCrumbItem[];
 }
 
 export interface RandomPlayer {
