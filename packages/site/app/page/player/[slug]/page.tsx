@@ -10,16 +10,15 @@ import { Footer } from "@/components/layout/Footer";
 export const runtime = "edge";
 
 export async function generateMetadata({
-    params,
-  }: {
-    params: { slug: string };
-  }) {
-
-    return {
-      title: `Player Profile - ${decodeURI(params.slug)}`,
-      description: `Player Profile for the Tranmere Rovers career of ${decodeURI(params.slug)}`,
-    };
-  }
+  params,
+}: {
+  params: { slug: string };
+}) {
+  return {
+    title: `Player Profile - ${decodeURI(params.slug)}`,
+    description: `Player Profile for the Tranmere Rovers career of ${decodeURI(params.slug)}`,
+  };
+}
 
 export default async function PlayerProfilePage({
   params,
@@ -33,15 +32,14 @@ export default async function PlayerProfilePage({
   const playerRequest = await fetch(url);
 
   const profile = (await playerRequest.json()) as PlayerProfile;
-  
-  if(!profile || !profile.player)
-    notFound();
+
+  if (!profile || !profile.player) notFound();
 
   const player = profile.player;
 
   return (
     <>
-      <Navbar showSearch={true}></Navbar>  
+      <Navbar showSearch={true}></Navbar>
       <section
         itemScope
         itemType="http://schema.org/athlete"

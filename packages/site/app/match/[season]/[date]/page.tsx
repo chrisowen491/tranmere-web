@@ -10,19 +10,19 @@ import { Footer } from "@/components/layout/Footer";
 export const runtime = "edge";
 
 export async function generateMetadata({
-    params,
-  }: {
-    params: { season: string; date: string  };
-  }) {
-    const url = `${GetBaseUrl(getRequestContext().env)}/match/${params.season}/${params.date}`;
+  params,
+}: {
+  params: { season: string; date: string };
+}) {
+  const url = `${GetBaseUrl(getRequestContext().env)}/match/${params.season}/${params.date}`;
 
-    const matchRequest = await fetch(url);
-    const match = (await matchRequest.json()) as MatchPageData;
-    return {
-      title:  `Match Summary - ${match.homeTeam} ${match.score} ${match.awayTeam}`,
-      description: `Match Summary For ${match.homeTeam} ${match.score} ${match.awayTeam} - ${match.date}`,
-    };
-  }
+  const matchRequest = await fetch(url);
+  const match = (await matchRequest.json()) as MatchPageData;
+  return {
+    title: `Match Summary - ${match.homeTeam} ${match.score} ${match.awayTeam}`,
+    description: `Match Summary For ${match.homeTeam} ${match.score} ${match.awayTeam} - ${match.date}`,
+  };
+}
 
 export default async function MatchPage({
   params,
@@ -112,7 +112,7 @@ export default async function MatchPage({
 
   return (
     <>
-      <Navbar showSearch={true}></Navbar>  
+      <Navbar showSearch={true}></Navbar>
       <section className="hero bg-blue">
         <div className="container">
           <div className="row">

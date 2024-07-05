@@ -6,32 +6,31 @@
 }
 
 #navsearch {
-    position: relative;
+  position: relative;
 }
 
 #navsearch .ais-Hits {
-    position: absolute;
-    top: 50;
-    left: 0;
-    width: 100%;
-    cursor: pointer;
+  position: absolute;
+  top: 50;
+  left: 0;
+  width: 100%;
+  cursor: pointer;
 }
 
 #autocomplete .ais-Hits {
-    cursor: pointer;
+  cursor: pointer;
 }
 
-
 #autocomplete .aa-ItemIcon {
-    float:left;
-    padding-bottom: 30px;
-    padding-right:20px;
+  float: left;
+  padding-bottom: 30px;
+  padding-right: 20px;
 }
 
 #autocomplete .aa-ItemContentBody {
-    width: 500px;
+  width: 500px;
 }
 #navsearch .ais-Hits-item:hover {
-    background-color: #064cdb;
-    color: #fff;
+  background-color: #064cdb;
+  color: #fff;
 }

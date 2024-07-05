@@ -1,3 +1,4 @@
+export const runtime = "edge";
 import { ISitemapField, getServerSideSitemap } from "next-sitemap";
 import { GetAllTeams, GetSeasons } from "@/lib/apiFunctions";
 import { getAllArticles, getAllPlayers } from "@/lib/api";
@@ -10,7 +11,7 @@ export async function GET(request: Request) {
 
   const pages: ISitemapField[] = [];
 
-/*
+  /*
 <url>
 <loc>https://www.tranmere-web.com/search-results</loc>
 <lastmod>2024-06-11</lastmod>

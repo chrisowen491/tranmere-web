@@ -1,14 +1,14 @@
 import DataDog from "@/components/DataDog";
 import "./globals.css";
 import "@/public/assets/scss/chat.scss";
-import { Metadata } from 'next'
- 
+import { Metadata } from "next";
+
 export const metadata: Metadata = {
   title: {
-    template: '%s | Tranmere-Web.com',
-    default: 'Tranmere-Web'
+    template: "%s | Tranmere-Web.com",
+    default: "Tranmere-Web",
   },
-}
+};
 
 export default function RootLayout({
   children,
@@ -23,7 +23,6 @@ export default function RootLayout({
       <body>
         <DataDog />
         {children}
-
       </body>
     </html>
   );

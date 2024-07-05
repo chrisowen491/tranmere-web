@@ -10,9 +10,7 @@ export default function PlayerLayout({
       <head>
         <link rel="shortcut icon" href="/images/favicon.ico" />
       </head>
-      <body className="penpic">
-        {children}
-      </body>
+      <body className="penpic">{children}</body>
     </html>
   );
 }

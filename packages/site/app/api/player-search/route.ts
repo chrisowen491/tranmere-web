@@ -4,9 +4,10 @@ export const runtime = "edge";
 
 export async function GET(req: NextRequest) {
   const url = new URL(req.url.replace("/api", ""));
-  
-  
-  const env = getRequestContext().env.API_DOMAIN ? getRequestContext().env : process.env as unknown as CloudflareEnv;
+
+  const env = getRequestContext().env.API_DOMAIN
+    ? getRequestContext().env
+    : (process.env as unknown as CloudflareEnv);
 
   url.host = env.API_DOMAIN;
   url.protocol = env.API_PROTOCOL;

@@ -85,7 +85,6 @@ exports.handler = async (
   view.date = date!;
   view.season = season!.toString();
 
-
   return utils.sendResponse(200, {
     season: view.season,
     score: view.ft,
@@ -102,10 +101,12 @@ exports.handler = async (
     apps: view.apps ? view.apps : [],
     formattedGoals: view.formattedGoals,
     report: view.report ? view.report.report : null,
-    team: view.apps.map( a => a.Name),
-    goals: view.goals.map( g => g.Scorer),
-    substitutes: view.apps.filter( a => a.SubbedBy).map( s=> s.SubbedBy + ' for ' + s.Name)
-  })
+    team: view.apps.map((a) => a.Name),
+    goals: view.goals.map((g) => g.Scorer),
+    substitutes: view.apps
+      .filter((a) => a.SubbedBy)
+      .map((s) => s.SubbedBy + ' for ' + s.Name)
+  });
 };
 
 function formatGoals(goals: Goal[]) {

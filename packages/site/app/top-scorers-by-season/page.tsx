@@ -1,3 +1,4 @@
+export const runtime = "edge";
 import { Title } from "@/components/layout/Title";
 import { SideBar } from "@/components/sidebar/SideBar";
 import { GetTopScorersBySeason } from "@/lib/apiFunctions";

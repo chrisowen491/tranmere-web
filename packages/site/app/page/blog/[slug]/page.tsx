@@ -19,7 +19,7 @@ export async function generateMetadata({
   const article = await getArticle(params.slug);
   return {
     title: article ? article.title : "",
-    description: article? article.description : ""
+    description: article ? article.description : "",
   };
 }
 
@@ -33,8 +33,6 @@ export default async function BlogPage({
   if (!article) {
     notFound();
   }
-
-
 
   const gallery = article.galleryTag
     ? await getAssetsByTag(article.galleryTag)
@@ -54,18 +52,23 @@ export default async function BlogPage({
                       <h1 className="h2 font-weight-normal" itemProp="headline">
                         {article.title}
                       </h1>
-                      {article.datePosted ? <h3
-                        className="h3 font-weight-normal"
-                        itemProp="datePublished"
-                      >
-                        Date: {article.datePosted.substring(0, 10)}
-                      </h3>: ""}
-                      {article.author ? <h3
-                        className="h3 font-weight-normal"
-                        itemProp="author"
-                      >
-                        Author: {article.author}
-                      </h3>: ""}
+                      {article.datePosted ? (
+                        <h3
+                          className="h3 font-weight-normal"
+                          itemProp="datePublished"
+                        >
+                          Date: {article.datePosted.substring(0, 10)}
+                        </h3>
+                      ) : (
+                        ""
+                      )}
+                      {article.author ? (
+                        <h3 className="h3 font-weight-normal" itemProp="author">
+                          Author: {article.author}
+                        </h3>
+                      ) : (
+                        ""
+                      )}
                     </div>
                   </div>
                 </div>
@@ -83,18 +86,23 @@ export default async function BlogPage({
                 <div className="row gutter-2">
                   <div className="col-12">
                     <h1 className="h2 font-weight-normal">{article.title}</h1>
-                    {article.datePosted ? <h3
+                    {article.datePosted ? (
+                      <h3
                         className="h3 font-weight-normal"
                         itemProp="datePublished"
                       >
                         Date: {article.datePosted.substring(0, 10)}
-                      </h3>: ""}
-                      {article.author ? <h3
-                        className="h3 font-weight-normal"
-                        itemProp="author"
-                      >
+                      </h3>
+                    ) : (
+                      ""
+                    )}
+                    {article.author ? (
+                      <h3 className="h3 font-weight-normal" itemProp="author">
                         Author: {article.author}
-                      </h3>: ""}
+                      </h3>
+                    ) : (
+                      ""
+                    )}
                   </div>
                 </div>
               </div>
@@ -111,33 +119,66 @@ export default async function BlogPage({
                 <div className="col-12">
                   {documentToReactComponents(article.blog.json)}
                   {gallery ? <Gallery gallery={gallery}></Gallery> : ""}
-                  {article.galleryCollection && article.galleryCollection.items.length > 0 ? <Gallery gallery={article.galleryCollection.items}></Gallery> : ""}
-                  {article.blocksCollection && article.blocksCollection.items.length > 0 ? 
+                  {article.galleryCollection &&
+                  article.galleryCollection.items.length > 0 ? (
+                    <Gallery
+                      gallery={article.galleryCollection.items}
+                    ></Gallery>
+                  ) : (
+                    ""
+                  )}
+                  {article.blocksCollection &&
+                  article.blocksCollection.items.length > 0 ? (
                     <>
-                    {article.blocksCollection.items.map((block, idx) => (
-                      
-                      <>
-                      {block.__typename == "Kit" ? <Kit season={block.season!} image={block.img!} key={idx} ></Kit> : <Star name={block.name!} notes={block.notes!} match={block.match!} season={block.season!} date={block.date!} programme={block.programme!} key={idx}></Star>}
-                      </>
-                    ))} 
+                      {article.blocksCollection.items.map((block, idx) => (
+                        <>
+                          {block.__typename == "Kit" ? (
+                            <Kit
+                              season={block.season!}
+                              image={block.img!}
+                              key={idx}
+                            ></Kit>
+                          ) : (
+                            <Star
+                              name={block.name!}
+                              notes={block.notes!}
+                              match={block.match!}
+                              season={block.season!}
+                              date={block.date!}
+                              programme={block.programme!}
+                              key={idx}
+                            ></Star>
+                          )}
+                        </>
+                      ))}
                     </>
-                  : ""}
+                  ) : (
+                    ""
+                  )}
                 </div>
               </div>
               <div className="row gutter-2"></div>
               <div className="row">
                 <div className="col-12">
-                {article.tags ? 
-                  <>
-                    {article.tags.map((tag, idx) => (
-                    <><span className="badge badge-primary" key={idx}>
-                      <a href={`/page/tag/${tag}`} style={{ color: "white" }}>
-                        {tag}
-                      </a>
-                    </span>&nbsp;</>
-                  ))}
-                  </>                
-                : ""}
+                  {article.tags ? (
+                    <>
+                      {article.tags.map((tag, idx) => (
+                        <>
+                          <span className="badge badge-primary" key={idx}>
+                            <a
+                              href={`/page/tag/${tag}`}
+                              style={{ color: "white" }}
+                            >
+                              {tag}
+                            </a>
+                          </span>
+                          &nbsp;
+                        </>
+                      ))}
+                    </>
+                  ) : (
+                    ""
+                  )}
                 </div>
               </div>
             </article>

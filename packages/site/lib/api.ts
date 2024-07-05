@@ -1,6 +1,10 @@
 // Set a variable that contains all the fields needed for articles when a fetch for
 
-import { GraphQLAssetsResponse, GraphQLBlogResponse, GraphQLPlayerResponse } from "./types";
+import {
+  GraphQLAssetsResponse,
+  GraphQLBlogResponse,
+  GraphQLPlayerResponse,
+} from "./types";
 
 const ARTICLE_GROUP_FIELDS = `
   sys {
@@ -94,7 +98,7 @@ function extractGalleryImageEntries(fetchResponse: GraphQLAssetsResponse) {
 }
 
 export async function getAssetsByTag(tag: string) {
-  console.log(tag)
+  console.log(tag);
   const articles = await fetchGraphQL(
     `query {
       assetCollection(where:{contentfulMetadata:{ tags: { id_contains_all: "${tag}"}}} , order: sys_publishedAt_DESC ) {

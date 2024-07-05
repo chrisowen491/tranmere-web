@@ -51,7 +51,6 @@ export interface Player extends BaseEntity {
   position?: string;
   dateOfBirth?: string;
   placeOfBirth?: string;
-  
 }
 
 export interface Manager {
