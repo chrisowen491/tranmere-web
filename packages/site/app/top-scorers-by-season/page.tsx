@@ -6,7 +6,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 
 export const metadata: Metadata = {
-  title: "Top Scorers By Season - Tranmere-Web",
+  title: "Top Scorers By Season",
   description: "Tranmere Rovers Top Scorers By Season",
 };
 

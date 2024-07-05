@@ -27,7 +27,7 @@ export async function generateMetadata({
 
   if (params.slug === "at-wembley") {
     description = "Tranmere Rovers FC Results At Wembley Stadium";
-    title = "Results At Wembley - Tranmere-Web";
+    title = "Results At Wembley";
   } else if (params.slug === "penalty-shootouts") {
     description = "Tranmere Rovers FC Results In Penalty Shootouts";
     title = "Results - Penalty Shootouts";

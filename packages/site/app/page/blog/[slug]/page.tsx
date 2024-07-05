@@ -8,19 +8,20 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import { Kit } from "@/components/Kit";
+import { Star } from "@/components/Star";
 
-export async function generateStaticParams() {
-  const allArticles = await getAllArticles();
-
-  return allArticles.map((article) => ({
-    slug: article.slug,
-  }));
+export async function generateMetadata({
+  params,
+}: {
+  params: { slug: string };
+}) {
+  const article = await getArticle(params.slug);
+  return {
+    title: article.title,
+    description: article.description,
+  };
 }
-
-export var metadata: Metadata = {
-  title: "Match Summary - Tranmere-Web",
-  description: "Match Summary",
-};
 
 export default async function BlogPage({
   params,
@@ -33,8 +34,7 @@ export default async function BlogPage({
     notFound();
   }
 
-  metadata.title = article.title;
-  metadata.description = article.description;
+
 
   const gallery = article.galleryTag
     ? await getAssetsByTag(article.galleryTag)
@@ -54,18 +54,18 @@ export default async function BlogPage({
                       <h1 className="h2 font-weight-normal" itemProp="headline">
                         {article.title}
                       </h1>
-                      <h3
+                      {article.datePosted ? <h3
                         className="h3 font-weight-normal"
                         itemProp="datePublished"
                       >
                         Date: {article.datePosted.substring(0, 10)}
-                      </h3>
-                      <h3
+                      </h3>: ""}
+                      {article.author ? <h3
                         className="h3 font-weight-normal"
-                        itemProp="datePublished"
+                        itemProp="author"
                       >
                         Author: {article.author}
-                      </h3>
+                      </h3>: ""}
                     </div>
                   </div>
                 </div>
@@ -83,18 +83,18 @@ export default async function BlogPage({
                 <div className="row gutter-2">
                   <div className="col-12">
                     <h1 className="h2 font-weight-normal">{article.title}</h1>
-                    <h3
+                    {article.datePosted ? <h3
                         className="h3 font-weight-normal"
                         itemProp="datePublished"
                       >
                         Date: {article.datePosted.substring(0, 10)}
-                      </h3>
-                      <h3
+                      </h3>: ""}
+                      {article.author ? <h3
                         className="h3 font-weight-normal"
-                        itemProp="datePublished"
+                        itemProp="author"
                       >
                         Author: {article.author}
-                      </h3>
+                      </h3>: ""}
                   </div>
                 </div>
               </div>
@@ -112,18 +112,32 @@ export default async function BlogPage({
                   {documentToReactComponents(article.blog.json)}
                   {gallery ? <Gallery gallery={gallery}></Gallery> : ""}
                   {article.galleryCollection && article.galleryCollection.items.length > 0 ? <Gallery gallery={article.galleryCollection.items}></Gallery> : ""}
+                  {article.blocksCollection && article.blocksCollection.items.length > 0 ? 
+                    <>
+                    {article.blocksCollection.items.map((block, idx) => (
+                      
+                      <>
+                      {block.__typename == "Kit" ? <Kit season={block.season!} image={block.img!} key={idx} ></Kit> : <Star name={block.name!} notes={block.notes!} match={block.match!} season={block.season!} date={block.date!} programme={block.programme!} key={idx}></Star>}
+                      </>
+                    ))} 
+                    </>
+                  : ""}
                 </div>
               </div>
               <div className="row gutter-2"></div>
               <div className="row">
                 <div className="col-12">
-                  {article.tags.map((tag, idx) => (
+                {article.tags ? 
+                  <>
+                    {article.tags.map((tag, idx) => (
                     <><span className="badge badge-primary" key={idx}>
                       <a href={`/page/tag/${tag}`} style={{ color: "white" }}>
                         {tag}
                       </a>
                     </span>&nbsp;</>
                   ))}
+                  </>                
+                : ""}
                 </div>
               </div>
             </article>

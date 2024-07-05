@@ -5,9 +5,15 @@ import { getAllArticles } from "@/lib/api";
 import Link from "next/link";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import { Metadata } from "next";
 
 
-export default async function Home() {
+export var metadata: Metadata = {
+  title: "Blog Index",
+  description: "A listing of all blog article for the site",
+};
+
+export default async function BlogHome() {
   const articles = await getAllArticles(50);
 
   return (

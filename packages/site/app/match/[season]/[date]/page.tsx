@@ -1,4 +1,3 @@
-import { Metadata } from "next";
 import { getRequestContext } from "@cloudflare/next-on-pages";
 import { MatchPageData } from "@/lib/types";
 import { Appearance, Match } from "@tranmere-web/lib/src/tranmere-web-types";
@@ -10,10 +9,20 @@ import { Footer } from "@/components/layout/Footer";
 
 export const runtime = "edge";
 
-export var metadata: Metadata = {
-  title: "Match Summary - Tranmere-Web",
-  description: "Match Summary",
-};
+export async function generateMetadata({
+    params,
+  }: {
+    params: { season: string; date: string  };
+  }) {
+    const url = `${GetBaseUrl(getRequestContext().env)}/match/${params.season}/${params.date}`;
+
+    const matchRequest = await fetch(url);
+    const match = (await matchRequest.json()) as MatchPageData;
+    return {
+      title:  `Match Summary - ${match.homeTeam} ${match.score} ${match.awayTeam}`,
+      description: `Match Summary For ${match.homeTeam} ${match.score} ${match.awayTeam} - ${match.date}`,
+    };
+  }
 
 export default async function MatchPage({
   params,
@@ -24,9 +33,6 @@ export default async function MatchPage({
 
   const matchRequest = await fetch(url);
   const match = (await matchRequest.json()) as MatchPageData;
-
-  metadata.title = `Match Summary - ${match.homeTeam} ${match.score} ${match.awayTeam} - Tranmere-Web`;
-  metadata.description = `Match Summary For ${match.homeTeam} ${match.score} ${match.awayTeam} - ${match.date}`;
 
   const nextMatchesUrl = `${GetBaseUrl(getRequestContext().env)}/result-search/?season=${match.season}&date=${match.date}&or=next`;
   const previousMatchesUrl = `${GetBaseUrl(getRequestContext().env)}/result-search/?season=${match.season}&date=${match.date}&or=previous`;

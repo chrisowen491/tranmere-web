@@ -113,7 +113,7 @@ export function Navbar(props: { showSearch: boolean }) {
                     <a className="dropdown-item" href="/hat-tricks">
                       Hat Tricks
                     </a>
-                    <a className="dropdown-item" href="/super-stars">
+                    <a className="dropdown-item" href="/page/blog/superstars-at-prenton-park">
                       Opposition Stars
                     </a>
                     <a className="dropdown-item" href="/transfer-central">
@@ -178,6 +178,12 @@ export function Navbar(props: { showSearch: boolean }) {
                       href="/page/blog/football-cards"
                     >
                       Football Cards
+                    </a>
+                    <a
+                      className="dropdown-item"
+                      href="/page/blog/historic-kits"
+                    >
+                      Historic Kits
                     </a>
                     <a className="dropdown-item" href="/page/blog/testimonials">
                       Testimonials & Benefit Matches

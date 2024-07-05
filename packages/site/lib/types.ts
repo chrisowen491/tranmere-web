@@ -42,6 +42,17 @@ export interface GalleryImage {
   url: string;
 }
 
+export interface Block {
+  "__typename": "Kit" | "Star";
+  season?: string;
+  img?: string;
+  name?: string;
+  date?: string;
+  notes?: string;
+  match?: string;
+  programme?: string;
+}
+
 export interface BlogItem {
   sys: Sys;
   title: string;
@@ -50,6 +61,9 @@ export interface BlogItem {
   author: string;
   galleryCollection: {
     items: GalleryImage[]
+  }
+  blocksCollection: {
+    items: Block[]
   }
   pic: Pic;
   blog: Blog;

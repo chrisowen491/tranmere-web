@@ -2,6 +2,24 @@
 
 import { GraphQLAssetsResponse, GraphQLBlogResponse, GraphQLPlayerResponse } from "./types";
 
+const ARTICLE_GROUP_FIELDS = `
+  sys {
+    id
+  }
+  title
+  slug
+  tags
+  datePosted
+  description
+  blog {
+    json
+  }
+  author
+  pic {
+    url
+  }
+`;
+
 // content is performed
 const ARTICLE_GRAPHQL_FIELDS = `
   sys {
@@ -17,6 +35,23 @@ const ARTICLE_GRAPHQL_FIELDS = `
       url
       title
       description
+    }
+  }
+  blocksCollection {
+    items {
+      __typename
+      ... on Kit {
+        season
+        img
+      }
+      ... on Star {
+        season
+        name
+        date
+        notes
+        match
+        programme
+      }
     }
   }
   galleryTag
@@ -59,6 +94,7 @@ function extractGalleryImageEntries(fetchResponse: GraphQLAssetsResponse) {
 }
 
 export async function getAssetsByTag(tag: string) {
+  console.log(tag)
   const articles = await fetchGraphQL(
     `query {
       assetCollection(where:{contentfulMetadata:{ tags: { id_contains_all: "${tag}"}}} , order: sys_publishedAt_DESC ) {
@@ -67,7 +103,7 @@ export async function getAssetsByTag(tag: string) {
           description
           url
         }
-      }# add your query
+      }
     }`,
   );
 
@@ -93,7 +129,23 @@ export async function getAllArticles(limit = 3) {
     `query {
         blogPostCollection(where:{slug_exists: true}, order: datePosted_DESC, limit: ${limit}) {
           items {
-            ${ARTICLE_GRAPHQL_FIELDS}
+            ${ARTICLE_GROUP_FIELDS}
+          }
+        }
+      }`,
+  );
+
+  //console.log(JSON.stringify(articles))
+
+  return extractArticleEntries(articles as GraphQLBlogResponse);
+}
+
+export async function getAllArticlesForTag(limit = 3, tag: string) {
+  const articles = await fetchGraphQL(
+    `query {
+        blogPostCollection(where:{tags_contains_all: "${tag}"}, order: datePosted_DESC, limit: ${limit}) {
+          items {
+            ${ARTICLE_GROUP_FIELDS}
           }
         }
       }`,

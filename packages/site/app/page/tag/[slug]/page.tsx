@@ -1,6 +1,6 @@
 import { Title } from "@/components/layout/Title";
 import { SideBar } from "@/components/sidebar/SideBar";
-import { getAllArticles } from "@/lib/api";
+import { getAllArticlesForTag } from "@/lib/api";
 import { ToTitleCase } from "@/lib/apiFunctions";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -12,22 +12,24 @@ export async function generateMetadata({
 }: {
   params: { slug: string };
 }) {
+
   return {
-    title: "article.title",
-    description: "article.description",
+    title: `Articles Tagged ${params.slug}`,
+    description: `All TranmereWeb.com articles tagged with  ${params.slug}`,
   };
 }
+
 
 export default async function TagPage({
   params,
 }: {
   params: { slug: string };
 }) {
-  const articles = await getAllArticles(100);
+  const articles = await getAllArticlesForTag(100, decodeURI(params.slug));
 
-  const list = articles.filter((a) => {
+  const list = articles ? articles.filter((a) => {
     return a.tags.includes(ToTitleCase(decodeURI(params.slug)));
-  });
+  }) : [];
 
   return (
     <>
@@ -46,6 +48,8 @@ export default async function TagPage({
                 <div className="row separated">
                   <article className="col-md-8 content-body">
                     <div className="list-group list-group-related">
+                    {list && list.length > 0 ? (
+                      <>
                       {list.map((article, idx) => (
                         <a
                           href={`/page/blog/${article.slug}`}
@@ -56,6 +60,10 @@ export default async function TagPage({
                           {article.title}
                         </a>
                       ))}
+                      </>
+                    ) : 
+                    <p>No Tagged Article</p>
+                    }
                     </div>
                     <div className="row gutter-2"></div>
                   </article>

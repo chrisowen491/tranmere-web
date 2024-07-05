@@ -3,16 +3,23 @@ import { PlayerProfile } from "@/lib/types";
 import { getRequestContext } from "@cloudflare/next-on-pages";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import { Document } from "@contentful/rich-text-types";
-import { Metadata } from "next";
+
 import { notFound } from "next/navigation";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 export const runtime = "edge";
 
-export var metadata: Metadata = {
-  title: "",
-  description: "",
-};
+export async function generateMetadata({
+    params,
+  }: {
+    params: { slug: string };
+  }) {
+
+    return {
+      title: `Player Profile - ${decodeURI(params.slug)}`,
+      description: `Player Profile for the Tranmere Rovers career of ${decodeURI(params.slug)}`,
+    };
+  }
 
 export default async function PlayerProfilePage({
   params,
@@ -31,8 +38,6 @@ export default async function PlayerProfilePage({
     notFound();
 
   const player = profile.player;
-  metadata.title = `Player Profile ${decodeURI(params.slug)} - Tranmere-Web`;
-  metadata.description = `Player Profile for ${decodeURI(params.slug)}`;
 
   return (
     <>

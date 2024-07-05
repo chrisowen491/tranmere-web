@@ -7,7 +7,7 @@ import { Footer } from "@/components/layout/Footer";
 
 
 export const metadata: Metadata = {
-  title: "Tranmere Hat Tricks - Tranmere-Web",
+  title: "Tranmere Hat Tricks",
   description: "Tranmere Rovers Hat Trick Scorers",
 };
 

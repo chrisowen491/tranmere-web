@@ -17,13 +17,13 @@ export async function generateMetadata({
 
   if (params.slug === "most-appearances") {
     description = "Tranmere Rovers FC Top Appearances Since 1977";
-    title = "Tranmere Record Appearances - Tranmere-Web";
+    title = "Tranmere Record Appearances";
   } else if (params.slug === "only-one-appearance") {
     description = "Tranmere Rovers FC Players Who Only Played Once Since 1977";
-    title = "Only Played Once For Tranmere  - Tranmere-Web";
+    title = "Only Played Once For Tranmere";
   } else if (params.slug === "top-scorers") {
     description = "Tranmere Rovers FC Top Scorers Since 1977";
-    title = "Tranmere Record Goalscorers - Tranmere-Web";
+    title = "Tranmere Record Goalscorers";
   }
 
   return {

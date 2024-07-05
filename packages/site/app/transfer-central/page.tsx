@@ -9,7 +9,7 @@ import { Metadata } from "next";
 export const runtime = "edge";
 
 export const metadata: Metadata = {
-  title: "Transfers Home - Tranmere-Web",
+  title: "Transfers Home",
   description: "Tranmere Rovers transfer information index",
 };
 

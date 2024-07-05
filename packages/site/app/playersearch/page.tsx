@@ -9,7 +9,7 @@ import { Footer } from "@/components/layout/Footer";
 export const runtime = "edge";
 
 export const metadata: Metadata = {
-  title: "Players Home - Tranmere-Web",
+  title: "Players Home",
   description: "Tranmere Rovers player infomation index",
 };
 

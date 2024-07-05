@@ -5,7 +5,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 
 export const metadata: Metadata = {
-  title: "Player Avatar Builder - Tranmere-Web",
+  title: "Player Avatar Builder",
   description:
     "Build a player avatar picture, complete with Tranmere Rovers kit",
 };
