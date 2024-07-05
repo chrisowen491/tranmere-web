@@ -7,7 +7,6 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Metadata } from "next";
 
-
 export var metadata: Metadata = {
   title: "Blog Index",
   description: "A listing of all blog article for the site",

@@ -12,13 +12,11 @@ export async function generateMetadata({
 }: {
   params: { slug: string };
 }) {
-
   return {
     title: `Articles Tagged ${params.slug}`,
     description: `All TranmereWeb.com articles tagged with  ${params.slug}`,
   };
 }
-
 
 export default async function TagPage({
   params,
@@ -27,9 +25,11 @@ export default async function TagPage({
 }) {
   const articles = await getAllArticlesForTag(100, decodeURI(params.slug));
 
-  const list = articles ? articles.filter((a) => {
-    return a.tags.includes(ToTitleCase(decodeURI(params.slug)));
-  }) : [];
+  const list = articles
+    ? articles.filter((a) => {
+        return a.tags.includes(ToTitleCase(decodeURI(params.slug)));
+      })
+    : [];
 
   return (
     <>
@@ -48,22 +48,22 @@ export default async function TagPage({
                 <div className="row separated">
                   <article className="col-md-8 content-body">
                     <div className="list-group list-group-related">
-                    {list && list.length > 0 ? (
-                      <>
-                      {list.map((article, idx) => (
-                        <a
-                          href={`/page/blog/${article.slug}`}
-                          key={idx}
-                          className="list-group-item list-group-item-action d-flex align-items-center active"
-                        >
-                          <i className="fs-20 icon-file-text2 text-primary mr-1"></i>
-                          {article.title}
-                        </a>
-                      ))}
-                      </>
-                    ) : 
-                    <p>No Tagged Article</p>
-                    }
+                      {list && list.length > 0 ? (
+                        <>
+                          {list.map((article, idx) => (
+                            <a
+                              href={`/page/blog/${article.slug}`}
+                              key={idx}
+                              className="list-group-item list-group-item-action d-flex align-items-center active"
+                            >
+                              <i className="fs-20 icon-file-text2 text-primary mr-1"></i>
+                              {article.title}
+                            </a>
+                          ))}
+                        </>
+                      ) : (
+                        <p>No Tagged Article</p>
+                      )}
                     </div>
                     <div className="row gutter-2"></div>
                   </article>

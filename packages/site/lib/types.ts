@@ -43,7 +43,7 @@ export interface GalleryImage {
 }
 
 export interface Block {
-  "__typename": "Kit" | "Star";
+  __typename: "Kit" | "Star";
   season?: string;
   img?: string;
   name?: string;
@@ -60,11 +60,11 @@ export interface BlogItem {
   description: string;
   author: string;
   galleryCollection: {
-    items: GalleryImage[]
-  }
+    items: GalleryImage[];
+  };
   blocksCollection: {
-    items: Block[]
-  }
+    items: Block[];
+  };
   pic: Pic;
   blog: Blog;
   galleryTag?: string;

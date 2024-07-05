@@ -10,19 +10,20 @@ export const metadata: Metadata = {
 };
 
 export default async function Transfers() {
-  
-  return <>
-    <Navbar showSearch={true}></Navbar>
-    <section>
-      <div className="container">
-        <div className="row">
-          <div className="col">
-            <h1>Contact us!</h1>
+  return (
+    <>
+      <Navbar showSearch={true}></Navbar>
+      <section>
+        <div className="container">
+          <div className="row">
+            <div className="col">
+              <h1>Contact us!</h1>
+            </div>
           </div>
+          <ContactForm></ContactForm>
         </div>
-        <ContactForm></ContactForm>
-      </div>
-    </section>
-    <Footer></Footer>
-  </>;
+      </section>
+      <Footer></Footer>
+    </>
+  );
 }

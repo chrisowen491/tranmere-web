@@ -8,8 +8,8 @@ export default function InitDataDog() {
     const initDD = () => {
       datadogLogs.init({
         clientToken: "pub91e87345f76af7acb5aa202805d95df0",
-        env: 'prod',
-        site: 'datadoghq.eu',
+        env: "prod",
+        site: "datadoghq.eu",
         forwardConsoleLogs: ["error", "info"],
         sessionSampleRate: 100,
         service: "www.tranmere-web.com",
@@ -40,4 +40,3 @@ datadogRum.init({
     ]
   });
 */
-  

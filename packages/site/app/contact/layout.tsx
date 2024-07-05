@@ -11,11 +11,7 @@ export default function RootLayout({
       <head>
         <link rel="shortcut icon" href="/images/favicon.ico" />
       </head>
-      <body className="away">
-        
-        {children}
-
-      </body>
+      <body className="away">{children}</body>
     </html>
   );
 }

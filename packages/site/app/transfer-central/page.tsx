@@ -15,25 +15,27 @@ export const metadata: Metadata = {
 
 export default async function Transfers() {
   const base = GetBaseUrl(getRequestContext().env) + "/transfer-search/";
-  
+
   const request = await fetch(base);
   const results = (await request.json()) as {
     transfers: Transfer[];
   };
 
   const teams = await GetAllTeams();
-  
-  return <>
-    <Navbar showSearch={true}></Navbar>
-    <section className="hero bg-blue">
-      <div className="container">
-        <Title title="Transfers Home"></Title>
-      </div>
-    </section>
 
-    <section className="overlay">
-      <TransferSearch default={results.transfers} teams={teams} />
-    </section>
-    <Footer></Footer>
-  </>;
+  return (
+    <>
+      <Navbar showSearch={true}></Navbar>
+      <section className="hero bg-blue">
+        <div className="container">
+          <Title title="Transfers Home"></Title>
+        </div>
+      </section>
+
+      <section className="overlay">
+        <TransferSearch default={results.transfers} teams={teams} />
+      </section>
+      <Footer></Footer>
+    </>
+  );
 }

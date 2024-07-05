@@ -6,9 +6,8 @@ import type {
 
 import { PlayerSeasonSummary } from '@tranmere-web/lib/src/tranmere-web-types';
 import { documentToPlainTextString } from '@contentful/rich-text-plain-text-renderer';
-import { Document } from "langchain/document";
-import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
-
+import { Document } from 'langchain/document';
+import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
 
 import {
   CloudflareVectorizeStore,
@@ -22,7 +21,6 @@ export interface Env {
   CF_SPACE: string;
   CF_KEY: string;
 }
-
 
 export default {
   async fetch(request: Request, env: Env) {
@@ -59,53 +57,53 @@ export default {
       });
 
       // Upsertion by id is supported
-      await store.addDocuments(
-        documents,
-        ids
-      );
+      await store.addDocuments(documents, ids);
       return Response.json({ success: true });
     } else if (pathname === '/blogs') {
-        
+      const blogsRequest = await fetch(
+        `https://cdn.contentful.com/spaces/${env.CF_SPACE}/environments/master/entries?access_token=${env.CF_KEY}&content_type=blogPost`
+      );
 
-        const blogsRequest = await fetch(`https://cdn.contentful.com/spaces/${env.CF_SPACE}/environments/master/entries?access_token=${env.CF_KEY}&content_type=blogPost`) 
+      const blogs = (await blogsRequest.json()) as { items: IBlogPost[] };
 
-        const blogs = await blogsRequest.json() as { items: IBlogPost[]}
+      const documents: Document[] = [];
+      const ids: string[] = [];
 
-        const documents: Document[] = [];
-        const ids: string[] = [];
-  
-        for(const blog of blogs.items) {
-            const fields = blog.fields as IBlogPostFields;
-          
-            const splitter = new RecursiveCharacterTextSplitter({
-                chunkSize: 1000,
-                chunkOverlap: 200,
-            });
+      for (const blog of blogs.items) {
+        const fields = blog.fields as IBlogPostFields;
 
-            const docs = await splitter.splitDocuments([
-                new Document({ pageContent: `
+        const splitter = new RecursiveCharacterTextSplitter({
+          chunkSize: 1000,
+          chunkOverlap: 200
+        });
+
+        const docs = await splitter.splitDocuments([
+          new Document({
+            pageContent: `
                 Title: ${fields.title}
                 Date Posted: ${fields.datePosted}
                 Author: ${fields.author}
                 Link: https://www.tranmere-web.com/page/blog/${blog.sys.id}                
                 ${documentToPlainTextString(fields.blog!)}
-                `, metadata: {type: 'Blog', blogId: blog.sys.id, link: `https://www.tranmere-web.com/page/blog/${blog.sys.id}`} }),
-            ]);
-
-            for (let i = 0; i < docs.length; i++) {
-                if(docs[i].metadata["loc"])
-                    docs[i].metadata["loc"]  = JSON.stringify(docs[i].metadata["loc"])              
-                ids.push(blog.sys.id + "-chunk" + i);
+                `,
+            metadata: {
+              type: 'Blog',
+              blogId: blog.sys.id,
+              link: `https://www.tranmere-web.com/page/blog/${blog.sys.id}`
             }
-            documents.push(...docs);
+          })
+        ]);
 
+        for (let i = 0; i < docs.length; i++) {
+          if (docs[i].metadata['loc'])
+            docs[i].metadata['loc'] = JSON.stringify(docs[i].metadata['loc']);
+          ids.push(blog.sys.id + '-chunk' + i);
         }
-        // Upsertion by id is supported
-        await store.addDocuments(
-          documents,
-          ids
-        );
-        return Response.json({ success: true });     
+        documents.push(...docs);
+      }
+      // Upsertion by id is supported
+      await store.addDocuments(documents, ids);
+      return Response.json({ success: true });
     } else if (pathname === '/clear') {
       await store.delete({ ids: ['id1', 'id2', 'id3'] });
       return Response.json({ success: true });

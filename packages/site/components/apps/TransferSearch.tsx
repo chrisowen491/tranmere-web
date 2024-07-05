@@ -20,7 +20,6 @@ export function TransferSearch(props: {
   const [loading, setLoading] = useState(false);
 
   const onSubmit = async (formData: FormData) => {
-
     setSeason(formData.get("season") as string);
     setClub(formData.get("club") as string);
     setFilter(formData.get("filter") as string);
@@ -113,26 +112,41 @@ export function TransferSearch(props: {
                 )}
                 <div id="player-search">
                   <table className="table">
-                  <thead className="thead-dark">
-                    <tr>
+                    <thead className="thead-dark">
+                      <tr>
                         <th scope="col">Name</th>
-                        <th scope="col" className="d-none d-sm-table-cell text-center">Season</th>
-                        <th scope="col" className="text-center">In/Out</th>
-                        <th scope="col" className="text-center">Club</th>
-                        <th scope="col" className="text-center">Value</th>
-                    </tr>
+                        <th
+                          scope="col"
+                          className="d-none d-sm-table-cell text-center"
+                        >
+                          Season
+                        </th>
+                        <th scope="col" className="text-center">
+                          In/Out
+                        </th>
+                        <th scope="col" className="text-center">
+                          Club
+                        </th>
+                        <th scope="col" className="text-center">
+                          Value
+                        </th>
+                      </tr>
                     </thead>
                     <tbody>
                       {transfers.map((transfer, idx) => (
-                      <tr key={idx}>
+                        <tr key={idx}>
                           <td>
-                              <a href={`/page/player/${transfer.name}`}>{transfer.name}</a>
+                            <a href={`/page/player/${transfer.name}`}>
+                              {transfer.name}
+                            </a>
                           </td>
-                          <td className="d-none d-sm-table-cell text-center">{transfer.season}</td>
+                          <td className="d-none d-sm-table-cell text-center">
+                            {transfer.season}
+                          </td>
                           <td className="text-center">{transfer.type}</td>
                           <td className="text-center">{transfer.club}</td>
                           <td className="text-center">{transfer.value}</td>
-                      </tr>
+                        </tr>
                       ))}
                     </tbody>
                   </table>
