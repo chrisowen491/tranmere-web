@@ -66,12 +66,12 @@ const ARTICLE_GRAPHQL_FIELDS = `
 
 async function fetchGraphQL(query: string) {
   return fetch(
-    `https://graphql.contentful.com/content/v1/spaces/${process.env.CONTENTFUL_SPACE_ID}`,
+    `https://graphql.contentful.com/content/v1/spaces/${process.env.CF_SPACE}`,
     {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.CONTENTFUL_ACCESS_TOKEN}`,
+        Authorization: `Bearer ${process.env.CF_KEY}`,
       },
       body: JSON.stringify({ query }),
       // Associate all fetches for articles with an "articles" cache tag so content can

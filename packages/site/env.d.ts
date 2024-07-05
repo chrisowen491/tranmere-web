@@ -1,8 +1,8 @@
 interface CloudflareEnv {
     VECTORIZE_INDEX: VectorizeIndex;
     AI: Fetcher;
-    CONTENTFUL_SPACE_ID: string;
-    CONTENTFUL_ACCESS_TOKEN: string;
+    CF_SPACE: string;
+    CF_KEY: string;
     API_PORT: string;
     API_PROTOCOL: string;
     API_DOMAIN: string;
