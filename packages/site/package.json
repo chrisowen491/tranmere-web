@@ -26,7 +26,7 @@
     "@langchain/cloudflare": "^0.0.6",
     "@langchain/community": "^0.2.3",
     "@langchain/core": "^0.2.1",
-    "@langchain/openai": "^0.1.0",
+    "@langchain/openai": "^0.2.0",
     "@next/bundle-analyzer": "^14.0.0",
     "@supabase/supabase-js": "^2.32.0",
     "@tranmere-web/lib": "*",
@@ -38,7 +38,7 @@
     "autoprefixer": "10.4.19",
     "bootstrap": "^4.6.2",
     "bootstrap-select": "^1.13.2",
-    "eslint": "8.46.0",
+    "eslint": "9.6.0",
     "eslint-config-next": "14.2.4",
     "instantsearch.css": "^8.3.0",
     "jquery": "^3.7.1",
@@ -60,7 +60,7 @@
     "zod-to-json-schema": "^3.21.4"
   },
   "devDependencies": {
-    "prettier": "3.3.1",
+    "prettier": "3.3.2",
     "sass": "^1.77.2",
     "vercel": "^34.2.3",
     "wrangler": "^3.60.1"
