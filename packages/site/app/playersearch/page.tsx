@@ -30,7 +30,35 @@ export default async function PlayerSearchPage() {
   return (
     <>
       <Title title="Players Search" subTitle="Player Records" summary={""}>
-        <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-50">Search for players by season or position - or view <a href='/player-records/most-appearances' className='text-indigo-600'>all time time appearance records</a> or <a href='/player-records/top-scorers' className='text-indigo-600'>top scorers</a>, You can also see players with just <a href='/player-records/only-one-appearance' className='text-indigo-600'>one appearance</a> and browse <a href='/top-scorers-by-season' className='text-indigo-600'>top scorers by season</a> or player with <a href='/hat-tricks' className='text-indigo-600'>hat tricks</a>.</p>
+        <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-50">
+          Search for players by season or position - or view{" "}
+          <a
+            href="/player-records/most-appearances"
+            className="text-indigo-600"
+          >
+            all time time appearance records
+          </a>{" "}
+          or{" "}
+          <a href="/player-records/top-scorers" className="text-indigo-600">
+            top scorers
+          </a>
+          , You can also see players with just{" "}
+          <a
+            href="/player-records/only-one-appearance"
+            className="text-indigo-600"
+          >
+            one appearance
+          </a>{" "}
+          and browse{" "}
+          <a href="/top-scorers-by-season" className="text-indigo-600">
+            top scorers by season
+          </a>{" "}
+          or player with{" "}
+          <a href="/hat-tricks" className="text-indigo-600">
+            hat tricks
+          </a>
+          .
+        </p>
       </Title>
       <PlayerSearch default={playerResults.players} season="2023" />
     </>

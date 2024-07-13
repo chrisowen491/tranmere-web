@@ -16,6 +16,6 @@ export default function AgentsPage() {
         endpoint="api/chat/agents"
         placeholder="Ask me anything Tranmere Rovers related"
       ></ChatWindow>
-      </>
+    </>
   );
 }

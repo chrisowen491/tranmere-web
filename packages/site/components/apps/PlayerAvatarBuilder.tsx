@@ -1,6 +1,10 @@
 "use client";
 import { useState } from "react";
-import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react'
+import {
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
+} from "@headlessui/react";
 
 export function PlayerAvatarBuilder() {
   const base = "https://www.tranmere-web.com/builder/";
@@ -16,31 +20,29 @@ export function PlayerAvatarBuilder() {
 
   return (
     <>
-    
       <div className="lg:flex lg:flex-row-reverse">
         <h1 className="sr-only">Checkout</h1>
 
-        <section aria-labelledby="summary-heading" className="flex-col bg-gray-50 px-20">
-          
+        <section
+          aria-labelledby="summary-heading"
+          className="flex-col bg-gray-50 px-20"
+        >
           <img width="350px" src={`${base}${img}`} />
           <h4>
             Link: <a href={`${base}${img}`}>here</a>
           </h4>
           <img width="100px" src={`${base}${img}`} />
-
         </section>
 
-        <section
-          className="flex-auto px-4 pb-16 sm:px-6 lg:px-8 lg:pb-24 lg:pt-0"
-        >
-
+        <section className="flex-auto px-4 pb-16 sm:px-6 lg:px-8 lg:pb-24 lg:pt-0">
           <div className="mx-auto max-w-lg">
-
-            <form  action={onSubmit} className="mt-6">
-
+            <form action={onSubmit} className="mt-6">
               <div className="grid grid-cols-12 gap-x-4 gap-y-6">
                 <div className="col-span-full">
-                  <label htmlFor="kit" className="block text-sm font-medium text-gray-700">
+                  <label
+                    htmlFor="kit"
+                    className="block text-sm font-medium text-gray-700"
+                  >
                     Kit
                   </label>
                   <div className="mt-1">
@@ -108,7 +110,10 @@ export function PlayerAvatarBuilder() {
                 </div>
 
                 <div className="col-span-full">
-                  <label htmlFor="skinColour" className="block text-sm font-medium text-gray-700">
+                  <label
+                    htmlFor="skinColour"
+                    className="block text-sm font-medium text-gray-700"
+                  >
                     Skin
                   </label>
                   <div className="mt-1">
@@ -126,7 +131,10 @@ export function PlayerAvatarBuilder() {
                 </div>
 
                 <div className="col-span-full">
-                  <label htmlFor="neckColour" className="block text-sm font-medium text-gray-700">
+                  <label
+                    htmlFor="neckColour"
+                    className="block text-sm font-medium text-gray-700"
+                  >
                     Neck
                   </label>
                   <div className="mt-1">
@@ -144,7 +152,10 @@ export function PlayerAvatarBuilder() {
                 </div>
 
                 <div className="col-span-full">
-                  <label htmlFor="hair" className="block text-sm font-medium text-gray-700">
+                  <label
+                    htmlFor="hair"
+                    className="block text-sm font-medium text-gray-700"
+                  >
                     Hair Shape
                   </label>
                   <div className="mt-1">
@@ -214,7 +225,10 @@ export function PlayerAvatarBuilder() {
                 </div>
 
                 <div className="col-span-full">
-                  <label htmlFor="colour" className="block text-sm font-medium text-gray-700">
+                  <label
+                    htmlFor="colour"
+                    className="block text-sm font-medium text-gray-700"
+                  >
                     Hair Colour
                   </label>
                   <div className="mt-1">
@@ -237,7 +251,10 @@ export function PlayerAvatarBuilder() {
                 </div>
 
                 <div className="col-span-full">
-                  <label htmlFor="highlights" className="block text-sm font-medium text-gray-700">
+                  <label
+                    htmlFor="highlights"
+                    className="block text-sm font-medium text-gray-700"
+                  >
                     Hair Highlights
                   </label>
                   <div className="mt-1">
@@ -254,7 +271,10 @@ export function PlayerAvatarBuilder() {
                 </div>
 
                 <div className="col-span-full">
-                  <label htmlFor="feature" className="block text-sm font-medium text-gray-700">
+                  <label
+                    htmlFor="feature"
+                    className="block text-sm font-medium text-gray-700"
+                  >
                     Facial Feature
                   </label>
                   <div className="mt-1">
@@ -283,7 +303,10 @@ export function PlayerAvatarBuilder() {
                 </div>
 
                 <div className="col-span-full">
-                  <label htmlFor="background" className="block text-sm font-medium text-gray-700">
+                  <label
+                    htmlFor="background"
+                    className="block text-sm font-medium text-gray-700"
+                  >
                     Background
                   </label>
                   <div className="mt-1">
@@ -312,4 +335,3 @@ export function PlayerAvatarBuilder() {
     </>
   );
 }
-

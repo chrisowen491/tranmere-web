@@ -25,7 +25,6 @@
   padding-left: 2.5rem;
 }
 
-
 #autocomplete .ais-Hits {
   cursor: pointer;
 }
@@ -44,5 +43,5 @@
 }
 
 .carousel .slide img {
-    width: 300px!important
+  width: 300px !important;
 }

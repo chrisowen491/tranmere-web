@@ -5,13 +5,13 @@ import { ExtendedMessage } from "@/lib/types";
 export function ChatMessageBubble(props: { message: ExtendedMessage }) {
   const userAvatar = "/images/2023.png";
   const colorClassName =
-    props.message.role === "user" ? "bg-blue-600 text-gray-50" : "bg-green-600 text-gray-50";  
+    props.message.role === "user"
+      ? "bg-blue-600 text-gray-50"
+      : "bg-green-600 text-gray-50";
   const avatar =
     props.message.role === "user" ? userAvatar : props.message.avatar;
   return (
-    <div
-      className={`${colorClassName} rounded px-4 py-2 max-w-full mb-8 flex`}
-    >
+    <div className={`${colorClassName} rounded px-4 py-2 max-w-full mb-8 flex`}>
       <div className="mr-2">
         <img alt="" src={avatar} className="h-24 w-24 rounded-full" />
       </div>

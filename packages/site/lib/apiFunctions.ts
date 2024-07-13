@@ -200,9 +200,9 @@ export async function GetAllHatTricks(): Promise<HatTrick[]> {
 
   const players = await GetAllPlayers();
 
-  results.forEach(r => {
-    r.picLink = players.find(p => p.name === r.Player)?.picLink
-  })
+  results.forEach((r) => {
+    r.picLink = players.find((p) => p.name === r.Player)?.picLink;
+  });
 
   results.sort(function (a, b) {
     if (a.Date < b.Date) return -1;

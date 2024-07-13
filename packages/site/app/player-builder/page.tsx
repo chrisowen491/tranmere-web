@@ -13,7 +13,9 @@ export default async function PlayerBuilder() {
   return (
     <>
       <Title title="Player Avatar Builder" subTitle="Media">
-        <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-50">Create your own avatar</p>
+        <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-50">
+          Create your own avatar
+        </p>
       </Title>
       <PlayerAvatarBuilder />
     </>

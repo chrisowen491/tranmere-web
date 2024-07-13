@@ -29,20 +29,27 @@ export default async function PlayerProfilePage({
   const playerRequest = await fetch(url);
 
   const profile = (await playerRequest.json()) as PlayerProfile;
-  const comments = await GetCommentsByUrl(getRequestContext().env, `/page/player/${decodeURI(params.slug)}`)
-  
+  const comments = await GetCommentsByUrl(
+    getRequestContext().env,
+    `/page/player/${decodeURI(params.slug)}`,
+  );
+
   let score = 0;
-  comments.forEach(c => {
-    score = score + c.rating
-  })
-  
-  const avg = Math.round(score/comments.length)
+  comments.forEach((c) => {
+    score = score + c.rating;
+  });
+
+  const avg = Math.round(score / comments.length);
 
   if (!profile || !profile.player) notFound();
 
   return (
     <>
-      <PlayerProfileView player={profile} comments={comments} avg={avg}></PlayerProfileView>
+      <PlayerProfileView
+        player={profile}
+        comments={comments}
+        avg={avg}
+      ></PlayerProfileView>
     </>
   );
 }

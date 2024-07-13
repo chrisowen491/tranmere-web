@@ -1,8 +1,11 @@
-export function SubmitButton(props: { text?: string, children?: React.ReactNode   }) {
+export function SubmitButton(props: {
+  text?: string;
+  children?: React.ReactNode;
+}) {
   return (
     <button
-    type="submit"
-    className="rounded-md 
+      type="submit"
+      className="rounded-md 
       bg-green-500 
       dark:bg-sky-400
       px-3 py-2 
@@ -16,9 +19,9 @@ export function SubmitButton(props: { text?: string, children?: React.ReactNode 
       focus-visible:outline-2 
       focus-visible:outline-offset-2 
       focus-visible:outline-indigo-600"
-  >
-    {props.text}
-    {props.children}
-  </button>
+    >
+      {props.text}
+      {props.children}
+    </button>
   );
 }

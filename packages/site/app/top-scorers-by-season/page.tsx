@@ -13,7 +13,11 @@ export default async function TopScorersBySeason() {
 
   return (
     <>
-      <Title subTitle={"Player Records"} title="Top Scorers By Season" summary={"Data only goes as far back as the 1977-78 season."}></Title>
+      <Title
+        subTitle={"Player Records"}
+        title="Top Scorers By Season"
+        summary={"Data only goes as far back as the 1977-78 season."}
+      ></Title>
       <div className="py-2 sm:py-2">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <ul
@@ -22,9 +26,18 @@ export default async function TopScorersBySeason() {
           >
             {topScorers.map((player, idx) => (
               <li key={idx}>
-                <a href={`/page/player/${player.Player}`} className="text-sm leading-6 text-gray-600 dark:text-gray-50">
-                  <img alt={player.Player} src={player.bio?.picLink} className="mx-auto h-24 w-24 rounded-full" />
-                  <h3 className="mt-6 text-base font-semibold leading-7 tracking-tight text-gray-900 dark:text-gray-50">{player.Player}</h3>
+                <a
+                  href={`/page/player/${player.Player}`}
+                  className="text-sm leading-6 text-gray-600 dark:text-gray-50"
+                >
+                  <img
+                    alt={player.Player}
+                    src={player.bio?.picLink}
+                    className="mx-auto h-24 w-24 rounded-full"
+                  />
+                  <h3 className="mt-6 text-base font-semibold leading-7 tracking-tight text-gray-900 dark:text-gray-50">
+                    {player.Player}
+                  </h3>
                   <p>{player.Season}</p>
                   <p>{player.goals} goals</p>
                 </a>

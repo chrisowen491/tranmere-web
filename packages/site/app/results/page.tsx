@@ -42,18 +42,27 @@ export default async function ResultsSearchPage() {
 
   return (
     <>
-    <Title title="Results Home" summary={""}>
-      <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-50">Search for results by season or opposition - or view <a href='/games/at-wembley' className='text-indigo-600'>results at wembley</a> or <a href='/games/penalty-shootouts' className='text-indigo-600'>penalty shootouts</a></p>
-    </Title>
-    <ResultsSearch
-      teams={teams}
-      managers={managers}
-      competitions={competitions}
-      results={results.results}
-      h2hresults={results.h2hresults}
-      h2htotal={results.h2htotal}
-      season={theYear.toString()}
-    />
+      <Title title="Results Home" summary={""}>
+        <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-50">
+          Search for results by season or opposition - or view{" "}
+          <a href="/games/at-wembley" className="text-indigo-600">
+            results at wembley
+          </a>{" "}
+          or{" "}
+          <a href="/games/penalty-shootouts" className="text-indigo-600">
+            penalty shootouts
+          </a>
+        </p>
+      </Title>
+      <ResultsSearch
+        teams={teams}
+        managers={managers}
+        competitions={competitions}
+        results={results.results}
+        h2hresults={results.h2hresults}
+        h2htotal={results.h2htotal}
+        season={theYear.toString()}
+      />
     </>
   );
 }

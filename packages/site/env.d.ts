@@ -14,4 +14,5 @@ interface CloudflareEnv {
     AUTH0_ADMIN_EMAIL: string;
     AUTH0_SECRET: string;
     AUTH0_CLIENT_SECRET: string;
+    OPENAI_API_KEY: string;
 }

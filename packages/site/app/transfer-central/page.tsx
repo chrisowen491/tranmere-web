@@ -23,7 +23,11 @@ export default async function Transfers() {
 
   return (
     <>
-      <Title title="Transfers Home" subTitle="Players" summary="Browse transfers history and use filters to fine tune your search"></Title>
+      <Title
+        title="Transfers Home"
+        subTitle="Players"
+        summary="Browse transfers history and use filters to fine tune your search"
+      ></Title>
       <TransferSearch default={results.transfers} teams={teams} />
     </>
   );

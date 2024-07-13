@@ -55,7 +55,9 @@ function Hit({ hit }: HitProps) {
     >
       <div className="aa-ItemContent">
         <div className="aa-ItemContentBody">
-          <div className="aa-ItemContentTitle dark:text-gray-600 dark:hover:text-gray-50">{hit.name}</div>
+          <div className="aa-ItemContentTitle dark:text-gray-600 dark:hover:text-gray-50">
+            {hit.name}
+          </div>
         </div>
       </div>
     </div>

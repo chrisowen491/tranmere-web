@@ -1,8 +1,8 @@
 "use client";
 import { useState } from "react";
 import { SubmitButton } from "../forms/SubmitButton";
-import { CheckCircleIcon, XMarkIcon } from '@heroicons/react/20/solid'
-import { XCircleIcon } from '@heroicons/react/20/solid'
+import { CheckCircleIcon, XMarkIcon } from "@heroicons/react/20/solid";
+import { XCircleIcon } from "@heroicons/react/20/solid";
 
 export function ContactForm() {
   const [failClass, setFailClass] = useState("hidden");
@@ -44,10 +44,15 @@ export function ContactForm() {
             <div className={`rounded-md bg-green-50 p-4 ${successClass}`}>
               <div className="flex">
                 <div className="flex-shrink-0">
-                  <CheckCircleIcon aria-hidden="true" className="h-5 w-5 text-green-400" />
+                  <CheckCircleIcon
+                    aria-hidden="true"
+                    className="h-5 w-5 text-green-400"
+                  />
                 </div>
                 <div className="ml-3">
-                  <p className="text-sm font-medium text-green-800">Message sent</p>
+                  <p className="text-sm font-medium text-green-800">
+                    Message sent
+                  </p>
                 </div>
                 <div className="ml-auto pl-3">
                   <div className="-mx-1.5 -my-1.5">
@@ -65,21 +70,31 @@ export function ContactForm() {
             <div className={`rounded-md bg-red-50 p-4  ${failClass}`}>
               <div className="flex">
                 <div className="flex-shrink-0">
-                  <XCircleIcon aria-hidden="true" className="h-5 w-5 text-red-400" />
+                  <XCircleIcon
+                    aria-hidden="true"
+                    className="h-5 w-5 text-red-400"
+                  />
                 </div>
                 <div className="ml-3">
-                  <h3 className="text-sm font-medium text-red-800">There were errors with your submission</h3>
-  
+                  <h3 className="text-sm font-medium text-red-800">
+                    There were errors with your submission
+                  </h3>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <form action={onSubmit} className={`px-6 pb-24 pt-20 sm:pb-32 lg:px-8 lg:py-48 ${formClass}`}>
+        <form
+          action={onSubmit}
+          className={`px-6 pb-24 pt-20 sm:pb-32 lg:px-8 lg:py-48 ${formClass}`}
+        >
           <div className="mx-auto max-w-xl lg:mr-0 lg:max-w-lg">
             <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
               <div>
-                <label htmlFor="name" className="block text-sm font-semibold leading-6">
+                <label
+                  htmlFor="name"
+                  className="block text-sm font-semibold leading-6"
+                >
                   Name
                 </label>
                 <div className="mt-2.5">
@@ -94,7 +109,10 @@ export function ContactForm() {
               </div>
 
               <div className="sm:col-span-2">
-                <label htmlFor="email" className="block text-sm font-semibold leading-6">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-semibold leading-6"
+                >
                   Email
                 </label>
                 <div className="mt-2.5">
@@ -109,7 +127,10 @@ export function ContactForm() {
               </div>
 
               <div className="sm:col-span-2">
-                <label htmlFor="message" className="block text-sm font-semibold leading-6">
+                <label
+                  htmlFor="message"
+                  className="block text-sm font-semibold leading-6"
+                >
                   Message
                 </label>
                 <div className="mt-2.5">
@@ -118,7 +139,7 @@ export function ContactForm() {
                     name="message"
                     rows={4}
                     className="block w-full rounded-md border-0 px-3.5 py-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                    defaultValue={''}
+                    defaultValue={""}
                   />
                 </div>
               </div>
@@ -132,4 +153,3 @@ export function ContactForm() {
     </div>
   );
 }
-

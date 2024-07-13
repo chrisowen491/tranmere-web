@@ -1,6 +1,6 @@
 import { getRequestContext } from "@cloudflare/next-on-pages";
 import { MatchPageData } from "@/lib/types";
-import {  Match } from "@tranmere-web/lib/src/tranmere-web-types";
+import { Match } from "@tranmere-web/lib/src/tranmere-web-types";
 import { GetBaseUrl } from "@/lib/apiFunctions";
 import MatchReport from "@/components/apps/MatchReport";
 import { GetCommentsByUrl } from "@/lib/comments";
@@ -46,15 +46,22 @@ export default async function MatchPage({
     results: Match[];
   };
 
-  const comments = await GetCommentsByUrl(getRequestContext().env, baseUrl)
+  const comments = await GetCommentsByUrl(getRequestContext().env, baseUrl);
   let score = 0;
-  comments.forEach(c => {
-    score = score + c.rating
-  })
-  
-  const avg = Math.round(score/comments.length)
+  comments.forEach((c) => {
+    score = score + c.rating;
+  });
+
+  const avg = Math.round(score / comments.length);
 
   return (
-    <MatchReport match={match} next={next.results} previous={previous.results} comments={comments} url={baseUrl} avg={avg}></MatchReport>
+    <MatchReport
+      match={match}
+      next={next.results}
+      previous={previous.results}
+      comments={comments}
+      url={baseUrl}
+      avg={avg}
+    ></MatchReport>
   );
 }

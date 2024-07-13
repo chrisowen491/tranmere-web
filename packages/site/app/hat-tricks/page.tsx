@@ -13,8 +13,13 @@ export default async function HatTricks() {
 
   return (
     <>
-    
-      <Title subTitle="Player Records" title="Tranmere Hat Tricks" summary={"All these players scored hat tricks (or better) in a first team game. Data only goes as far back as the 1977-78 season."}></Title>
+      <Title
+        subTitle="Player Records"
+        title="Tranmere Hat Tricks"
+        summary={
+          "All these players scored hat tricks (or better) in a first team game. Data only goes as far back as the 1977-78 season."
+        }
+      ></Title>
       <div className="py-2 sm:py-2">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <ul
@@ -23,9 +28,18 @@ export default async function HatTricks() {
           >
             {players.map((player, idx) => (
               <li key={idx}>
-                <img alt={player.Player} src={player.picLink} className="mx-auto h-24 w-24 rounded-full" />
-                <h3 className="mt-6 text-base font-semibold leading-7 tracking-tight text-gray-900 dark:text-gray-50">{player.Player}</h3>
-                <a href={`/match/${player.Season}/${player.Date}`} className="text-sm leading-6 text-gray-600 dark:text-gray-50">
+                <img
+                  alt={player.Player}
+                  src={player.picLink}
+                  className="mx-auto h-24 w-24 rounded-full"
+                />
+                <h3 className="mt-6 text-base font-semibold leading-7 tracking-tight text-gray-900 dark:text-gray-50">
+                  {player.Player}
+                </h3>
+                <a
+                  href={`/match/${player.Season}/${player.Date}`}
+                  className="text-sm leading-6 text-gray-600 dark:text-gray-50"
+                >
                   <p>{player.Date}</p>
                   <p>vs {player.Opposition}</p>
                   <p>{player.Goals} goals</p>

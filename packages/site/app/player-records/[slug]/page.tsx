@@ -24,7 +24,7 @@ export async function generateMetadata({
     title = "Tranmere Record Goalscorers";
   } else if (params.slug === "top-scorers") {
     description = "Tranmere Rovers FC Player Stats Season " + params.slug;
-    title = "Tranmere Record Player Stats - Season "  + params.slug;
+    title = "Tranmere Record Player Stats - Season " + params.slug;
   }
 
   return {
@@ -69,13 +69,13 @@ export default async function PlayerSearchPage({
 
   return (
     <>
-        <Title title={title!} subTitle="Player Records"></Title>
-        <PlayerSearch
-          default={playerResults.players}
-          sort={sort!}
-          filter={filter!}
-          season={season!}
-        />
+      <Title title={title!} subTitle="Player Records"></Title>
+      <PlayerSearch
+        default={playerResults.players}
+        sort={sort!}
+        filter={filter!}
+        season={season!}
+      />
     </>
   );
 }

@@ -8,7 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default async function Transfers() {
-  return (
-    <ContactForm></ContactForm>
-  );
+  return <ContactForm></ContactForm>;
 }
