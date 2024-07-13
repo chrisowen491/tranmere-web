@@ -1,6 +1,6 @@
 {
   "name": "tranmere-web",
-  "version": "3.0.189",
+  "version": "3.0.194",
   "description": "",
   "private": "true",
   "engines": {
@@ -27,6 +27,5 @@
     "typescript": "^5.4.5",
     "wrangler": "^3.60.1"
   },
-  "dependencies": {
-  }
+  "dependencies": {}
 }

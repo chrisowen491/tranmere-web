@@ -21,7 +21,7 @@
     "typescript-eslint": "^7.10.0"
   },
   "overrides": {
-    "@types/node": "20.14.9"
+    "@types/node": "20.14.10"
   },
   "dependencies": {
     "@contentful/rich-text-plain-text-renderer": "^16.1.3",
