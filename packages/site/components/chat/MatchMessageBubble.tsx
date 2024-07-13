@@ -1,4 +1,4 @@
-import { ExtendedMessage } from "../../lib/types";
+import { ExtendedMessage } from "@/lib/types";
 import Link from "next/link";
 
 export function MatchMessageBubble(props: { message: ExtendedMessage }) {

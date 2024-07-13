@@ -21,9 +21,6 @@ module.exports = withPlugins([[withBundleAnalyzer]], {
       },
     ],
   },
-  sassOptions: {
-    includePaths: [path.join(__dirname, 'styles')],
-  },
   async rewrites() {
 		return [
 			{

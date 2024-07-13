@@ -1,9 +1,7 @@
 export const runtime = "edge";
 import { PlayerAvatarBuilder } from "@/components/apps/PlayerAvatarBuilder";
-import { Title } from "@/components/layout/Title";
+import { Title } from "@/components/fragments/Title";
 import { Metadata } from "next";
-import { Navbar } from "@/components/layout/Navbar";
-import { Footer } from "@/components/layout/Footer";
 
 export const metadata: Metadata = {
   title: "Player Avatar Builder",
@@ -14,17 +12,10 @@ export const metadata: Metadata = {
 export default async function PlayerBuilder() {
   return (
     <>
-      <Navbar showSearch={true}></Navbar>
-      <section className="hero bg-blue">
-        <div className="container">
-          <Title title="Player Avatar Builder"></Title>
-        </div>
-      </section>
-
-      <section className="overlay">
-        <PlayerAvatarBuilder />
-      </section>
-      <Footer></Footer>
+      <Title title="Player Avatar Builder" subTitle="Media">
+        <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-50">Create your own avatar</p>
+      </Title>
+      <PlayerAvatarBuilder />
     </>
   );
 }

@@ -3,6 +3,7 @@ import {
   HatTrick,
   Manager,
   Match,
+  Player,
   PlayerSeasonSummary,
   Team,
 } from "@tranmere-web/lib/src/tranmere-web-types";
@@ -141,6 +142,29 @@ export async function GetAllTeams(): Promise<Team[]> {
   return results;
 }
 
+export async function GetAllPlayers(): Promise<Player[]> {
+  const query: string = encodeURIComponent(
+    "{listTranmereWebPlayerTable(limit:500){items{name picLink}}}",
+  );
+  const result = await fetch(
+    `${APP_SYNC_URL}/graphql?query=${query}`,
+    APP_SYNC_OPTIONS,
+  );
+
+  const list = (await result.json()) as {
+    data: { listTranmereWebPlayerTable: { items: Player[] } };
+  };
+
+  const results: Player[] = list.data.listTranmereWebPlayerTable.items;
+
+  results.sort(function (a: Team, b: Team) {
+    if (a.name < b.name) return -1;
+    if (a.name > b.name) return 1;
+    return 0;
+  });
+  return results;
+}
+
 export async function GetAllCupCompetitions(): Promise<Competition[]> {
   const query = encodeURIComponent(
     "{listTranmereWebCompetitions(limit:500){items{name}}}",
@@ -173,6 +197,12 @@ export async function GetAllHatTricks(): Promise<HatTrick[]> {
   };
 
   const results: HatTrick[] = list.data.listTranmereWebHatTricks.items;
+
+  const players = await GetAllPlayers();
+
+  results.forEach(r => {
+    r.picLink = players.find(p => p.name === r.Player)?.picLink
+  })
 
   results.sort(function (a, b) {
     if (a.Date < b.Date) return -1;

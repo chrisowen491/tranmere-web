@@ -1,0 +1,14 @@
+{
+  "name": "@tranmere-web/sql",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "db": "npx wrangler d1 execute tranmere-web --local --file=./schema.sql"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "wrangler": "^3.63.2"
+  }
+}

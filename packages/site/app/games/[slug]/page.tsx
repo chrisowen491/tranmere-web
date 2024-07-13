@@ -1,5 +1,5 @@
 import { ResultsSearch } from "@/components/apps/Results";
-import { Title } from "@/components/layout/Title";
+import { Title } from "@/components/fragments/Title";
 import {
   GetAllTeams,
   GetAllCupCompetitions,
@@ -12,8 +12,6 @@ import {
   Match,
 } from "@tranmere-web/lib/src/tranmere-web-types";
 import { getRequestContext } from "@cloudflare/next-on-pages";
-import { Navbar } from "@/components/layout/Navbar";
-import { Footer } from "@/components/layout/Footer";
 
 export const runtime = "edge";
 
@@ -66,6 +64,8 @@ export default async function GamesPage({
   let pens = "";
   let season = "";
   let opposition = "";
+  let competition = "";
+  let manager = "";
   const competitions = await GetAllCupCompetitions();
   const managers = await GetAllTranmereManagers();
   const teams = await GetAllTeams();
@@ -93,7 +93,7 @@ export default async function GamesPage({
 
   const latestSeasonRequest = await fetch(
     base +
-      `?season=${season}&venue=${venue}&pens=${pens}&sort=${sort}&opposition=${opposition}`,
+      `?season=${season}&venue=${venue}&pens=${encodeURI(pens)}&sort=${sort}&opposition=${opposition}&competition=${competition}`,
   );
   const results = (await latestSeasonRequest.json()) as {
     results: Match[];
@@ -103,29 +103,22 @@ export default async function GamesPage({
 
   return (
     <>
-      <Navbar showSearch={true}></Navbar>
-      <section className="hero bg-blue">
-        <div className="container">
-          <Title title={title!}></Title>
-        </div>
-      </section>
-
-      <section className="overlay">
-        <ResultsSearch
-          teams={teams}
-          managers={managers}
-          competitions={competitions}
-          results={results.results}
-          venue={venue}
-          pens={pens}
-          sort={sort}
-          opposition={opposition}
-          h2hresults={results.h2hresults}
-          h2htotal={results.h2htotal}
-          season={season}
-        />
-      </section>
-      <Footer></Footer>
+      <Title title={title!}></Title>
+      <ResultsSearch
+        teams={teams}
+        managers={managers}
+        competitions={competitions}
+        results={results.results}
+        venue={venue}
+        manager={manager}
+        pens={pens}
+        sort={sort}
+        opposition={opposition}
+        competition={competition}
+        h2hresults={results.h2hresults}
+        h2htotal={results.h2htotal}
+        season={season}
+      />
     </>
   );
 }

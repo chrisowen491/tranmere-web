@@ -1,7 +1,6 @@
-import { SideBar } from "@/components/sidebar/SideBar";
-import Search from "./Search";
-import { Navbar } from "@/components/layout/Navbar";
-import { Footer } from "@/components/layout/Footer";
+import { FAQs } from '@/components/fragments/FAQ';
+import { Hero } from '@/components/fragments/Hero';
+import { Navigation } from '@/components/layout/Navigation';
 import { Metadata } from "next";
 export const runtime = "edge";
 
@@ -22,263 +21,82 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
+
+  const faqs = [
+    {
+      question: "Can I create my own player avatar?",
+      answer:
+        "Yes, checkout the custom tool for customizing you own avatar",
+    },
+    {
+      question: "Do you have every Tranmere Rovers result?",
+      answer:
+        "We have all first team results since 1921. With appearance and goal data since 1977. Assist data is patchy since it is not definitively recorded.",
+    },
+    {
+      question: "How are match reports written?",
+      answer:
+        "All our match reports are written using Generative AI.",
+    },
+    {
+      question: "Where do you get your results information?",
+      answer:
+        "Results data is primarily sourced from James P. Curley (2016). engsoccerdata: English Soccer Data 1871-2016 on GitHub. Player apperance data is from various books and internet sources.",
+    },
+    {
+      question: "Where do the programme pictures come from?",
+      answer:
+        "I have scanned these in from my own personal collection. There are over 2000 programme covers, including nearly every home game since 1960 (missing about 20!).",
+    },
+  ]
+
+  const stats = [
+    { id: 1, name: 'Results Data', value: '5000+' },
+    { id: 2, name: 'Programme Scans', value: '2000+' },
+    { id: 3, name: 'Player Profiles', value: '500+' },
+    { id: 4, name: 'Match Reports', value: '20+' },
+  ]
+
   return (
     <>
-      <Navbar showSearch={false}></Navbar>
-      <section className="hero bg-blue overlay home-hero">
-        <div className="container">
-          <div className="row align-items-end justify-content-between">
-            <div className="col-sm-12 col-md-6 text-white mb-3 mb-md-0">
-              <div className="row gutter-2">
-                <div className="col-12">
-                  <h1 className="h3 font-weight-normal">
-                    Welcome To Tranmere Web!
-                  </h1>
-                </div>
-                <div className="col-12">
-                  <h2 className="h4">
-                    The website full of data, statistics and information about
-                    Tranmere Rovers FC
-                  </h2>
-                </div>
-              </div>
-            </div>
-            <div className="co-sm-12 col-md-6">
-              <img
-                src="https://www.tranmere-web.com/builder/1989/side-parting-left-small/ffd3b3/none/bc9d00/fcb98b/none/bc8a00"
-                alt="Image"
-                className="overlay-item-bottom"
-              />
-            </div>
-          </div>
-          <div className="row gutter-2">
-            <div className="col-12">
-              <div className="card">
-                <div className="card-body py-2">
-                  <Search />
-                </div>
-              </div>
-            </div>
+
+      <Hero />
+      <div className="relative mx-auto flex w-full max-w-8xl flex-auto justify-center sm:px-2 lg:px-8 xl:px-12">
+        <div className="hidden lg:relative lg:block lg:flex-none">
+          <div className="absolute inset-y-0 right-0 w-[50vw] bg-slate-50 dark:hidden" />
+          <div className="absolute bottom-0 right-0 top-16 hidden h-12 w-px bg-gradient-to-t from-slate-800 dark:block" />
+          <div className="absolute bottom-0 right-0 top-28 hidden w-px bg-slate-800 dark:block" />
+          <div className="sticky top-[4.75rem] -ml-0.5 h-[calc(100vh-4.75rem)] w-64 overflow-y-auto overflow-x-hidden py-16 pl-0.5 pr-8 xl:w-72 xl:pr-16">
+            <Navigation/>
           </div>
         </div>
-      </section>
 
-      <section className="bg-white" style={{ paddingTop: "10px" }}>
-        <div className="container">
-          <div className="row">
-            <div className="col">
-              <div className="content boxed">
-                <div className="row separated">
-                  <SideBar></SideBar>
-                  <article className="col-md-8 content-body">
-                    <h2>Frequently Asked Questions</h2>
-                    <div
-                      className="accordion accordion-stack"
-                      id="accordionExample"
-                    >
-                      <div
-                        className="card"
-                        itemScope
-                        itemProp="mainEntity"
-                        itemType="https://schema.org/Question"
-                      >
-                        <div className="card-header" id="headingOne">
-                          <h5 className="mb-0">
-                            <button
-                              className="btn btn-link"
-                              type="button"
-                              data-toggle="collapse"
-                              data-target="#collapseOne"
-                              aria-expanded="false"
-                              aria-controls="collapseOne"
-                              itemProp="name"
-                            >
-                              Can I create my own player avatar?
-                            </button>
-                          </h5>
-                        </div>
-
-                        <div
-                          id="collapseOne"
-                          className="collapse"
-                          aria-labelledby="headingOne"
-                          data-parent="#accordionExample"
-                          itemScope
-                          itemProp="acceptedAnswer"
-                          itemType="https://schema.org/Answer"
-                        >
-                          <div className="card-body" itemProp="text">
-                            Yes, checkout the custom tool for customizing you
-                            own avatar{" "}
-                            <a href="https://www.tranmere-web.com/player-builder">
-                              here
-                            </a>
-                          </div>
-                        </div>
-                      </div>
-                      <div
-                        className="card"
-                        itemScope
-                        itemProp="mainEntity"
-                        itemType="https://schema.org/Question"
-                      >
-                        <div className="card-header" id="headingTwo">
-                          <h5 className="mb-0">
-                            <button
-                              className="btn btn-link collapsed"
-                              type="button"
-                              data-toggle="collapse"
-                              data-target="#collapseTwo"
-                              aria-expanded="false"
-                              aria-controls="collapseTwo"
-                              itemProp="name"
-                            >
-                              Do you have every Tranmere Rovers result?
-                            </button>
-                          </h5>
-                        </div>
-                        <div
-                          id="collapseTwo"
-                          className="collapse"
-                          aria-labelledby="headingTwo"
-                          data-parent="#accordionExample"
-                          itemScope
-                          itemProp="acceptedAnswer"
-                          itemType="https://schema.org/Answer"
-                        >
-                          <div className="card-body" itemProp="text">
-                            We have all first team results since 1921. With
-                            appearance and goal data since 1977. Assist data is
-                            patchy since it is not definitively recorded.
-                          </div>
-                        </div>
-                      </div>
-                      <div
-                        className="card"
-                        itemScope
-                        itemProp="mainEntity"
-                        itemType="https://schema.org/Question"
-                      >
-                        <div className="card-header" id="headingThree">
-                          <h5 className="mb-0">
-                            <button
-                              className="btn btn-link collapsed"
-                              type="button"
-                              data-toggle="collapse"
-                              data-target="#collapseThree"
-                              aria-expanded="false"
-                              aria-controls="collapseThree"
-                              itemProp="name"
-                            >
-                              How are match reports written?
-                            </button>
-                          </h5>
-                        </div>
-                        <div
-                          id="collapseThree"
-                          className="collapse"
-                          aria-labelledby="headingThree"
-                          data-parent="#accordionExample"
-                          itemScope
-                          itemProp="acceptedAnswer"
-                          itemType="https://schema.org/Answer"
-                        >
-                          <div className="card-body" itemProp="text">
-                            All our match reports are written using Generative
-                            AI.
-                          </div>
-                        </div>
-                      </div>
-                      <div
-                        className="card"
-                        itemScope
-                        itemProp="mainEntity"
-                        itemType="https://schema.org/Question"
-                      >
-                        <div className="card-header" id="headingFour">
-                          <h5 className="mb-0">
-                            <button
-                              className="btn btn-link collapsed"
-                              type="button"
-                              data-toggle="collapse"
-                              data-target="#collapseFour"
-                              aria-expanded="false"
-                              aria-controls="collapseFour"
-                              itemProp="name"
-                            >
-                              Where do you get your results information?
-                            </button>
-                          </h5>
-                        </div>
-                        <div
-                          id="collapseFour"
-                          className="collapse"
-                          aria-labelledby="headingFour"
-                          data-parent="#accordionExample"
-                          itemScope
-                          itemProp="acceptedAnswer"
-                          itemType="https://schema.org/Answer"
-                        >
-                          <div className="card-body" itemProp="text">
-                            Results data is primarily sourced from James P.
-                            Curley (2016). engsoccerdata: English Soccer Data
-                            1871-2016 on{" "}
-                            <a href="https://github.com/jalapic/engsoccerdata/">
-                              GitHub
-                            </a>
-                            . Player apperance data is from various books and
-                            internet sources.
-                          </div>
-                        </div>
-                      </div>
-
-                      <div
-                        className="card"
-                        itemScope
-                        itemProp="mainEntity"
-                        itemType="https://schema.org/Question"
-                      >
-                        <div className="card-header" id="headingFive">
-                          <h5 className="mb-0">
-                            <button
-                              className="btn btn-link collapsed"
-                              type="button"
-                              data-toggle="collapse"
-                              data-target="#collapseFive"
-                              aria-expanded="false"
-                              aria-controls="collapseFive"
-                              itemProp="name"
-                            >
-                              Where do the programme pictures come from?
-                            </button>
-                          </h5>
-                        </div>
-                        <div
-                          id="collapseFive"
-                          className="collapse"
-                          aria-labelledby="headingFive"
-                          data-parent="#accordionExample"
-                          itemScope
-                          itemProp="acceptedAnswer"
-                          itemType="https://schema.org/Answer"
-                        >
-                          <div className="card-body" itemProp="text">
-                            I have scanned these in from my own personal
-                            collection. There are over 2000 programme covers,
-                            including nearly every home game since 1960 (missing
-                            about 20!).
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </article>
-                </div>
+        <div className="w-full">
+          <div className="pt-24">
+          <div className="mx-auto max-w-7xl px-6 lg:px-8">
+            <div className="mx-auto max-w-2xl lg:max-w-none">
+              <div className="text-center">
+                <h2 className="text-3xl font-bold tracking-tight sm:text-4xl  text-blue-600 dark:text-gray-50">
+                  The Most Comprehensive Tranmere Rovers Database On The Web
+                </h2>
+                <p className="mt-4 text-lg leading-8 dark:text-gray-50">
+                  Full results since 1921, appearance and goals data since 1977.
+                </p>
               </div>
+              <dl className="mt-16 grid grid-cols-1 gap-0.5 overflow-hidden rounded-2xl text-center sm:grid-cols-2 lg:grid-cols-4">
+                {stats.map((stat) => (
+                  <div key={stat.id} className="flex flex-col bg-gray-400/5 p-8">
+                    <dt className="text-sm font-semibold leading-6 text-gray-600 dark:text-gray-50">{stat.name}</dt>
+                    <dd className="order-first text-3xl font-semibold tracking-tight text-gray-900 dark:text-gray-50">{stat.value}</dd>
+                  </div>
+                ))}
+              </dl>
             </div>
           </div>
+          </div>
+          <FAQs text="Frequently Asked Questions" faqs={faqs}></FAQs>
         </div>
-      </section>
-      <Footer></Footer>
+      </div>
     </>
   );
 }

@@ -1,6 +1,5 @@
 import { ChatWindow } from "@/components/chat/ChatWindow";
-import { Navbar } from "@/components/layout/Navbar";
-import { Footer } from "@/components/layout/Footer";
+import { Title } from "@/components/fragments/Title";
 import { Metadata } from "next";
 export const runtime = "edge";
 
@@ -10,17 +9,13 @@ export const metadata: Metadata = {
 };
 
 export default function AgentsPage() {
-  const InfoCard = <div></div>;
   return (
     <>
-      <Navbar showSearch={true}></Navbar>
+      <Title title={"Tranmere-Web AI"} subTitle={"Artificial Intelligence"} />
       <ChatWindow
         endpoint="api/chat/agents"
-        emptyStateComponent={InfoCard}
         placeholder="Ask me anything Tranmere Rovers related"
-        titleText="Tranmere-Web AI"
       ></ChatWindow>
-      <Footer></Footer>
-    </>
+      </>
   );
 }

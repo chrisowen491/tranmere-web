@@ -1,10 +1,7 @@
 export const runtime = "edge";
-import { Title } from "@/components/layout/Title";
-import { SideBar } from "@/components/sidebar/SideBar";
+import { Title } from "@/components/fragments/Title";
 import { GetAllHatTricks } from "@/lib/apiFunctions";
 import { Metadata } from "next";
-import { Navbar } from "@/components/layout/Navbar";
-import { Footer } from "@/components/layout/Footer";
 
 export const metadata: Metadata = {
   title: "Tranmere Hat Tricks",
@@ -16,64 +13,28 @@ export default async function HatTricks() {
 
   return (
     <>
-      <Navbar showSearch={true}></Navbar>
-      <section className="hero bg-blue">
-        <div className="container">
-          <Title title="Tranmere Hat Tricks"></Title>
+    
+      <Title subTitle="Player Records" title="Tranmere Hat Tricks" summary={"All these players scored hat tricks (or better) in a first team game. Data only goes as far back as the 1977-78 season."}></Title>
+      <div className="py-2 sm:py-2">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+          <ul
+            role="list"
+            className="mx-auto mt-10 grid max-w-2xl grid-cols-2 gap-x-8 gap-y-16 text-center sm:grid-cols-3 md:grid-cols-4 lg:mx-0 lg:max-w-none lg:grid-cols-5 xl:grid-cols-6"
+          >
+            {players.map((player, idx) => (
+              <li key={idx}>
+                <img alt={player.Player} src={player.picLink} className="mx-auto h-24 w-24 rounded-full" />
+                <h3 className="mt-6 text-base font-semibold leading-7 tracking-tight text-gray-900 dark:text-gray-50">{player.Player}</h3>
+                <a href={`/match/${player.Season}/${player.Date}`} className="text-sm leading-6 text-gray-600 dark:text-gray-50">
+                  <p>{player.Date}</p>
+                  <p>vs {player.Opposition}</p>
+                  <p>{player.Goals} goals</p>
+                </a>
+              </li>
+            ))}
+          </ul>
         </div>
-      </section>
-
-      <section className="overlay">
-        <div className="container overlay-item-top">
-          <div className="row">
-            <div className="col">
-              <div className="content boxed">
-                <div className="row separated">
-                  <article className="col-md-8 content-body">
-                    <p>Data only goes as far back as the 1977-78 season.</p>
-                    {players.map((player) => (
-                      <div
-                        className="card stacked"
-                        style={{ marginBottom: "50px" }}
-                        key={player.Season}
-                      >
-                        <div className="card-body">
-                          <div className="row gutter-2 align-items-center">
-                            <div className="col">
-                              <a
-                                href={`/match/${player.Season}/${player.Date}`}
-                                className="topic"
-                              >
-                                <h3 className="card-title mb-1">
-                                  {player.Date}
-                                </h3>
-                                <h3 className="card-title mb-1">
-                                  {player.Player}
-                                </h3>
-                                <h3 className="card-title mb-1">
-                                  {player.Opposition}
-                                </h3>
-                                <p className="card-text mb-2">
-                                  {player.Goals} goals
-                                </p>
-                                <i className="icon-soccer icon-background"></i>
-                              </a>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                    <div className="row gutter-2"></div>
-                  </article>
-
-                  <SideBar />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-      <Footer></Footer>
+      </div>
     </>
   );
 }

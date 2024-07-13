@@ -1,219 +1,85 @@
 "use client";
 
-import { useEffect } from "react";
-import SearchBar from "../SearchBar";
+import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react'
+import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { ThemeSelector } from '@/components/layout/ThemeSelector';
+import SearchBar from '@/components/search/SearchBar';
+import ProfileClient from '@/components/layout/ProfileClient';
+
+
+const navigation = [
+  { name: 'Results', href: '/results', current: false },
+  { name: 'Players', href: '/playersearch', current: false },
+  { name: 'Media', href: '/page/tag/Media', current: false },
+  { name: 'Stats', href: '/page/tag/Stats', current: false },
+]
+
+function classNames(...classes: string[]) {
+  return classes.filter(Boolean).join(' ')
+}
 
 export function Navbar(props: { showSearch: boolean }) {
-  useEffect(() => {
-    typeof document !== undefined
-      ? require("bootstrap/dist/js/bootstrap")
-      : null;
-  }, []);
 
   return (
-    <header className="header header-sticky header-transparent" id="homenav">
-      <div className="container">
-        <div className="row">
-          <nav className="navbar navbar-expand-lg navbar-dark">
-            <div itemScope itemType="http://schema.org/Organization">
-              <a
-                itemProp="url"
-                href="/"
-                title="Tranmere-Web.com"
-                className="navbar-brand"
-              >
-                <img
-                  src="/assets/images/logo_white_transparent.png"
-                  alt="Tranmere-Web.com"
-                  itemProp="logo"
-                />
-              </a>
+    <Disclosure as="nav" className="bg-blue-900 dark:bg-blue-600">
+      <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+        <div className="relative flex h-16 items-center justify-between">
+          <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
+            {/* Mobile menu button*/}
+            <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+              <span className="absolute -inset-0.5" />
+              <span className="sr-only">Open main menu</span>
+              <Bars3Icon aria-hidden="true" className="block h-6 w-6 group-data-[open]:hidden" />
+              <XMarkIcon aria-hidden="true" className="hidden h-6 w-6 group-data-[open]:block" />
+            </DisclosureButton>
+          </div>
+          <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+            <div className="flex flex-shrink-0 items-center">
+              <a href="/"><img src='/assets/images/logo_white_transparent.png' alt='Tranmere-Web Logo' className="hidden h-12 w-auto fill-slate-700 lg:block dark:fill-sky-100"  /></a>
             </div>
-            <button
-              className="navbar-toggler"
-              type="button"
-              data-toggle="collapse"
-              data-target="#navbarSupportedContent"
-              aria-controls="navbarSupportedContent"
-              aria-expanded="false"
-              aria-label="Toggle navigation"
-            >
-              <span className="navbar-toggler-icon"></span>
-            </button>
-
-            <div
-              className="collapse navbar-collapse"
-              id="navbarSupportedContent"
-            >
-              <ul className="navbar-nav mr-auto">
-                <li className="nav-item dropdown">
+            <div className="hidden sm:ml-6 sm:block">
+              <div className="flex space-x-4">
+                {navigation.map((item) => (
                   <a
-                    className="nav-link dropdown-toggle"
-                    href="#"
-                    id="resultsNav"
-                    role="button"
-                    data-toggle="dropdown"
-                    aria-haspopup="true"
-                    aria-expanded="false"
+                    key={item.name}
+                    href={item.href}
+                    className={classNames(
+                      'text-gray-50 hover:bg-rose-950 hover:text-white',
+                      'rounded-md px-3 py-2 text-sm font-bold',
+                    )}
                   >
-                    Results
+                    {item.name}
                   </a>
-                  <div className="dropdown-menu" aria-labelledby="resultsNav">
-                    <a className="dropdown-item" href="/results">
-                      Results Home
-                    </a>
-                    <a className="dropdown-item" href="/games/at-wembley">
-                      Tranmere At Wembley
-                    </a>
-                    <a
-                      className="dropdown-item"
-                      href="/games/penalty-shootouts"
-                    >
-                      Penalty Shootouts
-                    </a>
-                  </div>
-                </li>
-                <li className="nav-item dropdown">
-                  <a
-                    className="nav-link dropdown-toggle"
-                    href="#"
-                    id="playerNav"
-                    role="button"
-                    data-toggle="dropdown"
-                    aria-haspopup="true"
-                    aria-expanded="false"
-                  >
-                    Players
-                  </a>
-                  <div className="dropdown-menu" aria-labelledby="playerNav">
-                    <a className="dropdown-item" href="/playersearch">
-                      Players Home
-                    </a>
-                    <a
-                      className="dropdown-item"
-                      href="/player-records/most-appearances"
-                    >
-                      Most Tranmere Appearances
-                    </a>
-                    <a
-                      className="dropdown-item"
-                      href="/player-records/top-scorers"
-                    >
-                      Most Tranmere Goals
-                    </a>
-                    <a
-                      className="dropdown-item"
-                      href="/player-records/only-one-appearance"
-                    >
-                      Only Played Once
-                    </a>
-                    <a className="dropdown-item" href="/top-scorers-by-season">
-                      Top Scorers By Season
-                    </a>
-                    <a className="dropdown-item" href="/hat-tricks">
-                      Hat Tricks
-                    </a>
-                    <a
-                      className="dropdown-item"
-                      href="/page/blog/superstars-at-prenton-park"
-                    >
-                      Opposition Stars
-                    </a>
-                    <a className="dropdown-item" href="/transfer-central">
-                      Transfers
-                    </a>
-                  </div>
-                </li>
-                <li className="nav-item dropdown">
-                  <a
-                    className="nav-link dropdown-toggle"
-                    href="#"
-                    id="statsNav"
-                    role="button"
-                    data-toggle="dropdown"
-                    aria-haspopup="true"
-                    aria-expanded="false"
-                  >
-                    Stats
-                  </a>
-                  <div className="dropdown-menu" aria-labelledby="statsNav">
-                    <a className="dropdown-item" href="/games/top-attendances">
-                      Highest Tranmere Attendances
-                    </a>
-                    <a
-                      className="dropdown-item"
-                      href="/games/top-home-attendances"
-                    >
-                      Highest Tranmere Attendances at Prenton Park
-                    </a>
-                  </div>
-                </li>
-                <li className="nav-item dropdown">
-                  <a
-                    className="nav-link dropdown-toggle"
-                    href="#"
-                    id="mediaNav"
-                    role="button"
-                    data-toggle="dropdown"
-                    aria-haspopup="true"
-                    aria-expanded="false"
-                  >
-                    Media
-                  </a>
-                  <div className="dropdown-menu" aria-labelledby="mediaNav">
-                    <a className="dropdown-item" href="/page/tag/Gallery">
-                      Galleries Home
-                    </a>
-                    <a className="dropdown-item" href="/blog">
-                      Blog Index
-                    </a>
-                    <a className="dropdown-item" href="/page/blog/books">
-                      Books
-                    </a>
-                    <a
-                      className="dropdown-item"
-                      href="/page/tag/Magazine%20Articles"
-                    >
-                      Magazine Articles
-                    </a>
-                    <a
-                      className="dropdown-item"
-                      href="/page/blog/football-cards"
-                    >
-                      Football Cards
-                    </a>
-                    <a
-                      className="dropdown-item"
-                      href="/page/blog/historic-kits"
-                    >
-                      Historic Kits
-                    </a>
-                    <a className="dropdown-item" href="/page/blog/testimonials">
-                      Testimonials & Benefit Matches
-                    </a>
-                    <a className="dropdown-item" href="/player-builder">
-                      Player Avatar Builder
-                    </a>
-                  </div>
-                </li>
-                <li className="nav-item dropdown">
-                  <a
-                    className="nav-link"
-                    href="/chat"
-                    id="chat"
-                    role="button"
-                    aria-haspopup="false"
-                    aria-expanded="false"
-                  >
-                    Tranmere AI
-                  </a>
-                </li>
-              </ul>
-              {props.showSearch ? <SearchBar /> : ""}
+                ))}
+              </div>
             </div>
-          </nav>
+          </div>
+          <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+            <SearchBar></SearchBar>
+            <ThemeSelector className="relative z-10 px-2" />
+            <ProfileClient></ProfileClient>
+          </div>
         </div>
       </div>
-    </header>
+
+      <DisclosurePanel className="sm:hidden">
+        <div className="space-y-1 px-2 pb-3 pt-2">
+          {navigation.map((item) => (
+            <DisclosureButton
+              key={item.name}
+              as="a"
+              href={item.href}
+              aria-current={item.current ? 'page' : undefined}
+              className={classNames(
+                item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                'block rounded-md px-3 py-2 text-base font-medium',
+              )}
+            >
+              {item.name}
+            </DisclosureButton>
+          ))}
+        </div>
+      </DisclosurePanel>
+    </Disclosure>
   );
 }

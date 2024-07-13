@@ -1,0 +1,13 @@
+DROP TABLE IF EXISTS Ratings;
+
+CREATE TABLE Ratings (
+  id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+  page_url TEXT NOT NULL,
+  image_url TEXT NOT NULL,
+  created TEXT NOT NULL,
+  sub TEXT NOT NULL,
+  user_name TEXT NOT NULL,
+  email TEXT NOT NULL,
+  rating INTEGER int NOT NULL,
+  comment  TEXT NULL
+);

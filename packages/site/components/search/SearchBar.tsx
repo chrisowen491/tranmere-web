@@ -15,7 +15,7 @@ import {
 } from "react-instantsearch";
 //import { InstantSearchNext } from 'react-instantsearch-nextjs';
 
-import { Panel } from "@/components/Panel";
+import { Panel } from "@/components/search/Panel";
 
 const client = algoliasearch("DZJXSVOWI3", "c050f0bd17ccfde9aa78a3563d552db2");
 
@@ -55,7 +55,7 @@ function Hit({ hit }: HitProps) {
     >
       <div className="aa-ItemContent">
         <div className="aa-ItemContentBody">
-          <div className="aa-ItemContentTitle">{hit.name}</div>
+          <div className="aa-ItemContentTitle dark:text-gray-600 dark:hover:text-gray-50">{hit.name}</div>
         </div>
       </div>
     </div>
@@ -64,7 +64,7 @@ function Hit({ hit }: HitProps) {
 
 export default function SearchBar() {
   return (
-    <div id="navsearch">
+    <div id="navsearch" className="w-1/2 dark:text-gray:600">
       <InstantSearch
         searchClient={client}
         indexName="TranmereWeb"

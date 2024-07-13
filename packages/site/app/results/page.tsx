@@ -1,5 +1,5 @@
 import { ResultsSearch } from "@/components/apps/Results";
-import { Title } from "@/components/layout/Title";
+import { Title } from "@/components/fragments/Title";
 import {
   GetAllTeams,
   GetAllCupCompetitions,
@@ -13,8 +13,6 @@ import {
 } from "@tranmere-web/lib/src/tranmere-web-types";
 import { getRequestContext } from "@cloudflare/next-on-pages";
 import { Metadata } from "next";
-import { Navbar } from "@/components/layout/Navbar";
-import { Footer } from "@/components/layout/Footer";
 export const runtime = "edge";
 
 export const metadata: Metadata = {
@@ -44,25 +42,18 @@ export default async function ResultsSearchPage() {
 
   return (
     <>
-      <Navbar showSearch={true}></Navbar>
-      <section className="hero bg-blue">
-        <div className="container">
-          <Title title="Results Home"></Title>
-        </div>
-      </section>
-
-      <section className="overlay">
-        <ResultsSearch
-          teams={teams}
-          managers={managers}
-          competitions={competitions}
-          results={results.results}
-          h2hresults={results.h2hresults}
-          h2htotal={results.h2htotal}
-          season={theYear.toString()}
-        />
-      </section>
-      <Footer></Footer>
+    <Title title="Results Home" summary={""}>
+      <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-50">Search for results by season or opposition - or view <a href='/games/at-wembley' className='text-indigo-600'>results at wembley</a> or <a href='/games/penalty-shootouts' className='text-indigo-600'>penalty shootouts</a></p>
+    </Title>
+    <ResultsSearch
+      teams={teams}
+      managers={managers}
+      competitions={competitions}
+      results={results.results}
+      h2hresults={results.h2hresults}
+      h2htotal={results.h2htotal}
+      season={theYear.toString()}
+    />
     </>
   );
 }

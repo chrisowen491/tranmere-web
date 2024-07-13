@@ -1,9 +1,7 @@
-import { Title } from "@/components/layout/Title";
-import { SideBar } from "@/components/sidebar/SideBar";
+import { Title } from "@/components/fragments/Title";
+import { SideBar } from "@/components/fragments/SideBar";
 import { GetAllTranmereManagers } from "@/lib/apiFunctions";
 import { Metadata } from "next";
-import { Navbar } from "@/components/layout/Navbar";
-import { Footer } from "@/components/layout/Footer";
 
 export const runtime = "edge";
 
@@ -17,7 +15,6 @@ export default async function ManagerRecords() {
 
   return (
     <>
-      <Navbar showSearch={true}></Navbar>
       <section className="hero bg-blue">
         <div className="container">
           <Title title="Tranmere Rovers Managerial Records"></Title>
@@ -82,7 +79,6 @@ export default async function ManagerRecords() {
           </div>
         </div>
       </section>
-      <Footer></Footer>
     </>
   );
 }

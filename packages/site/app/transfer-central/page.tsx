@@ -1,6 +1,4 @@
-import { Title } from "@/components/layout/Title";
-import { Navbar } from "@/components/layout/Navbar";
-import { Footer } from "@/components/layout/Footer";
+import { Title } from "@/components/fragments/Title";
 import { TransferSearch } from "@/components/apps/TransferSearch";
 import { GetAllTeams, GetBaseUrl } from "@/lib/apiFunctions";
 import { getRequestContext } from "@cloudflare/next-on-pages";
@@ -25,17 +23,8 @@ export default async function Transfers() {
 
   return (
     <>
-      <Navbar showSearch={true}></Navbar>
-      <section className="hero bg-blue">
-        <div className="container">
-          <Title title="Transfers Home"></Title>
-        </div>
-      </section>
-
-      <section className="overlay">
-        <TransferSearch default={results.transfers} teams={teams} />
-      </section>
-      <Footer></Footer>
+      <Title title="Transfers Home" subTitle="Players" summary="Browse transfers history and use filters to fine tune your search"></Title>
+      <TransferSearch default={results.transfers} teams={teams} />
     </>
   );
 }
