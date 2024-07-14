@@ -119,10 +119,10 @@ export default function PlayerProfileView(props: {
                       Links
                     </Tab>
                     <Tab className="whitespace-nowrap border-b-2 border-transparent py-6 text-sm font-medium hover:border-gray-300 hover:text-gray-800 data-[selected]:border-indigo-600 data-[selected]:text-indigo-600">
-                      Appearances
+                      Apps
                     </Tab>
                     <Tab className="whitespace-nowrap border-b-2 border-transparent py-6 text-sm font-medium hover:border-gray-300 hover:text-gray-800 data-[selected]:border-indigo-600 data-[selected]:text-indigo-600">
-                      Ratings & Comments
+                      Ratings
                     </Tab>
                   </TabList>
                 </div>

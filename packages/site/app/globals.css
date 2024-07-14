@@ -2,13 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-.mySwiper .carousel .control-next.control-arrow:before {
-  border-left: 50px solid #001489 !important;
-}
-.mySwiper .carousel .control-prev.control-arrow:before {
-  border-right: 50px solid #001489 !important;
-}
-
 #navsearch {
   position: relative;
 }
@@ -21,6 +14,7 @@
   cursor: pointer;
   z-index: 100;
 }
+
 #navsearch .ais-SearchBox-input {
   padding-left: 2.5rem;
 }
@@ -40,6 +34,7 @@
 }
 #navsearch .ais-Hits-item:hover {
   background-color: #064cdb;
+  color: white;
 }
 
 .carousel .slide img {

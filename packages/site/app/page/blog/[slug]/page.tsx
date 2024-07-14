@@ -134,7 +134,10 @@ export default async function BlogPage({
               {gallery ? <Gallery gallery={gallery}></Gallery> : ""}
               {article.galleryCollection &&
               article.galleryCollection.items.length > 0 ? (
-                <Gallery gallery={article.galleryCollection.items}></Gallery>
+                <>
+                  <p>Hover over the image for the buttons to browse the gallery</p>
+                  <Gallery gallery={article.galleryCollection.items}></Gallery>
+                </>
               ) : (
                 ""
               )}

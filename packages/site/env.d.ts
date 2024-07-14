@@ -15,4 +15,6 @@ interface CloudflareEnv {
     AUTH0_SECRET: string;
     AUTH0_CLIENT_SECRET: string;
     OPENAI_API_KEY: string;
+    CLOUDFLARE_ZONE: string;
+    CLOUDFLARE_API_KEY: string;
 }

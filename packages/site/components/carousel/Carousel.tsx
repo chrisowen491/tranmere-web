@@ -34,7 +34,7 @@ const Carousel = ({ slides }: { slides: string[] }) => {
           <Icons.ChevronRight width={20} height={20} />
         </Button>
       </div>
-      <div className="mt-6 flex items-center gap-4">
+      <div className="mt-6 flex items-center gap-4 w-full hidden md:display">
         {slides.map((_, index) => (
           <div
             key={"dot-" + index}

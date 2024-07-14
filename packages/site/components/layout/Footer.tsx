@@ -47,12 +47,12 @@ export default function Footer() {
       </h2>
       <div className="mx-auto max-w-7xl px-4 py-16 sm:py-24 lg:px-4 lg:py-32">
         <div className="xl:grid xl:grid-cols-4 xl:gap-2">
-          <Image
+          <a href="/"><Image
             src="/assets/images/logo_white_transparent.png"
             alt="TranmereWeb.com Logo"
             width={160}
             height={93}
-          />
+          /></a>
           <div className="mt-16 grid grid-cols-2 gap-4 xl:col-span-3 xl:mt-0">
             <div className="md:grid md:grid-cols-2 md:gap-4">
               <div>

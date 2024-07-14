@@ -68,6 +68,8 @@ export async function POST(req: NextRequest) {
 
     // Check Comment Moderation
 
+
+
     const moderationRequest = await fetch(
       "https://api.openai.com/v1/moderations",
       {
@@ -121,6 +123,20 @@ export async function POST(req: NextRequest) {
       .run();
 
     const comments = await GetCommentsByUrl(getRequestContext().env, body.url);
+
+    const zone = getRequestContext().env.CLOUDFLARE_ZONE ? getRequestContext().env.CLOUDFLARE_ZONE : process.env.CLOUDFLARE_ZONE;
+    const key = getRequestContext().env.CLOUDFLARE_API_KEY ? getRequestContext().env.CLOUDFLARE_API_KEY : process.env.CLOUDFLARE_API_KEY;
+    await fetch(`https://api.cloudflare.com/client/v4/zones/${zone}/purge_cache`, {
+      method: "POST",
+      body: JSON.stringify({
+        "files":[`https://www.tranmere-web.com${comment.url}`]
+      }),
+      headers: {
+        'Content-Type': 'application/json', 
+        'Authorization': `Bearer ${key}`
+      }
+    })
+
     return NextResponse.json(comments, { status: 200 });
   } catch (ex) {
     console.log(ex);

@@ -40,7 +40,7 @@ module.exports = withPlugins([[withBundleAnalyzer]], {
 				destination: `https://api.prod.tranmere-web.com/result-search/:path*`,
 			},
       {
-				source: '/transfer-search/:path*',
+				source: '/api/transfer-search/:path*',
 				destination: `https://api.prod.tranmere-web.com/transfer-search/:path*`,
 			},
 		]

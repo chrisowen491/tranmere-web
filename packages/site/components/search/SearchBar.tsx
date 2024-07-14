@@ -55,7 +55,7 @@ function Hit({ hit }: HitProps) {
     >
       <div className="aa-ItemContent">
         <div className="aa-ItemContentBody">
-          <div className="aa-ItemContentTitle dark:text-gray-600 dark:hover:text-gray-50">
+          <div className="aa-ItemContentTitle dark:text-gray-600 dark:hover:text-gray-50 hover:text-gray-50">
             {hit.name}
           </div>
         </div>
@@ -66,19 +66,17 @@ function Hit({ hit }: HitProps) {
 
 export default function SearchBar() {
   return (
-    <div id="navsearch" className="w-1/2 dark:text-gray:600">
+    <div id="navsearch" className="w-full max-w-lg lg:max-w-xs">
       <InstantSearch
         searchClient={client}
         indexName="TranmereWeb"
         future={{ preserveSharedStateOnUnmount: true }}
       >
-        <div className="algolia-autocomplete">
-          <div>
-            <SearchBox searchAsYouType={true} />
+        <div className="algolia-autocomplete relative">
+            <SearchBox searchAsYouType={true}  />
             <EmptyQueryBoundary fallback={null}>
               <Hits hitComponent={Hit} />
             </EmptyQueryBoundary>
-          </div>
         </div>
       </InstantSearch>
     </div>
