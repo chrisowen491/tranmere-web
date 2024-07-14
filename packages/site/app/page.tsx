@@ -2,6 +2,8 @@ import { FAQs } from "@/components/fragments/FAQ";
 import { Hero } from "@/components/fragments/Hero";
 import { Navigation } from "@/components/layout/Navigation";
 import { Metadata } from "next";
+import { UserCircleIcon, ChatBubbleBottomCenterIcon } from '@heroicons/react/20/solid'
+
 export const runtime = "edge";
 
 export const metadata: Metadata = {
@@ -19,6 +21,22 @@ export const metadata: Metadata = {
     url: "/",
   },
 };
+
+const features = [
+  {
+    name: 'Comments & Reviews',
+    description:
+      'Leave a star rating for players, matches and articles - plus leave comments',
+    icon: ChatBubbleBottomCenterIcon,
+  },
+  {
+    name: 'Player Avatars',
+    description:
+      'Create your own Tranmere Rovers avatar',
+    href: '/player-builder',
+    icon: UserCircleIcon,
+  }
+]
 
 export default async function Home() {
   const faqs = [
@@ -98,6 +116,7 @@ export default async function Home() {
               </div>
             </div>
           </div>
+
           <FAQs text="Frequently Asked Questions" faqs={faqs}></FAQs>
         </div>
       </div>

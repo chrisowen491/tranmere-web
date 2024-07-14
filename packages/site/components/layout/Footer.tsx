@@ -40,69 +40,45 @@ export default function Footer() {
   return (
     <footer
       aria-labelledby="footer-heading"
-      className="bg-blue-900 dark:bg-blue-600 text-gray-50 font-bold mt-28"
+      className="bg-blue-900 dark:bg-gray-950 text-gray-50 font-bold mt-4"
     >
       <h2 id="footer-heading" className="sr-only">
         Footer
       </h2>
-      <div className="mx-auto max-w-7xl px-4 py-16 sm:py-24 lg:px-4 lg:py-32">
+      <div className="mx-auto max-w-7xl px-4 pb-4 lg:px-4 py-12">
         <div className="xl:grid xl:grid-cols-4 xl:gap-2">
-          <a href="/"><Image
-            src="/assets/images/logo_white_transparent.png"
-            alt="TranmereWeb.com Logo"
-            width={160}
-            height={93}
-          /></a>
-          <div className="mt-16 grid grid-cols-2 gap-4 xl:col-span-3 xl:mt-0">
+          <a href="/">
+            <Image
+              src="/assets/images/logo_white_transparent.png"
+              alt="TranmereWeb.com Logo"
+              width={160}
+              height={93}/>
+          </a>
+          <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4 xl:col-span-3 xl:mt-0">
             <div className="md:grid md:grid-cols-2 md:gap-4">
               <div>
-                <h3 className="leading-6 font-semibold ">Results</h3>
+                <h3 className="leading-6 font-semibold  dark:text-blue-400">Results</h3>
                 <ul role="list" className="mt-6 space-y-4">
                   {navigation.results.map((item) => (
                     <li key={item.name}>
                       <a
                         href={item.href}
-                        className="leading-6 hover:text-white hover:bg-rose-950 rounded-md px-3 py-2"
+                        className="leading-6 hover:text-white hover:bg-rose-950 rounded-md px-3 py-2 dark:text-blue-400"
                       >
                         {item.name}
                       </a>
                     </li>
                   ))}
-                  <li className="">
-                    <a
-                      href={"/contact"}
-                      className="leading-6 hover:text-white hover:bg-rose-950 rounded-md px-3 py-2"
-                    >
-                      Contact Us
-                    </a>
-                  </li>
-                  <li className="">
-                    <a
-                      href={"/page/blog/about"}
-                      className="leading-6 hover:text-white hover:bg-rose-950 rounded-md px-3 py-2"
-                    >
-                      About
-                    </a>
-                  </li>
-                  <li className="px-3 mt-0">
-                    <Link
-                      href="https://github.com/chrisowen491/tranmere-web/"
-                      className=""
-                      aria-label="GitHub"
-                    >
-                      <GitHubIcon className="h-6 w-6 fill-slate-50 group-hover:fill-slate-500 dark:group-hover:fill-slate-300" />
-                    </Link>
-                  </li>
                 </ul>
               </div>
               <div className="mt-10 md:mt-0">
-                <h3 className="leading-6 font-semibold ">Players</h3>
+                <h3 className="leading-6 font-semibold  dark:text-blue-400">Players</h3>
                 <ul role="list" className="mt-6 space-y-4">
                   {navigation.players.map((item) => (
                     <li key={item.name}>
                       <a
                         href={item.href}
-                        className="leading-6 hover:text-white hover:bg-rose-950 rounded-md px-3 py-2"
+                        className="leading-6 hover:text-white hover:bg-rose-950 rounded-md px-3 py-2 dark:text-blue-400"
                       >
                         {item.name}
                       </a>
@@ -113,13 +89,13 @@ export default function Footer() {
             </div>
             <div className="md:grid md:grid-cols-2 md:gap-8">
               <div>
-                <h3 className="font-semibold leading-6">Statistics</h3>
+                <h3 className="font-semibold leading-6 dark:text-blue-400">Statistics</h3>
                 <ul role="list" className="mt-6 space-y-4">
                   {navigation.statistics.map((item) => (
                     <li key={item.name}>
                       <a
                         href={item.href}
-                        className="leading-6 hover:text-white hover:bg-rose-950 rounded-md px-3 py-2"
+                        className="leading-6 hover:text-white hover:bg-rose-950 rounded-md px-3 py-2 dark:text-blue-400"
                       >
                         {item.name}
                       </a>
@@ -128,13 +104,13 @@ export default function Footer() {
                 </ul>
               </div>
               <div className="mt-10 md:mt-0">
-                <h3 className="leading-6 font-semibold ">Media</h3>
+                <h3 className="leading-6 font-semibold  dark:text-blue-400">Media</h3>
                 <ul role="list" className="mt-6 space-y-4">
                   {navigation.media.map((item) => (
                     <li key={item.name}>
                       <a
                         href={item.href}
-                        className="leading-6 hover:text-white hover:bg-rose-950 rounded-md px-3 py-2"
+                        className="leading-6 hover:text-white hover:bg-rose-950 rounded-md px-3 py-2 dark:text-blue-400"
                       >
                         {item.name}
                       </a>
@@ -144,6 +120,24 @@ export default function Footer() {
               </div>
             </div>
           </div>
+        </div>
+      </div>
+      <div className="mx-auto max-w-7xl px-6 md:flex md:items-center md:justify-between lg:px-8 pb-6">
+        <div className="flex justify-center space-x-6 md:order-2 text-xs ">
+            <Link
+              href="https://github.com/chrisowen491/tranmere-web/"
+              className=""
+              aria-label="GitHub"
+            >
+              <GitHubIcon className="h-6 w-6 fill-slate-50 dark:fill-blue-400 group-hover:fill-slate-500 dark:group-hover:fill-slate-300" />
+            </Link>
+            <a href={"/page/blog/about"} className="text-gray-50 dark:text-blue-400 hover:bg-rose-950 rounded-md px-3 py-2 " >About the Site</a>
+            <a href={"/contact"} className="text-gray-50 dark:text-blue-400 hover:bg-rose-950 rounded-md px-3 py-2 " >Contact Us</a>
+        </div>
+        <div className="mt-8 md:order-1 md:mt-0">
+          <p className="text-center text-xs leading-5 text-gray-50 py-2 dark:text-blue-400">
+            &copy; 2024 Tranmere-Web.com
+          </p>
         </div>
       </div>
     </footer>

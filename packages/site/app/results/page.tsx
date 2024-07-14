@@ -13,6 +13,7 @@ import {
 } from "@tranmere-web/lib/src/tranmere-web-types";
 import { getRequestContext } from "@cloudflare/next-on-pages";
 import { Metadata } from "next";
+import { LinkButton } from "@/components/forms/LinkButton";
 export const runtime = "edge";
 
 export const metadata: Metadata = {
@@ -44,14 +45,7 @@ export default async function ResultsSearchPage() {
     <>
       <Title title="Results Home" summary={""}>
         <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-50">
-          Search for results by season or opposition - or view{" "}
-          <a href="/games/at-wembley" className="text-indigo-600">
-            results at wembley
-          </a>{" "}
-          or{" "}
-          <a href="/games/penalty-shootouts" className="text-indigo-600">
-            penalty shootouts
-          </a>
+          Search for results by season or opposition - or view <LinkButton href="/games/at-wembley" text="results at wembley" /> or <LinkButton href="/games/penalty-shootouts" text="penalty shootouts"/>
         </p>
       </Title>
       <ResultsSearch

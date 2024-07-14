@@ -4,6 +4,7 @@ import { PlayerSeasonSummary } from "@tranmere-web/lib/src/tranmere-web-types";
 import { getRequestContext } from "@cloudflare/next-on-pages";
 import { Metadata } from "next";
 import { GetBaseUrl } from "@/lib/apiFunctions";
+import { LinkButton } from "@/components/forms/LinkButton";
 export const runtime = "edge";
 
 export const metadata: Metadata = {
@@ -32,32 +33,19 @@ export default async function PlayerSearchPage() {
       <Title title="Players Search" subTitle="Player Records" summary={""}>
         <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-50">
           Search for players by season or position - or view{" "}
-          <a
+          <LinkButton
             href="/player-records/most-appearances"
-            className="text-indigo-600"
-          >
-            all time time appearance records
-          </a>{" "}
+            text="appearance records" />{" "}
           or{" "}
-          <a href="/player-records/top-scorers" className="text-indigo-600">
-            top scorers
-          </a>
+          <LinkButton href="/player-records/top-scorers" text="top scorers" />
           , You can also see players with just{" "}
-          <a
+          <LinkButton
             href="/player-records/only-one-appearance"
-            className="text-indigo-600"
-          >
-            one appearance
-          </a>{" "}
+            text="one appearance"/>{" "}
           and browse{" "}
-          <a href="/top-scorers-by-season" className="text-indigo-600">
-            top scorers by season
-          </a>{" "}
-          or player with{" "}
-          <a href="/hat-tricks" className="text-indigo-600">
-            hat tricks
-          </a>
-          .
+          <LinkButton href="/top-scorers-by-season" text="top scorers by season" />
+          {" "}or players with{" "}
+          <LinkButton href="/hat-tricks" text="hat tricks" />.
         </p>
       </Title>
       <PlayerSearch default={playerResults.players} season="2023" />

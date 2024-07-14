@@ -19,12 +19,6 @@ export function Hero() {
                 <Button href="/player-builder" variant="tertiary">
                   Avatar Builder
                 </Button>
-                <Button
-                  href="https://github.com/chrisowen491/tranmere-web/"
-                  variant="secondary"
-                >
-                  View on GitHub
-                </Button>
               </div>
             </div>
           </div>

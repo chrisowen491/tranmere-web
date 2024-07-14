@@ -33,7 +33,7 @@ export function Navbar(props: { showSearch: boolean }) {
   return (
     <>
 
-    <Disclosure as="nav" className="bg-blue-900 dark:bg-blue-600">
+    <Disclosure as="nav" className="bg-blue-900 dark:bg-blue-400">
       <div className="mx-auto max-w-7xl px-2 sm:px-4 lg:px-8">
         <div className="relative flex h-16 items-center justify-between">
           <div className="flex items-center px-2 lg:px-0">
@@ -66,7 +66,7 @@ export function Navbar(props: { showSearch: boolean }) {
           </div>
           <div className="flex lg:hidden">
             {/* Mobile menu button */}
-            <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-rose-950 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+            <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-gray-50 hover:bg-rose-950 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
               <span className="absolute -inset-0.5" />
               <span className="sr-only">Open main menu</span>
               <Bars3Icon aria-hidden="true" className="block h-6 w-6 group-data-[open]:hidden" />
