@@ -15,7 +15,7 @@
     "@aws-sdk/lib-dynamodb": "^3.485.0"
   },
   "devDependencies": {
-    "prettier": "3.3.2",
+    "prettier": "3.3.3",
     "@types/aws-lambda": "^8.10.115"
   }
 }
