@@ -170,7 +170,7 @@ export function ResultTable(props: {
                     <td className="whitespace-nowrap hidden px-3 py-3.5 lg:table-cell">
                       {result.programme ? (
                         <img
-                          src={`https://images.tranmere-web.com/${result.programme}`}
+                          src={`https://images.tranmere-web.com/${result.programme}`} alt={`${result.home} v ${result.visitor} Match Programme ${result.date}`}
                         />
                       ) : (
                         ""
