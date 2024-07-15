@@ -38,8 +38,8 @@
     "autoprefixer": "10.4.19",
     "bootstrap": "^4.6.2",
     "bootstrap-select": "^1.13.2",
-    "eslint": "9.6.0",
-    "eslint-config-next": "14.2.4",
+    "eslint": "9.7.0",
+    "eslint-config-next": "14.2.5",
     "instantsearch.css": "^8.3.0",
     "jquery": "^3.7.1",
     "langchain": "^0.2.2",
@@ -49,9 +49,9 @@
     "popper.js": "^1.16.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-instantsearch": "7.12.0",
+    "react-instantsearch": "7.12.1",
     "react-instantsearch-nextjs": "^0.3.5",
-    "react-instantsearch-router-nextjs": "7.12.0",
+    "react-instantsearch-router-nextjs": "7.12.1",
     "react-responsive-carousel": "^3.2.23",
     "react-toastify": "^10.0.0",
     "recharts": "^2.12.7",
@@ -60,7 +60,7 @@
     "zod-to-json-schema": "^3.21.4"
   },
   "devDependencies": {
-    "prettier": "3.3.2",
+    "prettier": "3.3.3",
     "sass": "^1.77.2",
     "vercel": "^34.2.3",
     "wrangler": "^3.60.1"
