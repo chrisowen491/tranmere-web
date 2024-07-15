@@ -83,3 +83,4 @@ packages/chat/.next/
 *.log
 .next
 t.txt
+syntax-ts

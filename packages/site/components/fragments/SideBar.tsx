@@ -1,5 +1,5 @@
-import { LastMatch } from "./LastMatch";
-import { RecentArticles } from "./RecentArticles";
+import { LastMatch } from "@/components/fragments/LastMatch";
+import { RecentArticles } from "@/components/fragments/RecentArticles";
 
 export async function SideBar() {
   return (

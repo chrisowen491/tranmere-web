@@ -1,11 +1,10 @@
 import { PlayerSearch } from "@/components/apps/PlayerSearch";
-import { Title } from "@/components/layout/Title";
+import { Title } from "@/components/fragments/Title";
 import { PlayerSeasonSummary } from "@tranmere-web/lib/src/tranmere-web-types";
 import { getRequestContext } from "@cloudflare/next-on-pages";
 import { Metadata } from "next";
 import { GetBaseUrl } from "@/lib/apiFunctions";
-import { Navbar } from "@/components/layout/Navbar";
-import { Footer } from "@/components/layout/Footer";
+import { LinkButton } from "@/components/forms/LinkButton";
 export const runtime = "edge";
 
 export const metadata: Metadata = {
@@ -31,17 +30,25 @@ export default async function PlayerSearchPage() {
 
   return (
     <>
-      <Navbar showSearch={true}></Navbar>
-      <section className="hero bg-blue">
-        <div className="container">
-          <Title title="Players Home"></Title>
-        </div>
-      </section>
-
-      <section className="overlay">
-        <PlayerSearch default={playerResults.players} season="2023" />
-      </section>
-      <Footer></Footer>
+      <Title title="Players Search" subTitle="Player Records" summary={""}>
+        <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-50">
+          Search for players by season or position - or view{" "}
+          <LinkButton
+            href="/player-records/most-appearances"
+            text="appearance records" />{" "}
+          or{" "}
+          <LinkButton href="/player-records/top-scorers" text="top scorers" />
+          , You can also see players with just{" "}
+          <LinkButton
+            href="/player-records/only-one-appearance"
+            text="one appearance"/>{" "}
+          and browse{" "}
+          <LinkButton href="/top-scorers-by-season" text="top scorers by season" />
+          {" "}or players with{" "}
+          <LinkButton href="/hat-tricks" text="hat tricks" />.
+        </p>
+      </Title>
+      <PlayerSearch default={playerResults.players} season="2023" />
     </>
   );
 }

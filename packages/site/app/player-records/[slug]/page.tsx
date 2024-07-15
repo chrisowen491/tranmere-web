@@ -1,10 +1,8 @@
 import { PlayerSearch } from "@/components/apps/PlayerSearch";
-import { Title } from "@/components/layout/Title";
+import { Title } from "@/components/fragments/Title";
 import { PlayerSeasonSummary } from "@tranmere-web/lib/src/tranmere-web-types";
 import { getRequestContext } from "@cloudflare/next-on-pages";
 import { GetBaseUrl } from "@/lib/apiFunctions";
-import { Navbar } from "@/components/layout/Navbar";
-import { Footer } from "@/components/layout/Footer";
 export const runtime = "edge";
 
 export async function generateMetadata({
@@ -24,6 +22,9 @@ export async function generateMetadata({
   } else if (params.slug === "top-scorers") {
     description = "Tranmere Rovers FC Top Scorers Since 1977";
     title = "Tranmere Record Goalscorers";
+  } else if (params.slug === "top-scorers") {
+    description = "Tranmere Rovers FC Player Stats Season " + params.slug;
+    title = "Tranmere Record Player Stats - Season " + params.slug;
   }
 
   return {
@@ -53,6 +54,9 @@ export default async function PlayerSearchPage({
   } else if (params.slug === "top-scorers") {
     sort = "Goals";
     title = "Tranmere Record Goalscorers";
+  } else {
+    season = params.slug;
+    title = "Player Stats - Season " + params.slug;
   }
 
   const latestSeasonRequest = await fetch(
@@ -65,22 +69,13 @@ export default async function PlayerSearchPage({
 
   return (
     <>
-      <Navbar showSearch={true}></Navbar>
-      <section className="hero bg-blue">
-        <div className="container">
-          <Title title={title!}></Title>
-        </div>
-      </section>
-
-      <section className="overlay">
-        <PlayerSearch
-          default={playerResults.players}
-          sort={sort!}
-          filter={filter!}
-          season={season!}
-        />
-      </section>
-      <Footer></Footer>
+      <Title title={title!} subTitle="Player Records"></Title>
+      <PlayerSearch
+        default={playerResults.players}
+        sort={sort!}
+        filter={filter!}
+        season={season!}
+      />
     </>
   );
 }

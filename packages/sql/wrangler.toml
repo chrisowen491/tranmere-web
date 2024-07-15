@@ -1,0 +1,6 @@
+name = "tranmere-web"
+
+[[d1_databases]]
+binding = "DB" # i.e. available in your Worker on env.DB
+database_name = "tranmere-web"
+database_id = "cb021697-9af3-4872-b8eb-ce49be71bb8c"

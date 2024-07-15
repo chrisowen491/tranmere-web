@@ -16,7 +16,7 @@ import "instantsearch.css/themes/reset.css";
 // Or include the full Satellite theme
 import "instantsearch.css/themes/satellite.css";
 
-import { Panel } from "@/components/Panel";
+import { Panel } from "@/components/search/Panel";
 
 const client = algoliasearch("DZJXSVOWI3", "c050f0bd17ccfde9aa78a3563d552db2");
 

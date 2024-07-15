@@ -1,14 +1,18 @@
 export const runtime = "edge";
 
-import { Gallery } from "@/components/Gallery";
-import { SideBar } from "@/components/sidebar/SideBar";
+import { Gallery } from "@/components/blogs/Gallery";
 import { getArticle, getAssetsByTag } from "@/lib/api";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import { notFound } from "next/navigation";
-import { Navbar } from "@/components/layout/Navbar";
-import { Footer } from "@/components/layout/Footer";
-import { Kit } from "@/components/Kit";
-import { Star } from "@/components/Star";
+import { Kit } from "@/components/blogs/Kit";
+import { Star } from "@/components/blogs/Star";
+import { Navigation } from "@/components/layout/Navigation";
+import { Title } from "@/components/fragments/Title";
+import { BLOCKS, MARKS } from "@contentful/rich-text-types";
+import { getRequestContext } from "@cloudflare/next-on-pages";
+import { GetCommentsByUrl } from "@/lib/comments";
+import { Reviews } from "@/components/comments/Reviews";
+import CommentPanel from "@/components/comments/CommentPanel";
 
 export async function generateMetadata({
   params,
@@ -37,105 +41,120 @@ export default async function BlogPage({
     ? await getAssetsByTag(article.galleryTag)
     : null;
 
+  const Text = ({ children }: any) => (
+    <p className="align-center">{children}</p>
+  );
+
+  const url = `/page/blog/${params.slug}`;
+  const comments = await GetCommentsByUrl(getRequestContext().env, url);
+
+  let score = 0;
+  comments.forEach((c) => {
+    score = score + c.rating;
+  });
+
+  const avg = Math.round(score / comments.length);
+
+  const options = {
+    renderNode: {
+      [BLOCKS.PARAGRAPH]: (node: any, children: any) => <Text>{children}</Text>,
+    },
+    renderText: (text: string) => text.replace("!", "?"),
+  };
+
   return (
     <>
-      <Navbar showSearch={true}></Navbar>
-      <section className="hero bg-blue overlay">
-        <div className="container">
-          <div className="row align-items-end justify-content-between">
-            {article.pic ? (
-              <>
-                <div className="col-md-6 text-white mb-3 mb-md-0">
-                  <div className="row gutter-2">
-                    <div className="col-12">
-                      <h1 className="h2 font-weight-normal" itemProp="headline">
-                        {article.title}
-                      </h1>
-                      {article.datePosted ? (
-                        <h3
-                          className="h3 font-weight-normal"
-                          itemProp="datePublished"
-                        >
-                          Date: {article.datePosted.substring(0, 10)}
-                        </h3>
-                      ) : (
-                        ""
-                      )}
-                      {article.author ? (
-                        <h3 className="h3 font-weight-normal" itemProp="author">
-                          Author: {article.author}
-                        </h3>
-                      ) : (
-                        ""
-                      )}
-                    </div>
-                  </div>
-                </div>
-                <div className="col-md-6 pl-md-5">
-                  <meta itemProp="image" content={article.pic.url} />
-                  <img
-                    src={`${article.pic.url}?h=300`}
-                    alt="Image"
-                    className="overlay-item-bottom"
-                  />
-                </div>
-              </>
-            ) : (
-              <div className="col-md-12 text-white mb-3 mb-md-0">
-                <div className="row gutter-2">
-                  <div className="col-12">
-                    <h1 className="h2 font-weight-normal">{article.title}</h1>
-                    {article.datePosted ? (
-                      <h3
-                        className="h3 font-weight-normal"
-                        itemProp="datePublished"
-                      >
-                        Date: {article.datePosted.substring(0, 10)}
-                      </h3>
-                    ) : (
-                      ""
-                    )}
-                    {article.author ? (
-                      <h3 className="h3 font-weight-normal" itemProp="author">
-                        Author: {article.author}
-                      </h3>
-                    ) : (
-                      ""
-                    )}
-                  </div>
-                </div>
-              </div>
-            )}
+      <div className="relative mx-auto flex w-full max-w-8xl flex-auto justify-center sm:px-2 lg:px-8 xl:px-12">
+        <div className="hidden lg:relative lg:block lg:flex-none">
+          <div className="absolute inset-y-0 right-0 w-[50vw] bg-slate-50 dark:hidden" />
+          <div className="absolute bottom-0 right-0 top-16 hidden h-12 w-px bg-gradient-to-t from-slate-800 dark:block" />
+          <div className="absolute bottom-0 right-0 top-28 hidden w-px bg-slate-800 dark:block" />
+          <div className="sticky top-[4.75rem] -ml-0.5 h-[calc(100vh-4.75rem)] w-64 overflow-y-auto overflow-x-hidden py-16 pl-0.5 pr-8 xl:w-72 xl:pr-16">
+            <Navigation />
           </div>
         </div>
-      </section>
+        <div className="columns-1 px-8">
+          <section className="">
+            <Title
+              title={article.title}
+              subTitle={article.author ? `Author: ${article.author}` : "Blog"}
+              summary={
+                article.datePosted
+                  ? `Date: ${new Date(article.datePosted).toDateString()}`
+                  : undefined
+              }
+            ></Title>
+            {article.pic ? (
+              <img
+                src={`${article.pic.url}?h=300`}
+                alt="Image"
+                className="overlay-item-bottom"
+              />
+            ) : (
+              ""
+            )}
+            <Reviews
+              text={"Reviews"}
+              avg={avg}
+              count={comments.length}
+              className="mx-auto max-w-7xl px-6 lg:px-8"
+            ></Reviews>
+          </section>
 
-      <section className="bg-white" style={{ padding: "0px" }}>
-        <div className="container">
-          <div className="row">
-            <article className="col-md-8 content-body">
-              <div className="row">
-                <div className="col-12">
-                  {documentToReactComponents(article.blog.json)}
-                  {gallery ? <Gallery gallery={gallery}></Gallery> : ""}
-                  {article.galleryCollection &&
-                  article.galleryCollection.items.length > 0 ? (
-                    <Gallery
-                      gallery={article.galleryCollection.items}
-                    ></Gallery>
-                  ) : (
-                    ""
-                  )}
-                  {article.blocksCollection &&
-                  article.blocksCollection.items.length > 0 ? (
-                    <>
+          <article className="py-10">
+            <div
+              className="prose 
+              mx-auto max-w-7xl px-6 lg:px-8
+              prose-slate max-w-none 
+              dark:prose-invert 
+              dark:text-slate-400 
+              prose-headings:scroll-mt-28 
+              prose-headings:font-display 
+              prose-headings:font-normal 
+              lg:prose-headings:scroll-mt-[8.5rem] 
+              prose-lead:text-slate-500 
+              dark:prose-lead:text-slate-400 
+              prose-a:font-semibold 
+              dark:prose-a:text-blue-600 
+              prose-a:text-indigo-600
+              hover:prose-a:[--tw-prose-underline-size:6px] 
+              dark:[--tw-prose-background:theme(colors.slate.900)] 
+              dark:hover:prose-a:[--tw-prose-underline-size:6px] 
+              prose-pre:rounded-xl 
+              prose-pre:bg-slate-900 
+              prose-pre:shadow-lg 
+              dark:prose-pre:bg-slate-800/60 
+              dark:prose-pre:shadow-none 
+              dark:prose-pre:ring-1 
+              dark:prose-pre:ring-slate-300/10 
+              dark:prose-hr:border-slate-800"
+            >
+              {documentToReactComponents(article.blog.json, options)}
+
+              {gallery ? <Gallery gallery={gallery}></Gallery> : ""}
+              {article.galleryCollection &&
+              article.galleryCollection.items.length > 0 ? (
+                <>
+                  <p>Hover over the image for the buttons to browse the gallery</p>
+                  <Gallery gallery={article.galleryCollection.items}></Gallery>
+                </>
+              ) : (
+                ""
+              )}
+              {article.blocksCollection &&
+              article.blocksCollection.items.length > 0 ? (
+                <div className="py-2 sm:py-2">
+                  <div className="mx-auto max-w-7xl px-6 lg:px-8">
+                    <ul
+                      role="list"
+                      className="mx-auto mt-10 grid max-w-2xl grid-cols-2 gap-x-8 gap-y-16 text-center sm:grid-cols-3 md:grid-cols-4 lg:mx-0 lg:max-w-none lg:grid-cols-5 xl:grid-cols-6"
+                    >
                       {article.blocksCollection.items.map((block, idx) => (
-                        <>
+                        <li key={idx}>
                           {block.__typename == "Kit" ? (
                             <Kit
                               season={block.season!}
                               image={block.img!}
-                              key={idx}
                             ></Kit>
                           ) : (
                             <Star
@@ -145,47 +164,41 @@ export default async function BlogPage({
                               season={block.season!}
                               date={block.date!}
                               programme={block.programme!}
-                              key={idx}
                             ></Star>
                           )}
-                        </>
+                        </li>
                       ))}
-                    </>
-                  ) : (
-                    ""
-                  )}
+                    </ul>
+                  </div>
                 </div>
-              </div>
-              <div className="row gutter-2"></div>
-              <div className="row">
-                <div className="col-12">
-                  {article.tags ? (
-                    <>
-                      {article.tags.map((tag, idx) => (
-                        <span key={idx}>
-                          <span className="badge badge-primary">
-                            <a
-                              href={`/page/tag/${tag}`}
-                              style={{ color: "white" }}
-                            >
-                              {tag}
-                            </a>
-                          </span>
-                          &nbsp;
-                        </span>
-                      ))}
-                    </>
-                  ) : (
-                    ""
-                  )}
-                </div>
-              </div>
-            </article>
-            <SideBar></SideBar>
-          </div>
+              ) : (
+                ""
+              )}
+            </div>
+            <CommentPanel
+              comments={comments}
+              url={url}
+              className="mx-auto max-w-7xl px-6 lg:px-8 mt-6"
+            ></CommentPanel>
+            <div className="mx-auto max-w-7xl px-6 lg:px-8 mt-6">
+              {article.tags ? (
+                <>
+                  {article.tags.map((tag, idx) => (
+                    <span key={idx}>
+                      <span className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
+                        <a href={`/page/tag/${tag}`}>{tag}</a>
+                      </span>
+                      &nbsp;
+                    </span>
+                  ))}
+                </>
+              ) : (
+                ""
+              )}
+            </div>
+          </article>
         </div>
-      </section>
-      <Footer></Footer>
+      </div>
     </>
   );
 }

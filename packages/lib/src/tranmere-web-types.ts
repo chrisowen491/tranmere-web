@@ -29,7 +29,7 @@ export interface BaseEntity {
 
 export interface Player extends BaseEntity {
   id?: string;
-  biography?: string;
+  biography?: any;
   foot?: string;
   links?: string;
   pic?: string;
@@ -82,6 +82,8 @@ export interface HatTrick {
   Opposition: string;
   Goals: number;
   Season: number;
+  picLink?: string;
+
 }
 
 export interface Link {

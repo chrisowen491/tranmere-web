@@ -1,23 +1,21 @@
-import { MatchMessageBubble } from "./MatchMessageBubble";
-import { PlayerBubble } from "./PlayerBubble";
-import { ExtendedMessage } from "../../lib/types";
+import { MatchMessageBubble } from "@/components/chat/MatchMessageBubble";
+import { PlayerBubble } from "@/components/chat/PlayerBubble";
+import { ExtendedMessage } from "@/lib/types";
 
 export function ChatMessageBubble(props: { message: ExtendedMessage }) {
   const userAvatar = "/images/2023.png";
   const colorClassName =
     props.message.role === "user"
-      ? "bg-green text-white"
-      : "bg-blue text-white";
+      ? "bg-blue-600 text-gray-50"
+      : "bg-green-600 text-gray-50";
   const avatar =
     props.message.role === "user" ? userAvatar : props.message.avatar;
   return (
-    <div
-      className={`ml-auto mr-auto ${colorClassName} rounded px-4 py-2 max-w-[80%] mb-4 flex row`}
-    >
-      <div className="col-2">
-        <img src={avatar} />
+    <div className={`${colorClassName} rounded px-4 py-2 max-w-full mb-8 flex`}>
+      <div className="mr-2">
+        <img alt="" src={avatar} className="h-24 w-24 rounded-full" />
       </div>
-      <div className="col-10">
+      <div className="whitespace-pre-wrap flex flex-col">
         <span>{props.message.content}</span>
         {props.message.player && (
           <PlayerBubble

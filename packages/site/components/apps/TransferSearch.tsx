@@ -2,6 +2,11 @@
 import { GetSeasons } from "@/lib/apiFunctions";
 import { Team, Transfer } from "@tranmere-web/lib/src/tranmere-web-types";
 import { useState } from "react";
+import { TransferTable } from "./partials/TransferTable";
+import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
+import { XMarkIcon } from "@heroicons/react/24/outline";
+import { FilterBox } from "@/components/forms/FilterBox";
+import { SubmitButton } from "@/components/forms/SubmitButton";
 
 export function TransferSearch(props: {
   default: Transfer[];
@@ -13,11 +18,16 @@ export function TransferSearch(props: {
   const seasons = GetSeasons();
   const base = "/api/transfer-search/";
 
+  const [open, setOpen] = useState(false);
   const [transfers, setTransfers] = useState(props.default);
   const [season, setSeason] = useState(props.season);
   const [club, setClub] = useState(props.club);
   const [filter, setFilter] = useState(props.filter);
   const [loading, setLoading] = useState(false);
+
+  function showFilters(event: React.MouseEvent<HTMLElement>): void {
+    setOpen(true);
+  }
 
   const onSubmit = async (formData: FormData) => {
     setSeason(formData.get("season") as string);
@@ -41,121 +51,124 @@ export function TransferSearch(props: {
   };
 
   return (
-    <div className="container overlay-item-top">
-      <div className="row">
-        <div className="col">
-          <div className="content boxed">
-            <div className="row separated">
-              <aside className="col-md-3 content-aside bg-light">
-                <div className="widget">
-                  <form action={onSubmit}>
-                    <h3 className="widget-title">Filter</h3>
-                    <div className="form-group">
-                      <label htmlFor="season">Season</label>
-                      <select
-                        defaultValue={season!}
-                        className="form-control form-control-sm"
-                        id="season"
-                        name="season"
-                      >
-                        <option value="">All</option>
-                        {seasons.map((season, idx) => (
-                          <option key={idx}>{season}</option>
-                        ))}
-                      </select>
+    <>
+      <Dialog open={open} onClose={setOpen} className="relative z-10">
+        <div className="fixed inset-0" />
+
+        <div className="fixed inset-0 overflow-hidden">
+          <div className="absolute inset-0 overflow-hidden">
+            <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
+              <DialogPanel
+                transition
+                className="pointer-events-auto w-screen max-w-md transform transition duration-500 ease-in-out data-[closed]:translate-x-full sm:duration-700"
+              >
+                <div className="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
+                  <div className="bg-indigo-700 px-4 py-6 sm:px-6">
+                    <div className="flex items-center justify-between">
+                      <DialogTitle className="text-base font-semibold leading-6 text-white">
+                        Filter Controls
+                      </DialogTitle>
+                      <div className="ml-3 flex h-7 items-center">
+                        <button
+                          type="button"
+                          onClick={() => setOpen(false)}
+                          className="relative rounded-md bg-indigo-700 text-indigo-200 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
+                        >
+                          <span className="absolute -inset-2.5" />
+                          <span className="sr-only">Close panel</span>
+                          <XMarkIcon aria-hidden="true" className="h-6 w-6" />
+                        </button>
+                      </div>
                     </div>
-                    <div className="form-group">
-                      <label htmlFor="opposition">Opposition</label>
-                      <select
-                        className="form-control form-control-sm"
-                        id="club"
-                        name="club"
-                        defaultValue={club!}
-                      >
-                        <option value="">All</option>
-                        {props.teams.map((s, idx) => (
-                          <option key={idx}>{s.name}</option>
-                        ))}
-                      </select>
-                    </div>
-                    <div className="form-group">
-                      <label htmlFor="filter">Filter</label>
-                      <select
-                        defaultValue={filter!}
-                        className="form-control form-control-sm"
-                        id="filter"
-                        name="filter"
-                      >
-                        <option></option>
-                        <option>In</option>
-                        <option>Out</option>
-                      </select>
-                    </div>
-                    <button
-                      type="submit"
-                      className="btn btn-sm btn-primary btn-rounded btn-player-search"
-                    >
-                      Search
-                    </button>
-                  </form>
-                </div>
-              </aside>
-              <article className="col-md-9 content-body tranmere-results">
-                {loading ? (
-                  <div id="loading">
-                    <div className="spinner-grow text-primary" role="status">
-                      <span className="sr-only">Loading...</span>
+                    <div className="mt-1">
+                      <p className="text-sm text-indigo-300">
+                        Filter results using the controls below.
+                      </p>
                     </div>
                   </div>
-                ) : (
-                  ""
-                )}
-                <div id="player-search">
-                  <table className="table">
-                    <thead className="thead-dark">
-                      <tr>
-                        <th scope="col">Name</th>
-                        <th
-                          scope="col"
-                          className="d-none d-sm-table-cell text-center"
-                        >
-                          Season
-                        </th>
-                        <th scope="col" className="text-center">
-                          In/Out
-                        </th>
-                        <th scope="col" className="text-center">
-                          Club
-                        </th>
-                        <th scope="col" className="text-center">
-                          Value
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {transfers.map((transfer, idx) => (
-                        <tr key={idx}>
-                          <td>
-                            <a href={`/page/player/${transfer.name}`}>
-                              {transfer.name}
-                            </a>
-                          </td>
-                          <td className="d-none d-sm-table-cell text-center">
-                            {transfer.season}
-                          </td>
-                          <td className="text-center">{transfer.type}</td>
-                          <td className="text-center">{transfer.club}</td>
-                          <td className="text-center">{transfer.value}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                  <div className="relative flex-1 px-4 sm:px-6">
+                    <form action={onSubmit}>
+                      <div className="p-4 ">
+                        <div className="border-b border-gray-900/10 pb-12">
+                          <div className="mt-10">
+                            <FilterBox
+                              title="Season"
+                              identifier={"season"}
+                              options={seasons.map((s) => ({
+                                label: `${s}`,
+                                value: `${s}`,
+                              }))}
+                              includeAll={true}
+                              default={season}
+                            ></FilterBox>
+                            <FilterBox
+                              title="Club"
+                              identifier={"club"}
+                              options={props.teams.map((s) => ({
+                                label: s.name,
+                                value: s.name,
+                              }))}
+                              includeAll={true}
+                              default={club}
+                            ></FilterBox>
+
+                            <FilterBox
+                              title="Filter"
+                              default={filter}
+                              identifier={"filter"}
+                              options={[
+                                { label: "In", value: "In" },
+                                { label: "Out", value: "Out" },
+                              ]}
+                              includeAll={true}
+                            ></FilterBox>
+                          </div>
+                        </div>
+                        <div className="mt-6 flex items-center justify-end gap-x-6">
+                          <SubmitButton text={"Search"}></SubmitButton>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
                 </div>
-              </article>
+              </DialogPanel>
             </div>
           </div>
         </div>
-      </div>
-    </div>
+      </Dialog>
+
+      <button
+        type="button"
+        onClick={showFilters}
+        className="
+      bg-green-500 
+      dark:bg-sky-400
+      px-3 py-2 
+      text-sm 
+      font-semibold 
+      text-white 
+      shadow-sm 
+      hover:bg-green-600 
+      dark:hover:bg-sky-500 
+      focus-visible:outline 
+      focus-visible:outline-2 
+      focus-visible:outline-offset-2 
+      focus-visible:outline-indigo-600"
+      >
+        Filter
+      </button>
+
+      {loading ? (
+        <div id="loading">
+          <div className="spinner-grow text-primary" role="status">
+            <span className="sr-only">Loading...</span>
+          </div>
+        </div>
+      ) : (
+        ""
+      )}
+
+      <TransferTable records={transfers} title="Transfers"></TransferTable>
+    </>
   );
 }

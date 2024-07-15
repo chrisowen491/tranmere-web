@@ -3,10 +3,12 @@ import {
   Appearance,
   Player,
   PlayerSeasonSummary,
-  Team,
   Transfer,
 } from "@tranmere-web/lib/src/tranmere-web-types";
 import type { Message } from "ai/react";
+import { NextPage } from "next";
+import { AppProps } from "next/app";
+import { ReactElement, ReactNode } from "react";
 
 export interface PlayerName {
   name: string;
