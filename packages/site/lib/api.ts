@@ -56,6 +56,10 @@ const ARTICLE_GRAPHQL_FIELDS = `
         match
         programme
       }
+      ... on Graph {
+        title
+        chart
+      }        
     }
   }
   galleryTag
