@@ -16,7 +16,18 @@ const navigation = [
   { name: "Results", href: "/results", current: false },
   { name: "Players", href: "/playersearch", current: false },
   { name: "Media", href: "/page/tag/Media", current: false },
-  { name: "Stats", href: "/page/tag/Stats", current: false },
+  { name: "Blog", href: "/blog", current: false },
+];
+
+const mobilenavigation = [
+  { name: "Results", href: "/results", current: false },
+  { name: "Players", href: "/playersearch", current: false },
+  { name: "Transfers", href: "/transfer-central", current: false },
+  { name: "Media", href: "/page/tag/Media", current: false },
+  { name: "Blog", href: "/blog", current: false },
+  { name: "Avatar Builder", href: "/player-builder", current: false },
+  { name: "Contact Us", href: "/contact", current: false },
+  { name: "About the Site", href: "/page/blog/about", current: false },
 ];
 
 function classNames(...classes: string[]) {
@@ -114,7 +125,7 @@ export function Navbar(props: { showSearch: boolean }) {
 
       <DisclosurePanel className="lg:hidden">
         <div className="space-y-1 px-2 pb-3 pt-2">
-          {navigation.map((item, idx) => (
+          {mobilenavigation.map((item, idx) => (
               <DisclosureButton
               as="a"
               key={idx}
@@ -126,17 +137,7 @@ export function Navbar(props: { showSearch: boolean }) {
           ))}
         </div>
           {user ? (
-            <div className="border-t border-gray-700 pb-3 pt-4">
-              <div className="flex items-center px-5">
-                <div className="flex-shrink-0">
-                  <div className="flex-shrink-0 text-gray-50">
-                    Change Theme:
-                  </div>
-                  <div className="flex-shrink-0">
-                    <ThemeSelector className="relative z-10 px-2" />
-                  </div>
-                </div>
-              </div>  
+            <div className="border-t border-gray-700 pb-3 pt-4"> 
               <div className="flex items-center px-5">
                 <div className="flex-shrink-0">
                   <img
@@ -150,7 +151,8 @@ export function Navbar(props: { showSearch: boolean }) {
                   <div className="text-sm font-medium text-gray-400">{user.email}</div>
                 </div>
               </div>
-              <div className="mt-3 space-y-1 px-2">
+              <div className="flex items-center px-5">
+                <div className="flex-shrink-0">
                 <DisclosureButton
                   as="a"
                   aria-label="logout"
@@ -159,27 +161,42 @@ export function Navbar(props: { showSearch: boolean }) {
                 >
                   Sign out
                 </DisclosureButton>
+                </div>
+                <div className="ml-3">
+                  <div className="flex items-center px-5">
+                    <div className="flex-shrink-0 text-gray-50">
+                      Change Theme:
+                    </div>
+                    <div className="flex-shrink-0">
+                      <ThemeSelector className="relative z-10 px-2" />
+                    </div>
+                  </div>                  
+                </div>
               </div>
             </div>
           ) : (
             <div className="border-t border-gray-700 pb-3 pt-4">
               <div className="flex items-center px-5">
-                <div className="flex-shrink-0 text-gray-50">
-                  Change Theme:
-                </div>
                 <div className="flex-shrink-0">
-                  <ThemeSelector className="relative z-10 px-2" />
+                  <DisclosureButton
+                    as="a"
+                    href="/api/auth/login"
+                    aria-label="login"
+                    className="block rounded-md px-3 py-2 text-base font-medium text-gray-50 hover:bg-gray-700 hover:text-white"
+                  >
+                    Sign In
+                  </DisclosureButton>
                 </div>
-              </div>
-              <div className="mt-3 space-y-1 px-2">
-                <DisclosureButton
-                  as="a"
-                  href="/api/auth/login"
-                  aria-label="login"
-                  className="block rounded-md px-3 py-2 text-base font-medium text-gray-50 hover:bg-gray-700 hover:text-white"
-                >
-                  Sign In
-                </DisclosureButton>
+                <div className="ml-3">
+                  <div className="flex items-center px-5">
+                    <div className="flex-shrink-0 text-gray-50">
+                      Change Theme:
+                    </div>
+                    <div className="flex-shrink-0">
+                      <ThemeSelector className="relative z-10 px-2" />
+                    </div>
+                  </div>                  
+                </div>
               </div>
             </div>
           )}

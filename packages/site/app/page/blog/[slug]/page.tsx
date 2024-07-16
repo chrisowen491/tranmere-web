@@ -181,8 +181,8 @@ export default async function BlogPage({
               )}
               {article.blocksCollection &&
               article.blocksCollection.items.length > 0 ? (
-                <div className="py-2 sm:py-2">
-                  <div className="mx-auto max-w-7xl px-6 lg:px-8">
+                <div className="">
+                  <div className="w-full">
                       {article.blocksCollection.items.map((block, idx) => (
                         <div key={idx} style={{}}>
                           {block.__typename == "Graph" ? (
