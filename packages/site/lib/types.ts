@@ -45,7 +45,7 @@ export interface GalleryImage {
 }
 
 export interface Block {
-  __typename: "Kit" | "Star";
+  __typename: "Kit" | "Star" | "Graph";
   season?: string;
   img?: string;
   name?: string;
@@ -53,6 +53,24 @@ export interface Block {
   notes?: string;
   match?: string;
   programme?: string;
+  title?: string;
+  chart?: ChartData;
+}
+
+export interface ChartData {
+  data: Chart;
+}
+
+export interface Chart {
+  labels: string[];
+  datasets: DataSet[];
+}
+
+export interface DataSet {
+  data: number[];
+  label: string;
+  borderColor: string;
+  backgroundColor: string;
 }
 
 export interface BlogItem {

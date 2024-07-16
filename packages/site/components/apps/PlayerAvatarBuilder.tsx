@@ -1,10 +1,5 @@
 "use client";
 import { useState } from "react";
-import {
-  Disclosure,
-  DisclosureButton,
-  DisclosurePanel,
-} from "@headlessui/react";
 
 export function PlayerAvatarBuilder() {
   const base = "https://www.tranmere-web.com/builder/";
@@ -20,9 +15,9 @@ export function PlayerAvatarBuilder() {
 
   return (
     <>
+      
       <div className="lg:flex lg:flex-row-reverse">
         <h1 className="sr-only">Checkout</h1>
-
         <section
           aria-labelledby="summary-heading"
           className="flex-col bg-gray-50 px-20"
