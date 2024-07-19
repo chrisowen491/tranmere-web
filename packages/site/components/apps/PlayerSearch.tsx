@@ -228,7 +228,7 @@ export function PlayerSearch(props: {
                     <th scope="col" className="px-3 py-3.5">
                       Goals
                     </th>
-                    <th scope="col" className="px-3 py-3.5">
+                    <th scope="col" className="hidden px-3 py-3.5 lg:table-cell">
                       Assists
                     </th>
                     <th
@@ -245,14 +245,14 @@ export function PlayerSearch(props: {
                     </th>
                     <th
                       scope="col"
-                      className="hidden px-3 py-3.5 lg:table-cell"
+                      className="hidden px-1 md:px-3 py-3.5 lg:table-cell"
                     >
                       Penalties
                     </th>
-                    <th scope="col" className="hidden px-3 py-3.5 lg:table-cell">
+                    <th scope="col" className="hidden px-1 md:px-3 py-3.5 lg:table-cell">
                       Red Cards
                     </th>
-                    <th scope="col" className="hidden px-3 py-3.5 lg:table-cell">
+                    <th scope="col" className="hidden px-1 md:px-3 py-3.5 lg:table-cell">
                       Yellow Cards
                     </th>
                   </tr>
@@ -260,7 +260,7 @@ export function PlayerSearch(props: {
                 <tbody className="divide-y divide-gray-200  text-sm">
                   {players.map((player, idx) => (
                     <tr key={idx}>
-                      <td className="whitespace-nowrap px-3 py-4">
+                      <td className="whitespace-nowrap px-1 md:px-3 py-4">
                         <div className="flex items-center">
                           <div className="h-11 w-11 flex-shrink-0">
                             {player.bio?.picLink ? (
@@ -280,28 +280,28 @@ export function PlayerSearch(props: {
                           </div>
                         </div>
                       </td>
-                      <td className="whitespace-nowrap px-3 py-4 text-center">
+                      <td className="whitespace-nowrap px-1 md:px-3 py-4 text-center">
                         {player.starts}
                       </td>
-                      <td className="whitespace-nowrap px-3 py-4 text-center">
+                      <td className="whitespace-nowrap px-1 md:px-3 py-4 text-center">
                         {player.goals}
                       </td>
-                      <td className="whitespace-nowrap px-3 py-4 text-center">
+                      <td className="whitespace-nowrap hidden px-1 md:px-3 py-3.5 lg:table-cell text-center">
                         {player.assists}
                       </td>
-                      <td className="whitespace-nowrap hidden px-3 py-3.5 lg:table-cell text-center">
+                      <td className="whitespace-nowrap hidden px-1 md:px-3 py-3.5 lg:table-cell text-center">
                         {player.headers}
                       </td>
-                      <td className="whitespace-nowrap hidden px-3 py-3.5 lg:table-cell text-center">
+                      <td className="whitespace-nowrap hidden px-1 md:px-3 py-3.5 lg:table-cell text-center">
                         {player.freekicks}
                       </td>
-                      <td className="whitespace-nowrap hidden px-3 py-3.5 lg:table-cell text-center">
+                      <td className="whitespace-nowrap hidden px-1 md:px-3 py-3.5 lg:table-cell text-center">
                         {player.penalties}
                       </td>
-                      <td className="whitespace-nowrap hidden px-3 py-3.5 lg:table-cell text-center">
+                      <td className="whitespace-nowrap hidden px-1 md:px-3 py-3.5 lg:table-cell text-center">
                         {player.red}
                       </td>
-                      <td className="whitespace-nowrap hidden px-3 py-3.5 lg:table-cell text-center">
+                      <td className="whitespace-nowrap hidden px-1 md:px-3 py-3.5 lg:table-cell text-center">
                         {player.yellow}
                       </td>
                     </tr>

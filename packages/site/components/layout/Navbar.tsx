@@ -72,7 +72,7 @@ export function Navbar(props: { showSearch: boolean }) {
               </div>
             </div>
           </div>
-          <div className="flex flex-1 justify-center px-2 lg:ml-6 lg:justify-end">
+          <div className="flex flex-1 justify-center lg:ml-6 lg:justify-end">
             <SearchBar></SearchBar>
           </div>
           <div className="flex lg:hidden">
