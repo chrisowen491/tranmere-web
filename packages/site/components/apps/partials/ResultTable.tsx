@@ -18,7 +18,7 @@ export function ResultTable(props: {
           <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
             {props.h2hresults && props.h2hresults.length > 0 ? (
               <>
-                <h2 className="mt-2 text-2xl font-bold tracking-tight sm:text-2xl px-2 md:px-0">
+                <h2 className="mt-2 text-2xl font-bold tracking-tight sm:text-2xl px-1 md:px-0">
                   Overall Record
                 </h2>
                 <table className="min-w-full divide-y divide-gray-300">
@@ -119,28 +119,28 @@ export function ResultTable(props: {
             ) : (
               ""
             )}
-            <h2 className="mt-2 text-2xl font-bold tracking-tight sm:text-2xl sm:text-2xl px-2 md:px-0">
+            <h2 className="mt-2 text-2xl font-bold tracking-tight sm:text-2xl sm:text-2xl px-1 md:px-0">
               {props.title}
             </h2>
             <table className="min-w-full divide-y text-left text-sm">
               <thead className="font-semibold ">
                 <tr>
-                  <th scope="col" className="py-3 py-3.5 px-3">
+                  <th scope="col" className="py-3 py-3.5 px-1 sm:px-3">
                     Date
                   </th>
-                  <th scope="col" className="px-3 py-3.5">
+                  <th scope="col" className="px-1 sm:px-3 py-3.5">
                     Opposition
                   </th>
-                  <th scope="col" className="hidden px-3 py-3.5 lg:table-cell">
+                  <th scope="col" className="hidden px-1 sm:px-3 py-3.5 lg:table-cell">
                     Competition
                   </th>
-                  <th scope="col" className="px-3 py-3.5">
+                  <th scope="col" className="px-1 sm:px-3 py-3.5">
                     Result
                   </th>
-                  <th scope="col" className="hidden px-3 py-3.5 lg:table-cell">
+                  <th scope="col" className="hidden px-1 sm:px-3 py-3.5 lg:table-cell">
                     Att.
                   </th>
-                  <th scope="col" className="hidden px-3 py-3.5 lg:table-cell">
+                  <th scope="col" className="hidden px-1 sm:px-3 py-3.5 lg:table-cell">
                     Programme
                   </th>
                 </tr>
@@ -148,23 +148,23 @@ export function ResultTable(props: {
               <tbody className="divide-y divide-gray-200 text-sm">
                 {props.results.map((result, idx) => (
                   <tr key={idx}>
-                    <td className="whitespace-nowrap px-3 py-4">
+                    <td className="whitespace-nowrap px-1 sm:px-3 py-4">
                       <LinkButton
                         text={result.date}
                         href={`/match/${result.season}/${result.date}`}
                       ></LinkButton>
                     </td>
-                    <td className="whitespace-nowrap px-3 py-4">
+                    <td className="whitespace-nowrap px-1 sm:px-3 py-4">
                       <LinkButton
                         text={result.opposition!}
                         href={`/games/${result.opposition}`}
                       ></LinkButton>
                     </td>
-                    <td className="whitespace-nowrap hidden px-3 py-3.5 lg:table-cell">
+                    <td className="whitespace-nowrap hidden px-1 sm:px-3 py-3.5 lg:table-cell">
                       {result.competition}
                     </td>
-                    <td className="whitespace-nowrap px-3 py-4">{result.ft}</td>
-                    <td className="whitespace-nowrap hidden px-3 py-3.5 lg:table-cell">
+                    <td className="whitespace-nowrap px-1 sm:px-3 py-4">{result.ft}</td>
+                    <td className="whitespace-nowrap hidden px-1 sm:px-3 py-3.5 lg:table-cell">
                       {result.attendance}
                     </td>
                     <td className="whitespace-nowrap hidden px-3 py-3.5 lg:table-cell">

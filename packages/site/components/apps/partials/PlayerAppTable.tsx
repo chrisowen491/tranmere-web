@@ -19,10 +19,10 @@ export function PlayerAppsTable(props: {
                   <th scope="col" className="py-3 py-3.5">
                     Season
                   </th>
-                  <th scope="col" className="py-3 py-3.5">
+                  <th scope="col" className="hidden px-3 py-3.5 lg:table-cell">
                     Competition
                   </th>
-                  <th scope="col" className="py-3 py-3.5">
+                  <th scope="col" className="py-3 px-3 py-3.5">
                     Opposition
                   </th>
                   <th scope="col" className="hidden px-3 py-3.5 lg:table-cell">
@@ -42,7 +42,7 @@ export function PlayerAppsTable(props: {
                         href={`/player-records/${record.Season}`}
                       ></LinkButton>
                     </td>
-                    <td className="whitespace-nowrap px-3 py-4">
+                    <td className="whitespace-nowrap hidden px-3 py-3.5 lg:table-cell">
                       {record.Competition}
                     </td>
                     <td className="whitespace-nowrap px-3 py-4">
