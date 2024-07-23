@@ -52,14 +52,6 @@ exports.handler = async (
   } else {
     delete view.programme;
   }
-  view.goalkeepers = [];
-  view.fullback1 = [];
-  view.fullback2 = [];
-  view.defenders = [];
-  view.midfielders = [];
-  view.wingers1 = [];
-  view.wingers2 = [];
-  view.strikers = [];
   view.formattedGoals = formatGoals(view.goals);
   if (view.attendance! > 0) view.hasAttendance = true;
   if (view.venue && view.venue != 'Unknown') view.hasVenue = true;
@@ -75,35 +67,6 @@ exports.handler = async (
         app.bio.picLink = app.bio.picLink.replace(re, '/' + theSeason + '/');
         app.bio.picLink = app.bio.picLink.replace(re3, '/' + theSeason + '/');
       }
-      if (app.bio) {
-        if (app.bio.position == 'Goalkeeper') {
-          view.goalkeepers.push(app);
-        } else if (app.bio.position == 'Central Defender') {
-          view.defenders.push(app);
-        } else if (
-          app.bio.position == 'Full Back' &&
-          view.fullback1.length == 0
-        ) {
-          view.fullback1.push(app);
-        } else if (
-          app.bio.position == 'Full Back' &&
-          view.fullback2.length == 0
-        ) {
-          view.fullback2.push(app);
-        } else if (app.bio.position == 'Central Midfielder') {
-          view.midfielders.push(app);
-        } else if (app.bio.position == 'Winger' && view.wingers1.length == 0) {
-          view.wingers1.push(app);
-        } else if (app.bio.position == 'Winger' && view.wingers2.length == 0) {
-          view.wingers2.push(app);
-        } else if (app.bio.position == 'Striker') {
-          view.strikers.push(app);
-        } else {
-          noPositionList.push(app);
-        }
-      } else {
-        noPositionList.push(app);
-      }
     } else {
       app.bio = {
         name: app.Name,
@@ -114,33 +77,6 @@ exports.handler = async (
     }
   }
 
-  for (const position of noPositionList) {
-    if (view.goalkeepers.length == 0) {
-      view.goalkeepers.push(position);
-    } else if (view.fullback1.length == 0) {
-      view.fullback1.push(position);
-    } else if (view.fullback2.length == 0) {
-      view.fullback2.push(position);
-    } else if (view.defenders.length < 2) {
-      view.defenders.push(position);
-    } else if (view.wingers1.length == 0) {
-      view.wingers1.push(position);
-    } else if (view.wingers2.length == 0) {
-      view.wingers2.push(position);
-    } else if (view.midfielders.length < 2) {
-      view.midfielders.push(position);
-    } else {
-      view.strikers.push(position);
-    }
-  }
-
-  view.defColspan = Math.floor(
-    24 / (view.defenders.length + view.fullback1.length + view.fullback2.length)
-  );
-  view.midColspan = Math.floor(
-    24 / (view.midfielders.length + view.wingers1.length + view.wingers2.length)
-  );
-  view.strColspan = Math.floor(24 / view.strikers.length);
   view.random = Math.ceil(Math.random() * 100000);
   view.url = `/match/${season}/${date}`;
   view.title = 'Match Summary';
@@ -149,11 +85,28 @@ exports.handler = async (
   view.date = date!;
   view.season = season!.toString();
 
-  const page = utils.buildPage(view, './templates/match.mustache');
-
-  const maxAge = season == 2021 ? 86400 : 2592000;
-
-  return utils.sendHTMLResponse(page, maxAge);
+  return utils.sendResponse(200, {
+    season: view.season,
+    score: view.ft,
+    date: view.date,
+    attendance: view.attendance,
+    referee: view.referee,
+    competition: view.competition,
+    pens: view.pens,
+    homeTeam: view.home,
+    awayTeam: view.visitor,
+    programme: view.largeProgramme,
+    venue: view.venue,
+    //fullGoals: view.goals,
+    apps: view.apps ? view.apps : [],
+    formattedGoals: view.formattedGoals,
+    report: view.report ? view.report.report : null,
+    team: view.apps.map((a) => a.Name),
+    goals: view.goals.map((g) => g.Scorer),
+    substitutes: view.apps
+      .filter((a) => a.SubbedBy)
+      .map((s) => s.SubbedBy + ' for ' + s.Name)
+  });
 };
 
 function formatGoals(goals: Goal[]) {

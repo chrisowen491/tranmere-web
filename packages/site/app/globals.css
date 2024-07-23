@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+#navsearch {
+  position: relative;
+}
+
+#navsearch .ais-Hits {
+  position: absolute;
+  top: 50;
+  left: 0;
+  width: 100%;
+  cursor: pointer;
+  z-index: 100;
+}
+
+#navsearch .ais-SearchBox-input {
+  padding-left: 2.5rem;
+}
+
+#autocomplete .ais-Hits {
+  cursor: pointer;
+}
+
+#autocomplete .aa-ItemIcon {
+  float: left;
+  padding-bottom: 30px;
+  padding-right: 20px;
+}
+
+#autocomplete .aa-ItemContentBody {
+  width: 500px;
+}
+#navsearch .ais-Hits-item:hover {
+  background-color: #064cdb;
+  color: white;
+}
+
+.carousel .slide img {
+  width: 300px !important;
+}

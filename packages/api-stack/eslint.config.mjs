@@ -7,6 +7,7 @@ export default [
       '**/*.config.js',
       '**/lambda/upload.js',
       '**/node_modules/**',
+      '**/cdk.out/**',
     ],
   },
   eslint.configs.recommended,

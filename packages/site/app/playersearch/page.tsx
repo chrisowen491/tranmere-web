@@ -1,0 +1,54 @@
+import { PlayerSearch } from "@/components/apps/PlayerSearch";
+import { Title } from "@/components/fragments/Title";
+import { PlayerSeasonSummary } from "@tranmere-web/lib/src/tranmere-web-types";
+import { getRequestContext } from "@cloudflare/next-on-pages";
+import { Metadata } from "next";
+import { GetBaseUrl } from "@/lib/apiFunctions";
+import { LinkButton } from "@/components/forms/LinkButton";
+export const runtime = "edge";
+
+export const metadata: Metadata = {
+  title: "Players Home",
+  description: "Tranmere Rovers player infomation index",
+};
+
+export default async function PlayerSearchPage() {
+  const base = GetBaseUrl(getRequestContext().env) + "/player-search/";
+
+  var dateobj = new Date();
+  var theYear =
+    dateobj.getUTCMonth() > 6
+      ? dateobj.getFullYear()
+      : dateobj.getFullYear() - 1;
+
+  const latestSeasonRequest = await fetch(
+    base + `?season=${theYear}&sort=&filter=`,
+  );
+  const playerResults = (await latestSeasonRequest.json()) as {
+    players: PlayerSeasonSummary[];
+  };
+
+  return (
+    <>
+      <Title title="Players Search" subTitle="Player Records" summary={""}>
+        <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-50">
+          Search for players by season or position - or view{" "}
+          <LinkButton
+            href="/player-records/most-appearances"
+            text="appearance records" />{" "}
+          or{" "}
+          <LinkButton href="/player-records/top-scorers" text="top scorers" />
+          , You can also see players with just{" "}
+          <LinkButton
+            href="/player-records/only-one-appearance"
+            text="one appearance"/>{" "}
+          and browse{" "}
+          <LinkButton href="/top-scorers-by-season" text="top scorers by season" />
+          {" "}or players with{" "}
+          <LinkButton href="/hat-tricks" text="hat tricks" />.
+        </p>
+      </Title>
+      <PlayerSearch default={playerResults.players} season="2023" />
+    </>
+  );
+}

@@ -1,0 +1,16 @@
+name = "tranmere-web"
+compatibility_flags = ["nodejs_compat"]
+compatibility_date = "2024-01-10"
+pages_build_output_dir = ".vercel/output/static"
+
+[[vectorize]]
+binding = "VECTORIZE_INDEX"
+index_name = "tranmere-web"
+
+[ai]
+binding = "AI"
+
+[[d1_databases]]
+binding = "DB" # i.e. available in your Worker on env.DB
+database_name = "tranmere-web"
+database_id = "cb021697-9af3-4872-b8eb-ce49be71bb8c"
