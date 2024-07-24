@@ -56,25 +56,25 @@ export function ResultTable(props: {
                         <td className="whitespace-nowrap px-3 py-4">
                           {result.venue}
                         </td>
-                        <td className="whitespace-nowrap px-3 py-4">
+                        <td className="whitespace-nowrap px-3 py-4 text-center">
                           {result.pld}
                         </td>
-                        <td className="whitespace-nowrap px-3 py-4">
+                        <td className="whitespace-nowrap px-3 py-4 text-center">
                           {result.wins}
                         </td>
-                        <td className="whitespace-nowrap px-3 py-4">
+                        <td className="whitespace-nowrap px-3 py-4 text-center">
                           {result.draws}
                         </td>
-                        <td className="whitespace-nowrap px-3 py-4">
+                        <td className="whitespace-nowrap px-3 py-4 text-center">
                           {result.lost}
                         </td>
-                        <td className="whitespace-nowrap hidden px-3 py-3.5 lg:table-cell">
+                        <td className="whitespace-nowrap hidden px-3 py-3.5 lg:table-cell text-center">
                           {result.for}
                         </td>
-                        <td className="whitespace-nowrap hidden px-3 py-3.5 lg:table-cell">
+                        <td className="whitespace-nowrap hidden px-3 py-3.5 lg:table-cell text-center">
                           {result.against}
                         </td>
-                        <td className="whitespace-nowrap hidden px-3 py-3.5 lg:table-cell">
+                        <td className="whitespace-nowrap hidden px-3 py-3.5 lg:table-cell text-center">
                           {result.diff}
                         </td>
                       </tr>
@@ -134,13 +134,13 @@ export function ResultTable(props: {
                   <th scope="col" className="hidden px-1 sm:px-3 py-3.5 lg:table-cell">
                     Competition
                   </th>
-                  <th scope="col" className="px-1 sm:px-3 py-3.5">
+                  <th scope="col" className="px-1 sm:px-3 py-3.5 text-center">
                     Result
                   </th>
-                  <th scope="col" className="hidden px-1 sm:px-3 py-3.5 lg:table-cell">
+                  <th scope="col" className="hidden px-1 sm:px-3 py-3.5 lg:table-cell text-center">
                     Att.
                   </th>
-                  <th scope="col" className="hidden px-1 sm:px-3 py-3.5 lg:table-cell">
+                  <th scope="col" className="hidden px-1 sm:px-3 py-3.5 lg:table-cell text-center">
                     Programme
                   </th>
                 </tr>
