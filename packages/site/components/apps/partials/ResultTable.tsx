@@ -171,6 +171,7 @@ export function ResultTable(props: {
                       {result.programme ? (
                         <img
                           src={`https://images.tranmere-web.com/${result.programme}`} alt={`${result.home} v ${result.visitor} Match Programme ${result.date}`}
+                          className="mx-auto"
                         />
                       ) : (
                         ""

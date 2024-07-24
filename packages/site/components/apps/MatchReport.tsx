@@ -127,9 +127,6 @@ export default function MatchReport(props: {
                   Comments & Ratings
                 </Tab>
                 <Tab className="whitespace-nowrap border-b-2 border-transparent py-6 text-sm font-medium hover:border-gray-300 hover:text-gray-800 data-[selected]:border-indigo-600 data-[selected]:text-indigo-600">
-                  FAQ
-                </Tab>
-                <Tab className="whitespace-nowrap border-b-2 border-transparent py-6 text-sm font-medium hover:border-gray-300 hover:text-gray-800 data-[selected]:border-indigo-600 data-[selected]:text-indigo-600">
                   Team
                 </Tab>
               </TabList>
@@ -140,10 +137,6 @@ export default function MatchReport(props: {
                   comments={props.comments}
                   url={props.url}
                 ></CommentPanel>
-              </TabPanel>
-
-              <TabPanel className="text-sm">
-                <h3 className="sr-only">Frequently Asked Questions</h3>
               </TabPanel>
 
               <TabPanel className="">

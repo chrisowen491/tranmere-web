@@ -20,7 +20,7 @@ export function PlayerAvatarBuilder() {
         <h1 className="sr-only">Checkout</h1>
         <section
           aria-labelledby="summary-heading"
-          className="flex-col bg-gray-50 px-20"
+          className="flex-col px-20"
         >
           <img width="350px" src={`${base}${img}`} />
           <h4>
