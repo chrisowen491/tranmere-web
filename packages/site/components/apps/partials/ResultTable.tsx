@@ -98,7 +98,7 @@ export function ResultTable(props: {
                             <td className="whitespace-nowrap px-3 py-4 text-center">
                               <strong>{result.lost}</strong>
                             </td>
-                            <td className="whitespace-nowrap hidden px-3 py-3.5 lg:table-cel text-centerl">
+                            <td className="whitespace-nowrap hidden px-3 py-3.5 lg:table-cell text-center">
                               <strong>{result.for}</strong>
                             </td>
                             <td className="whitespace-nowrap hidden px-3 py-3.5 lg:table-cell text-center">
