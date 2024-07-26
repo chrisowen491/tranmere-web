@@ -132,7 +132,7 @@ export default async function BlogPage({
             >
               {documentToReactComponents(article.blog.json, options)}
 
-              {gallery ? <Slider images={article.galleryCollection.items} title={article.title}/> : ""}
+              {gallery ? <Slider images={gallery} title={article.title}/> : ""}
               {article.galleryCollection &&
               article.galleryCollection.items.length > 0 ? (
                 <>
