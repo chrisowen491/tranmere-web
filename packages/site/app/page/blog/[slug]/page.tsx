@@ -1,6 +1,5 @@
 export const runtime = "edge";
 
-import { Gallery } from "@/components/blogs/Gallery";
 import { getArticle, getAssetsByTag } from "@/lib/api";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import { notFound } from "next/navigation";
@@ -14,6 +13,7 @@ import { GetCommentsByUrl } from "@/lib/comments";
 import { Reviews } from "@/components/comments/Reviews";
 import CommentPanel from "@/components/comments/CommentPanel";
 import { LineGraph } from "@/components/charts/LineGraph";
+import Slider from "@/components/carousel/Slider";
 
 export async function generateMetadata({
   params,
@@ -132,12 +132,12 @@ export default async function BlogPage({
             >
               {documentToReactComponents(article.blog.json, options)}
 
-              {gallery ? <Gallery gallery={gallery}></Gallery> : ""}
+              {gallery ? <Slider images={article.galleryCollection.items} title={article.title}/> : ""}
               {article.galleryCollection &&
               article.galleryCollection.items.length > 0 ? (
                 <>
                   <p>Hover over the image for the buttons to browse the gallery</p>
-                  <Gallery gallery={article.galleryCollection.items}></Gallery>
+                  <Slider images={article.galleryCollection.items} title={article.title}/>
                 </>
               ) : (
                 ""
