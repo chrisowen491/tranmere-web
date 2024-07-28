@@ -20,21 +20,18 @@ const navigation = [
 ];
 
 const mobilenavigation = [
+  { name: "Home", href: "/", current: false },
   { name: "Results", href: "/results", current: false },
   { name: "Players", href: "/playersearch", current: false },
   { name: "Transfers", href: "/transfer-central", current: false },
-  { name: "Media", href: "/page/tag/Media", current: false },
+  { name: "AI Chat Bot", href: "/chat", current: false },
   { name: "Blog", href: "/blog", current: false },
   { name: "Avatar Builder", href: "/player-builder", current: false },
   { name: "Contact Us", href: "/contact", current: false },
   { name: "About the Site", href: "/page/blog/about", current: false },
 ];
 
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(" ");
-}
-
-export function Navbar(props: { showSearch: boolean }) {
+export function Navbar() {
 
   const { user, error, isLoading } = useUser();
 

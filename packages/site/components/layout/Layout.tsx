@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { Navbar } from "@/components/layout/Navbar";
 import Footer from "./Footer";
-//import { Search } from '@/components/syntax/Search'
 
 function Header() {
   let [isScrolled, setIsScrolled] = useState(false);
@@ -20,7 +19,7 @@ function Header() {
     };
   }, []);
 
-  return <Navbar showSearch={false}></Navbar>;
+  return <Navbar></Navbar>;
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {
