@@ -5,7 +5,7 @@ on:
     branches: [ master ]
     paths:
       - 'packages/api-stack/**'
-      - 'templates/**' 
+      - 'packages/lib/**'      
       - '.github/workflows/**'   
 
 
