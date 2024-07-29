@@ -35,17 +35,21 @@ export default async function PlayerSearchPage() {
           Search for players by season or position - or view{" "}
           <LinkButton
             href="/player-records/most-appearances"
-            text="appearance records" />{" "}
+            text="appearance records"
+          />{" "}
           or{" "}
-          <LinkButton href="/player-records/top-scorers" text="top scorers" />
-          , You can also see players with just{" "}
+          <LinkButton href="/player-records/top-scorers" text="top scorers" />,
+          You can also see players with just{" "}
           <LinkButton
             href="/player-records/only-one-appearance"
-            text="one appearance"/>{" "}
+            text="one appearance"
+          />{" "}
           and browse{" "}
-          <LinkButton href="/top-scorers-by-season" text="top scorers by season" />
-          {" "}or players with{" "}
-          <LinkButton href="/hat-tricks" text="hat tricks" />.
+          <LinkButton
+            href="/top-scorers-by-season"
+            text="top scorers by season"
+          />{" "}
+          or players with <LinkButton href="/hat-tricks" text="hat tricks" />.
         </p>
       </Title>
       <PlayerSearch default={playerResults.players} season="2023" />

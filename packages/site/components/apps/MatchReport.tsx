@@ -24,20 +24,18 @@ export default function MatchReport(props: {
   const next = props.next;
   const previous = props.previous;
 
-
   const breadcrumbs = [
     { id: 1, name: "Home", href: "/" },
     { id: 2, name: match.season, href: "/games/" + match.season },
   ];
-  
 
   return (
     <div className="mx-auto px-4 pb-24 pt-14 sm:px-6 sm:pb-32 sm:pt-16 lg:max-w-7xl lg:px-8 dark:text-gray-50 text-gray-500">
-        <BreadcrumbLinks
-          breadcrumbs={breadcrumbs}
-          currentpage={match.date}
-          currenthref={`/match/${match.season}/${match.date}`}
-        />
+      <BreadcrumbLinks
+        breadcrumbs={breadcrumbs}
+        currentpage={match.date}
+        currenthref={`/match/${match.season}/${match.date}`}
+      />
       <div className="lg:grid lg:grid-cols-7 lg:grid-rows-1 lg:gap-x-8 lg:gap-y-10 xl:gap-x-16 mt-4">
         <div className="lg:col-span-4 lg:row-end-1">
           <div className="rounded-lg">

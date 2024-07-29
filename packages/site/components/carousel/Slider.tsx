@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import Description from "./Description";
 import { GalleryImage } from "@/lib/types";
 
-const Slider = (props: { images: GalleryImage[], title: string  }) => {
+const Slider = (props: { images: GalleryImage[]; title: string }) => {
   const [activeImage, setActiveImage] = useState(0);
   const images = props.images;
 
@@ -31,12 +31,12 @@ const Slider = (props: { images: GalleryImage[], title: string  }) => {
   }, [activeImage]);
   return (
     <div className="grid place-items-center md:grid-cols-2 grid-cols-1 w-full mx-auto max-w-5xl">
-    <Description
+      <Description
         activeImage={activeImage}
         clickNext={clickNext}
         clickPrev={clickPrev}
         images={images}
-        title= {props.title}
+        title={props.title}
       />
       <div
         className={`w-full flex justify-center items-center gap-4 transition-transform ease-in-out duration-500 md:rounded-2xl p-6 md:p-0 mb-20`}
@@ -50,12 +50,7 @@ const Slider = (props: { images: GalleryImage[], title: string  }) => {
                 : "hidden"
             }`}
           >
-            <Image
-              src={elem.url}
-              alt=""
-              width={400}
-              height={400}
-            />
+            <Image src={elem.url} alt="" width={400} height={400} />
           </div>
         ))}
       </div>

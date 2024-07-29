@@ -71,10 +71,10 @@ export default function SearchBar() {
         future={{ preserveSharedStateOnUnmount: true }}
       >
         <div className="algolia-autocomplete relative">
-            <SearchBox searchAsYouType={true}  />
-            <EmptyQueryBoundary fallback={null}>
-              <Hits hitComponent={Hit} />
-            </EmptyQueryBoundary>
+          <SearchBox searchAsYouType={true} />
+          <EmptyQueryBoundary fallback={null}>
+            <Hits hitComponent={Hit} />
+          </EmptyQueryBoundary>
         </div>
       </InstantSearch>
     </div>

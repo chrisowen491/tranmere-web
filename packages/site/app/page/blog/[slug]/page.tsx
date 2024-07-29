@@ -132,12 +132,17 @@ export default async function BlogPage({
             >
               {documentToReactComponents(article.blog.json, options)}
 
-              {gallery ? <Slider images={gallery} title={article.title}/> : ""}
+              {gallery ? <Slider images={gallery} title={article.title} /> : ""}
               {article.galleryCollection &&
               article.galleryCollection.items.length > 0 ? (
                 <>
-                  <p>Hover over the image for the buttons to browse the gallery</p>
-                  <Slider images={article.galleryCollection.items} title={article.title}/>
+                  <p>
+                    Hover over the image for the buttons to browse the gallery
+                  </p>
+                  <Slider
+                    images={article.galleryCollection.items}
+                    title={article.title}
+                  />
                 </>
               ) : (
                 ""
@@ -159,16 +164,18 @@ export default async function BlogPage({
                             ></Kit>
                           ) : (
                             <>
-                            {block.__typename == "Star" ? (
-                              <Star
-                                name={block.name!}
-                                notes={block.notes!}
-                                match={block.match!}
-                                season={block.season!}
-                                date={block.date!}
-                                programme={block.programme!}
-                              ></Star>
-                            ) : ("")}
+                              {block.__typename == "Star" ? (
+                                <Star
+                                  name={block.name!}
+                                  notes={block.notes!}
+                                  match={block.match!}
+                                  season={block.season!}
+                                  date={block.date!}
+                                  programme={block.programme!}
+                                ></Star>
+                              ) : (
+                                ""
+                              )}
                             </>
                           )}
                         </li>
@@ -183,22 +190,23 @@ export default async function BlogPage({
               article.blocksCollection.items.length > 0 ? (
                 <div className="">
                   <div className="w-full">
-                      {article.blocksCollection.items.map((block, idx) => (
-                        <div key={idx} style={{}}>
-                          {block.__typename == "Graph" ? (
-                            <LineGraph
-                              title={block.title!}
-                              chart={block.chart!.data}
-                            ></LineGraph>
-                          ) : ("")}
-                        </div>
-                      ))}
+                    {article.blocksCollection.items.map((block, idx) => (
+                      <div key={idx} style={{}}>
+                        {block.__typename == "Graph" ? (
+                          <LineGraph
+                            title={block.title!}
+                            chart={block.chart!.data}
+                          ></LineGraph>
+                        ) : (
+                          ""
+                        )}
+                      </div>
+                    ))}
                   </div>
                 </div>
               ) : (
                 ""
               )}
-
             </div>
             <CommentPanel
               comments={comments}

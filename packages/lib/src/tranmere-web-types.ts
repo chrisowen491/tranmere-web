@@ -83,7 +83,6 @@ export interface HatTrick {
   Goals: number;
   Season: number;
   picLink?: string;
-
 }
 
 export interface Link {
