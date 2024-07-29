@@ -1,21 +1,30 @@
 "use client";
 
-import { Chart } from '@/lib/types';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, AreaChart, Area } from 'recharts';
+import { Chart } from "@/lib/types";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  AreaChart,
+  Area,
+} from "recharts";
 
 export function LineGraph(props: { title: string; chart: Chart }) {
-
   let data = [];
-  
-  for(var i=0; i < props.chart.labels.length; i++) {
 
-    let obj : any = {
-      name: props.chart.labels[i]
-    }
+  for (var i = 0; i < props.chart.labels.length; i++) {
+    let obj: any = {
+      name: props.chart.labels[i],
+    };
 
-    props.chart.datasets.forEach(ds => {
-      obj[ds.label] = ds.data[i]
-    })
+    props.chart.datasets.forEach((ds) => {
+      obj[ds.label] = ds.data[i];
+    });
 
     data.push(obj);
   }
@@ -37,7 +46,13 @@ export function LineGraph(props: { title: string; chart: Chart }) {
         <Tooltip />
         <Legend />
         {props.chart.datasets.map((ds, idx) => (
-        <Area type="monotone" dataKey={ds.label} stroke={ds.borderColor} activeDot={{ r: 8 }} key={idx} />
+          <Area
+            type="monotone"
+            dataKey={ds.label}
+            stroke={ds.borderColor}
+            activeDot={{ r: 8 }}
+            key={idx}
+          />
         ))}
       </AreaChart>
     </ResponsiveContainer>

@@ -27,25 +27,46 @@ export function ResultTable(props: {
                       <th scope="col" className="py-3 py-3.5 text-left px-3">
                         Venue
                       </th>
-                      <th scope="col" className="py-3 py-3.5 text-left px-3 text-center">
+                      <th
+                        scope="col"
+                        className="py-3 py-3.5 text-left px-3 text-center"
+                      >
                         Pld
                       </th>
-                      <th scope="col" className="py-3 py-3.5 text-left px-3 text-center">
+                      <th
+                        scope="col"
+                        className="py-3 py-3.5 text-left px-3 text-center"
+                      >
                         Won
                       </th>
-                      <th scope="col" className="py-3 py-3.5 text-left px-3 text-center">
+                      <th
+                        scope="col"
+                        className="py-3 py-3.5 text-left px-3 text-center"
+                      >
                         Draws
                       </th>
-                      <th scope="col" className="py-3 py-3.5 text-left px-3 text-center">
+                      <th
+                        scope="col"
+                        className="py-3 py-3.5 text-left px-3 text-center"
+                      >
                         Lost
                       </th>
-                      <th scope="col" className="hidden px-3 py-3.5 lg:table-cell text-center">
+                      <th
+                        scope="col"
+                        className="hidden px-3 py-3.5 lg:table-cell text-center"
+                      >
                         For
                       </th>
-                      <th scope="col" className="hidden px-3 py-3.5 lg:table-cell text-center">
+                      <th
+                        scope="col"
+                        className="hidden px-3 py-3.5 lg:table-cell text-center"
+                      >
                         Agn
                       </th>
-                      <th scope="col" className="hidden px-3 py-3.5 lg:table-cell text-center">
+                      <th
+                        scope="col"
+                        className="hidden px-3 py-3.5 lg:table-cell text-center"
+                      >
                         Diff
                       </th>
                     </tr>
@@ -131,16 +152,25 @@ export function ResultTable(props: {
                   <th scope="col" className="px-1 sm:px-3 py-3.5">
                     Opposition
                   </th>
-                  <th scope="col" className="hidden px-1 sm:px-3 py-3.5 lg:table-cell">
+                  <th
+                    scope="col"
+                    className="hidden px-1 sm:px-3 py-3.5 lg:table-cell"
+                  >
                     Competition
                   </th>
                   <th scope="col" className="px-1 sm:px-3 py-3.5 text-center">
                     Result
                   </th>
-                  <th scope="col" className="hidden px-1 sm:px-3 py-3.5 lg:table-cell text-center">
+                  <th
+                    scope="col"
+                    className="hidden px-1 sm:px-3 py-3.5 lg:table-cell text-center"
+                  >
                     Att.
                   </th>
-                  <th scope="col" className="hidden px-1 sm:px-3 py-3.5 lg:table-cell text-center">
+                  <th
+                    scope="col"
+                    className="hidden px-1 sm:px-3 py-3.5 lg:table-cell text-center"
+                  >
                     Programme
                   </th>
                 </tr>
@@ -163,14 +193,17 @@ export function ResultTable(props: {
                     <td className="whitespace-nowrap hidden px-1 sm:px-3 py-3.5 lg:table-cell">
                       {result.competition}
                     </td>
-                    <td className="whitespace-nowrap px-1 sm:px-3 py-4 text-center">{result.ft}</td>
+                    <td className="whitespace-nowrap px-1 sm:px-3 py-4 text-center">
+                      {result.ft}
+                    </td>
                     <td className="whitespace-nowrap hidden px-1 sm:px-3 py-3.5 lg:table-cell text-center">
                       {result.attendance}
                     </td>
                     <td className="whitespace-nowrap hidden px-3 py-3.5 lg:table-cell text-center">
                       {result.programme ? (
                         <img
-                          src={`https://images.tranmere-web.com/${result.programme}`} alt={`${result.home} v ${result.visitor} Match Programme ${result.date}`}
+                          src={`https://images.tranmere-web.com/${result.programme}`}
+                          alt={`${result.home} v ${result.visitor} Match Programme ${result.date}`}
                           className="mx-auto"
                         />
                       ) : (

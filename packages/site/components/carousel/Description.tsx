@@ -12,7 +12,13 @@ type Props = {
   title: string;
 };
 
-const Description = ({ activeImage, clickNext, clickPrev, images, title }: Props) => {
+const Description = ({
+  activeImage,
+  clickNext,
+  clickPrev,
+  images,
+  title,
+}: Props) => {
   return (
     <div className="grid place-items-start w-full relative md:rounded-tr-3xl md:rounded-br-3xl">
       {images.map((elem, idx) => (
@@ -24,7 +30,7 @@ const Description = ({ activeImage, clickNext, clickPrev, images, title }: Props
               : "hidden"
           }`}
         >
-        <div className="">
+          <div className="">
             <div
               className="absolute top-2 right-10 cursor-pointer"
               onClick={clickPrev}
@@ -39,9 +45,7 @@ const Description = ({ activeImage, clickNext, clickPrev, images, title }: Props
               <Image src={right} alt="" className=" bg-blue-600" />
             </div>
           </div>
-          <div
-            className="w-full"
-          >
+          <div className="w-full">
             <div className="py-8 text-2xl font-extrabold">{elem.title}</div>
             <div className="leading-relaxed font-medium text-base tracking-wide italic">
               {" "}

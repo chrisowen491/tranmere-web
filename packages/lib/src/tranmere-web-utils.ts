@@ -14,7 +14,7 @@ import {
   Report,
   Transfer,
   Link,
-  PlayerSeasonSummary,
+  PlayerSeasonSummary
 } from './tranmere-web-types';
 
 //const APP_SYNC_URL = 'https://api.prod.tranmere-web.com';

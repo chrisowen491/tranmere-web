@@ -45,7 +45,12 @@ export default async function ResultsSearchPage() {
     <>
       <Title title="Results Home" summary={""}>
         <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-50">
-          Search for results by season or opposition - or view <LinkButton href="/games/at-wembley" text="results at wembley" /> or <LinkButton href="/games/penalty-shootouts" text="penalty shootouts"/>
+          Search for results by season or opposition - or view{" "}
+          <LinkButton href="/games/at-wembley" text="results at wembley" /> or{" "}
+          <LinkButton
+            href="/games/penalty-shootouts"
+            text="penalty shootouts"
+          />
         </p>
       </Title>
       <ResultsSearch
