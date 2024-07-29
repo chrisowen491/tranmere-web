@@ -1,12 +1,13 @@
 import { GetLastMatch } from "@/lib/apiFunctions";
 import Link from "next/link";
+import { LinkButton } from "../forms/LinkButton";
 
 export async function LastMatch() {
   const match = await GetLastMatch();
   const score = `${match.home} ${match.ft} ${match.visitor}`;
   return (
     <div
-      className="card bordered text-center"
+      className="card mb-8"
       itemScope
       itemType="https://schema.org/SportsEvent"
     >
@@ -41,13 +42,10 @@ export async function LastMatch() {
         ) : (
           ""
         )}
-        <Link
-          itemProp="url"
-          className="btn btn-primary"
+        <LinkButton
           href={`/match/${match.season}/${match.date}`}
-        >
-          Match Report
-        </Link>
+          text="Match Report"
+        ></LinkButton>
         <i className="icon-trophy icon-background"></i>
       </div>
     </div>

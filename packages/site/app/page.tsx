@@ -2,10 +2,10 @@ import { FAQs } from "@/components/fragments/FAQ";
 import { Hero } from "@/components/fragments/Hero";
 import { Navigation } from "@/components/layout/Navigation";
 import { Metadata } from "next";
-import {
-  UserCircleIcon,
-  ChatBubbleBottomCenterIcon,
-} from "@heroicons/react/20/solid";
+import { GetAllPlayers, GetBaseUrl } from "@/lib/apiFunctions";
+import { getRequestContext } from "@cloudflare/next-on-pages";
+import { PlayerProfile } from "@/lib/types";
+import { PlayerOfTheDay } from "@/components/fragments/PlayerOfTheDay";
 
 export const runtime = "edge";
 
@@ -24,21 +24,6 @@ export const metadata: Metadata = {
     url: "/",
   },
 };
-
-const features = [
-  {
-    name: "Comments & Reviews",
-    description:
-      "Leave a star rating for players, matches and articles - plus leave comments",
-    icon: ChatBubbleBottomCenterIcon,
-  },
-  {
-    name: "Player Avatars",
-    description: "Create your own Tranmere Rovers avatar",
-    href: "/player-builder",
-    icon: UserCircleIcon,
-  },
-];
 
 export default async function Home() {
   const faqs = [
@@ -73,6 +58,16 @@ export default async function Home() {
     { id: 3, name: "Player Profiles", value: "500+" },
     { id: 4, name: "Match Reports", value: "20+" },
   ];
+
+  const players = await GetAllPlayers();
+  const randomplayer = players[Math.floor(Math.random() * players.length)];
+
+  const url =
+    GetBaseUrl(getRequestContext().env) + `/page/player/${randomplayer.name}`;
+
+  const playerRequest = await fetch(url);
+
+  const profile = (await playerRequest.json()) as PlayerProfile;
 
   return (
     <>
@@ -118,7 +113,7 @@ export default async function Home() {
               </div>
             </div>
           </div>
-
+          <PlayerOfTheDay randomplayer={profile} />
           <FAQs text="Frequently Asked Questions" faqs={faqs}></FAQs>
         </div>
       </div>
