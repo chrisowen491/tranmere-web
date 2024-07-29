@@ -2,7 +2,7 @@ import { Button } from "@/components/fragments/Button";
 
 export function Hero() {
   return (
-    <div className="overflow-hidden bg-blue-600 dark:bg-blue-600">
+    <div className="overflow-hidden bg-blue-600 dark:bg-slate-950">
       <div className="py-4 sm:px-2 relative lg:px-0 lg:py-20">
         <div className="mx-auto grid max-w-2xl grid-cols-1 items-center gap-x-8 gap-y-16 px-4 lg:max-w-8xl lg:grid-cols-2 lg:px-8 xl:gap-x-16 xl:px-12">
           <div className="relative z-10 md:text-center lg:text-left">

@@ -21,7 +21,7 @@ export function FAQs(props: { text: string; faqs: FAQ[] }) {
           {props.faqs.map((faq) => (
             <Disclosure key={faq.question} as="div" className="pt-6">
               <dt>
-                <DisclosureButton className="group flex w-full items-start justify-between text-left text-gray-900">
+                <DisclosureButton className="group flex w-full items-start justify-between text-left text-gray-900 dark:text-gray-50">
                   <span className="text-base font-semibold leading-7 dark:text-gray-50">
                     {faq.question}
                   </span>

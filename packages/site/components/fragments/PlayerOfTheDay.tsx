@@ -1,31 +1,43 @@
-import { Player } from "@tranmere-web/lib/src/tranmere-web-types";
+import { PlayerProfile } from "@/lib/types";
 
-export function PlayerOfTheDay(props: { randomplayer: Player }) {
+export function PlayerOfTheDay(props: { randomplayer: PlayerProfile }) {
   const { randomplayer = props.randomplayer } = props;
-
+  let goals = 0;
+  if(randomplayer.appearances) {
+    randomplayer.appearances.forEach((app) => {
+        goals = goals + app.Goals!;
+    });  
+  }
   return (
-    <></>
-    /*
-<div className="row justify-content-center justify-content-lg-start gutter-2 player-of-day">
-    <div className="col-lg-12 col-md-12 col-sm-12">
-        <div className="card stacked" itemScope itemType ="https://schema.org/SportsTeam">
-            <meta itemProp="name" content="Tranmere Rovers" />
-            <div className="card-body" style={{backgroundImage:`url(${randomplayer.picLink})`>
-                <div className="row gutter-2 align-items-center">
-                    <div className="col" itemprop="member" itemscope itemtype="https://schema.org/athlete">
-                        <meta itemProp="image" content="{{randomplayer.picLink}}" />
-                        <h3 className="font-weight-normal mb-2">Player Of The Day</h3>
-                        <h4 className="font-weight-normal mb-3" itemProp="name">{{randomplayer.name}}</h4>
-                        <p><strong>Debut:</strong> {{randomplayer.debut.Opposition}} {{randomplayer.debut.Date}}</p>
-                        <p className="card-text mb-2">{{randomplayer.apps}} apps</p>
-                        <p className="card-text mb-2">{{randomplayer.goals}} goals</p>
-                        <a href="/page/player/{{randomplayer.name}}" className="action mt-1 text-blue">View Profile</a>
-                    </div>
-                </div>
+<section className="isolate overflow-hidden mx-auto max-w-7xl px-6 lg:px-8 ml-8 mr-8">
+      <div className="relative mx-auto max-w-2xl py-8 sm:py-8 lg:max-w-4xl">
+        <div className="absolute left-1/2 top-0 -z-10 h-[50rem] w-[90rem] -translate-x-1/2 bg-[radial-gradient(50%_100%_at_top,theme(colors.indigo.100),white)] opacity-20 lg:left-36" />
+        <div className="absolute inset-y-0 right-1/2 -z-10 mr-12 w-[150vw] origin-bottom-left skew-x-[-30deg] shadow-xl shadow-indigo-600/10 ring-1 ring-indigo-50 sm:mr-20 md:mr-0 lg:right-full lg:-mr-36 lg:origin-center" />
+        <figure className="grid grid-cols-1 items-center gap-x-6 gap-y-8 lg:gap-x-10">
+
+          <div className="col-end-1 w-16 lg:row-span-4 lg:w-72">
+            <img
+              alt=""
+              src={randomplayer.player.picLink}
+              className="rounded-xl bg-indigo-50 lg:rounded-3xl"
+            />
+          </div>
+          <figcaption className="text-base lg:col-start-1 lg:row-start-3">
+          <div className="font-semibold text-gray-900 dark:text-gray-50">Player Of the Day:</div>
+            <div className="font-semibold text-gray-900 dark:text-gray-50">{randomplayer.player.name}</div>
+            <div className="mt-1 text-gray-500 dark:text-gray-50"><strong>Debut:</strong> {randomplayer.debut.Opposition} {randomplayer.debut.Date}</div>
+            <div className="mt-1 text-gray-500 dark:text-gray-50">{randomplayer.appearances.length} apps, {goals} goals</div>
+            <div className="">
+                <a
+                    href={`/page/player/${randomplayer.player.name}`}
+                    className="text-base font-semibold text-indigo-600 dark:text-indigo-400 hover:underline"
+                >
+                    View Player Profile
+                </a>
             </div>
-        </div>                                     
-    </div>          
-</div>
-*/
+          </figcaption>
+        </figure>
+      </div>
+    </section>
   );
 }

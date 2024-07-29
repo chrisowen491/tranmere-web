@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
 import { navigation } from "@/lib/navigation";
+import { LastMatch } from "../fragments/LastMatch";
 
 export function Navigation({
   className,
@@ -16,6 +17,7 @@ export function Navigation({
 
   return (
     <nav className={clsx("text-base lg:text-sm", className)}>
+      <LastMatch></LastMatch>
       <ul role="list" className="space-y-9">
         {navigation.map((section) => (
           <li key={section.title}>

@@ -3,6 +3,10 @@ import { Hero } from "@/components/fragments/Hero";
 import { Navigation } from "@/components/layout/Navigation";
 import { Metadata } from "next";
 import { UserCircleIcon, ChatBubbleBottomCenterIcon } from '@heroicons/react/20/solid'
+import { GetAllPlayers, GetBaseUrl } from "@/lib/apiFunctions";
+import { getRequestContext } from "@cloudflare/next-on-pages";
+import { PlayerProfile } from "@/lib/types";
+import { PlayerOfTheDay } from "@/components/fragments/PlayerOfTheDay";
 
 export const runtime = "edge";
 
@@ -72,6 +76,16 @@ export default async function Home() {
     { id: 4, name: "Match Reports", value: "20+" },
   ];
 
+
+  const players = await GetAllPlayers();
+  const randomplayer = players[Math.floor(Math.random() * players.length)];
+
+  const url = GetBaseUrl(getRequestContext().env) + `/page/player/${randomplayer.name}`;
+
+  const playerRequest = await fetch(url);
+
+  const profile = (await playerRequest.json()) as PlayerProfile;
+
   return (
     <>
       <Hero />
@@ -116,7 +130,7 @@ export default async function Home() {
               </div>
             </div>
           </div>
-
+          <PlayerOfTheDay randomplayer={profile} />
           <FAQs text="Frequently Asked Questions" faqs={faqs}></FAQs>
         </div>
       </div>
