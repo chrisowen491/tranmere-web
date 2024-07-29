@@ -5,7 +5,7 @@ on:
     branches: [ master ]
     paths:
       - 'packages/site/**'
-      - '.github/workflows/**'
+      - '.github/workflows/web.yml'
 
 jobs:
   publish_site:

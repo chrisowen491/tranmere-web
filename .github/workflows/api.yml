@@ -6,7 +6,7 @@ on:
     paths:
       - 'packages/api-stack/**'
       - 'packages/lib/**'      
-      - '.github/workflows/**'   
+      - '.github/workflows/api.yml'   
 
 
 jobs:
@@ -99,14 +99,3 @@ jobs:
         run: 
           yarn workspace @tranmere-web/api-tests api
 
-  web_acceptance_test:
-    runs-on: ubuntu-latest
-    needs: [aws_cdk, data_dog]
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22.2.0'      
-      - name: Post Deploy Checks
-        run: 
-          yarn workspace @tranmere-web/api-tests web
