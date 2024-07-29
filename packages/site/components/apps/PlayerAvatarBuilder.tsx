@@ -15,13 +15,9 @@ export function PlayerAvatarBuilder() {
 
   return (
     <>
-      
       <div className="lg:flex lg:flex-row-reverse">
         <h1 className="sr-only">Checkout</h1>
-        <section
-          aria-labelledby="summary-heading"
-          className="flex-col bg-gray-50 px-20"
-        >
+        <section aria-labelledby="summary-heading" className="flex-col px-20">
           <img width="350px" src={`${base}${img}`} />
           <h4>
             Link: <a href={`${base}${img}`}>here</a>

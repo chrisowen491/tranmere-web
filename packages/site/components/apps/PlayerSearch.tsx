@@ -219,7 +219,7 @@ export function PlayerSearch(props: {
               <table className="min-w-full divide-y divide-gray-300">
                 <thead className="thead-dark text-sm font-semibold">
                   <tr>
-                    <th scope="col" className="py-3 py-3.5">
+                    <th scope="col" className="py-3 py-3.5 text-left">
                       Name
                     </th>
                     <th scope="col" className="py-3 py-3.5">
@@ -228,7 +228,10 @@ export function PlayerSearch(props: {
                     <th scope="col" className="px-3 py-3.5">
                       Goals
                     </th>
-                    <th scope="col" className="hidden px-3 py-3.5 lg:table-cell">
+                    <th
+                      scope="col"
+                      className="hidden px-3 py-3.5 lg:table-cell"
+                    >
                       Assists
                     </th>
                     <th
@@ -249,10 +252,16 @@ export function PlayerSearch(props: {
                     >
                       Penalties
                     </th>
-                    <th scope="col" className="hidden px-1 md:px-3 py-3.5 lg:table-cell">
+                    <th
+                      scope="col"
+                      className="hidden px-1 md:px-3 py-3.5 lg:table-cell"
+                    >
                       Red Cards
                     </th>
-                    <th scope="col" className="hidden px-1 md:px-3 py-3.5 lg:table-cell">
+                    <th
+                      scope="col"
+                      className="hidden px-1 md:px-3 py-3.5 lg:table-cell"
+                    >
                       Yellow Cards
                     </th>
                   </tr>

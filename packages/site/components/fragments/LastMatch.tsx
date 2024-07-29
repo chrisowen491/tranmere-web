@@ -45,8 +45,7 @@ export async function LastMatch() {
         <LinkButton
           href={`/match/${match.season}/${match.date}`}
           text="Match Report"
-        >
-        </LinkButton>
+        ></LinkButton>
         <i className="icon-trophy icon-background"></i>
       </div>
     </div>

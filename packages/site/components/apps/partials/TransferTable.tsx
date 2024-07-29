@@ -13,10 +13,16 @@ export function TransferTable(props: { title: string; records: Transfer[] }) {
                   <th scope="col" className="py-3 py-3.5">
                     Name
                   </th>
-                  <th scope="col" className="hidden px-1 md:px-1 md:px-3 py-3.5 lg:table-cell">
+                  <th
+                    scope="col"
+                    className="hidden px-1 md:px-1 md:px-3 py-3.5 lg:table-cell text-center"
+                  >
                     Season
                   </th>
-                  <th scope="col" className="hidden px-1 md:px-1 md:px-3 py-3.5 lg:table-cell">
+                  <th
+                    scope="col"
+                    className="hidden px-1 md:px-1 md:px-3 py-3.5 lg:table-cell text-center"
+                  >
                     In/Out
                   </th>
                   <th scope="col" className="px-1 md:px-3 py-3.5">

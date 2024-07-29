@@ -4,7 +4,6 @@ import algoliasearch from "algoliasearch/lite";
 import { Hit as AlgoliaHit } from "instantsearch.js";
 import React, { ReactNode } from "react";
 import "instantsearch.css/themes/reset.css";
-// Or include the full Satellite theme
 import "instantsearch.css/themes/satellite.css";
 import {
   Hits,
@@ -13,7 +12,6 @@ import {
   useInstantSearch,
   InstantSearch,
 } from "react-instantsearch";
-//import { InstantSearchNext } from 'react-instantsearch-nextjs';
 
 import { Panel } from "@/components/search/Panel";
 
@@ -73,10 +71,10 @@ export default function SearchBar() {
         future={{ preserveSharedStateOnUnmount: true }}
       >
         <div className="algolia-autocomplete relative">
-            <SearchBox searchAsYouType={true}  />
-            <EmptyQueryBoundary fallback={null}>
-              <Hits hitComponent={Hit} />
-            </EmptyQueryBoundary>
+          <SearchBox searchAsYouType={true} />
+          <EmptyQueryBoundary fallback={null}>
+            <Hits hitComponent={Hit} />
+          </EmptyQueryBoundary>
         </div>
       </InstantSearch>
     </div>

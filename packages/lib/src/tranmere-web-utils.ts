@@ -14,20 +14,20 @@ import {
   Report,
   Transfer,
   Link,
-  PlayerSeasonSummary,
+  PlayerSeasonSummary
 } from './tranmere-web-types';
 
-const APP_SYNC_URL = 'https://api.prod.tranmere-web.com';
-const APP_SYNC_OPTIONS = {
-  headers: {
-    //'x-api-key': this.APP_SYNC_KEY
-  }
-};
-const apiOptions = {
-  headers: {
-    //'x-api-key': this.API_KEY
-  }
-};
+//const APP_SYNC_URL = 'https://api.prod.tranmere-web.com';
+//const APP_SYNC_OPTIONS = {
+//  headers: {
+//    //'x-api-key': this.APP_SYNC_KEY
+//  }
+//};
+//const apiOptions = {
+//  headers: {
+//    //'x-api-key': this.API_KEY
+//  }
+//};
 
 export enum DataTables {
   APPS_TABLE_NAME = 'TranmereWebAppsTable',

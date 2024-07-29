@@ -1,1 +1,2 @@
-
+npx lerna run format 
+npx lerna run lint
