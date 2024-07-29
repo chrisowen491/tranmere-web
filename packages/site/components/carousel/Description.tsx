@@ -35,19 +35,19 @@ const Description = ({
               className="absolute top-2 right-10 cursor-pointer"
               onClick={clickPrev}
             >
-              <Image src={left} alt="" className=" bg-blue-600" />
+              <Image src={left} alt="" className=" bg-blue-600 dark:bg-gray-900" />
             </div>
 
             <div
               className="absolute top-2 right-2 cursor-pointer"
               onClick={clickNext}
             >
-              <Image src={right} alt="" className=" bg-blue-600" />
+              <Image src={right} alt="" className=" bg-blue-600 dark:bg-gray-900" />
             </div>
           </div>
           <div className="w-full">
-            <div className="py-8 text-2xl font-extrabold">{elem.title}</div>
-            <div className="leading-relaxed font-medium text-base tracking-wide italic">
+            <div className="py-8 text-2xl font-extrabold dark:text-gray-50">{elem.title}</div>
+            <div className="leading-relaxed font-medium text-base tracking-wide italic dark:text-gray-50">
               {" "}
               {elem.description}
             </div>

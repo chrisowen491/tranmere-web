@@ -24,16 +24,16 @@ export default async function BlogHome() {
           </div>
         </div>
         <div className="columns-1">
-          <div className="bg-white py-10 sm:py-10">
+          <div className="py-10 sm:py-10">
             <div className="mx-auto max-w-7xl px-6 lg:px-8">
               <div className="mx-auto max-w-2xl lg:mx-0">
-                <p className="text-base font-semibold leading-7 text-indigo-600">
+                <p className="text-base font-semibold leading-7 text-indigo-600 dark:text-indigo-50">
                   Blog Pages
                 </p>
-                <h2 className="mt-2 text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+                <h2 className="mt-2 text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl dark:text-indigo-50">
                   Blogs & Articles
                 </h2>
-                <p className="mt-6 text-lg leading-8 text-gray-600">
+                <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-200">
                   All the blog posts and articles from across the site
                 </p>
               </div>
@@ -51,13 +51,13 @@ export default async function BlogHome() {
                   </time>
                 </div>
                 <div className="group relative">
-                  <h3 className="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
+                  <h3 className="mt-3 text-lg font-semibold leading-6 text-gray-900 dark:text-indigo-50 group-hover:text-gray-600">
                     <a href={`/page/blog/${article.slug}`}>
                       <span className="absolute inset-0" />
                       {article.title}
                     </a>
                   </h3>
-                  <p className="mt-5 mb-5 line-clamp-3 text-sm leading-6 text-gray-600">
+                  <p className="mt-5 mb-5 line-clamp-3 text-sm leading-6 text-gray-600 dark:text-gray-200">
                     {article.description}
                   </p>
                   <a

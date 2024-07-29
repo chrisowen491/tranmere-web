@@ -146,7 +146,7 @@ export function ResultTable(props: {
             <table className="min-w-full divide-y text-left text-sm">
               <thead className="font-semibold ">
                 <tr>
-                  <th scope="col" className="py-3 py-3.5 px-1 sm:px-3">
+                  <th scope="col" className="py-3.5 px-1 sm:px-3">
                     Date
                   </th>
                   <th scope="col" className="px-1 sm:px-3 py-3.5">
@@ -163,13 +163,13 @@ export function ResultTable(props: {
                   </th>
                   <th
                     scope="col"
-                    className="hidden px-1 sm:px-3 py-3.5 lg:table-cell text-center"
+                    className="hidden px-1 sm:px-3 py-3.5 md:table-cell text-center"
                   >
                     Att.
                   </th>
                   <th
                     scope="col"
-                    className="hidden px-1 sm:px-3 py-3.5 lg:table-cell text-center"
+                    className="hidden px-1 sm:px-3 py-3.5 md:table-cell text-center"
                   >
                     Programme
                   </th>
@@ -196,10 +196,10 @@ export function ResultTable(props: {
                     <td className="whitespace-nowrap px-1 sm:px-3 py-4 text-center">
                       {result.ft}
                     </td>
-                    <td className="whitespace-nowrap hidden px-1 sm:px-3 py-3.5 lg:table-cell text-center">
+                    <td className="whitespace-nowrap hidden px-1 sm:px-3 py-3.5 md:table-cell text-center">
                       {result.attendance}
                     </td>
-                    <td className="whitespace-nowrap hidden px-3 py-3.5 lg:table-cell text-center">
+                    <td className="whitespace-nowrap hidden px-3 py-3.5 md:table-cell text-center">
                       {result.programme ? (
                         <img
                           src={`https://images.tranmere-web.com/${result.programme}`}
