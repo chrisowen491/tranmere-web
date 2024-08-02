@@ -4,8 +4,8 @@ import { LinkButton } from "../forms/LinkButton";
 
 export async function LastMatch() {
   const match = await GetLastMatch();
-  if(!match) {
-    return <div></div>
+  if (!match) {
+    return <div></div>;
   }
   const score = `${match.home} ${match.ft} ${match.visitor}`;
   return (
