@@ -51,7 +51,7 @@ export function TransferSearch(props: {
   };
 
   return (
-    <>
+    <div className="mx-auto w-full px-2">
       <Dialog open={open} onClose={setOpen} className="relative z-10">
         <div className="fixed inset-0" />
 
@@ -153,7 +153,9 @@ export function TransferSearch(props: {
       focus-visible:outline 
       focus-visible:outline-2 
       focus-visible:outline-offset-2 
-      focus-visible:outline-indigo-600"
+      focus-visible:outline-indigo-600
+      w-full
+      "
       >
         Filter
       </button>
@@ -169,6 +171,6 @@ export function TransferSearch(props: {
       )}
 
       <TransferTable records={transfers} title="Transfers"></TransferTable>
-    </>
+    </div>
   );
 }

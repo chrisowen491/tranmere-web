@@ -79,7 +79,7 @@ export function ResultsSearch(props: {
   }
 
   return (
-    <>
+    <div className="mx-auto w-full px-2">
       <Dialog open={open} onClose={setOpen} className="relative z-10">
         <div className="fixed inset-0" />
 
@@ -216,26 +216,28 @@ export function ResultsSearch(props: {
         </div>
       </Dialog>
 
-      <button
-        type="button"
-        onClick={showFilters}
-        className="
-      bg-green-500 
-      dark:bg-blue-600
-      px-3 py-2 
-      text-sm 
-      font-semibold 
-      text-white 
-      shadow-sm 
-      hover:bg-green-600 
-      dark:hover:bg-sky-400 
-      focus-visible:outline 
-      focus-visible:outline-2 
-      focus-visible:outline-offset-2 
-      focus-visible:outline-indigo-600"
-      >
-        Filter
-      </button>
+        <button
+          type="button"
+          onClick={showFilters}
+          className="
+        bg-green-500 
+        dark:bg-blue-600
+        px-3 py-2 
+        text-sm 
+        font-semibold 
+        text-white 
+        shadow-sm 
+        hover:bg-green-600 
+        dark:hover:bg-sky-400 
+        focus-visible:outline 
+        focus-visible:outline-2 
+        focus-visible:outline-offset-2 
+        focus-visible:outline-indigo-600
+        w-full
+        "
+        >
+          Filter Controls
+        </button>
 
       {loading ? (
         <div id="loading">
@@ -252,6 +254,6 @@ export function ResultsSearch(props: {
         h2hresults={h2hresults}
         h2htotal={h2htotal}
       ></ResultTable>
-    </>
+    </div>
   );
 }

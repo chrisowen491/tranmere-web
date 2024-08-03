@@ -10,18 +10,18 @@ export function TransferTable(props: { title: string; records: Transfer[] }) {
             <table className="min-w-full divide-y text-left text-sm">
               <thead className="font-semibold ">
                 <tr>
-                  <th scope="col" className="py-3 py-3.5">
+                  <th scope="col" className="px-1 md:px-1 py-3">
                     Name
                   </th>
                   <th
                     scope="col"
-                    className="hidden px-1 md:px-1 md:px-3 py-3.5 lg:table-cell text-center"
+                    className="hidden px-1 md:px-1 py-3.5 lg:table-cell text-center"
                   >
                     Season
                   </th>
                   <th
                     scope="col"
-                    className="hidden px-1 md:px-1 md:px-3 py-3.5 lg:table-cell text-center"
+                    className="hidden px-1 md:px-1  py-3.5 lg:table-cell text-center"
                   >
                     In/Out
                   </th>
@@ -36,22 +36,22 @@ export function TransferTable(props: { title: string; records: Transfer[] }) {
               <tbody className="divide-y divide-gray-200 text-sm">
                 {props.records.map((record, idx) => (
                   <tr key={idx}>
-                    <td className="whitespace-nowrap px-1 md:px-3 py-4">
+                    <td className="whitespace  px-1 md:px-3 py-4">
                       <LinkButton
                         text={record.name}
                         href={`/page/player/${record.name}`}
                       ></LinkButton>
                     </td>
-                    <td className="whitespace-nowrap hidden px-1 md:px-1 md:px-3 py-3.5 lg:table-cell text-center">
+                    <td className="whitespace  hidden px-1 md:px-1 py-3.5 lg:table-cell text-center">
                       <LinkButton
                         text={record.season.toString()}
                         href={`/player-records/${record.season}`}
                       ></LinkButton>
                     </td>
-                    <td className="whitespace-nowrap hidden px-1 md:px-1 md:px-3 py-3.5 lg:table-cell text-center">
+                    <td className="whitespace  hidden px-1 md:px-1  py-3.5 lg:table-cell text-center">
                       {record.type}
                     </td>
-                    <td className="whitespace-nowrap px-1 md:px-3 py-4">
+                    <td className="whitespace  px-1 md:px-3 py-4">
                       {record.type === "out" ? (
                         <LinkButton
                           href={`/games/${record.to}`}
@@ -64,7 +64,7 @@ export function TransferTable(props: { title: string; records: Transfer[] }) {
                         />
                       )}
                     </td>
-                    <td className="whitespace-nowrap px-1 md:px-3 py-4">
+                    <td className="whitespace  px-1 md:px-3 py-4">
                       {record.value}
                     </td>
                   </tr>

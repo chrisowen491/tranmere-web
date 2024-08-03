@@ -14,6 +14,7 @@ import { Reviews } from "@/components/comments/Reviews";
 import CommentPanel from "@/components/comments/CommentPanel";
 import { LineGraph } from "@/components/charts/LineGraph";
 import Slider from "@/components/carousel/Slider";
+import { LastMatch } from "@/components/fragments/LastMatch";
 
 export async function generateMetadata({
   params,
@@ -71,6 +72,7 @@ export default async function BlogPage({
           <div className="absolute bottom-0 right-0 top-16 hidden h-12 w-px bg-gradient-to-t from-slate-800 dark:block" />
           <div className="absolute bottom-0 right-0 top-28 hidden w-px bg-slate-800 dark:block" />
           <div className="sticky top-[4.75rem] -ml-0.5 h-[calc(100vh-4.75rem)] w-64 overflow-y-auto overflow-x-hidden py-16 pl-0.5 pr-8 xl:w-72 xl:pr-16">
+            <LastMatch></LastMatch>
             <Navigation />
           </div>
         </div>

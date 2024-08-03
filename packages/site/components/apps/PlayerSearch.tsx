@@ -102,7 +102,7 @@ export function PlayerSearch(props: {
   };
 
   return (
-    <>
+    <div className="mx-auto w-full px-8">
       <Dialog open={open} onClose={setOpen} className="relative z-10">
         <div className="fixed inset-0" />
 
@@ -198,7 +198,9 @@ export function PlayerSearch(props: {
     focus-visible:outline 
     focus-visible:outline-2 
     focus-visible:outline-offset-2 
-    focus-visible:outline-indigo-600"
+    focus-visible:outline-indigo-600
+    w-full
+    "
       >
         Filter
       </button>
@@ -321,6 +323,6 @@ export function PlayerSearch(props: {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }

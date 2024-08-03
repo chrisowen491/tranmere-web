@@ -1,5 +1,3 @@
-"use client";
-
 import {
   Disclosure,
   DisclosureButton,
@@ -35,10 +33,7 @@ const mobilenavigation = [
 ];
 
 export function Navbar() {
-  const { user, error, isLoading } = useUser();
-
-  if (isLoading) return <div className="text-gray-50">Loading...</div>;
-  if (error) return <div className="text-gray-50">{error.message}</div>;
+  const { user } = useUser();
 
   return (
     <>
