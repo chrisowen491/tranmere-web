@@ -216,10 +216,10 @@ export function ResultsSearch(props: {
         </div>
       </Dialog>
 
-        <button
-          type="button"
-          onClick={showFilters}
-          className="
+      <button
+        type="button"
+        onClick={showFilters}
+        className="
         bg-green-500 
         dark:bg-blue-600
         px-3 py-2 
@@ -235,9 +235,9 @@ export function ResultsSearch(props: {
         focus-visible:outline-indigo-600
         w-full
         "
-        >
-          Filter Controls
-        </button>
+      >
+        Filter Controls
+      </button>
 
       {loading ? (
         <div id="loading">
