@@ -18,10 +18,10 @@
     "prettier": "3.3.3",
     "ts-jest": "^29.0.5",
     "typescript": "^5.4.5",
-    "typescript-eslint": "^7.10.0"
+    "typescript-eslint": "^8.0.0"
   },
   "overrides": {
-    "@types/node": "20.14.13"
+    "@types/node": "20.14.14"
   },
   "dependencies": {
     "@contentful/rich-text-plain-text-renderer": "^16.1.3",
