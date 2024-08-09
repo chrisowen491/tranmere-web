@@ -1,9 +1,7 @@
+export const runtime = "edge";
 import { Title } from "@/components/fragments/Title";
-import { SideBar } from "@/components/fragments/SideBar";
 import { GetAllTranmereManagers } from "@/lib/apiFunctions";
 import { Metadata } from "next";
-
-export const runtime = "edge";
 
 export const metadata: Metadata = {
   title: "Tranmere Rovers Managerial Records",
@@ -15,70 +13,30 @@ export default async function ManagerRecords() {
 
   return (
     <>
-      <section className="hero bg-blue">
-        <div className="container">
-          <Title title="Tranmere Rovers Managerial Records"></Title>
-        </div>
-      </section>
+      <Title
+        subTitle={"Managers"}
+        title="Manager Records"
+        summary={"Complete first team manager records"}
+      ></Title>
+      <div className="py-2 sm:py-2">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+          <ul
+            role="list"
+            className="mx-auto mt-10 grid max-w-2xl grid-cols-2 gap-x-8 gap-y-16 text-center sm:grid-cols-3 md:grid-cols-4 lg:mx-0 lg:max-w-none lg:grid-cols-5 xl:grid-cols-6"
+          >
+            {managers.map((manager, idx) => (
+              <li key={idx}>
 
-      <section className="overlay">
-        <div className="container overlay-item-top">
-          <div className="row">
-            <div className="col">
-              <div className="content boxed">
-                <div className="row separated">
-                  <article className="col-md-8 content-body">
-                    <p>A complete list of Tranmere Rovers managers</p>
-                    {managers.map((manager) => (
-                      <div
-                        className="card stacked"
-                        style={{ marginBottom: "50px" }}
-                        key={manager.name}
-                      >
-                        <div className="card-body">
-                          <div className="row gutter-2 align-items-center">
-                            <div className="col">
-                              <h3 className="card-title mb-1" itemProp="name">
-                                {manager.name}
-                              </h3>
-                              <p className="card-text mb-2">
-                                <small>
-                                  From
-                                  <time
-                                    dateTime={manager.dateJoined}
-                                    className="text-muted d-block"
-                                  >
-                                    {manager.dateJoined}
-                                  </time>
-                                </small>
-                              </p>
-                              <p className="card-text mb-2">
-                                <small>
-                                  To
-                                  <time
-                                    dateTime={manager.dateLeft}
-                                    className="text-muted d-block"
-                                  >
-                                    {manager.dateLeft}
-                                  </time>
-                                </small>
-                              </p>
-                            </div>
-                          </div>
-                          <i className="icon-photo icon-background text-blue"></i>
-                        </div>
-                      </div>
-                    ))}
-                    <div className="row gutter-2"></div>
-                  </article>
-
-                  <SideBar />
-                </div>
-              </div>
-            </div>
-          </div>
+                  <h3 className="mt-6 text-base font-semibold leading-7 tracking-tight text-gray-900 dark:text-gray-50">
+                    {manager.name}
+                  </h3>
+                  <p>Joined: {manager.dateJoined}</p>
+                  <p>Left: {manager.dateLeftText}</p>
+              </li>
+            ))}
+          </ul>
         </div>
-      </section>
+      </div>
     </>
   );
 }

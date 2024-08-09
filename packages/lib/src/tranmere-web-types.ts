@@ -43,6 +43,7 @@ export interface Manager {
   dateJoined: string;
   dateLeft: string;
   dateLeftText?: string;
+  programmePath?: string;
 }
 
 export type Team = BaseEntity;

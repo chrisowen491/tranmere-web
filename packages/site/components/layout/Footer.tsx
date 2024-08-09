@@ -27,6 +27,7 @@ const navigation = {
   statistics: [
     { name: "Top Attendences", href: "/games/top-attendances" },
     { name: "Top Home Attendences", href: "/games/top-home-attendances" },
+    { name: "Manager Records", href: "/managers" },
   ],
   media: [
     { name: "Blog", href: "/blog" },

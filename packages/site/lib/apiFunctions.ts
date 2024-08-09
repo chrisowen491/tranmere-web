@@ -60,7 +60,7 @@ export async function GetTopScorersBySeason(): Promise<PlayerSeasonSummary[]> {
 
 export async function GetAllTranmereManagers(): Promise<Manager[]> {
   const query = encodeURIComponent(
-    "{listTranmereWebManagers(limit:300){items{name dateLeft dateJoined}}}",
+    "{listTranmereWebManagers(limit:300){items{name dateLeft dateJoined programmePath}}}",
   );
   const results = await fetch(
     `${APP_SYNC_URL}/graphql?query=${query}`,
