@@ -44,10 +44,7 @@ function EmptyQueryBoundary(options: QueryBoundary) {
 
 function Hit({ hit }: HitProps) {
   return (
-    <div
-      className=""
-      onClick={() => (window.location.href = hit.link)}
-    >
+    <div className="" onClick={() => (window.location.href = hit.link)}>
       <div className="">
         <div className="">
           <div className=" dark:text-gray-600 dark:hover:text-gray-50 hover:text-gray-50">
