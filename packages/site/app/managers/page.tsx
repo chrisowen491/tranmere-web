@@ -26,12 +26,11 @@ export default async function ManagerRecords() {
           >
             {managers.map((manager, idx) => (
               <li key={idx}>
-
-                  <h3 className="mt-6 text-base font-semibold leading-7 tracking-tight text-gray-900 dark:text-gray-50">
-                    {manager.name}
-                  </h3>
-                  <p>Joined: {manager.dateJoined}</p>
-                  <p>Left: {manager.dateLeftText}</p>
+                <h3 className="mt-6 text-base font-semibold leading-7 tracking-tight text-gray-900 dark:text-gray-50">
+                  {manager.name}
+                </h3>
+                <p>Joined: {manager.dateJoined}</p>
+                <p>Left: {manager.dateLeftText}</p>
               </li>
             ))}
           </ul>
