@@ -76,7 +76,7 @@ type TranmereWebManagers {
   name: ID!
   dateJoined: String!
   dateLeft: String!
-  programmePath: String!
+  programmePath: String
 }
 
 type TranmereWebClubsConnection {
