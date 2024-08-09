@@ -37,7 +37,7 @@ export function Navbar() {
 
   return (
     <>
-      <Disclosure as="nav" className="bg-blue-900 dark:bg-blue-400">
+      <Disclosure as="nav" className="bg-blue-900 dark:bg-slate-950">
         <div className="mx-auto max-w-7xl px-2 sm:px-4 lg:px-8">
           <div className="relative flex h-16 items-center justify-between">
             <div className="flex items-center px-2 lg:px-0">

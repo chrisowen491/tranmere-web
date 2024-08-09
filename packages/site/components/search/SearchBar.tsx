@@ -8,12 +8,9 @@ import "instantsearch.css/themes/satellite.css";
 import {
   Hits,
   SearchBox,
-  RefinementList,
   useInstantSearch,
   InstantSearch,
 } from "react-instantsearch";
-
-import { Panel } from "@/components/search/Panel";
 
 const client = algoliasearch("DZJXSVOWI3", "c050f0bd17ccfde9aa78a3563d552db2");
 
@@ -48,12 +45,12 @@ function EmptyQueryBoundary(options: QueryBoundary) {
 function Hit({ hit }: HitProps) {
   return (
     <div
-      className="aa-ItemWrapper"
+      className=""
       onClick={() => (window.location.href = hit.link)}
     >
-      <div className="aa-ItemContent">
-        <div className="aa-ItemContentBody">
-          <div className="aa-ItemContentTitle dark:text-gray-600 dark:hover:text-gray-50 hover:text-gray-50">
+      <div className="">
+        <div className="">
+          <div className=" dark:text-gray-600 dark:hover:text-gray-50 hover:text-gray-50">
             {hit.name}
           </div>
         </div>
@@ -73,18 +70,10 @@ export default function SearchBar() {
         <div className="algolia-autocomplete relative">
           <SearchBox searchAsYouType={true} />
           <EmptyQueryBoundary fallback={null}>
-            <Hits hitComponent={Hit} />
+            <Hits hitComponent={Hit} className="dark:bg-slate-950" />
           </EmptyQueryBoundary>
         </div>
       </InstantSearch>
     </div>
-  );
-}
-
-function FallbackComponent({ attribute }: { attribute: string }) {
-  return (
-    <Panel header={attribute}>
-      <RefinementList attribute={attribute} />
-    </Panel>
   );
 }

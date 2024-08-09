@@ -22,15 +22,12 @@ export function Hero() {
               </div>
             </div>
           </div>
-          <div className="relative lg:static xl:pl-10">
-            <div className="absolute inset-x-[-50vw] -bottom-48 -top-32 [mask-image:linear-gradient(transparent,white,white)] lg:-bottom-32 lg:-top-32 lg:left-[calc(50%+14rem)] lg:right-0 lg:[mask-image:none] dark:[mask-image:linear-gradient(transparent,white,transparent)] lg:dark:[mask-image:linear-gradient(white,white,transparent)]"></div>
-          </div>
         </div>
         <img
           src="https://www.tranmere-web.com/builder/1989/side-parting-left-small/ffd3b3/none/bc9d00/fcb98b/none/bc8a00"
           alt="Image"
           width={"300px"}
-          className="absolute bottom-0 right-0 w-1/2 md:w-1/4"
+          className="absolute bottom-0 right-0 w-2/6 sm:w-1/4 xl:w-1/6"
         />
       </div>
     </div>

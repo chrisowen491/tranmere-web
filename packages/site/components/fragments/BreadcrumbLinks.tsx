@@ -11,7 +11,7 @@ export function BreadcrumbLinks(props: {
 }) {
   return (
     <nav aria-label="Breadcrumb" className="mx-auto max-w-7xl">
-      <ol role="list" className="flex items-center space-x-4">
+      <ol role="list" className="flex items-center space-x-4 px-8">
         {props.breadcrumbs.map((breadcrumb) => (
           <li key={breadcrumb.id}>
             <div className="flex items-center">

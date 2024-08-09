@@ -9,16 +9,14 @@ export function PlayerOfTheDay(props: { randomplayer: PlayerProfile }) {
     });
   }
   return (
-    <section className="isolate overflow-hidden mx-auto w-full px-8 mx-8">
+    <section className="isolate overflow-hidden mx-auto w-full px-8">
       <div className="relative mx-auto max-w-2xl py-8 sm:py-8 lg:max-w-4xl">
-        <div className="absolute left-1/2 top-0 -z-10 h-[50rem] w-[90rem] -translate-x-1/2 bg-[radial-gradient(50%_100%_at_top,theme(colors.indigo.100),white)] opacity-20 lg:left-36" />
-        <div className="absolute inset-y-0 right-1/2 -z-10 mr-12 w-[150vw] origin-bottom-left skew-x-[-30deg] shadow-xl shadow-indigo-600/10 ring-1 ring-indigo-50 sm:mr-20 md:mr-0 lg:right-full lg:-mr-36 lg:origin-center" />
         <figure className="grid grid-cols-1 items-center gap-x-6 gap-y-8 lg:gap-x-10">
           <div className="col-end-1 w-16 lg:row-span-4 lg:w-72">
             <img
               alt=""
               src={randomplayer.player.picLink}
-              className="rounded-xl bg-indigo-50 lg:rounded-3xl"
+              className="rounded-xl bg-indigo-50 lg:rounded-3xl dark:bg-slate-950"
             />
           </div>
           <figcaption className="text-base lg:col-start-1 lg:row-start-3">

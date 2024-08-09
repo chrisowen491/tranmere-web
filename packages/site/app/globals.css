@@ -19,19 +19,6 @@
   padding-left: 2.5rem;
 }
 
-#autocomplete .ais-Hits {
-  cursor: pointer;
-}
-
-#autocomplete .aa-ItemIcon {
-  float: left;
-  padding-bottom: 30px;
-  padding-right: 20px;
-}
-
-#autocomplete .aa-ItemContentBody {
-  width: 500px;
-}
 #navsearch .ais-Hits-item:hover {
   background-color: #064cdb;
   color: white;
