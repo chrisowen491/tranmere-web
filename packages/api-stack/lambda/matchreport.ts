@@ -26,7 +26,7 @@ const dynamo = DynamoDBDocument.from(
 import { ChatOpenAI } from '@langchain/openai';
 import { PromptTemplate } from '@langchain/core/prompts';
 import { RunnableSequence } from '@langchain/core/runnables';
-const chatModel = new ChatOpenAI({ modelName: 'gpt-4-1106-preview' });
+const chatModel = new ChatOpenAI({ modelName: 'gpt-4-turbo' });
 import { v4 as uuidv4 } from 'uuid';
 import { z } from 'zod';
 import { StructuredOutputParser } from 'langchain/output_parsers';
@@ -258,60 +258,66 @@ exports.handler = async (
   });
   await dynamo.send(params);
 
-  const parser = StructuredOutputParser.fromZodSchema(
-    z.object({
-      goals: z
-        .array(
-          z.object({
-            Minute: z.number().describe('the minute the goal was scored'),
-            Scorer: z.string().describe('the name of the goalscorer'),
-            GoalType: z
-              .enum(['Shot', 'Header', 'Penalty', 'FreeKick', 'Header'])
-              .nullable()
-              .describe('how the goal was scored if known'),
-            Assist: z
-              .string()
-              .nullable()
-              .describe('the name of any player credited with the assist'),
-            AssistType: z
-              .enum(['Pass', 'Cross', 'Corner', 'FreeKick', 'Header'])
-              .nullable()
-              .describe('the type of assist')
-          })
-        )
-        .describe(
-          'An array of goals scored by tranmere rovers players in this match'
-        )
-    })
-  );
+  if((theMatch.home === 'Tranmere Rovers' && theMatch.hgoal === "0") || (theMatch.visitor === 'Tranmere Rovers' && theMatch.vgoal === "0")) {
+    console.log("No goals scored by Tranmere Rovers in this match");
+    return utils.sendResponse(200, { message: events });
+  } else {
 
-  const goal_chain = RunnableSequence.from([
-    PromptTemplate.fromTemplate(
-      'Use the supplied soccer game events to extract information about goals scored by Tranmere Rovers.\n{format_instructions}\n{events}'
-    ),
-    chatModel,
-    parser
-  ]);
+    const parser = StructuredOutputParser.fromZodSchema(
+      z.object({
+        goals: z
+          .array(
+            z.object({
+              Minute: z.number().describe('the minute the goal was scored'),
+              Scorer: z.string().describe('the name of the goalscorer'),
+              GoalType: z
+                .enum(['Shot', 'Header', 'Penalty', 'FreeKick', 'Header'])
+                .nullable()
+                .describe('how the goal was scored if known'),
+              Assist: z
+                .string()
+                .nullable()
+                .describe('the name of any player credited with the assist'),
+              AssistType: z
+                .enum(['Pass', 'Cross', 'Corner', 'FreeKick', 'Header'])
+                .nullable()
+                .describe('the type of assist')
+            })
+          )
+          .describe(
+            'An array of goals scored by tranmere rovers players in this match'
+          )
+      })
+    );
 
-  const goal_response = await goal_chain.invoke({
-    events: JSON.stringify(events),
-    format_instructions: parser.getFormatInstructions()
-  });
+    const goal_chain = RunnableSequence.from([
+      PromptTemplate.fromTemplate(
+        'Use the supplied soccer game events to extract information about goals scored by Tranmere Rovers.\n{format_instructions}\n{events}'
+      ),
+      chatModel,
+      parser
+    ]);
 
-  for await (const obj of goal_response.goals) {
-    const goal: Goal = {
-      id: uuidv4(),
-      Date: day!,
-      GoalType: obj.GoalType?.valueOf(),
-      Minute: obj.Minute.toString(),
-      Opposition: theMatch.opposition!,
-      Scorer: translatePlayerName(obj.Scorer),
-      Assist: obj.Assist!,
-      AssistType: obj.AssistType?.valueOf(),
-      Season: season
-    };
-    await utils.insertUpdateItem(goal, DataTables.GOALS_TABLE_NAME);
+    const goal_response = await goal_chain.invoke({
+      events: JSON.stringify(events),
+      format_instructions: parser.getFormatInstructions()
+    });
+
+    for await (const obj of goal_response.goals) {
+      const goal: Goal = {
+        id: uuidv4(),
+        Date: day!,
+        GoalType: obj.GoalType?.valueOf(),
+        Minute: obj.Minute.toString(),
+        Opposition: theMatch.opposition!,
+        Scorer: translatePlayerName(obj.Scorer),
+        Assist: obj.Assist!,
+        AssistType: obj.AssistType?.valueOf(),
+        Season: season
+      };
+      await utils.insertUpdateItem(goal, DataTables.GOALS_TABLE_NAME);
+    }
+
+    return utils.sendResponse(200, goal_response);
   }
-
-  return utils.sendResponse(200, goal_response);
 };

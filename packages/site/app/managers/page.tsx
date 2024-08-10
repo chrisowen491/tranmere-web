@@ -1,6 +1,6 @@
 export const runtime = "edge";
 import { Title } from "@/components/fragments/Title";
-import { GetAllTranmereManagers } from "@/lib/apiFunctions";
+import { buildImagePath, GetAllTranmereManagers } from "@/lib/apiFunctions";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -26,11 +26,17 @@ export default async function ManagerRecords() {
           >
             {managers.map((manager, idx) => (
               <li key={idx}>
-                <h3 className="mt-6 text-base font-semibold leading-7 tracking-tight text-gray-900 dark:text-gray-50">
-                  {manager.name}
-                </h3>
-                <p>Joined: {manager.dateJoined}</p>
-                <p>Left: {manager.dateLeftText}</p>
+                  {manager.programmePath && (
+                  <img
+                    alt={manager.name}
+                    src={buildImagePath(manager.programmePath!, 200, 200)}
+                    className="mx-auto h-200 w-200 rounded-full"
+                  />)}
+                  <h3 className="mt-6 text-base font-semibold leading-7 tracking-tight text-gray-900 dark:text-gray-50">
+                    {manager.name}
+                  </h3>
+                  <p>Joined: {manager.dateJoined}</p>
+                  <p>Left: {manager.dateLeftText}</p>
               </li>
             ))}
           </ul>

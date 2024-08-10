@@ -63,7 +63,7 @@ export async function GetAllTranmereManagers(): Promise<Manager[]> {
     "{listTranmereWebManagers(limit:300){items{name dateLeft dateJoined programmePath}}}",
   );
   const results = await fetch(
-    `${APP_SYNC_URL}/graphql?query=${query}`,
+    `${APP_SYNC_URL}/graphql?query=${query}&v=4`,
     APP_SYNC_OPTIONS,
   );
 
@@ -260,4 +260,44 @@ export function ToTitleCase(input: string): string {
     );
 
   return str;
+}
+
+export function buildImagePath(image: string, width: number, height: number): string {
+  const programme = new ProgrammeImage(image, {
+    resize: {
+      width: width,
+      height: height,
+      fit: 'fill'
+    }
+  });
+  return 'https://images.tranmere-web.com/' + programme.imagestring();
+}
+
+
+export interface ImageEdits {
+  resize?: ImageResize;
+}
+
+export interface ImageResize {
+  width: number;
+  height?: number;
+  fit: string;
+}
+
+export class ProgrammeImage {
+  bucket: string;
+  key: string;
+  edits?: ImageEdits;
+
+  constructor(key: string, edits?: ImageEdits) {
+    this.bucket = 'trfc-programmes';
+    this.key = key;
+    if (typeof edits !== 'undefined') {
+      this.edits = edits;
+    }
+  }
+
+  imagestring() {
+    return Buffer.from(JSON.stringify(this)).toString('base64');
+  }
 }
