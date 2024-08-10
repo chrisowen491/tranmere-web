@@ -262,17 +262,20 @@ export function ToTitleCase(input: string): string {
   return str;
 }
 
-export function buildImagePath(image: string, width: number, height: number): string {
+export function buildImagePath(
+  image: string,
+  width: number,
+  height: number,
+): string {
   const programme = new ProgrammeImage(image, {
     resize: {
       width: width,
       height: height,
-      fit: 'fill'
-    }
+      fit: "fill",
+    },
   });
-  return 'https://images.tranmere-web.com/' + programme.imagestring();
+  return "https://images.tranmere-web.com/" + programme.imagestring();
 }
-
 
 export interface ImageEdits {
   resize?: ImageResize;
@@ -290,14 +293,14 @@ export class ProgrammeImage {
   edits?: ImageEdits;
 
   constructor(key: string, edits?: ImageEdits) {
-    this.bucket = 'trfc-programmes';
+    this.bucket = "trfc-programmes";
     this.key = key;
-    if (typeof edits !== 'undefined') {
+    if (typeof edits !== "undefined") {
       this.edits = edits;
     }
   }
 
   imagestring() {
-    return Buffer.from(JSON.stringify(this)).toString('base64');
+    return Buffer.from(JSON.stringify(this)).toString("base64");
   }
 }

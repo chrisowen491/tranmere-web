@@ -258,11 +258,13 @@ exports.handler = async (
   });
   await dynamo.send(params);
 
-  if((theMatch.home === 'Tranmere Rovers' && theMatch.hgoal === "0") || (theMatch.visitor === 'Tranmere Rovers' && theMatch.vgoal === "0")) {
-    console.log("No goals scored by Tranmere Rovers in this match");
+  if (
+    (theMatch.home === 'Tranmere Rovers' && theMatch.hgoal === '0') ||
+    (theMatch.visitor === 'Tranmere Rovers' && theMatch.vgoal === '0')
+  ) {
+    console.log('No goals scored by Tranmere Rovers in this match');
     return utils.sendResponse(200, { message: events });
   } else {
-
     const parser = StructuredOutputParser.fromZodSchema(
       z.object({
         goals: z
