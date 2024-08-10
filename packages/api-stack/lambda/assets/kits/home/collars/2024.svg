@@ -8,8 +8,11 @@
     <path stroke="#000035" d="m256,359l30,30l31.996,-70.056l-17.996,-11.944l-44,52z" fill="#000035"/>
    </g>
   </g>
-    <g id="sub-collar">
-   <line fill="none" stroke-width="4" fill-opacity="null" x1="198" y1="311.45313" x2="229" y2="377.45313" id="svg_37" stroke-dasharray="5,5" stroke="#990000"/>
-   <line fill="none" stroke-width="4" fill-opacity="null" x1="312" y1="309.45313" x2="281" y2="375.45313" id="svg_46" stroke-dasharray="5,5" stroke="#990000"/>
+  <g stroke="null" id="sub-collar">
+   <line transform="rotate(-0.913708 214.5 350.953)" stroke="#990000" id="svg_37" y2="382.45313" x2="227" y1="319.45313" x1="202" fill-opacity="null" stroke-width="4" fill="none"/>
+   <line transform="rotate(-2.92982 298 349.937)" stroke="#990000" id="svg_46" y2="380.42087" x2="280" y1="319.45313" x1="316" fill-opacity="null" stroke-width="4" fill="none"/>
   </g>
+    <rect stroke="#000035" id="svg_72" height="24" width="27" y="361" x="242" stroke-width="4" fill="#000035"/>
+  <rect stroke="#bf5f00" id="svg_73" height="8" width="3" y="376" x="259" stroke-width="4" fill="none"/>
+  <rect stroke="#990000" id="svg_74" height="8" width="3" y="376" x="252" stroke-width="4" fill="none"/>
 </svg>  

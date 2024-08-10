@@ -19,12 +19,12 @@
         <g id="right-sleeve">
             <path fill="#ffffff" d="m379.92691,458.49199l66,0l0,20l-66,0l0,-20z"/>
         </g>
-        <line fill="none" stroke-width="8" x1="65" y1="475.45313" x2="131" y2="475.45313"  stroke="#000035"/>
-        <line fill="none" stroke-width="8" x1="380" y1="475.45313" x2="446" y2="475.45313"  stroke="#000035"/>
+        <line fill="none" stroke-width="16" x1="65" y1="475.45313" x2="131" y2="475.45313"  stroke="#000035"/>
+        <line fill="none" stroke-width="16" x1="380" y1="475.45313" x2="446" y2="475.45313"  stroke="#000035"/>
     </g>
     <g id="sleeves">
-    <line fill="none" stroke-width="4" fill-opacity="null" x1="84.96226" y1="438.04443" x2="109.03774" y2="492.86182" id="svg_47" stroke-dasharray="5,5" transform="rotate(113.0205307006836 96.99999999999999,465.453125) " stroke="#990000"/>
-    <line fill="none" stroke-width="4" fill-opacity="null" x1="399.0314" y1="433.42855" x2="422.96864" y2="490.47772" id="svg_48" stroke-dasharray="5,5" transform="rotate(113.0205307006836 411.00000000000006,461.95312499999994) " stroke="#990000"/>
+        <line fill="none" stroke-width="2" x1="65" y1="475.45313" x2="131" y2="475.45313"  stroke="#990000"/>
+        <line fill="none" stroke-width="2" x1="380" y1="475.45313" x2="446" y2="475.45313"  stroke="#990000"/>
     </g>
 
 
