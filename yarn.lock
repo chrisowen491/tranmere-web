@@ -4694,11 +4694,11 @@ aws-cdk@2.151.0:
     fsevents "2.3.2"
 
 aws-sdk-js-codemod@^2.0.0:
-  version "2.2.2"
-  resolved "https://registry.yarnpkg.com/aws-sdk-js-codemod/-/aws-sdk-js-codemod-2.2.2.tgz#277528486f49aa85fa7d1480bcaed1e687b5a313"
-  integrity sha512-Txhg7mwZiw0TW5VB7KXu4tO/Y0pt7ZR/Eo0WDDd9+ftrvaS3JI80jGoNYd465HMlXgEJKDzBll3dt5QcDSgv6g==
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk-js-codemod/-/aws-sdk-js-codemod-2.3.0.tgz#89f2b1d095c0d5b783b4522d892f962be9cdbdad"
+  integrity sha512-9Eu/26RURLdVtNna1clDUtPWYuxIMoWs9qTKo1DmfeaALv7CyhzxGhT8cBGS5G9KLqVz6atqUVZg9D6tRDPkAw==
   dependencies:
-    jscodeshift "0.16.1"
+    jscodeshift "17.0.0"
 
 aws-sign2@~0.7.0:
   version "0.7.0"
@@ -5069,7 +5069,7 @@ chalk@^2.4.2:
     escape-string-regexp "^1.0.5"
     supports-color "^5.3.0"
 
-chalk@^4.0.0, chalk@^4.0.2, chalk@^4.1.0, chalk@^4.1.1, chalk@^4.1.2:
+chalk@^4.0.0, chalk@^4.0.2, chalk@^4.1.0, chalk@^4.1.1:
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/chalk/-/chalk-4.1.2.tgz#aac4e2b7734a740867aeb16bf02aad556a1e7a01"
   integrity sha512-oKnbhFyRIXpUuez8iBMmyEa4nbj4IOQyuhc/wy9kY7/WVPcwIO9VA668Pu8RkO7+0G76SLROeyw9CpQ061i4mA==
@@ -8848,10 +8848,10 @@ jsbn@~0.1.0:
   resolved "https://registry.yarnpkg.com/jsbn/-/jsbn-0.1.1.tgz#a5e654c2e5a2deb5f201d96cefbca80c0ef2f513"
   integrity sha512-UVU9dibq2JcFWxQPA6KCqj5O42VOmAY3zQUfEKxU0KpTGXwNoCjkX1e13eHNvw/xPynt6pU0rZ1htjWTNTSXsg==
 
-jscodeshift@0.16.1:
-  version "0.16.1"
-  resolved "https://registry.yarnpkg.com/jscodeshift/-/jscodeshift-0.16.1.tgz#f80207f0a99b58de400a6f174ceecefe277dd5da"
-  integrity sha512-oMQXySazy63awNBzMpXbbVv73u3irdxTeX2L5ueRyFRxi32qb9uzdZdOY5fTBYADBG19l5M/wnGknZSV1dzCdA==
+jscodeshift@17.0.0:
+  version "17.0.0"
+  resolved "https://registry.yarnpkg.com/jscodeshift/-/jscodeshift-17.0.0.tgz#a5a255b87cf9aab226133ddc02471e2ff7a88bd9"
+  integrity sha512-Af+MFsNwLSVO+t4kKjJdJKh6iNbNHfDfFGdyltJ2wUFN3furgbvHguJmB85iou+fY7wbHgI8eiEKpp6doGgtKg==
   dependencies:
     "@babel/core" "^7.24.7"
     "@babel/parser" "^7.24.7"
@@ -8863,12 +8863,11 @@ jscodeshift@0.16.1:
     "@babel/preset-flow" "^7.24.7"
     "@babel/preset-typescript" "^7.24.7"
     "@babel/register" "^7.24.6"
-    chalk "^4.1.2"
     flow-parser "0.*"
     graceful-fs "^4.2.4"
     micromatch "^4.0.7"
     neo-async "^2.5.0"
-    node-dir "^0.1.17"
+    picocolors "^1.0.1"
     recast "^0.23.9"
     temp "^0.9.4"
     write-file-atomic "^5.0.1"
@@ -9730,7 +9729,7 @@ minimatch@9.0.3:
   dependencies:
     brace-expansion "^2.0.1"
 
-minimatch@^3.0.2, minimatch@^3.0.4, minimatch@^3.1.1, minimatch@^3.1.2:
+minimatch@^3.0.4, minimatch@^3.1.1, minimatch@^3.1.2:
   version "3.1.2"
   resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-3.1.2.tgz#19cd194bfd3e428f049a70817c038d89ab4be35b"
   integrity sha512-J7p63hRiAjw1NDEww1W7i37+ByIrOWO5XQQAzZ3VOcL0PNybwpfmV/N05zFAzwQ9USyEcX6t3UO+K5aqBQOIHw==
@@ -10049,13 +10048,6 @@ next@^14.2.3:
     "@next/swc-win32-arm64-msvc" "14.2.5"
     "@next/swc-win32-ia32-msvc" "14.2.5"
     "@next/swc-win32-x64-msvc" "14.2.5"
-
-node-dir@^0.1.17:
-  version "0.1.17"
-  resolved "https://registry.yarnpkg.com/node-dir/-/node-dir-0.1.17.tgz#5f5665d93351335caabef8f1c554516cf5f1e4e5"
-  integrity sha512-tmPX422rYgofd4epzrNoOXiE8XFZYOcCq1vD7MAXCDO+O+zndlA2ztdKKMa+EeuBG5tHETpr4ml4RGgpqDCCAg==
-  dependencies:
-    minimatch "^3.0.2"
 
 node-domexception@1.0.0:
   version "1.0.0"
