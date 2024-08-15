@@ -181,7 +181,7 @@ exports.handler = async (
   }
 
   console.log(`Found ${events.length} events to build a match report`);
-  if(events.length > 0) {
+  if (events.length > 0) {
     await utils.insertUpdateItem(theMatch, DataTables.RESULTS_TABLE);
 
     const team = theMatch.home === 'Tranmere Rovers' ? 'homeTeam' : 'awayTeam';
@@ -198,7 +198,9 @@ exports.handler = async (
           Number: element.meta.uniformNumber,
           SubbedBy:
             element.substitutions.length > 0
-              ? translatePlayerName(element.substitutions[0].replacedBy.name.full)
+              ? translatePlayerName(
+                  element.substitutions[0].replacedBy.name.full
+                )
               : null,
           SubTime:
             element.substitutions.length > 0
@@ -229,7 +231,7 @@ exports.handler = async (
         await utils.insertUpdateItem(app, DataTables.APPS_TABLE_NAME);
       }
     }
-  
+
     const prompt = ChatPromptTemplate.fromMessages([
       [
         'system',
@@ -255,9 +257,9 @@ exports.handler = async (
       referee: theMatch.referee,
       attendance: theMatch.attendance
     });
-  
+
     const output = response.content.toString().replace(/\n/g, '<br />');
-  
+
     const params = new UpdateCommand({
       TableName: DataTables.REPORT_TABLE,
       Key: {
@@ -270,7 +272,7 @@ exports.handler = async (
       ReturnValues: 'UPDATED_NEW'
     });
     await dynamo.send(params);
-  
+
     if (
       (theMatch.home === 'Tranmere Rovers' && theMatch.hgoal === '0') ||
       (theMatch.visitor === 'Tranmere Rovers' && theMatch.vgoal === '0')
@@ -304,7 +306,7 @@ exports.handler = async (
             )
         })
       );
-  
+
       const goal_chain = RunnableSequence.from([
         PromptTemplate.fromTemplate(
           'Use the supplied soccer game events to extract information about goals scored by Tranmere Rovers.\n{format_instructions}\n{events}'
@@ -312,12 +314,12 @@ exports.handler = async (
         chatModel,
         parser
       ]);
-  
+
       const goal_response = await goal_chain.invoke({
         events: JSON.stringify(events),
         format_instructions: parser.getFormatInstructions()
       });
-  
+
       for await (const obj of goal_response.goals) {
         const goal: Goal = {
           id: uuidv4(),
@@ -332,11 +334,12 @@ exports.handler = async (
         };
         await utils.insertUpdateItem(goal, DataTables.GOALS_TABLE_NAME);
       }
-  
-      return utils.sendResponse(200, events);
-  }
 
+      return utils.sendResponse(200, events);
+    }
   } else {
-    return utils.sendResponse(200, { message: 'no events - so no match report' });
+    return utils.sendResponse(200, {
+      message: 'no events - so no match report'
+    });
   }
 };
