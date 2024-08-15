@@ -144,53 +144,6 @@ exports.handler = async (
         dateString
       ][0].events[0].comment;
   }
-  await utils.insertUpdateItem(theMatch, DataTables.RESULTS_TABLE);
-
-  const team = theMatch.home === 'Tranmere Rovers' ? 'homeTeam' : 'awayTeam';
-  for await (const element of lineups.data.payload[0].body.teams[team]
-    .players) {
-    if (element.meta.status === 'starter') {
-      const app: Appearance = {
-        id: uuidv4(),
-        Date: day!,
-        Opposition: theMatch.opposition!,
-        Competition: competition,
-        Season: season!,
-        Name: translatePlayerName(element.name.full),
-        Number: element.meta.uniformNumber,
-        SubbedBy:
-          element.substitutions.length > 0
-            ? translatePlayerName(element.substitutions[0].replacedBy.name.full)
-            : null,
-        SubTime:
-          element.substitutions.length > 0
-            ? element.substitutions[0].timeElapsed
-            : null,
-        YellowCard: element.bookings.find((el) => el.type === 'yellow-card')
-          ? 'TRUE'
-          : null,
-        RedCard: element.bookings.find((el) => el.type === 'red-card')
-          ? 'TRUE'
-          : null,
-        SubYellow:
-          element.substitutions.length > 0 &&
-          element.substitutions[0].replacedBy.bookings.find(
-            (el) => el.type === 'yellow-card'
-          )
-            ? 'TRUE'
-            : null,
-        SubRed:
-          element.substitutions.length > 0 &&
-          element.substitutions[0].replacedBy.bookings.find(
-            (el) => el.type === 'red-card'
-          )
-            ? 'TRUE'
-            : null
-      };
-      if (element.substitutions.length == 0) delete app.SubbedBy;
-      await utils.insertUpdateItem(app, DataTables.APPS_TABLE_NAME);
-    }
-  }
 
   const events: MatchEvent[] = [];
   const page = 1;
@@ -227,99 +180,163 @@ exports.handler = async (
     }
   }
 
-  const prompt = ChatPromptTemplate.fromMessages([
-    [
-      'system',
-      'You are a robot capable of creating soccer match reports for a tranmere rovers fan site.'
-    ],
-    [
-      'user',
-      `Write a compelling soccer match report in 5-6 paragraphs using the following match events. 
-        {input}`
-    ]
-  ]);
-  const chain = prompt.pipe(chatModel);
-  const response = await chain.invoke({
-    input: JSON.stringify(events)
-  });
+  console.log(`Found ${events.length} events to build a match report`);
+  if(events.length > 0) {
+    await utils.insertUpdateItem(theMatch, DataTables.RESULTS_TABLE);
 
-  const output = response.content.toString().replace(/\n/g, '<br />');
-
-  const params = new UpdateCommand({
-    TableName: DataTables.REPORT_TABLE,
-    Key: {
-      day: day
-    },
-    UpdateExpression: 'set report = :r',
-    ExpressionAttributeValues: {
-      ':r': output
-    },
-    ReturnValues: 'UPDATED_NEW'
-  });
-  await dynamo.send(params);
-
-  if (
-    (theMatch.home === 'Tranmere Rovers' && theMatch.hgoal === '0') ||
-    (theMatch.visitor === 'Tranmere Rovers' && theMatch.vgoal === '0')
-  ) {
-    console.log('No goals scored by Tranmere Rovers in this match');
-    return utils.sendResponse(200, { message: events });
-  } else {
-    const parser = StructuredOutputParser.fromZodSchema(
-      z.object({
-        goals: z
-          .array(
-            z.object({
-              Minute: z.number().describe('the minute the goal was scored'),
-              Scorer: z.string().describe('the name of the goalscorer'),
-              GoalType: z
-                .enum(['Shot', 'Header', 'Penalty', 'FreeKick', 'Header'])
-                .nullable()
-                .describe('how the goal was scored if known'),
-              Assist: z
-                .string()
-                .nullable()
-                .describe('the name of any player credited with the assist'),
-              AssistType: z
-                .enum(['Pass', 'Cross', 'Corner', 'FreeKick', 'Header'])
-                .nullable()
-                .describe('the type of assist')
-            })
-          )
-          .describe(
-            'An array of goals scored by tranmere rovers players in this match'
-          )
-      })
-    );
-
-    const goal_chain = RunnableSequence.from([
-      PromptTemplate.fromTemplate(
-        'Use the supplied soccer game events to extract information about goals scored by Tranmere Rovers.\n{format_instructions}\n{events}'
-      ),
-      chatModel,
-      parser
-    ]);
-
-    const goal_response = await goal_chain.invoke({
-      events: JSON.stringify(events),
-      format_instructions: parser.getFormatInstructions()
-    });
-
-    for await (const obj of goal_response.goals) {
-      const goal: Goal = {
-        id: uuidv4(),
-        Date: day!,
-        GoalType: obj.GoalType?.valueOf(),
-        Minute: obj.Minute.toString(),
-        Opposition: theMatch.opposition!,
-        Scorer: translatePlayerName(obj.Scorer),
-        Assist: obj.Assist!,
-        AssistType: obj.AssistType?.valueOf(),
-        Season: season
-      };
-      await utils.insertUpdateItem(goal, DataTables.GOALS_TABLE_NAME);
+    const team = theMatch.home === 'Tranmere Rovers' ? 'homeTeam' : 'awayTeam';
+    for await (const element of lineups.data.payload[0].body.teams[team]
+      .players) {
+      if (element.meta.status === 'starter') {
+        const app: Appearance = {
+          id: uuidv4(),
+          Date: day!,
+          Opposition: theMatch.opposition!,
+          Competition: competition,
+          Season: season!,
+          Name: translatePlayerName(element.name.full),
+          Number: element.meta.uniformNumber,
+          SubbedBy:
+            element.substitutions.length > 0
+              ? translatePlayerName(element.substitutions[0].replacedBy.name.full)
+              : null,
+          SubTime:
+            element.substitutions.length > 0
+              ? element.substitutions[0].timeElapsed
+              : null,
+          YellowCard: element.bookings.find((el) => el.type === 'yellow-card')
+            ? 'TRUE'
+            : null,
+          RedCard: element.bookings.find((el) => el.type === 'red-card')
+            ? 'TRUE'
+            : null,
+          SubYellow:
+            element.substitutions.length > 0 &&
+            element.substitutions[0].replacedBy.bookings.find(
+              (el) => el.type === 'yellow-card'
+            )
+              ? 'TRUE'
+              : null,
+          SubRed:
+            element.substitutions.length > 0 &&
+            element.substitutions[0].replacedBy.bookings.find(
+              (el) => el.type === 'red-card'
+            )
+              ? 'TRUE'
+              : null
+        };
+        if (element.substitutions.length == 0) delete app.SubbedBy;
+        await utils.insertUpdateItem(app, DataTables.APPS_TABLE_NAME);
+      }
     }
+  
+    const prompt = ChatPromptTemplate.fromMessages([
+      [
+        'system',
+        'You are a robot capable of creating soccer match reports for a tranmere rovers fan site.'
+      ],
+      [
+        'user',
+        `Write a compelling soccer match report in 5-6 paragraphs using the following match events. 
+        Competition: {competition}
+        Venue: {venue}
+        Date: {date}
+        Attendance: {attendance}
+        Match events:
+          {events}`
+      ]
+    ]);
+    const chain = prompt.pipe(chatModel);
+    const response = await chain.invoke({
+      events: JSON.stringify(events),
+      competition: competition,
+      date: theMatch.date,
+      venue: venue,
+      referee: theMatch.referee,
+      attendance: theMatch.attendance
+    });
+  
+    const output = response.content.toString().replace(/\n/g, '<br />');
+  
+    const params = new UpdateCommand({
+      TableName: DataTables.REPORT_TABLE,
+      Key: {
+        day: day
+      },
+      UpdateExpression: 'set report = :r',
+      ExpressionAttributeValues: {
+        ':r': output
+      },
+      ReturnValues: 'UPDATED_NEW'
+    });
+    await dynamo.send(params);
+  
+    if (
+      (theMatch.home === 'Tranmere Rovers' && theMatch.hgoal === '0') ||
+      (theMatch.visitor === 'Tranmere Rovers' && theMatch.vgoal === '0')
+    ) {
+      console.log('No goals scored by Tranmere Rovers in this match');
+      return utils.sendResponse(200, { message: events });
+    } else {
+      const parser = StructuredOutputParser.fromZodSchema(
+        z.object({
+          goals: z
+            .array(
+              z.object({
+                Minute: z.number().describe('the minute the goal was scored'),
+                Scorer: z.string().describe('the name of the goalscorer'),
+                GoalType: z
+                  .enum(['Shot', 'Header', 'Penalty', 'FreeKick', 'Header'])
+                  .nullable()
+                  .describe('how the goal was scored if known'),
+                Assist: z
+                  .string()
+                  .nullable()
+                  .describe('the name of any player credited with the assist'),
+                AssistType: z
+                  .enum(['Pass', 'Cross', 'Corner', 'FreeKick', 'Header'])
+                  .nullable()
+                  .describe('the type of assist')
+              })
+            )
+            .describe(
+              'An array of goals scored by tranmere rovers players in this match'
+            )
+        })
+      );
+  
+      const goal_chain = RunnableSequence.from([
+        PromptTemplate.fromTemplate(
+          'Use the supplied soccer game events to extract information about goals scored by Tranmere Rovers.\n{format_instructions}\n{events}'
+        ),
+        chatModel,
+        parser
+      ]);
+  
+      const goal_response = await goal_chain.invoke({
+        events: JSON.stringify(events),
+        format_instructions: parser.getFormatInstructions()
+      });
+  
+      for await (const obj of goal_response.goals) {
+        const goal: Goal = {
+          id: uuidv4(),
+          Date: day!,
+          GoalType: obj.GoalType?.valueOf(),
+          Minute: obj.Minute.toString(),
+          Opposition: theMatch.opposition!,
+          Scorer: translatePlayerName(obj.Scorer),
+          Assist: obj.Assist!,
+          AssistType: obj.AssistType?.valueOf(),
+          Season: season
+        };
+        await utils.insertUpdateItem(goal, DataTables.GOALS_TABLE_NAME);
+      }
+  
+      return utils.sendResponse(200, events);
+  }
 
-    return utils.sendResponse(200, goal_response);
+  } else {
+    return utils.sendResponse(200, { message: 'no events - so no match report' });
   }
 };

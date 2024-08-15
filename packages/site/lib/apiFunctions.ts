@@ -103,19 +103,6 @@ export async function GetLastMatch(): Promise<Match> {
 
   var idx = matches.results.length;
   var match = matches.results[idx - 1];
-  if (match && match.programme) {
-    var largeBody = {
-      bucket: "trfc-programmes",
-      key: match.programme,
-      edits: {
-        resize: {
-          width: 200,
-          fit: "contain",
-        },
-      },
-    };
-    match.largeProgramme = btoa(JSON.stringify(largeBody));
-  }
   return match;
 }
 
