@@ -16,7 +16,7 @@
   "dependencies": {
     "@algolia/autocomplete-js": "^1.17.2",
     "@algolia/autocomplete-theme-classic": "^1.8.0",
-    "@algolia/client-search": "^4.20.0",
+    "@algolia/client-search": "^5.0.0",
     "@auth0/auth0-react": "^2.2.4",
     "@auth0/nextjs-auth0": "^3.5.0",
     "@cloudflare/next-on-pages": "^1.11.3",
@@ -44,7 +44,7 @@
     "@types/react-dom": "18.3.0",
     "@use-gesture/react": "^10.3.1",
     "ai": "^3.1.12",
-    "algoliasearch": "^4.24.0",
+    "algoliasearch": "^5.0.0",
     "autoprefixer": "^10.4.19",
     "date-fns": "^3.0.0",
     "eslint": "9.9.0",
@@ -73,7 +73,7 @@
   },
   "devDependencies": {
     "prettier": "3.3.3",
-    "vercel": "^35.0.0",
+    "vercel": "^36.0.0",
     "wrangler": "^3.60.1"
   }
 }
