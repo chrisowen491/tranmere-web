@@ -7,14 +7,15 @@ import {
   MatchEvent,
   Match,
   Appearance,
-  Goal
+  Goal,
+  FixtureSet,
+  MatchEvents
 } from '@tranmere-web/lib/src/tranmere-web-types';
 import {
   translateTeamName,
   translatePlayerName,
   translateCompetition
 } from '@tranmere-web/lib/src/tranmere-web-mappers';
-import axios from 'axios';
 import { ChatPromptTemplate } from '@langchain/core/prompts';
 import { DynamoDBDocument, UpdateCommand } from '@aws-sdk/lib-dynamodb';
 import { DynamoDB } from '@aws-sdk/client-dynamodb';
@@ -58,72 +59,69 @@ exports.handler = async (
     }
   };
 
-  const dateString = moment(theDate).format('dddd-Do-MMMM');
+  const fixtureUrl = `https://www.bbc.co.uk/wc-data/container/sport-data-scores-fixtures?selectedEndDate=${day}&selectedStartDate=${day}&todayDate=${day}&urn=urn%3Abbc%3Asportsdata%3Afootball%3Ateam%3Atranmere-rovers&useSdApi=false`
 
-  const reportQuery = `https://push.api.bbci.co.uk/batch?t=%2Fdata%2Fbbc-morph-football-scores-match-list-data%2FendDate%2F${day}%2FstartDate%2F${day}%2Fteam%2Ftranmere-rovers%2FtodayDate%2F${day}%2Fversion%2F2.4.6`;
-  const fixtures = await axios.get(reportQuery, options);
+  const fixturesResponse = await fetch(fixtureUrl, options);
+  const fixtures = await fixturesResponse.json() as FixtureSet;
 
   if (
-    fixtures.data.payload &&
-    fixtures.data.payload[0].body.matchData.length == 0
+    !fixtures.eventGroups ||
+    fixtures.eventGroups.length === 0
   ) {
     return utils.sendResponse(200, { message: 'nothing' });
   }
 
   if (
-    fixtures.data.payload[0].body.matchData[0].tournamentDatesWithEvents[
-      dateString
-    ][0].events[0].eventProgress.status === 'POSTPONED'
+    fixtures.eventGroups[0].secondaryGroups[0].events[0].status === 'POSTPONED'
   ) {
     return utils.sendResponse(200, { message: 'postponed' });
   }
 
-  const reportId =
-    fixtures.data.payload[0].body.matchData[0].tournamentDatesWithEvents[
-      dateString
-    ][0].events[0].eventKey;
-  const competition = translateCompetition(
-    fixtures.data.payload[0].body.matchData[0].tournamentMeta.tournamentName
-      .first
-  );
+  const reportId = fixtures.eventGroups[0].secondaryGroups[0].events[0].id;
+
+  const dateString = moment(theDate).format('dddd-Do-MMMM');
+  const reportQuery = `https://push.api.bbci.co.uk/batch?t=%2Fdata%2Fbbc-morph-football-scores-match-list-data%2FendDate%2F${day}%2FstartDate%2F${day}%2Fteam%2Ftranmere-rovers%2FtodayDate%2F${day}%2Fversion%2F2.4.6`;
+  const oldFixtureRequest = await fetch(reportQuery, options);
+  const oldFixtureResponse = await oldFixtureRequest.json();
+  const oldReportId = oldFixtureResponse.payload[0].body.matchData[0].tournamentDatesWithEvents[dateString][0].events[0].eventKey;
+
+  const competition = translateCompetition(fixtures.eventGroups[0].secondaryGroups[0].events[0].tournament.name);
   const venue =
-    fixtures.data.payload[0].body.matchData[0].tournamentDatesWithEvents[
+    oldFixtureResponse.payload[0].body.matchData[0].tournamentDatesWithEvents[
       dateString
     ][0].events[0].venue.name.first;
-  const hscore =
-    fixtures.data.payload[0].body.matchData[0].tournamentDatesWithEvents[
-      dateString
-    ][0].events[0].homeTeam.scores.score;
-  const vscore =
-    fixtures.data.payload[0].body.matchData[0].tournamentDatesWithEvents[
-      dateString
-    ][0].events[0].awayTeam.scores.score;
 
-  const lineup_url = `https://push.api.bbci.co.uk/batch?t=%2Fdata%2Fbbc-morph-sport-football-team-lineups-data%2Fevent%2F${reportId}%2Fversion%2F1.0.8`;
-  const lineups = await axios.get(lineup_url, options);
+  const hscore = fixtures.eventGroups[0].secondaryGroups[0].events[0].home.score;
+  const vscore = fixtures.eventGroups[0].secondaryGroups[0].events[0].away.score;
 
-  const attendance = lineups.data.payload[0].body.meta.attendance
-    ? parseInt(lineups.data.payload[0].body.meta.attendance.replace(/,/g, ''))
+  const lineup_url = `https://push.api.bbci.co.uk/batch?t=%2Fdata%2Fbbc-morph-sport-football-team-lineups-data%2Fevent%2F${oldReportId}%2Fversion%2F1.0.8`;
+  //const lineup_url = `https://www.bbc.co.uk/wc-data/container/match-lineups?globalContainerPolling=true&urn=urn%3Abbc%3Asportsdata%3Afootball%3Aevent%3A${reportId}`;
+  const lineupResponse = await fetch(lineup_url, options);
+
+  const lineups = await lineupResponse.json();
+
+  const attendance = lineups.payload[0].body.meta.attendance
+    ? parseInt(lineups.payload[0].body.meta.attendance.replace(/,/g, ''))
     : 0;
 
   const theMatch: Match = {
     date: day!,
     attendance: attendance,
-    referee: lineups.data.payload[0].body.meta.referee,
+    referee: lineups.payload[0].body.meta.referee,
     formation:
-      lineups.data.payload[0].body.teams.homeTeam.name === 'Tranmere Rovers'
-        ? lineups.data.payload[0].body.teams.homeTeam.formation
-        : lineups.data.payload[0].body.teams.awayTeam.formation,
+      lineups.payload[0].body.teams.homeTeam.name === 'Tranmere Rovers'
+        ? lineups.payload[0].body.teams.homeTeam.formation
+        : lineups.payload[0].body.teams.awayTeam.formation,
     id: uuidv4(),
     programme: '#N/A',
-    home: translateTeamName(lineups.data.payload[0].body.teams.homeTeam.name),
+    home: translateTeamName(lineups.payload[0].body.teams.homeTeam.name),
     visitor: translateTeamName(
-      lineups.data.payload[0].body.teams.awayTeam.name
+      lineups.payload[0].body.teams.awayTeam.name
     ),
     opposition:
-      lineups.data.payload[0].body.teams.homeTeam.name === 'Tranmere Rovers'
-        ? translateTeamName(lineups.data.payload[0].body.teams.awayTeam.name)
-        : translateTeamName(lineups.data.payload[0].body.teams.homeTeam.name),
+      lineups.payload[0].body.teams.homeTeam.name === 'Tranmere Rovers'
+        ? translateTeamName(lineups.payload[0].body.teams.awayTeam.name)
+        : translateTeamName(lineups.payload[0].body.teams.homeTeam.name),
     static: 'static',
     season: season,
     venue: venue,
@@ -134,58 +132,50 @@ exports.handler = async (
     competition: competition
   };
 
+
   if (
-    fixtures.data.payload[0].body.matchData[0].tournamentDatesWithEvents[
+    oldFixtureResponse.payload[0].body.matchData[0].tournamentDatesWithEvents[
       dateString
     ][0].events[0].eventOutcomeType === 'shootout'
   ) {
-    theMatch.pens =
-      fixtures.data.payload[0].body.matchData[0].tournamentDatesWithEvents[
+    theMatch.pens = oldFixtureResponse.payload[0].body.matchData[0].tournamentDatesWithEvents[
         dateString
       ][0].events[0].comment;
   }
 
   const events: MatchEvent[] = [];
-  const page = 1;
+  let page = 1;
+  let complete = false;
 
-  const url = `https://push.api.bbci.co.uk/batch?t=%2Fdata%2Fbbc-morph-lx-commentary-data-paged%2Fdiscipline%2Fsoccer%2FeventId%2F${reportId}%2FisUk%2Ffalse%2Flimit%2F20%2FnitroKey%2Flx-nitro%2FpageNumber%2F${page}%2Fversion%2F1.5.6`;
 
-  const summary = await axios.get(url, options);
+  while(!complete)
+  {  
+    const url = `https://www.bbc.co.uk/wc-data/container/stream?globalContainerPolling=true&liveTextStreamId=${reportId}&pageNumber=${page}&pageSize=40&type=football`;
+    const eventsResponse = await fetch(url, options);
+    const summary = await eventsResponse.json() as MatchEvents;
 
-  summary.data.payload[0].body.results.forEach((element) => {
-    if (element.time && element.time.trim() !== '')
-      events.unshift({
-        description: element.body[0].children[0].text,
-        time: element.time,
-        eventType: element.title
-      });
-  });
+    summary.results.forEach((element) => {
+      if (element.content.model.blocks![0].model.blocks![0].model.text)
+        events.unshift({
+          description: element.content.model.blocks![0].model.blocks![0].model.text,
+          time: element.dates.time
+        });
+    });
 
-  if (summary.data.payload[0].body.numberOfPages > 1) {
-    for (
-      let page = 2;
-      page <= summary.data.payload[0].body.numberOfPages;
-      page++
-    ) {
-      const url = `https://push.api.bbci.co.uk/batch?t=%2Fdata%2Fbbc-morph-lx-commentary-data-paged%2Fdiscipline%2Fsoccer%2FeventId%2F${reportId}%2FisUk%2Ffalse%2Flimit%2F20%2FnitroKey%2Flx-nitro%2FpageNumber%2F${page}%2Fversion%2F1.5.6`;
-      const next_page = await axios.get(url, options);
-      next_page.data.payload[0].body.results.forEach((element) => {
-        if (element.time && element.time.trim() !== '')
-          events.unshift({
-            description: element.body[0].children[0].text,
-            time: element.time,
-            eventType: element.title
-          });
-      });
+    if (summary.page.total == page) {
+      complete = true;
+    } else {
+      page++;
     }
   }
+
 
   console.log(`Found ${events.length} events to build a match report`);
   if (events.length > 0) {
     await utils.insertUpdateItem(theMatch, DataTables.RESULTS_TABLE);
 
     const team = theMatch.home === 'Tranmere Rovers' ? 'homeTeam' : 'awayTeam';
-    for await (const element of lineups.data.payload[0].body.teams[team]
+    for await (const element of lineups.payload[0].body.teams[team]
       .players) {
       if (element.meta.status === 'starter') {
         const app: Appearance = {
@@ -255,7 +245,7 @@ exports.handler = async (
       date: theMatch.date,
       venue: venue,
       referee: theMatch.referee,
-      attendance: theMatch.attendance
+      attendance: theMatch.attendance && theMatch.attendance > 0 ? theMatch.attendance : 'unknown'
     });
 
     const output = response.content.toString().replace(/\n/g, '<br />');
