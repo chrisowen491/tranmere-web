@@ -211,6 +211,7 @@ export class TranmereWebStack extends cdk.Stack {
     });
 
     const contact_us = api.root.addResource('contact-us');
+    const upload = api.root.addResource('upload');
     const media_sync = api.root.addResource('media-sync');
     const type = media_sync.addResource('{type}');
     const builder = api.root.addResource('builder');
@@ -272,26 +273,26 @@ export class TranmereWebStack extends cdk.Stack {
       readWriteTables: [TranmereWebHatTricks]
     });
 
-    /*
-    new TranmereWebLambda(this, 'UploadJobFunction', {      
+    new TranmereWebLambda(this, 'UploadJobFunction', {
       environment: env_variables,
-      lambdaFile: './lambda/upload.js',
+      lambdaFile: './lambda/upload.ts',
       readWriteTables: [TranmereWebPlayerTransfers],
       apiResource: upload,
       apiMethod: 'GET',
       commandHooks: {
-        beforeBundling(inputDir: string, outputDir: string): string[] {
+        beforeBundling(): string[] {
           return [];
         },
         afterBundling(inputDir: string, outputDir: string): string[] {
-          return [`mkdir ${outputDir}/csv && cp -R ${inputDir}/csv/* ${outputDir}/csv`];
+          return [
+            `mkdir ${outputDir}/csv && cp -R ${inputDir}/csv/* ${outputDir}/csv`
+          ];
         },
         beforeInstall() {
           return [];
-        },
+        }
       }
     });
-    */
 
     new TranmereWebLambda(this, 'MatchUpdateFunction', {
       environment: env_variables,

@@ -239,289 +239,287 @@ export interface PlayerSeasonSummary {
 }
 
 export interface FixtureSet {
-  eventGroups: EventGroup[]
-  sport: string
-  useCatalogue: boolean
-  selectedStartDate: string
-  selectedEndDate: string
-  shouldShowScorersButton: boolean
-  urn: string
-  maximumScoreDigits: number
+  eventGroups: EventGroup[];
+  sport: string;
+  useCatalogue: boolean;
+  selectedStartDate: string;
+  selectedEndDate: string;
+  shouldShowScorersButton: boolean;
+  urn: string;
+  maximumScoreDigits: number;
 }
 
 export interface EventGroup {
-  displayLabel?: string
-  secondaryGroups: SecondaryGroup[]
+  displayLabel?: string;
+  secondaryGroups: SecondaryGroup[];
 }
 
 export interface SecondaryGroup {
-  displayLabel: string
-  events: Event[]
+  displayLabel: string;
+  events: Event[];
 }
 
 export interface Event {
-  home: EventTeam
-  away: EventTeam
-  id: string
-  urn: string
-  eventGroupingLabel: string
-  startDateTime: string
-  tournamentId: string
-  date: Date
-  periodLabel: Label
-  time: Time
-  status: string
-  statusComment: Label
-  participants: Participant[]
-  headToHeadDetailLabel: string
-  tournament: Tournament
-  stage: Round
-  round: Round
-  winner: string
-  tipoTopicId: string
-  onwardJourneyLink: string
-  accessibleEventSummary: string
+  home: EventTeam;
+  away: EventTeam;
+  id: string;
+  urn: string;
+  eventGroupingLabel: string;
+  startDateTime: string;
+  tournamentId: string;
+  date: Date;
+  periodLabel: Label;
+  time: Time;
+  status: string;
+  statusComment: Label;
+  participants: Participant[];
+  headToHeadDetailLabel: string;
+  tournament: Tournament;
+  stage: Round;
+  round: Round;
+  winner: string;
+  tipoTopicId: string;
+  onwardJourneyLink: string;
+  accessibleEventSummary: string;
 }
 
 export interface EventTeam {
-  id: string
-  fullName: string
-  shortName: string
-  urn: string
-  runningScores: RunningScores
-  scoreUnconfirmed: string
-  actions: Action[]
-  score: string
+  id: string;
+  fullName: string;
+  shortName: string;
+  urn: string;
+  runningScores: RunningScores;
+  scoreUnconfirmed: string;
+  actions: Action[];
+  score: string;
 }
 
 export interface RunningScores {
-  halftime: string
-  fulltime: string
+  halftime: string;
+  fulltime: string;
 }
 
 export interface Action {
-  playerUrn: string
-  playerName: string
-  actionType: string
-  actions: ActionType[]
+  playerUrn: string;
+  playerName: string;
+  actionType: string;
+  actions: ActionType[];
 }
 
 export interface ActionType {
-  type: string
-  typeLabel: Label
-  timeLabel: Label
+  type: string;
+  typeLabel: Label;
+  timeLabel: Label;
 }
 
 export interface Label {
-  value: string
-  accessible: string
+  value: string;
+  accessible: string;
 }
 
 export interface Date {
-  iso: string
-  time: string
-  shortDate: string
-  longDate: string
-  dayOfWeek: string
-  day: string
-  month: string
-  shortMonth: string
-  year: string
-  isoDate: string
+  iso: string;
+  time: string;
+  shortDate: string;
+  longDate: string;
+  dayOfWeek: string;
+  day: string;
+  month: string;
+  shortMonth: string;
+  year: string;
+  isoDate: string;
 }
 
 export interface Time {
-  accessibleTime: string
-  displayTimeUK: string
-  timeCertainty: boolean
+  accessibleTime: string;
+  displayTimeUK: string;
+  timeCertainty: boolean;
 }
 
 export interface Participant {
-  id: string
-  urn?: string
-  name: Name
-  score: string
-  halftimeScore: string
-  fulltimeScore: string
-  alignment: string
+  id: string;
+  urn?: string;
+  name: Name;
+  score: string;
+  halftimeScore: string;
+  fulltimeScore: string;
+  alignment: string;
 }
 
 export interface Name {
-  fullName: string
-  shortName: string
+  fullName: string;
+  shortName: string;
 }
 
 export interface Tournament {
-  id: string
-  name: string
-  disambiguatedName: string
-  urn: string
-  thingsGuid: string
+  id: string;
+  name: string;
+  disambiguatedName: string;
+  urn: string;
+  thingsGuid: string;
 }
 
 export interface Round {
-  id: string
-  name: string
-  urn: string
+  id: string;
+  name: string;
+  urn: string;
 }
 
-
-
 export interface TeamLineups {
-  homeTeam: LineupTeam
-  awayTeam: LineupTeam
-  useCatalogue: boolean
-  officials: Official[]
+  homeTeam: LineupTeam;
+  awayTeam: LineupTeam;
+  useCatalogue: boolean;
+  officials: Official[];
 }
 
 export interface LineupTeam {
-  id: string
-  urn: string
-  name: Name
-  alignment: string
-  formation: Formation
-  manager: Manager
-  players: Players
+  id: string;
+  urn: string;
+  name: Name;
+  alignment: string;
+  formation: Formation;
+  manager: Manager;
+  players: Players;
 }
 
 export interface FullName {
-  fullName: string
-  shortName: string
-  code: string
-  full: string
+  fullName: string;
+  shortName: string;
+  code: string;
+  full: string;
 }
 
 export interface Formation {
-  layout: string
-  value: string
-  accessible: string
+  layout: string;
+  value: string;
+  accessible: string;
 }
 
 export interface LineupManager {
-  id: string
-  name: FullName
+  id: string;
+  name: FullName;
 }
 
 export interface Players {
-  starters: Starter[]
-  substitutes: SubstituteDetails[]
+  starters: Starter[];
+  substitutes: SubstituteDetails[];
 }
 
 export interface Starter {
-  urn: string
-  name: FullName
-  position: string
-  shirtNumber: number
-  formationPlace: string
-  isCaptain: boolean
-  cards: Card[]
-  displayName: string
-  substitutes: Substitute[]
-  substitutedOff?: SubstitutedOff
-  card?: Card
+  urn: string;
+  name: FullName;
+  position: string;
+  shirtNumber: number;
+  formationPlace: string;
+  isCaptain: boolean;
+  cards: Card[];
+  displayName: string;
+  substitutes: Substitute[];
+  substitutedOff?: SubstitutedOff;
+  card?: Card;
 }
 
 export interface Card {
-  type: string
-  timeLabel: TimeLabel
+  type: string;
+  timeLabel: TimeLabel;
 }
 
 export interface TimeLabel {
-  value: string
-  accessible: string
+  value: string;
+  accessible: string;
 }
 
 export interface Substitute {
-  playerSubbedOutId: string
-  playerSubbedInId: string
-  playerSubbedInName: string
-  timeLabel: TimeLabel
+  playerSubbedOutId: string;
+  playerSubbedInId: string;
+  playerSubbedInName: string;
+  timeLabel: TimeLabel;
 }
 
 export interface SubstitutedOff {
-  periodId: number
-  timeMin: number
-  timeMinSec: string
-  timestamp: string
-  playerOnUrn: string
-  playerOnName: string
-  reason: string
+  periodId: number;
+  timeMin: number;
+  timeMinSec: string;
+  timestamp: string;
+  playerOnUrn: string;
+  playerOnName: string;
+  reason: string;
 }
 
 export interface SubstituteDetails {
-  urn: string
-  name: FullName
-  position: string
-  shirtNumber: number
-  isCaptain: boolean
-  cards: any[]
-  displayName: string
-  substitutedOn?: SubstitutedOn
+  urn: string;
+  name: FullName;
+  position: string;
+  shirtNumber: number;
+  isCaptain: boolean;
+  cards: any[];
+  displayName: string;
+  substitutedOn?: SubstitutedOn;
 }
 
 export interface SubstitutedOn {
-  periodId: number
-  timeMin: number
-  timeMinSec: string
-  timestamp: string
-  playerOffUrn: string
-  playerOffName: string
-  reason: string
+  periodId: number;
+  timeMin: number;
+  timeMinSec: string;
+  timestamp: string;
+  playerOffUrn: string;
+  playerOffName: string;
+  reason: string;
 }
 
 export interface Official {
-  id: string
-  opId: string
-  type: string
-  lastName: string
-  firstName: string
-  shortLastName: string
-  shortFirstName: string
+  id: string;
+  opId: string;
+  type: string;
+  lastName: string;
+  firstName: string;
+  shortLastName: string;
+  shortFirstName: string;
 }
 
 export interface MatchEvents {
-  results: Result[]
-  page: Page
-  uasActivityData: UasActivityData
+  results: Result[];
+  page: Page;
+  uasActivityData: UasActivityData;
 }
 
 export interface Result {
-  header: Block
-  content: Block
-  urn: string
-  type: string
-  dates: Dates
-  headline?: Block
-  timestamp: string
+  header: Block;
+  content: Block;
+  urn: string;
+  type: string;
+  dates: Dates;
+  headline?: Block;
+  timestamp: string;
 }
 
 export interface Model {
-  text?: string
-  blocks?: Block[]
-  attributes?: any[]
+  text?: string;
+  blocks?: Block[];
+  attributes?: any[];
 }
 
 export interface Block {
-  type?: string
-  model: Model
+  type?: string;
+  model: Model;
 }
 
 export interface Dates {
-  firstPublished: string
-  lastPublished: string
-  time: string
-  accessibleTime: string
-  curated: string
+  firstPublished: string;
+  lastPublished: string;
+  time: string;
+  accessibleTime: string;
+  curated: string;
 }
 
 export interface Page {
-  index: number
-  total: number
+  index: number;
+  total: number;
 }
 
 export interface UasActivityData {
-  resourceDomain: string
-  resourceType: string
-  environment: string
-  apiKey: string
+  resourceDomain: string;
+  resourceType: string;
+  environment: string;
+  apiKey: string;
 }

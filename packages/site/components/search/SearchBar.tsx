@@ -1,6 +1,6 @@
 "use client";
 
-import algoliasearch from "algoliasearch/lite";
+import { liteClient } from 'algoliasearch/lite'
 import { Hit as AlgoliaHit } from "instantsearch.js";
 import React, { ReactNode } from "react";
 import "instantsearch.css/themes/reset.css";
@@ -12,7 +12,7 @@ import {
   InstantSearch,
 } from "react-instantsearch";
 
-const client = algoliasearch("DZJXSVOWI3", "c050f0bd17ccfde9aa78a3563d552db2");
+const client = liteClient("DZJXSVOWI3", "c050f0bd17ccfde9aa78a3563d552db2");
 
 type HitProps = {
   hit: AlgoliaHit<{

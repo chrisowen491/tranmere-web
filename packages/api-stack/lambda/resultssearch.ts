@@ -64,6 +64,7 @@ exports.handler = async (
   const h2hTotal = [buildDefaultSummary('Total')];
   for (let i = 0; i < data!.length; i++) {
     const match = data![i];
+
     if (match.home == 'Tranmere Rovers') {
       let haindex = 0;
       if (match.venue == 'Wembley Stadium') {
@@ -122,7 +123,9 @@ exports.handler = async (
       match.apps = await utils.getAppsBySeason(match.season, date);
     }
     if (match.attendance == 0) match.attendance = null;
-    results.push(match);
+    if (match.competition !== 'Friendly') {
+      results.push(match);
+    }
   }
 
   if (h2hresults[2].pld == 0) {

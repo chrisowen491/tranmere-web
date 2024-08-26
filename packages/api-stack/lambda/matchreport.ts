@@ -59,15 +59,12 @@ exports.handler = async (
     }
   };
 
-  const fixtureUrl = `https://www.bbc.co.uk/wc-data/container/sport-data-scores-fixtures?selectedEndDate=${day}&selectedStartDate=${day}&todayDate=${day}&urn=urn%3Abbc%3Asportsdata%3Afootball%3Ateam%3Atranmere-rovers&useSdApi=false`
+  const fixtureUrl = `https://www.bbc.co.uk/wc-data/container/sport-data-scores-fixtures?selectedEndDate=${day}&selectedStartDate=${day}&todayDate=${day}&urn=urn%3Abbc%3Asportsdata%3Afootball%3Ateam%3Atranmere-rovers&useSdApi=false`;
 
   const fixturesResponse = await fetch(fixtureUrl, options);
-  const fixtures = await fixturesResponse.json() as FixtureSet;
+  const fixtures = (await fixturesResponse.json()) as FixtureSet;
 
-  if (
-    !fixtures.eventGroups ||
-    fixtures.eventGroups.length === 0
-  ) {
+  if (!fixtures.eventGroups || fixtures.eventGroups.length === 0) {
     return utils.sendResponse(200, { message: 'nothing' });
   }
 
@@ -83,16 +80,23 @@ exports.handler = async (
   const reportQuery = `https://push.api.bbci.co.uk/batch?t=%2Fdata%2Fbbc-morph-football-scores-match-list-data%2FendDate%2F${day}%2FstartDate%2F${day}%2Fteam%2Ftranmere-rovers%2FtodayDate%2F${day}%2Fversion%2F2.4.6`;
   const oldFixtureRequest = await fetch(reportQuery, options);
   const oldFixtureResponse = await oldFixtureRequest.json();
-  const oldReportId = oldFixtureResponse.payload[0].body.matchData[0].tournamentDatesWithEvents[dateString][0].events[0].eventKey;
+  const oldReportId =
+    oldFixtureResponse.payload[0].body.matchData[0].tournamentDatesWithEvents[
+      dateString
+    ][0].events[0].eventKey;
 
-  const competition = translateCompetition(fixtures.eventGroups[0].secondaryGroups[0].events[0].tournament.name);
+  const competition = translateCompetition(
+    fixtures.eventGroups[0].secondaryGroups[0].events[0].tournament.name
+  );
   const venue =
     oldFixtureResponse.payload[0].body.matchData[0].tournamentDatesWithEvents[
       dateString
     ][0].events[0].venue.name.first;
 
-  const hscore = fixtures.eventGroups[0].secondaryGroups[0].events[0].home.score;
-  const vscore = fixtures.eventGroups[0].secondaryGroups[0].events[0].away.score;
+  const hscore =
+    fixtures.eventGroups[0].secondaryGroups[0].events[0].home.score;
+  const vscore =
+    fixtures.eventGroups[0].secondaryGroups[0].events[0].away.score;
 
   const lineup_url = `https://push.api.bbci.co.uk/batch?t=%2Fdata%2Fbbc-morph-sport-football-team-lineups-data%2Fevent%2F${oldReportId}%2Fversion%2F1.0.8`;
   //const lineup_url = `https://www.bbc.co.uk/wc-data/container/match-lineups?globalContainerPolling=true&urn=urn%3Abbc%3Asportsdata%3Afootball%3Aevent%3A${reportId}`;
@@ -115,9 +119,7 @@ exports.handler = async (
     id: uuidv4(),
     programme: '#N/A',
     home: translateTeamName(lineups.payload[0].body.teams.homeTeam.name),
-    visitor: translateTeamName(
-      lineups.payload[0].body.teams.awayTeam.name
-    ),
+    visitor: translateTeamName(lineups.payload[0].body.teams.awayTeam.name),
     opposition:
       lineups.payload[0].body.teams.homeTeam.name === 'Tranmere Rovers'
         ? translateTeamName(lineups.payload[0].body.teams.awayTeam.name)
@@ -132,13 +134,13 @@ exports.handler = async (
     competition: competition
   };
 
-
   if (
     oldFixtureResponse.payload[0].body.matchData[0].tournamentDatesWithEvents[
       dateString
     ][0].events[0].eventOutcomeType === 'shootout'
   ) {
-    theMatch.pens = oldFixtureResponse.payload[0].body.matchData[0].tournamentDatesWithEvents[
+    theMatch.pens =
+      oldFixtureResponse.payload[0].body.matchData[0].tournamentDatesWithEvents[
         dateString
       ][0].events[0].comment;
   }
@@ -147,17 +149,16 @@ exports.handler = async (
   let page = 1;
   let complete = false;
 
-
-  while(!complete)
-  {  
+  while (!complete) {
     const url = `https://www.bbc.co.uk/wc-data/container/stream?globalContainerPolling=true&liveTextStreamId=${reportId}&pageNumber=${page}&pageSize=40&type=football`;
     const eventsResponse = await fetch(url, options);
-    const summary = await eventsResponse.json() as MatchEvents;
+    const summary = (await eventsResponse.json()) as MatchEvents;
 
     summary.results.forEach((element) => {
       if (element.content.model.blocks![0].model.blocks![0].model.text)
         events.unshift({
-          description: element.content.model.blocks![0].model.blocks![0].model.text,
+          description:
+            element.content.model.blocks![0].model.blocks![0].model.text,
           time: element.dates.time
         });
     });
@@ -169,14 +170,12 @@ exports.handler = async (
     }
   }
 
-
   console.log(`Found ${events.length} events to build a match report`);
   if (events.length > 0) {
     await utils.insertUpdateItem(theMatch, DataTables.RESULTS_TABLE);
 
     const team = theMatch.home === 'Tranmere Rovers' ? 'homeTeam' : 'awayTeam';
-    for await (const element of lineups.payload[0].body.teams[team]
-      .players) {
+    for await (const element of lineups.payload[0].body.teams[team].players) {
       if (element.meta.status === 'starter') {
         const app: Appearance = {
           id: uuidv4(),
@@ -245,7 +244,10 @@ exports.handler = async (
       date: theMatch.date,
       venue: venue,
       referee: theMatch.referee,
-      attendance: theMatch.attendance && theMatch.attendance > 0 ? theMatch.attendance : 'unknown'
+      attendance:
+        theMatch.attendance && theMatch.attendance > 0
+          ? theMatch.attendance
+          : 'unknown'
     });
 
     const output = response.content.toString().replace(/\n/g, '<br />');
