@@ -47,8 +47,8 @@
     "algoliasearch": "^5.0.0",
     "autoprefixer": "^10.4.19",
     "date-fns": "^3.0.0",
-    "eslint": "9.9.0",
-    "eslint-config-next": "14.2.5",
+    "eslint": "9.9.1",
+    "eslint-config-next": "14.2.6",
     "framer-motion": "^11.2.13",
     "instantsearch.css": "^8.3.0",
     "langchain": "^0.2.2",
@@ -59,9 +59,9 @@
     "postcss": "^8.4.39",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-instantsearch": "7.12.4",
+    "react-instantsearch": "7.13.0",
     "react-instantsearch-nextjs": "^0.3.5",
-    "react-instantsearch-router-nextjs": "7.12.4",
+    "react-instantsearch-router-nextjs": "7.13.0",
     "react-responsive-carousel": "^3.2.23",
     "react-spring": "^9.7.3",
     "react-toastify": "^10.0.0",
@@ -73,7 +73,7 @@
   },
   "devDependencies": {
     "prettier": "3.3.3",
-    "vercel": "^36.0.0",
+    "vercel": "^37.0.0",
     "wrangler": "^3.60.1"
   }
 }
