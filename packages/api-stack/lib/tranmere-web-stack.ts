@@ -211,7 +211,7 @@ export class TranmereWebStack extends cdk.Stack {
     });
 
     const contact_us = api.root.addResource('contact-us');
-    const upload = api.root.addResource('upload');
+    //const upload = api.root.addResource('upload');
     const media_sync = api.root.addResource('media-sync');
     const type = media_sync.addResource('{type}');
     const builder = api.root.addResource('builder');
@@ -273,6 +273,7 @@ export class TranmereWebStack extends cdk.Stack {
       readWriteTables: [TranmereWebHatTricks]
     });
 
+    /*
     new TranmereWebLambda(this, 'UploadJobFunction', {
       environment: env_variables,
       lambdaFile: './lambda/upload.ts',
@@ -293,6 +294,7 @@ export class TranmereWebStack extends cdk.Stack {
         }
       }
     });
+    */
 
     new TranmereWebLambda(this, 'MatchUpdateFunction', {
       environment: env_variables,
