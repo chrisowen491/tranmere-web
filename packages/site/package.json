@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@algolia/autocomplete-js": "^1.17.2",
-    "@algolia/autocomplete-theme-classic": "^1.8.0",
+    "@algolia/autocomplete-theme-classic": "^1.17.2",
     "@algolia/client-search": "^5.1.1",
     "@auth0/auth0-react": "^2.2.4",
     "@auth0/nextjs-auth0": "^3.5.0",
@@ -39,7 +39,6 @@
     "@tailwindcss/forms": "^0.5.7",
     "@tailwindcss/typography": "^0.5.13",
     "@tranmere-web/lib": "*",
-    "@types/node": "^20.12.12",
     "@types/react": "^18.3.3",
     "@types/react-dom": "18.3.0",
     "@use-gesture/react": "^10.3.1",
