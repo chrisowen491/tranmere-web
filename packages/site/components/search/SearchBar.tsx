@@ -1,6 +1,6 @@
 "use client";
 
-import { liteClient } from 'algoliasearch/lite'
+import { liteClient } from "algoliasearch/lite";
 import { Hit as AlgoliaHit } from "instantsearch.js";
 import React, { ReactNode } from "react";
 import "instantsearch.css/themes/reset.css";
