@@ -13,7 +13,6 @@ import { BreadcrumbLinks } from "@/components/fragments/BreadcrumbLinks";
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
 
-
 export default function MatchReport(props: {
   match: MatchPageData;
   next: Match[];
@@ -27,36 +26,35 @@ export default function MatchReport(props: {
   const previous = props.previous;
 
   match.apps.sort((a, b) => {
-    if(a.bio?.position === b.bio?.position) {
+    if (a.bio?.position === b.bio?.position) {
       return 0;
-    } else if(a.bio?.position === "Goalkeeper") {
+    } else if (a.bio?.position === "Goalkeeper") {
       return -1;
-    } else if(b.bio?.position === "Goalkeeper") {
+    } else if (b.bio?.position === "Goalkeeper") {
       return 1;
-    } else if(a.bio?.position === "Full Back") {
+    } else if (a.bio?.position === "Full Back") {
       return -1;
-    } else if(b.bio?.position === "Full Back") {
+    } else if (b.bio?.position === "Full Back") {
       return 1;
-    } else if(a.bio?.position === "Central Defender") {
+    } else if (a.bio?.position === "Central Defender") {
       return -1;
-    } else if(b.bio?.position === "Central Defender") {
+    } else if (b.bio?.position === "Central Defender") {
       return 1;
-    } else if(a.bio?.position === "Central Midfielder") {
+    } else if (a.bio?.position === "Central Midfielder") {
       return -1;
-    } else if(b.bio?.position === "Central Midfielder") {
+    } else if (b.bio?.position === "Central Midfielder") {
       return 1;
-    } else if(a.bio?.position === "Winger") {
+    } else if (a.bio?.position === "Winger") {
       return -1;
-    } else if(b.bio?.position === "Winger") {
+    } else if (b.bio?.position === "Winger") {
       return 1;
-    } else if(a.bio?.position === "Striker") {
+    } else if (a.bio?.position === "Striker") {
       return -1;
-    } else if(b.bio?.position === "Striker") {
+    } else if (b.bio?.position === "Striker") {
       return 1;
     } else {
       return 1;
     }
-
   });
   const breadcrumbs = [
     { id: 1, name: "Home", href: "/" },
@@ -98,12 +96,16 @@ export default function MatchReport(props: {
                 Venue: <strong>{match.venue}</strong>
               </p>
               {match.attendance ? (
-                <p className="mt-2 text-sm">Attendance: <strong>{match.attendance}</strong></p>
+                <p className="mt-2 text-sm">
+                  Attendance: <strong>{match.attendance}</strong>
+                </p>
               ) : (
                 ""
               )}
               {match.referee ? (
-                <p className="mt-2 text-sm">Referee: <strong>{match.referee}</strong></p>
+                <p className="mt-2 text-sm">
+                  Referee: <strong>{match.referee}</strong>
+                </p>
               ) : (
                 ""
               )}
@@ -164,8 +166,8 @@ export default function MatchReport(props: {
                 </Tab>
                 {match.apps && match.apps.length > 0 ? (
                   <Tab className="whitespace-nowrap border-b-2 border-transparent py-6 text-sm font-medium hover:border-gray-300 hover:text-gray-800 data-[selected]:border-indigo-600 data-[selected]:text-indigo-600">
-                  Team
-                </Tab>
+                    Team
+                  </Tab>
                 ) : (
                   ""
                 )}
@@ -202,17 +204,29 @@ export default function MatchReport(props: {
                             {player.Name}
                           </h3>
                           {player.YellowCard ? (
-                            <PencilSquareIcon aria-hidden="true" className="h-6 w-6 mx-auto text-yellow-400" />
-                          ) : ("")
-                          }
+                            <PencilSquareIcon
+                              aria-hidden="true"
+                              className="h-6 w-6 mx-auto text-yellow-400"
+                            />
+                          ) : (
+                            ""
+                          )}
                           {player.RedCard ? (
-                            <PencilSquareIcon aria-hidden="true" className="h-6 w-6 mx-auto text-red-400" />
-                          ) : ("")
-                          }
+                            <PencilSquareIcon
+                              aria-hidden="true"
+                              className="h-6 w-6 mx-auto text-red-400"
+                            />
+                          ) : (
+                            ""
+                          )}
                           {player.SubbedBy ? (
-                            <ArrowPathIcon aria-hidden="true" className="h-6 w-6 mx-auto"/>
-                          ) : ("")
-                          }
+                            <ArrowPathIcon
+                              aria-hidden="true"
+                              className="h-6 w-6 mx-auto"
+                            />
+                          ) : (
+                            ""
+                          )}
                           <p className="text-sm leading-6">
                             {player.bio?.position}
                           </p>
