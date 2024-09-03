@@ -7,16 +7,16 @@ const utils = new TranmereWebUtils();
 exports.handler = async () => {
   const playerTotalsHash = {};
 
-  for (let i = 1977; i <= utils.getYear(); i++) {
+  for (let year = 1960; year <= utils.getYear(); year++) {
     const playerHash = {};
 
-    const apps = await utils.getAppsBySeason(i);
-    const goals = await utils.getGoalsBySeason(i);
+    const apps = await utils.getAppsBySeason(year);
+    const goals = await utils.getGoalsBySeason(year);
 
     for (let a = 0; a < apps.length; a++) {
       const app = apps[a];
       if (!playerHash[app.Name]) {
-        playerHash[app.Name] = buildNewPlayer(i, app.Name);
+        playerHash[app.Name] = buildNewPlayer(year, app.Name);
       }
       playerHash[app.Name].starts++;
       playerHash[app.Name].Apps++;
@@ -26,7 +26,7 @@ exports.handler = async () => {
 
       if (app.SubbedBy) {
         if (!playerHash[app.SubbedBy]) {
-          playerHash[app.SubbedBy] = buildNewPlayer(i, app.SubbedBy);
+          playerHash[app.SubbedBy] = buildNewPlayer(year, app.SubbedBy);
         }
         playerHash[app.SubbedBy].subs++;
         playerHash[app.SubbedBy].Apps++;
@@ -38,7 +38,7 @@ exports.handler = async () => {
     for (let g = 0; g < goals.length; g++) {
       const goal = goals[g];
       if (!playerHash[goal.Scorer]) {
-        playerHash[goal.Scorer] = buildNewPlayer(i, goal.Scorer);
+        playerHash[goal.Scorer] = buildNewPlayer(year, goal.Scorer);
       }
       playerHash[goal.Scorer].goals++;
       if (goal.GoalType == 'Header') {
@@ -50,7 +50,7 @@ exports.handler = async () => {
       }
       if (goal.Assist) {
         if (!playerHash[goal.Assist]) {
-          playerHash[goal.Assist] = buildNewPlayer(i, goal.Assist);
+          playerHash[goal.Assist] = buildNewPlayer(year, goal.Assist);
         }
         playerHash[goal.Assist].assists++;
       }
@@ -64,7 +64,7 @@ exports.handler = async () => {
             DataTables.SUMMARY_TABLE_NAME
           );
 
-        console.log('Updated DB for ' + key + ' during season ' + i);
+        console.log('Updated DB for ' + key + ' during season ' + year);
         if (!playerTotalsHash[key]) {
           playerTotalsHash[key] = buildNewPlayer('TOTAL', key);
         }

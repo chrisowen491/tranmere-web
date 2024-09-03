@@ -42,6 +42,7 @@ export function PlayerAvatarBuilder() {
                       id="kit"
                       name="kit"
                     >
+                      <option value="1960">1957-62 Home</option>
                       <option value="1966">1966-68 Home</option>
                       <option value="1977">1977-78 Home</option>
                       <option value="1979">1979-80 Home</option>
