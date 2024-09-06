@@ -162,8 +162,10 @@ export class TranmereWebGraphQL extends Construct {
           responseMappingTemplate: MappingTemplate.dynamoDbResultItem()
         });
 
-        if(props.tables[i].putSchema) {
-          table.grantWriteData(new iam.ServicePrincipal('appsync.amazonaws.com'));
+        if (props.tables[i].putSchema) {
+          table.grantWriteData(
+            new iam.ServicePrincipal('appsync.amazonaws.com')
+          );
           dynamoDataSources.createResolver(tableName + 'PutResolver', {
             typeName: 'Mutation',
             fieldName: 'add' + tableName,
