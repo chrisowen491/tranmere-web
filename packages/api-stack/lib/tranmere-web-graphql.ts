@@ -103,7 +103,7 @@ export class TranmereWebGraphQL extends Construct {
           ]
         }
       );
-      
+
       graph_ql.addMethod(
         'PUT',
         new apigw.AwsIntegration({
@@ -133,7 +133,6 @@ export class TranmereWebGraphQL extends Construct {
           ]
         }
       );
-      
     }
 
     if (props.tables) {
