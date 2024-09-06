@@ -5,6 +5,7 @@ import { aws_apigateway as apigw } from 'aws-cdk-lib';
 import * as cdk from 'aws-cdk-lib';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import * as ddb from 'aws-cdk-lib/aws-dynamodb';
+import { PassthroughBehavior } from 'aws-cdk-lib/aws-apigateway';
 
 export interface TranmereWebGraphQLProps {
   readonly tables?: TranmereWebDynamoDBTableProps[];
@@ -76,7 +77,9 @@ export class TranmereWebGraphQL extends Construct {
             credentialsRole: appsyncrole,
             requestParameters: {
               'integration.request.querystring.query':
-                'method.request.querystring.query'
+                'method.request.querystring.query',
+              'integration.request.querystring.mutation':
+                'method.request.querystring.mutation'
             },
             integrationResponses: [
               {
@@ -100,7 +103,7 @@ export class TranmereWebGraphQL extends Construct {
           ]
         }
       );
-      /*
+      
       graph_ql.addMethod(
         'PUT',
         new apigw.AwsIntegration({
@@ -130,7 +133,7 @@ export class TranmereWebGraphQL extends Construct {
           ]
         }
       );
-      */
+      
     }
 
     if (props.tables) {

@@ -6,7 +6,7 @@
     },
     "attributeValues" : {
         "name" : $util.dynamodb.toDynamoDBJson($context.arguments.name),
-        "lienk" : $util.dynamodb.toDynamoDBJson($context.arguments.link),
+        "link" : $util.dynamodb.toDynamoDBJson($context.arguments.link),
         "description" : $util.dynamodb.toDynamoDBJson($context.arguments.description),
     }
 }
