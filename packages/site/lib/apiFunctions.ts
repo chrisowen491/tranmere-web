@@ -45,7 +45,7 @@ export function GetBaseUrl(env: CloudflareEnv) {
 export async function GetTopScorersBySeason(): Promise<PlayerSeasonSummary[]> {
   const results: PlayerSeasonSummary[] = [];
 
-  for (let i = 1977; i <= GetYear(); i++) {
+  for (let i = 1960; i <= GetYear(); i++) {
     const result = await fetch(
       "https://api.prod.tranmere-web.com/player-search/?season=" +
         i +

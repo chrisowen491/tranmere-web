@@ -8,7 +8,7 @@ const utils = new TranmereWebUtils();
 exports.handler = async (event: APIGatewayEvent) => {
   console.log('Received event:', event);
 
-  for (let i = 1977; i <= utils.getYear(); i++) {
+  for (let i = 1960; i <= utils.getYear(); i++) {
     const dateMap = {};
     const goals = await utils.getGoalsBySeason(i);
 
