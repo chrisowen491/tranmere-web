@@ -15,6 +15,7 @@ export interface TranmereWebGraphQLProps {
 export interface TranmereWebDynamoDBTableProps {
   readonly table: ddb.ITable;
   readonly keyColumn: string;
+  readonly putSchema?: string;
 }
 
 export class TranmereWebGraphQL extends Construct {
@@ -98,6 +99,37 @@ export class TranmereWebGraphQL extends Construct {
           ]
         }
       );
+      /*
+      graph_ql.addMethod(
+        'PUT',
+        new apigw.AwsIntegration({
+          service: 'appsync-api',
+          region: props.region,
+          subdomain: 'clllxcsjtbdujahnszk5grceuu',
+          integrationHttpMethod: 'PUT',
+          path: 'graphql',
+          options: {
+            credentialsRole: appsyncrole,
+            passthroughBehavior: PassthroughBehavior.WHEN_NO_TEMPLATES,
+            integrationResponses: [
+              {
+                statusCode: '200'
+              }
+            ]
+          }
+        }),
+        {
+          methodResponses: [
+            {
+              statusCode: '200',
+              responseModels: {
+                'application/json': apigw.Model.EMPTY_MODEL
+              }
+            }
+          ]
+        }
+      );
+      */
     }
 
     if (props.tables) {
@@ -129,6 +161,20 @@ export class TranmereWebGraphQL extends Construct {
           ),
           responseMappingTemplate: MappingTemplate.dynamoDbResultItem()
         });
+
+        if(props.tables[i].putSchema) {
+          table.grantWriteData(new iam.ServicePrincipal('appsync.amazonaws.com'));
+          dynamoDataSources.createResolver(tableName + 'PutResolver', {
+            typeName: 'Mutation',
+            fieldName: 'add' + tableName,
+            requestMappingTemplate: MappingTemplate.fromFile(
+              `graphql/${props.tables[i].putSchema}`
+            ),
+            responseMappingTemplate: MappingTemplate.fromString(
+              '$util.toJson($context.result)'
+            )
+          });
+        }
       }
     }
   }

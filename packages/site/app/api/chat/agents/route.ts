@@ -24,6 +24,7 @@ import { getSystemPrompt } from "@/chat/prompts/system";
 import { z } from "zod";
 import { PlayerStatsTool } from "@/chat/tools/PlayerStatsTool";
 import { BaseChatModel } from "@langchain/core/language_models/chat_models";
+import { InsertLinkTool } from "@/chat/tools/InsertLinkTool";
 
 export const runtime = "edge";
 
@@ -114,6 +115,7 @@ export async function POST(req: NextRequest) {
       MatchTool,
       TransferTool,
       PlayerStatsTool,
+      InsertLinkTool
       //createRetrieverTool(db.asRetriever() as unknown as BaseRetrieverInterface, {
       //  name: "tranmere-player-qa",
       //  description:
