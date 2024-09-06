@@ -87,7 +87,8 @@ export class TranmereWebGraphQL extends Construct {
         }),
         {
           requestParameters: {
-            'method.request.querystring.query': true
+            'method.request.querystring.query': true,
+            'method.request.querystring.mutation': true
           },
           methodResponses: [
             {
