@@ -90,8 +90,8 @@ export class TranmereWebGraphQL extends Construct {
         }),
         {
           requestParameters: {
-            'method.request.querystring.query': true,
-            'method.request.querystring.mutation': true
+            'method.request.querystring.query': false,
+            'method.request.querystring.mutation': false
           },
           methodResponses: [
             {
@@ -103,7 +103,7 @@ export class TranmereWebGraphQL extends Construct {
           ]
         }
       );
-      
+
       graph_ql.addMethod(
         'PUT',
         new apigw.AwsIntegration({
@@ -133,7 +133,6 @@ export class TranmereWebGraphQL extends Construct {
           ]
         }
       );
-      
     }
 
     if (props.tables) {
