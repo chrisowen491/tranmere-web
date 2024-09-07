@@ -111,6 +111,7 @@ export class TranmereWebGraphQL extends Construct {
           region: props.region,
           subdomain: 'clllxcsjtbdujahnszk5grceuu',
           integrationHttpMethod: 'PUT',
+          path: 'graphql',
           options: {
             credentialsRole: appsyncrole,
             passthroughBehavior: PassthroughBehavior.WHEN_NO_TEMPLATES,
