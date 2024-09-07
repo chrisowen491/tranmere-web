@@ -105,12 +105,12 @@ export class TranmereWebGraphQL extends Construct {
       );
 
       graph_ql.addMethod(
-        'PUT',
+        'POST',
         new apigw.AwsIntegration({
           service: 'appsync-api',
           region: props.region,
           subdomain: 'clllxcsjtbdujahnszk5grceuu',
-          integrationHttpMethod: 'PUT',
+          integrationHttpMethod: 'POST',
           path: 'graphql',
           options: {
             credentialsRole: appsyncrole,
