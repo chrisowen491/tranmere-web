@@ -27,12 +27,29 @@ export const InsertLinkTool = new DynamicStructuredTool({
       link,
       description
     }) => {
-      const querystring = encodeURIComponent(
-        `{addTranmereWebPlayerLinks(id:"${uuidv4()}" name:"${player}" link:"${link}" description:"${description}"){id name link description}}`,
-      );
-      const query = await fetch(`https://api.prod.tranmere-web.com/graphql?mutation=${querystring}`)
+      
+        const body = {
+          "query":`mutation MyMutation { addTranmereWebPlayerLinks(description: "${description}", id: "${uuidv4()}", link: "${link}", name: "${player}") { id } }`,
+          "variables":null,
+          "operationName":"MyMutation"
+        }
 
-      const results = await query.json()
-      return JSON.stringify(results);
+        const query = await fetch(`https://api.prod.tranmere-web.com/graphql`, {
+          method: 'POST',
+          body: JSON.stringify(body),
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        })
+        console.log(query.status)
+        console.log(JSON.stringify(body))
+        console.log(await query.text())
+        if(query.status !== 200) { 
+          return "Link not added";
+
+        } else 
+        {
+          return "Link added";
+        }
     }
   })

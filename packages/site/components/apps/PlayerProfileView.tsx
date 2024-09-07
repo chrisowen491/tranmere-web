@@ -1,7 +1,7 @@
 "use client";
 
 import { Fragment } from "react";
-import { PlayerProfile } from "@/lib/types";
+import { Blog, BlogItem, PlayerProfile } from "@/lib/types";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import { Document } from "@contentful/rich-text-types";
 import type { Comment } from "@/lib/comments";
@@ -22,9 +22,11 @@ const breadcrumbs = [
 export default function PlayerProfileView(props: {
   player: PlayerProfile;
   comments: Comment[];
+  articles: BlogItem[];
   avg: number;
 }) {
   const player = props.player;
+  const articles = props.articles;
   const comments = props.comments;
 
   return (
@@ -99,6 +101,48 @@ export default function PlayerProfileView(props: {
                   <p>
                     {player.player.dateOfBirth} ({player.player.placeOfBirth})
                   </p>
+                </div>
+              ) : (
+                ""
+              )}
+
+              {articles && articles.length > 0 ? (
+                <div className="mt-8 border-t border-gray-200 pt-8">
+                  <h2 className="text-sm font-medium text-gray-900 dark:text-gray-50">
+                    Blog Posts
+                  </h2>
+                  {articles.map((article) => (
+                    <article
+                      key={article.sys.id}
+                      className="flex max-w-xl flex-col items-start justify-between py-6"
+                    >
+                      <div className="flex items-center gap-x-4 text-xs">
+                        <time
+                          dateTime={article.datePosted}
+                          className="text-gray-500 dark:text-gray-50"
+                        >
+                          {new Date(article.datePosted).toDateString()}
+                        </time>
+                      </div>
+                      <div className="group relative">
+                        <h3 className="mt-1 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600 dark:text-gray-50">
+                          <a href={`/page/blog/${article.slug}`}>
+                            <span className="absolute inset-0" />
+                            {article.title}
+                          </a>
+                        </h3>
+                        <p className="mt-5 mb-5 line-clamp-3 text-sm leading-6 text-gray-600">
+                          {article.description}
+                        </p>
+                        <a
+                          href={`/page/blog/${article.slug}`}
+                          className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:text-gray-50"
+                        >
+                          Read
+                        </a>
+                      </div>
+                    </article>
+                  ))}
                 </div>
               ) : (
                 ""

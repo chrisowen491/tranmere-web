@@ -22,12 +22,6 @@ export default async function TagPage({
 }) {
   const articles = await getAllArticlesForTag(100, decodeURI(params.slug));
 
-  const list = articles
-    ? articles.filter((a) => {
-        return a.tags.includes(ToTitleCase(decodeURI(params.slug)));
-      })
-    : [];
-
   return (
     <>
       <div className="relative mx-auto flex w-full max-w-8xl flex-auto justify-center sm:px-2 lg:px-8 xl:px-12">

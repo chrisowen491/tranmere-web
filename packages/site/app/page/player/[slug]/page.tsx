@@ -1,4 +1,5 @@
 import PlayerProfileView from "@/components/apps/PlayerProfileView";
+import { getAllArticlesForTag } from "@/lib/api";
 import { GetBaseUrl } from "@/lib/apiFunctions";
 import { GetCommentsByUrl } from "@/lib/comments";
 import { PlayerProfile } from "@/lib/types";
@@ -29,6 +30,8 @@ export default async function PlayerProfilePage({
   const playerRequest = await fetch(url);
 
   const profile = (await playerRequest.json()) as PlayerProfile;
+  const articles = await getAllArticlesForTag(100, decodeURI(params.slug));
+
   const comments = await GetCommentsByUrl(
     getRequestContext().env,
     `/page/player/${decodeURI(params.slug)}`,
@@ -47,6 +50,7 @@ export default async function PlayerProfilePage({
     <>
       <PlayerProfileView
         player={profile}
+        articles={articles}
         comments={comments}
         avg={avg}
       ></PlayerProfileView>
