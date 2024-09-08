@@ -353,9 +353,9 @@ export default function SeasonReview(props: {
                                 />
                               ) : (
                                 <UserIcon
-                                      aria-hidden="true"
-                                      className="h-11 w-11 text-indigo-600  rounded-full dark:text-indigo-50"
-                                    />
+                                  aria-hidden="true"
+                                  className="h-11 w-11 text-indigo-600  rounded-full dark:text-indigo-50"
+                                />
                               )}
                             </div>
                             <div className="ml-4">
@@ -400,9 +400,9 @@ export default function SeasonReview(props: {
             <div className="lg:col-start-3">
               {/* Activity feed */}
               {props.transfers && props.transfers.length > 0 ? (
-              <h2 className="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-50">
-              Transfers
-            </h2>
+                <h2 className="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-50">
+                  Transfers
+                </h2>
               ) : (
                 ""
               )}

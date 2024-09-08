@@ -282,9 +282,9 @@ export function PlayerSearch(props: {
                               />
                             ) : (
                               <UserIcon
-                                      aria-hidden="true"
-                                      className="h-11 w-11 text-indigo-600  rounded-full dark:text-indigo-50"
-                                    />
+                                aria-hidden="true"
+                                className="h-11 w-11 text-indigo-600  rounded-full dark:text-indigo-50"
+                              />
                             )}
                           </div>
                           <div className="ml-4">

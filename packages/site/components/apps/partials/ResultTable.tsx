@@ -38,28 +38,16 @@ export function ResultTable(props: {
                       <th scope="col" className="py-3.5 text-left px-3">
                         Venue
                       </th>
-                      <th
-                        scope="col"
-                        className="py-3.5 px-3 text-center"
-                      >
+                      <th scope="col" className="py-3.5 px-3 text-center">
                         Pld
                       </th>
-                      <th
-                        scope="col"
-                        className="py-3.5 px-3 text-center"
-                      >
+                      <th scope="col" className="py-3.5 px-3 text-center">
                         Won
                       </th>
-                      <th
-                        scope="col"
-                        className="py-3.5 px-3 text-center"
-                      >
+                      <th scope="col" className="py-3.5 px-3 text-center">
                         Draws
                       </th>
-                      <th
-                        scope="col"
-                        className="py-3.5 px-3 text-center"
-                      >
+                      <th scope="col" className="py-3.5 px-3 text-center">
                         Lost
                       </th>
                       <th
