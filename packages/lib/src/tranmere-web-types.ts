@@ -126,6 +126,8 @@ export interface Match {
   referee?: string;
   formation?: string;
   largeProgramme?: string;
+  round?: string;
+  tier: string;
 }
 
 export interface H2HResult {
@@ -170,12 +172,12 @@ export interface Appearance {
   Season: string;
   Name: string;
   Number: string | null | undefined;
-  SubbedBy: string | null | undefined;
-  SubTime: string | null | undefined;
-  YellowCard: string | null | undefined;
-  RedCard: string | null | undefined;
-  SubYellow: string | null | undefined;
-  SubRed: string | null | undefined;
+  SubbedBy?: string | null | undefined;
+  SubTime?: string | null | undefined;
+  YellowCard?: string | null | undefined;
+  RedCard?: string | null | undefined;
+  SubYellow?: string | null | undefined;
+  SubRed?: string | null | undefined;
   bio?: Player;
   Type?: string;
   Goals?: number;
