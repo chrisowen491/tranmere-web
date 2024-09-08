@@ -1,17 +1,26 @@
-'use client'
+"use client";
 
 import {
   CalendarDaysIcon,
   ChevronRightIcon,
   ChevronLeftIcon,
-} from '@heroicons/react/20/solid'
-import { Competition, H2HResult, H2HTotal, Manager, Match, PlayerSeasonSummary, Team, Transfer } from '@tranmere-web/lib/src/tranmere-web-types'
-import { ResultTable } from './partials/ResultTable'
-import { LinkButton } from '../forms/LinkButton'
-import { BlogItem } from '@/lib/types'
+} from "@heroicons/react/20/solid";
+import {
+  Competition,
+  H2HResult,
+  H2HTotal,
+  Manager,
+  Match,
+  PlayerSeasonSummary,
+  Team,
+  Transfer,
+} from "@tranmere-web/lib/src/tranmere-web-types";
+import { ResultTable } from "./partials/ResultTable";
+import { LinkButton } from "../forms/LinkButton";
+import { BlogItem } from "@/lib/types";
 
 function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(" ");
 }
 
 export default function SeasonReview(props: {
@@ -32,23 +41,21 @@ export default function SeasonReview(props: {
   transfers: Transfer[];
   articles: BlogItem[];
 }) {
-
-
-
   const seasonInt = parseInt(props.season);
-  
 
   return (
     <>
-
       <main>
         <header className="relative isolate">
-          <div aria-hidden="true" className="absolute inset-0 -z-10 overflow-hidden">
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 -z-10 overflow-hidden"
+          >
             <div className="absolute left-16 top-full -mt-4 transform-gpu opacity-50 blur-3xl xl:left-1/2 xl:-ml-80">
               <div
                 style={{
                   clipPath:
-                    'polygon(100% 38.5%, 82.6% 100%, 60.2% 37.7%, 52.4% 32.1%, 47.5% 41.8%, 45.2% 65.6%, 27.5% 23.4%, 0.1% 35.3%, 17.9% 0%, 27.7% 23.4%, 76.2% 2.5%, 74.2% 56%, 100% 38.5%)',
+                    "polygon(100% 38.5%, 82.6% 100%, 60.2% 37.7%, 52.4% 32.1%, 47.5% 41.8%, 45.2% 65.6%, 27.5% 23.4%, 0.1% 35.3%, 17.9% 0%, 27.7% 23.4%, 76.2% 2.5%, 74.2% 56%, 100% 38.5%)",
                 }}
                 className="aspect-[1154/678] w-[72.125rem] bg-gradient-to-br from-[#FFFFFF] to-[#9089FC]"
               />
@@ -59,38 +66,53 @@ export default function SeasonReview(props: {
           <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
             <div className="mx-auto flex max-w-2xl items-center justify-between gap-x-8 lg:mx-0 lg:max-w-none">
               <div className="flex items-center gap-x-6">
-                <CalendarDaysIcon aria-hidden="true" className="h-12 w-12 text-indigo-600" />
+                <CalendarDaysIcon
+                  aria-hidden="true"
+                  className="h-12 w-12 text-indigo-600"
+                />
                 <h1>
                   <div className="text-sm leading-6 text-gray-500">
                     Season Summary
                   </div>
-                  <div className="mt-1 text-base font-semibold leading-6 text-gray-900">{props.season}</div>
+                  <div className="mt-1 text-base font-semibold leading-6 text-gray-900">
+                    {props.season}
+                  </div>
                 </h1>
               </div>
               <div className="flex items-center gap-x-4 sm:gap-x-6">
                 {seasonInt > 1920 ? (
-                    <>
-                    <ChevronLeftIcon aria-hidden="true" className="h-6 w-6 text-indigo-600" /> 
-                      <a href={`/season/${seasonInt-1}`} className="text-sm font-semibold leading-6 text-indigo-900 sm:block">
+                  <>
+                    <ChevronLeftIcon
+                      aria-hidden="true"
+                      className="h-6 w-6 text-indigo-600"
+                    />
+                    <a
+                      href={`/season/${seasonInt - 1}`}
+                      className="text-sm font-semibold leading-6 text-indigo-900 sm:block"
+                    >
                       Previous Season
-                      </a>
-                    </>
-                  ) : (
-                    ""
+                    </a>
+                  </>
+                ) : (
+                  ""
                 )}
- 
 
-                  {seasonInt < 2024 ? (
-                    <>
-                      <a href={`/season/${seasonInt+1}`} className="text-sm font-semibold leading-6 text-indigo-900 sm:block">
+                {seasonInt < 2024 ? (
+                  <>
+                    <a
+                      href={`/season/${seasonInt + 1}`}
+                      className="text-sm font-semibold leading-6 text-indigo-900 sm:block"
+                    >
                       Next Season
-                      </a>
-                      <ChevronRightIcon aria-hidden="true" className="h-6 w-6 text-indigo-600" /> 
-                    </>
-                  ) : (
-                    ""
-                  )}
-
+                    </a>
+                    <ChevronRightIcon
+                      aria-hidden="true"
+                      className="h-6 w-6 text-indigo-600"
+                    />
+                  </>
+                ) : (
+                  ""
+                )}
               </div>
             </div>
           </div>
@@ -151,64 +173,79 @@ export default function SeasonReview(props: {
                     ))}
                   </tbody>
                 </table>
-
               </div>
-              <p><a className='rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600' href={`/player-records/${props.season}`}>Full Player Records</a></p>
-
+              <p>
+                <a
+                  className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  href={`/player-records/${props.season}`}
+                >
+                  Full Player Records
+                </a>
+              </p>
             </div>
 
             {/* Invoice */}
             <div className="px-2 py-2 shadow-sm ring-1 ring-gray-900/5 sm:mx-0 sm:rounded-lg sm:px-2 sm:pb-14 lg:col-span-2 lg:row-span-2 lg:row-end-2">
-            <ResultTable
-              title="Results"
-              results={props.results}
-              h2hresults={props.h2hresults}
-              h2htotal={props.h2htotal}
-            ></ResultTable>
+              <ResultTable
+                title="Results"
+                results={props.results}
+                h2hresults={props.h2hresults}
+                h2htotal={props.h2htotal}
+              ></ResultTable>
             </div>
 
             <div className="lg:col-start-3">
               {/* Activity feed */}
-              <h2 className="text-sm font-semibold leading-6 text-gray-900">Transfers</h2>
+              <h2 className="text-sm font-semibold leading-6 text-gray-900">
+                Transfers
+              </h2>
               <ul role="list" className="mt-6 space-y-6 mb-6">
                 {props.transfers.map((transfer, idx) => (
                   <li key={transfer.id} className="relative flex gap-x-4">
                     <div
                       className={classNames(
-                        idx === props.transfers.length - 1 ? 'h-6' : '-bottom-6',
-                        'absolute left-0 top-0 flex w-6 justify-center',
+                        idx === props.transfers.length - 1
+                          ? "h-6"
+                          : "-bottom-6",
+                        "absolute left-0 top-0 flex w-6 justify-center",
                       )}
                     >
                       <div className="w-px bg-gray-200" />
                     </div>
-                      <>
-                        <div className="relative flex h-6 w-6 flex-none items-center justify-center bg-white">
-                          {transfer.type === 'in' ? (
-                            <ChevronRightIcon aria-hidden="true" className="h-12 w-12 text-green-300" />
-                          ) : (
-                            <ChevronLeftIcon aria-hidden="true" className="h-12 w-12 text-red-300" />
-                          )}
-                        </div>
-                        <p className="flex-auto py-0.5 text-xs leading-5 text-gray-500">
-                          <span className="font-medium text-gray-900">{transfer.name}</span>{' '}
-                          {transfer.type === 'in' ? (
-                            <>from {transfer.from}</>
-                          ) : (
-                            <>to {transfer.to}</>
-                          )}
-                        </p>
-                        {transfer.value ? (
-                            <>({transfer.value})</>
-                          ) : (
-                            ""
-                          )}
-                      </>
+                    <>
+                      <div className="relative flex h-6 w-6 flex-none items-center justify-center bg-white">
+                        {transfer.type === "in" ? (
+                          <ChevronRightIcon
+                            aria-hidden="true"
+                            className="h-12 w-12 text-green-300"
+                          />
+                        ) : (
+                          <ChevronLeftIcon
+                            aria-hidden="true"
+                            className="h-12 w-12 text-red-300"
+                          />
+                        )}
+                      </div>
+                      <p className="flex-auto py-0.5 text-xs leading-5 text-gray-500">
+                        <span className="font-medium text-gray-900">
+                          {transfer.name}
+                        </span>{" "}
+                        {transfer.type === "in" ? (
+                          <>from {transfer.from}</>
+                        ) : (
+                          <>to {transfer.to}</>
+                        )}
+                      </p>
+                      {transfer.value ? <>({transfer.value})</> : ""}
+                    </>
                   </li>
                 ))}
               </ul>
 
-              <h2 className="text-sm font-semibold leading-6 text-gray-900">Articles</h2>
-            {props.articles && props.articles.length > 0 ? (
+              <h2 className="text-sm font-semibold leading-6 text-gray-900">
+                Articles
+              </h2>
+              {props.articles && props.articles.length > 0 ? (
                 <div className=" border-gray-200 pt-8">
                   <h2 className="text-sm font-medium text-gray-900 dark:text-gray-50">
                     Articles
@@ -250,10 +287,9 @@ export default function SeasonReview(props: {
                 ""
               )}
             </div>
-
           </div>
         </div>
       </main>
     </>
-  )
+  );
 }

@@ -55,9 +55,8 @@ export default async function GamesPage({
   const managers = await GetAllTranmereManagers();
   const teams = await GetAllTeams();
 
-    title = "Season Summary - " + decodeURI(params.slug);
-    season = decodeURI(params.slug);
-
+  title = "Season Summary - " + decodeURI(params.slug);
+  season = decodeURI(params.slug);
 
   const latestSeasonRequest = await fetch(
     base +
@@ -70,15 +69,17 @@ export default async function GamesPage({
   };
 
   const latestSeasonPlayerRequest = await fetch(
-    GetBaseUrl(getRequestContext().env) + `/player-search/?season=${season}&sort==&filter=`,
+    GetBaseUrl(getRequestContext().env) +
+      `/player-search/?season=${season}&sort==&filter=`,
   );
 
   const playerResults = (await latestSeasonPlayerRequest.json()) as {
     players: PlayerSeasonSummary[];
   };
 
-
-  const request = await fetch(GetBaseUrl(getRequestContext().env) + `/transfer-search/?season=${season}`);
+  const request = await fetch(
+    GetBaseUrl(getRequestContext().env) + `/transfer-search/?season=${season}`,
+  );
   const transfers = (await request.json()) as {
     transfers: Transfer[];
   };
