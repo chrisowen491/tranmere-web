@@ -15,6 +15,7 @@ import { useUser } from "@auth0/nextjs-auth0/client";
 
 const navigation = [
   { name: "Results", href: "/results", current: false },
+  { name: "Seasons", href: "/season/2024", current: false },
   { name: "Players", href: "/playersearch", current: false },
   { name: "Media", href: "/page/tag/Media", current: false },
   { name: "Blog", href: "/blog", current: false },
@@ -23,6 +24,7 @@ const navigation = [
 const mobilenavigation = [
   { name: "Home", href: "/", current: false },
   { name: "Results", href: "/results", current: false },
+  { name: "Seasons", href: "/season/2024", current: false },
   { name: "Players", href: "/playersearch", current: false },
   { name: "Transfers", href: "/transfer-central", current: false },
   { name: "AI Chat Bot", href: "/chat", current: false },

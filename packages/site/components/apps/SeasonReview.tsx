@@ -4,6 +4,7 @@ import {
   CalendarDaysIcon,
   ChevronRightIcon,
   ChevronLeftIcon,
+  PhotoIcon
 } from "@heroicons/react/20/solid";
 import {
   Competition,
@@ -18,6 +19,8 @@ import {
 import { ResultTable } from "./partials/ResultTable";
 import { LinkButton } from "../forms/LinkButton";
 import { BlogItem } from "@/lib/types";
+import { buildImagePath } from "@/lib/apiFunctions";
+import { areIntervalsOverlapping, format, formatDistance, formatRelative, subDays } from 'date-fns'
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -41,7 +44,80 @@ export default function SeasonReview(props: {
   transfers: Transfer[];
   articles: BlogItem[];
 }) {
+
   const seasonInt = parseInt(props.season);
+
+  props.managers.forEach((manager) => { 
+    if(manager.dateLeft == "now()") {
+      manager.dateLeft = new Date().toISOString();
+    } 
+  });
+
+  const managers = props.managers.filter((manager) => areIntervalsOverlapping(
+    { start: new Date(seasonInt, 6, 20), end: new Date(seasonInt+1, 4, 15) },
+    { start: new Date(manager.dateJoined), end: new Date(manager.dateLeft) }
+  ));
+
+  let division = 0;
+  let divisionName = "";
+  props.results.forEach((result) => { 
+    if(result.competition === "League" || result.competition === "Conference") {
+      if(result.tier && parseInt(result.tier) != 0) {
+        division = parseInt(result.tier);
+        
+      }
+    }
+  });
+
+  if (division == 5) {
+    divisionName = "National League";
+  } else if( seasonInt > 1991 && seasonInt < 2004) {
+   if(division == 4) {
+      divisionName = "Division 3";  
+    } else if(division == 3) {  
+      divisionName = "Division 2";
+    } else if(division == 2) {
+      divisionName = "Division 1";
+    }
+  } else if( seasonInt < 1992) {
+    if(division == 4) {
+      divisionName = "Division 4";  
+    } else if(division == 3) {
+      divisionName = "Division 3";  
+    } else if(division == 2) {
+      divisionName = "Division 2";
+    }
+  } else if(seasonInt > 2003) { 
+    if(division == 4) {
+      divisionName = "League 2";  
+    } else if(division == 3) {
+      divisionName = "League 1";  
+    } else if(division == 2) {
+      divisionName = "The Championship";
+    }
+  }
+
+  const topScorers = props.players.filter((player) => player.goals > 0);
+  topScorers.sort((a, b) => b.goals - a.goals);
+
+
+  const facup = props.results.filter((result) => result.competition === "FA Cup");
+
+  let facupround = 0;
+  facup.forEach((result) => { 
+    if(result.round && parseInt(result.round) > facupround) {
+      facupround = parseInt(result.round);
+    }
+  });
+
+  const leaguecup = props.results.filter((result) => result.competition === "League Cup");
+
+  let leaguecupround = 0;
+  leaguecup.forEach((result) => { 
+    if(result.round && parseInt(result.round) > leaguecupround) {
+      leaguecupround = parseInt(result.round);
+    }
+  });
 
   return (
     <>
@@ -68,18 +144,35 @@ export default function SeasonReview(props: {
               <div className="flex items-center gap-x-6">
                 <CalendarDaysIcon
                   aria-hidden="true"
-                  className="h-12 w-12 text-indigo-600"
+                  className="hidden h-12 w-12 text-indigo-600 md:block"
                 />
-                <h1>
+                <div>
                   <div className="text-sm leading-6 text-gray-500">
-                    Season Summary
+                    Division
                   </div>
-                  <div className="mt-1 text-base font-semibold leading-6 text-gray-900">
-                    {props.season}
+                  <div className="mt-1 text-base font-semibold leading-6 text-gray-900 dark:text-gray-50">
+                    {divisionName} (Step {division})
                   </div>
-                </h1>
+                </div>
+
+                <div>
+                  <div className="text-sm leading-6 text-gray-500">
+                    FA Cup:
+                  </div>
+                  <div className="mt-1 text-base font-semibold leading-6 text-gray-900 dark:text-gray-50">
+                    Round: {facupround}
+                  </div>
+                </div>
+                <div>
+                  <div className="text-sm leading-6 text-gray-500">
+                    Lg Cup:
+                  </div>
+                  <div className="mt-1 text-base font-semibold leading-6 text-gray-900 dark:text-gray-50">
+                    Round: {leaguecupround}
+                  </div>
+                </div>
               </div>
-              <div className="flex items-center gap-x-4 sm:gap-x-6">
+              <div className="flex items-center gap-x-3 sm:gap-x-3">
                 {seasonInt > 1920 ? (
                   <>
                     <ChevronLeftIcon
@@ -90,7 +183,7 @@ export default function SeasonReview(props: {
                       href={`/season/${seasonInt - 1}`}
                       className="text-sm font-semibold leading-6 text-indigo-900 sm:block"
                     >
-                      Previous Season
+                      Previous
                     </a>
                   </>
                 ) : (
@@ -103,7 +196,7 @@ export default function SeasonReview(props: {
                       href={`/season/${seasonInt + 1}`}
                       className="text-sm font-semibold leading-6 text-indigo-900 sm:block"
                     >
-                      Next Season
+                      Next
                     </a>
                     <ChevronRightIcon
                       aria-hidden="true"
@@ -123,10 +216,110 @@ export default function SeasonReview(props: {
             <div className="lg:col-start-3 lg:row-end-1">
               <h2 className="sr-only">Summary</h2>
               <div className="rounded-lg bg-gray-50 shadow-sm ring-1 ring-gray-900/5 dark:bg-gray-900 mb-2">
+
+                {managers && managers.length > 0 ? 
+                    <>
+                    <h2 className="mt-2 text-2xl font-bold tracking-tight sm:text-2xl px-2">Managers</h2>
+                    <table className="min-w-full divide-y divide-gray-300 text-sm">
+                      <thead className="thead-dark text-sm font-semibold">
+                        <tr>
+                          <th scope="col" className="px-3 py-3.5 text-left">
+                            Name
+                          </th>
+                          <th scope="col" className="py-3.5">
+                            From
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      {managers.map((manager, idx) => (
+                        <tr key={idx}>
+                          <td className="whitespace-nowrap px-1 md:px-1 py-4">
+                            <div className="flex items-center">
+                              <div className="h-11 w-11 flex-shrink-0">
+                                {manager.programmePath ? (
+                                  <img
+                                    src={buildImagePath(manager.programmePath!, 200, 200)}
+                                    className="h-11 w-11 rounded-full"
+                                  />
+                                ) : (
+                                  <PhotoIcon
+                                    aria-hidden="true"
+                                    className="h-11 w-11 text-indigo-600  rounded-full"
+                                  />
+                                )}
+                              </div>
+                              <div className="ml-4">
+                                <LinkButton
+                                  text={manager.name}
+                                  href={`a`}
+                                ></LinkButton>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="whitespace-nowrap px-1 md:px-3 py-4 text-center">
+                            {manager.dateJoined}
+                          </td>
+                        </tr>
+                      ))}
+                      </tbody>
+                    </table>
+                    </>
+                    : ""}                
+                  {topScorers && topScorers.length > 0 ? 
+                    <>
+                    <h2 className="mt-2 text-2xl font-bold tracking-tight sm:text-2xl px-2">Top Scorer</h2>
+                    <table className="min-w-full divide-y divide-gray-300 text-sm">
+                      <thead className="thead-dark text-sm font-semibold">
+                        <tr>
+                          <th scope="col" className="px-3 py-3.5 text-left">
+                            Name
+                          </th>
+                          <th scope="col" className="py-3.5">
+                            Starts
+                          </th>
+                          <th scope="col" className="px-3 py-3.5">
+                            Goals
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      <tr>
+                        <td className="whitespace-nowrap px-1 md:px-3 py-4">
+                          <div className="flex items-center">
+                            <div className="h-11 w-11 flex-shrink-0">
+                              {topScorers[0].bio?.picLink ? (
+                                <img
+                                  src={topScorers[0].bio.picLink}
+                                  className="h-11 w-11 rounded-full"
+                                />
+                              ) : (
+                                ""
+                              )}
+                            </div>
+                            <div className="ml-4">
+                              <LinkButton
+                                text={topScorers[0].Player}
+                                href={`/page/player/${topScorers[0].Player}`}
+                              ></LinkButton>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="whitespace-nowrap px-1 md:px-3 py-4 text-center">
+                          {topScorers[0].starts}
+                        </td>
+                        <td className="whitespace-nowrap px-1 md:px-3 py-4 text-center">
+                          {topScorers[0].goals}
+                        </td>
+                      </tr>
+                      </tbody>
+                    </table>
+                    </>
+                    : ""}
                 <h2 className="mt-2 text-2xl font-bold tracking-tight sm:text-2xl px-2">
                   Player Data
                 </h2>
-                <table className="min-w-full divide-y divide-gray-300">
+                <table className="min-w-full divide-y divide-gray-300 text-sm">
                   <thead className="thead-dark text-sm font-semibold">
                     <tr>
                       <th scope="col" className="px-3 py-3.5 text-left">
@@ -140,7 +333,7 @@ export default function SeasonReview(props: {
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-200  text-sm">
+                  <tbody className="divide-y divide-gray-200 text-sm">
                     {props.players.map((player, idx) => (
                       <tr key={idx}>
                         <td className="whitespace-nowrap px-1 md:px-3 py-4">
@@ -174,7 +367,7 @@ export default function SeasonReview(props: {
                   </tbody>
                 </table>
               </div>
-              <p>
+              <p className="mt-6">
                 <a
                   className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                   href={`/player-records/${props.season}`}
@@ -235,21 +428,18 @@ export default function SeasonReview(props: {
                         ) : (
                           <>to {transfer.to}</>
                         )}
+                      {transfer.value ? <> ({transfer.value})</> : ""}
                       </p>
-                      {transfer.value ? <>({transfer.value})</> : ""}
+                      
                     </>
                   </li>
                 ))}
               </ul>
 
-              <h2 className="text-sm font-semibold leading-6 text-gray-900">
-                Articles
-              </h2>
+              {props.articles && props.articles.length > 0  ? <h2 className="text-sm font-semibold leading-6 text-gray-900">Articles</h2>: ""}
+              
               {props.articles && props.articles.length > 0 ? (
-                <div className=" border-gray-200 pt-8">
-                  <h2 className="text-sm font-medium text-gray-900 dark:text-gray-50">
-                    Articles
-                  </h2>
+                <div className=" border-gray-200 pt-2">
                   {props.articles.map((article) => (
                     <article
                       key={article.sys.id}
