@@ -133,7 +133,7 @@ export default function MatchReport(props: {
             <h3 className="text-sm font-medium">Rovers Team</h3>
             <p className="mt-4 text-sm">
               {match.apps!.map((p, idx) => (
-                <>
+                <span key={idx}>
                   <LinkButton
                     text={p.Name}
                     href={`/page/player/${p.Name}`}
@@ -151,7 +151,7 @@ export default function MatchReport(props: {
                   ) : (
                     ", "
                   )}
-                </>
+                </span>
               ))}
             </p>
           </div>

@@ -52,7 +52,7 @@ export default async function GamesPage({
   let competition = "";
   const managers = await GetAllTranmereManagers();
 
-  title = "Season Summary - " + decodeURI(params.slug);
+  title = "Season: " + decodeURI(params.slug);
   season = decodeURI(params.slug);
 
   const latestSeasonRequest = await fetch(

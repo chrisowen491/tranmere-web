@@ -6,7 +6,8 @@ import { FilterBox } from "@/components/forms/FilterBox";
 import { SubmitButton } from "@/components/forms/SubmitButton";
 import { LinkButton } from "@/components/forms/LinkButton";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
-import { XMarkIcon } from "@heroicons/react/24/outline";
+import { PhotoIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { UserIcon } from "@heroicons/react/20/solid";
 
 export function PlayerSearch(props: {
   default: PlayerSeasonSummary[];
@@ -280,7 +281,10 @@ export function PlayerSearch(props: {
                                 className="h-11 w-11 rounded-full"
                               />
                             ) : (
-                              ""
+                              <UserIcon
+                                      aria-hidden="true"
+                                      className="h-11 w-11 text-indigo-600  rounded-full dark:text-indigo-50"
+                                    />
                             )}
                           </div>
                           <div className="ml-4">

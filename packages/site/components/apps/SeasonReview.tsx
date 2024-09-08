@@ -5,6 +5,7 @@ import {
   ChevronRightIcon,
   ChevronLeftIcon,
   PhotoIcon,
+  UserIcon,
 } from "@heroicons/react/20/solid";
 import {
   H2HResult,
@@ -143,14 +144,14 @@ export default function SeasonReview(props: {
               <div className="flex items-center gap-x-6">
                 <CalendarDaysIcon
                   aria-hidden="true"
-                  className="hidden h-12 w-12 text-indigo-600 md:block"
+                  className="hidden h-12 w-12 text-indigo-600 md:block dark:text-indigo-50"
                 />
                 <div>
                   <div className="text-sm leading-6 text-gray-500">
                     Division
                   </div>
                   <div className="mt-1 text-base font-semibold leading-6 text-gray-900 dark:text-gray-50">
-                    {divisionName} (Step {division})
+                    {divisionName}
                   </div>
                 </div>
 
@@ -167,16 +168,16 @@ export default function SeasonReview(props: {
                   </div>
                 </div>
               </div>
-              <div className="flex items-center gap-x-3 sm:gap-x-3">
+              <div className="hidden md:flex items-center gap-x-3 sm:gap-x-3">
                 {seasonInt > 1920 ? (
                   <>
                     <ChevronLeftIcon
                       aria-hidden="true"
-                      className="h-6 w-6 text-indigo-600"
+                      className="h-6 w-6 text-indigo-600 dark:text-indigo-50"
                     />
                     <a
                       href={`/season/${seasonInt - 1}`}
-                      className="text-sm font-semibold leading-6 text-indigo-900 sm:block"
+                      className="text-sm font-semibold leading-6 text-indigo-900 sm:block dark:text-indigo-400"
                     >
                       Previous
                     </a>
@@ -189,13 +190,13 @@ export default function SeasonReview(props: {
                   <>
                     <a
                       href={`/season/${seasonInt + 1}`}
-                      className="text-sm font-semibold leading-6 text-indigo-900 sm:block"
+                      className="text-sm font-semibold leading-6 text-indigo-900 sm:block dark:text-indigo-400"
                     >
                       Next
                     </a>
                     <ChevronRightIcon
                       aria-hidden="true"
-                      className="h-6 w-6 text-indigo-600"
+                      className="h-6 w-6 text-indigo-600 dark:text-indigo-50"
                     />
                   </>
                 ) : (
@@ -216,8 +217,8 @@ export default function SeasonReview(props: {
                     <h2 className="mt-2 text-2xl font-bold tracking-tight sm:text-2xl px-2">
                       Managers
                     </h2>
-                    <table className="min-w-full divide-y divide-gray-300 text-sm">
-                      <thead className="thead-dark text-sm font-semibold">
+                    <table className="min-w-full divide-y divide-gray-300  text-xs">
+                      <thead className="thead-dark  text-xs font-semibold">
                         <tr>
                           <th scope="col" className="px-3 py-3.5 text-left">
                             Name
@@ -227,7 +228,7 @@ export default function SeasonReview(props: {
                           </th>
                         </tr>
                       </thead>
-                      <tbody>
+                      <tbody className="text-xs">
                         {managers.map((manager, idx) => (
                           <tr key={idx}>
                             <td className="whitespace-nowrap px-1 md:px-1 py-4">
@@ -245,7 +246,7 @@ export default function SeasonReview(props: {
                                   ) : (
                                     <PhotoIcon
                                       aria-hidden="true"
-                                      className="h-11 w-11 text-indigo-600  rounded-full"
+                                      className="h-11 w-11 text-indigo-600  rounded-full dark:text-indigo-50"
                                     />
                                   )}
                                 </div>
@@ -273,8 +274,8 @@ export default function SeasonReview(props: {
                     <h2 className="mt-2 text-2xl font-bold tracking-tight sm:text-2xl px-2">
                       Top Scorer
                     </h2>
-                    <table className="min-w-full divide-y divide-gray-300 text-sm">
-                      <thead className="thead-dark text-sm font-semibold">
+                    <table className="min-w-full divide-y divide-gray-300">
+                      <thead className="thead-dark  text-xs font-semibold">
                         <tr>
                           <th scope="col" className="px-3 py-3.5 text-left">
                             Name
@@ -287,7 +288,7 @@ export default function SeasonReview(props: {
                           </th>
                         </tr>
                       </thead>
-                      <tbody>
+                      <tbody className="text-xs">
                         <tr>
                           <td className="whitespace-nowrap px-1 md:px-3 py-4">
                             <div className="flex items-center">
@@ -325,8 +326,8 @@ export default function SeasonReview(props: {
                 <h2 className="mt-2 text-2xl font-bold tracking-tight sm:text-2xl px-2">
                   Player Data
                 </h2>
-                <table className="min-w-full divide-y divide-gray-300 text-sm">
-                  <thead className="thead-dark text-sm font-semibold">
+                <table className="min-w-full divide-y divide-gray-300">
+                  <thead className="thead-dark  text-xs font-semibold">
                     <tr>
                       <th scope="col" className="px-3 py-3.5 text-left">
                         Name
@@ -339,7 +340,7 @@ export default function SeasonReview(props: {
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-200 text-sm">
+                  <tbody className="divide-y divide-gray-200  text-xs">
                     {props.players.map((player, idx) => (
                       <tr key={idx}>
                         <td className="whitespace-nowrap px-1 md:px-3 py-4">
@@ -351,7 +352,10 @@ export default function SeasonReview(props: {
                                   className="h-11 w-11 rounded-full"
                                 />
                               ) : (
-                                ""
+                                <UserIcon
+                                      aria-hidden="true"
+                                      className="h-11 w-11 text-indigo-600  rounded-full dark:text-indigo-50"
+                                    />
                               )}
                             </div>
                             <div className="ml-4">
@@ -384,7 +388,7 @@ export default function SeasonReview(props: {
             </div>
 
             {/* Invoice */}
-            <div className="px-2 py-2 shadow-sm ring-1 ring-gray-900/5 sm:mx-0 sm:rounded-lg sm:px-2 sm:pb-14 lg:col-span-2 lg:row-span-2 lg:row-end-2">
+            <div className="px-2 py-2 shadow-sm ring-1 ring-gray-900/5 sm:mx-0 sm:rounded-lg sm:px-2 sm:pb-14 lg:col-span-2 lg:row-span-2 lg:row-end-2  text-xs">
               <ResultTable
                 title="Results"
                 results={props.results}
@@ -395,9 +399,13 @@ export default function SeasonReview(props: {
 
             <div className="lg:col-start-3">
               {/* Activity feed */}
-              <h2 className="text-sm font-semibold leading-6 text-gray-900">
-                Transfers
-              </h2>
+              {props.transfers && props.transfers.length > 0 ? (
+              <h2 className="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-50">
+              Transfers
+            </h2>
+              ) : (
+                ""
+              )}
               <ul role="list" className="mt-6 space-y-6 mb-6">
                 {props.transfers.map((transfer, idx) => (
                   <li key={transfer.id} className="relative flex gap-x-4">
@@ -425,8 +433,8 @@ export default function SeasonReview(props: {
                           />
                         )}
                       </div>
-                      <p className="flex-auto py-0.5 text-xs leading-5 text-gray-500">
-                        <span className="font-medium text-gray-900">
+                      <p className="flex-auto py-0.5 text-xs leading-5 text-gray-500 dark:text-gray-50">
+                        <span className="font-medium text-gray-900 dark:text-gray-50">
                           {transfer.name}
                         </span>{" "}
                         {transfer.type === "in" ? (

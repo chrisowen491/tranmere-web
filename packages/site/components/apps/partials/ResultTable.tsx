@@ -25,7 +25,7 @@ export function ResultTable(props: {
   return (
     <div className="px-4 sm:px-6 lg:px-8">
       <div className="mt-8 flow-root">
-        <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+        <div className="-mx-4 -my-2">
           <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
             {props.h2hresults && props.h2hresults.length > 0 ? (
               <>
@@ -33,32 +33,32 @@ export function ResultTable(props: {
                   Overall Record
                 </h2>
                 <table className="min-w-full divide-y divide-gray-300">
-                  <thead className="thead-dark text-sm font-semibold">
+                  <thead className="thead-dark  font-semibold">
                     <tr>
-                      <th scope="col" className="py-3 py-3.5 text-left px-3">
+                      <th scope="col" className="py-3.5 text-left px-3">
                         Venue
                       </th>
                       <th
                         scope="col"
-                        className="py-3 py-3.5 text-left px-3 text-center"
+                        className="py-3.5 px-3 text-center"
                       >
                         Pld
                       </th>
                       <th
                         scope="col"
-                        className="py-3 py-3.5 text-left px-3 text-center"
+                        className="py-3.5 px-3 text-center"
                       >
                         Won
                       </th>
                       <th
                         scope="col"
-                        className="py-3 py-3.5 text-left px-3 text-center"
+                        className="py-3.5 px-3 text-center"
                       >
                         Draws
                       </th>
                       <th
                         scope="col"
-                        className="py-3 py-3.5 text-left px-3 text-center"
+                        className="py-3.5 px-3 text-center"
                       >
                         Lost
                       </th>
@@ -82,7 +82,7 @@ export function ResultTable(props: {
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-200  text-sm">
+                  <tbody className="divide-y divide-gray-200">
                     {props.h2hresults.map((result, idx) => (
                       <tr key={idx}>
                         <td className="whitespace-nowrap px-3 py-4">
@@ -154,7 +154,7 @@ export function ResultTable(props: {
             <h2 className="mt-2 text-2xl font-bold tracking-tight sm:text-2xl sm:text-2xl px-1 md:px-0">
               {props.title}
             </h2>
-            <table className="min-w-full divide-y text-left text-sm">
+            <table className="min-w-full divide-y text-left">
               <thead className="font-semibold ">
                 <tr>
                   <th scope="col" className="py-3.5 px-1 sm:px-3">
@@ -186,7 +186,7 @@ export function ResultTable(props: {
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200 text-sm">
+              <tbody className="divide-y divide-gray-200 ">
                 {props.results.map((result, idx) => (
                   <tr key={idx}>
                     <td className="whitespace-nowrap px-1 sm:px-3 py-4">
