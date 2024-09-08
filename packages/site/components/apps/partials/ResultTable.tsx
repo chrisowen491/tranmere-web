@@ -5,18 +5,16 @@ import {
 } from "@tranmere-web/lib/src/tranmere-web-types";
 import { LinkButton } from "@/components/forms/LinkButton";
 
-
 function trimDate(input?: string) {
-  if(!input) {
-    return ""
-  } else if(input == "now()") {
+  if (!input) {
+    return "";
+  } else if (input == "now()") {
     return "Present";
   } else {
     const date = new Date(input);
     return `${date.getDate()}/${date.getMonth() + 1}`;
   }
 }
-
 
 export function ResultTable(props: {
   title: string;
