@@ -16,13 +16,13 @@ export function PlayerAppsTable(props: {
             <table className="min-w-full divide-y text-left text-sm">
               <thead className="font-semibold ">
                 <tr>
-                  <th scope="col" className="py-3 py-3.5">
+                  <th scope="col" className="py-3.5">
                     Season
                   </th>
                   <th scope="col" className="hidden px-3 py-3.5 lg:table-cell">
                     Competition
                   </th>
-                  <th scope="col" className="py-3 px-3 py-3.5">
+                  <th scope="col" className="px-3 py-3.5">
                     Opposition
                   </th>
                   <th scope="col" className="hidden px-3 py-3.5 lg:table-cell">

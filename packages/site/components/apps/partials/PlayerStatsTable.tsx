@@ -16,10 +16,10 @@ export function PlayerStatsTable(props: {
             <table className="min-w-full divide-y text-left text-sm">
               <thead className="font-semibold ">
                 <tr>
-                  <th scope="col" className="py-3 py-3.5">
+                  <th scope="col" className="py-3.5">
                     Season
                   </th>
-                  <th scope="col" className="py-3 py-3.5">
+                  <th scope="col" className="py-3.5">
                     Starts
                   </th>
                   <th scope="col" className="px-3 py-3.5">
@@ -51,7 +51,7 @@ export function PlayerStatsTable(props: {
                     <td className="whitespace-nowrap px-3 py-4">
                       <LinkButton
                         text={record.Season}
-                        href={`/player-records/${record.Season}`}
+                        href={`/season/${record.Season}`}
                       ></LinkButton>
                     </td>
                     <td className="whitespace-nowrap px-3 py-4">

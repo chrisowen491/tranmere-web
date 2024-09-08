@@ -38,13 +38,13 @@ export default async function TagPage({
             <div className="mx-auto max-w-7xl px-6 lg:px-8">
               <div className="mx-auto max-w-2xl lg:mx-0">
                 <p className="text-base font-semibold leading-7 text-indigo-600 dark:text-gray-50">
-                  {params.slug} - Blog Pages
+                  {decodeURI(params.slug)} - Blog Pages
                 </p>
                 <h2 className="mt-2 text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl dark:text-gray-50">
-                  {params.slug}
+                {decodeURI(params.slug)}
                 </h2>
                 <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-50">
-                  All the blog posts tagged with {params.slug}
+                  All the blog posts tagged with {decodeURI(params.slug)}
                 </p>
               </div>
             </div>

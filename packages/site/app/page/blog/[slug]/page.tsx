@@ -91,7 +91,7 @@ export default async function BlogPage({
               <img
                 src={`${article.pic.url}?h=300`}
                 alt="Image"
-                className="overlay-item-bottom"
+                className="overlay-item-bottom px-8"
               />
             ) : (
               ""

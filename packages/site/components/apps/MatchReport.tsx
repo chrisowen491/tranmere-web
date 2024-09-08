@@ -58,7 +58,7 @@ export default function MatchReport(props: {
   });
   const breadcrumbs = [
     { id: 1, name: "Home", href: "/" },
-    { id: 2, name: match.season, href: "/games/" + match.season },
+    { id: 2, name: match.season, href: "/season/" + match.season },
   ];
 
   return (
