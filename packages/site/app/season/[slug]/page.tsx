@@ -50,10 +50,7 @@ export default async function GamesPage({
   let season = "";
   let opposition = "";
   let competition = "";
-  let manager = "";
-  const competitions = await GetAllCupCompetitions();
   const managers = await GetAllTranmereManagers();
-  const teams = await GetAllTeams();
 
   title = "Season Summary - " + decodeURI(params.slug);
   season = decodeURI(params.slug);
@@ -90,16 +87,8 @@ export default async function GamesPage({
     <>
       <Title title={title!}></Title>
       <SeasonReview
-        teams={teams}
         managers={managers}
-        competitions={competitions}
         results={results.results}
-        venue={venue}
-        manager={manager}
-        pens={pens}
-        sort={sort}
-        opposition={opposition}
-        competition={competition}
         h2hresults={results.h2hresults}
         h2htotal={results.h2htotal}
         players={playerResults.players}

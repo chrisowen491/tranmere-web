@@ -7,26 +7,18 @@ import {
   PhotoIcon,
 } from "@heroicons/react/20/solid";
 import {
-  Competition,
   H2HResult,
   H2HTotal,
   Manager,
   Match,
   PlayerSeasonSummary,
-  Team,
   Transfer,
 } from "@tranmere-web/lib/src/tranmere-web-types";
 import { ResultTable } from "./partials/ResultTable";
 import { LinkButton } from "../forms/LinkButton";
 import { BlogItem } from "@/lib/types";
 import { buildImagePath } from "@/lib/apiFunctions";
-import {
-  areIntervalsOverlapping,
-  format,
-  formatDistance,
-  formatRelative,
-  subDays,
-} from "date-fns";
+import { areIntervalsOverlapping } from "date-fns";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -37,16 +29,8 @@ export default function SeasonReview(props: {
   h2hresults: H2HResult[];
   h2htotal: H2HTotal[];
   players: PlayerSeasonSummary[];
-  competition?: string;
-  manager?: string;
-  venue?: string;
-  opposition?: string;
-  pens?: string;
-  sort?: string;
   season: string;
-  competitions: Competition[];
   managers: Manager[];
-  teams: Team[];
   transfers: Transfer[];
   articles: BlogItem[];
 }) {
