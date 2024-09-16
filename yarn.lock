@@ -5261,9 +5261,9 @@ content-type@1.0.4:
   integrity sha512-hIP3EEPs8tB9AT1L+NUqtwOAps4mk2Zob89MWXMHjHWg9milF/j4osnnQLXBCBFBk/tvIG/tUc9mOUJiPBhPXA==
 
 contentful-management@^11.8.0:
-  version "11.33.0"
-  resolved "https://registry.yarnpkg.com/contentful-management/-/contentful-management-11.33.0.tgz#3bed7a5154790690218a77d393f55a1616b7523a"
-  integrity sha512-QIpKV9BWGQ4M9TTTeyJiIyCElMnQvzMijMpQA31uFAdFxfokRcyA6zyYoVA7tIsyOmpWIAcFbGcDiGROAMR+zA==
+  version "11.34.0"
+  resolved "https://registry.yarnpkg.com/contentful-management/-/contentful-management-11.34.0.tgz#f1c84cf81f711680b8195843059fce666cec8950"
+  integrity sha512-C3eFMwnEjk+elRlJr0Abzw2PVWKTVBP/dh8lRxvpJYFquknaTxKnFTourdHAX/AP9KpKvdkO0Iy11d6bqSnPYA==
   dependencies:
     "@contentful/rich-text-types" "^16.6.1"
     axios "^1.7.4"
