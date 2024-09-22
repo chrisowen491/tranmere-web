@@ -15,7 +15,7 @@ exports.handler = async (
   return utils.sendResponse(200, 'Success');
 };
 
-async function sendEmail(event: { name: string; email: string; desc: string; }) {
+async function sendEmail(event: { name: string; email: string; desc: string }) {
   const params = {
     Destination: {
       ToAddresses: [RECEIVER!]

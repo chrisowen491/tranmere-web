@@ -386,11 +386,10 @@ export interface LineupTeam {
 }
 
 export interface FullPlayerName {
-  short: string
-  first: string
-  last: string
+  short: string;
+  first: string;
+  last: string;
 }
-
 
 export interface FullName {
   fullName: string;
@@ -430,7 +429,7 @@ export interface Starter {
 }
 
 export interface Card {
-  type: "Yellow Card" | "Red Card";
+  type: 'Yellow Card' | 'Red Card';
   timeLabel: TimeLabel;
 }
 
@@ -533,6 +532,3 @@ export interface UasActivityData {
   environment: string;
   apiKey: string;
 }
-
-
-

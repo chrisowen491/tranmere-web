@@ -3,7 +3,11 @@ import {
   TranmereWebUtils,
   ProgrammeImage
 } from '@tranmere-web/lib/src/tranmere-web-utils';
-import { Appearance, Goal, Player } from '@tranmere-web/lib/src/tranmere-web-types';
+import {
+  Appearance,
+  Goal,
+  Player
+} from '@tranmere-web/lib/src/tranmere-web-types';
 import { MatchView } from '@tranmere-web/lib/src/tranmere-web-view-types';
 
 const utils = new TranmereWebUtils();
@@ -12,7 +16,7 @@ const playerMap = new Map<string, Player>();
 
 const re = /\/\d\d\d\d\//gm;
 const re3 = /\/\d\d\d\d[A-Za-z]\//gm;
-const seasonMapping = new Map<number, number>()
+const seasonMapping = new Map<number, number>();
 seasonMapping.set(1978, 1977);
 seasonMapping.set(1984, 1983);
 seasonMapping.set(1990, 1989);

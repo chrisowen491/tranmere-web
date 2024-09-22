@@ -80,13 +80,11 @@ exports.handler = async (
     fixtures.eventGroups[0].secondaryGroups[0].events[0].tournament.name
   );
 
-
   const dateString = moment(theDate).format('dddd-Do-MMMM');
   const reportQuery = `https://push.api.bbci.co.uk/batch?t=%2Fdata%2Fbbc-morph-football-scores-match-list-data%2FendDate%2F${day}%2FstartDate%2F${day}%2Fteam%2Ftranmere-rovers%2FtodayDate%2F${day}%2Fversion%2F2.4.6`;
   const oldFixtureRequest = await fetch(reportQuery, options);
-  const oldFixtureResponse = await oldFixtureRequest.json() as unknown;
-  
-  
+  const oldFixtureResponse = (await oldFixtureRequest.json()) as unknown;
+
   const venue =
     oldFixtureResponse.payload[0].body.matchData[0].tournamentDatesWithEvents[
       dateString
@@ -100,13 +98,13 @@ exports.handler = async (
   const lineup_url = `https://www.bbc.co.uk/wc-data/container/match-lineups?globalContainerPolling=true&urn=urn%3Abbc%3Asportsdata%3Afootball%3Aevent%3A${reportId}`;
   const lineupResponse = await fetch(lineup_url, options);
 
-  const lineups = await lineupResponse.json() as TeamLineups;
+  const lineups = (await lineupResponse.json()) as TeamLineups;
 
   /*
   const attendance = lineups.payload[0].body.meta.attendance
     ? parseInt(lineups.payload[0].body.meta.attendance.replace(/,/g, ''))
     : 0;
-  */  
+  */
 
   const theMatch: Match = {
     date: day!,
@@ -121,15 +119,15 @@ exports.handler = async (
     home: translateTeamName(lineups.homeTeam.name.fullName),
     visitor: translateTeamName(lineups.awayTeam.name.fullName),
     opposition:
-    lineups.homeTeam.name.fullName === 'Tranmere Rovers'
+      lineups.homeTeam.name.fullName === 'Tranmere Rovers'
         ? translateTeamName(lineups.awayTeam.name.fullName)
         : translateTeamName(lineups.homeTeam.name.fullName),
     static: 'static',
     season: season,
     venue: venue,
     hgoal: hscore,
-    tier: competition == "League Two" ? "4" : "0",
-    division: competition == "League Two" ? "4" : "0",
+    tier: competition == 'League Two' ? '4' : '0',
+    division: competition == 'League Two' ? '4' : '0',
     pens: '',
     vgoal: vscore,
     ft: hscore + '-' + vscore,
@@ -180,17 +178,26 @@ exports.handler = async (
 
     const team = theMatch.home === 'Tranmere Rovers' ? 'homeTeam' : 'awayTeam';
     for await (const element of lineups[team].players.starters) {
-
-      const sub = lineups[team].players.substitutes.find(s => s.substitutedOn && s.substitutedOn.playerOffName === element.displayName);
+      const sub = lineups[team].players.substitutes.find(
+        (s) =>
+          s.substitutedOn &&
+          s.substitutedOn.playerOffName === element.displayName
+      );
       const app: Appearance = {
         id: uuidv4(),
         Date: day!,
         Opposition: theMatch.opposition!,
         Competition: competition,
         Season: season!,
-        Name: translatePlayerName(simplifyName(element.name.first) + " " + element.name.last),
+        Name: translatePlayerName(
+          simplifyName(element.name.first) + ' ' + element.name.last
+        ),
         Number: element.shirtNumber.toString(),
-        SubbedBy: sub ? translatePlayerName(simplifyName(sub.name.first) + " " + sub.name.last) : null,
+        SubbedBy: sub
+          ? translatePlayerName(
+              simplifyName(sub.name.first) + ' ' + sub.name.last
+            )
+          : null,
         SubTime: sub ? sub.substitutedOn?.timeMin.toString() : null,
         YellowCard: element.cards.find((el) => el.type === 'Yellow Card')
           ? 'TRUE'
@@ -198,8 +205,14 @@ exports.handler = async (
         RedCard: element.cards.find((el) => el.type === 'Red Card')
           ? 'TRUE'
           : null,
-        SubYellow: sub && sub.cards.find((el) => el.type === 'Yellow Card') ? 'TRUE' : null, 
-        SubRed: sub && sub.cards.find((el) => el.type === 'Yellow Card') ? 'TRUE' : null, 
+        SubYellow:
+          sub && sub.cards.find((el) => el.type === 'Yellow Card')
+            ? 'TRUE'
+            : null,
+        SubRed:
+          sub && sub.cards.find((el) => el.type === 'Yellow Card')
+            ? 'TRUE'
+            : null
       };
       if (!sub) delete app.SubbedBy;
       await utils.insertUpdateItem(app, DataTables.APPS_TABLE_NAME);
@@ -323,4 +336,3 @@ function simplifyName(first: string) {
   const name = first.split(' ');
   return name[0];
 }
-

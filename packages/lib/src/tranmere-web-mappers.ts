@@ -4,7 +4,7 @@ export function translatePlayerName(input: string): string {
   const mapping = {
     'Rob Apter': 'Robert Apter',
     'Christopher Merrie': 'Chris Merrie',
-    'Joshua Williams': 'Josh Williams',
+    'Joshua Williams': 'Josh Williams'
   };
   return mapping[input.trim()] ? mapping[input.trim()] : input.trim();
 }
