@@ -18,7 +18,7 @@ export const getSystemPrompt = function(avatar: string | null) {
         case "Muir":
             personality = "You have the personality of former Tranmere player Ian Muir and should speak with a thick Brummie accent"
             break;             
-        case "Generic" || null:
+        case "Generic":
             personality = "Your personality is a person from the Wirral with a slightly posh scouse accent!"                                 
     }
     

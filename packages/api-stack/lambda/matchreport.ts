@@ -9,7 +9,8 @@ import {
   Appearance,
   Goal,
   FixtureSet,
-  MatchEvents
+  MatchEvents,
+  TeamLineups
 } from '@tranmere-web/lib/src/tranmere-web-types';
 import {
   translateTeamName,
@@ -60,7 +61,6 @@ exports.handler = async (
   };
 
   const fixtureUrl = `https://www.bbc.co.uk/wc-data/container/sport-data-scores-fixtures?selectedEndDate=${day}&selectedStartDate=${day}&todayDate=${day}&urn=urn%3Abbc%3Asportsdata%3Afootball%3Ateam%3Atranmere-rovers&useSdApi=false`;
-
   const fixturesResponse = await fetch(fixtureUrl, options);
   const fixtures = (await fixturesResponse.json()) as FixtureSet;
 
@@ -76,18 +76,17 @@ exports.handler = async (
 
   const reportId = fixtures.eventGroups[0].secondaryGroups[0].events[0].id;
 
-  const dateString = moment(theDate).format('dddd-Do-MMMM');
-  const reportQuery = `https://push.api.bbci.co.uk/batch?t=%2Fdata%2Fbbc-morph-football-scores-match-list-data%2FendDate%2F${day}%2FstartDate%2F${day}%2Fteam%2Ftranmere-rovers%2FtodayDate%2F${day}%2Fversion%2F2.4.6`;
-  const oldFixtureRequest = await fetch(reportQuery, options);
-  const oldFixtureResponse = await oldFixtureRequest.json();
-  const oldReportId =
-    oldFixtureResponse.payload[0].body.matchData[0].tournamentDatesWithEvents[
-      dateString
-    ][0].events[0].eventKey;
-
   const competition = translateCompetition(
     fixtures.eventGroups[0].secondaryGroups[0].events[0].tournament.name
   );
+
+
+  const dateString = moment(theDate).format('dddd-Do-MMMM');
+  const reportQuery = `https://push.api.bbci.co.uk/batch?t=%2Fdata%2Fbbc-morph-football-scores-match-list-data%2FendDate%2F${day}%2FstartDate%2F${day}%2Fteam%2Ftranmere-rovers%2FtodayDate%2F${day}%2Fversion%2F2.4.6`;
+  const oldFixtureRequest = await fetch(reportQuery, options);
+  const oldFixtureResponse = await oldFixtureRequest.json() as unknown;
+  
+  
   const venue =
     oldFixtureResponse.payload[0].body.matchData[0].tournamentDatesWithEvents[
       dateString
@@ -98,42 +97,46 @@ exports.handler = async (
   const vscore =
     fixtures.eventGroups[0].secondaryGroups[0].events[0].away.score;
 
-  const lineup_url = `https://push.api.bbci.co.uk/batch?t=%2Fdata%2Fbbc-morph-sport-football-team-lineups-data%2Fevent%2F${oldReportId}%2Fversion%2F1.0.8`;
-  //const lineup_url = `https://www.bbc.co.uk/wc-data/container/match-lineups?globalContainerPolling=true&urn=urn%3Abbc%3Asportsdata%3Afootball%3Aevent%3A${reportId}`;
+  const lineup_url = `https://www.bbc.co.uk/wc-data/container/match-lineups?globalContainerPolling=true&urn=urn%3Abbc%3Asportsdata%3Afootball%3Aevent%3A${reportId}`;
   const lineupResponse = await fetch(lineup_url, options);
 
-  const lineups = await lineupResponse.json();
+  const lineups = await lineupResponse.json() as TeamLineups;
 
+  /*
   const attendance = lineups.payload[0].body.meta.attendance
     ? parseInt(lineups.payload[0].body.meta.attendance.replace(/,/g, ''))
     : 0;
+  */  
 
   const theMatch: Match = {
     date: day!,
-    attendance: attendance,
-    referee: lineups.payload[0].body.meta.referee,
+    attendance: 0,
+    referee: '',
     formation:
-      lineups.payload[0].body.teams.homeTeam.name === 'Tranmere Rovers'
-        ? lineups.payload[0].body.teams.homeTeam.formation
-        : lineups.payload[0].body.teams.awayTeam.formation,
+      lineups.homeTeam.name.fullName === 'Tranmere Rovers'
+        ? lineups.homeTeam.formation.layout
+        : lineups.awayTeam.formation.layout,
     id: uuidv4(),
     programme: '#N/A',
-    home: translateTeamName(lineups.payload[0].body.teams.homeTeam.name),
-    visitor: translateTeamName(lineups.payload[0].body.teams.awayTeam.name),
+    home: translateTeamName(lineups.homeTeam.name.fullName),
+    visitor: translateTeamName(lineups.awayTeam.name.fullName),
     opposition:
-      lineups.payload[0].body.teams.homeTeam.name === 'Tranmere Rovers'
-        ? translateTeamName(lineups.payload[0].body.teams.awayTeam.name)
-        : translateTeamName(lineups.payload[0].body.teams.homeTeam.name),
+    lineups.homeTeam.name.fullName === 'Tranmere Rovers'
+        ? translateTeamName(lineups.awayTeam.name.fullName)
+        : translateTeamName(lineups.homeTeam.name.fullName),
     static: 'static',
     season: season,
     venue: venue,
     hgoal: hscore,
+    tier: competition == "League Two" ? "4" : "0",
+    division: competition == "League Two" ? "4" : "0",
     pens: '',
     vgoal: vscore,
     ft: hscore + '-' + vscore,
     competition: competition
   };
 
+  /* Pens
   if (
     oldFixtureResponse.payload[0].body.matchData[0].tournamentDatesWithEvents[
       dateString
@@ -144,6 +147,7 @@ exports.handler = async (
         dateString
       ][0].events[0].comment;
   }
+      */
 
   const events: MatchEvent[] = [];
   let page = 1;
@@ -175,50 +179,30 @@ exports.handler = async (
     await utils.insertUpdateItem(theMatch, DataTables.RESULTS_TABLE);
 
     const team = theMatch.home === 'Tranmere Rovers' ? 'homeTeam' : 'awayTeam';
-    for await (const element of lineups.payload[0].body.teams[team].players) {
-      if (element.meta.status === 'starter') {
-        const app: Appearance = {
-          id: uuidv4(),
-          Date: day!,
-          Opposition: theMatch.opposition!,
-          Competition: competition,
-          Season: season!,
-          Name: translatePlayerName(element.name.full),
-          Number: element.meta.uniformNumber,
-          SubbedBy:
-            element.substitutions.length > 0
-              ? translatePlayerName(
-                  element.substitutions[0].replacedBy.name.full
-                )
-              : null,
-          SubTime:
-            element.substitutions.length > 0
-              ? element.substitutions[0].timeElapsed
-              : null,
-          YellowCard: element.bookings.find((el) => el.type === 'yellow-card')
-            ? 'TRUE'
-            : null,
-          RedCard: element.bookings.find((el) => el.type === 'red-card')
-            ? 'TRUE'
-            : null,
-          SubYellow:
-            element.substitutions.length > 0 &&
-            element.substitutions[0].replacedBy.bookings.find(
-              (el) => el.type === 'yellow-card'
-            )
-              ? 'TRUE'
-              : null,
-          SubRed:
-            element.substitutions.length > 0 &&
-            element.substitutions[0].replacedBy.bookings.find(
-              (el) => el.type === 'red-card'
-            )
-              ? 'TRUE'
-              : null
-        };
-        if (element.substitutions.length == 0) delete app.SubbedBy;
-        await utils.insertUpdateItem(app, DataTables.APPS_TABLE_NAME);
-      }
+    for await (const element of lineups[team].players.starters) {
+
+      const sub = lineups[team].players.substitutes.find(s => s.substitutedOn && s.substitutedOn.playerOffName === element.displayName);
+      const app: Appearance = {
+        id: uuidv4(),
+        Date: day!,
+        Opposition: theMatch.opposition!,
+        Competition: competition,
+        Season: season!,
+        Name: translatePlayerName(simplifyName(element.name.first) + " " + element.name.last),
+        Number: element.shirtNumber.toString(),
+        SubbedBy: sub ? translatePlayerName(simplifyName(sub.name.first) + " " + sub.name.last) : null,
+        SubTime: sub ? sub.substitutedOn?.timeMin.toString() : null,
+        YellowCard: element.cards.find((el) => el.type === 'Yellow Card')
+          ? 'TRUE'
+          : null,
+        RedCard: element.cards.find((el) => el.type === 'Red Card')
+          ? 'TRUE'
+          : null,
+        SubYellow: sub && sub.cards.find((el) => el.type === 'Yellow Card') ? 'TRUE' : null, 
+        SubRed: sub && sub.cards.find((el) => el.type === 'Yellow Card') ? 'TRUE' : null, 
+      };
+      if (!sub) delete app.SubbedBy;
+      await utils.insertUpdateItem(app, DataTables.APPS_TABLE_NAME);
     }
 
     const prompt = ChatPromptTemplate.fromMessages([
@@ -335,3 +319,8 @@ exports.handler = async (
     });
   }
 };
+function simplifyName(first: string) {
+  const name = first.split(' ');
+  return name[0];
+}
+

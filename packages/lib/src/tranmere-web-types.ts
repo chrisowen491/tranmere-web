@@ -108,6 +108,7 @@ export interface Match {
   scrape_id?: string;
   id?: string;
   date: string;
+  division?: string;
   competition?: string;
   programme?: string;
   youtube?: string;
@@ -384,6 +385,13 @@ export interface LineupTeam {
   players: Players;
 }
 
+export interface FullPlayerName {
+  short: string
+  first: string
+  last: string
+}
+
+
 export interface FullName {
   fullName: string;
   shortName: string;
@@ -409,7 +417,7 @@ export interface Players {
 
 export interface Starter {
   urn: string;
-  name: FullName;
+  name: FullPlayerName;
   position: string;
   shirtNumber: number;
   formationPlace: string;
@@ -422,7 +430,7 @@ export interface Starter {
 }
 
 export interface Card {
-  type: string;
+  type: "Yellow Card" | "Red Card";
   timeLabel: TimeLabel;
 }
 
@@ -450,7 +458,7 @@ export interface SubstitutedOff {
 
 export interface SubstituteDetails {
   urn: string;
-  name: FullName;
+  name: FullPlayerName;
   position: string;
   shirtNumber: number;
   isCaptain: boolean;
@@ -525,3 +533,6 @@ export interface UasActivityData {
   environment: string;
   apiKey: string;
 }
+
+
+

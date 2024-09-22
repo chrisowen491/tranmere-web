@@ -15,7 +15,7 @@ exports.handler = async (
   return utils.sendResponse(200, 'Success');
 };
 
-async function sendEmail(event) {
+async function sendEmail(event: { name: string; email: string; desc: string; }) {
   const params = {
     Destination: {
       ToAddresses: [RECEIVER!]
@@ -41,7 +41,7 @@ async function sendEmail(event) {
     Source: SENDER!
   };
   return new Promise((resolve, reject) => {
-    ses.sendEmail(params, function (err, data) {
+    ses.sendEmail(params, function (err: Error, data: unknown) {
       if (err) {
         reject(err);
       } else {

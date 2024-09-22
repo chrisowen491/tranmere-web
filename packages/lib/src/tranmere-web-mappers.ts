@@ -2,7 +2,9 @@ export function translatePlayerName(input: string): string {
   const regex = /\s*\(s\/o\s\d+\)\s*/g;
   input = input.replace(regex, '');
   const mapping = {
-    'Rob Apter': 'Robert Apter'
+    'Rob Apter': 'Robert Apter',
+    'Christopher Merrie': 'Chris Merrie',
+    'Joshua Williams': 'Josh Williams',
   };
   return mapping[input.trim()] ? mapping[input.trim()] : input.trim();
 }

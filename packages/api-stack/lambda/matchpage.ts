@@ -3,28 +3,27 @@ import {
   TranmereWebUtils,
   ProgrammeImage
 } from '@tranmere-web/lib/src/tranmere-web-utils';
-import { Appearance, Goal } from '@tranmere-web/lib/src/tranmere-web-types';
+import { Appearance, Goal, Player } from '@tranmere-web/lib/src/tranmere-web-types';
 import { MatchView } from '@tranmere-web/lib/src/tranmere-web-view-types';
 
 const utils = new TranmereWebUtils();
 
-const playerMap = {};
+const playerMap = new Map<string, Player>();
 
 const re = /\/\d\d\d\d\//gm;
 const re3 = /\/\d\d\d\d[A-Za-z]\//gm;
-const seasonMapping = {
-  '1978': 1977,
-  '1984': 1983,
-  '1990': 1989,
-  '1992': 1991,
-  '1994': 1993,
-  '1996': 1995,
-  '1998': 1997,
-  '2001': 2000,
-  '2003': 2002,
-  '2005': 2004,
-  '2008': 2007
-};
+const seasonMapping = new Map<number, number>()
+seasonMapping.set(1978, 1977);
+seasonMapping.set(1984, 1983);
+seasonMapping.set(1990, 1989);
+seasonMapping.set(1992, 1991);
+seasonMapping.set(1994, 1993);
+seasonMapping.set(1996, 1995);
+seasonMapping.set(1998, 1997);
+seasonMapping.set(2001, 2000);
+seasonMapping.set(2003, 2002);
+seasonMapping.set(2005, 2004);
+seasonMapping.set(2008, 2007);
 
 exports.handler = async (
   event: APIGatewayEvent
@@ -32,10 +31,10 @@ exports.handler = async (
   const date = event.pathParameters!.date;
   const season = parseInt(event.pathParameters!.season!);
 
-  if (!playerMap['John Aldridge']) {
+  if (!playerMap.get('John Aldridge')) {
     const squadSearch = await utils.getAllPlayersFromDb();
     squadSearch.forEach((player) => {
-      playerMap[player.name] = player;
+      playerMap.set(player.name, player);
     });
   }
 
@@ -58,12 +57,12 @@ exports.handler = async (
 
   const noPositionList: Appearance[] = [];
   for (const app of view.apps) {
-    if (playerMap[app.Name]) {
-      app.bio = playerMap[app.Name];
+    if (playerMap.get(app.Name)) {
+      app.bio = playerMap.get(app.Name);
 
       if (app.bio && app.bio.picLink) {
         let theSeason = season;
-        if (seasonMapping[season]) theSeason = seasonMapping[season];
+        if (seasonMapping.get(season)) theSeason = seasonMapping.get(season)!;
         app.bio.picLink = app.bio.picLink.replace(re, '/' + theSeason + '/');
         app.bio.picLink = app.bio.picLink.replace(re3, '/' + theSeason + '/');
       }
@@ -111,20 +110,20 @@ exports.handler = async (
 
 function formatGoals(goals: Goal[]) {
   let output = '';
-  const scorers = {};
+  const scorers = new Map<string, number>();
   goals.forEach((goal) => {
-    if (scorers[goal.Scorer]) {
-      scorers[goal.Scorer] = scorers[goal.Scorer] + 1;
+    if (scorers.get(goal.Scorer)) {
+      scorers.set(goal.Scorer, scorers.get(goal.Scorer)! + 1);
     } else {
-      scorers[goal.Scorer] = 1;
+      scorers.set(goal.Scorer, 1);
     }
   });
 
   const keys = Object.keys(scorers);
 
   keys.forEach((key, index) => {
-    if (scorers[key] > 1) {
-      output = `${output}${key} ${scorers[key]}`;
+    if (scorers.get(key)! > 1) {
+      output = `${output}${key} ${scorers.get(key)}`;
     } else {
       output = output + key;
     }
