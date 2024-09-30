@@ -1939,9 +1939,9 @@
     uuid "^10.0.0"
 
 "@langchain/community@^0.3.0":
-  version "0.3.3"
-  resolved "https://registry.yarnpkg.com/@langchain/community/-/community-0.3.3.tgz#d5afb7bb39aa5a0118dc61d0563e1fdd1fdfdfe4"
-  integrity sha512-445g9hBeBNndNC8ruQIO/sNbHYBL3jjrPuDW+/S6e/RAXo8whJA/02CWRcSMDYX3o4+1Brrg6rFimipOuM9M9w==
+  version "0.3.4"
+  resolved "https://registry.yarnpkg.com/@langchain/community/-/community-0.3.4.tgz#6ade0816e45602bdd22376d67ce0908a94458f35"
+  integrity sha512-CLHjqxjWQnujofE40JNGsZuEruf0JCUxplbqNJoLKxbyx9JUD6kUnOpdoIuyywZWyBKwbLWZdCymlGzjokt3XQ==
   dependencies:
     "@langchain/openai" ">=0.2.0 <0.4.0"
     binary-extensions "^2.2.0"
@@ -8906,22 +8906,10 @@ kleur@^3.0.3:
     zod "^3.22.4"
     zod-to-json-schema "^3.22.3"
 
-langsmith@^0.1.56, langsmith@~0.1.56:
+langsmith@^0.1.56, langsmith@^0.1.56-rc.1, langsmith@~0.1.56:
   version "0.1.59"
   resolved "https://registry.yarnpkg.com/langsmith/-/langsmith-0.1.59.tgz#5fbf6a7e1adc10caf922f0cfa86aa3b5a0408ee7"
   integrity sha512-dW+z6s538zBswFFP2w/xzvVef7y2+yNt6GkmRCeLtwfpbMaM4di7JboK3vmnZ+0/LjNb2ukiMmgsTNKu/Y43cg==
-  dependencies:
-    "@types/uuid" "^10.0.0"
-    commander "^10.0.1"
-    p-queue "^6.6.2"
-    p-retry "4"
-    semver "^7.6.3"
-    uuid "^10.0.0"
-
-langsmith@^0.1.56-rc.1:
-  version "0.1.56-rc.1"
-  resolved "https://registry.yarnpkg.com/langsmith/-/langsmith-0.1.56-rc.1.tgz#20900ff0dee51baea359c6f16a4acc260f07fbb7"
-  integrity sha512-XsOxlhBAlTCGR9hNEL2VSREmiz8v6czNuX3CIwec9fH9T0WbNPle8Q/7Jy/h9UCbS9vuzTjfgc4qO5Dc9cu5Ig==
   dependencies:
     "@types/uuid" "^10.0.0"
     commander "^10.0.1"
