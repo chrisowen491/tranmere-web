@@ -123,17 +123,14 @@ function formatGoals(goals: Goal[]) {
     }
   });
 
-  const keys = Object.keys(scorers);
-
-  keys.forEach((key, index) => {
-    if (scorers.get(key)! > 1) {
-      output = `${output}${key} ${scorers.get(key)}`;
+  scorers.forEach((value, key) => {
+    if(value === 1) {
+      output += key + ', ';
     } else {
-      output = output + key;
-    }
-    if (index != keys.length - 1) {
-      output = `${output}, `;
+      output += key + ' (' + value + '), ';
     }
   });
+
+  output = output.slice(0, -2);
   return output;
 }

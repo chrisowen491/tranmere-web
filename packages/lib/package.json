@@ -9,13 +9,13 @@
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {   
+  "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.485.0",
     "@aws-sdk/client-ses": "^3.485.0",
     "@aws-sdk/lib-dynamodb": "^3.485.0"
   },
   "devDependencies": {
-    "prettier": "3.3.3",
-    "@types/aws-lambda": "^8.10.115"
+    "@types/aws-lambda": "^8.10.115",
+    "prettier": "3.3.3"
   }
 }
