@@ -124,7 +124,7 @@ function formatGoals(goals: Goal[]) {
   });
 
   scorers.forEach((value, key) => {
-    if(value === 1) {
+    if (value === 1) {
       output += key + ', ';
     } else {
       output += key + ' (' + value + '), ';
