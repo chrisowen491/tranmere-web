@@ -21,6 +21,7 @@ export function ResultTable(props: {
   results: Match[];
   h2hresults?: H2HResult[];
   h2htotal?: H2HTotal[];
+  fullDate?: boolean;
 }) {
   return (
     <div className="px-4 sm:px-6 lg:px-8">
@@ -175,13 +176,20 @@ export function ResultTable(props: {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 ">
-                {props.results.map((result, idx) => (
+                {props.results.map((result : any, idx) => (
                   <tr key={idx}>
                     <td className="whitespace-nowrap px-1 sm:px-3 py-4">
-                      <LinkButton
-                        text={trimDate(result.date)}
-                        href={`/match/${result.season}/${result.date}`}
-                      ></LinkButton>
+                      {props.fullDate ? (
+                        <LinkButton
+                          text={result.date}
+                          href={`/match/${result.season}/${result.date}`}
+                        ></LinkButton>
+                      ): (
+                        <LinkButton
+                          text={trimDate(result.date)}
+                          href={`/match/${result.season}/${result.date}`}
+                        ></LinkButton>
+                      )}
                     </td>
                     <td className="whitespace-nowrap px-1 sm:px-3 py-4">
                       <LinkButton

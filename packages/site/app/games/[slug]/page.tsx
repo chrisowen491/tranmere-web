@@ -118,6 +118,7 @@ export default async function GamesPage({
         h2hresults={results.h2hresults}
         h2htotal={results.h2htotal}
         season={season}
+        fullDate={true}
       />
     </>
   );

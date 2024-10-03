@@ -251,10 +251,7 @@ export default function SeasonReview(props: {
                                   )}
                                 </div>
                                 <div className="ml-4">
-                                  <LinkButton
-                                    text={manager.name}
-                                    href={`a`}
-                                  ></LinkButton>
+                                  {manager.name}
                                 </div>
                               </div>
                             </td>

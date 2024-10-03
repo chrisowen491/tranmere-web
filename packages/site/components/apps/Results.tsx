@@ -29,6 +29,7 @@ export function ResultsSearch(props: {
   competitions: Competition[];
   managers: Manager[];
   teams: Team[];
+  fullDate?: boolean;
 }) {
   const seasons = GetSeasons();
   const base = "/api/result-search/";
@@ -253,6 +254,7 @@ export function ResultsSearch(props: {
         results={results}
         h2hresults={h2hresults}
         h2htotal={h2htotal}
+        fullDate={props.fullDate}
       ></ResultTable>
     </div>
   );
