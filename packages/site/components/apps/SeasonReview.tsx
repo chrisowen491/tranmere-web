@@ -250,9 +250,7 @@ export default function SeasonReview(props: {
                                     />
                                   )}
                                 </div>
-                                <div className="ml-4">
-                                  {manager.name}
-                                </div>
+                                <div className="ml-4">{manager.name}</div>
                               </div>
                             </td>
                             <td className="whitespace-nowrap px-1 md:px-3 py-4 text-center">

@@ -176,7 +176,7 @@ export function ResultTable(props: {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 ">
-                {props.results.map((result : any, idx) => (
+                {props.results.map((result: any, idx) => (
                   <tr key={idx}>
                     <td className="whitespace-nowrap px-1 sm:px-3 py-4">
                       {props.fullDate ? (
@@ -184,7 +184,7 @@ export function ResultTable(props: {
                           text={result.date}
                           href={`/match/${result.season}/${result.date}`}
                         ></LinkButton>
-                      ): (
+                      ) : (
                         <LinkButton
                           text={trimDate(result.date)}
                           href={`/match/${result.season}/${result.date}`}
