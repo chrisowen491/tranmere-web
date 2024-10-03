@@ -7,7 +7,7 @@ export function translatePlayerName(input: string): string {
     'Joshua Williams': 'Josh Williams',
     'Thomas Davies': 'Tom Davies',
     'Joshua Davison': 'Josh Davison',
-    'Bradley Walker': 'Brad Walker'
+    'Bradley Walker': 'Brad Walker',
     'Joseph Murphy': 'Joe Murphy'
   };
   return mapping[input.trim()] ? mapping[input.trim()] : input.trim();
