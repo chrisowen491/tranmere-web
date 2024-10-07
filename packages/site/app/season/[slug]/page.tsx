@@ -1,8 +1,5 @@
-import { ResultsSearch } from "@/components/apps/Results";
 import { Title } from "@/components/fragments/Title";
 import {
-  GetAllTeams,
-  GetAllCupCompetitions,
   GetAllTranmereManagers,
   GetBaseUrl,
 } from "@/lib/apiFunctions";

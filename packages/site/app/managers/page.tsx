@@ -2,6 +2,7 @@ export const runtime = "edge";
 import { Title } from "@/components/fragments/Title";
 import { buildImagePath, GetAllTranmereManagers } from "@/lib/apiFunctions";
 import { Metadata } from "next";
+import { UserIcon } from "@heroicons/react/20/solid";
 
 export const metadata: Metadata = {
   title: "Tranmere Rovers Managerial Records",
@@ -26,12 +27,14 @@ export default async function ManagerRecords() {
           >
             {managers.map((manager, idx) => (
               <li key={idx}>
-                {manager.programmePath && (
+                {manager.programmePath ? (
                   <img
                     alt={manager.name}
                     src={buildImagePath(manager.programmePath!, 200, 200)}
                     className="mx-auto h-200 w-200 rounded-full"
                   />
+                ) : (
+                  <UserIcon aria-hidden="true" className="mx-auto h-200 w-200 rounded-full text-indigo-600 dark:text-indigo-50" />
                 )}
                 <h3 className="mt-6 text-base font-semibold leading-7 tracking-tight text-gray-900 dark:text-gray-50">
                   {manager.name}
