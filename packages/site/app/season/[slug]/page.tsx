@@ -1,8 +1,5 @@
 import { Title } from "@/components/fragments/Title";
-import {
-  GetAllTranmereManagers,
-  GetBaseUrl,
-} from "@/lib/apiFunctions";
+import { GetAllTranmereManagers, GetBaseUrl } from "@/lib/apiFunctions";
 import {
   H2HResult,
   H2HTotal,

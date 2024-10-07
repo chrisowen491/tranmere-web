@@ -34,7 +34,10 @@ export default async function ManagerRecords() {
                     className="mx-auto h-200 w-200 rounded-full"
                   />
                 ) : (
-                  <UserIcon aria-hidden="true" className="mx-auto h-200 w-200 rounded-full text-indigo-600 dark:text-indigo-50" />
+                  <UserIcon
+                    aria-hidden="true"
+                    className="mx-auto h-200 w-200 rounded-full text-indigo-600 dark:text-indigo-50"
+                  />
                 )}
                 <h3 className="mt-6 text-base font-semibold leading-7 tracking-tight text-gray-900 dark:text-gray-50">
                   {manager.name}
