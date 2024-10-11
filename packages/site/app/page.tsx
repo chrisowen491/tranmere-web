@@ -74,18 +74,34 @@ export default async function Home() {
     <>
       <Hero />
       <div className="relative mx-auto flex w-full max-w-8xl flex-auto justify-center sm:px-2 lg:px-8 xl:px-12">
-        <div className="hidden lg:relative lg:block lg:flex-none">
-          <div className="absolute inset-y-0 right-0 w-[50vw] bg-slate-50 dark:hidden" />
-          <div className="absolute bottom-0 right-0 top-16 hidden h-12 w-px bg-gradient-to-t from-slate-800 dark:block" />
-          <div className="absolute bottom-0 right-0 top-28 hidden w-px bg-slate-800 dark:block" />
-          <div className="sticky top-[4.75rem] -ml-0.5 h-[calc(100vh-4.75rem)] w-64 overflow-y-auto overflow-x-hidden py-16 pl-0.5 pr-8 xl:w-72 xl:pr-16">
-            <LastMatch></LastMatch>
-            <Navigation />
-          </div>
-        </div>
-
         <div className="w-full">
-          <div className="pt-24">
+          <div className="py-4">
+            <div className="mx-auto max-w-2xl px-6 lg:max-w-7xl lg:px-8">
+              <h2 className="text-base/7 font-semibold text-indigo-600 dark:text-indigo-50">
+                What's New
+              </h2>
+              <p className="mt-2 max-w-lg text-pretty text-4xl font-medium tracking-tight text-indigo-900 dark:text-indigo-50 sm:text-5xl">
+                Latest Updates
+              </p>
+              <div className="mt-10 grid grid-cols-1 gap-4 sm:mt-16 lg:grid-cols-6">
+                <div className="relative lg:col-span-3">
+                  <div className="absolute inset-px rounded-lg max-lg:rounded-t-[2rem] lg:rounded-tl-[2rem]" />
+                  <div className="relative flex h-full flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] max-lg:rounded-t-[calc(2rem+1px)] lg:rounded-tl-[calc(2rem+1px)]">
+                    <PlayerOfTheDay randomplayer={profile} />
+                  </div>
+                  <div className="pointer-events-none absolute inset-px rounded-lg shadow ring-1 ring-black/5 max-lg:rounded-t-[2rem] lg:rounded-tl-[2rem]" />
+                </div>
+                <div className="relative lg:col-span-3">
+                  <div className="absolute inset-px rounded-lg lg:rounded-tr-[2rem]" />
+                  <div className="relative flex h-full flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] lg:rounded-tr-[calc(2rem+1px)]">
+                    <LastMatch></LastMatch>
+                  </div>
+                  <div className="pointer-events-none absolute inset-px rounded-lg shadow ring-1 ring-black/5 lg:rounded-tr-[2rem]" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="pt-8">
             <div className="mx-auto max-w-7xl px-6 lg:px-8">
               <div className="mx-auto max-w-2xl lg:max-w-none">
                 <div className="text-center">
@@ -115,7 +131,6 @@ export default async function Home() {
               </div>
             </div>
           </div>
-          <PlayerOfTheDay randomplayer={profile} />
           <FAQs text="Frequently Asked Questions" faqs={faqs}></FAQs>
         </div>
       </div>

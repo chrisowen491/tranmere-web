@@ -10,8 +10,7 @@ import type { Comment } from "@/lib/comments";
 import { Reviews } from "@/components/comments/Reviews";
 import { LinkButton } from "@/components/forms/LinkButton";
 import { BreadcrumbLinks } from "@/components/fragments/BreadcrumbLinks";
-import { PencilSquareIcon } from "@heroicons/react/24/outline";
-import { ArrowPathIcon } from "@heroicons/react/24/outline";
+import { PencilSquareIcon, ArrowPathIcon } from "@heroicons/react/24/outline";
 
 export default function MatchReport(props: {
   match: MatchPageData;

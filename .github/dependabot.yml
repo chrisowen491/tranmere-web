@@ -9,24 +9,14 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "weekly"
+    versioning-strategy: increase  
+    groups:
+        node-deps:
+          patterns:
+            - "*"
     ignore:
       - dependency-name: "esbuild"          
-  - package-ecosystem: "npm" # See documentation for possible values
-    directory: "/packages/api-stack" # Location of package manifests
-    schedule:
-      interval: "weekly" 
-  - package-ecosystem: "npm" # See documentation for possible values
-    directory: "/packages/api-tests" # Location of package manifests
-    schedule:
-      interval: "weekly" 
-  - package-ecosystem: "npm" # See documentation for possible values
-    directory: "/packages/site" # Location of package manifests
-    schedule:
-      interval: "weekly"
-  - package-ecosystem: "npm" # See documentation for possible values
-    directory: "/packages/lib" # Location of package manifests
-    schedule:
-      interval: "weekly"                                  
+                                           
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
