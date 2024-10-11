@@ -1,60 +1,40 @@
-"use client";
-
-import Image from "next/image";
-import { useEffect, useState } from "react";
-
-import Description from "./Description";
 import { GalleryImage } from "@/lib/types";
 
 const Slider = (props: { images: GalleryImage[]; title: string }) => {
-  const [activeImage, setActiveImage] = useState(0);
   const images = props.images;
 
-  const clickNext = () => {
-    activeImage === images.length - 1
-      ? setActiveImage(0)
-      : setActiveImage(activeImage + 1);
-  };
-  const clickPrev = () => {
-    activeImage === 0
-      ? setActiveImage(images.length - 1)
-      : setActiveImage(activeImage - 1);
-  };
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      clickNext();
-    }, 5000);
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [activeImage]);
   return (
-    <div className="grid place-items-center md:grid-cols-2 grid-cols-1 w-full mx-auto max-w-5xl">
-      <Description
-        activeImage={activeImage}
-        clickNext={clickNext}
-        clickPrev={clickPrev}
-        images={images}
-        title={props.title}
-      />
-      <div
-        className={`w-full flex justify-center items-center gap-4 transition-transform ease-in-out duration-500 md:rounded-2xl p-6 md:p-0 mb-20`}
-      >
-        {images.map((elem, idx) => (
-          <div
-            key={idx}
-            className={`${
-              idx === activeImage
-                ? "block w-1/2 h-[80vh] object-cover transition-all duration-500 ease-in-out"
-                : "hidden"
-            }`}
-          >
-            <Image src={elem.url} alt="" width={400} height={400} />
-          </div>
-        ))}
+    <>
+    <div>
+      <div className="mx-auto max-w-2xl px-4 py-2 sm:px-6 sm:py-2 lg:max-w-7xl lg:px-8">
+
+        <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+          {images.map((elem, idx) => (
+            <div key={idx} className="group relative">
+              <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-indigo-200 dark:bg-black lg:aspect-none group-hover:opacity-75 lg:h-80">
+                <img
+                  alt={elem.description}
+                  src={elem.url}
+                  className="h-full w-full object-cover object-center lg:h-full lg:w-full"
+                />
+              </div>
+              <div className="mt-4 flex justify-between">
+                <div>
+                  <h3 className="text-sm text-gray-700 dark:text-indigo-50">
+                    <a href={elem.url}>
+                      <span aria-hidden="true" className="absolute inset-0" />
+                      {elem.title}
+                    </a>
+                  </h3>
+                  <p className="mt-1 text-sm text-gray-500 dark:text-indigo-50">{elem.description}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
+  </>
   );
 };
 
