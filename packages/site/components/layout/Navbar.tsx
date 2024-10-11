@@ -17,7 +17,7 @@ const navigation = [
   { name: "Results", href: "/results", current: false },
   { name: "Seasons", href: "/season/2024", current: false },
   { name: "Players", href: "/playersearch", current: false },
-  { name: "Gallery", href: "/page/tag/Media", current: false },
+  { name: "Gallery", href: "/page/tag/Gallery", current: false },
   { name: "Blogs & Articles", href: "/blog", current: false },
 ];
 
