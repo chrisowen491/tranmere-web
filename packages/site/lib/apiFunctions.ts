@@ -152,10 +152,9 @@ export async function GetAllPlayers(): Promise<Player[]> {
   return results;
 }
 
-
-export async function GetOnThisDay(): Promise<Match|null> { 
+export async function GetOnThisDay(): Promise<Match | null> {
   const dateobj = new Date();
-  const day = dateobj.toISOString().slice(0, 10).substr(5);      
+  const day = dateobj.toISOString().slice(0, 10).substr(5);
   const query = encodeURIComponent(
     `{getTranmereWebOnThisDayById(day: "${day}"){opposition programme hgoal vgoal season date}}`,
   );
@@ -169,8 +168,8 @@ export async function GetOnThisDay(): Promise<Match|null> {
     data: { getTranmereWebOnThisDayById: Match };
   };
 
-  if(onThisDay.data.getTranmereWebOnThisDayById === null) return null;
-  
+  if (onThisDay.data.getTranmereWebOnThisDayById === null) return null;
+
   return onThisDay.data.getTranmereWebOnThisDayById;
 }
 
