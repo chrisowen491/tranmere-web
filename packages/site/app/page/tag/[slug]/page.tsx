@@ -1,6 +1,4 @@
 import { getAllArticlesForTag } from "@/lib/api";
-import { ToTitleCase } from "@/lib/apiFunctions";
-import { Navigation } from "@/components/layout/Navigation";
 
 export const runtime = "edge";
 

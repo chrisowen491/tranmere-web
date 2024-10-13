@@ -1,12 +1,19 @@
 import { FAQs } from "@/components/fragments/FAQ";
 import { Hero } from "@/components/fragments/Hero";
-import { Navigation } from "@/components/layout/Navigation";
 import { Metadata } from "next";
 import { GetAllPlayers, GetBaseUrl } from "@/lib/apiFunctions";
 import { getRequestContext } from "@cloudflare/next-on-pages";
 import { PlayerProfile } from "@/lib/types";
 import { PlayerOfTheDay } from "@/components/fragments/PlayerOfTheDay";
 import { LastMatch } from "@/components/fragments/LastMatch";
+import {
+  BanknotesIcon,
+  BriefcaseIcon,
+  ChartBarIcon,
+  StarIcon,
+  TrophyIcon,
+  UserGroupIcon,
+} from "@heroicons/react/24/outline";
 
 export const runtime = "edge";
 
@@ -53,6 +60,57 @@ export default async function Home() {
     },
   ];
 
+  const actions = [
+    {
+      title: "Transfers",
+      href: "/transfer-central",
+      icon: BanknotesIcon,
+      iconForeground: "text-teal-700",
+      iconBackground: "bg-teal-50",
+      text: "Transfers in and out of Tranmere Rovers since 1977",
+    },
+    {
+      title: "Manager Records",
+      href: "/managers",
+      icon: BriefcaseIcon,
+      iconForeground: "text-purple-700",
+      iconBackground: "bg-purple-50",
+      text: "Complete list of Tranmere Rvers managers since 1920",
+    },
+    {
+      title: "Top Attendances",
+      href: "/games/top-attendances",
+      icon: UserGroupIcon,
+      iconForeground: "text-sky-700",
+      iconBackground: "bg-sky-50",
+      text: "Attendance records at home and way from Prenton Park",
+    },
+    {
+      title: "Top Scorers By Season",
+      href: "/top-scorers-by-season",
+      icon: ChartBarIcon,
+      iconForeground: "text-yellow-700",
+      iconBackground: "bg-yellow-50",
+      text: "Which Tranmere player scored the most goals in each season",
+    },
+    {
+      title: "Penalty Shootouts",
+      href: "/games/penalty-shootouts",
+      icon: StarIcon,
+      iconForeground: "text-rose-700",
+      iconBackground: "bg-rose-50",
+      text: "Each penalty shootout Tranmere have been involved in",
+    },
+    {
+      title: "Wembley Games",
+      href: "/games/at-wembley",
+      icon: TrophyIcon,
+      iconForeground: "text-indigo-700",
+      iconBackground: "bg-indigo-50",
+      text: "Tranmere's record at Wembley Stadium",
+    },
+  ];
+
   const stats = [
     { id: 1, name: "Results Data", value: "5000+" },
     { id: 2, name: "Programme Scans", value: "2000+" },
@@ -70,6 +128,10 @@ export default async function Home() {
 
   const profile = (await playerRequest.json()) as PlayerProfile;
 
+  function classNames(...classes: string[]) {
+    return classes.filter(Boolean).join(" ");
+  }
+
   return (
     <>
       <Hero />
@@ -80,9 +142,6 @@ export default async function Home() {
               <h2 className="text-base/7 font-semibold text-indigo-600 dark:text-indigo-50">
                 What's New
               </h2>
-              <p className="mt-2 max-w-lg text-pretty text-4xl font-medium tracking-tight text-indigo-900 dark:text-indigo-50 sm:text-5xl">
-                Latest Updates
-              </p>
               <div className="mt-10 grid grid-cols-1 gap-4 sm:mt-16 lg:grid-cols-6">
                 <div className="relative lg:col-span-3">
                   <div className="absolute inset-px rounded-lg max-lg:rounded-t-[2rem] lg:rounded-tl-[2rem]" />
@@ -100,6 +159,60 @@ export default async function Home() {
                 </div>
               </div>
             </div>
+          </div>
+          <div className="divide-y divide-gray-200 overflow-hidden rounded-lg bg-gray-200 shadow sm:grid lg:grid-cols-2 sm:gap-px sm:divide-y-0 mx-8">
+            {actions.map((action, actionIdx) => (
+              <div
+                key={action.title}
+                className={classNames(
+                  actionIdx === 0
+                    ? "rounded-tl-lg rounded-tr-lg sm:rounded-tr-none"
+                    : "",
+                  actionIdx === 1 ? "sm:rounded-tr-lg" : "",
+                  actionIdx === actions.length - 2 ? "sm:rounded-bl-lg" : "",
+                  actionIdx === actions.length - 1
+                    ? "rounded-bl-lg rounded-br-lg sm:rounded-bl-none"
+                    : "",
+                  "group relative bg-white dark:bg-gray-950 p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500",
+                )}
+              >
+                <div>
+                  <span
+                    className={classNames(
+                      action.iconBackground,
+                      action.iconForeground,
+                      "inline-flex rounded-lg p-3 ring-4 ring-white",
+                    )}
+                  >
+                    <action.icon aria-hidden="true" className="h-6 w-6" />
+                  </span>
+                </div>
+                <div className="mt-8">
+                  <h3 className="text-base font-semibold leading-6 text-gray-900 dark:text-white">
+                    <a href={action.href} className="focus:outline-none">
+                      {/* Extend touch target to entire panel */}
+                      <span aria-hidden="true" className="absolute inset-0" />
+                      {action.title}
+                    </a>
+                  </h3>
+                  <p className="mt-2 text-sm text-gray-500 dark:text-white">
+                    {action.text}
+                  </p>
+                </div>
+                <span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute right-6 top-6 text-gray-300 group-hover:text-gray-400"
+                >
+                  <svg
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                    className="h-6 w-6"
+                  >
+                    <path d="M20 4h1a1 1 0 00-1-1v1zm-1 12a1 1 0 102 0h-2zM8 3a1 1 0 000 2V3zM3.293 19.293a1 1 0 101.414 1.414l-1.414-1.414zM19 4v12h2V4h-2zm1-1H8v2h12V3zm-.707.293l-16 16 1.414 1.414 16-16-1.414-1.414z" />
+                  </svg>
+                </span>
+              </div>
+            ))}
           </div>
           <div className="pt-8">
             <div className="mx-auto max-w-7xl px-6 lg:px-8">

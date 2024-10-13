@@ -1,8 +1,5 @@
 import { getAllArticles } from "@/lib/api";
 import { Metadata } from "next";
-import { Navigation } from "@/components/layout/Navigation";
-import { LastMatch } from "@/components/fragments/LastMatch";
-
 export const runtime = "edge";
 
 export var metadata: Metadata = {

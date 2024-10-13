@@ -10,7 +10,7 @@ export function Hero() {
               <p className="mt-3 text-2xl tracking-tight text-blue-50">
                 Welcome To Tranmere Web!
               </p>
-              <p className="mt-3 text-2xl tracking-tight text-blue-50">
+              <p className="mt-3 text-xl sm:mr-32 tracking-tight text-blue-50">
                 The website full of data, statistics and information about
                 Tranmere Rovers FC
               </p>

@@ -5,7 +5,6 @@ import { documentToReactComponents } from "@contentful/rich-text-react-renderer"
 import { notFound } from "next/navigation";
 import { Kit } from "@/components/blogs/Kit";
 import { Star } from "@/components/blogs/Star";
-import { Navigation } from "@/components/layout/Navigation";
 import { Title } from "@/components/fragments/Title";
 import { BLOCKS, MARKS } from "@contentful/rich-text-types";
 import { getRequestContext } from "@cloudflare/next-on-pages";
@@ -14,7 +13,6 @@ import { Reviews } from "@/components/comments/Reviews";
 import CommentPanel from "@/components/comments/CommentPanel";
 import { LineGraph } from "@/components/charts/LineGraph";
 import Slider from "@/components/carousel/Slider";
-import { LastMatch } from "@/components/fragments/LastMatch";
 
 export async function generateMetadata({
   params,
