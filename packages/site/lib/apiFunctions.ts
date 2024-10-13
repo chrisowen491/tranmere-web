@@ -152,6 +152,28 @@ export async function GetAllPlayers(): Promise<Player[]> {
   return results;
 }
 
+
+export async function GetOnThisDay(): Promise<Match|null> { 
+  const dateobj = new Date();
+  const day = dateobj.toISOString().slice(0, 10).substr(5);      
+  const query = encodeURIComponent(
+    `{getTranmereWebOnThisDayById(day: "${day}"){opposition programme hgoal vgoal season date}}`,
+  );
+
+  const response = await fetch(
+    `${APP_SYNC_URL}/graphql?query=${query}`,
+    APP_SYNC_OPTIONS,
+  );
+
+  const onThisDay = (await response.json()) as {
+    data: { getTranmereWebOnThisDayById: Match };
+  };
+
+  if(onThisDay.data.getTranmereWebOnThisDayById === null) return null;
+  
+  return onThisDay.data.getTranmereWebOnThisDayById;
+}
+
 export async function GetAllCupCompetitions(): Promise<Competition[]> {
   const query = encodeURIComponent(
     "{listTranmereWebCompetitions(limit:500){items{name}}}",

@@ -22,9 +22,9 @@ export async function LastMatch() {
         />
       )}
 
-      <div className="p-10 pt-4">
+      <div className="p-10 pt-4 mx-auto">
         <h3 className="text-sm/4 font-semibold text-indigo-600 dark:text-indigo-50">
-          Last Match:
+          Last Match
         </h3>
         <p className="mt-2 text-lg/7 font-medium tracking-tight text-gray-950 dark:text-indigo-50">
           {match.opposition} ({match.ft})

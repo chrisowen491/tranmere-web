@@ -16,7 +16,7 @@ export function PlayerOfTheDay(props: { randomplayer: PlayerProfile }) {
         src={randomplayer.player.picLink}
         className="h-80 w-80 object-cover object-left mx-auto"
       />
-      <div className="p-10 pt-4">
+      <div className="p-10 pt-4 mx-auto">
         <h3 className="text-sm/4 font-semibold text-indigo-600 dark:text-indigo-50">
           Random Player of the Day
         </h3>

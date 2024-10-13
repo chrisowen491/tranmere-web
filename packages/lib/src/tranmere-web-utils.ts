@@ -70,6 +70,14 @@ export class TranmereWebUtils {
     }
   }
 
+  getSeasons(): number[] {
+    const seasons: number[] = [];
+    for (let i = this.getYear(); i > 1920; i--) {
+      seasons.push(i);
+    }
+    return seasons;
+  }
+
   sendResponse(code: number, obj: any): APIGatewayProxyResult {
     return {
       isBase64Encoded: false,

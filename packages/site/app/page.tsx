@@ -14,6 +14,7 @@ import {
   TrophyIcon,
   UserGroupIcon,
 } from "@heroicons/react/24/outline";
+import { OnThisDay } from "@/components/fragments/OnThisDay";
 
 export const runtime = "edge";
 
@@ -143,17 +144,24 @@ export default async function Home() {
                 What's New
               </h2>
               <div className="mt-10 grid grid-cols-1 gap-4 sm:mt-16 lg:grid-cols-6">
-                <div className="relative lg:col-span-3">
+                <div className="relative lg:col-span-2">
                   <div className="absolute inset-px rounded-lg max-lg:rounded-t-[2rem] lg:rounded-tl-[2rem]" />
                   <div className="relative flex h-full flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] max-lg:rounded-t-[calc(2rem+1px)] lg:rounded-tl-[calc(2rem+1px)]">
                     <PlayerOfTheDay randomplayer={profile} />
                   </div>
                   <div className="pointer-events-none absolute inset-px rounded-lg shadow ring-1 ring-black/5 max-lg:rounded-t-[2rem] lg:rounded-tl-[2rem]" />
                 </div>
-                <div className="relative lg:col-span-3">
+                <div className="relative lg:col-span-2">
                   <div className="absolute inset-px rounded-lg lg:rounded-tr-[2rem]" />
                   <div className="relative flex h-full flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] lg:rounded-tr-[calc(2rem+1px)]">
                     <LastMatch></LastMatch>
+                  </div>
+                  <div className="pointer-events-none absolute inset-px rounded-lg shadow ring-1 ring-black/5 lg:rounded-tr-[2rem]" />
+                </div>
+                <div className="relative lg:col-span-2">
+                  <div className="absolute inset-px rounded-lg lg:rounded-tr-[2rem]" />
+                  <div className="relative flex h-full flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] lg:rounded-tr-[calc(2rem+1px)]">
+                    <OnThisDay></OnThisDay>
                   </div>
                   <div className="pointer-events-none absolute inset-px rounded-lg shadow ring-1 ring-black/5 lg:rounded-tr-[2rem]" />
                 </div>
