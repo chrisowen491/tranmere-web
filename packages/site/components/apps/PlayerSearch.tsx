@@ -6,7 +6,7 @@ import { FilterBox } from "@/components/forms/FilterBox";
 import { SubmitButton } from "@/components/forms/SubmitButton";
 import { LinkButton } from "@/components/forms/LinkButton";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
-import { PhotoIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 import { UserIcon } from "@heroicons/react/20/solid";
 
 export function PlayerSearch(props: {
@@ -296,7 +296,7 @@ export function PlayerSearch(props: {
                         </div>
                       </td>
                       <td className="whitespace-nowrap px-1 md:px-3 py-4 text-center">
-                        {player.starts}
+                        {player.starts} ({player.subs})
                       </td>
                       <td className="whitespace-nowrap px-1 md:px-3 py-4 text-center">
                         {player.goals}

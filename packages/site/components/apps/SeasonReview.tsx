@@ -367,7 +367,7 @@ export default function SeasonReview(props: {
                           </div>
                         </td>
                         <td className="whitespace-nowrap px-1 md:px-3 py-4 text-center">
-                          {player.starts}
+                          {player.starts} ({player.subs})
                         </td>
                         <td className="whitespace-nowrap px-1 md:px-3 py-4 text-center">
                           {player.goals}

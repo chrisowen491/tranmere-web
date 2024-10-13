@@ -1,7 +1,7 @@
 "use client";
 
 import { Fragment } from "react";
-import { Blog, BlogItem, PlayerProfile } from "@/lib/types";
+import { BlogItem, PlayerProfile } from "@/lib/types";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import { Document } from "@contentful/rich-text-types";
 import type { Comment } from "@/lib/comments";
@@ -147,6 +147,34 @@ export default function PlayerProfileView(props: {
               ) : (
                 ""
               )}
+
+              <div className="mt-8 border-t border-gray-200 pt-8">
+                <h2 className="text-sm font-medium text-gray-900 dark:text-gray-50">
+                  Links
+                </h2>
+                <dl>
+                  <dd className="prose prose-sm mt-2 max-w-none text-gray-500">
+                    <p>
+                      <LinkButton
+                        text="Transfermarkt"
+                        href={`https://www.transfermarkt.co.uk/schnellsuche/ergebnis/schnellsuche?query=${player.player.name}`}
+                      ></LinkButton>
+                    </p>
+                  </dd>
+                  {player.links.map((link, idx) => (
+                    <Fragment key={idx}>
+                      <dd className="prose prose-sm mt-2 max-w-none text-gray-500">
+                        <p>
+                          <LinkButton
+                            text={link.description}
+                            href={link.link}
+                          ></LinkButton>
+                        </p>
+                      </dd>
+                    </Fragment>
+                  ))}
+                </dl>
+              </div>
             </div>
 
             <div className="mx-auto mt-16 w-full max-w-2xl lg:col-span-4 lg:mt-0 lg:max-w-none">
@@ -158,9 +186,6 @@ export default function PlayerProfileView(props: {
                     </Tab>
                     <Tab className="whitespace-nowrap border-b-2 border-transparent py-6 text-sm font-medium hover:border-gray-300 hover:text-gray-800 data-[selected]:border-indigo-600 data-[selected]:text-indigo-600">
                       Transfers
-                    </Tab>
-                    <Tab className="whitespace-nowrap border-b-2 border-transparent py-6 text-sm font-medium hover:border-gray-300 hover:text-gray-800 data-[selected]:border-indigo-600 data-[selected]:text-indigo-600">
-                      Links
                     </Tab>
                     <Tab className="whitespace-nowrap border-b-2 border-transparent py-6 text-sm font-medium hover:border-gray-300 hover:text-gray-800 data-[selected]:border-indigo-600 data-[selected]:text-indigo-600">
                       Apps
@@ -183,25 +208,6 @@ export default function PlayerProfileView(props: {
                       records={player.transfers}
                       title="Transfers"
                     ></PlayerTransfersTable>
-                  </TabPanel>
-
-                  <TabPanel className="text-sm text-gray-500">
-                    <h3 className="sr-only">Links</h3>
-
-                    <dl>
-                      {player.links.map((link, idx) => (
-                        <Fragment key={idx}>
-                          <dd className="prose prose-sm mt-2 max-w-none text-gray-500">
-                            <p>
-                              <LinkButton
-                                text={link.description}
-                                href={link.link}
-                              ></LinkButton>
-                            </p>
-                          </dd>
-                        </Fragment>
-                      ))}
-                    </dl>
                   </TabPanel>
 
                   <TabPanel className="">

@@ -1,5 +1,6 @@
 import { GetLastMatch } from "@/lib/apiFunctions";
 import { PlayIcon } from "@heroicons/react/20/solid";
+import { LinkButton } from "@/components//forms/LinkButton";
 export async function LastMatch() {
   const match = await GetLastMatch();
   if (!match) {
@@ -29,12 +30,10 @@ export async function LastMatch() {
           {match.opposition} ({match.ft})
         </p>
         <p className="mt-2 max-w-lg text-sm/6 text-gray-600 dark:text-indigo-50">
-          <a
+          <LinkButton
+            text="View Match Report"
             href={`/match/${match.season}/${match.date}`}
-            className="text-base font-semibold text-indigo-600 dark:text-indigo-400 hover:underline"
-          >
-            View Match Report
-          </a>
+          ></LinkButton>
         </p>
       </div>
     </>

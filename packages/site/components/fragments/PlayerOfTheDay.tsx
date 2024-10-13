@@ -1,4 +1,5 @@
 import { PlayerProfile } from "@/lib/types";
+import { LinkButton } from "@/components//forms/LinkButton";
 
 export function PlayerOfTheDay(props: { randomplayer: PlayerProfile }) {
   const { randomplayer = props.randomplayer } = props;
@@ -28,12 +29,10 @@ export function PlayerOfTheDay(props: { randomplayer: PlayerProfile }) {
           <br />
           {randomplayer.appearances.length} apps, {goals} goals
           <br />
-          <a
+          <LinkButton
+            text="View Player Profile"
             href={`/page/player/${randomplayer.player.name}`}
-            className="text-base font-semibold text-indigo-600 dark:text-indigo-400 hover:underline"
-          >
-            View Player Profile
-          </a>
+          ></LinkButton>
         </p>
       </div>
     </>

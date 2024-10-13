@@ -55,7 +55,7 @@ export function PlayerStatsTable(props: {
                       ></LinkButton>
                     </td>
                     <td className="whitespace-nowrap px-3 py-4">
-                      {record.starts}
+                      {record.starts} ({record.subs})
                     </td>
                     <td className="whitespace-nowrap px-3 py-4">
                       {record.goals}
