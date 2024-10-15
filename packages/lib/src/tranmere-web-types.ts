@@ -239,6 +239,7 @@ export interface PlayerSeasonSummary {
   freekicks: number;
   bio?: Player;
   picLink?: any;
+  goalsPerGame?: number;
 }
 
 export interface FixtureSet {

@@ -49,7 +49,7 @@ export default async function PlayerSearchPage() {
             href="/top-scorers-by-season"
             text="top scorers by season"
           />{" "}
-          or players with <LinkButton href="/hat-tricks" text="hat tricks" />.
+          or players with <LinkButton href="/hat-tricks" text="hat tricks" /> and <LinkButton href="/top-scorers-per-game" text="Top goals per game"></LinkButton>.
         </p>
       </Title>
       <PlayerSearch default={playerResults.players} season="2023" />
