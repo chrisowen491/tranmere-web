@@ -12,25 +12,20 @@ export const metadata: Metadata = {
 
 export default async function HatTricks() {
   const base = GetBaseUrl(getRequestContext().env) + "/player-search/";
-  
-  const latestSeasonRequest = await fetch(
-    base +
-      `?season=&sort=Goals&filter=`,
-  );
+
+  const latestSeasonRequest = await fetch(base + `?season=&sort=Goals&filter=`);
   const playerResults = (await latestSeasonRequest.json()) as {
     players: PlayerSeasonSummary[];
   };
 
-
-
   const players = playerResults.players.filter((p) => p.Apps > 20);
   players.forEach((p) => {
-    p.goalsPerGame = Math.round((p.goals / p.Apps)*100) / 100;
-   });
+    p.goalsPerGame = Math.round((p.goals / p.Apps) * 100) / 100;
+  });
 
-  players.sort((a, b) => { 
+  players.sort((a, b) => {
     return b.goalsPerGame! - a.goalsPerGame!;
-   });
+  });
 
   return (
     <>
