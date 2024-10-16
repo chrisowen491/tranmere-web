@@ -1,10 +1,8 @@
 # *
 User-agent: *
 Allow: /
-Disallow: /*?*
 Disallow: /404
 Disallow: /error
-Disallow: /edit*
 Disallow: /match/192*
 Disallow: /match/193*
 Disallow: /match/194*
