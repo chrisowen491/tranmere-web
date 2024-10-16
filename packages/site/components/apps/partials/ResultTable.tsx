@@ -140,7 +140,7 @@ export function ResultTable(props: {
             ) : (
               ""
             )}
-            <h2 className="mt-2 text-2xl font-bold tracking-tight sm:text-2xl sm:text-2xl px-1 md:px-0">
+            <h2 className="mt-2 text-2xl font-bold tracking-tight sm:text-2xl px-1 md:px-0">
               {props.title}
             </h2>
             <table className="min-w-full divide-y text-left">

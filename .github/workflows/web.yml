@@ -7,17 +7,19 @@ on:
       - 'packages/site/**'
       - '.github/workflows/web.yml'
 
+permissions: read-all
+
 jobs:
   publish_site:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      deployments: write
+      deployments: read
     name: Publish to Cloudflare Pages
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/setup-node@v0a44ba7841725637a19e28fa30b79a866c81b0a6 # v4.0.4
         with:
           node-version: '20'
       # Run a build step here if your project requires

@@ -185,33 +185,30 @@ async function getResults(
   };
 
   if (season) {
-    (params.KeyConditionExpression = 'season = :season'),
-      (params.ExpressionAttributeValues![':season'] =
-        decodeURIComponent(season));
+    params.KeyConditionExpression = 'season = :season'
+    params.ExpressionAttributeValues![':season'] = decodeURIComponent(season);
     query = true;
   } else if (opposition) {
     params.IndexName = 'OppositionIndex';
-    (params.KeyConditionExpression = 'opposition = :opposition'),
-      (params.ExpressionAttributeValues![':opposition'] =
-        decodeURIComponent(opposition));
+    params.KeyConditionExpression = 'opposition = :opposition';
+    params.ExpressionAttributeValues![':opposition'] = decodeURIComponent(opposition);
     query = true;
   } else if (competition) {
     params.IndexName = 'CompetitionIndex';
-    (params.KeyConditionExpression = 'competition = :competition'),
-      (params.ExpressionAttributeValues![':competition'] =
-        decodeURIComponent(competition));
+    params.KeyConditionExpression = 'competition = :competition';
+    params.ExpressionAttributeValues![':competition'] = decodeURIComponent(competition);
     query = true;
   } else if (venue && decodeURIComponent(sort) != 'Top Attendance') {
     params.IndexName = 'VenueIndex';
-    (params.KeyConditionExpression = 'venue = :venue'),
-      (params.ExpressionAttributeValues![':venue'] = decodeURIComponent(venue));
+    params.KeyConditionExpression = 'venue = :venue';
+    params.ExpressionAttributeValues![':venue'] = decodeURIComponent(venue);
     query = true;
   } else if (sort && decodeURIComponent(sort) == 'Top Attendance') {
     params.IndexName = 'AttendanceIndex';
-    (params.KeyConditionExpression = '#static = :static'),
-      (params.ExpressionAttributeNames = {
-        '#static': 'static'
-      });
+    params.KeyConditionExpression = '#static = :static';
+    params.ExpressionAttributeNames = {
+      '#static': 'static'
+    };
     params.ExpressionAttributeValues = {
       ':static': 'static'
     };
@@ -243,9 +240,8 @@ async function getResults(
       modifier = '<';
       params.ScanIndexForward = false;
     }
-    (params.KeyConditionExpression = `season = :season and #date ${modifier} :date`),
-      (params.ExpressionAttributeValues![':season'] =
-        decodeURIComponent(season));
+    params.KeyConditionExpression = `season = :season and #date ${modifier} :date`;
+    params.ExpressionAttributeValues![':season'] = decodeURIComponent(season);
     params.ExpressionAttributeNames!['#date'] = 'date';
     params.ExpressionAttributeValues![':date'] = decodeURIComponent(date);
     params.Limit = 5;

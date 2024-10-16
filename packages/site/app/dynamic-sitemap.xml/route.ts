@@ -11,87 +11,6 @@ export async function GET(request: Request) {
 
   const pages: ISitemapField[] = [];
 
-  /*
-<url>
-<loc>https://www.tranmere-web.com/search-results</loc>
-<lastmod>2024-06-11</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.5</priority>
-</url>
-<url>
-<loc>https://www.tranmere-web.com/transfer-central</loc>
-<lastmod>2024-06-11</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.5</priority>
-</url>
-<url>
-<loc>https://www.tranmere-web.com/edit-goal</loc>
-<lastmod>2024-06-11</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.5</priority>
-</url>
-<url>
-<loc>https://www.tranmere-web.com/index</loc>
-<lastmod>2024-06-11</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.5</priority>
-</url>
-<url>
-<loc>https://www.tranmere-web.com/error</loc>
-<lastmod>2024-06-11</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.5</priority>
-</url>
-<url>
-<loc>https://www.tranmere-web.com/404</loc>
-<lastmod>2024-06-11</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.5</priority>
-</url>
-<url>
-<loc>https://www.tranmere-web.com/playersearch</loc>
-<lastmod>2024-06-11</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.5</priority>
-</url>
-<url>
-<loc>https://www.tranmere-web.com/hat-tricks</loc>
-<lastmod>2024-06-11</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.5</priority>
-</url>
-<url>
-<loc>https://www.tranmere-web.com/player-builder</loc>
-<lastmod>2024-06-11</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.5</priority>
-</url>
-<url>
-<loc>https://www.tranmere-web.com/top-scorers-by-season</loc>
-<lastmod>2024-06-11</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.5</priority>
-</url>
-<url>
-<loc>https://www.tranmere-web.com/managers</loc>
-<lastmod>2024-06-11</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.5</priority>
-</url>
-<url>
-<loc>https://www.tranmere-web.com/results</loc>
-<lastmod>2024-06-11</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.5</priority>
-</url>
-<url>
-<loc>https://www.tranmere-web.com/contact</loc>
-<lastmod>2024-06-11</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.5</priority>
-</url>
-*/
-
   players.forEach((t) => {
     pages.push({
       loc: `https://www.tranmere-web.com/page/player/${t.name}`,
@@ -114,7 +33,7 @@ export async function GET(request: Request) {
 
   teams.forEach((t) => {
     pages.push({
-      loc: `https://www.tranmere-web.com/games/${encodeURI(t.name.replace("&", ""))}`,
+      loc: `https://www.tranmere-web.com/games/${encodeURI(t.name.replace(/&/g, ""))}`,
       lastmod: new Date().toISOString(),
     });
   });

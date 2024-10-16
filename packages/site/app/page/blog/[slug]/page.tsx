@@ -96,7 +96,7 @@ export default async function BlogPage({
           <article className="py-10">
             <div
               className="prose 
-              mx-auto max-w-7xl px-6 lg:px-8
+              mx-auto px-6 lg:px-8
               prose-slate max-w-none 
               dark:prose-invert 
               dark:text-slate-400 

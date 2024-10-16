@@ -16,13 +16,13 @@ export function PlayerTransfersTable(props: {
             <table className="min-w-full divide-y text-left text-sm">
               <thead className="font-semibold ">
                 <tr>
-                  <th scope="col" className="py-3 py-3.5">
+                  <th scope="col" className="py-3.5">
                     Season
                   </th>
-                  <th scope="col" className="py-3 py-3.5">
+                  <th scope="col" className="py-3.5">
                     In/Out
                   </th>
-                  <th scope="col" className="px-3 py-3.5">
+                  <th scope="col" className="py-3.5">
                     Fee
                   </th>
                 </tr>
