@@ -185,18 +185,20 @@ async function getResults(
   };
 
   if (season) {
-    params.KeyConditionExpression = 'season = :season'
+    params.KeyConditionExpression = 'season = :season';
     params.ExpressionAttributeValues![':season'] = decodeURIComponent(season);
     query = true;
   } else if (opposition) {
     params.IndexName = 'OppositionIndex';
     params.KeyConditionExpression = 'opposition = :opposition';
-    params.ExpressionAttributeValues![':opposition'] = decodeURIComponent(opposition);
+    params.ExpressionAttributeValues![':opposition'] =
+      decodeURIComponent(opposition);
     query = true;
   } else if (competition) {
     params.IndexName = 'CompetitionIndex';
     params.KeyConditionExpression = 'competition = :competition';
-    params.ExpressionAttributeValues![':competition'] = decodeURIComponent(competition);
+    params.ExpressionAttributeValues![':competition'] =
+      decodeURIComponent(competition);
     query = true;
   } else if (venue && decodeURIComponent(sort) != 'Top Attendance') {
     params.IndexName = 'VenueIndex';
