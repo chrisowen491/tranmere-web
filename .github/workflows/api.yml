@@ -61,7 +61,16 @@ jobs:
         with:
           node-version: '20'      
       - name: Install
-        run: yarn --frozen-lockfile                 
+        run: yarn --frozen-lockfile   
+      - uses: chrnorm/deployment-action@55729fcebec3d284f60f5bcabbd8376437d696b1
+        name: Create GitHub deployment
+        id: deployment
+        with:
+          token: '${{ secrets.GITHUB_TOKEN }}'
+          environment-url: https://api.prod.tranmere-web.com/
+          environment: production
+          description: "API Deployment"
+
       - name: Deploy CDK
         run: |
           yarn workspace @tranmere-web/api-stack cdk deploy --require-approval never "*"
@@ -74,15 +83,25 @@ jobs:
           CF_KEY: ${{ secrets.CF_KEY }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           DD_TAGS: git.commit.sha:${{ github.sha }},git.repository_url:github.com/${{ github.repository }}
-      - uses: chrnorm/deployment-action@55729fcebec3d284f60f5bcabbd8376437d696b1
-        name: Create GitHub deployment
-        id: deployment
-        with:
-          token: '${{ secrets.GITHUB_TOKEN }}'
-          environment-url: https://api.prod.tranmere-web.com/
-          environment: production
-          description: "API Deployment"
 
+
+      - name: Update deployment status (success)
+        if: success()
+        uses: chrnorm/deployment-status@9a72af4586197112e0491ea843682b5dc280d806
+        with:
+          token: '${{ github.token }}'
+          environment-url: ${{ steps.deployment.outputs.environment_url }}
+          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
+          state: 'success'          
+
+      - name: Update deployment status (failure)
+        if: failure()
+        uses: chrnorm/deployment-status@9a72af4586197112e0491ea843682b5dc280d806
+        with:
+          token: '${{ github.token }}'
+          environment-url: ${{ steps.deployment.outputs.environment_url }}
+          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
+          state: 'failure'   
 
   data_dog:
     runs-on: ubuntu-latest

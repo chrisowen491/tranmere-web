@@ -35,6 +35,15 @@ jobs:
           API_PROTOCOL: "https" 
           API_DOMAIN: "api.prod.tranmere-web.com"
 
+      - uses: chrnorm/deployment-action@55729fcebec3d284f60f5bcabbd8376437d696b1
+        name: Create GitHub deployment
+        id: deployment
+        with:
+          token: '${{ secrets.GITHUB_TOKEN }}'
+          environment-url: https://www.tranmere-web.com
+          environment: production
+          description: "Pages Deployment"   
+
       - name: Deploy
         id: deploy
         uses: cloudflare/wrangler-action@9681c2997648301493e78cacbfb790a9f19c833f
@@ -44,11 +53,20 @@ jobs:
           workingDirectory: ./packages/site
           command: pages deploy .vercel/output/static --project-name=tranmere-web
 
-      - uses: chrnorm/deployment-action@55729fcebec3d284f60f5bcabbd8376437d696b1
-        name: Create GitHub deployment
-        id: deployment
+      - name: Update deployment status (success)
+        if: success()
+        uses: chrnorm/deployment-status@9a72af4586197112e0491ea843682b5dc280d806
         with:
-          token: '${{ secrets.GITHUB_TOKEN }}'
+          token: '${{ github.token }}'
           environment-url: ${{ steps.deploy.outputs.deployment-url }}
-          environment: production
-          description: "Pages Deployment"   
+          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
+          state: 'success'          
+
+      - name: Update deployment status (failure)
+        if: failure()
+        uses: chrnorm/deployment-status@9a72af4586197112e0491ea843682b5dc280d806
+        with:
+          token: '${{ github.token }}'
+          environment-url: ${{ steps.deployment.outputs.environment_url }}
+          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
+          state: 'failure'          
