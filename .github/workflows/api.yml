@@ -20,7 +20,7 @@ jobs:
     steps:
       - uses: actions/setup-node@0a44ba7841725637a19e28fa30b79a866c81b0a6 # v4.04
         with:
-          node-version: '22.2.0'
+          node-version: '20'
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
       - name: Install
         run: yarn --frozen-lockfile
@@ -30,12 +30,17 @@ jobs:
           DD_KEY: ${{ secrets.DD_KEY }}
           CF_SPACE: ${{ secrets.CF_SPACE }}
           CF_KEY: ${{ secrets.CF_KEY }}
+      - uses: actions/create-github-app-token@5d869da34e18e7287c1daad50e0b8ea0f506ce69
+        id: app-token
+        with:
+          app-id: ${{ vars.VERSION_BUMPER_APPID }}
+          private-key: ${{ secrets.VERSION_BUMPER_SECRET }}          
       - name: Automated Version Bump
         uses: phips28/gh-action-bump-version@fdad52b3b3bbe8fad96b8ca18c56127a96f603db
         with:
           tag-prefix: 'v'
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
       - id: bump
         run: echo "version=$(node tag.js)" >> $GITHUB_OUTPUT
 
@@ -53,7 +58,7 @@ jobs:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
       - uses: actions/setup-node@0a44ba7841725637a19e28fa30b79a866c81b0a6 # v4.0.4
         with:
-          node-version: '22.2.0'      
+          node-version: '20'      
       - name: Install
         run: yarn --frozen-lockfile                 
       - name: Deploy CDK
@@ -75,7 +80,7 @@ jobs:
     steps:
       - uses: actions/setup-node@0a44ba7841725637a19e28fa30b79a866c81b0a6 # v4.0.4
         with:
-          node-version: '22.2.0'    
+          node-version: '20'    
       - name: Install Data Dog CI
         run: | 
           yarn global add @datadog/datadog-ci@${{ vars.DataDogCIVersion}}
@@ -97,7 +102,7 @@ jobs:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
       - uses: actions/setup-node@0a44ba7841725637a19e28fa30b79a866c81b0a6 # v4.0.4
         with:
-          node-version: '22.2.0'      
+          node-version: '20'      
       - name: Post Deploy Checks
         run: 
           yarn workspace @tranmere-web/api-tests api
