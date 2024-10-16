@@ -67,7 +67,7 @@ jobs:
         id: deployment
         with:
           token: '${{ secrets.GITHUB_TOKEN }}'
-          environment-url: https://api.prod.tranmere-web.com/
+          environment-url: https://api.prod.tranmere-web.com/player-search/
           environment: production
           description: "API Deployment"
 
