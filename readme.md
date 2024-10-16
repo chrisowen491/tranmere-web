@@ -1,10 +1,16 @@
 # Tranmere Web.com
+[![CodeQL](https://github.com/chrisowen491/tranmere-web/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/chrisowen491/tranmere-web/actions/workflows/codeql-analysis.yml)
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/chrisowen491/tranmere-web/badge)](https://scorecard.dev/viewer/?uri=github.com/chrisowen491/tranmere-web)
+[![Web Deploy](https://github.com/chrisowen491/tranmere-web/actions/workflows/web.yml/badge.svg)](https://github.com/chrisowen491/tranmere-web/actions/workflows/web.yml)
+[![API Deploy](https://github.com/chrisowen491/tranmere-web/actions/workflows/api.yml/badge.svg)](https://github.com/chrisowen491/tranmere-web/actions/workflows/api.yml)
+[![PR Builder](https://github.com/chrisowen491/tranmere-web/actions/workflows/pullrequest.yml/badge.svg)](https://github.com/chrisowen491/tranmere-web/actions/workflows/pullrequest.yml)
 
-This site is a demo site using Tarnmere Rovers data to demonstrate all sorts of website functionality. It is not meant as a commercial entity, and is purely for fun. 
+
+This site is a demo site using Tranmere Rovers data to demonstrate all sorts of website functionality. It is not meant as a commercial entity, and is purely for fun. 
 
 Most functionality is provided using free tools, but the the AWS Backend and [DataDog](https://www.datadoghq.com/) monitoring require paid for subscriptions.
 
-## Frontend - Static HTML, JQuery, Saas
+## Frontend - NextJS, React, Tailwind, Contentful
 Source code for [Tranmere-Web.com](https://www.tranmere-web.com). 
 
 The site is a static site designed to be deployed via [cloudflare pages](https://pages.cloudflare.com/).
@@ -19,7 +25,7 @@ Dynamic elements are powered using a combination of AWS Lambda, AppSync, DynamoD
 ### Prerequisites
 
  * Scripts are designed for Linux/Mac
- * Node v18+, NPM
+ * Node v20+, NPM
 
 ### Install
 
