@@ -15,6 +15,8 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.bump.outputs.version }}
+    permissions:
+      contents: write     
     steps:
       - uses: actions/setup-node@0a44ba7841725637a19e28fa30b79a866c81b0a6 # v4.04
         with:
@@ -29,7 +31,7 @@ jobs:
           CF_SPACE: ${{ secrets.CF_SPACE }}
           CF_KEY: ${{ secrets.CF_KEY }}
       - name: Automated Version Bump
-        uses: phips28/gh-action-bump-version@master
+        uses: phips28/gh-action-bump-version@fdad52b3b3bbe8fad96b8ca18c56127a96f603db
         with:
           tag-prefix: 'v'
         env:
