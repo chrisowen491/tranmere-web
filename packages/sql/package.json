@@ -9,6 +9,6 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "wrangler": "^3.63.2"
+    "wrangler": "^3.80.5"
   }
 }
