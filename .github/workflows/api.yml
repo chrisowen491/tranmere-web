@@ -16,7 +16,8 @@ jobs:
     #outputs:
     #  version: ${{ steps.bump.outputs.version }}
     permissions:
-      contents: write     
+      contents: write
+      deployments: write   
     steps:
       - uses: actions/setup-node@0a44ba7841725637a19e28fa30b79a866c81b0a6 # v4.04
         with:
@@ -73,6 +74,15 @@ jobs:
           CF_KEY: ${{ secrets.CF_KEY }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           DD_TAGS: git.commit.sha:${{ github.sha }},git.repository_url:github.com/${{ github.repository }}
+      - uses: chrnorm/deployment-action@55729fcebec3d284f60f5bcabbd8376437d696b1
+        name: Create GitHub deployment
+        id: deployment
+        with:
+          token: '${{ secrets.GITHUB_TOKEN }}'
+          environment-url: https://api.prod.tranmere-web.com/
+          environment: production
+          description: "API Deployment"
+
 
   data_dog:
     runs-on: ubuntu-latest
