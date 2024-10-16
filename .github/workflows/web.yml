@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      deployments: read
+      deployments: write
     name: Publish to Cloudflare Pages
     steps:
       - name: Checkout
@@ -35,8 +35,18 @@ jobs:
           API_PROTOCOL: "https" 
           API_DOMAIN: "api.prod.tranmere-web.com"
 
-      - name: Build
-        run: yarn cloudflare-deploy
-        env:
-          CF_API_TOKEN: ${{ secrets.CLOUDFLARE_AUTH_KEY }}
-          CF_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      - name: Deploy
+        uses: cloudflare/wrangler-action@9681c2997648301493e78cacbfb790a9f19c833f
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_AUTH_KEY }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: ./packages/site
+          command: pages deploy .vercel/output/static --project-name=tranmere-web
+
+      #- uses: chrnorm/deployment-action@55729fcebec3d284f60f5bcabbd8376437d696b1
+      #  name: Create GitHub deployment
+      #  id: deployment
+      #  with:
+      #    token: '${{ secrets.GITHUB_TOKEN }}'
+      #    environment-url: http://my-app-url.com
+      #    environment: production   
