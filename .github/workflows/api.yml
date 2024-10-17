@@ -13,8 +13,8 @@ permissions: read-all
 jobs:
   build_test_and_package:
     runs-on: ubuntu-latest
-    #outputs:
-    #  version: ${{ steps.bump.outputs.version }}
+    outputs:
+      current-version: ${{ steps.package-version.outputs.current-version }}
     permissions:
       contents: write
       deployments: write   
@@ -31,26 +31,10 @@ jobs:
           DD_KEY: ${{ secrets.DD_KEY }}
           CF_SPACE: ${{ secrets.CF_SPACE }}
           CF_KEY: ${{ secrets.CF_KEY }}
-      #- uses: actions/create-github-app-token@5d869da34e18e7287c1daad50e0b8ea0f506ce69
-      #  id: app-token
-      #    app-id: ${{ vars.VERSION_BUMPER_APPID }}
-      #  with:
-      #    private-key: ${{ secrets.VERSION_BUMPER_SECRET }}          
-      #- name: Automated Version Bump
-      #  uses: phips28/gh-action-bump-version@fdad52b3b3bbe8fad96b8ca18c56127a96f603db
-      #  with:
-      #    tag-prefix: 'v'
-      #  env:
-      #    GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
-      #- id: bump
-      #  run: echo "version=$(node tag.js)" >> $GITHUB_OUTPUT
+      - name: get-npm-version
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@3cf273023a0dda27efcd3164bdfb51908dd46a5b
 
-  #trigger_web_deploy:
-  #  runs-on: ubuntu-latest
-  #  needs: build_test_and_package
-  #  steps:
-  #    - name: Call Web Hook
-  #      run: curl -X POST https://api.cloudflare.com/client/v4/pages/webhooks/deploy_hooks/d244ae02-7152-4c32-b6c8-d75c023e735c       
 
   aws_cdk:
     runs-on: ubuntu-latest
@@ -89,7 +73,7 @@ jobs:
       # https://docs.datadoghq.com/serverless/aws_lambda/installation/nodejs/?tab=awssam    
       - name: Instrument
         run: | 
-          datadog-ci lambda instrument --functions-regex "^TranmereWebStack" -r eu-west-1 -v ${{ vars.DataDogNodeLayerVersion}} -e ${{ vars.DataDogExtensionLayerVersion}} --service tranmere-web --env prod --merge-xray-traces false
+          datadog-ci lambda instrument --functions-regex "^TranmereWebStack" -r eu-west-1 -v ${{ vars.DataDogNodeLayerVersion}} -e ${{ vars.DataDogExtensionLayerVersion}} --service tranmere-web --env prod --version ${{needs.build_test_and_package.outputs.current-version}} --merge-xray-traces false
         env:
           AWS_REGION: eu-west-1
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
