@@ -1,8 +1,7 @@
 # Tranmere Web.com
 [![CodeQL](https://github.com/chrisowen491/tranmere-web/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/chrisowen491/tranmere-web/actions/workflows/codeql-analysis.yml)
 [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/chrisowen491/tranmere-web/badge)](https://scorecard.dev/viewer/?uri=github.com/chrisowen491/tranmere-web)
-[![Web Deploy](https://github.com/chrisowen491/tranmere-web/actions/workflows/web.yml/badge.svg)](https://github.com/chrisowen491/tranmere-web/actions/workflows/web.yml)
-[![API Deploy](https://github.com/chrisowen491/tranmere-web/actions/workflows/api.yml/badge.svg)](https://github.com/chrisowen491/tranmere-web/actions/workflows/api.yml)
+[![Deploy](https://github.com/chrisowen491/tranmere-web/actions/workflows/deploy.yml/badge.svg)](https://github.com/chrisowen491/tranmere-web/actions/workflows/deploy.yml)
 [![PR Builder](https://github.com/chrisowen491/tranmere-web/actions/workflows/pullrequest.yml/badge.svg)](https://github.com/chrisowen491/tranmere-web/actions/workflows/pullrequest.yml)
 
 
