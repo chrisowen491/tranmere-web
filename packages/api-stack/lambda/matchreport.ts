@@ -202,7 +202,7 @@ exports.handler = async (
             ? 'TRUE'
             : null,
         SubRed:
-          sub && sub.cards.find((el) => el.type === 'Yellow Card')
+          sub && sub.cards.find((el) => el.type === 'Red Card')
             ? 'TRUE'
             : null
       };
