@@ -12,8 +12,8 @@
     "test": "jest",
     "format": "prettier --write \"lib\" --write \"lambda\""
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Chris Owen",
+  "license": "GPL-3.0-only",
   "dependencies": {
     "@contentful/rich-text-from-markdown": "^15.16.15",
     "@langchain/community": "^0.3.0",

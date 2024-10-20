@@ -5,8 +5,8 @@
   "scripts": {
     "db": "npx wrangler d1 execute tranmere-web --local --file=./schema.sql"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Chris Owen",
+  "license": "GPL-3.0-only",
   "description": "",
   "dependencies": {
     "wrangler": "^3.80.5"

@@ -7,8 +7,8 @@
     "web": "newman run ./postman-collection.json -e ./env/cf-prod.json",
     "api": "newman run ./postman-collection.json -e ./env/aws-prod.json"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Chris Owen",
+  "license": "GPL-3.0-only",
   "dependencies": {
     "newman": "^6.0.0"
   }

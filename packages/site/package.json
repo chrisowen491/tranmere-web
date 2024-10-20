@@ -13,6 +13,8 @@
     "db": "npx wrangler d1 execute tranmere-web --local --file=../sql/schema.sql",
     "db:remote": "npx wrangler d1 execute tranmere-web --remote --file=../sql/schema.sql"
   },
+  "author": "Chris Owen",
+  "license": "GPL-3.0-only",
   "dependencies": {
     "@algolia/autocomplete-js": "^1.17.6",
     "@algolia/autocomplete-theme-classic": "^1.17.6",
