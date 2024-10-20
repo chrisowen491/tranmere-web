@@ -2,7 +2,7 @@ name: Version Pull Request
 
 on:
   pull_request:
-    branches: [ "master" ]
+    branches: [ "notused" ]
 
 permissions: read-all
 
