@@ -2,9 +2,6 @@ name: Pull Request Tests
 
 on:
   pull_request:
-    types:
-      - opened
-      - edited
 
 permissions: read-all
 
@@ -26,9 +23,3 @@ jobs:
           DD_KEY: ${{ secrets.DD_KEY }}
           CF_SPACE: ${{ secrets.CF_SPACE }}
           CF_KEY: ${{ secrets.CF_KEY }}     
-      - name: Automated Version Bump
-        uses: phips28/gh-action-bump-version@fdad52b3b3bbe8fad96b8ca18c56127a96f603db
-        with:
-          tag-prefix: 'v'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
