@@ -1,8 +1,8 @@
 name: Version Pull Request
 
 on:
-  push:
-    branches: [ master ]
+  pull_request:
+    branches: [ "notused" ]
 
 permissions: read-all
 
