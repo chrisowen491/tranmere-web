@@ -80,16 +80,6 @@ exports.handler = async (
     fixtures.eventGroups[0].secondaryGroups[0].events[0].tournament.name
   );
 
-  const dateString = moment(theDate).format('dddd-Do-MMMM');
-  const reportQuery = `https://push.api.bbci.co.uk/batch?t=%2Fdata%2Fbbc-morph-football-scores-match-list-data%2FendDate%2F${day}%2FstartDate%2F${day}%2Fteam%2Ftranmere-rovers%2FtodayDate%2F${day}%2Fversion%2F2.4.6`;
-  const oldFixtureRequest = await fetch(reportQuery, options);
-  const oldFixtureResponse = (await oldFixtureRequest.json()) as unknown;
-
-  const venue =
-    oldFixtureResponse.payload[0].body.matchData[0].tournamentDatesWithEvents[
-      dateString
-    ][0].events[0].venue.name.first;
-
   const hscore =
     fixtures.eventGroups[0].secondaryGroups[0].events[0].home.score;
   const vscore =
@@ -99,6 +89,8 @@ exports.handler = async (
   const lineupResponse = await fetch(lineup_url, options);
 
   const lineups = (await lineupResponse.json()) as TeamLineups;
+
+  const venue = lineups.homeTeam.name.fullName === 'Tranmere Rovers' ? 'Prenton Park' : 'Unknown';
 
   /*
   const attendance = lineups.payload[0].body.meta.attendance
