@@ -47,7 +47,7 @@
     "algoliasearch": "^5.2.5",
     "autoprefixer": "^10.4.19",
     "date-fns": "^4.0.0",
-    "eslint": "9.12.0",
+    "eslint": "9.13.0",
     "eslint-config-next": "14.2.15",
     "framer-motion": "^11.11.9",
     "instantsearch.css": "^8.3.0",
