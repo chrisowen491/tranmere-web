@@ -18,7 +18,7 @@
   "dependencies": {
     "@algolia/autocomplete-js": "^1.17.6",
     "@algolia/autocomplete-theme-classic": "^1.17.6",
-    "@algolia/client-search": "^5.1.1",
+    "@algolia/client-search": "^5.10.0",
     "@auth0/auth0-react": "^2.2.4",
     "@auth0/nextjs-auth0": "^3.5.0",
     "@cloudflare/next-on-pages": "^1.11.3",
@@ -35,7 +35,7 @@
     "@langchain/core": "^0.3.0",
     "@langchain/openai": "^0.3.0",
     "@material-tailwind/react": "^2.1.9",
-    "@next/bundle-analyzer": "^14.0.0",
+    "@next/bundle-analyzer": "^15.0.0",
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/forms": "^0.5.7",
     "@tailwindcss/typography": "^0.5.13",
@@ -43,16 +43,16 @@
     "@types/react": "^18.3.3",
     "@types/react-dom": "18.3.1",
     "@use-gesture/react": "^10.3.1",
-    "ai": "^3.4.12",
-    "algoliasearch": "^5.2.5",
+    "ai": "^3.4.17",
+    "algoliasearch": "^5.10.0",
     "autoprefixer": "^10.4.19",
     "date-fns": "^4.0.0",
     "eslint": "9.13.0",
-    "eslint-config-next": "14.2.15",
+    "eslint-config-next": "15.0.0",
     "framer-motion": "^11.11.9",
     "instantsearch.css": "^8.3.0",
-    "langchain": "^0.3.0",
-    "next": "^14.2.3",
+    "langchain": "^0.3.3",
+    "next": "^15.0.0",
     "next-compose-plugins": "^2.2.1",
     "next-sitemap": "^4.2.3",
     "next-themes": "^0.3.0",
@@ -73,7 +73,7 @@
   },
   "devDependencies": {
     "prettier": "3.3.3",
-    "vercel": "^37.0.0",
+    "vercel": "^37.12.0",
     "wrangler": "^3.80.5"
   }
 }
