@@ -7,7 +7,7 @@ on:
       - 'packages/api-stack/**'
       - 'packages/lib/**'
       - 'packages/api-tests/**'
-      - '.github/workflows/web.yml'   
+      - '.github/workflows/api.yml'   
 
 permissions: read-all
 
