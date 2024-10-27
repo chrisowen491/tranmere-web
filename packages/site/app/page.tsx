@@ -15,6 +15,7 @@ import {
   UserGroupIcon,
 } from "@heroicons/react/24/outline";
 import { OnThisDay } from "@/components/fragments/OnThisDay";
+import { TagCloud } from "@/components/blogs/TagCloud";
 
 export const runtime = "edge";
 
@@ -168,6 +169,36 @@ export default async function Home() {
               </div>
             </div>
           </div>
+          <div className="pt-8">
+            <div className="mx-auto max-w-7xl px-6 lg:px-8">
+              <div className="mx-auto max-w-2xl lg:max-w-none">
+                <div className="text-center">
+                  <h2 className="text-3xl font-bold tracking-tight sm:text-4xl  text-blue-600 dark:text-gray-50">
+                    The Most Comprehensive Tranmere Rovers Database On The Web
+                  </h2>
+                  <p className="mt-4 text-lg leading-8 dark:text-gray-50">
+                    Full results since 1921, appearance and goals data since
+                    1977.
+                  </p>
+                </div>
+                <dl className="mt-16 grid grid-cols-1 gap-0.5 overflow-hidden rounded-2xl text-center sm:grid-cols-2 lg:grid-cols-4">
+                  {stats.map((stat) => (
+                    <div
+                      key={stat.id}
+                      className="flex flex-col bg-gray-400/5 p-8"
+                    >
+                      <dt className="text-sm font-semibold leading-6 text-gray-600 dark:text-gray-50">
+                        {stat.name}
+                      </dt>
+                      <dd className="order-first text-3xl font-semibold tracking-tight text-gray-900 dark:text-gray-50">
+                        {stat.value}
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
+            </div>
+          </div>
           <div className="divide-y divide-gray-200 overflow-hidden rounded-lg bg-gray-200 shadow sm:grid lg:grid-cols-2 sm:gap-px sm:divide-y-0 mx-8">
             {actions.map((action, actionIdx) => (
               <div
@@ -222,36 +253,7 @@ export default async function Home() {
               </div>
             ))}
           </div>
-          <div className="pt-8">
-            <div className="mx-auto max-w-7xl px-6 lg:px-8">
-              <div className="mx-auto max-w-2xl lg:max-w-none">
-                <div className="text-center">
-                  <h2 className="text-3xl font-bold tracking-tight sm:text-4xl  text-blue-600 dark:text-gray-50">
-                    The Most Comprehensive Tranmere Rovers Database On The Web
-                  </h2>
-                  <p className="mt-4 text-lg leading-8 dark:text-gray-50">
-                    Full results since 1921, appearance and goals data since
-                    1977.
-                  </p>
-                </div>
-                <dl className="mt-16 grid grid-cols-1 gap-0.5 overflow-hidden rounded-2xl text-center sm:grid-cols-2 lg:grid-cols-4">
-                  {stats.map((stat) => (
-                    <div
-                      key={stat.id}
-                      className="flex flex-col bg-gray-400/5 p-8"
-                    >
-                      <dt className="text-sm font-semibold leading-6 text-gray-600 dark:text-gray-50">
-                        {stat.name}
-                      </dt>
-                      <dd className="order-first text-3xl font-semibold tracking-tight text-gray-900 dark:text-gray-50">
-                        {stat.value}
-                      </dd>
-                    </div>
-                  ))}
-                </dl>
-              </div>
-            </div>
-          </div>
+          <TagCloud />
           <FAQs text="Frequently Asked Questions" faqs={faqs}></FAQs>
         </div>
       </div>
