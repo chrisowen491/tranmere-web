@@ -10,7 +10,6 @@ on:
 permissions: read-all
 
 jobs:
-
   publish_site:
     runs-on: ubuntu-latest
     permissions:
