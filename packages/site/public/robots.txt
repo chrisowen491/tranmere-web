@@ -15,6 +15,7 @@ Disallow: /match/1973*
 Disallow: /match/1974*
 Disallow: /match/1975*
 Disallow: /match/1976*
+Disallow: /builder*
 
 # Host
 Host: https://www.tranmere-web.com
