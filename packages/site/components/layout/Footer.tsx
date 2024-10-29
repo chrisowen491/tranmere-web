@@ -48,14 +48,14 @@ export default function Footer() {
       </h2>
       <div className="mx-auto max-w-7xl px-4 pb-4 lg:px-4 py-12">
         <div className="xl:grid xl:grid-cols-4 xl:gap-2">
-          <a href="/">
+          <Link href="/">
             <Image
               src="/assets/images/logo_white_transparent.png"
               alt="TranmereWeb.com Logo"
               width={160}
               height={93}
             />
-          </a>
+          </Link>
         </div>
       </div>
       <div className="mx-auto max-w-7xl px-6 md:flex md:items-center md:justify-between lg:px-8 pb-6">
@@ -67,18 +67,18 @@ export default function Footer() {
           >
             <GitHubIcon className="h-6 w-6 fill-slate-50 dark:fill-blue-400 group-hover:fill-slate-500 dark:group-hover:fill-slate-300" />
           </Link>
-          <a
+          <Link
             href={"/page/blog/about"}
             className="text-gray-50 dark:text-blue-400 hover:bg-rose-950 rounded-md px-3 py-2 "
           >
             About the Site
-          </a>
-          <a
+          </Link>
+          <Link
             href={"/contact"}
             className="text-gray-50 dark:text-blue-400 hover:bg-rose-950 rounded-md px-3 py-2 "
           >
             Contact Us
-          </a>
+          </Link>
         </div>
         <div className="mt-8 md:order-1 md:mt-0">
           <p className="text-center text-xs leading-5 text-gray-50 py-2 dark:text-blue-400">

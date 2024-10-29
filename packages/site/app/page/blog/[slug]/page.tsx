@@ -13,6 +13,7 @@ import { Reviews } from "@/components/comments/Reviews";
 import CommentPanel from "@/components/comments/CommentPanel";
 import { LineGraph } from "@/components/charts/LineGraph";
 import Slider from "@/components/carousel/Slider";
+import Link from "next/link";
 
 export async function generateMetadata({
   params,
@@ -210,7 +211,7 @@ export default async function BlogPage({
                   {article.tags.map((tag, idx) => (
                     <span key={idx}>
                       <span className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
-                        <a href={`/page/tag/${tag}`}>{tag}</a>
+                        <Link href={`/page/tag/${tag}`}>{tag}</Link>
                       </span>
                       &nbsp;
                     </span>

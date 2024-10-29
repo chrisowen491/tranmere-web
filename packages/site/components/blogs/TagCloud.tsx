@@ -1,5 +1,6 @@
 import { getAllArticles } from "@/lib/api";
 import { BlogItem } from "@/lib/types";
+import Link from "next/link";
 
 interface Tag {
     name: string;
@@ -67,7 +68,7 @@ export async function TagCloud() {
             <ul className="flex justify-center flex-wrap max-w-xl align-center gap-2 leading-8 mx-auto">
                 {tags.map((tag) => (
                     <li key={tag.name}>
-                        <a href={`/page/tag/${tag.name}`} className={`${tag.textSize} ${tag.color}`}>{tag.name}</a>
+                        <Link href={`/page/tag/${tag.name}`} className={`${tag.textSize} ${tag.color}`}>{tag.name}</Link>
                     </li>
                 ))}
             </ul>

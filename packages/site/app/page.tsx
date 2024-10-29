@@ -16,6 +16,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { OnThisDay } from "@/components/fragments/OnThisDay";
 import { TagCloud } from "@/components/blogs/TagCloud";
+import Link from "next/link";
 
 export const runtime = "edge";
 
@@ -228,11 +229,11 @@ export default async function Home() {
                 </div>
                 <div className="mt-8">
                   <h3 className="text-base font-semibold leading-6 text-gray-900 dark:text-white">
-                    <a href={action.href} className="focus:outline-none">
+                    <Link href={action.href} className="focus:outline-none">
                       {/* Extend touch target to entire panel */}
                       <span aria-hidden="true" className="absolute inset-0" />
                       {action.title}
-                    </a>
+                    </Link>
                   </h3>
                   <p className="mt-2 text-sm text-gray-500 dark:text-white">
                     {action.text}
