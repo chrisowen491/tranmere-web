@@ -6,9 +6,9 @@ import {
   Transfer,
 } from "@tranmere-web/lib/src/tranmere-web-types";
 import type { Message } from "ai/react";
-import { NextPage } from "next";
-import { AppProps } from "next/app";
-import { ReactElement, ReactNode } from "react";
+
+export type SlugParams = Promise<{ slug: string }>
+export type MatchParams = Promise<{ season: string; date: string }>
 
 export interface PlayerName {
   name: string;

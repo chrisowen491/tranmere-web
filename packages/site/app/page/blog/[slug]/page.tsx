@@ -14,12 +14,11 @@ import CommentPanel from "@/components/comments/CommentPanel";
 import { LineGraph } from "@/components/charts/LineGraph";
 import Slider from "@/components/carousel/Slider";
 import Link from "next/link";
+import { SlugParams } from "@/lib/types";
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { slug: string };
-}) {
+export async function generateMetadata(props: { params: SlugParams }) {
+
+  const params = await props.params;
   const article = await getArticle(params.slug);
   return {
     title: article ? article.title : "",
@@ -27,11 +26,8 @@ export async function generateMetadata({
   };
 }
 
-export default async function BlogPage({
-  params,
-}: {
-  params: { slug: string };
-}) {
+export default async function BlogPage(props: { params: SlugParams }) {
+  const params = await props.params;
   const article = await getArticle(params.slug);
 
   if (!article) {
