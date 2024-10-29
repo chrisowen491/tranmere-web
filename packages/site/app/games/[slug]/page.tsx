@@ -12,14 +12,12 @@ import {
   Match,
 } from "@tranmere-web/lib/src/tranmere-web-types";
 import { getRequestContext } from "@cloudflare/next-on-pages";
+import { SlugParams } from "@/lib/types";
 
 export const runtime = "edge";
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { slug: string };
-}) {
+export async function generateMetadata(props: { params: SlugParams }) {
+  const params = await props.params;
   let description: string | null = null;
   let title: string | null = null;
 
@@ -51,11 +49,9 @@ export async function generateMetadata({
   };
 }
 
-export default async function GamesPage({
-  params,
-}: {
-  params: { slug: string };
-}) {
+export default async function GamesPage(props: { params: SlugParams }) {
+
+  const params = await props.params;
   const base = GetBaseUrl(getRequestContext().env) + "/result-search/";
 
   let title: string | null = null;

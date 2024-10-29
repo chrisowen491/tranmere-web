@@ -12,6 +12,7 @@ import { ThemeSelector } from "@/components/layout/ThemeSelector";
 import SearchBar from "@/components/search/SearchBar";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { useUser } from "@auth0/nextjs-auth0/client";
+import Link from "next/link";
 
 const navigation = [
   { name: "Results", href: "/results", current: false },
@@ -44,24 +45,24 @@ export function Navbar() {
           <div className="relative flex h-16 items-center justify-between">
             <div className="flex items-center px-2 lg:px-0">
               <div className="flex-shrink-0">
-                <a href="/">
+                <Link href="/">
                   <img
                     src="/assets/images/logo_white_transparent.png"
                     alt="Tranmere-Web Logo"
                     className="hidden h-12 w-auto fill-slate-700 lg:block dark:fill-sky-100"
                   />
-                </a>
+                </Link>
               </div>
               <div className="hidden lg:ml-6 lg:block">
                 <div className="flex space-x-4">
                   {navigation.map((item) => (
-                    <a
+                    <Link
                       key={item.name}
                       href={item.href}
                       className="rounded-md px-3 py-2 text-sm font-medium text-white  hover:bg-rose-950 hover:text-white"
                     >
                       {item.name}
-                    </a>
+                    </Link>
                   ))}
                 </div>
               </div>
@@ -106,23 +107,23 @@ export function Navbar() {
                       className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
                     >
                       <MenuItem>
-                        <a
+                        <Link
                           href="/api/auth/logout"
                           aria-label="logout"
                           className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
                         >
                           Sign out
-                        </a>
+                        </Link>
                       </MenuItem>
                     </MenuItems>
                   </Menu>
                 ) : (
-                  <a href="/api/auth/login" aria-label="login">
+                  <Link href="/api/auth/login" aria-label="login">
                     <ChatBubbleBottomCenterIcon
                       aria-hidden="true"
                       className="h-6 w-6 text-white"
                     />
-                  </a>
+                  </Link>
                 )}
               </div>
             </div>

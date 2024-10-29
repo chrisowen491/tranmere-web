@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useState } from "react";
 
 export function PlayerAvatarBuilder() {
@@ -20,7 +21,7 @@ export function PlayerAvatarBuilder() {
         <section aria-labelledby="summary-heading" className="flex-col px-20">
           <img width="350px" src={`${base}${img}`} />
           <h4>
-            Link: <a href={`${base}${img}`}>here</a>
+            Link: <Link href={`${base}${img}`}>here</Link>
           </h4>
           <img width="100px" src={`${base}${img}`} />
         </section>

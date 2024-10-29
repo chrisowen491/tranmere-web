@@ -1,4 +1,5 @@
 import { Appearance } from "@tranmere-web/lib/src/tranmere-web-types";
+import Link from "next/link";
 
 export function SquadAppearance(props: {
   players: Appearance[];
@@ -8,40 +9,40 @@ export function SquadAppearance(props: {
     <>
       {props.players.map((p, idx) => (
         <td colSpan={props.colSpan} key={idx}>
-          <a href={`/page/player/${p.Name}`}>
+          <Link href={`/page/player/${p.Name}`}>
             <img src={p.bio!.picLink} alt="Avatar" />
-          </a>
+          </Link>
           {p.RedCard ? (
-            <a href={`/page/player/${p.Name}`} className="red">
+            <Link href={`/page/player/${p.Name}`} className="red">
               {p.Name}
-            </a>
+            </Link>
           ) : (
             <>
               {p.YellowCard ? (
-                <a href={`/page/player/${p.Name}`} className="yellow">
+                <Link href={`/page/player/${p.Name}`} className="yellow">
                   {p.Name}
-                </a>
+                </Link>
               ) : (
-                <a href={`/page/player/${p.Name}`}>{p.Name}</a>
+                <Link href={`/page/player/${p.Name}`}>{p.Name}</Link>
               )}
             </>
           )}
           {p.SubbedBy ? (
             <>
               {p.SubRed ? (
-                <a href={`/page/player/${p.SubbedBy}`} className="red">
+                <Link href={`/page/player/${p.SubbedBy}`} className="red">
                   ({p.SubbedBy} {p.SubTime})
-                </a>
+                </Link>
               ) : (
                 <>
                   {p.SubYellow ? (
-                    <a href={`/page/player/${p.SubbedBy}`} className="yellow">
+                    <Link href={`/page/player/${p.SubbedBy}`} className="yellow">
                       ({p.SubbedBy} {p.SubTime})
-                    </a>
+                    </Link>
                   ) : (
-                    <a href={`/page/player/${p.SubbedBy}`}>
+                    <Link href={`/page/player/${p.SubbedBy}`}>
                       ({p.SubbedBy} {p.SubTime})
-                    </a>
+                    </Link>
                   )}
                 </>
               )}

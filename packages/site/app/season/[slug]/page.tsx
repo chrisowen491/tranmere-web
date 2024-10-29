@@ -10,14 +10,13 @@ import {
 import { getRequestContext } from "@cloudflare/next-on-pages";
 import SeasonReview from "@/components/apps/SeasonReview";
 import { getAllArticlesForTag } from "@/lib/api";
+import { SlugParams } from "@/lib/types";
 
 export const runtime = "edge";
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { slug: string };
-}) {
+export async function generateMetadata(props: { params: SlugParams }) {
+
+  const params = await props.params;
   let description: string | null = null;
   let title: string | null = null;
 
@@ -30,13 +29,10 @@ export async function generateMetadata({
   };
 }
 
-export default async function GamesPage({
-  params,
-}: {
-  params: { slug: string };
-}) {
-  const base = GetBaseUrl(getRequestContext().env) + "/result-search/";
+export default async function SeasonPage(props: { params: SlugParams }) {
 
+  const params = await props.params;
+  const base = GetBaseUrl(getRequestContext().env) + "/result-search/";
   let title: string | null = null;
   let sort = "Date";
   let venue = "";

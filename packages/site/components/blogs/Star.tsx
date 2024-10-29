@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export function Star(props: {
   name: string;
   notes: string;
@@ -19,9 +21,9 @@ export function Star(props: {
       <p>{props.notes}</p>
       <p>{props.match}</p>
       <p>
-        <a href={`/match/${props.season}/${props.date}`} className="">
+        <Link href={`/match/${props.season}/${props.date}`} className="">
           Report
-        </a>
+        </Link>
       </p>
     </>
   );

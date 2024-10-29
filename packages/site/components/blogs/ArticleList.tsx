@@ -1,5 +1,6 @@
 import { BlogItem } from "@/lib/types";
 import { UserIcon, PencilIcon } from "@heroicons/react/24/outline";
+import Link from "next/link";
 
 export default function ArticleList(props: {
   posts: BlogItem[];
@@ -32,7 +33,11 @@ export default function ArticleList(props: {
                       className="absolute inset-0 h-full rounded-2xl bg-gray-50 dark:bg-gray-950 mx-auto"
                     />
                   ) : (
-                    ""
+                    <img
+                      alt={post.title}
+                      src='https://images.ctfassets.net/pz711f8blqyy/4xiJsea65ajh0swqmdEbOF/a2fc207703c03245cd64a8c01b857e28/2021.svg'
+                      className="absolute inset-0 h-full rounded-2xl bg-gray-50 dark:bg-gray-950 mx-auto"
+                    />
                   )}
                   <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-gray-900/10" />
                 </div>
@@ -60,10 +65,10 @@ export default function ArticleList(props: {
                   </div>
                   <div className="group relative max-w-xl">
                     <h3 className="mt-3 text-lg font-semibold leading-6 text-gray-900 dark:text-gray-50 group-hover:text-gray-600">
-                      <a href={`/page/blog/${post.slug}`}>
+                      <Link href={`/page/blog/${post.slug}`}>
                         <span className="absolute inset-0" />
                         {post.title}
-                      </a>
+                      </Link>
                     </h3>
                     <p className="mt-5 text-sm leading-6 text-gray-600 dark:text-gray-50">
                       {post.description}

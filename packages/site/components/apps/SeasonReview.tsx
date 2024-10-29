@@ -20,6 +20,7 @@ import { LinkButton } from "../forms/LinkButton";
 import { BlogItem } from "@/lib/types";
 import { buildImagePath } from "@/lib/apiFunctions";
 import { areIntervalsOverlapping } from "date-fns";
+import Link from "next/link";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -474,10 +475,10 @@ export default function SeasonReview(props: {
                       </div>
                       <div className="group relative">
                         <h3 className="mt-1 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600 dark:text-gray-50">
-                          <a href={`/page/blog/${article.slug}`}>
+                          <Link href={`/page/blog/${article.slug}`}>
                             <span className="absolute inset-0" />
                             {article.title}
-                          </a>
+                          </Link>
                         </h3>
                         <p className="mt-5 mb-5 line-clamp-3 text-sm leading-6 text-gray-600">
                           {article.description}

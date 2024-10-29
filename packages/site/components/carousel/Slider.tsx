@@ -1,4 +1,5 @@
 import { GalleryImage } from "@/lib/types";
+import Link from "next/link";
 
 const Slider = (props: { images: GalleryImage[]; title: string }) => {
   const images = props.images;
@@ -20,10 +21,10 @@ const Slider = (props: { images: GalleryImage[]; title: string }) => {
                 <div className="mt-4 flex justify-between">
                   <div>
                     <h3 className="text-sm text-gray-700 dark:text-indigo-50">
-                      <a href={elem.url}>
+                      <Link href={elem.url}>
                         <span aria-hidden="true" className="absolute inset-0" />
                         {elem.title}
-                      </a>
+                      </Link>
                     </h3>
                     <p className="mt-1 text-sm text-gray-500 dark:text-indigo-50">
                       {elem.description}

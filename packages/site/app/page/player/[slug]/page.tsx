@@ -2,27 +2,21 @@ import PlayerProfileView from "@/components/apps/PlayerProfileView";
 import { getAllArticlesForTag } from "@/lib/api";
 import { GetBaseUrl } from "@/lib/apiFunctions";
 import { GetCommentsByUrl } from "@/lib/comments";
-import { PlayerProfile } from "@/lib/types";
+import { PlayerProfile, SlugParams } from "@/lib/types";
 import { getRequestContext } from "@cloudflare/next-on-pages";
 import { notFound } from "next/navigation";
 export const runtime = "edge";
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { slug: string };
-}) {
+export async function generateMetadata(props: { params: SlugParams }) {
+  const params = await props.params;
   return {
     title: `Player Profile - ${decodeURI(params.slug)}`,
     description: `Player Profile for the Tranmere Rovers career of ${decodeURI(params.slug)}`,
   };
 }
 
-export default async function PlayerProfilePage({
-  params,
-}: {
-  params: { slug: string };
-}) {
+export default async function PlayerProfilePage(props: { params: SlugParams }) {
+  const params = await props.params;
   const url =
     GetBaseUrl(getRequestContext().env) +
     `/page/player/${decodeURI(params.slug)}?json=true`;

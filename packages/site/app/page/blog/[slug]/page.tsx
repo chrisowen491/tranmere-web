@@ -13,12 +13,12 @@ import { Reviews } from "@/components/comments/Reviews";
 import CommentPanel from "@/components/comments/CommentPanel";
 import { LineGraph } from "@/components/charts/LineGraph";
 import Slider from "@/components/carousel/Slider";
+import Link from "next/link";
+import { SlugParams } from "@/lib/types";
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { slug: string };
-}) {
+export async function generateMetadata(props: { params: SlugParams }) {
+
+  const params = await props.params;
   const article = await getArticle(params.slug);
   return {
     title: article ? article.title : "",
@@ -26,11 +26,8 @@ export async function generateMetadata({
   };
 }
 
-export default async function BlogPage({
-  params,
-}: {
-  params: { slug: string };
-}) {
+export default async function BlogPage(props: { params: SlugParams }) {
+  const params = await props.params;
   const article = await getArticle(params.slug);
 
   if (!article) {
@@ -210,7 +207,7 @@ export default async function BlogPage({
                   {article.tags.map((tag, idx) => (
                     <span key={idx}>
                       <span className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
-                        <a href={`/page/tag/${tag}`}>{tag}</a>
+                        <Link href={`/page/tag/${tag}`}>{tag}</Link>
                       </span>
                       &nbsp;
                     </span>

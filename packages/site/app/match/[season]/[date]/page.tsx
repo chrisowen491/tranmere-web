@@ -1,5 +1,5 @@
 import { getRequestContext } from "@cloudflare/next-on-pages";
-import { MatchPageData } from "@/lib/types";
+import { MatchPageData, MatchParams } from "@/lib/types";
 import { Match } from "@tranmere-web/lib/src/tranmere-web-types";
 import { GetBaseUrl } from "@/lib/apiFunctions";
 import MatchReport from "@/components/apps/MatchReport";
@@ -7,11 +7,9 @@ import { GetCommentsByUrl } from "@/lib/comments";
 
 export const runtime = "edge";
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { season: string; date: string };
-}) {
+export async function generateMetadata(props: { params: MatchParams }) {
+
+  const params = await props.params;
   const url = `${GetBaseUrl(getRequestContext().env)}/match/${params.season}/${params.date}`;
 
   const matchRequest = await fetch(url);
@@ -22,11 +20,9 @@ export async function generateMetadata({
   };
 }
 
-export default async function MatchPage({
-  params,
-}: {
-  params: { season: string; date: string };
-}) {
+export default async function MatchPage(props: { params: MatchParams }) {
+
+  const params = await props.params;
   const baseUrl = `/match/${params.season}/${params.date}`;
   const url = `${GetBaseUrl(getRequestContext().env)}${baseUrl}`;
 

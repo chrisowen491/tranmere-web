@@ -3,13 +3,12 @@ import { Title } from "@/components/fragments/Title";
 import { PlayerSeasonSummary } from "@tranmere-web/lib/src/tranmere-web-types";
 import { getRequestContext } from "@cloudflare/next-on-pages";
 import { GetBaseUrl } from "@/lib/apiFunctions";
+import { SlugParams } from "@/lib/types";
 export const runtime = "edge";
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { slug: string };
-}) {
+export async function generateMetadata(props: { params: SlugParams }) {
+
+  const params = await props.params;
   let description: string | null = null;
   let title: string | null = null;
 
@@ -33,11 +32,9 @@ export async function generateMetadata({
   };
 }
 
-export default async function PlayerSearchPage({
-  params,
-}: {
-  params: { slug: string };
-}) {
+export default async function PlayerSearchPage(props: { params: SlugParams }) {
+
+  const params = await props.params;
   const base = GetBaseUrl(getRequestContext().env) + "/player-search/";
 
   let season: string = "";
