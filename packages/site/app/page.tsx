@@ -143,7 +143,7 @@ export default async function Home() {
           <div className="py-4">
             <div className="mx-auto max-w-2xl px-6 lg:max-w-7xl lg:px-8">
               <h2 className="text-base/7 font-semibold text-indigo-600 dark:text-indigo-50">
-                What's New
+                What&#39;s New
               </h2>
               <div className="mt-10 grid grid-cols-1 gap-4 sm:mt-16 lg:grid-cols-6">
                 <div className="relative lg:col-span-2">
