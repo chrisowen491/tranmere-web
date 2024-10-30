@@ -110,6 +110,7 @@ export function Navbar() {
                         <Link
                           href="/api/auth/logout"
                           aria-label="logout"
+                          prefetch={false}
                           className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
                         >
                           Sign out
@@ -118,7 +119,7 @@ export function Navbar() {
                     </MenuItems>
                   </Menu>
                 ) : (
-                  <Link href="/api/auth/login" aria-label="login">
+                  <Link href="/api/auth/login" aria-label="login"  prefetch={false}>
                     <ChatBubbleBottomCenterIcon
                       aria-hidden="true"
                       className="h-6 w-6 text-white"
