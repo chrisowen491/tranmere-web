@@ -1,5 +1,6 @@
 import { GalleryImage } from "@/lib/types";
 import Link from "next/link";
+import Image from "next/image";
 
 const Slider = (props: { images: GalleryImage[]; title: string }) => {
   const images = props.images;
@@ -11,10 +12,12 @@ const Slider = (props: { images: GalleryImage[]; title: string }) => {
           <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
             {images.map((elem, idx) => (
               <div key={idx} className="group relative">
-                <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-indigo-200 dark:bg-black lg:aspect-none group-hover:opacity-75 lg:h-80">
-                  <img
+                <div className="aspect-h-1 aspect-w-1 w-full rounded-md bg-indigo-200 dark:bg-black lg:aspect-none group-hover:opacity-75 lg:h-80">
+                  <Image
                     alt={elem.description}
                     src={elem.url}
+                    width={400}
+                    height={400}
                     className="h-full w-full object-cover object-center lg:h-full lg:w-full"
                   />
                 </div>

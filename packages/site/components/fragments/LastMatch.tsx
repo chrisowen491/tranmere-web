@@ -1,6 +1,7 @@
 import { GetLastMatch } from "@/lib/apiFunctions";
 import { PlayIcon } from "@heroicons/react/20/solid";
 import { LinkButton } from "@/components//forms/LinkButton";
+import Image from "next/image";
 export async function LastMatch() {
   const match = await GetLastMatch();
   if (!match) {
@@ -10,8 +11,10 @@ export async function LastMatch() {
   return (
     <>
       {match.largeProgramme ? (
-        <img
+        <Image
           alt="Match Programme"
+          width={200}
+          height={400}
           src={`https://images.tranmere-web.com/${match.largeProgramme}`}
           className="h-80 object-cover object-left"
         />

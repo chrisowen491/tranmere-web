@@ -1,6 +1,7 @@
 import { BlogItem } from "@/lib/types";
-import { UserIcon, PencilIcon } from "@heroicons/react/24/outline";
+import { UserIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function ArticleList(props: {
   posts: BlogItem[];
@@ -33,8 +34,10 @@ export default function ArticleList(props: {
                       className="absolute inset-0 h-full rounded-2xl bg-gray-50 dark:bg-gray-950 mx-auto"
                     />
                   ) : (
-                    <img
+                    <Image
                       alt={post.title}
+                      width={512}
+                      height={512}
                       src='https://images.ctfassets.net/pz711f8blqyy/4xiJsea65ajh0swqmdEbOF/a2fc207703c03245cd64a8c01b857e28/2021.svg'
                       className="absolute inset-0 h-full rounded-2xl bg-gray-50 dark:bg-gray-950 mx-auto"
                     />
@@ -50,13 +53,13 @@ export default function ArticleList(props: {
                       post.tags.map((tag, idx) => (
                         <div key={idx}>
                           {idx < 5 ? (
-                            <a
+                            <Link
                               href={`/page/tag/${tag}`}
                               key={idx}
                               className="relative z-10 rounded-full bg-gray-50 px-3 py-1.5 font-medium text-gray-600  hover:bg-gray-100"
                             >
                               {tag}
-                            </a>
+                            </Link>
                           ) : (
                             ""
                           )}
