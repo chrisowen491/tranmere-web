@@ -43,7 +43,7 @@ export default async function BlogPage(props: { params: SlugParams }) {
   );
 
   const url = `/page/blog/${params.slug}`;
-  const comments = await GetCommentsByUrl(getRequestContext().env, url);
+  const comments = [] //await GetCommentsByUrl(getRequestContext().env, url);
 
   let score = 0;
   comments.forEach((c) => {
