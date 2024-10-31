@@ -8,6 +8,7 @@ import { LinkButton } from "@/components/forms/LinkButton";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { UserIcon } from "@heroicons/react/20/solid";
+import Image from "next/image";
 
 export function PlayerSearch(props: {
   default: PlayerSeasonSummary[];
@@ -276,7 +277,11 @@ export function PlayerSearch(props: {
                         <div className="flex items-center">
                           <div className="h-11 w-11 flex-shrink-0">
                             {player.bio?.picLink ? (
-                              <img
+                              <Image
+                                alt={player.Player}
+                                width={100}
+                                height={100}  
+                                unoptimized={true}
                                 src={player.bio.picLink}
                                 className="h-11 w-11 rounded-full"
                               />

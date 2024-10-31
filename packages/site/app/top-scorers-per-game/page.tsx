@@ -5,6 +5,7 @@ import { getRequestContext } from "@cloudflare/next-on-pages";
 import { PlayerSeasonSummary } from "@tranmere-web/lib/src/tranmere-web-types";
 import { Metadata } from "next";
 
+
 export const metadata: Metadata = {
   title: "Tranmere Top Scorers - Goals Per Game",
   description: "Who has the best goals per game average for Tranmere Rovers",

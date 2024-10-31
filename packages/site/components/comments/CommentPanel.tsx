@@ -143,7 +143,7 @@ export default function CommentPanel(props: {
                 <div key={idx} className="flex space-x-4 text-sm">
                   <div className="flex-none py-10">
                     <img
-                      alt=""
+                      alt="User avatar"
                       src={comment.user.picture}
                       className="h-10 w-10 rounded-full bg-gray-100"
                     />

@@ -2,6 +2,7 @@ export const runtime = "edge";
 import { Title } from "@/components/fragments/Title";
 import { GetTopScorersBySeason } from "@/lib/apiFunctions";
 import { Metadata } from "next";
+import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "Top Scorers By Season",
@@ -30,9 +31,12 @@ export default async function TopScorersBySeason() {
                   href={`/page/player/${player.Player}`}
                   className="text-sm leading-6 text-gray-600 dark:text-gray-50"
                 >
-                  <img
+                  <Image
                     alt={player.Player}
-                    src={player.bio?.picLink}
+                    width={200}
+                    height={200}
+                    unoptimized={true}
+                    src={player.bio?.picLink!}
                     className="mx-auto h-24 w-24 rounded-full"
                   />
                   <h3 className="mt-6 text-base font-semibold leading-7 tracking-tight text-gray-900 dark:text-gray-50">
