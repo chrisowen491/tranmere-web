@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useState } from "react";
+import Image from "next/image";
 
 export function PlayerAvatarBuilder() {
   const base = "https://www.tranmere-web.com/builder/";
@@ -19,11 +20,11 @@ export function PlayerAvatarBuilder() {
       <div className="lg:flex lg:flex-row-reverse">
         <h1 className="sr-only">Checkout</h1>
         <section aria-labelledby="summary-heading" className="flex-col px-20">
-          <img width="350px" src={`${base}${img}`} />
+          <Image width={350} height={350} alt="Avatar" unoptimized={true} src={`${base}${img}`} />
           <h4>
             Link: <Link href={`${base}${img}`}>here</Link>
           </h4>
-          <img width="100px" src={`${base}${img}`} />
+          <Image width={100} height={100} alt="Avatar" unoptimized={true} src={`${base}${img}`} />
         </section>
 
         <section className="flex-auto px-4 pb-16 sm:px-6 lg:px-8 lg:pb-24 lg:pt-0">

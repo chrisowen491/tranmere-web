@@ -25,6 +25,12 @@ module.exports = withPlugins([[withBundleAnalyzer]], {
         port: '',
         pathname: '/**',
       },
+	  {
+        protocol: 'https',
+        hostname: 'www.tranmere-web.com',
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
   async rewrites() {

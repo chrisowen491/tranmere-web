@@ -1,8 +1,13 @@
+import Image from "next/image";
+
 export function Kit(props: { season: string; image: string }) {
   return (
     <>
-      <img
+      <Image
         alt={props.season}
+        width={100}
+        height={100}
+        unoptimized={true}
         src={props.image}
         className="mx-auto h-24 w-24 rounded-full"
       />

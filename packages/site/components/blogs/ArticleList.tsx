@@ -27,22 +27,24 @@ export default function ArticleList(props: {
                 className="relative isolate flex flex-col gap-8 lg:flex-row"
               >
                 <div className="relative aspect-[16/9] sm:aspect-[2/1] lg:aspect-square lg:w-64 lg:shrink-0">
-                  {post.pic != null ? (
-                    <img
-                      alt={post.title}
-                      src={post.pic.url}
-                      className="absolute inset-0 h-full rounded-2xl bg-gray-50 dark:bg-gray-950 mx-auto"
-                    />
-                  ) : (
-                    <Image
-                      alt={post.title}
-                      width={512}
-                      height={512}
-                      src='https://images.ctfassets.net/pz711f8blqyy/4xiJsea65ajh0swqmdEbOF/a2fc207703c03245cd64a8c01b857e28/2021.svg'
-                      className="absolute inset-0 h-full rounded-2xl bg-gray-50 dark:bg-gray-950 mx-auto"
-                    />
-                  )}
-                  <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-gray-900/10" />
+                  <Link href={`/page/blog/${post.slug}`}>
+                    {post.pic != null ? (
+                      <img
+                        alt={post.title}
+                        src={post.pic.url}
+                        className="absolute inset-0 h-full rounded-2xl bg-gray-50 dark:bg-gray-950 mx-auto"
+                      />
+                    ) : (
+                      <Image
+                        alt={post.title}
+                        width={512}
+                        height={512}
+                        src='https://images.ctfassets.net/pz711f8blqyy/4xiJsea65ajh0swqmdEbOF/a2fc207703c03245cd64a8c01b857e28/2021.svg'
+                        className="absolute inset-0 h-full rounded-2xl bg-gray-50 dark:bg-gray-950 mx-auto"
+                      />
+                    )}
+                    <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-gray-900/10" />
+                  </Link>
                 </div>
                 <div>
                   <div className="flex items-center gap-x-4 text-xs">
