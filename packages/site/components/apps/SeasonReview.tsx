@@ -21,6 +21,7 @@ import { BlogItem } from "@/lib/types";
 import { buildImagePath } from "@/lib/apiFunctions";
 import { areIntervalsOverlapping } from "date-fns";
 import Link from "next/link";
+import Image from "next/image";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -176,12 +177,12 @@ export default function SeasonReview(props: {
                       aria-hidden="true"
                       className="h-6 w-6 text-indigo-600 dark:text-indigo-50"
                     />
-                    <a
+                    <Link
                       href={`/season/${seasonInt - 1}`}
                       className="text-sm font-semibold leading-6 text-indigo-900 sm:block dark:text-indigo-400"
                     >
                       Previous
-                    </a>
+                    </Link>
                   </>
                 ) : (
                   ""
@@ -189,12 +190,12 @@ export default function SeasonReview(props: {
 
                 {seasonInt < 2024 ? (
                   <>
-                    <a
+                    <Link
                       href={`/season/${seasonInt + 1}`}
                       className="text-sm font-semibold leading-6 text-indigo-900 sm:block dark:text-indigo-400"
                     >
                       Next
-                    </a>
+                    </Link>
                     <ChevronRightIcon
                       aria-hidden="true"
                       className="h-6 w-6 text-indigo-600 dark:text-indigo-50"
@@ -236,7 +237,10 @@ export default function SeasonReview(props: {
                               <div className="flex items-center">
                                 <div className="h-11 w-11 flex-shrink-0">
                                   {manager.programmePath ? (
-                                    <img
+                                    <Image
+                                      alt="Programme With Manager On Cover"
+                                      height={200}
+                                      width={200}
                                       src={buildImagePath(
                                         manager.programmePath!,
                                         200,
@@ -295,7 +299,11 @@ export default function SeasonReview(props: {
                             <div className="flex items-center">
                               <div className="h-11 w-11 flex-shrink-0">
                                 {topScorers[0].bio?.picLink ? (
-                                  <img
+                                  <Image
+                                    width={200}
+                                    height={200}
+                                    unoptimized={true}
+                                    alt={topScorers[0].Player}
                                     src={topScorers[0].bio.picLink}
                                     className="h-11 w-11 rounded-full"
                                   />
@@ -348,7 +356,11 @@ export default function SeasonReview(props: {
                           <div className="flex items-center">
                             <div className="h-11 w-11 flex-shrink-0">
                               {player.bio?.picLink ? (
-                                <img
+                                <Image
+                                  width={200}
+                                  height={200}
+                                  unoptimized={true}
+                                  alt={player.Player}
                                   src={player.bio.picLink}
                                   className="h-11 w-11 rounded-full"
                                 />
@@ -379,12 +391,12 @@ export default function SeasonReview(props: {
                 </table>
               </div>
               <p className="mt-6">
-                <a
+                <Link
                   className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                   href={`/player-records/${props.season}`}
                 >
                   Full Player Records
-                </a>
+                </Link>
               </p>
             </div>
 
@@ -483,12 +495,12 @@ export default function SeasonReview(props: {
                         <p className="mt-5 mb-5 line-clamp-3 text-sm leading-6 text-gray-600">
                           {article.description}
                         </p>
-                        <a
+                        <Link
                           href={`/page/blog/${article.slug}`}
                           className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:text-gray-50"
                         >
                           Read
-                        </a>
+                        </Link>
                       </div>
                     </article>
                   ))}

@@ -1,5 +1,6 @@
 import { PlayerProfile } from "@/lib/types";
 import { LinkButton } from "@/components//forms/LinkButton";
+import Image from "next/image";
 
 export function PlayerOfTheDay(props: { randomplayer: PlayerProfile }) {
   const { randomplayer = props.randomplayer } = props;
@@ -11,9 +12,12 @@ export function PlayerOfTheDay(props: { randomplayer: PlayerProfile }) {
   }
   return (
     <>
-      <img
+      <Image
         alt={randomplayer.player.name}
-        src={randomplayer.player.picLink}
+        width={200}
+        height={200}  
+        unoptimized={true}
+        src={randomplayer.player.picLink!}
         className="h-80 w-80 object-cover object-left mx-auto"
       />
       <div className="p-10 pt-4 mx-auto">

@@ -14,6 +14,8 @@ import { BreadcrumbLinks } from "@/components/fragments/BreadcrumbLinks";
 import { Reviews } from "@/components/comments/Reviews";
 import CommentPanel from "@/components/comments/CommentPanel";
 import Link from "next/link";
+import Image from "next/image";
+
 
 const breadcrumbs = [
   { id: 1, name: "Home", href: "/" },
@@ -45,9 +47,12 @@ export default function PlayerProfileView(props: {
               <h2 className="sr-only">Images</h2>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 lg:grid-rows-3 lg:gap-8">
-                <img
+                <Image
                   alt={player.player.name}
-                  src={player.player.picLink}
+                  width={400}
+                  height={400}
+                  unoptimized={true}
+                  src={player.player.picLink!}
                   className={"lg:col-span-2 lg:row-span-2"}
                 />
               </div>

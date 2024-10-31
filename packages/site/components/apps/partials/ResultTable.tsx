@@ -4,6 +4,7 @@ import {
   Match,
 } from "@tranmere-web/lib/src/tranmere-web-types";
 import { LinkButton } from "@/components/forms/LinkButton";
+import Image from "next/image";
 
 function trimDate(input?: string) {
   if (!input) {
@@ -208,7 +209,9 @@ export function ResultTable(props: {
                     </td>
                     <td className="whitespace-nowrap hidden px-3 py-3.5 md:table-cell text-center">
                       {result.programme ? (
-                        <img
+                        <Image
+                          width={100}
+                          height={200}
                           src={`https://images.tranmere-web.com/${result.programme}`}
                           alt={`${result.home} v ${result.visitor} Match Programme ${result.date}`}
                           className="mx-auto"

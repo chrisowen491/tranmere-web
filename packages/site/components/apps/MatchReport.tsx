@@ -11,6 +11,7 @@ import { Reviews } from "@/components/comments/Reviews";
 import { LinkButton } from "@/components/forms/LinkButton";
 import { BreadcrumbLinks } from "@/components/fragments/BreadcrumbLinks";
 import { PencilSquareIcon, ArrowPathIcon } from "@heroicons/react/24/outline";
+import Image from "next/image";
 
 export default function MatchReport(props: {
   match: MatchPageData;
@@ -71,7 +72,9 @@ export default function MatchReport(props: {
         <div className="lg:col-span-4 lg:row-end-1">
           <div className="rounded-lg">
             {match.programme ? (
-              <img
+              <Image
+                width={400}
+                height={400}
                 alt="Match Programme"
                 src={`https://images.tranmere-web.com/${match.programme}`}
               />
@@ -194,9 +197,12 @@ export default function MatchReport(props: {
                     >
                       {match.apps.map((player) => (
                         <li key={player.Name}>
-                          <img
-                            alt=""
-                            src={player.bio!.picLink}
+                          <Image
+                            alt={player.Name}
+                            width={200}
+                            height={200}
+                            unoptimized={true}
+                            src={player.bio!.picLink!}
                             className="mx-auto h-24 w-24 rounded-full"
                           />
                           <h3 className="mt-6 text-base font-semibold leading-7 tracking-tight">

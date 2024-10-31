@@ -1,6 +1,7 @@
 import { MatchMessageBubble } from "@/components/chat/MatchMessageBubble";
 import { PlayerBubble } from "@/components/chat/PlayerBubble";
 import { ExtendedMessage } from "@/lib/types";
+import Image from "next/image";
 
 export function ChatMessageBubble(props: { message: ExtendedMessage }) {
   const userAvatar = "/images/2023.png";
@@ -13,7 +14,7 @@ export function ChatMessageBubble(props: { message: ExtendedMessage }) {
   return (
     <div className={`${colorClassName} rounded px-4 py-2 max-w-full mb-8 flex`}>
       <div className="mr-2">
-        <img alt="" src={avatar} className="h-24 w-24 rounded-full" />
+        <Image alt="Avatar" width={200} height={200} src={avatar!} className="h-24 w-24 rounded-full" />
       </div>
       <div className="whitespace-pre-wrap flex flex-col">
         <span>{props.message.content}</span>
