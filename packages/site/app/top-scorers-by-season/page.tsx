@@ -3,6 +3,7 @@ import { Title } from "@/components/fragments/Title";
 import { GetTopScorersBySeason } from "@/lib/apiFunctions";
 import { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Top Scorers By Season",
@@ -27,7 +28,7 @@ export default async function TopScorersBySeason() {
           >
             {topScorers.map((player, idx) => (
               <li key={idx}>
-                <a
+                <Link
                   href={`/page/player/${player.Player}`}
                   className="text-sm leading-6 text-gray-600 dark:text-gray-50"
                 >
@@ -44,7 +45,7 @@ export default async function TopScorersBySeason() {
                   </h3>
                   <p>{player.Season}</p>
                   <p>{player.goals} goals</p>
-                </a>
+                </Link>
               </li>
             ))}
           </ul>

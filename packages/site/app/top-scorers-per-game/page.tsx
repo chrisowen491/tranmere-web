@@ -4,7 +4,8 @@ import { GetBaseUrl } from "@/lib/apiFunctions";
 import { getRequestContext } from "@cloudflare/next-on-pages";
 import { PlayerSeasonSummary } from "@tranmere-web/lib/src/tranmere-web-types";
 import { Metadata } from "next";
-
+import Image from "next/image";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Tranmere Top Scorers - Goals Per Game",
@@ -45,22 +46,24 @@ export default async function HatTricks() {
           >
             {players.map((player, idx) => (
               <li key={idx}>
-                <img
+                <Image
                   alt={player.Player}
-                  src={player.bio!.picLink}
+                  width={200}
+                  height={200}
+                  src={player.bio!.picLink!}
                   className="mx-auto h-24 w-24 rounded-full"
                 />
                 <h3 className="mt-6 text-base font-semibold leading-7 tracking-tight text-gray-900 dark:text-gray-50">
                   {player.Player}
                 </h3>
-                <a
+                <Link
                   href={`/page/player/${player.Player}`}
                   className="text-sm leading-6 text-gray-600 dark:text-gray-50"
                 >
                   <p>{player.goalsPerGame} goals per game</p>
                   <p>{player.goals} goals</p>
                   <p>{player.Apps} appearances</p>
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
