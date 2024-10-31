@@ -144,7 +144,7 @@ export default async function BlogPage(props: { params: SlugParams }) {
                       className="mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 text-center sm:grid-cols-3 md:grid-cols-4 lg:mx-0 lg:max-w-none lg:grid-cols-5 xl:grid-cols-6"
                     >
                       {article.blocksCollection.items.map((block, idx) => (
-                        <li key={idx}>
+                        <li key={idx} className="list-none">
                           {block.__typename == "Kit" ? (
                             <Kit
                               season={block.season!}
