@@ -13,6 +13,7 @@ import SearchBar from "@/components/search/SearchBar";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import Link from "next/link";
+import Image from "next/image";
 
 const navigation = [
   { name: "Results", href: "/results", current: false },
@@ -46,9 +47,11 @@ export function Navbar() {
             <div className="flex items-center px-2 lg:px-0">
               <div className="flex-shrink-0">
                 <Link href="/">
-                  <img
+                  <Image
                     src="/assets/images/logo_white_transparent.png"
                     alt="Tranmere-Web Logo"
+                    width={450}
+                    height={260}
                     className="hidden h-12 w-auto fill-slate-700 lg:block dark:fill-sky-100"
                   />
                 </Link>
@@ -110,6 +113,7 @@ export function Navbar() {
                         <Link
                           href="/api/auth/logout"
                           aria-label="logout"
+                          prefetch={false}
                           className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
                         >
                           Sign out
@@ -118,7 +122,7 @@ export function Navbar() {
                     </MenuItems>
                   </Menu>
                 ) : (
-                  <Link href="/api/auth/login" aria-label="login">
+                  <Link href="/api/auth/login" aria-label="login"  prefetch={false}>
                     <ChatBubbleBottomCenterIcon
                       aria-hidden="true"
                       className="h-6 w-6 text-white"

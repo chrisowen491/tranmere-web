@@ -1,6 +1,7 @@
 import { GetOnThisDay } from "@/lib/apiFunctions";
 import { PlayIcon } from "@heroicons/react/20/solid";
 import { LinkButton } from "@/components//forms/LinkButton";
+import Image from "next/image";
 export async function OnThisDay() {
   const match = await GetOnThisDay();
   if (!match) {
@@ -9,9 +10,11 @@ export async function OnThisDay() {
   return (
     <>
       {match.programme ? (
-        <img
+        <Image
           alt="Match Programme"
           src={`https://images.tranmere-web.com/${match.programme}`}
+          width={200}
+          height={400}
           className="h-80 mx-auto mt-2"
         />
       ) : (

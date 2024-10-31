@@ -2,6 +2,7 @@ export const runtime = "edge";
 import { Title } from "@/components/fragments/Title";
 import { GetAllHatTricks } from "@/lib/apiFunctions";
 import { Metadata } from "next";
+import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "Tranmere Hat Tricks",
@@ -28,9 +29,11 @@ export default async function HatTricks() {
           >
             {players.map((player, idx) => (
               <li key={idx}>
-                <img
+                <Image
+                  width={200}
+                  height={200}
                   alt={player.Player}
-                  src={player.picLink}
+                  src={player.picLink!}
                   className="mx-auto h-24 w-24 rounded-full"
                 />
                 <h3 className="mt-6 text-base font-semibold leading-7 tracking-tight text-gray-900 dark:text-gray-50">

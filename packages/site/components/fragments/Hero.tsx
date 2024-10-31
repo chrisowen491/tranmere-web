@@ -1,4 +1,5 @@
 import { Button } from "@/components/fragments/Button";
+import Image from "next/image";
 
 export function Hero() {
   return (
@@ -23,10 +24,12 @@ export function Hero() {
             </div>
           </div>
         </div>
-        <img
+        <Image
           src="https://www.tranmere-web.com/builder/1989/side-parting-left-small/ffd3b3/none/bc9d00/fcb98b/none/bc8a00"
-          alt="Image"
-          width={"300px"}
+          alt="Ian Muir Avatar"
+          unoptimized={true}
+          width={"300"}
+          height={"300"}
           className="absolute bottom-0 right-0 w-2/6 sm:w-1/4 xl:w-1/6"
         />
       </div>

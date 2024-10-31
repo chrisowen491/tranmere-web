@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 export function Star(props: {
   name: string;
@@ -10,8 +11,10 @@ export function Star(props: {
 }) {
   return (
     <>
-      <img
+      <Image
         alt={"Programme"}
+        height={200}
+        width={100}
         src={props.programme}
         className="mx-auto h-24 w-24 rounded-full"
       />
