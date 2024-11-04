@@ -8,5 +8,5 @@
     "group:all", 
     "schedule:earlyMondays"
   ],
-  "ignoreDeps": ["esbuild"]
+  "ignoreDeps": ["esbuild","cookie"]
 }
