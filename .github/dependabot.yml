@@ -15,7 +15,8 @@ updates:
           patterns:
             - "*"
     ignore:
-      - dependency-name: "esbuild"        
+      - dependency-name: "esbuild"
+      - dependency-name: "cookie"               
                                            
   - package-ecosystem: "github-actions"
     directory: "/"
