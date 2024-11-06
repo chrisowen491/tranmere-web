@@ -1,9 +1,6 @@
 import { FAQs } from "@/components/fragments/FAQ";
 import { Hero } from "@/components/fragments/Hero";
 import { Metadata } from "next";
-import { GetAllPlayers, GetBaseUrl } from "@/lib/apiFunctions";
-import { getRequestContext } from "@cloudflare/next-on-pages";
-import { PlayerProfile } from "@/lib/types";
 import { PlayerOfTheDay } from "@/components/fragments/PlayerOfTheDay";
 import { LastMatch } from "@/components/fragments/LastMatch";
 import {
@@ -121,16 +118,6 @@ export default async function Home() {
     { id: 4, name: "Match Reports", value: "20+" },
   ];
 
-  const players = await GetAllPlayers();
-  const randomplayer = players[Math.floor(Math.random() * players.length)];
-
-  const url =
-    GetBaseUrl(getRequestContext().env) + `/page/player/${randomplayer.name}`;
-
-  const playerRequest = await fetch(url);
-
-  const profile = (await playerRequest.json()) as PlayerProfile;
-
   function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(" ");
   }
@@ -149,7 +136,7 @@ export default async function Home() {
                 <div className="relative lg:col-span-2">
                   <div className="absolute inset-px rounded-lg max-lg:rounded-t-[2rem] lg:rounded-tl-[2rem]" />
                   <div className="relative flex h-full flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] max-lg:rounded-t-[calc(2rem+1px)] lg:rounded-tl-[calc(2rem+1px)]">
-                    <PlayerOfTheDay randomplayer={profile} />
+                    <PlayerOfTheDay />
                   </div>
                   <div className="pointer-events-none absolute inset-px rounded-lg shadow ring-1 ring-black/5 max-lg:rounded-t-[2rem] lg:rounded-tl-[2rem]" />
                 </div>
