@@ -34,7 +34,7 @@ export const InsertLinkTool = new DynamicStructuredTool({
           "operationName":"MyMutation"
         }
 
-        const query = await fetch(`https://api.prod.tranmere-web.com/graphql`, {
+        const query = await fetch(`https://api.tranmere-web.com/graphql`, {
           method: 'POST',
           body: JSON.stringify(body),
           headers: {

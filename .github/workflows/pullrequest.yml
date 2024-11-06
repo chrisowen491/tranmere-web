@@ -32,4 +32,4 @@ jobs:
           CONTENTFUL_ACCESS_TOKEN: ${{ secrets.CF_KEY }}
           API_PORT: "443"
           API_PROTOCOL: "https" 
-          API_DOMAIN: "api.prod.tranmere-web.com"          
+          API_DOMAIN: "api.tranmere-web.com"          

@@ -201,11 +201,11 @@ export class TranmereWebStack extends cdk.Stack {
         allowOrigins: ['*']
       },
       domainName: {
-        domainName: `api.prod.${rootDomain}`,
+        domainName: `api.${rootDomain}`,
         certificate: acm.Certificate.fromCertificateArn(
           this,
           'tranmere-web-cert',
-          'arn:aws:acm:us-east-1:559251280975:certificate/7c66b883-d2e0-491d-b678-fb288111b292'
+          'arn:aws:acm:us-east-1:559251280975:certificate/afb04599-690b-4911-8952-92c97112984c'
         ),
         endpointType: apigw.EndpointType.EDGE
       }
