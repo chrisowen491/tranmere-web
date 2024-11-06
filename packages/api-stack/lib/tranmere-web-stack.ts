@@ -30,7 +30,8 @@ export class TranmereWebStack extends cdk.Stack {
       CF_MANANGEMENT_KEY: CF_MANANGEMENT_KEY,
       DD_TAGS: DD_TAGS,
       OPENAI_API_KEY: OPENAI_API_KEY,
-      TAVILY_API_KEY: TAVILY_API_KEY
+      TAVILY_API_KEY: TAVILY_API_KEY,
+      DD_EXTENSION_VERSION: 'next'
     };
 
     const TranmereWebPlayerTable = ddb.Table.fromTableAttributes(
