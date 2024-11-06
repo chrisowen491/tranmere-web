@@ -59,7 +59,7 @@ export const ResultsTool = new DynamicStructuredTool({
     }) => {
       const realvenue = (venue === "Any" || !venue ) ? "" : venue;
       const realseason = (season === 0 || !season ) ? "" : `${season}`;
-      const query = await fetch(`https://api.prod.tranmere-web.com/result-search/?season=${realseason}&competition=&opposition=&manager=&venue=${realvenue}&pens=&sort=${sort}`)
+      const query = await fetch(`https://api.tranmere-web.com/result-search/?season=${realseason}&competition=&opposition=&manager=&venue=${realvenue}&pens=&sort=${sort}`)
 
       const results = await query.json() as {results: Result[]};
 

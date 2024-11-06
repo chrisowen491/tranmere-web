@@ -37,7 +37,7 @@ export default {
       return Response.json(results);
     } else if (pathname === '/players') {
       const search = await fetch(
-        'https://api.prod.tranmere-web.com/player-search/?season=&sort=&filter=',
+        'https://api.tranmere-web.com/player-search/?season=&sort=&filter=',
         { method: 'GET' }
       );
 

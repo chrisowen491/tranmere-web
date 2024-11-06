@@ -8,7 +8,7 @@ import {
   Team,
 } from "@tranmere-web/lib/src/tranmere-web-types";
 
-const APP_SYNC_URL = "https://api.prod.tranmere-web.com";
+const APP_SYNC_URL = "https://api.tranmere-web.com";
 const APP_SYNC_OPTIONS = {
   headers: {
     //'x-api-key': this.APP_SYNC_KEY
@@ -47,7 +47,7 @@ export async function GetTopScorersBySeason(): Promise<PlayerSeasonSummary[]> {
 
   for (let i = 1960; i <= GetYear(); i++) {
     const result = await fetch(
-      "https://api.prod.tranmere-web.com/player-search/?season=" +
+      "https://api.tranmere-web.com/player-search/?season=" +
         i +
         "&sort=Goals",
     );
@@ -96,7 +96,7 @@ export async function GetLastMatch(): Promise<Match> {
       : dateobj.getFullYear() - 1;
 
   const results = await fetch(
-    `https://api.prod.tranmere-web.com/result-search/?season=${theYear}&competition=&opposition=&manager=&venue=&pens=&sort=Date&c=${dateobj.getDate()}`,
+    `https://api.tranmere-web.com/result-search/?season=${theYear}&competition=&opposition=&manager=&venue=&pens=&sort=Date&c=${dateobj.getDate()}`,
   );
 
   const matches = (await results.json()) as { results: Match[] };

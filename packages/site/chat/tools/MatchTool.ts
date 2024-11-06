@@ -17,7 +17,7 @@ export const MatchTool = new DynamicStructuredTool({
 
       const theDate = new Date(date);
       const season = theDate.getUTCMonth() > 6 ? theDate.getFullYear() : theDate.getFullYear() - 1;
-      const query = await fetch(`https://api.prod.tranmere-web.com/match/${season}/${date}`)
+      const query = await fetch(`https://api.tranmere-web.com/match/${season}/${date}`)
       const results = await query.json()
       return JSON.stringify(results);
     }

@@ -17,7 +17,7 @@ import {
   PlayerSeasonSummary
 } from './tranmere-web-types';
 
-//const APP_SYNC_URL = 'https://api.prod.tranmere-web.com';
+//const APP_SYNC_URL = 'https://api.tranmere-web.com';
 //const APP_SYNC_OPTIONS = {
 //  headers: {
 //    //'x-api-key': this.APP_SYNC_KEY

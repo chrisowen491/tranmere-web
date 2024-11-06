@@ -4,7 +4,7 @@ export const runtime = "edge";
 export async function GET(req: NextRequest) {
   const url = new URL(req.url);
 
-  url.host = "api.prod.tranmere-web.com";
+  url.host = "api.tranmere-web.com";
   url.protocol = "https";
   url.port = "443";
 
