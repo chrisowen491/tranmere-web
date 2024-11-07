@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { z } from "zod";
 
 export const InsertLinkTool = new DynamicStructuredTool({
-    name: 'tranmere-web-insert-transfers-tool',
+    name: 'tranmere-web-insert-link-tool',
     description: 'Add related links to our player database',
     schema: z.object({
         player: z

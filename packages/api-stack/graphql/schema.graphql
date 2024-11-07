@@ -20,6 +20,8 @@ type Query {
   getTranmereWebOnThisDayById(day: String!): TranmereWebOnThisDay
   listTranmereWebPlayerLinks(filter: TableSimpleFilterInput, limit: Int, nextToken: String): TranmereWebPlayerLinksConnection
   getTranmereWebPlayerLinksById(id: String!): TranmereWebPlayerLinks
+  listTranmereWebPlayerTransfers(filter: TableSimpleFilterInput, limit: Int, nextToken: String): TranmereWebPlayerTransfersConnection
+  getTranmereWebPlayerTransfersById(id: String!): TranmereWebPlayerTransfers
 }
 
 type TranmereWebClubs {
@@ -89,6 +91,16 @@ type TranmereWebPlayerLinks {
   description: String!
 }
 
+type TranmereWebPlayerTransfers {
+  id: String!
+  name: ID!
+  cost: Int!
+  value: String!
+  to: String!
+  from: String!
+  season: Int!
+}
+
 type TranmereWebClubsConnection {
   items: [TranmereWebClubs]
   nextToken: String
@@ -114,6 +126,10 @@ type TranmereWebPlayerLinksConnection {
   nextToken: String
 }
 
+type TranmereWebPlayerTransfersConnection {
+  items: [TranmereWebPlayerTransfers]
+  nextToken: String
+}
 
 type TranmereWebStarsTableConnection {
   items: [TranmereWebStarsTable]
@@ -137,6 +153,15 @@ type Mutation {
         link: String!
         description: String!
     ): TranmereWebPlayerLinks!
+    addTranmereWebPlayerTransfers(
+        id: String!
+        name: ID!
+        cost: Int!
+        value: String!
+        to: String!
+        from: String!
+        season: Int!
+    ): TranmereWebPlayerTransfers!
 }
 
 
