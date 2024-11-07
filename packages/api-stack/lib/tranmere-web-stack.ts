@@ -500,6 +500,12 @@ export class TranmereWebStack extends cdk.Stack {
           putSchema: 'putlink.json'
         },
         {
+          table: 
+          TranmereWebPlayerTransfers,
+          keyColumn: 'id',
+          putSchema: 'puttransfer.json'
+        },
+        {
           table: TranmereWebStarsTable,
           keyColumn: 'id'
         },
