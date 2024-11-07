@@ -74,7 +74,7 @@ jobs:
       # https://docs.datadoghq.com/serverless/aws_lambda/installation/nodejs/?tab=awssam    
       - name: Instrument
         run: | 
-          datadog-ci lambda instrument --functions-regex "^TranmereWebStack" -r eu-west-1 -v ${{ vars.DataDogNodeLayerVersion}} -e ${{ vars.DataDogExtensionLayerVersion}} --service tranmere-web --env prod --version ${{needs.build_test_and_package.outputs.current-version}} --merge-xray-traces false
+          datadog-ci lambda instrument --functions-regex "^TranmereWebStack" -r eu-west-1 -v ${{ vars.DataDogNodeLayerVersion}} -e ${{ vars.DataDogExtensionLayerVersion}} --service tranmere-web --env prod --version ${{needs.build_test_and_package.outputs.current-version}} --merge-xray-traces false --tracing true --capture-lambda-payload true
         env:
           AWS_REGION: eu-west-1
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
