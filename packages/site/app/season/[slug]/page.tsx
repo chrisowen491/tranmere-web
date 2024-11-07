@@ -21,7 +21,7 @@ export async function generateMetadata(props: { params: SlugParams }) {
   let title: string | null = null;
 
   title = "Season Review - " + decodeURI(params.slug) + " Tranmere-Web";
-  description = "Tranmere Rovers Season REview : " + decodeURI(params.slug);
+  description = "Tranmere Rovers Season Review : " + decodeURI(params.slug);
 
   return {
     title: title,
@@ -57,7 +57,7 @@ export default async function SeasonPage(props: { params: SlugParams }) {
 
   const latestSeasonPlayerRequest = await fetch(
     GetBaseUrl(getRequestContext().env) +
-      `/player-search/?season=${season}&sort==&filter=`,
+      `/player-search/?season=${season}&sort=&filter=`,
   );
 
   const playerResults = (await latestSeasonPlayerRequest.json()) as {

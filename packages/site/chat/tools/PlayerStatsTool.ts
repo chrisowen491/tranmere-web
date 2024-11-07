@@ -58,7 +58,7 @@ export const PlayerStatsTool = new DynamicStructuredTool({
       limit,
       player
     }) => {
-      const query = await fetch(`https://api.prod.tranmere-web.com/player-search/?season=${season}&sort=${sort}&filter=`)
+      const query = await fetch(`https://api.tranmere-web.com/player-search/?season=${season}&sort=${sort}&filter=`)
 
       const players = await query.json() as {players: PlayerSeasonSummary[]};
       

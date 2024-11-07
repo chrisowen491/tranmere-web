@@ -28,7 +28,7 @@ export const TransferTool = new DynamicStructuredTool({
       type,
       club
     }) => {
-      const query = await fetch(`https://api.prod.tranmere-web.com/transfer-search/?season${season}=&filter=${type}&club=${club}`)
+      const query = await fetch(`https://api.tranmere-web.com/transfer-search/?season${season}=&filter=${type}&club=${club}`)
 
       const results = await query.json()
       return JSON.stringify(results);
