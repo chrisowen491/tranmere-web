@@ -81,6 +81,16 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           DATADOG_API_KEY: ${{ secrets.DD_KEY }}
           DATADOG_SITE: datadoghq.eu
+      - name: InstrumentImages
+        run: | 
+          datadog-ci lambda instrument --functions-regex "^ServerlessImageHandler" -r eu-west-1 -v ${{ vars.DataDogNodeLayerVersion}} -e ${{ vars.DataDogExtensionLayerVersion}} --service image-handler --env prod --version ${{needs.build_test_and_package.outputs.current-version}} --merge-xray-traces false
+        env:
+          AWS_REGION: eu-west-1
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          DATADOG_API_KEY: ${{ secrets.DD_KEY }}
+          DATADOG_SITE: datadoghq.eu
+
 
   api_acceptance_test:
     runs-on: ubuntu-latest
