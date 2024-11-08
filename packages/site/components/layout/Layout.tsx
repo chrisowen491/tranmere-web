@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { Navbar } from "@/components/layout/Navbar";
 import Footer from "./Footer";
+import DataDog from "./DataDog";
 
 function Header() {
   let [isScrolled, setIsScrolled] = useState(false);
@@ -28,6 +29,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex w-full flex-col">
       <Header />
+      <DataDog/>
       {children}
       <Footer></Footer>
     </div>
