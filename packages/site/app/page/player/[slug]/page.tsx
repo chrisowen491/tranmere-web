@@ -22,8 +22,11 @@ export default async function PlayerProfilePage(props: { params: SlugParams }) {
     `/page/player/${decodeURI(params.slug)}?json=true`;
 
   const playerRequest = await fetch(url);
-
+  
   const profile = (await playerRequest.json()) as PlayerProfile;
+  
+  if (!profile || !profile.player) notFound();
+
   const articles = await getAllArticlesForTag(100, decodeURI(params.slug));
 
   const comments = await GetCommentsByUrl(
@@ -37,8 +40,6 @@ export default async function PlayerProfilePage(props: { params: SlugParams }) {
   });
 
   const avg = Math.round(score / comments.length);
-
-  if (!profile || !profile.player) notFound();
 
   return (
     <>

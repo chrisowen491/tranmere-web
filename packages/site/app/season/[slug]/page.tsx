@@ -1,5 +1,5 @@
 import { Title } from "@/components/fragments/Title";
-import { GetAllTranmereManagers, GetBaseUrl } from "@/lib/apiFunctions";
+import { GetAllTranmereManagers, GetBaseUrl, GetYear } from "@/lib/apiFunctions";
 import {
   H2HResult,
   H2HTotal,
@@ -11,6 +11,8 @@ import { getRequestContext } from "@cloudflare/next-on-pages";
 import SeasonReview from "@/components/apps/SeasonReview";
 import { getAllArticlesForTag } from "@/lib/api";
 import { SlugParams } from "@/lib/types";
+import { parse } from "path";
+import { notFound } from "next/navigation";
 
 export const runtime = "edge";
 
@@ -32,18 +34,20 @@ export async function generateMetadata(props: { params: SlugParams }) {
 export default async function SeasonPage(props: { params: SlugParams }) {
 
   const params = await props.params;
+  const season = decodeURI(params.slug);
+  
+  if(parseInt(season) < 1920 || parseInt(season) > GetYear()) notFound(); 
+  
   const base = GetBaseUrl(getRequestContext().env) + "/result-search/";
   let title: string | null = null;
   let sort = "Date";
   let venue = "";
   let pens = "";
-  let season = "";
   let opposition = "";
   let competition = "";
   const managers = await GetAllTranmereManagers();
 
-  title = "Season: " + decodeURI(params.slug);
-  season = decodeURI(params.slug);
+  title = "Season: " + season;
 
   const latestSeasonRequest = await fetch(
     base +

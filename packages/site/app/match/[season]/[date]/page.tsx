@@ -28,9 +28,10 @@ export default async function MatchPage(props: { params: MatchParams }) {
   const url = `${GetBaseUrl(getRequestContext().env)}${baseUrl}`;
 
   const matchRequest = await fetch(url);
-  const match = (await matchRequest.json()) as MatchPageData;
 
-  if (!match) notFound();
+  if (matchRequest.status != 200) notFound();
+
+  const match = (await matchRequest.json()) as MatchPageData;
 
   const seasonMatchesUrl = `${GetBaseUrl(getRequestContext().env)}/result-search/?season=${match.season}`;
 
@@ -41,8 +42,8 @@ export default async function MatchPage(props: { params: MatchParams }) {
   };
 
 
-  let next = matches.results.filter((m) => m.date > match.date).slice(0, 5);
-  let previous = matches.results.filter((m) => m.date < match.date).slice(0, 5);
+  const next = matches.results.filter((m) => m.date > match.date).slice(0, 5);
+  const previous = matches.results.filter((m) => m.date < match.date).slice(0, 5);
 
   const comments = await GetCommentsByUrl(getRequestContext().env, baseUrl);
   let score = 0;
@@ -57,9 +58,9 @@ export default async function MatchPage(props: { params: MatchParams }) {
       match={match}
       next={next}
       previous={previous}
-      comments={comments}
+      comments={[]}
       url={baseUrl}
-      avg={avg}
+      avg={1}
     ></MatchReport>
   );
 }
