@@ -230,10 +230,7 @@ export class TranmereWebStack extends cdk.Stack {
     const date = season.addResource('{date}');
 
     const report = date.addResource('report');
-    const goal = api.root.addResource('goal');
-    const goalseason = goal.addResource('{season}');
-    const goalid = goalseason.addResource('{id}');
-    const transfers = api.root.addResource('transfers');
+
     const profile = api.root.addResource('profile');
     const playerName = profile.addResource('{playerName}');
     const links = api.root.addResource('links');
@@ -296,17 +293,6 @@ export class TranmereWebStack extends cdk.Stack {
       }
     });
     */
-
-    new TranmereWebLambda(this, 'MatchUpdateFunction', {
-      environment: env_variables,
-      apiResource: date,
-      apiMethod: 'POST',
-      lambdaFile: './lambda/matchupdate.ts',
-      readWriteTables: [TranmereWebGames],
-      authorizer: cognitoAuthorizer,
-      scopes: 'TranmereWeb/matches.read'
-    });
-
     new TranmereWebLambda(this, 'MatchReportFunction', {
       environment: env_variables,
       apiResource: report,
@@ -319,34 +305,6 @@ export class TranmereWebStack extends cdk.Stack {
         TranmereWebAppsTable,
         TranmereWebGoalsTable
       ]
-    });
-
-    new TranmereWebLambda(this, 'GoalUpdateFunction', {
-      environment: env_variables,
-      apiResource: goalid,
-      apiMethod: 'POST',
-      lambdaFile: './lambda/goalupdate.ts',
-      readWriteTables: [TranmereWebGoalsTable],
-      authorizer: cognitoAuthorizer,
-      scopes: 'TranmereWeb/matches.read'
-    });
-
-    new TranmereWebLambda(this, 'GoalFunction', {
-      environment: env_variables,
-      apiResource: goalid,
-      apiMethod: 'GET',
-      lambdaFile: './lambda/goal.ts',
-      readTables: [TranmereWebGoalsTable]
-    });
-
-    new TranmereWebLambda(this, 'TransferUpdateFunction', {
-      environment: env_variables,
-      apiResource: transfers,
-      apiMethod: 'POST',
-      lambdaFile: './lambda/transferinsert.ts',
-      readWriteTables: [TranmereWebPlayerTransfers],
-      authorizer: cognitoAuthorizer,
-      scopes: 'TranmereWeb/matches.read'
     });
 
     new TranmereWebLambda(this, 'ProfileBuilderFunction', {
@@ -362,16 +320,6 @@ export class TranmereWebStack extends cdk.Stack {
         TranmereWebPlayerSeasonSummaryTable,
         TranmereWebPlayerTransfers
       ]
-    });
-
-    new TranmereWebLambda(this, 'LinksUpdateFunction', {
-      environment: env_variables,
-      apiResource: links,
-      apiMethod: 'POST',
-      lambdaFile: './lambda/linksinsert.ts',
-      readWriteTables: [TranmereWebPlayerLinks],
-      //authorizer: cognitoAuthorizer,
-      scopes: 'TranmereWeb/matches.read'
     });
 
     new TranmereWebLambda(this, 'PlayerSearchFunction', {

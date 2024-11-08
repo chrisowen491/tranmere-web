@@ -40,9 +40,6 @@ exports.handler = async (
   const sort = event.queryStringParameters
     ? event.queryStringParameters.sort
     : null;
-  const or = event.queryStringParameters
-    ? event.queryStringParameters.or
-    : null;
 
   const data = await getResults(
     season,
@@ -52,8 +49,7 @@ exports.handler = async (
     manager,
     venue,
     pens,
-    sort,
-    or
+    sort
   );
   const results: any[] = [];
   const h2hresults = [
@@ -118,7 +114,7 @@ exports.handler = async (
     } else {
       delete match.programme;
     }
-    if (date && !or) {
+    if (date) {
       match.goals = await utils.getGoalsBySeason(match.season, date);
       match.apps = await utils.getAppsBySeason(match.season, date);
     }
@@ -156,7 +152,7 @@ exports.handler = async (
     });
   }
 
-  if (date && results.length == 1 && !or)
+  if (date && results.length == 1)
     return utils.sendResponse(200, results[0]);
   else
     return utils.sendResponse(200, {
@@ -174,8 +170,7 @@ async function getResults(
   manager,
   venue,
   pens,
-  sort,
-  or
+  sort
 ) {
   let query = false;
   let params: QueryCommandInput = {
@@ -236,30 +231,6 @@ async function getResults(
     params.ExpressionAttributeValues![':to'] = decodeURIComponent(dates[1]);
   }
 
-  if (or) {
-    let modifier = '>';
-    if (or == 'previous') {
-      modifier = '<';
-      params.ScanIndexForward = false;
-    }
-    params.KeyConditionExpression = `season = :season and #date ${modifier} :date`;
-    params.ExpressionAttributeValues![':season'] = decodeURIComponent(season);
-    params.ExpressionAttributeNames!['#date'] = 'date';
-    params.ExpressionAttributeValues![':date'] = decodeURIComponent(date);
-    params.Limit = 5;
-  } else if (date) {
-    if (query) {
-      params.KeyConditionExpression =
-        params.KeyConditionExpression + ' and #date = :date';
-    } else {
-      params.FilterExpression = params.FilterExpression
-        ? params.FilterExpression + ' and #date = :date'
-        : '#date = :date';
-    }
-    params.ExpressionAttributeNames!['#date'] = 'date';
-    params.ExpressionAttributeValues![':date'] = decodeURIComponent(date);
-  }
-
   if (season && opposition)
     params = buildQuery(params, opposition, 'opposition');
 
@@ -284,7 +255,7 @@ async function getResults(
 
   const result = query ? await dynamo.query(params) : await dynamo.scan(params);
   let items = result.Items;
-  if (typeof result.LastEvaluatedKey != 'undefined' && !or) {
+  if (typeof result.LastEvaluatedKey != 'undefined') {
     params.ExclusiveStartKey = result.LastEvaluatedKey;
     const nextResults = query
       ? await dynamo.query(params)
