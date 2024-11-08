@@ -31,7 +31,8 @@ exports.handler = async (
   const links = await utils.getPlayerLinks(playerName);
 
   if (!player) {
-    throw new Error('Player has no records');
+    console.log('Player not found: ' + playerName);
+    return utils.sendResponse(404, { message: 'Player not found' });
   }
 
   const playerview: PlayerView = {
