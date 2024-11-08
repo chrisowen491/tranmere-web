@@ -29,18 +29,17 @@ export default async function MatchPage(props: { params: MatchParams }) {
   const matchRequest = await fetch(url);
   const match = (await matchRequest.json()) as MatchPageData;
 
-  const nextMatchesUrl = `${GetBaseUrl(getRequestContext().env)}/result-search/?season=${match.season}&date=${match.date}&or=next`;
-  const previousMatchesUrl = `${GetBaseUrl(getRequestContext().env)}/result-search/?season=${match.season}&date=${match.date}&or=previous`;
+  const seasonMatchesUrl = `${GetBaseUrl(getRequestContext().env)}/result-search/?season=${match.season}`;
 
-  const nextMatches = await fetch(nextMatchesUrl);
-  const previousMatches = await fetch(previousMatchesUrl);
+  const seasonMatches = await fetch(seasonMatchesUrl);
 
-  const next = (await nextMatches.json()) as {
+  const matches = (await seasonMatches.json()) as {
     results: Match[];
   };
-  const previous = (await previousMatches.json()) as {
-    results: Match[];
-  };
+
+
+  let next = matches.results.filter((m) => m.date > match.date).slice(0, 5);
+  let previous = matches.results.filter((m) => m.date < match.date).slice(0, 5);
 
   const comments = await GetCommentsByUrl(getRequestContext().env, baseUrl);
   let score = 0;
@@ -53,11 +52,11 @@ export default async function MatchPage(props: { params: MatchParams }) {
   return (
     <MatchReport
       match={match}
-      next={next.results}
-      previous={previous.results}
-      comments={comments}
+      next={next}
+      previous={previous}
+      comments={[]}
       url={baseUrl}
-      avg={avg}
+      avg={1}
     ></MatchReport>
   );
 }

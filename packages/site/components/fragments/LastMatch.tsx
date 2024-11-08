@@ -16,7 +16,7 @@ export async function LastMatch() {
           width={200}
           height={400}
           src={`https://images.tranmere-web.com/${match.largeProgramme}`}
-          className="h-80 object-cover object-left"
+          className="h-80 object-cover object-left mx-auto"
         />
       ) : (
         <PlayIcon
