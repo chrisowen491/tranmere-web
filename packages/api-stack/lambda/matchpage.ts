@@ -43,6 +43,12 @@ exports.handler = async (
   }
 
   const match = await utils.getResultForDate(season, date!);
+
+  if (!match) {
+    console.log('Match not found: ' + date);
+    return utils.sendResponse(404, { message: 'Match not found' });
+  }
+
   const report = await utils.getReportForDate(date!);
 
   const view: MatchView = match!;

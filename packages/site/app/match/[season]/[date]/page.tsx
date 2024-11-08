@@ -4,6 +4,7 @@ import { Match } from "@tranmere-web/lib/src/tranmere-web-types";
 import { GetBaseUrl } from "@/lib/apiFunctions";
 import MatchReport from "@/components/apps/MatchReport";
 import { GetCommentsByUrl } from "@/lib/comments";
+import { notFound } from "next/navigation";
 
 export const runtime = "edge";
 
@@ -28,6 +29,8 @@ export default async function MatchPage(props: { params: MatchParams }) {
 
   const matchRequest = await fetch(url);
   const match = (await matchRequest.json()) as MatchPageData;
+
+  if (!match) notFound();
 
   const seasonMatchesUrl = `${GetBaseUrl(getRequestContext().env)}/result-search/?season=${match.season}`;
 
