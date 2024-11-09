@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export interface Breadcrumb {
   id: number;
   name: string;
@@ -15,12 +17,12 @@ export function BreadcrumbLinks(props: {
         {props.breadcrumbs.map((breadcrumb) => (
           <li key={breadcrumb.id}>
             <div className="flex items-center">
-              <a
+              <Link
                 href={breadcrumb.href}
                 className="mr-4 text-sm font-medium text-gray-900 dark:text-gray-50"
               >
                 {breadcrumb.name}
-              </a>
+              </Link>
               <svg
                 viewBox="0 0 6 20"
                 aria-hidden="true"
@@ -35,13 +37,13 @@ export function BreadcrumbLinks(props: {
           </li>
         ))}
         <li className="text-sm">
-          <a
+          <Link
             href={props.currenthref}
             aria-current="page"
             className="font-medium text-gray-500 hover:text-gray-600 dark:text-blue-600"
           >
             {props.currentpage}
-          </a>
+          </Link>
         </li>
       </ol>
     </nav>
