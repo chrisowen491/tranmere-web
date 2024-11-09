@@ -3,6 +3,7 @@ import { Title } from "@/components/fragments/Title";
 import { GetAllHatTricks } from "@/lib/apiFunctions";
 import { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Tranmere Hat Tricks",
@@ -39,14 +40,15 @@ export default async function HatTricks() {
                 <h3 className="mt-6 text-base font-semibold leading-7 tracking-tight text-gray-900 dark:text-gray-50">
                   {player.Player}
                 </h3>
-                <a
+                <Link
                   href={`/match/${player.Season}/${player.Date}`}
+                  prefetch={false}
                   className="text-sm leading-6 text-gray-600 dark:text-gray-50"
                 >
                   <p>{player.Date}</p>
                   <p>vs {player.Opposition}</p>
                   <p>{player.Goals} goals</p>
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
