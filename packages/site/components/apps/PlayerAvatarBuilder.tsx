@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 
 export function PlayerAvatarBuilder() {
-  const base = "https://www.tranmere-web.com/builder/";
+  const base = "/builder/";
   const [img, setImg] = useState(
     "1966/simple/ffd3b3/none/000000/fcb98b/LightGray/8e740c",
   );

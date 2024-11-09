@@ -14,7 +14,6 @@ const CF_MANANGEMENT_KEY = process.env.CF_MANANGEMENT_KEY!;
 const EMAIL_ADDRESS = process.env.EMAIL_ADDRESS!;
 const DD_TAGS = process.env.DD_TAGS!;
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY!;
-const IS_WINDOWS = process.env.IS_WINDOWS ? true : false;
 const TAVILY_API_KEY = process.env.TAVILY_API_KEY!;
 
 export class TranmereWebStack extends cdk.Stack {
@@ -215,15 +214,7 @@ export class TranmereWebStack extends cdk.Stack {
     //const upload = api.root.addResource('upload');
     const media_sync = api.root.addResource('media-sync');
     const type = media_sync.addResource('{type}');
-    const builder = api.root.addResource('builder');
-    const kit = builder.addResource('{kit}');
-    const hair = kit.addResource('{hair}');
-    const body = hair.addResource('{body}');
-    const features = body.addResource('{features}');
-    const hairColour = features.addResource('{hairColour}');
-    const neckColour = hairColour.addResource('{neckColour}');
-    const background = neckColour.addResource('{background}');
-    const highlights = background.addResource('{highlights}');
+
     const match = api.root.addResource('match');
 
     const season = match.addResource('{season}');
@@ -394,32 +385,6 @@ export class TranmereWebStack extends cdk.Stack {
         TranmereWebPlayerTransfers,
         TranmereWebPlayerLinks
       ]
-    });
-
-    new TranmereWebLambda(this, 'PlayerBuilderFunction', {
-      environment: env_variables,
-      lambdaFile: './lambda/playerbuilder.ts',
-      apiResource: highlights,
-      apiMethod: 'GET',
-      commandHooks: {
-        beforeBundling(): string[] {
-          return [];
-        },
-        afterBundling(inputDir: string, outputDir: string): string[] {
-          if (IS_WINDOWS) {
-            return [
-              `mkdir ${outputDir}\\assets && xcopy ${inputDir}\\lambda\\assets\\* ${outputDir}\\assets /E`
-            ];
-          } else {
-            return [
-              `mkdir ${outputDir}/assets && cp -R ${inputDir}/packages/api-stack/lambda/assets/* ${outputDir}/assets`
-            ];
-          }
-        },
-        beforeInstall() {
-          return [];
-        }
-      }
     });
 
     new TranmereWebGraphQL(this, 'TranmereWebGraphQL', {

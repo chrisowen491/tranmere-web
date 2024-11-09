@@ -15,6 +15,20 @@ const APP_SYNC_OPTIONS = {
   },
 };
 
+export async function GetSvg(input: string): Promise<string> {
+  const start =
+    '<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">';
+  const end = '</svg>';
+
+  const request = await fetch(`https://raw.githubusercontent.com/chrisowen491/tranmere-web/refs/heads/master/packages/site/public/builder/${input}`);
+  if(request.status !== 200) {
+    return '';
+  }
+  const body = (await request.text()).replace(start, '').replace(end, '');
+  return body;
+}
+
+
 export function GetYear(): number {
   const theDate = new Date();
   if (theDate.getUTCMonth() > 6) {

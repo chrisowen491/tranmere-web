@@ -35,10 +35,6 @@ module.exports = withPlugins([[withBundleAnalyzer]], {
   },
   async rewrites() {
 		return [
-			{
-				source: '/builder/:path*',
-				destination: `https://api.tranmere-web.com/builder/:path*`,
-			},
       {
 				source: '/api/contact-us/:path*',
 				destination: `https://api.tranmere-web.com/contact-us/:path*`,
