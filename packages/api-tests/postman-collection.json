@@ -57,57 +57,6 @@
 			]
 		},
 		{
-			"name": "PlayerBuilder-Test",
-			"item": [
-				{
-					"name": "PlayerBuilder-Test",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "x-api-key",
-								"value": "{{testApiKey}}",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{protocol}}://{{domain}}/builder/2000/curly/ffd3b3/none/a8890d/fcb98b/LightGray/8e740c/",
-							"protocol": "{{protocol}}",
-							"host": [
-								"{{domain}}"
-							],
-							"path": [
-								"builder",
-								"2000",
-								"curly",
-								"ffd3b3",
-								"none",
-								"a8890d",
-								"fcb98b",
-								"LightGray",
-								"8e740c",
-								""
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
 			"name": "ResultSearch-Test",
 			"item": [
 				{
