@@ -224,7 +224,6 @@ export class TranmereWebStack extends cdk.Stack {
 
     const profile = api.root.addResource('profile');
     const playerName = profile.addResource('{playerName}');
-    const links = api.root.addResource('links');
     const page = api.root.addResource('page');
     const pageName = page.addResource('{pageName}');
     const classifier = pageName.addResource('{classifier}');

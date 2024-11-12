@@ -83,8 +83,7 @@ export class TranmereWebUtils {
       isBase64Encoded: false,
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-        'Cache-Control': 'public, max-age=86400'
+        'Access-Control-Allow-Origin': '*'
       },
       statusCode: code,
       body: JSON.stringify(obj)
