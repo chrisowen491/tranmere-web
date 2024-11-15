@@ -58,7 +58,7 @@ export default async function PlayerSearchPage() {
           .
         </p>
         <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-50">
-        Use the filters to switch season or focus on a groups of players. Player records only go far back as 1977, though I'm slowly filling in other years.
+        Use the filters to switch season or focus on a groups of players. Player records only go far back as 1977, though I am slowly filling in other years.
         </p>
       </Title>
       <PlayerSearch default={playerResults.players} season="2023" />
