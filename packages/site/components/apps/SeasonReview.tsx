@@ -18,7 +18,7 @@ import {
 import { ResultTable } from "./partials/ResultTable";
 import { LinkButton } from "../forms/LinkButton";
 import { BlogItem } from "@/lib/types";
-import { buildImagePath } from "@/lib/apiFunctions";
+import { buildImagePath, replaceSeasonsKit } from "@/lib/apiFunctions";
 import { areIntervalsOverlapping } from "date-fns";
 import Link from "next/link";
 import Image from "next/image";
@@ -306,7 +306,7 @@ export default function SeasonReview(props: {
                                     height={200}
                                     unoptimized={true}
                                     alt={topScorers[0].Player}
-                                    src={topScorers[0].bio.picLink}
+                                    src={replaceSeasonsKit(topScorers[0].bio.picLink)}
                                     className="h-11 w-11 rounded-full"
                                   />
                                 ) : (
@@ -363,7 +363,7 @@ export default function SeasonReview(props: {
                                   height={200}
                                   unoptimized={true}
                                   alt={player.Player}
-                                  src={player.bio.picLink}
+                                  src={replaceSeasonsKit(player.bio.picLink, props.season)}
                                   className="h-11 w-11 rounded-full"
                                 />
                               ) : (

@@ -46,6 +46,44 @@ export function GetSeasons(): number[] {
   return seasons;
 }
 
+export function GetSeasonsForPlayers(): number[] {
+  const seasons: number[] = [];
+  for (let i = GetYear(); i > 1976; i--) {
+    seasons.push(i);
+  }
+  return seasons;
+}
+
+export function replaceSeasonsKit(input: string, season?: string): string {
+  const seasonMapping = new Map<number, number>([
+    [1978, 1977],
+    [1984, 1983],
+    [1990, 1989],
+    [1992, 1991],
+    [1994, 1993],
+    [1996, 1995],
+    [1998, 1997],
+    [2001, 2000],
+    [2003, 2002],
+    [2005, 2006],
+    [2008, 2007]]
+  );
+
+  const re = /\/\d\d\d\dA*\//gm;
+  const re3 = /\/\d\d\d\d[A-Za-z]\//gm;
+  if(season) {
+    let seasonKit = season;
+    if (seasonMapping.get(parseInt(season))) {
+      seasonKit = seasonMapping.get(parseInt(season))?.toString()!;
+    }
+    
+    const output = input.replace(re, `/${seasonKit}/`);
+    return output;
+  } else {
+    return input;
+  }
+}
+
 export function GetBaseUrl(env: CloudflareEnv) {
   if (!env.API_DOMAIN) {
     env = process.env as unknown as CloudflareEnv;

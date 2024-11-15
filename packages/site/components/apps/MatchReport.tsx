@@ -12,6 +12,7 @@ import { LinkButton } from "@/components/forms/LinkButton";
 import { BreadcrumbLinks } from "@/components/fragments/BreadcrumbLinks";
 import { PencilSquareIcon, ArrowPathIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
+import { replaceSeasonsKit } from "@/lib/apiFunctions";
 
 export default function MatchReport(props: {
   match: MatchPageData;
@@ -202,7 +203,7 @@ export default function MatchReport(props: {
                             width={200}
                             height={200}
                             unoptimized={true}
-                            src={player.bio!.picLink!}
+                            src={replaceSeasonsKit(player.bio!.picLink!, match.season)}
                             className="mx-auto h-24 w-24 rounded-full"
                           />
                           <h3 className="mt-6 text-base font-semibold leading-7 tracking-tight">
