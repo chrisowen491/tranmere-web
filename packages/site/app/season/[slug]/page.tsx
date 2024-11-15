@@ -1,5 +1,5 @@
 import { Title } from "@/components/fragments/Title";
-import { GetAllTranmereManagers, GetBaseUrl, GetYear } from "@/lib/apiFunctions";
+import { GetAllTranmereManagers, GetBaseUrl, GetSeasons, GetYear } from "@/lib/apiFunctions";
 import {
   H2HResult,
   H2HTotal,
@@ -13,6 +13,7 @@ import { getAllArticlesForTag } from "@/lib/api";
 import { SlugParams } from "@/lib/types";
 import { parse } from "path";
 import { notFound } from "next/navigation";
+import { JumpBox } from "@/components/forms/JumpBox";
 
 export const runtime = "edge";
 
@@ -77,9 +78,12 @@ export default async function SeasonPage(props: { params: SlugParams }) {
 
   const articles = await getAllArticlesForTag(100, season);
 
+  const seasons = GetSeasons();
   return (
     <>
-      <Title title={title!}></Title>
+      <Title title={title!}>
+       <JumpBox season={season} seasons={seasons}></JumpBox>
+      </Title>
       <SeasonReview
         managers={managers}
         results={results.results}

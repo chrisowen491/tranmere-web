@@ -1,5 +1,5 @@
 "use client";
-import { GetSeasons } from "@/lib/apiFunctions";
+import { GetSeasonsForPlayers, replaceSeasonsKit } from "@/lib/apiFunctions";
 import { PlayerSeasonSummary } from "@tranmere-web/lib/src/tranmere-web-types";
 import { useState } from "react";
 import { FilterBox } from "@/components/forms/FilterBox";
@@ -16,14 +16,12 @@ export function PlayerSearch(props: {
   sort?: string;
   season?: string;
 }) {
-  const seasons = GetSeasons();
+  const seasons = GetSeasonsForPlayers();
   const base = "/api/player-search/";
 
   const [open, setOpen] = useState(false);
   const [players, setPlayers] = useState(props.default);
   const [season, setSeason] = useState(props.season);
-  const [sort, setSort] = useState(props.sort);
-  const [filter, setFilter] = useState(props.filter);
   const [loading, setLoading] = useState(false);
 
   const filters = [
@@ -57,36 +55,15 @@ export function PlayerSearch(props: {
     },
   ];
 
-  const seasonMapping = {
-    1978: 1977,
-    1984: 1983,
-    1990: 1989,
-    1992: 1991,
-    1994: 1993,
-    1996: 1995,
-    1998: 1997,
-    2001: 2000,
-    2003: 2002,
-    2005: 2006,
-    2008: 2007,
-  };
-
-  const re = /\/\d\d\d\d\//gm;
-  const re3 = /\/\d\d\d\d[A-Za-z]\//gm;
-
   function showFilters(event: React.MouseEvent<HTMLElement>): void {
     setOpen(true);
   }
-
   const onSubmit = async (formData: FormData) => {
     const targetSeason = formData.get("season")
       ? parseInt(formData.get("season")!.toString())
       : null;
 
     setSeason(formData.get("season") as string);
-    setSort(formData.get("sort") as string);
-    setFilter(formData.get("filter") as string);
-
     setLoading(true);
 
     const latestSeasonRequest = await fetch(
@@ -96,8 +73,6 @@ export function PlayerSearch(props: {
     const playerResults = (await latestSeasonRequest.json()) as {
       players: PlayerSeasonSummary[];
     };
-
-    //TODO Season Shirt
 
     setPlayers(playerResults.players);
     setLoading(false);
@@ -187,22 +162,20 @@ export function PlayerSearch(props: {
       <button
         type="button"
         onClick={showFilters}
-        className="
-    bg-green-500 
-    dark:bg-blue-600
-    px-3 py-2 
-    text-sm 
-    font-semibold 
-    text-white 
-    shadow-sm 
-    hover:bg-green-600 
-    dark:hover:bg-sky-500 
-    focus-visible:outline 
-    focus-visible:outline-2 
-    focus-visible:outline-offset-2 
-    focus-visible:outline-indigo-600
-    w-full
-    "
+        className=" bg-green-500 
+          dark:bg-blue-600
+          px-3 py-2 
+          text-sm 
+          font-semibold 
+          text-white 
+          shadow-sm 
+          hover:bg-green-600 
+          dark:hover:bg-sky-500 
+          focus-visible:outline 
+          focus-visible:outline-2 
+          focus-visible:outline-offset-2 
+          focus-visible:outline-indigo-600
+          w-full"
       >
         Filter
       </button>
@@ -282,7 +255,7 @@ export function PlayerSearch(props: {
                                 width={100}
                                 height={100}  
                                 unoptimized={true}
-                                src={player.bio.picLink}
+                                src={replaceSeasonsKit(player.bio.picLink, season)}
                                 className="h-11 w-11 rounded-full"
                               />
                             ) : (
