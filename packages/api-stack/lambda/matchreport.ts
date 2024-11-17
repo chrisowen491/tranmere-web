@@ -69,7 +69,7 @@ exports.handler = async (
   }
 
   if (
-    fixtures.eventGroups[0].secondaryGroups[0].events[0].status === 'POSTPONED'
+    fixtures.eventGroups[0].secondaryGroups[0].events[0].status === 'Postponed'
   ) {
     return utils.sendResponse(200, { message: 'postponed' });
   }
@@ -79,6 +79,8 @@ exports.handler = async (
   const competition = translateCompetition(
     fixtures.eventGroups[0].secondaryGroups[0].events[0].tournament.name
   );
+
+  const time = fixtures.eventGroups[0].secondaryGroups[0].events[0].time.displayTimeUK;
 
   const hscore =
     fixtures.eventGroups[0].secondaryGroups[0].events[0].home.score;
@@ -91,6 +93,20 @@ exports.handler = async (
   const lineups = (await lineupResponse.json()) as TeamLineups;
 
   const venue = lineups.homeTeam.name.fullName === 'Tranmere Rovers' ? 'Prenton Park' : 'Unknown';
+
+  const seasonMatchesUrl = `https://api.tranmere-web.com/result-search/?season=${season}`;
+
+  const seasonMatches = await fetch(seasonMatchesUrl);
+
+  const matches = (await seasonMatches.json()) as {
+    results: Match[];
+  };
+
+  const previous = matches.results.filter((m) => m.date < day!).slice(0, 5);
+
+  const lastmatches = previous.map((m) => {
+    return `${m.date} - ${m.competition} - ${m.home} ${m.ft} ${m.visitor} \n`;
+  })
 
   /*
   const attendance = lineups.payload[0].body.meta.attendance
@@ -217,11 +233,18 @@ exports.handler = async (
       ],
       [
         'user',
-        `Write a compelling soccer match report in 5-6 paragraphs using the following match events. 
+        `Write a compelling soccer match report in 5-6 paragraphs using the following match events.  
+        Write the report from the perspective of a Tranmere Rovers fan.
+        If the venue is unknown assume the game took place at the home of the team listed first.
+        Don't mention the attendance if it is not known.
         Competition: {competition}
         Venue: {venue}
         Date: {date}
+        Time: {time}
+        Referee: {referee}
         Attendance: {attendance}
+        Tranmere's last 5 games: 
+          {last5Ganes}
         Match events:
           {events}`
       ]
@@ -233,6 +256,8 @@ exports.handler = async (
       date: theMatch.date,
       venue: venue,
       referee: theMatch.referee,
+      time: time,
+      last5Ganes: lastmatches,
       attendance:
         theMatch.attendance && theMatch.attendance > 0
           ? theMatch.attendance
