@@ -32,7 +32,7 @@ exports.handler = async (
     ExpressionAttributeValues: {}
   };
 
-  if (season) {
+  if (season && season.match(/^\d{4}$/)) {
     (query.KeyConditionExpression = 'season = :season'),
       (query.ExpressionAttributeValues![':season'] = parseInt(season));
   }
@@ -69,7 +69,7 @@ exports.handler = async (
     }
   }
 
-  const result = season ? await dynamo.query(query) : await dynamo.scan(query);
+  const result = (season  && season.match(/^\d{4}$/)) ? await dynamo.query(query) : await dynamo.scan(query);
   const results = result.Items;
   const amendedResults: any[] = [];
   results?.forEach((result) => {
