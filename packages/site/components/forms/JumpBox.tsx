@@ -3,7 +3,7 @@
 export function JumpBox(props: { season: string, seasons: number[] }) {
 
   return (
-    <div className="w-1/4 pt-8">
+    <div className="w-1/2 pt-8">
         <select
             id="switch"
             name="switch"
