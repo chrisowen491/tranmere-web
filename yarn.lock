@@ -129,11 +129,6 @@
     "@algolia/requester-fetch" "5.14.2"
     "@algolia/requester-node-http" "5.14.2"
 
-"@algolia/client-common@5.13.0":
-  version "5.13.0"
-  resolved "https://registry.yarnpkg.com/@algolia/client-common/-/client-common-5.13.0.tgz#0b6c1ccde53a422a5a5daedd0fe59eb3d3f3bc0f"
-  integrity sha512-2SP6bGGWOTN920MLZv8s7yIR3OqY03vEe4U+vb2MGdL8a/8EQznF3L/nTC/rGf/hvEfZlX2tGFxPJaF2waravg==
-
 "@algolia/client-common@5.14.2":
   version "5.14.2"
   resolved "https://registry.yarnpkg.com/@algolia/client-common/-/client-common-5.14.2.tgz#659e5a78b3563b628a982f3d3054c424d8a3d2c9"
@@ -169,7 +164,7 @@
     "@algolia/requester-fetch" "5.14.2"
     "@algolia/requester-node-http" "5.14.2"
 
-"@algolia/client-search@5.14.2":
+"@algolia/client-search@5.14.2", "@algolia/client-search@^5.12.0":
   version "5.14.2"
   resolved "https://registry.yarnpkg.com/@algolia/client-search/-/client-search-5.14.2.tgz#7e7b7eaa66cea90ba645cb8739e2739d38ec733a"
   integrity sha512-0imdBZDjqxrshw0+eyJUgnkRAbS2W93UQ3BVj8VjN4xQylIMf0fWs72W7MZFdHlH78JJYydevgzqvGMcV0Z1CA==
@@ -178,16 +173,6 @@
     "@algolia/requester-browser-xhr" "5.14.2"
     "@algolia/requester-fetch" "5.14.2"
     "@algolia/requester-node-http" "5.14.2"
-
-"@algolia/client-search@^5.12.0":
-  version "5.13.0"
-  resolved "https://registry.yarnpkg.com/@algolia/client-search/-/client-search-5.13.0.tgz#7469d59fd2cb38f229c2bde981c1b2898a7759bb"
-  integrity sha512-s2ge3uZ6Zg2sPSFibqijgEYsuorxcc8KVHg3I95nOPHvFHdnBtSHymhZvq4sp/fu8ijt/Y8jLwkuqm5myn+2Sg==
-  dependencies:
-    "@algolia/client-common" "5.13.0"
-    "@algolia/requester-browser-xhr" "5.13.0"
-    "@algolia/requester-fetch" "5.13.0"
-    "@algolia/requester-node-http" "5.13.0"
 
 "@algolia/events@^4.0.1":
   version "4.0.1"
@@ -224,13 +209,6 @@
     "@algolia/requester-fetch" "5.14.2"
     "@algolia/requester-node-http" "5.14.2"
 
-"@algolia/requester-browser-xhr@5.13.0":
-  version "5.13.0"
-  resolved "https://registry.yarnpkg.com/@algolia/requester-browser-xhr/-/requester-browser-xhr-5.13.0.tgz#e77dfee5583e1976600062da9dbba49363825f4a"
-  integrity sha512-NV6oSCt5lFuzfsVQoSBpewEWf/h4ySr7pv2bfwu9yF/jc/g39pig8+YpuqsxlRWBm/lTGVA2V0Ai9ySwrNumIA==
-  dependencies:
-    "@algolia/client-common" "5.13.0"
-
 "@algolia/requester-browser-xhr@5.14.2":
   version "5.14.2"
   resolved "https://registry.yarnpkg.com/@algolia/requester-browser-xhr/-/requester-browser-xhr-5.14.2.tgz#aa2ba4aaa2d8e83e8a546f4a1363339f932c827d"
@@ -238,26 +216,12 @@
   dependencies:
     "@algolia/client-common" "5.14.2"
 
-"@algolia/requester-fetch@5.13.0":
-  version "5.13.0"
-  resolved "https://registry.yarnpkg.com/@algolia/requester-fetch/-/requester-fetch-5.13.0.tgz#958bc1abf50ee8e4b863e9d5ca8f8378e74937d4"
-  integrity sha512-094bK4rumf+rXJazxv3mq6eKRM0ep5AxIo8T0YmOdldswQt79apeufFiPLN19nHEWH22xR2FelimD+T/wRSP+Q==
-  dependencies:
-    "@algolia/client-common" "5.13.0"
-
 "@algolia/requester-fetch@5.14.2":
   version "5.14.2"
   resolved "https://registry.yarnpkg.com/@algolia/requester-fetch/-/requester-fetch-5.14.2.tgz#d0bcfce9f48efc0bedd40e5579832edbdee5d00a"
   integrity sha512-UNBg5mM4MIYdxPuVjyDL22BC6P87g7WuM91Z1Ky0J19aEGvCSF+oR+9autthROFXdRnAa1rACOjuqn95iBbKpw==
   dependencies:
     "@algolia/client-common" "5.14.2"
-
-"@algolia/requester-node-http@5.13.0":
-  version "5.13.0"
-  resolved "https://registry.yarnpkg.com/@algolia/requester-node-http/-/requester-node-http-5.13.0.tgz#420703e78343171812ec1c192940cf295f0e0013"
-  integrity sha512-JY5xhEYMgki53Wm+A6R2jUpOUdD0zZnBq+PC5R1TGMNOYL1s6JjDrJeMsvaI2YWxYMUSoCnRoltN/yf9RI8n3A==
-  dependencies:
-    "@algolia/client-common" "5.13.0"
 
 "@algolia/requester-node-http@5.14.2":
   version "5.14.2"
@@ -1554,15 +1518,6 @@
   resolved "https://registry.yarnpkg.com/@eslint-community/regexpp/-/regexpp-4.12.1.tgz#cfc6cffe39df390a3841cde2abccf92eaa7ae0e0"
   integrity sha512-CCZCDJuduB9OUkFkY2IgppNZMi2lBQgD2qzwXkEia16cge2pijY/aXi96CJMquDMn3nJdlPV1A5KrJEXwfLNzQ==
 
-"@eslint/config-array@^0.18.0":
-  version "0.18.0"
-  resolved "https://registry.yarnpkg.com/@eslint/config-array/-/config-array-0.18.0.tgz#37d8fe656e0d5e3dbaea7758ea56540867fd074d"
-  integrity sha512-fTxvnS1sRMu3+JjXwJG0j/i4RT9u4qJ+lqS/yCGap4lH4zZGzQ7tu+xZqQmcMZq5OBZDL4QRxQzRjkWcGt8IVw==
-  dependencies:
-    "@eslint/object-schema" "^2.1.4"
-    debug "^4.3.1"
-    minimatch "^3.1.2"
-
 "@eslint/config-array@^0.19.0":
   version "0.19.0"
   resolved "https://registry.yarnpkg.com/@eslint/config-array/-/config-array-0.19.0.tgz#3251a528998de914d59bb21ba4c11767cf1b3519"
@@ -1571,11 +1526,6 @@
     "@eslint/object-schema" "^2.1.4"
     debug "^4.3.1"
     minimatch "^3.1.2"
-
-"@eslint/core@^0.7.0":
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/@eslint/core/-/core-0.7.0.tgz#a1bb4b6a4e742a5ff1894b7ee76fbf884ec72bd3"
-  integrity sha512-xp5Jirz5DyPYlPiKat8jaq0EmYvDXKKpzTbxXMpT9eqlRJkRKIz9AGMdlvYjih+im+QlhWrpvVjl8IPC/lHlUw==
 
 "@eslint/core@^0.9.0":
   version "0.9.0"
@@ -1597,11 +1547,6 @@
     minimatch "^3.1.2"
     strip-json-comments "^3.1.1"
 
-"@eslint/js@9.14.0":
-  version "9.14.0"
-  resolved "https://registry.yarnpkg.com/@eslint/js/-/js-9.14.0.tgz#2347a871042ebd11a00fd8c2d3d56a265ee6857e"
-  integrity sha512-pFoEtFWCPyDOl+C6Ift+wC7Ro89otjigCf5vcuWqWgqNSQbRrpjSvdeE6ofLz4dHmyxD5f7gIdGT4+p36L6Twg==
-
 "@eslint/js@9.15.0":
   version "9.15.0"
   resolved "https://registry.yarnpkg.com/@eslint/js/-/js-9.15.0.tgz#df0e24fe869143b59731942128c19938fdbadfb5"
@@ -1611,13 +1556,6 @@
   version "2.1.4"
   resolved "https://registry.yarnpkg.com/@eslint/object-schema/-/object-schema-2.1.4.tgz#9e69f8bb4031e11df79e03db09f9dbbae1740843"
   integrity sha512-BsWiH1yFGjXXS2yvrf5LyuoSIIbPrGUWob917o+BTKuZ7qJdxX8aJLRxs1fS9n6r7vESrq1OUqb68dANcFXuQQ==
-
-"@eslint/plugin-kit@^0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@eslint/plugin-kit/-/plugin-kit-0.2.0.tgz#8712dccae365d24e9eeecb7b346f85e750ba343d"
-  integrity sha512-vH9PiIMMwvhCx31Af3HiGzsVNULDbyVkHXwlemn/B0TFj/00ho3y55efXrUZTfQipxoHC5u4xq6zblww1zm1Ig==
-  dependencies:
-    levn "^0.4.1"
 
 "@eslint/plugin-kit@^0.2.3":
   version "0.2.3"
@@ -1745,11 +1683,6 @@
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/@humanwhocodes/retry/-/retry-0.3.0.tgz#6d86b8cb322660f03d3f0aa94b99bdd8e172d570"
   integrity sha512-d2CGZR2o7fS6sWB7DG/3a95bGKQyHMACZ5aW8qGkkqQpUoZV6C0X7Pc7l4ZNMZkfNBf4VWNe9E1jRsf0G146Ew==
-
-"@humanwhocodes/retry@^0.4.0":
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/@humanwhocodes/retry/-/retry-0.4.0.tgz#b57438cab2a2381b4b597b0ab17339be381bd755"
-  integrity sha512-xnRgu9DxZbkWak/te3fcytNyp8MTbuiZIaueg2rgEvBuN55n04nwLYLU9TX/VVlusc9L2ZNXi99nUFNkHXtr5g==
 
 "@humanwhocodes/retry@^0.4.1":
   version "0.4.1"
@@ -5609,7 +5542,7 @@ create-require@^1.1.0:
   resolved "https://registry.yarnpkg.com/create-require/-/create-require-1.1.1.tgz#c1d7e8f1e5f6cfc9ff65f9cd352d37348756c333"
   integrity sha512-dcKFX3jn0MpIaXjisoRvexIJVEKzaq7z2rZKxf+MSr9TkdmHmsU4m2lcLojrj/FHl8mk5VxMmYA+ftRkP/3oKQ==
 
-cross-spawn@^7.0.0, cross-spawn@^7.0.2, cross-spawn@^7.0.3:
+cross-spawn@^7.0.0, cross-spawn@^7.0.3:
   version "7.0.3"
   resolved "https://registry.yarnpkg.com/cross-spawn/-/cross-spawn-7.0.3.tgz#f73a85b9d5d41d045551c177e2882d4ac85728a6"
   integrity sha512-iRDPJKUPVEND7dHPO8rkbOnPpyDygcDFtWjpeWNCgy8WP2rXcxXL8TskReQl6OrB2G7+UJrags1q15Fudc7G6w==
@@ -6667,7 +6600,7 @@ eslint-visitor-keys@^4.2.0:
   resolved "https://registry.yarnpkg.com/eslint-visitor-keys/-/eslint-visitor-keys-4.2.0.tgz#687bacb2af884fcdda8a6e7d65c606f46a14cd45"
   integrity sha512-UyLnSehNt62FFhSwjZlHmeokpRK59rcz29j+F1/aDgbkbRTk7wIc9XzdoasMUbRNKDM0qQt/+BJ4BrpFeABemw==
 
-eslint@9.15.0:
+eslint@9.15.0, eslint@^9.14.0:
   version "9.15.0"
   resolved "https://registry.yarnpkg.com/eslint/-/eslint-9.15.0.tgz#77c684a4e980e82135ebff8ee8f0a9106ce6b8a6"
   integrity sha512-7CrWySmIibCgT1Os28lUU6upBshZ+GxybLOrmRzi08kS8MBuO8QA7pXEgYgY5W8vK3e74xv0lpjo9DbaGU9Rkw==
@@ -6706,47 +6639,6 @@ eslint@9.15.0:
     minimatch "^3.1.2"
     natural-compare "^1.4.0"
     optionator "^0.9.3"
-
-eslint@^9.14.0:
-  version "9.14.0"
-  resolved "https://registry.yarnpkg.com/eslint/-/eslint-9.14.0.tgz#534180a97c00af08bcf2b60b0ebf0c4d6c1b2c95"
-  integrity sha512-c2FHsVBr87lnUtjP4Yhvk4yEhKrQavGafRA/Se1ouse8PfbfC/Qh9Mxa00yWsZRlqeUB9raXip0aiiUZkgnr9g==
-  dependencies:
-    "@eslint-community/eslint-utils" "^4.2.0"
-    "@eslint-community/regexpp" "^4.12.1"
-    "@eslint/config-array" "^0.18.0"
-    "@eslint/core" "^0.7.0"
-    "@eslint/eslintrc" "^3.1.0"
-    "@eslint/js" "9.14.0"
-    "@eslint/plugin-kit" "^0.2.0"
-    "@humanfs/node" "^0.16.6"
-    "@humanwhocodes/module-importer" "^1.0.1"
-    "@humanwhocodes/retry" "^0.4.0"
-    "@types/estree" "^1.0.6"
-    "@types/json-schema" "^7.0.15"
-    ajv "^6.12.4"
-    chalk "^4.0.0"
-    cross-spawn "^7.0.2"
-    debug "^4.3.2"
-    escape-string-regexp "^4.0.0"
-    eslint-scope "^8.2.0"
-    eslint-visitor-keys "^4.2.0"
-    espree "^10.3.0"
-    esquery "^1.5.0"
-    esutils "^2.0.2"
-    fast-deep-equal "^3.1.3"
-    file-entry-cache "^8.0.0"
-    find-up "^5.0.0"
-    glob-parent "^6.0.2"
-    ignore "^5.2.0"
-    imurmurhash "^0.1.4"
-    is-glob "^4.0.0"
-    json-stable-stringify-without-jsonify "^1.0.1"
-    lodash.merge "^4.6.2"
-    minimatch "^3.1.2"
-    natural-compare "^1.4.0"
-    optionator "^0.9.3"
-    text-table "^0.2.0"
 
 espree@^10.0.1, espree@^10.3.0:
   version "10.3.0"
@@ -12368,11 +12260,6 @@ text-extensions@^1.0.0:
   version "1.9.0"
   resolved "https://registry.yarnpkg.com/text-extensions/-/text-extensions-1.9.0.tgz#1853e45fee39c945ce6f6c36b2d659b5aabc2a26"
   integrity sha512-wiBrwC1EhBelW12Zy26JeOUkQ5mRu+5o8rpsJk5+2t+Y5vE7e842qtZDQ2g1NpX/29HdyFeJ4nSIhI47ENSxlQ==
-
-text-table@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
-  integrity sha512-N+8UisAXDGk8PFXP4HAzVR9nbfmVJ3zYLAWiTIoqC5v5isinhr+r5uaO8+7r3BMfuNIufIsA7RdpVgacC2cSpw==
 
 thenify-all@^1.0.0:
   version "1.6.0"
