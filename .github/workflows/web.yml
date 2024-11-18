@@ -46,7 +46,7 @@ jobs:
 
       - name: Deploy
         id: deploy
-        uses: cloudflare/wrangler-action@05f17c4a695b4d94b57b59997562c6a4624c64e4
+        uses: cloudflare/wrangler-action@ac2fd0ec8f7f5fb14f4ea61b68007f34238e105a
         with:
           apiToken: ${{ secrets.CLOUDFLARE_AUTH_KEY }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
