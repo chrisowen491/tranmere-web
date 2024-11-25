@@ -16,7 +16,8 @@ updates:
             - "*"
     ignore:
       - dependency-name: "esbuild"
-      - dependency-name: "cookie"               
+      - dependency-name: "cookie"  
+      - dependency-name: "ai"               
                                            
   - package-ecosystem: "github-actions"
     directory: "/"
