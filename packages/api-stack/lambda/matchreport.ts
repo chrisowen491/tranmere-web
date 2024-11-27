@@ -10,7 +10,8 @@ import {
   Goal,
   FixtureSet,
   MatchEvents,
-  TeamLineups
+  TeamLineups,
+  Manager
 } from '@tranmere-web/lib/src/tranmere-web-types';
 import {
   translateTeamName,
@@ -101,6 +102,15 @@ exports.handler = async (
   const matches = (await seasonMatches.json()) as {
     results: Match[];
   };
+
+  const managersUrl = `https://api.tranmere-web.com/graphql?query=${encodeURIComponent("{listTranmereWebManagers(limit:300){items{name dateLeft}}}")}&v=4`;
+
+  const managersList = await fetch(managersUrl);
+
+  const managers = (await managersList.json()) as {
+    data: { listTranmereWebManagers: { items: Manager[] } };
+  };
+  const manager = managers.data.listTranmereWebManagers.items.find( m => m.dateLeft === 'now()');
 
   const previous = matches.results.filter((m) => m.date < day!).slice(0, 5);
 
@@ -242,6 +252,7 @@ exports.handler = async (
         Date: {date}
         Time: {time}
         Referee: {referee}
+        Tranmere Manager: {manager}
         Attendance: {attendance}
         Tranmere's last 5 games: 
           {last5Ganes}
@@ -258,6 +269,7 @@ exports.handler = async (
       referee: theMatch.referee,
       time: time,
       last5Ganes: lastmatches,
+      manager: manager,
       attendance:
         theMatch.attendance && theMatch.attendance > 0
           ? theMatch.attendance

@@ -43,7 +43,10 @@ export default async function MatchPage(props: { params: MatchParams }) {
 
 
   const next = matches.results.filter((m) => m.date > match.date).slice(0, 5);
-  const previous = matches.results.filter((m) => m.date < match.date).slice(0, 5);
+  const previousMatches = matches.results.filter((m) => m.date < match.date);
+  const previous = previousMatches.slice(
+    Math.max(previousMatches.length - 5, 0)
+  );
 
   const comments = await GetCommentsByUrl(getRequestContext().env, baseUrl);
   let score = 0;
@@ -58,9 +61,9 @@ export default async function MatchPage(props: { params: MatchParams }) {
       match={match}
       next={next}
       previous={previous}
-      comments={comments}
+      comments={[]}
       url={baseUrl}
-      avg={avg}
+      avg={0}
     ></MatchReport>
   );
 }
