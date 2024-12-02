@@ -17,7 +17,8 @@ updates:
     ignore:
       - dependency-name: "esbuild"
       - dependency-name: "cookie"  
-      - dependency-name: "ai"               
+      - dependency-name: "ai"  
+      - dependency-name: "vercel"               
                                            
   - package-ecosystem: "github-actions"
     directory: "/"

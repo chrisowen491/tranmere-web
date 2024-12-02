@@ -53,6 +53,25 @@ jobs:
           workingDirectory: ./packages/site
           command: pages deploy .vercel/output/static --project-name=tranmere-web
 
+      - name: Check HTTP status
+        uses: gerdemann/http-status-code@944938ed534b092b9f7e1e5c6b08c5d9bbc35162
+        with:
+          url: 'https://www.tranmere-web.com'
+          code: 200
+          timeout: 60
+          interval: 10
+
+      - name: Run Binoculars
+        uses: foo-software/binoculars-action@21e84de9937428b73a157aef7226113dc3ce1fd3
+        with:
+          author: ${{ github.actor }}
+          branch: ${{ github.ref }}
+          enableComments: false
+          minScore: 80
+          urls: 'https://www.tranmere-web.com'
+          sha: ${{ github.sha }}        
+  
+
       - name: Update deployment status (success)
         if: success()
         uses: chrnorm/deployment-status@9a72af4586197112e0491ea843682b5dc280d806

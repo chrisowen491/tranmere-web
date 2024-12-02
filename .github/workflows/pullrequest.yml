@@ -32,4 +32,31 @@ jobs:
           CONTENTFUL_ACCESS_TOKEN: ${{ secrets.CF_KEY }}
           API_PORT: "443"
           API_PROTOCOL: "https" 
-          API_DOMAIN: "api.tranmere-web.com"          
+          API_DOMAIN: "api.tranmere-web.com"
+      - name: Web Deploy
+        id: deploy
+        uses: cloudflare/wrangler-action@05f17c4a695b4d94b57b59997562c6a4624c64e4
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_AUTH_KEY }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: ./packages/site
+          command: pages deploy .vercel/output/static --project-name=tranmere-web --branch=${{ github.head_ref }}                
+      
+      - name: Check HTTP status
+        uses: gerdemann/http-status-code@944938ed534b092b9f7e1e5c6b08c5d9bbc35162
+        with:
+          url: ${{ steps.deploy.outputs.deployment-url }}
+          code: 200
+          timeout: 60
+          interval: 10
+
+      - name: Run Binoculars
+        uses: foo-software/binoculars-action@21e84de9937428b73a157aef7226113dc3ce1fd3
+        with:
+          accessToken: ${{ secrets.BINOCULARS_GITHUB_ACCESS_TOKEN }}
+          author: ${{ github.actor }}
+          branch: ${{ github.ref }}
+          enableComments: true
+          minScore: 80
+          urls: ${{ steps.deploy.outputs.deployment-url }}
+          sha: ${{ github.sha }}        
