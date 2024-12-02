@@ -53,9 +53,10 @@ jobs:
       - name: Run Binoculars
         uses: foo-software/binoculars-action@21e84de9937428b73a157aef7226113dc3ce1fd3
         with:
+          accessToken: ${{ secrets.BINOCULARS_GITHUB_ACCESS_TOKEN }}
           author: ${{ github.actor }}
           branch: ${{ github.ref }}
-          enableComments: false
+          enableComments: true
           minScore: 80
           urls: ${{ steps.deploy.outputs.deployment-url }}
           sha: ${{ github.sha }}        
