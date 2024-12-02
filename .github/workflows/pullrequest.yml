@@ -49,3 +49,13 @@ jobs:
           code: 200
           timeout: 60
           interval: 10
+
+      - name: Run Binoculars
+        uses: foo-software/binoculars-action@master
+        with:
+          author: ${{ github.actor }}
+          branch: ${{ github.ref }}
+          enableComments: false
+          minScore: 80
+          urls: ${{ steps.deploy.outputs.deployment-url }}
+          sha: ${{ github.sha }}        
