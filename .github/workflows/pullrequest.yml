@@ -40,7 +40,7 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_AUTH_KEY }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           workingDirectory: ./packages/site
-          command: pages deploy .vercel/output/static --project-name=tranmere-web                
+          command: pages deploy .vercel/output/static --project-name=tranmere-web --branch=${{ github.head_ref }}                
       
       - name: Check HTTP status
         uses: gerdemann/http-status-code@944938ed534b092b9f7e1e5c6b08c5d9bbc35162
@@ -53,10 +53,9 @@ jobs:
       - name: Run Binoculars
         uses: foo-software/binoculars-action@21e84de9937428b73a157aef7226113dc3ce1fd3
         with:
-          accessToken: ${{ secrets.GITHUB_TOKEN }}
           author: ${{ github.actor }}
           branch: ${{ github.ref }}
-          enableComments: true
+          enableComments: false
           minScore: 80
           urls: ${{ steps.deploy.outputs.deployment-url }}
           sha: ${{ github.sha }}        
