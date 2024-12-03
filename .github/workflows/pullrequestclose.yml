@@ -16,7 +16,7 @@ jobs:
         - name: Install
           run: yarn --frozen-lockfile 
         - name: Unit Test
-          run: yarn workspace @tranmere-web/clean-up build
+          run: yarn workspace @tranmere-web/clean-up action
         - uses: ./packages/clean-up
           with:
             apiToken: ${{ secrets.CLOUDFLARE_AUTH_KEY }}
