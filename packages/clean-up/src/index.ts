@@ -115,7 +115,7 @@ query ($owner: String!, $repo: String!, $env: String!) {
       ...headers,
       method: 'DELETE'
     });
-    info(`Got ${res.status} from cloudflare`)
+    info(`Got ${res.status} from cloudflare from ${endpoint}/${d.id}`)
     if (res.status === 200) {
       const deployment = githubDeployments.find(
         ({ node }) => node.statuses.edges[0].node.environmentUrl === d.url
