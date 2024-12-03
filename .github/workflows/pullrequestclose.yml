@@ -1,0 +1,25 @@
+name: Close Pull Request
+
+# only trigger on pull request closed events
+on:
+  pull_request:
+    types: [ closed ]
+
+jobs:
+  merge_job:
+    runs-on: ubuntu-latest
+    steps:
+        - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        - uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
+          with:
+            node-version: '20'      
+        - name: Install
+          run: yarn --frozen-lockfile 
+        - name: Unit Test
+          run: yarn workspace @tranmere-web/clean-up build
+        - uses: ./packages/clean-up
+          with:
+            apiToken: ${{ secrets.CLOUDFLARE_AUTH_KEY }}
+            accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+            projectName: tranmere-web
+                     

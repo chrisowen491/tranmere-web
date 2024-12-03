@@ -1,9 +1,9 @@
 {
-    "name": "clean-up",
+    "name": "@tranmere-web/clean-up",
     "version": "0.0.0",
     "private": true,
     "scripts": {
-      "build": "esbuild ./src/index.ts --bundle --platform=node --outfile=./dist/index.js",
+      "action": "esbuild ./src/index.ts --bundle --platform=node --outfile=./dist/index.js",
       "lint": "eslint .",
       "format": "prettier --write \"src\""
     },
