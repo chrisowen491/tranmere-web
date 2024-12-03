@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import Image from "next/image";
+import DOMPurify from "dompurify";
 
 export function PlayerAvatarBuilder() {
   const base = "/builder/";
@@ -60,7 +61,7 @@ export function PlayerAvatarBuilder() {
                       id="kit"
                       name="kit"
                       onChange={(e) => {
-                        setKit(e.target.value);
+                        setKit(DOMPurify.sanitize(e.target.value));
                       }}
                     >
                       <option value="1960">1957-62 Home</option>
@@ -136,7 +137,7 @@ export function PlayerAvatarBuilder() {
                       id="skinColour"
                       name="skinColour"
                       onChange={(e) => {
-                        setSkinColour(e.target.value);
+                        setSkinColour(DOMPurify.sanitize(e.target.value));
                       }}
                     >
                       <option>ffd3b3</option>
@@ -160,7 +161,7 @@ export function PlayerAvatarBuilder() {
                       id="neckColour"
                       name="neckColour"
                       onChange={(e) => {
-                        setNeckColour(e.target.value);
+                        setNeckColour(DOMPurify.sanitize(e.target.value));
                       }}
                     >
                       <option>fcb98b</option>
@@ -184,7 +185,7 @@ export function PlayerAvatarBuilder() {
                       id="hair"
                       name="hair"
                       onChange={(e) => {
-                        setHair(e.target.value);
+                        setHair(DOMPurify.sanitize(e.target.value));
                       }}
                     >
                       <option>simple</option>
@@ -260,7 +261,7 @@ export function PlayerAvatarBuilder() {
                       id="colour"
                       name="colour"
                       onChange={(e) => {
-                        setColour(e.target.value);
+                        setColour(DOMPurify.sanitize(e.target.value));
                       }}
                     >
                       <option value="000000">Black</option>
@@ -289,7 +290,7 @@ export function PlayerAvatarBuilder() {
                       id="highlights"
                       name="highlights"
                       onChange={(e) => {
-                        setHighlights(e.target.value);
+                        setHighlights(DOMPurify.sanitize(e.target.value));
                       }}
                     >
                       <option value="8e740c">Brown</option>
@@ -312,7 +313,7 @@ export function PlayerAvatarBuilder() {
                       id="feature"
                       name="feature"
                       onChange={(e) => {
-                        setFeature(e.target.value);
+                        setFeature(DOMPurify.sanitize(e.target.value));
                       }}
                     >
                       <option>none</option>
@@ -347,7 +348,7 @@ export function PlayerAvatarBuilder() {
                       id="background"
                       name="background"
                       onChange={(e) => {
-                        setBackground(e.target.value);
+                        setBackground(DOMPurify.sanitize(e.target.value));
                       }}
                     >
                       <option value="LightGray">LightGray</option>
