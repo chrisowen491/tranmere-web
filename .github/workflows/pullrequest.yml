@@ -33,6 +33,17 @@ jobs:
           API_PORT: "443"
           API_PROTOCOL: "https" 
           API_DOMAIN: "api.tranmere-web.com"
+
+      - uses: chrnorm/deployment-action@51e93982518dc06e500fe65559032a439663aaac
+        name: Create GitHub deployment
+        id: deployment
+        with:
+          token: '${{ secrets.GITHUB_TOKEN }}'
+          environment-url: https://www.tranmere-web.com
+          environment: pr
+          description: "Pages Deployment"   
+  
+
       - name: Web Deploy
         id: deploy
         uses: cloudflare/wrangler-action@05f17c4a695b4d94b57b59997562c6a4624c64e4
@@ -60,3 +71,22 @@ jobs:
           minScore: 80
           urls: ${{ steps.deploy.outputs.deployment-url }}
           sha: ${{ github.sha }}        
+
+      - name: Update deployment status (success)
+        if: success()
+        uses: chrnorm/deployment-status@9a72af4586197112e0491ea843682b5dc280d806
+        with:
+          token: '${{ github.token }}'
+          environment-url: ${{ steps.deploy.outputs.deployment-url }}
+          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
+          state: 'success'          
+  
+      - name: Update deployment status (failure)
+        if: failure()
+        uses: chrnorm/deployment-status@9a72af4586197112e0491ea843682b5dc280d806
+        with:
+          token: '${{ github.token }}'
+          environment-url: ${{ steps.deployment.outputs.environment_url }}
+          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
+          state: 'failure'          
+  

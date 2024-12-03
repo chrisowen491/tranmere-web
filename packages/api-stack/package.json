@@ -10,6 +10,7 @@
     "local-api": "cdk synth --quiet && sam local start-api -t ./cdk.out/TranmereWebStack.template.json",
     "synth": "cdk synth --quiet",
     "test": "jest",
+    "lint": "eslint .",
     "format": "prettier --write \"lib\" --write \"lambda\""
   },
   "author": "Chris Owen",

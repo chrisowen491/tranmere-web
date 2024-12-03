@@ -1,8 +1,10 @@
 # *
 User-agent: *
 Allow: /
+Disallow: /*?*
 Disallow: /404
 Disallow: /error
+Disallow: /edit*
 Disallow: /match/192*
 Disallow: /match/193*
 Disallow: /match/194*
@@ -15,7 +17,6 @@ Disallow: /match/1973*
 Disallow: /match/1974*
 Disallow: /match/1975*
 Disallow: /match/1976*
-Disallow: /builder*
 
 # Host
 Host: https://www.tranmere-web.com
