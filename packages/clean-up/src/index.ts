@@ -111,7 +111,7 @@ query ($owner: String!, $repo: String!, $env: String!) {
 
   for await (const d of cfDeployments) {
     info(`Deleting deployment ${d.url}`);
-    const res = await fetch(`${endpoint}/${d.id}`, {
+    const res = await fetch(`${endpoint}/${d.id}?force=true`, {
       ...headers,
       method: 'DELETE'
     });
