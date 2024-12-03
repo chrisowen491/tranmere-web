@@ -69,7 +69,7 @@ query ($owner: String!, $repo: String!, $env: String!) {
     {
       owner: context.repo.owner,
       repo: context.repo.repo,
-      env: `${projectName} (Preview)`
+      env: `pr`
     }
   );
 
