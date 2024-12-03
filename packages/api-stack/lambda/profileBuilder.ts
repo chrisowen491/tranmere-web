@@ -150,21 +150,21 @@ const tools = [
 
       if (player) {
         let entry = await environment.getEntry(player.id!);
-        (entry.fields.biography = {
+        entry.fields.biography = {
           'en-GB': document
-        }),
-          (entry.fields.placeOfBirth = {
+        };
+        entry.fields.placeOfBirth = {
             'en-GB': placeOfBirth
-          }),
-          (entry.fields.position = {
-            'en-GB': new_position
-          }),
-          (entry.fields.height = {
-            'en-GB': height
-          }),
-          (entry.fields.dateOfBirth = {
-            'en-GB': dateOfBirth
-          });
+        };
+        entry.fields.position = {
+          'en-GB': new_position
+        };
+        entry.fields.height = {
+          'en-GB': height
+        };
+        entry.fields.dateOfBirth = {
+          'en-GB': dateOfBirth
+        };
 
         entry = await entry.update();
         entry = await entry.publish();

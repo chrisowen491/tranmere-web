@@ -33,8 +33,8 @@ exports.handler = async (
   };
 
   if (season && season.match(/^\d{4}$/)) {
-    (query.KeyConditionExpression = 'season = :season'),
-      (query.ExpressionAttributeValues![':season'] = parseInt(season));
+    query.KeyConditionExpression = 'season = :season';
+    query.ExpressionAttributeValues![':season'] = parseInt(season);
   }
 
   if (filter || club) {

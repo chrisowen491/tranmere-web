@@ -1,0 +1,21 @@
+name: CloudFlare Pages Clean Up Action
+description: This action will remove the deployment of a cloudflare pages preview deployment.
+branding:
+  icon: cloud-off
+  color: orange
+inputs:
+  apiToken:
+    description: Cloudflare API Token
+    required: true
+  accountId:
+    description: Cloudflare Account ID
+    required: true
+  projectName:
+    description: The name of the Pages project to check to
+    required: true 
+  gitHubToken:
+    description: GitHub Token
+    default: ${{ github.token }}
+runs:
+  using: node20
+  main: dist/index.js

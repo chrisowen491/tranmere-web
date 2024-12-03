@@ -43,7 +43,7 @@ exports.handler = async (
   const season = event.pathParameters
     ? event.pathParameters!.season
     : utils.getYear().toString();
-  const theDate = new Date(day!);
+
   const options = {
     headers: {
       accept:

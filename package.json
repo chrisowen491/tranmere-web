@@ -15,6 +15,7 @@
     "site": "yarn workspace @tranmere-web/site site",
     "prepare": "husky",
     "lint": "npx lerna run lint",
+    "action": "npx lerna run action",
     "format": "npx lerna run format"
   },
   "workspaces": [
