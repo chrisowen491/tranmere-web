@@ -63,7 +63,7 @@ jobs:
           interval: 10
 
       - name: Run Binoculars
-        uses: foo-software/binoculars-action@21e84de9937428b73a157aef7226113dc3ce1fd3
+        uses: foo-software/binoculars-action@134fda2fdf2e1902b236387fe5f07ae6558e2751
         with:
           accessToken: ${{ secrets.BINOCULARS_GITHUB_ACCESS_TOKEN }}
           author: ${{ github.actor }}
