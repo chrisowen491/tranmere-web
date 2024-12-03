@@ -9,7 +9,6 @@ import { notFound } from "next/navigation";
 export const runtime = "edge";
 
 export async function generateMetadata(props: { params: MatchParams }) {
-
   const params = await props.params;
   const url = `${GetBaseUrl(getRequestContext().env)}/match/${params.season}/${params.date}`;
 
@@ -22,7 +21,6 @@ export async function generateMetadata(props: { params: MatchParams }) {
 }
 
 export default async function MatchPage(props: { params: MatchParams }) {
-
   const params = await props.params;
   const baseUrl = `/match/${params.season}/${params.date}`;
   const url = `${GetBaseUrl(getRequestContext().env)}${baseUrl}`;
@@ -41,11 +39,10 @@ export default async function MatchPage(props: { params: MatchParams }) {
     results: Match[];
   };
 
-
   const next = matches.results.filter((m) => m.date > match.date).slice(0, 5);
   const previousMatches = matches.results.filter((m) => m.date < match.date);
   const previous = previousMatches.slice(
-    Math.max(previousMatches.length - 5, 0)
+    Math.max(previousMatches.length - 5, 0),
   );
 
   const comments = await GetCommentsByUrl(getRequestContext().env, baseUrl);

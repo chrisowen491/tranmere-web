@@ -18,16 +18,17 @@ const APP_SYNC_OPTIONS = {
 export async function GetSvg(input: string): Promise<string> {
   const start =
     '<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">';
-  const end = '</svg>';
+  const end = "</svg>";
 
-  const request = await fetch(`https://raw.githubusercontent.com/chrisowen491/tranmere-web/refs/heads/master/packages/site/public/builder/${input}`);
-  if(request.status !== 200) {
-    return '';
+  const request = await fetch(
+    `https://raw.githubusercontent.com/chrisowen491/tranmere-web/refs/heads/master/packages/site/public/builder/${input}`,
+  );
+  if (request.status !== 200) {
+    return "";
   }
-  const body = (await request.text()).replace(start, '').replace(end, '');
+  const body = (await request.text()).replace(start, "").replace(end, "");
   return body;
 }
-
 
 export function GetYear(): number {
   const theDate = new Date();
@@ -66,17 +67,17 @@ export function replaceSeasonsKit(input: string, season?: string): string {
     [2001, 2000],
     [2003, 2002],
     [2005, 2006],
-    [2008, 2007]]
-  );
+    [2008, 2007],
+  ]);
 
   const re = /\/\d\d\d\dA*\//gm;
   const re3 = /\/\d\d\d\d[A-Za-z]\//gm;
-  if(season) {
+  if (season) {
     let seasonKit = season;
     if (seasonMapping.get(parseInt(season))) {
       seasonKit = seasonMapping.get(parseInt(season))?.toString()!;
     }
-    
+
     const output = input.replace(re, `/${seasonKit}/`);
     return output;
   } else {
@@ -99,9 +100,7 @@ export async function GetTopScorersBySeason(): Promise<PlayerSeasonSummary[]> {
 
   for (let i = 1960; i <= GetYear(); i++) {
     const result = await fetch(
-      "https://api.tranmere-web.com/player-search/?season=" +
-        i +
-        "&sort=Goals",
+      "https://api.tranmere-web.com/player-search/?season=" + i + "&sort=Goals",
     );
     const players = (await result.json()) as { players: PlayerSeasonSummary[] };
     if (players.players && players.players.length > 0)

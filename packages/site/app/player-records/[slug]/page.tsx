@@ -7,7 +7,6 @@ import { SlugParams } from "@/lib/types";
 export const runtime = "edge";
 
 export async function generateMetadata(props: { params: SlugParams }) {
-
   const params = await props.params;
   let description: string | null = null;
   let title: string | null = null;
@@ -33,7 +32,6 @@ export async function generateMetadata(props: { params: SlugParams }) {
 }
 
 export default async function PlayerSearchPage(props: { params: SlugParams }) {
-
   const params = await props.params;
   const base = GetBaseUrl(getRequestContext().env) + "/player-search/";
 
@@ -67,9 +65,11 @@ export default async function PlayerSearchPage(props: { params: SlugParams }) {
   return (
     <>
       <Title title={title!} subTitle="Player Records">
-      <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-50">
-        Use the filters to switch season or focus on a groups of players. Player records only go far back as 1977, though I am slowly filling in other years.
-      </p>
+        <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-50">
+          Use the filters to switch season or focus on a groups of players.
+          Player records only go far back as 1977, though I am slowly filling in
+          other years.
+        </p>
       </Title>
       <PlayerSearch
         default={playerResults.players}

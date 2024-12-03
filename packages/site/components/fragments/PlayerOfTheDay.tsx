@@ -5,7 +5,6 @@ import { getRequestContext } from "@cloudflare/next-on-pages";
 import Image from "next/image";
 
 export async function PlayerOfTheDay() {
-
   const players = await GetAllPlayers();
   const randomplayer = players[Math.floor(Math.random() * players.length)];
 
@@ -27,7 +26,7 @@ export async function PlayerOfTheDay() {
       <Image
         alt={profile.player.name}
         width={200}
-        height={200}  
+        height={200}
         unoptimized={true}
         src={profile.player.picLink!}
         className="h-80 w-80 object-cover object-left mx-auto"

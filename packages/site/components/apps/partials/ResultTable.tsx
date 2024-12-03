@@ -196,7 +196,6 @@ export function ResultTable(props: {
                       <LinkButton
                         text={result.opposition!}
                         href={`/games/${result.opposition}`}
-                        
                       ></LinkButton>
                     </td>
                     <td className="whitespace-nowrap hidden px-1 sm:px-3 py-3.5 lg:table-cell">

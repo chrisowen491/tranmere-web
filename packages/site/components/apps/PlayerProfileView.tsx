@@ -16,7 +16,6 @@ import CommentPanel from "@/components/comments/CommentPanel";
 import Link from "next/link";
 import Image from "next/image";
 
-
 const breadcrumbs = [
   { id: 1, name: "Home", href: "/" },
   { id: 2, name: "Players", href: "/playersearch" },

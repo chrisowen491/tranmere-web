@@ -39,7 +39,7 @@ export default function ArticleList(props: {
                         alt={post.title}
                         width={512}
                         height={512}
-                        src='https://images.ctfassets.net/pz711f8blqyy/4xiJsea65ajh0swqmdEbOF/a2fc207703c03245cd64a8c01b857e28/2021.svg'
+                        src="https://images.ctfassets.net/pz711f8blqyy/4xiJsea65ajh0swqmdEbOF/a2fc207703c03245cd64a8c01b857e28/2021.svg"
                         className="absolute inset-0 h-full rounded-2xl bg-gray-50 dark:bg-gray-950 mx-auto"
                       />
                     )}

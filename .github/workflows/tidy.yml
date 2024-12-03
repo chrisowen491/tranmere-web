@@ -1,0 +1,38 @@
+name: Web Deploy
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - 'packages/tidy/**'
+      - '.github/workflows/tidy.yml'   
+
+permissions: read-all
+
+jobs:
+  publish_site:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    name: Publish Cloudflare Worker
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
+        with:
+          node-version: '20'
+      # Run a build step here if your project requires
+      - name: Install
+        run: yarn --frozen-lockfile 
+      - name: Deploy
+        id: deploy
+        uses: cloudflare/wrangler-action@05f17c4a695b4d94b57b59997562c6a4624c64e4
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_AUTH_KEY }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: ./packages/tidy
+          secrets: |
+            API_TOKEN
+        env:
+            API_TOKEN: ${{ secrets.CLOUDFLARE_AUTH_KEY }}          

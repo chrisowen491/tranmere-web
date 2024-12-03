@@ -117,7 +117,7 @@ export async function POST(req: NextRequest) {
       TransferTool,
       PlayerStatsTool,
       InsertLinkTool,
-      InsertTransferTool
+      InsertTransferTool,
       //createRetrieverTool(db.asRetriever() as unknown as BaseRetrieverInterface, {
       //  name: "tranmere-player-qa",
       //  description:

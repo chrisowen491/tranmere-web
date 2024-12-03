@@ -19,11 +19,28 @@ export function PlayerAvatarBuilder() {
       <div className="lg:flex lg:flex-row-reverse">
         <h1 className="sr-only">Checkout</h1>
         <section aria-labelledby="summary-heading" className="flex-col px-20">
-          <Image width={350} height={350} alt="Avatar" unoptimized={true} src={`${base}${kit}/${hair}/${skinColour}/${feature}/${colour}/${neckColour}/${background}/${highlights}`} />
+          <Image
+            width={350}
+            height={350}
+            alt="Avatar"
+            unoptimized={true}
+            src={`${base}${kit}/${hair}/${skinColour}/${feature}/${colour}/${neckColour}/${background}/${highlights}`}
+          />
           <h4>
-            Link: <Link href={`${base}${kit}/${hair}/${skinColour}/${feature}/${colour}/${neckColour}/${background}/${highlights}`}>here</Link>
+            Link:{" "}
+            <Link
+              href={`${base}${kit}/${hair}/${skinColour}/${feature}/${colour}/${neckColour}/${background}/${highlights}`}
+            >
+              here
+            </Link>
           </h4>
-          <Image width={100} height={100} alt="Avatar" unoptimized={true} src={`${base}${kit}/${hair}/${skinColour}/${feature}/${colour}/${neckColour}/${background}/${highlights}`} />
+          <Image
+            width={100}
+            height={100}
+            alt="Avatar"
+            unoptimized={true}
+            src={`${base}${kit}/${hair}/${skinColour}/${feature}/${colour}/${neckColour}/${background}/${highlights}`}
+          />
         </section>
 
         <section className="flex-auto px-4 pb-16 sm:px-6 lg:px-8 lg:pb-24 lg:pt-0">
@@ -42,7 +59,9 @@ export function PlayerAvatarBuilder() {
                       className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                       id="kit"
                       name="kit"
-                      onChange={(e) => {setKit(e.target.value);}}
+                      onChange={(e) => {
+                        setKit(e.target.value);
+                      }}
                     >
                       <option value="1960">1957-62 Home</option>
                       <option value="1966">1966-68 Home</option>
@@ -116,7 +135,9 @@ export function PlayerAvatarBuilder() {
                       className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                       id="skinColour"
                       name="skinColour"
-                      onChange={(e) => {setSkinColour(e.target.value);}}
+                      onChange={(e) => {
+                        setSkinColour(e.target.value);
+                      }}
                     >
                       <option>ffd3b3</option>
                       <option>7f3f00</option>
@@ -138,7 +159,9 @@ export function PlayerAvatarBuilder() {
                       className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                       id="neckColour"
                       name="neckColour"
-                      onChange={(e) => {setNeckColour(e.target.value);}}
+                      onChange={(e) => {
+                        setNeckColour(e.target.value);
+                      }}
                     >
                       <option>fcb98b</option>
                       <option>5b2d01</option>
@@ -160,7 +183,9 @@ export function PlayerAvatarBuilder() {
                       className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                       id="hair"
                       name="hair"
-                      onChange={(e) => {setHair(e.target.value);}}
+                      onChange={(e) => {
+                        setHair(e.target.value);
+                      }}
                     >
                       <option>simple</option>
                       <option>short</option>
@@ -234,7 +259,9 @@ export function PlayerAvatarBuilder() {
                       className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                       id="colour"
                       name="colour"
-                      onChange={(e) => {setColour(e.target.value);}}
+                      onChange={(e) => {
+                        setColour(e.target.value);
+                      }}
                     >
                       <option value="000000">Black</option>
                       <option value="7f3f00">Brown</option>
@@ -261,7 +288,9 @@ export function PlayerAvatarBuilder() {
                       className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                       id="highlights"
                       name="highlights"
-                      onChange={(e) => {setHighlights(e.target.value);}}
+                      onChange={(e) => {
+                        setHighlights(e.target.value);
+                      }}
                     >
                       <option value="8e740c">Brown</option>
                       <option value="bc8a00">Blonde</option>
@@ -282,7 +311,9 @@ export function PlayerAvatarBuilder() {
                       className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                       id="feature"
                       name="feature"
-                      onChange={(e) => {setFeature(e.target.value);}}
+                      onChange={(e) => {
+                        setFeature(e.target.value);
+                      }}
                     >
                       <option>none</option>
                       <option>stubble</option>
@@ -315,7 +346,9 @@ export function PlayerAvatarBuilder() {
                       className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                       id="background"
                       name="background"
-                      onChange={(e) => {setBackground(e.target.value);}}
+                      onChange={(e) => {
+                        setBackground(e.target.value);
+                      }}
                     >
                       <option value="LightGray">LightGray</option>
                       <option value="White">White</option>
