@@ -69,7 +69,7 @@ query ($owner: String!, $repo: String!, $env: String!) {
     {
       owner: context.repo.owner,
       repo: context.repo.repo,
-      env: `${projectName} (Preview)`
+      env: `pr`
     }
   );
 
@@ -111,10 +111,11 @@ query ($owner: String!, $repo: String!, $env: String!) {
 
   for await (const d of cfDeployments) {
     info(`Deleting deployment ${d.url}`);
-    const res = await fetch(`${endpoint}/${d.id}`, {
+    const res = await fetch(`${endpoint}/${d.id}?force=true`, {
       ...headers,
       method: 'DELETE'
     });
+    info(`Got ${res.status} from cloudflare from ${endpoint}/${d.id}`)
     if (res.status === 200) {
       const deployment = githubDeployments.find(
         ({ node }) => node.statuses.edges[0].node.environmentUrl === d.url
