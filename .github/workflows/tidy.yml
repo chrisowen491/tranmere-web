@@ -1,4 +1,4 @@
-name: Web Deploy
+name: Tidy Deploy
 
 on:
   push:
