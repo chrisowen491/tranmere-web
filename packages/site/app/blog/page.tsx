@@ -12,6 +12,10 @@ export default async function BlogHome() {
   const articles = await getAllArticles(50);
 
   return (
-    <ArticleList posts={articles} title="Blog Index" subtitle="A listing of all blog articles for the site" />
+    <ArticleList
+      posts={articles}
+      title="Blog Index"
+      subtitle="A listing of all blog articles for the site"
+    />
   );
 }

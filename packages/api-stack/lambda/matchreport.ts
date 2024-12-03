@@ -81,7 +81,8 @@ exports.handler = async (
     fixtures.eventGroups[0].secondaryGroups[0].events[0].tournament.name
   );
 
-  const time = fixtures.eventGroups[0].secondaryGroups[0].events[0].time.displayTimeUK;
+  const time =
+    fixtures.eventGroups[0].secondaryGroups[0].events[0].time.displayTimeUK;
 
   const hscore =
     fixtures.eventGroups[0].secondaryGroups[0].events[0].home.score;
@@ -93,7 +94,10 @@ exports.handler = async (
 
   const lineups = (await lineupResponse.json()) as TeamLineups;
 
-  const venue = lineups.homeTeam.name.fullName === 'Tranmere Rovers' ? 'Prenton Park' : 'Unknown';
+  const venue =
+    lineups.homeTeam.name.fullName === 'Tranmere Rovers'
+      ? 'Prenton Park'
+      : 'Unknown';
 
   const seasonMatchesUrl = `https://api.tranmere-web.com/result-search/?season=${season}`;
 
@@ -103,20 +107,22 @@ exports.handler = async (
     results: Match[];
   };
 
-  const managersUrl = `https://api.tranmere-web.com/graphql?query=${encodeURIComponent("{listTranmereWebManagers(limit:300){items{name dateLeft}}}")}&v=4`;
+  const managersUrl = `https://api.tranmere-web.com/graphql?query=${encodeURIComponent('{listTranmereWebManagers(limit:300){items{name dateLeft}}}')}&v=4`;
 
   const managersList = await fetch(managersUrl);
 
   const managers = (await managersList.json()) as {
     data: { listTranmereWebManagers: { items: Manager[] } };
   };
-  const manager = managers.data.listTranmereWebManagers.items.find( m => m.dateLeft === 'now()');
+  const manager = managers.data.listTranmereWebManagers.items.find(
+    (m) => m.dateLeft === 'now()'
+  );
 
   const previous = matches.results.filter((m) => m.date < day!).slice(0, 5);
 
   const lastmatches = previous.map((m) => {
     return `${m.date} - ${m.competition} - ${m.home} ${m.ft} ${m.visitor} \n`;
-  })
+  });
 
   /*
   const attendance = lineups.payload[0].body.meta.attendance
@@ -228,9 +234,7 @@ exports.handler = async (
             ? 'TRUE'
             : null,
         SubRed:
-          sub && sub.cards.find((el) => el.type === 'Red Card')
-            ? 'TRUE'
-            : null
+          sub && sub.cards.find((el) => el.type === 'Red Card') ? 'TRUE' : null
       };
       if (!sub) delete app.SubbedBy;
       await utils.insertUpdateItem(app, DataTables.APPS_TABLE_NAME);

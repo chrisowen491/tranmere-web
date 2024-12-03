@@ -203,7 +203,10 @@ export default function MatchReport(props: {
                             width={200}
                             height={200}
                             unoptimized={true}
-                            src={replaceSeasonsKit(player.bio!.picLink!, match.season)}
+                            src={replaceSeasonsKit(
+                              player.bio!.picLink!,
+                              match.season,
+                            )}
                             className="mx-auto h-24 w-24 rounded-full"
                           />
                           <h3 className="mt-6 text-base font-semibold leading-7 tracking-tight">

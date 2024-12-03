@@ -1,3 +1,4 @@
+/*
 import type {
   VectorizeIndex,
   Fetcher,
@@ -112,3 +113,4 @@ export default {
     return Response.json({ error: 'Not Found' }, { status: 404 });
   }
 };
+*/

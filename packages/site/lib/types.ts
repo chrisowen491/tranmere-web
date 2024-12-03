@@ -7,8 +7,8 @@ import {
 } from "@tranmere-web/lib/src/tranmere-web-types";
 import type { Message } from "ai/react";
 
-export type SlugParams = Promise<{ slug: string }>
-export type MatchParams = Promise<{ season: string; date: string }>
+export type SlugParams = Promise<{ slug: string }>;
+export type MatchParams = Promise<{ season: string; date: string }>;
 
 export interface PlayerName {
   name: string;

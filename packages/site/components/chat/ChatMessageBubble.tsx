@@ -14,7 +14,13 @@ export function ChatMessageBubble(props: { message: ExtendedMessage }) {
   return (
     <div className={`${colorClassName} rounded px-4 py-2 max-w-full mb-8 flex`}>
       <div className="mr-2">
-        <Image alt="Avatar" width={200} height={200} src={avatar!} className="h-24 w-24 rounded-full" />
+        <Image
+          alt="Avatar"
+          width={200}
+          height={200}
+          src={avatar!}
+          className="h-24 w-24 rounded-full"
+        />
       </div>
       <div className="whitespace-pre-wrap flex flex-col">
         <span>{props.message.content}</span>

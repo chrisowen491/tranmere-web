@@ -29,7 +29,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex w-full flex-col">
       <Header />
-      <DataDog/>
+      <DataDog />
       {children}
       <Footer></Footer>
     </div>

@@ -1,5 +1,10 @@
 import { Title } from "@/components/fragments/Title";
-import { GetAllTranmereManagers, GetBaseUrl, GetSeasons, GetYear } from "@/lib/apiFunctions";
+import {
+  GetAllTranmereManagers,
+  GetBaseUrl,
+  GetSeasons,
+  GetYear,
+} from "@/lib/apiFunctions";
 import {
   H2HResult,
   H2HTotal,
@@ -18,7 +23,6 @@ import { JumpBox } from "@/components/forms/JumpBox";
 export const runtime = "edge";
 
 export async function generateMetadata(props: { params: SlugParams }) {
-
   const params = await props.params;
   let description: string | null = null;
   let title: string | null = null;
@@ -33,12 +37,11 @@ export async function generateMetadata(props: { params: SlugParams }) {
 }
 
 export default async function SeasonPage(props: { params: SlugParams }) {
-
   const params = await props.params;
   const season = decodeURI(params.slug);
-  
-  if(parseInt(season) < 1920 || parseInt(season) > GetYear()) notFound(); 
-  
+
+  if (parseInt(season) < 1920 || parseInt(season) > GetYear()) notFound();
+
   const base = GetBaseUrl(getRequestContext().env) + "/result-search/";
   let title: string | null = null;
   let sort = "Date";
@@ -82,7 +85,7 @@ export default async function SeasonPage(props: { params: SlugParams }) {
   return (
     <>
       <Title title={title!}>
-       <JumpBox season={season} seasons={seasons}></JumpBox>
+        <JumpBox season={season} seasons={seasons}></JumpBox>
       </Title>
       <SeasonReview
         managers={managers}

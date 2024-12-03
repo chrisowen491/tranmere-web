@@ -1,7 +1,6 @@
 import type { DeploymentState } from '@octokit/graphql-schema';
 import type { RequestInit } from 'undici';
-import type { Deployments } from './cloudflare';
-
+import { Deployments } from '@tranmere-web/lib/src/cloudflare';
 import { env } from 'process';
 
 import { debug, getInput, info, setFailed } from '@actions/core';
@@ -115,7 +114,7 @@ query ($owner: String!, $repo: String!, $env: String!) {
       ...headers,
       method: 'DELETE'
     });
-    info(`Got ${res.status} from cloudflare from ${endpoint}/${d.id}`)
+    info(`Got ${res.status} from cloudflare from ${endpoint}/${d.id}`);
     if (res.status === 200) {
       const deployment = githubDeployments.find(
         ({ node }) => node.statuses.edges[0].node.environmentUrl === d.url

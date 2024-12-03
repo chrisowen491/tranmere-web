@@ -152,8 +152,7 @@ exports.handler = async (
     });
   }
 
-  if (date && results.length == 1)
-    return utils.sendResponse(200, results[0]);
+  if (date && results.length == 1) return utils.sendResponse(200, results[0]);
   else
     return utils.sendResponse(200, {
       results: results,

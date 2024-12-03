@@ -253,9 +253,12 @@ export function PlayerSearch(props: {
                               <Image
                                 alt={player.Player}
                                 width={100}
-                                height={100}  
+                                height={100}
                                 unoptimized={true}
-                                src={replaceSeasonsKit(player.bio.picLink, season)}
+                                src={replaceSeasonsKit(
+                                  player.bio.picLink,
+                                  season,
+                                )}
                                 className="h-11 w-11 rounded-full"
                               />
                             ) : (

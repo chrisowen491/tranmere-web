@@ -17,7 +17,6 @@ import Link from "next/link";
 import { SlugParams } from "@/lib/types";
 
 export async function generateMetadata(props: { params: SlugParams }) {
-
   const params = await props.params;
   const article = await getArticle(params.slug);
   return {

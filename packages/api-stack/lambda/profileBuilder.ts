@@ -154,7 +154,7 @@ const tools = [
           'en-GB': document
         };
         entry.fields.placeOfBirth = {
-            'en-GB': placeOfBirth
+          'en-GB': placeOfBirth
         };
         entry.fields.position = {
           'en-GB': new_position

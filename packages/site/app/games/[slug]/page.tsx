@@ -50,7 +50,6 @@ export async function generateMetadata(props: { params: SlugParams }) {
 }
 
 export default async function GamesPage(props: { params: SlugParams }) {
-
   const params = await props.params;
   const base = GetBaseUrl(getRequestContext().env) + "/result-search/";
 

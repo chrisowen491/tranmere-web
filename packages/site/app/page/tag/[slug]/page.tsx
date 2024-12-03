@@ -17,9 +17,5 @@ export default async function TagPage(props: { params: SlugParams }) {
   const articles = await getAllArticlesForTag(100, decodeURI(params.slug));
   const title = `${decodeURI(params.slug)} - Blog Pages`;
   const subtitle = `All the blog posts tagged with ${decodeURI(params.slug)}`;
-  return (
-
-    <ArticleList posts={articles} title={title} subtitle={subtitle} />
-
-  );
+  return <ArticleList posts={articles} title={title} subtitle={subtitle} />;
 }

@@ -122,7 +122,11 @@ export function Navbar() {
                     </MenuItems>
                   </Menu>
                 ) : (
-                  <Link href="/api/auth/login" aria-label="login"  prefetch={false}>
+                  <Link
+                    href="/api/auth/login"
+                    aria-label="login"
+                    prefetch={false}
+                  >
                     <ChatBubbleBottomCenterIcon
                       aria-hidden="true"
                       className="h-6 w-6 text-white"
