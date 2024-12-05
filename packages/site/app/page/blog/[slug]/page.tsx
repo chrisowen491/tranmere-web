@@ -124,7 +124,7 @@ export default async function BlogPage(props: { params: SlugParams }) {
               article.galleryCollection.items.length > 0 ? (
                 <>
                   <p>
-                    Hover over the image for the buttons to browse the gallery
+                    Click the image for a larger version
                   </p>
                   <Slider
                     images={article.galleryCollection.items}
