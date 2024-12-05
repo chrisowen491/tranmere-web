@@ -13,7 +13,7 @@ export async function OnThisDay() {
         <Image
           alt="Match Programme"
           src={`https://images.tranmere-web.com/${match.programme}`}
-          width={200}
+          width={250}
           height={400}
           className="h-80 mx-auto mt-2"
         />

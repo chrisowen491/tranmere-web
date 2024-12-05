@@ -13,7 +13,7 @@ export async function LastMatch() {
       {match.largeProgramme ? (
         <Image
           alt="Match Programme"
-          width={200}
+          width={250}
           height={400}
           src={`https://images.tranmere-web.com/${match.largeProgramme}`}
           className="h-80 object-cover object-left mx-auto"
