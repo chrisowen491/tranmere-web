@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { APIGatewayEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { TranmereWebUtils } from '@tranmere-web/lib/src/tranmere-web-utils';
-import { PlayerView } from '@tranmere-web/lib/src/tranmere-web-view-types';
+import { PlayerView } from '@tranmere-web/lib/src/tranmere-web-types';
 const utils = new TranmereWebUtils();
 
 exports.handler = async (

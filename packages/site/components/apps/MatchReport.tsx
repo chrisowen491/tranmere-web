@@ -1,9 +1,8 @@
 "use client";
 
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
-import { MatchPageData } from "@/lib/types";
-import { Match } from "@tranmere-web/lib/src/tranmere-web-types";
+import { Match, MatchPageData } from "@tranmere-web/lib/src/tranmere-web-types";
 import { ResultTable } from "@/components/apps/partials/ResultTable";
 import CommentPanel from "@/components/comments/CommentPanel";
 import type { Comment } from "@/lib/comments";
@@ -26,7 +25,7 @@ export default function MatchReport(props: {
   const next = props.next;
   const previous = props.previous;
 
-  match.apps.sort((a, b) => {
+  match.apps!.sort((a, b) => {
     if (a.bio?.position === b.bio?.position) {
       return 0;
     } else if (a.bio?.position === "Goalkeeper") {
@@ -59,7 +58,11 @@ export default function MatchReport(props: {
   });
   const breadcrumbs = [
     { id: 1, name: "Home", href: "/" },
-    { id: 2, name: match.season, href: "/season/" + match.season },
+    {
+      id: 2,
+      name: match.season.toString(),
+      href: "/season/" + match.season.toString(),
+    },
   ];
 
   return (
@@ -122,7 +125,13 @@ export default function MatchReport(props: {
           </div>
 
           <p className="mt-6 dark:text-gray-50 text-gray-500">
-            <span dangerouslySetInnerHTML={{ __html: match.report }} />
+            {match.report ? (
+              <span
+                dangerouslySetInnerHTML={{ __html: match.report!.report }}
+              />
+            ) : (
+              ""
+            )}
           </p>
 
           <div className="mt-10 border-t border-gray-200 pt-10">
@@ -157,6 +166,19 @@ export default function MatchReport(props: {
                 </span>
               ))}
             </p>
+          </div>
+
+          <div className="mt-10 border-t border-gray-200 pt-10">
+            {match.ticket ? (
+              <Image
+                width={250}
+                height={250}
+                alt="Match Programme"
+                src={`https://images.tranmere-web.com/${match.ticket}`}
+              />
+            ) : (
+              ""
+            )}
           </div>
         </div>
 
@@ -196,7 +218,7 @@ export default function MatchReport(props: {
                       role="list"
                       className="mx-auto mt-20 grid max-w-2xl grid-cols-2 gap-x-8 gap-y-16 text-center sm:grid-cols-3 md:grid-cols-3 lg:mx-0 lg:max-w-none lg:grid-cols-3 xl:grid-cols-3"
                     >
-                      {match.apps.map((player) => (
+                      {match.apps!.map((player) => (
                         <li key={player.Name}>
                           <Image
                             alt={player.Name}
@@ -205,7 +227,7 @@ export default function MatchReport(props: {
                             unoptimized={true}
                             src={replaceSeasonsKit(
                               player.bio!.picLink!,
-                              match.season,
+                              match.season.toString(),
                             )}
                             className="mx-auto h-24 w-24 rounded-full"
                           />
