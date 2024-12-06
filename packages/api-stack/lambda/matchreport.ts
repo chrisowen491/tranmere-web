@@ -140,6 +140,7 @@ exports.handler = async (
         : lineups.awayTeam.formation.layout,
     id: uuidv4(),
     programme: '#N/A',
+    ticket: '#N/A',
     home: translateTeamName(lineups.homeTeam.name.fullName),
     visitor: translateTeamName(lineups.awayTeam.name.fullName),
     opposition:
@@ -147,13 +148,12 @@ exports.handler = async (
         ? translateTeamName(lineups.awayTeam.name.fullName)
         : translateTeamName(lineups.homeTeam.name.fullName),
     static: 'static',
-    season: season,
+    season: parseInt(season!),
     venue: venue,
-    hgoal: hscore,
-    tier: competition == 'League Two' ? '4' : '0',
-    division: competition == 'League Two' ? '4' : '0',
+    hgoal: parseInt(hscore),
+    tier: competition == 'League Two' ? 4 : 0,
     pens: '',
-    vgoal: vscore,
+    vgoal: parseInt(vscore),
     ft: hscore + '-' + vscore,
     competition: competition
   };
@@ -296,8 +296,8 @@ exports.handler = async (
     await dynamo.send(params);
 
     if (
-      (theMatch.home === 'Tranmere Rovers' && theMatch.hgoal === '0') ||
-      (theMatch.visitor === 'Tranmere Rovers' && theMatch.vgoal === '0')
+      (theMatch.home === 'Tranmere Rovers' && theMatch.hgoal === 0) ||
+      (theMatch.visitor === 'Tranmere Rovers' && theMatch.vgoal === 0)
     ) {
       console.log('No goals scored by Tranmere Rovers in this match');
       return utils.sendResponse(200, { message: events });

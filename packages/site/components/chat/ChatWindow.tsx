@@ -11,9 +11,7 @@ import { ChatMessageBubble } from "@/components/chat/ChatMessageBubble";
 import {
   ComplexChatResponse,
   ExtendedMessage,
-  MatchPageData,
 } from "../../lib/types";
-import { PlayerSeasonSummary } from "@tranmere-web/lib/src/tranmere-web-types";
 import { SubmitButton } from "@/components/forms/SubmitButton";
 
 export function ChatWindow(props: {

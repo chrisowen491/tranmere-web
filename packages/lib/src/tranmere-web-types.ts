@@ -104,13 +104,26 @@ export interface MatchEvent {
   description: string;
 }
 
+export interface DBMatch
+  extends Omit<
+    Match,
+    'season' | 'hgoal' | 'vgoal' | 'attendance' | 'round' | 'tier'
+  > {
+  season?: number | string;
+  hgoal?: number | string;
+  vgoal?: number | string;
+  attendance?: number | string | null;
+  round?: number | string;
+  tier: number | string;
+}
+
 export interface Match {
-  scrape_id?: string;
   id?: string;
   date: string;
   division?: string;
   competition?: string;
   programme?: string;
+  ticket?: string;
   youtube?: string;
   pens?: string;
   home?: string;
@@ -118,17 +131,21 @@ export interface Match {
   opposition?: string;
   venue?: string;
   static?: string;
-  season?: string;
-  hgoal?: string;
-  vgoal?: string;
+  season: number;
+  hgoal: number;
+  vgoal: number;
   ft?: string;
   day?: string;
-  attendance?: number;
+  attendance?: number | null;
   referee?: string;
   formation?: string;
   largeProgramme?: string;
-  round?: string;
-  tier: string;
+  largeTicket?: string;
+  round?: number;
+  tier: number;
+  location?: 'H' | 'A' | 'N';
+  goals?: Goal[];
+  apps?: Appearance[];
 }
 
 export interface H2HResult {
@@ -194,34 +211,6 @@ export interface Transfer {
   cost: number;
   type?: string;
   club?: string;
-}
-
-export interface BasePageView {
-  random?: number;
-  title?: string;
-  pageType?: string;
-  description?: string;
-}
-
-export interface TagView extends BasePageView {
-  items?: any;
-  url?: string;
-}
-
-// ToDo
-export interface PlayerView extends BasePageView {
-  title?: string;
-  pageType?: string;
-  description?: string;
-  name?: string;
-  debut?: any;
-  seasons?: any;
-  transfers?: any;
-  links?: any;
-  teams?: Team[];
-  player?: any;
-  url?: string;
-  image?: string;
 }
 
 export interface PlayerSeasonSummary {
@@ -532,4 +521,23 @@ export interface UasActivityData {
   resourceType: string;
   environment: string;
   apiKey: string;
+}
+
+export interface MatchPageData extends Match {
+  report?: Report | null;
+  formattedGoals?: string;
+  substitutes?: string[];
+  score?: string;
+  homeTeam?: string;
+  awayTeam?: string;
+}
+
+export interface PlayerView {
+  image: string;
+  player: Player;
+  links: Link[];
+  debut: Appearance;
+  transfers: Transfer[];
+  appearances: Appearance[];
+  seasons: PlayerSeasonSummary[];
 }

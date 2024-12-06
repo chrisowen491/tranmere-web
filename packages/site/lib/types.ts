@@ -1,6 +1,7 @@
 import { Document } from "@contentful/rich-text-types";
 import {
   Appearance,
+  MatchPageData,
   Player,
   PlayerSeasonSummary,
   Transfer,
@@ -110,26 +111,6 @@ export interface ExtendedMessage extends Message {
   match?: MatchPageData;
   players?: PlayerSeasonSummary[];
   player?: PlayerSeasonSummary;
-}
-
-export interface MatchPageData {
-  season: string;
-  score: string;
-  date: string;
-  attendance: number;
-  competition: string;
-  pens: string;
-  homeTeam: string;
-  awayTeam: string;
-  report: string;
-  referee: string;
-  team: string[];
-  goals: string[];
-  substitutes: string[];
-  programme: string;
-  venue: string;
-  apps: Appearance[];
-  formattedGoals: string;
 }
 
 export interface ComplexChatResponse {

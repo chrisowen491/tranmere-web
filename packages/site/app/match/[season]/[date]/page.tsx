@@ -1,6 +1,6 @@
 import { getRequestContext } from "@cloudflare/next-on-pages";
-import { MatchPageData, MatchParams } from "@/lib/types";
-import { Match } from "@tranmere-web/lib/src/tranmere-web-types";
+import { MatchParams } from "@/lib/types";
+import { Match, MatchPageData } from "@tranmere-web/lib/src/tranmere-web-types";
 import { GetBaseUrl } from "@/lib/apiFunctions";
 import MatchReport from "@/components/apps/MatchReport";
 import { GetCommentsByUrl } from "@/lib/comments";

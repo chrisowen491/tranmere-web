@@ -23,7 +23,7 @@ exports.handler = async (
       item.id = body.sys.id;
       await utils.insertUpdateItem(item, event.pathParameters!.type!);
     } else if (body.sys.type === 'DeletedEntry') {
-      await utils.deleteItem(body.sys.id, event.pathParameters!.type);
+      await utils.deleteItem(body.sys.id, event.pathParameters!.type!);
     }
   }
   return utils.sendResponse(200, 'ok');

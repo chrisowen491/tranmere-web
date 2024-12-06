@@ -6,9 +6,9 @@ import {
 import {
   Appearance,
   Goal,
-  Player
+  Player,
+  MatchPageData
 } from '@tranmere-web/lib/src/tranmere-web-types';
-import { MatchView } from '@tranmere-web/lib/src/tranmere-web-view-types';
 
 const utils = new TranmereWebUtils();
 
@@ -51,19 +51,27 @@ exports.handler = async (
 
   const report = await utils.getReportForDate(date!);
 
-  const view: MatchView = match!;
+  const view: MatchPageData = match!;
   view.report = report;
   view.goals = await utils.getGoalsBySeason(season, date);
   view.apps = await utils.getAppsBySeason(season, date);
+  view.homeTeam = view.home;
+  view.awayTeam = view.visitor;
+  view.score = view.ft;
+
   if (view.programme && view.programme != '#N/A') {
     const largeBody = new ProgrammeImage(view.programme);
-    view.largeProgramme = largeBody.imagestring();
+    view.programme = largeBody.imagestring();
   } else {
     delete view.programme;
   }
+  if (view.ticket && view.ticket != '#N/A') {
+    const largeBody = new ProgrammeImage(view.ticket);
+    view.ticket = largeBody.imagestring();
+  } else {
+    delete view.ticket;
+  }
   view.formattedGoals = formatGoals(view.goals);
-  if (view.attendance! > 0) view.hasAttendance = true;
-  if (view.venue && view.venue != 'Unknown') view.hasVenue = true;
 
   const noPositionList: Appearance[] = [];
   for (const app of view.apps) {
@@ -86,36 +94,11 @@ exports.handler = async (
     }
   }
 
-  view.random = Math.ceil(Math.random() * 100000);
-  view.url = `/match/${season}/${date}`;
-  view.title = 'Match Summary';
-  view.pageType = 'AboutPage';
-  view.description = `Match Summary For ${match?.home} ${match?.ft} ${match?.visitor} - ${match?.date}`;
-  view.date = date!;
-  view.season = season!.toString();
+  view.substitutes = view.apps
+    .filter((a) => a.SubbedBy)
+    .map((s) => s.SubbedBy + ' for ' + s.Name);
 
-  return utils.sendResponse(200, {
-    season: view.season,
-    score: view.ft,
-    date: view.date,
-    attendance: view.attendance,
-    referee: view.referee,
-    competition: view.competition,
-    pens: view.pens,
-    homeTeam: view.home,
-    awayTeam: view.visitor,
-    programme: view.largeProgramme,
-    venue: view.venue,
-    //fullGoals: view.goals,
-    apps: view.apps ? view.apps : [],
-    formattedGoals: view.formattedGoals,
-    report: view.report ? view.report.report : null,
-    team: view.apps.map((a) => a.Name),
-    goals: view.goals.map((g) => g.Scorer),
-    substitutes: view.apps
-      .filter((a) => a.SubbedBy)
-      .map((s) => s.SubbedBy + ' for ' + s.Name)
-  });
+  return utils.sendResponse(200, view);
 };
 
 function formatGoals(goals: Goal[]) {

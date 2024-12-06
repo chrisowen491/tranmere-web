@@ -7,6 +7,7 @@ import {
 } from '@tranmere-web/lib/src/tranmere-web-utils';
 import { DynamoDBDocument, QueryCommandInput } from '@aws-sdk/lib-dynamodb';
 import { DynamoDB } from '@aws-sdk/client-dynamodb';
+import { DBMatch, Match } from '@tranmere-web/lib/src/tranmere-web-types';
 const utils = new TranmereWebUtils();
 
 const dynamo = DynamoDBDocument.from(
@@ -70,16 +71,16 @@ exports.handler = async (
         match.location = 'H';
       }
       h2hresults[haindex].pld += 1;
-      if (parseInt(match.hgoal) > parseInt(match.vgoal)) {
+      if (match.hgoal > match.vgoal) {
         h2hresults[haindex].wins += 1;
-      } else if (parseInt(match.hgoal) < parseInt(match.vgoal)) {
+      } else if (match.hgoal < match.vgoal) {
         h2hresults[haindex].lost += 1;
       } else {
         h2hresults[haindex].draws += 1;
       }
-      h2hresults[haindex].for += parseInt(match.hgoal);
-      h2hresults[haindex].against += parseInt(match.vgoal);
-      h2hresults[haindex].diff += parseInt(match.hgoal) - parseInt(match.vgoal);
+      h2hresults[haindex].for += match.hgoal;
+      h2hresults[haindex].against += match.vgoal;
+      h2hresults[haindex].diff += match.hgoal - match.vgoal;
     } else {
       let haindex = 1;
       if (match.venue == 'Wembley Stadium') {
@@ -89,16 +90,16 @@ exports.handler = async (
         match.location = 'A';
       }
       h2hresults[haindex].pld += 1;
-      if (parseInt(match.hgoal) > parseInt(match.vgoal)) {
+      if (match.hgoal > match.vgoal) {
         h2hresults[haindex].lost += 1;
-      } else if (parseInt(match.hgoal) < parseInt(match.vgoal)) {
+      } else if (match.hgoal < match.vgoal) {
         h2hresults[haindex].wins += 1;
       } else {
         h2hresults[haindex].draws += 1;
       }
-      h2hresults[haindex].for += parseInt(match.vgoal);
-      h2hresults[haindex].against += parseInt(match.hgoal);
-      h2hresults[haindex].diff += parseInt(match.vgoal) - parseInt(match.hgoal);
+      h2hresults[haindex].for += match.vgoal;
+      h2hresults[haindex].against += match.hgoal;
+      h2hresults[haindex].diff += match.vgoal - match.hgoal;
     }
     if (match.programme && match.programme != '#N/A') {
       const smallBody = new ProgrammeImage(match.programme);
@@ -113,6 +114,20 @@ exports.handler = async (
       match.largeProgramme = largeBody.imagestring();
     } else {
       delete match.programme;
+    }
+    if (match.ticket && match.ticket != '#N/A') {
+      const smallBody = new ProgrammeImage(match.ticket);
+      smallBody.edits = {
+        resize: {
+          width: 100,
+          fit: 'contain'
+        }
+      };
+      const largeBody = new ProgrammeImage(match.ticket);
+      match.ticket = smallBody.imagestring();
+      match.largeTicket = largeBody.imagestring();
+    } else {
+      delete match.ticket;
     }
     if (date) {
       match.goals = await utils.getGoalsBySeason(match.season, date);
@@ -162,14 +177,14 @@ exports.handler = async (
 };
 
 async function getResults(
-  season,
-  competition,
-  opposition,
-  date,
-  manager,
-  venue,
-  pens,
-  sort
+  season: string | null | undefined,
+  competition: string | null | undefined,
+  opposition: string | null | undefined,
+  date: string | null | undefined,
+  manager: string | null | undefined,
+  venue: string | null | undefined,
+  pens: string | null | undefined,
+  sort: string | null | undefined
 ) {
   let query = false;
   let params: QueryCommandInput = {
@@ -194,7 +209,7 @@ async function getResults(
     params.ExpressionAttributeValues![':competition'] =
       decodeURIComponent(competition);
     query = true;
-  } else if (venue && decodeURIComponent(sort) != 'Top Attendance') {
+  } else if (venue && decodeURIComponent(sort!) != 'Top Attendance') {
     params.IndexName = 'VenueIndex';
     params.KeyConditionExpression = 'venue = :venue';
     params.ExpressionAttributeValues![':venue'] = decodeURIComponent(venue);
@@ -261,7 +276,37 @@ async function getResults(
       : await dynamo.scan(params);
     items = items!.concat(nextResults.Items!);
   }
-  return items;
+
+  const results = items as DBMatch[];
+
+  const matches: Match[] = results.map((result) => {
+    return {
+      date: result.date,
+      division: result.division,
+      competition: result.competition,
+      programme: result.programme,
+      ticket: result.ticket,
+      youtube: result.youtube,
+      pens: result.pens,
+      home: result.home,
+      visitor: result.visitor,
+      opposition: result.opposition,
+      venue: result.venue,
+      static: result.static,
+      ft: result.ft,
+      day: result.day,
+      referee: result.referee,
+      formation: result.formation,
+      location: result.location,
+      tier: Number(result.tier),
+      season: Number(result.season),
+      hgoal: Number(result.hgoal),
+      vgoal: Number(result.vgoal),
+      attendance: Number(result.attendance),
+      round: Number(result.round)
+    };
+  });
+  return matches;
 }
 
 function buildQuery(query, attribute, attributeName) {
