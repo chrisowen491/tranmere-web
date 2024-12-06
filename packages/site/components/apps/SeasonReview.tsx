@@ -62,8 +62,8 @@ export default function SeasonReview(props: {
       result.competition === "League" ||
       result.competition === "Conference"
     ) {
-      if (result.tier && parseInt(result.tier) != 0) {
-        division = parseInt(result.tier);
+      if (result.tier && result.tier != 0) {
+        division = result.tier;
       }
     }
   });
@@ -105,8 +105,8 @@ export default function SeasonReview(props: {
 
   let facupround = 0;
   facup.forEach((result) => {
-    if (result.round && parseInt(result.round) > facupround) {
-      facupround = parseInt(result.round);
+    if (result.round && result.round > facupround) {
+      facupround = result.round;
     }
   });
 
@@ -116,8 +116,8 @@ export default function SeasonReview(props: {
 
   let leaguecupround = 0;
   leaguecup.forEach((result) => {
-    if (result.round && parseInt(result.round) > leaguecupround) {
-      leaguecupround = parseInt(result.round);
+    if (result.round && result.round > leaguecupround) {
+      leaguecupround = result.round;
     }
   });
 
