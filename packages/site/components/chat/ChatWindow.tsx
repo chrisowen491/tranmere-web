@@ -183,15 +183,62 @@ export function ChatWindow(props: {
     }
   }
 
+  const butttonClass =
+    "rounded-md bg-sky-500 dark:bg-sky-500 px-2 py-2 text-xs font-semibold text-white shadow-sm hover:bg-green-600 dark:hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600";
+
   return (
     <div
       className={`flex flex-col items-center p-4 md:p-8 rounded grow overflow-hidden ${messages.length > 0 ? "border" : ""}`}
     >
       <form onSubmit={sendMessage} className="flex w-full flex-col">
+        <div className="grid grid-cols-5 gap-4 mb-8">
+          <button
+            onClick={() => setInput("How many goals did Eugene Dadi score?")}
+            className={butttonClass}
+          >
+            How many goals did Eugene Dadi score?
+          </button>
+          <button
+            onClick={() => setInput("Who did we sign Pat Nevin from?")}
+            className={butttonClass}
+          >
+            Who did we sign Pat Nevin from?
+          </button>
+          <button
+            onClick={() =>
+              setInput(
+                "Who scored more goals John Aldridge or Ian Muir & what seasons did they play?",
+              )
+            }
+            className={butttonClass}
+          >
+            Who scored more goals John Aldridge or Ian Muir & what seasons did
+            they play?
+          </button>
+          <button
+            onClick={() =>
+              setInput("What was the score against Aston Villa in 1993?")
+            }
+            className={butttonClass}
+          >
+            What was the score against Aston Villa in 1993?
+          </button>
+          <button
+            onClick={() =>
+              setInput(
+                "What was the score against Aston Villa on 1994-02-27 and who scored for Tranmere?",
+              )
+            }
+            className={butttonClass}
+          >
+            What was the score against Aston Villa on 1994-02-27 and who scored
+            for Tranmere
+          </button>
+        </div>
         <div className="grid grid-cols-5 gap-4">
           <div className="flex col-span-3">
             <input
-              className="px-3 py-2 text-sm w-full"
+              className="px-3 py-2 text-sm w-full dark:text-slate-800"
               value={input}
               placeholder={placeholder ?? ""}
               onChange={handleInputChange}
@@ -199,7 +246,7 @@ export function ChatWindow(props: {
           </div>
           <div className="flex">
             <select
-              className="px-3 py-2 text-sm w-full"
+              className="px-3 py-2 text-sm w-full dark:text-slate-800"
               value={avatar}
               onChange={handleSelectionChange}
             >

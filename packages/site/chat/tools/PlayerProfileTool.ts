@@ -5,7 +5,7 @@ import { z } from "zod";
 export const PlayerProfileTool = new DynamicStructuredTool({
   name: "tranmere-web-player-profile-tool",
   description:
-    "Get a full biogropahy of a tranmere rovers player including appearances and goals.",
+    "Get a full biogropahy of a tranmere rovers player including appearances and goals and transfer history.",
   schema: z.object({
     player: z.string().describe("The player name "),
   }),

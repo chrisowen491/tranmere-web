@@ -2,7 +2,7 @@
 
 import { liteClient } from "algoliasearch/lite";
 import { Hit as AlgoliaHit } from "instantsearch.js";
-import * as React from 'react';
+import * as React from "react";
 import "instantsearch.css/themes/reset.css";
 import "instantsearch.css/themes/satellite.css";
 import {
