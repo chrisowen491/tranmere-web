@@ -17,7 +17,7 @@ export function MatchMessageBubble(props: { message: ExtendedMessage }) {
           {match.programme ? (
             <Image
               alt="Match Programme"
-              width={250}
+              width={280}
               height={400}
               src={`https://images.tranmere-web.com/${match.programme}`}
               className="h-80 object-cover object-left mx-auto"
