@@ -107,10 +107,10 @@ export interface Blog {
 
 export interface ExtendedMessage extends Message {
   avatar?: string;
-  type?: "chat" | "match" | "player" | "players";
-  match?: MatchPageData;
+  type?: "chat" | "matches" | "profiles" | "players";
+  matches?: MatchPageData[];
   players?: PlayerSeasonSummary[];
-  player?: PlayerSeasonSummary;
+  profiles?: PlayerProfile[];
 }
 
 export interface ComplexChatResponse {
@@ -151,7 +151,7 @@ export interface Kwargs {
   response_metadata: ResponseMetadata;
   tool_call_chunks: ToolCallChunk[];
   tool_calls: ToolCall2[];
-  invalid_tool_calls: any[];
+  invalid_tool_calls: object[];
 }
 
 export interface AdditionalKwargs {
@@ -201,7 +201,7 @@ export interface PlayerProfile {
   links: HyperLink[];
   image: string;
   player: Player;
-  appearances: Appearance[];
+  appearances?: Appearance[];
 }
 
 export interface Breadcrumb {

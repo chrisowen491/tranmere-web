@@ -9,34 +9,6 @@ function GitHubIcon(props: React.ComponentPropsWithoutRef<"svg">) {
   );
 }
 
-const navigation = {
-  results: [
-    { name: "Results Home", href: "/results" },
-    { name: "Results At Wembley", href: "/games/at-wembley" },
-    { name: "Penalty Shootouts", href: "/games/penalty-shootouts" },
-  ],
-  players: [
-    { name: "Players Home", href: "/playersearch" },
-    { name: "Record Appearances", href: "/player-records/most-appearances" },
-    { name: "Record Goalscorers", href: "/player-records/top-scorers" },
-    { name: "Only Played Once", href: "/player-records/only-one-appearance" },
-    { name: "Top Scorers By Season", href: "/top-scorers-by-season" },
-    { name: "Hat Tricks", href: "/hat-tricks" },
-    { name: "Transfers", href: "/transfer-central" },
-  ],
-  statistics: [
-    { name: "Top Attendences", href: "/games/top-attendances" },
-    { name: "Top Home Attendences", href: "/games/top-home-attendances" },
-    { name: "Manager Records", href: "/managers" },
-  ],
-  media: [
-    { name: "Blog", href: "/blog" },
-    { name: "TRFC Books", href: "/page/blog/books" },
-    { name: "Football Cards", href: "/page/blog/football-cards" },
-    { name: "Player Avatar Builder", href: "/player-builder" },
-  ],
-};
-
 export default function Footer() {
   return (
     <footer

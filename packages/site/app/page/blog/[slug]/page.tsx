@@ -6,7 +6,7 @@ import { notFound } from "next/navigation";
 import { Kit } from "@/components/blogs/Kit";
 import { Star } from "@/components/blogs/Star";
 import { Title } from "@/components/fragments/Title";
-import { BLOCKS, MARKS } from "@contentful/rich-text-types";
+import { BLOCKS } from "@contentful/rich-text-types";
 import { getRequestContext } from "@cloudflare/next-on-pages";
 import { GetCommentsByUrl } from "@/lib/comments";
 import { Reviews } from "@/components/comments/Reviews";
@@ -123,9 +123,7 @@ export default async function BlogPage(props: { params: SlugParams }) {
               {article.galleryCollection &&
               article.galleryCollection.items.length > 0 ? (
                 <>
-                  <p>
-                    Click the image for a larger version
-                  </p>
+                  <p>Click the image for a larger version</p>
                   <Slider
                     images={article.galleryCollection.items}
                     title={article.title}

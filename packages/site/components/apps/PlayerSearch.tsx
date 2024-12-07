@@ -55,14 +55,10 @@ export function PlayerSearch(props: {
     },
   ];
 
-  function showFilters(event: React.MouseEvent<HTMLElement>): void {
+  function showFilters(): void {
     setOpen(true);
   }
   const onSubmit = async (formData: FormData) => {
-    const targetSeason = formData.get("season")
-      ? parseInt(formData.get("season")!.toString())
-      : null;
-
     setSeason(formData.get("season") as string);
     setLoading(true);
 
@@ -115,7 +111,12 @@ export function PlayerSearch(props: {
                     </div>
                   </div>
                   <div className="relative flex-1 px-4 sm:px-6">
-                    <form action={onSubmit}>
+                    <form
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                        onSubmit(new FormData(e.currentTarget));
+                      }}
+                    >
                       <div className="p-4 ">
                         <div className="border-b border-gray-900/10 pb-12">
                           <div className="mt-10">

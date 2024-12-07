@@ -71,11 +71,11 @@ export function replaceSeasonsKit(input: string, season?: string): string {
   ]);
 
   const re = /\/\d\d\d\dA*\//gm;
-  const re3 = /\/\d\d\d\d[A-Za-z]\//gm;
+
   if (season) {
     let seasonKit = season;
     if (seasonMapping.get(parseInt(season))) {
-      seasonKit = seasonMapping.get(parseInt(season))?.toString()!;
+      seasonKit = seasonMapping.get(parseInt(season))!.toString();
     }
 
     const output = input.replace(re, `/${seasonKit}/`);
@@ -152,8 +152,8 @@ export async function GetLastMatch(): Promise<Match> {
 
   const matches = (await results.json()) as { results: Match[] };
 
-  var idx = matches.results.length;
-  var match = matches.results[idx - 1];
+  const idx = matches.results.length;
+  const match = matches.results[idx - 1];
   return match;
 }
 
@@ -272,14 +272,14 @@ export async function GetAllHatTricks(): Promise<HatTrick[]> {
 }
 
 export function ToTitleCase(input: string): string {
-  var i, j, str, lowers, uppers;
+  let i, j, str;
   str = input.replace(/([^\W_]+[^\s-]*) */g, function (txt) {
     return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
   });
 
   // Certain minor words should be left lowercase unless
   // they are the first or last words in the string
-  lowers = [
+  const lowers = [
     "A",
     "An",
     "The",
@@ -311,7 +311,7 @@ export function ToTitleCase(input: string): string {
     );
 
   // Certain words such as initialisms or acronyms should be left uppercase
-  uppers = ["Id", "Tv"];
+  const uppers = ["Id", "Tv"];
   for (i = 0, j = uppers.length; i < j; i++)
     str = str.replace(
       new RegExp("\\b" + uppers[i] + "\\b", "g"),

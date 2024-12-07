@@ -2,8 +2,6 @@
 
 import { Chart } from "@/lib/types";
 import {
-  LineChart,
-  Line,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -15,10 +13,10 @@ import {
 } from "recharts";
 
 export function LineGraph(props: { title: string; chart: Chart }) {
-  let data = [];
+  const data = [];
 
-  for (var i = 0; i < props.chart.labels.length; i++) {
-    let obj: any = {
+  for (let i = 0; i < props.chart.labels.length; i++) {
+    const obj: any = {
       name: props.chart.labels[i],
     };
 

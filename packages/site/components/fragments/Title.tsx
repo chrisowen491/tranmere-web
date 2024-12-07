@@ -1,4 +1,4 @@
-export async function Title(props: {
+export function Title(props: {
   title: string;
   subTitle?: string;
   summary?: string;

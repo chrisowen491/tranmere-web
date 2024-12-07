@@ -46,7 +46,6 @@ export interface CategoryScores {
 }
 
 export async function DELETE(req: NextRequest) {
-  const data = await getSession();
   const body = (await req.json()) as { comment: Comment };
 
   await getRequestContext()
@@ -83,7 +82,6 @@ export async function POST(req: NextRequest) {
     );
 
     const result = (await moderationRequest.json()) as ModerationResult;
-    console.log(result);
     let flagged = false;
     result.results.forEach((m) => {
       if (m.flagged) {

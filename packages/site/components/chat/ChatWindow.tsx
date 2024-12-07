@@ -11,8 +11,13 @@ import { ChatMessageBubble } from "@/components/chat/ChatMessageBubble";
 import {
   ComplexChatResponse,
   ExtendedMessage,
+  PlayerProfile,
 } from "../../lib/types";
 import { SubmitButton } from "@/components/forms/SubmitButton";
+import {
+  MatchPageData,
+  PlayerSeasonSummary,
+} from "@tranmere-web/lib/src/tranmere-web-types";
 
 export function ChatWindow(props: {
   endpoint: string;
@@ -96,66 +101,76 @@ export function ChatWindow(props: {
 
       if (response.status === 200) {
         const newMessages = messagesWithUserReply;
-        const basereply: ExtendedMessage = {
+        let basereply: ExtendedMessage = {
           id: `${newMessages.length}`,
           content: json.output,
           role: "assistant",
           avatar: json.avatar,
         };
-        const extraMesages: ExtendedMessage[] = [];
 
-        /*
-        if (
-          json.intermediate_steps.filter(
-            (step) => step.action.tool === "tranmere-web-match-tool",
-          ).length > 0
-        ) {
-          const steps = json.intermediate_steps.filter(
-            (step) => step.action.tool === "tranmere-web-match-tool",
-          );
-          if (steps.length > 0 && steps[0].observation !== "") {
-            const game = JSON.parse(steps[0].observation) as MatchPageData;
+        const players: PlayerSeasonSummary[] = [];
+        const profiles: PlayerProfile[] = [];
+        const matches: MatchPageData[] = [];
 
-            const match: ExtendedMessage = {
-              id: `${newMessages.length}`,
-              content: basereply.content,
-              match: game,
-              role: "assistant",
-              avatar: json.avatar,
-              type: "match",
-            };
-            extraMesages.push(match);
-          }
-        } else if (
-          json.intermediate_steps.filter(
-            (step) => step.action.tool === "tranmere-web-player-stats-tool",
-          ).length > 0
-        ) {
-          const steps = json.intermediate_steps.filter(
-            (step) => step.action.tool === "tranmere-web-player-stats-tool",
-          );
-          if (steps.length > 0 && steps[0].observation !== "") {
-            const players = JSON.parse(
-              steps[0].observation,
-            ) as PlayerSeasonSummary[];
-            if (players.length == 1) {
-              const message: ExtendedMessage = {
-                id: `${newMessages.length}`,
-                content: basereply.content,
-                player: players[0],
-                role: "assistant",
-                avatar: json.avatar,
-                type: "player",
-              };
-              extraMesages.push(message);
-            } else {
-              extraMesages.push(basereply);
+        if (json.intermediate_steps) {
+          json.intermediate_steps.forEach((step) => {
+            if (step.action.tool === "tranmere-web-player-stats-tool") {
+              const playerStats = JSON.parse(step.observation);
+              if (playerStats.length > 0) {
+                playerStats.forEach((player: PlayerSeasonSummary) => {
+                  players.push(player);
+                });
+              } else {
+                players.push(playerStats);
+              }
+            } else if (
+              step.action.tool === "tranmere-web-player-profile-tool"
+            ) {
+              const player = JSON.parse(step.observation) as PlayerProfile;
+              if (
+                profiles.find((p) => p.player.name === player.player.name) ===
+                undefined
+              )
+                profiles.push(player);
+            } else if (step.action.tool === "tranmere-web-match-tool") {
+              const match = JSON.parse(step.observation);
+              if (match.length > 0) {
+                match.forEach((m: MatchPageData) => {
+                  match.push(m);
+                });
+              } else {
+                matches.push(match);
+              }
             }
-          }
-        } else {
-          */
+          });
+        }
+
+        if (players.length > 0) {
+          basereply = {
+            ...basereply,
+            type: "players",
+            players: players,
+            profiles: [],
+          };
+        }
+        if (profiles.length > 0) {
+          basereply = {
+            ...basereply,
+            type: "profiles",
+            profiles: profiles,
+            players: [],
+          };
+        }
+        if (matches.length > 0) {
+          basereply = {
+            ...basereply,
+            type: "matches",
+            matches: matches,
+          };
+        }
+
+        const extraMesages: ExtendedMessage[] = [];
         extraMesages.push(basereply);
-        //}
         setMessages([...newMessages, ...extraMesages]);
       } else {
         if (json.error) {

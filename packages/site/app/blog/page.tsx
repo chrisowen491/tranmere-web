@@ -3,7 +3,7 @@ import { getAllArticles } from "@/lib/api";
 import { Metadata } from "next";
 export const runtime = "edge";
 
-export var metadata: Metadata = {
+export const metadata: Metadata = {
   title: "Blog Index",
   description: "A listing of all blog article for the site",
 };
