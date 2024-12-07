@@ -14,6 +14,15 @@ import {
 import { OnThisDay } from "@/components/fragments/OnThisDay";
 import { TagCloud } from "@/components/blogs/TagCloud";
 import Link from "next/link";
+import {
+  GetAllPlayers,
+  GetBaseUrl,
+  GetLastMatch,
+  GetOnThisDay,
+} from "@/lib/apiFunctions";
+import { getRequestContext } from "@cloudflare/next-on-pages";
+import { PlayerProfile } from "@/lib/types";
+import { getAllArticles } from "@/lib/api";
 
 export const runtime = "edge";
 
@@ -122,6 +131,19 @@ export default async function Home() {
     return classes.filter(Boolean).join(" ");
   }
 
+  const players = await GetAllPlayers();
+  const randomplayer = players[Math.floor(Math.random() * players.length)];
+
+  const url =
+    GetBaseUrl(getRequestContext().env) + `/page/player/${randomplayer.name}`;
+
+  const playerRequest = await fetch(url);
+
+  const profile = (await playerRequest.json()) as PlayerProfile;
+  const match = await GetLastMatch();
+  const onthisday = await GetOnThisDay();
+  const articles = await getAllArticles(100);
+
   return (
     <>
       <Hero />
@@ -136,21 +158,21 @@ export default async function Home() {
                 <div className="relative lg:col-span-2">
                   <div className="absolute inset-px rounded-lg max-lg:rounded-t-[2rem] lg:rounded-tl-[2rem]" />
                   <div className="relative flex h-full flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] max-lg:rounded-t-[calc(2rem+1px)] lg:rounded-tl-[calc(2rem+1px)]">
-                    <PlayerOfTheDay />
+                    <PlayerOfTheDay profile={profile} />
                   </div>
                   <div className="pointer-events-none absolute inset-px rounded-lg shadow ring-1 ring-black/5 max-lg:rounded-t-[2rem] lg:rounded-tl-[2rem]" />
                 </div>
                 <div className="relative lg:col-span-2">
                   <div className="absolute inset-px rounded-lg lg:rounded-tr-[2rem]" />
                   <div className="relative flex h-full flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] lg:rounded-tr-[calc(2rem+1px)]">
-                    <LastMatch></LastMatch>
+                    <LastMatch match={match}></LastMatch>
                   </div>
                   <div className="pointer-events-none absolute inset-px rounded-lg shadow ring-1 ring-black/5 lg:rounded-tr-[2rem]" />
                 </div>
                 <div className="relative lg:col-span-2">
                   <div className="absolute inset-px rounded-lg lg:rounded-tr-[2rem]" />
                   <div className="relative flex h-full flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] lg:rounded-tr-[calc(2rem+1px)]">
-                    <OnThisDay></OnThisDay>
+                    <OnThisDay match={onthisday!}></OnThisDay>
                   </div>
                   <div className="pointer-events-none absolute inset-px rounded-lg shadow ring-1 ring-black/5 lg:rounded-tr-[2rem]" />
                 </div>
@@ -241,7 +263,7 @@ export default async function Home() {
               </div>
             ))}
           </div>
-          <TagCloud />
+          <TagCloud articles={articles} />
           <FAQs text="Frequently Asked Questions" faqs={faqs}></FAQs>
         </div>
       </div>

@@ -25,11 +25,13 @@ export function TransferSearch(props: {
   const [filter, setFilter] = useState(props.filter);
   const [loading, setLoading] = useState(false);
 
-  function showFilters(event: React.MouseEvent<HTMLElement>): void {
+  function showFilters(): void {
     setOpen(true);
   }
 
-  const onSubmit = async (formData: FormData) => {
+  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
     setSeason(formData.get("season") as string);
     setClub(formData.get("club") as string);
     setFilter(formData.get("filter") as string);
@@ -87,7 +89,7 @@ export function TransferSearch(props: {
                     </div>
                   </div>
                   <div className="relative flex-1 px-4 sm:px-6">
-                    <form action={onSubmit}>
+                    <form onSubmit={onSubmit}>
                       <div className="p-4 ">
                         <div className="border-b border-gray-900/10 pb-12">
                           <div className="mt-10">

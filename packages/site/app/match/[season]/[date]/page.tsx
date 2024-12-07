@@ -60,7 +60,7 @@ export default async function MatchPage(props: { params: MatchParams }) {
       previous={previous}
       comments={comments}
       url={baseUrl}
-      avg={score}
+      avg={avg}
     ></MatchReport>
   );
 }

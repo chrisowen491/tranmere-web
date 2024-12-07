@@ -12,7 +12,7 @@ export default function CommentPanel(props: {
   const [text, setText] = useState("");
   const [rating, setRating] = useState(3);
 
-  const { user, error, isLoading } = useUser();
+  const { user } = useUser();
   const [thecomments, setComments] = useState(props.comments);
 
   function classNames(...classes: string[]) {
@@ -60,7 +60,12 @@ export default function CommentPanel(props: {
   };
   return (
     <div className={`mt-5 dark:text-gray-50 text-gray-900 ${props.className}`}>
-      <form action={onSubmit}>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          onSubmit(new FormData(e.currentTarget));
+        }}
+      >
         <div className="col-span-full">
           <label
             htmlFor="comment"

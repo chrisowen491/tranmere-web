@@ -59,8 +59,8 @@ export default async function GamesPage(props: { params: SlugParams }) {
   let pens = "";
   let season = "";
   let opposition = "";
-  let competition = "";
-  let manager = "";
+  const competition = "";
+  const manager = "";
   const competitions = await GetAllCupCompetitions();
   const managers = await GetAllTranmereManagers();
   const teams = await GetAllTeams();

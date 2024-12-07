@@ -1,20 +1,9 @@
 import { PlayerProfile } from "@/lib/types";
 import { LinkButton } from "@/components//forms/LinkButton";
-import { GetAllPlayers, GetBaseUrl } from "@/lib/apiFunctions";
-import { getRequestContext } from "@cloudflare/next-on-pages";
 import Image from "next/image";
 
-export async function PlayerOfTheDay() {
-  const players = await GetAllPlayers();
-  const randomplayer = players[Math.floor(Math.random() * players.length)];
-
-  const url =
-    GetBaseUrl(getRequestContext().env) + `/page/player/${randomplayer.name}`;
-
-  const playerRequest = await fetch(url);
-
-  const profile = (await playerRequest.json()) as PlayerProfile;
-
+export function PlayerOfTheDay(props: { profile: PlayerProfile }) {
+  const profile = props.profile;
   let goals = 0;
   if (profile.appearances) {
     profile.appearances.forEach((app) => {
@@ -42,7 +31,7 @@ export async function PlayerOfTheDay() {
           <strong>Debut:</strong> {profile.debut.Opposition}{" "}
           {profile.debut.Date}
           <br />
-          {profile.appearances.length} apps, {goals} goals
+          {profile.appearances!.length} apps, {goals} goals
           <br />
           <LinkButton
             text="View Player Profile"

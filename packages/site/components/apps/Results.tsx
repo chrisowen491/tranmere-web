@@ -75,7 +75,7 @@ export function ResultsSearch(props: {
     setOpen(false);
   };
 
-  function showFilters(event: React.MouseEvent<HTMLElement>): void {
+  function showFilters(): void {
     setOpen(true);
   }
 
@@ -116,7 +116,12 @@ export function ResultsSearch(props: {
                     </div>
                   </div>
                   <div className="relative flex-1 px-4 sm:px-6">
-                    <form action={onSubmit}>
+                    <form
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                        onSubmit(new FormData(e.currentTarget));
+                      }}
+                    >
                       <div className="p-4 ">
                         <div className="border-b border-gray-900/10 pb-12">
                           <div className="mt-10">

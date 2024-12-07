@@ -1,9 +1,9 @@
-import { GetOnThisDay } from "@/lib/apiFunctions";
 import { PlayIcon } from "@heroicons/react/20/solid";
 import { LinkButton } from "@/components//forms/LinkButton";
 import Image from "next/image";
-export async function OnThisDay() {
-  const match = await GetOnThisDay();
+import { Match } from "@tranmere-web/lib/src/tranmere-web-types";
+export function OnThisDay(props: { match: Match }) {
+  const match = props.match;
   if (!match) {
     return <div></div>;
   }

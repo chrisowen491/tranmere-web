@@ -16,7 +16,6 @@ import { getRequestContext } from "@cloudflare/next-on-pages";
 import SeasonReview from "@/components/apps/SeasonReview";
 import { getAllArticlesForTag } from "@/lib/api";
 import { SlugParams } from "@/lib/types";
-import { parse } from "path";
 import { notFound } from "next/navigation";
 import { JumpBox } from "@/components/forms/JumpBox";
 
@@ -44,11 +43,11 @@ export default async function SeasonPage(props: { params: SlugParams }) {
 
   const base = GetBaseUrl(getRequestContext().env) + "/result-search/";
   let title: string | null = null;
-  let sort = "Date";
-  let venue = "";
-  let pens = "";
-  let opposition = "";
-  let competition = "";
+  const sort = "Date";
+  const venue = "";
+  const pens = "";
+  const opposition = "";
+  const competition = "";
   const managers = await GetAllTranmereManagers();
 
   title = "Season: " + season;

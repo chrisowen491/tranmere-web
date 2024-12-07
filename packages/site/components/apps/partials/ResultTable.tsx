@@ -177,7 +177,7 @@ export function ResultTable(props: {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 ">
-                {props.results.map((result: any, idx) => (
+                {props.results.map((result: Match, idx) => (
                   <tr key={idx}>
                     <td className="whitespace-nowrap px-1 sm:px-3 py-4">
                       {props.fullDate ? (

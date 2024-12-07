@@ -11,32 +11,42 @@ export function ChatMessageBubble(props: { message: ExtendedMessage }) {
       : "bg-green-600 text-gray-50";
   const avatar =
     props.message.role === "user" ? userAvatar : props.message.avatar;
+  console.log(props.message);
   return (
-    <div className={`${colorClassName} rounded px-4 py-2 max-w-full mb-8 flex`}>
-      <div className="mr-2">
-        <Image
-          alt="Avatar"
-          width={200}
-          height={200}
-          src={avatar!}
-          className="h-24 w-24 rounded-full"
-        />
+    <>
+      <div className="mb-10">
+        <div className="w-full">
+          {(props.message.players || props.message.profiles) && (
+            <PlayerBubble
+              key={props.message.id}
+              message={props.message}
+            ></PlayerBubble>
+          )}
+          {props.message.matches && (
+            <MatchMessageBubble
+              key={props.message.id}
+              message={props.message}
+            ></MatchMessageBubble>
+          )}
+        </div>
       </div>
-      <div className="whitespace-pre-wrap flex flex-col">
-        <span>{props.message.content}</span>
-        {props.message.player && (
-          <PlayerBubble
-            key={props.message.id}
-            message={props.message}
-          ></PlayerBubble>
-        )}
-        {props.message.match && (
-          <MatchMessageBubble
-            key={props.message.id}
-            message={props.message}
-          ></MatchMessageBubble>
-        )}
+      <div
+        className={`${colorClassName} rounded px-4 py-2 max-w-full mb-8 flex`}
+      >
+        <div className="mr-2 flex flex-col shrink-0">
+          <Image
+            alt="Avatar"
+            width={200}
+            height={200}
+            src={avatar!}
+            unoptimized={true}
+            className="h-24 w-24 rounded-full"
+          />
+        </div>
+        <div className="flex flex-col">
+          <span>{props.message.content}</span>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

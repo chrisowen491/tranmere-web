@@ -1,4 +1,3 @@
-import { getAllArticles } from "@/lib/api";
 import { BlogItem } from "@/lib/types";
 import Link from "next/link";
 
@@ -41,10 +40,9 @@ export function getTextSize(articles: number) {
   return sizes[articles + 1];
 }
 
-export async function TagCloud() {
+export function TagCloud(props: { articles: BlogItem[] }) {
   const tags: Tag[] = [];
-
-  const articles: BlogItem[] = await getAllArticles(100);
+  const articles = props.articles;
 
   articles.forEach((article) => {
     if (!article.tags) return;

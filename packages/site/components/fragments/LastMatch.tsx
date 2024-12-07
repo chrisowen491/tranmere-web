@@ -1,13 +1,12 @@
-import { GetLastMatch } from "@/lib/apiFunctions";
 import { PlayIcon } from "@heroicons/react/20/solid";
 import { LinkButton } from "@/components//forms/LinkButton";
 import Image from "next/image";
-export async function LastMatch() {
-  const match = await GetLastMatch();
+import { Match } from "@tranmere-web/lib/src/tranmere-web-types";
+export function LastMatch(props: { match: Match }) {
+  const match = props.match;
   if (!match) {
     return <div></div>;
   }
-  const score = `${match.home} ${match.ft} ${match.visitor}`;
   return (
     <>
       {match.largeProgramme ? (

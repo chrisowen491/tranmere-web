@@ -1,11 +1,11 @@
 export const runtime = "edge";
 
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { GetSeasons } from "@/lib/apiFunctions";
 
 //export interface Season
 
-export async function POST(req: NextRequest) {
+export async function POST() {
   const seasons = GetSeasons();
   return NextResponse.json(
     seasons.map((s) => {

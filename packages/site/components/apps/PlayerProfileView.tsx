@@ -217,7 +217,7 @@ export default function PlayerProfileView(props: {
 
                   <TabPanel className="">
                     <PlayerAppsTable
-                      records={player.appearances}
+                      records={player.appearances!}
                       title="Apps"
                     ></PlayerAppsTable>
                   </TabPanel>

@@ -10,7 +10,7 @@ export function ContactForm() {
   const [formClass, setFormClass] = useState("");
 
   const onSubmit = async (formData: FormData) => {
-    var data = {
+    const data = {
       name: formData.get("name"),
       email: formData.get("email"),
       desc: formData.get("message"),
@@ -85,7 +85,11 @@ export function ContactForm() {
           </div>
         </div>
         <form
-          action={onSubmit}
+          onSubmit={(e) => {
+            e.preventDefault();
+            const formData = new FormData(e.currentTarget);
+            onSubmit(formData);
+          }}
           className={`px-6 pb-24 pt-20 sm:pb-32 lg:px-8 lg:py-48 ${formClass}`}
         >
           <div className="mx-auto max-w-xl lg:mr-0 lg:max-w-lg">

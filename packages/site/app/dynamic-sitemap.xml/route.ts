@@ -3,7 +3,7 @@ import { ISitemapField, getServerSideSitemap } from "next-sitemap";
 import { GetAllTeams, GetSeasons } from "@/lib/apiFunctions";
 import { getAllArticles, getAllPlayers } from "@/lib/api";
 
-export async function GET(request: Request) {
+export async function GET() {
   const teams = await GetAllTeams();
   const articles = await getAllArticles(50);
   const seasons = GetSeasons();

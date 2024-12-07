@@ -24,8 +24,8 @@ export const metadata: Metadata = {
 export default async function ResultsSearchPage() {
   const base = GetBaseUrl(getRequestContext().env) + "/result-search/";
 
-  var dateobj = new Date();
-  var theYear =
+  const dateobj = new Date();
+  const theYear =
     dateobj.getUTCMonth() > 6
       ? dateobj.getFullYear()
       : dateobj.getFullYear() - 1;

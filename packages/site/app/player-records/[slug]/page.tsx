@@ -20,9 +20,6 @@ export async function generateMetadata(props: { params: SlugParams }) {
   } else if (params.slug === "top-scorers") {
     description = "Tranmere Rovers FC Top Scorers Since 1977";
     title = "Tranmere Record Goalscorers";
-  } else if (params.slug === "top-scorers") {
-    description = "Tranmere Rovers FC Player Stats Season " + params.slug;
-    title = "Tranmere Record Player Stats - Season " + params.slug;
   }
 
   return {

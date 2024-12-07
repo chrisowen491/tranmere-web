@@ -12,13 +12,7 @@ type Props = {
   title: string;
 };
 
-const Description = ({
-  activeImage,
-  clickNext,
-  clickPrev,
-  images,
-  title,
-}: Props) => {
+const Description = ({ activeImage, clickNext, clickPrev, images }: Props) => {
   return (
     <div className="grid place-items-start w-full relative md:rounded-tr-3xl md:rounded-br-3xl">
       {images.map((elem, idx) => (
