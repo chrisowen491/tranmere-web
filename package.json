@@ -29,7 +29,7 @@
     "wrangler": "^3.86.1"
   },
   "dependencies": {
-    "@types/node": "^22.9.4"
+    "@types/node": "^22.10.1"
   },
   "resolutions": {
     "**/path-to-regexp": "8.2.0",
