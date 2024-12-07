@@ -2,7 +2,7 @@
 
 import { liteClient } from "algoliasearch/lite";
 import { Hit as AlgoliaHit } from "instantsearch.js";
-import React, { ReactNode } from "react";
+import * as React from 'react';
 import "instantsearch.css/themes/reset.css";
 import "instantsearch.css/themes/satellite.css";
 import {
@@ -24,8 +24,8 @@ type HitProps = {
 };
 
 type QueryBoundary = {
-  children: ReactNode;
-  fallback?: ReactNode;
+  children: React.ReactNode;
+  fallback?: React.ReactNode;
 };
 
 function EmptyQueryBoundary(options: QueryBoundary) {

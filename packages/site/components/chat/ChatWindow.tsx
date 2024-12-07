@@ -49,7 +49,7 @@ export function ChatWindow(props: {
     headers: {
       "x-avatar": avatar,
     },
-    streamMode: "text",
+    streamProtocol: "text",
     onError: (e) => {
       toast(e.message, {
         theme: "dark",
