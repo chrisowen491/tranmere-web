@@ -98,7 +98,6 @@ export async function POST(req: NextRequest) {
       ResultsTool,
       TeamLookupTool,
       MatchTool,
-      TransferTool,
       ManagerTool,
       PlayerProfileTool,
       PlayerStatsTool,
