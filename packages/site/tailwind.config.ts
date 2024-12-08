@@ -2,6 +2,7 @@ import typographyPlugin from '@tailwindcss/typography'
 import aspectPlugin from '@tailwindcss/aspect-ratio'
 import formPlugin from '@tailwindcss/forms'
 import { type Config } from 'tailwindcss'
+import scrollbarplugin from 'tailwind-scrollbar'
 
 
 export default {
@@ -37,5 +38,5 @@ export default {
       },
     },
   },
-  plugins: [typographyPlugin, formPlugin, aspectPlugin],
+  plugins: [typographyPlugin, formPlugin, aspectPlugin, scrollbarplugin],
 } satisfies Config
