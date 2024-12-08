@@ -297,7 +297,7 @@ export function SmallChatWindow(props: {
         <Image
           src="/assets/logos/roverbot.png"
           alt="RoverBot"
-          className="h-12 w-12 text-indigo-600 object-none absolute right-0 bottom-0"
+          className="h-12 w-12  text-indigo-600 absolute right-0 bottom-0"
           width={100}
           height={100}
           onClick={toggle}
