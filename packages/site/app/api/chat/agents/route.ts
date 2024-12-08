@@ -10,7 +10,6 @@ import {
   ChatPromptTemplate,
   MessagesPlaceholder,
 } from "@langchain/core/prompts";
-import { TransferTool } from "@/chat/tools/TransferTool";
 import { getSystemPrompt } from "@/chat/prompts/system";
 import { PlayerStatsTool } from "@/chat/tools/PlayerStatsTool";
 import { BaseChatModel } from "@langchain/core/language_models/chat_models";
