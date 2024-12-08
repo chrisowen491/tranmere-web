@@ -186,7 +186,7 @@ export function SmallChatWindow(props: {
     "rounded-md bg-sky-500 dark:bg-sky-500 px-2 py-2 text-xs font-semibold text-white shadow-sm hover:bg-green-600 dark:hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mb-4";
 
   return (
-    <div className="fixed bottom-10 right-4 text-blue-500 w-full max-w-96 z-50">
+    <div className="fixed bottom-10 right-1 md:right-12 text-blue-500 w-full max-w-96 z-50">
       <div
         className={`bg-gray-200 rounded-lg relative right-0 bottom-14  ${chatopen ? "block" : "hidden"}`}
       >
