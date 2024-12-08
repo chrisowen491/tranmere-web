@@ -18,6 +18,7 @@ import { InsertLinkTool } from "@/chat/tools/InsertLinkTool";
 import { InsertTransferTool } from "@/chat/tools/InsertTransferTool";
 import { TeamLookupTool } from "@/chat/tools/TeamLookupTool";
 import { PlayerProfileTool } from "@/chat/tools/PlayerProfileTool";
+import { ManagerTool } from "@/chat/tools/ManagerTool";
 
 export const runtime = "edge";
 
@@ -32,7 +33,7 @@ const convertVercelMessageToLangChainMessage = (message: VercelChatMessage) => {
 };
 
 const avatarMap = new Map();
-avatarMap.set("Generic", "/images/1989a.png");
+avatarMap.set("Generic", "/assets/logos/roverbot.png");
 avatarMap.set(
   "Aldo",
   "/builder/1991/side-parting/ffd3b3/thick-tache/7f3f00/fcb98b/none/bc8a00",
@@ -98,6 +99,7 @@ export async function POST(req: NextRequest) {
       TeamLookupTool,
       MatchTool,
       TransferTool,
+      ManagerTool,
       PlayerProfileTool,
       PlayerStatsTool,
       InsertLinkTool,

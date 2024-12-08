@@ -23,6 +23,7 @@ import {
 import { getRequestContext } from "@cloudflare/next-on-pages";
 import { PlayerProfile } from "@/lib/types";
 import { getAllArticles } from "@/lib/api";
+import { SmallChatWindow } from "@/components/chat/SmallChatWindow";
 
 export const runtime = "edge";
 
@@ -264,7 +265,12 @@ export default async function Home() {
             ))}
           </div>
           <TagCloud articles={articles} />
+
           <FAQs text="Frequently Asked Questions" faqs={faqs}></FAQs>
+          <SmallChatWindow
+            endpoint="api/chat/agents"
+            placeholder="Ask me anything Tranmere Rovers related"
+          ></SmallChatWindow>
         </div>
       </div>
     </>

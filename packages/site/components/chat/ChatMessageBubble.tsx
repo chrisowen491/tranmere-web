@@ -11,10 +11,9 @@ export function ChatMessageBubble(props: { message: ExtendedMessage }) {
       : "bg-green-600 text-gray-50";
   const avatar =
     props.message.role === "user" ? userAvatar : props.message.avatar;
-  console.log(props.message);
   return (
     <>
-      <div className="mb-10">
+      <div className="mt-2">
         <div className="w-full">
           {(props.message.players || props.message.profiles) && (
             <PlayerBubble
@@ -31,7 +30,7 @@ export function ChatMessageBubble(props: { message: ExtendedMessage }) {
         </div>
       </div>
       <div
-        className={`${colorClassName} rounded px-4 py-2 max-w-full mb-8 flex`}
+        className={`${colorClassName} rounded px-4 py-2 max-w-full mb-2 flex`}
       >
         <div className="mr-2 flex flex-col shrink-0">
           <Image
@@ -40,10 +39,10 @@ export function ChatMessageBubble(props: { message: ExtendedMessage }) {
             height={200}
             src={avatar!}
             unoptimized={true}
-            className="h-24 w-24 rounded-full"
+            className="h-12 w-12 rounded-full"
           />
         </div>
-        <div className="flex flex-col">
+        <div className="flex flex-col text-sm">
           <span>{props.message.content}</span>
         </div>
       </div>
