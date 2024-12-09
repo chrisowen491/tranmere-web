@@ -6,12 +6,12 @@ export function PlayerBubble(props: { message: ExtendedMessage }) {
   return (
     <ul
       role="list"
-      className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 text-center lg:mx-0 lg:max-w-none mb-4"
+      className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 text-center lg:max-w-none"
     >
       {props.message.players!.map((player, idx) => (
         <li
           key={idx}
-          className="text-sm leading-6 text-gray-600 dark:text-gray-50"
+          className="text-sm leading-6 text-gray-50 dark:text-gray-50"
         >
           {player.picLink ? (
             <Image
@@ -42,7 +42,7 @@ export function PlayerBubble(props: { message: ExtendedMessage }) {
       {props.message.profiles!.map((player, idx) => (
         <li
           key={idx}
-          className="text-sm leading-6 text-gray-600 dark:text-gray-50"
+          className="text-sm leading-6 text-gray-50 dark:text-gray-50"
         >
           {player.player.picLink ? (
             <Image
