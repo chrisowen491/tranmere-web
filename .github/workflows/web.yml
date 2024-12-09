@@ -54,7 +54,7 @@ jobs:
           command: pages deploy .vercel/output/static --project-name=tranmere-web
 
       - name: Check HTTP status
-        uses: gerdemann/http-status-code@944938ed534b092b9f7e1e5c6b08c5d9bbc35162
+        uses: gerdemann/http-status-code@f8e07763c720fb0ee5e95c49605d38fc78dd60f2
         with:
           url: 'https://www.tranmere-web.com'
           code: 200
@@ -62,7 +62,7 @@ jobs:
           interval: 10
 
       - name: Run Binoculars
-        uses: foo-software/binoculars-action@134fda2fdf2e1902b236387fe5f07ae6558e2751
+        uses: foo-software/binoculars-action@40b0a9d3f6242214723446d3835e203271ade291
         with:
           author: ${{ github.actor }}
           branch: ${{ github.ref }}
