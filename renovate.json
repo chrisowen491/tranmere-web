@@ -8,5 +8,5 @@
     "group:all", 
     "schedule:earlyMondays"
   ],
-  "ignoreDeps": ["esbuild","cookie","ai","cloudflare/wrangler-action"]
+  "ignoreDeps": ["esbuild","cookie","yarn","cloudflare/wrangler-action"]
 }
