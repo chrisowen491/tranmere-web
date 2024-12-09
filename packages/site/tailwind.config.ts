@@ -36,6 +36,10 @@ export default {
       maxWidth: {
         '8xl': '88rem',
       },
+      maxHeight: {
+        '128': '34rem',
+      }
+
     },
   },
   plugins: [typographyPlugin, formPlugin, aspectPlugin, scrollbarplugin],
