@@ -148,7 +148,7 @@ exports.handler = async (
         ? translateTeamName(lineups.awayTeam.name.fullName)
         : translateTeamName(lineups.homeTeam.name.fullName),
     static: 'static',
-    season: parseInt(season!),
+    season: season!,
     venue: venue,
     hgoal: parseInt(hscore),
     tier: competition == 'League Two' ? 4 : 0,
