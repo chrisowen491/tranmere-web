@@ -131,7 +131,7 @@ export interface Match {
   opposition?: string;
   venue?: string;
   static?: string;
-  season: number;
+  season: string;
   hgoal: number;
   vgoal: number;
   ft?: string;
