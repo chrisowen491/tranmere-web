@@ -10,7 +10,7 @@
   "author": "Chris Owen",
   "license": "GPL-3.0-only",
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20240502.0",
+    "@cloudflare/workers-types": "^4.20241216.0",
     "@types/jest": "^29.5.12",
     "@types/node": "^22.10.1",
     "eslint": "^9.16.0",
@@ -18,7 +18,7 @@
     "prettier": "3.4.2",
     "ts-jest": "^29.0.5",
     "typescript": "^5.4.5",
-    "typescript-eslint": "^8.18.0"
+    "typescript-eslint": "^8.18.1"
   },
   "overrides": {
     "@types/node": "22.10.2"
@@ -29,6 +29,6 @@
     "@langchain/cloudflare": "^0.1.0",
     "@tranmere-web/lib": "*",
     "langchain": "^0.3.0",
-    "wrangler": "^3.86.1"
+    "wrangler": "^3.96.0"
   }
 }
