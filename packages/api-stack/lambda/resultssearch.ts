@@ -73,40 +73,43 @@ exports.handler = async (
     h2hresults[haindex].pld += 1;
     h2hTotal[0].pld += 1;
 
+    const hgoal = match.hgoal ?? 0;
+    const vgoal = match.vgoal ?? 0;
+
     if (match.home == 'Tranmere Rovers') {
-      if (match.hgoal > match.vgoal) {
+      if (hgoal > vgoal) {
         h2hresults[haindex].wins += 1;
         h2hTotal[0].wins += 1;
-      } else if (match.hgoal < match.vgoal) {
+      } else if (hgoal < vgoal) {
         h2hresults[haindex].lost += 1;
         h2hTotal[0].lost += 1;
       } else {
         h2hresults[haindex].draws += 1;
         h2hTotal[0].draws += 1;
       }
-      h2hresults[haindex].for += match.hgoal;
-      h2hresults[haindex].against += match.vgoal;
-      h2hresults[haindex].diff += match.hgoal - match.vgoal;
-      h2hTotal[0].for += match.hgoal;
-      h2hTotal[0].against += match.vgoal;
-      h2hTotal[0].diff += match.hgoal - match.vgoal;
+      h2hresults[haindex].for += hgoal;
+      h2hresults[haindex].against += vgoal;
+      h2hresults[haindex].diff += hgoal - vgoal;
+      h2hTotal[0].for += hgoal;
+      h2hTotal[0].against += vgoal;
+      h2hTotal[0].diff += hgoal - vgoal;
     } else {
-      if (match.hgoal > match.vgoal) {
+      if (hgoal > vgoal) {
         h2hresults[haindex].lost += 1;
         h2hTotal[0].lost += 1;
-      } else if (match.hgoal < match.vgoal) {
+      } else if (hgoal < vgoal) {
         h2hresults[haindex].wins += 1;
         h2hTotal[0].wins += 1;
       } else {
         h2hresults[haindex].draws += 1;
         h2hTotal[0].draws += 1;
       }
-      h2hresults[haindex].for += match.vgoal;
-      h2hresults[haindex].against += match.hgoal;
-      h2hresults[haindex].diff += match.vgoal - match.hgoal;
-      h2hTotal[0].for += match.vgoal;
-      h2hTotal[0].against += match.hgoal;
-      h2hTotal[0].diff += match.vgoal - match.hgoal;
+      h2hresults[haindex].for += vgoal;
+      h2hresults[haindex].against += hgoal;
+      h2hresults[haindex].diff += vgoal - hgoal;
+      h2hTotal[0].for += vgoal;
+      h2hTotal[0].against += hgoal;
+      h2hTotal[0].diff += vgoal - hgoal;
     }
     if (match.programme && match.programme != '#N/A') {
       const smallBody = new ProgrammeImage(match.programme);
