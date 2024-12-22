@@ -62,44 +62,51 @@ exports.handler = async (
   for (let i = 0; i < data!.length; i++) {
     const match = data![i];
 
+    let haindex = match.home == 'Tranmere Rovers' ? 0 : 1;
+    if (match.venue == 'Wembley Stadium') {
+      match.location = 'N';
+      haindex = 2;
+    } else {
+      match.location = match.home == 'Tranmere Rovers' ? 'H' : 'A';
+    }
+
+    h2hresults[haindex].pld += 1;
+    h2hTotal[0].pld += 1;
+
     if (match.home == 'Tranmere Rovers') {
-      let haindex = 0;
-      if (match.venue == 'Wembley Stadium') {
-        match.location = 'N';
-        haindex = 2;
-      } else {
-        match.location = 'H';
-      }
-      h2hresults[haindex].pld += 1;
       if (match.hgoal > match.vgoal) {
         h2hresults[haindex].wins += 1;
+        h2hTotal[0].wins += 1;
       } else if (match.hgoal < match.vgoal) {
         h2hresults[haindex].lost += 1;
+        h2hTotal[0].lost += 1;
       } else {
         h2hresults[haindex].draws += 1;
+        h2hTotal[0].draws += 1;
       }
       h2hresults[haindex].for += match.hgoal;
       h2hresults[haindex].against += match.vgoal;
       h2hresults[haindex].diff += match.hgoal - match.vgoal;
+      h2hTotal[0].for += match.hgoal;
+      h2hTotal[0].against += match.vgoal;
+      h2hTotal[0].diff += match.hgoal - match.vgoal;
     } else {
-      let haindex = 1;
-      if (match.venue == 'Wembley Stadium') {
-        match.location = 'N';
-        haindex = 2;
-      } else {
-        match.location = 'A';
-      }
-      h2hresults[haindex].pld += 1;
       if (match.hgoal > match.vgoal) {
         h2hresults[haindex].lost += 1;
+        h2hTotal[0].lost += 1;
       } else if (match.hgoal < match.vgoal) {
         h2hresults[haindex].wins += 1;
+        h2hTotal[0].wins += 1;
       } else {
         h2hresults[haindex].draws += 1;
+        h2hTotal[0].draws += 1;
       }
       h2hresults[haindex].for += match.vgoal;
       h2hresults[haindex].against += match.hgoal;
       h2hresults[haindex].diff += match.vgoal - match.hgoal;
+      h2hTotal[0].for += match.vgoal;
+      h2hTotal[0].against += match.hgoal;
+      h2hTotal[0].diff += match.vgoal - match.hgoal;
     }
     if (match.programme && match.programme != '#N/A') {
       const smallBody = new ProgrammeImage(match.programme);
@@ -130,8 +137,8 @@ exports.handler = async (
       delete match.ticket;
     }
     if (date) {
-      match.goals = await utils.getGoalsBySeason(match.season, date);
-      match.apps = await utils.getAppsBySeason(match.season, date);
+      match.goals = await utils.getGoalsBySeason(parseInt(match.season), date);
+      match.apps = await utils.getAppsBySeason(parseInt(match.season), date);
     }
     if (match.attendance == 0) match.attendance = null;
     if (match.competition !== 'Friendly') {
@@ -141,16 +148,6 @@ exports.handler = async (
 
   if (h2hresults[2].pld == 0) {
     h2hresults.pop();
-  }
-
-  for (let i = 0; i < h2hresults.length; i++) {
-    h2hTotal[0].pld += h2hresults[i].pld;
-    h2hTotal[0].wins += h2hresults[i].wins;
-    h2hTotal[0].draws += h2hresults[i].draws;
-    h2hTotal[0].lost += h2hresults[i].lost;
-    h2hTotal[0].for += h2hresults[i].for;
-    h2hTotal[0].against += h2hresults[i].against;
-    h2hTotal[0].diff += h2hresults[i].diff;
   }
 
   if (sort && decodeURIComponent(sort) == 'Top Attendance') {
@@ -299,7 +296,7 @@ async function getResults(
       formation: result.formation,
       location: result.location,
       tier: Number(result.tier),
-      season: Number(result.season),
+      season: result.season!.toString(),
       hgoal: Number(result.hgoal),
       vgoal: Number(result.vgoal),
       attendance: Number(result.attendance),
