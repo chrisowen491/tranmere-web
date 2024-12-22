@@ -92,7 +92,6 @@ exports.handler = async (
       h2hresults[haindex].diff += hgoal - vgoal;
       h2hTotal[0].for += hgoal;
       h2hTotal[0].against += vgoal;
-      h2hTotal[0].diff += hgoal - vgoal;
     } else {
       if (hgoal > vgoal) {
         h2hresults[haindex].lost += 1;
@@ -109,7 +108,6 @@ exports.handler = async (
       h2hresults[haindex].diff += vgoal - hgoal;
       h2hTotal[0].for += vgoal;
       h2hTotal[0].against += hgoal;
-      h2hTotal[0].diff += vgoal - hgoal;
     }
     if (match.programme && match.programme != '#N/A') {
       const smallBody = new ProgrammeImage(match.programme);
@@ -148,6 +146,11 @@ exports.handler = async (
       results.push(match);
     }
   }
+
+  h2hTotal[0].diff = h2hTotal[0].for - h2hTotal[0].against;
+  h2hresults[0].diff = h2hresults[0].for - h2hresults[0].against;
+  h2hresults[1].diff = h2hresults[1].for - h2hresults[1].against;
+  h2hresults[2].diff = h2hresults[2].for - h2hresults[2].against;
 
   if (h2hresults[2].pld == 0) {
     h2hresults.pop();
@@ -298,12 +301,12 @@ async function getResults(
       referee: result.referee,
       formation: result.formation,
       location: result.location,
-      tier: Number(result.tier),
+      tier: result.tier ? parseInt(result.tier!.toString()) : 0,
       season: result.season!.toString(),
-      hgoal: Number(result.hgoal),
-      vgoal: Number(result.vgoal),
-      attendance: Number(result.attendance),
-      round: Number(result.round)
+      hgoal: parseInt(result.hgoal!.toString()),
+      vgoal: parseInt(result.vgoal!.toString()),
+      attendance: result.attendance ? parseInt(result.attendance!.toString()) : null,
+      round: result.round ? parseInt(result.round!.toString()) : undefined,
     };
   });
   return matches;
