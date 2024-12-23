@@ -41,7 +41,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{protocol}}://{{domain}}/player-search/",
+							"raw": "{{protocol}}://{{domain}}/player-search/?season=2024",
 							"protocol": "{{protocol}}",
 							"host": [
 								"{{domain}}"
