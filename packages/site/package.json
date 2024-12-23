@@ -21,7 +21,7 @@
     "@ai-sdk/openai": "^1.0.7",
     "@algolia/autocomplete-js": "^1.17.8",
     "@algolia/autocomplete-theme-classic": "^1.17.8",
-    "@algolia/client-search": "^5.16.0",
+    "@algolia/client-search": "^5.18.0",
     "@auth0/auth0-react": "^2.2.4",
     "@auth0/nextjs-auth0": "^3.5.0",
     "@cloudflare/next-on-pages": "^1.13.7",
