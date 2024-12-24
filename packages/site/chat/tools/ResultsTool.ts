@@ -1,5 +1,5 @@
 import { DynamicStructuredTool } from "@langchain/core/tools";
-import { Match } from "@tranmere-web/lib/src/tranmere-web-types";
+import { H2HResult, H2HTotal, Match } from "@tranmere-web/lib/src/tranmere-web-types";
 import { z } from "zod";
 
 export const ResultsTool = new DynamicStructuredTool({
@@ -10,10 +10,10 @@ export const ResultsTool = new DynamicStructuredTool({
     season: z
       .number()
       .describe(
-        "The season to get results from - should be the year the season started e.g. the 1993-94 season should be supplied as 1993. Leave blank for all time records",
+        "The season to get results from - should be the year the season started e.g. the 1993-94 season should be supplied as 1993. Leave blank for all time records or if a specific season is not mentioned. The current season is 2024 i.e the 2024-25 season",
       ),
     sort: z
-      .enum(["Date", "Top Attendance"])
+      .enum(["Date", "Date Descending", "Top Attendance"])
       .default("Date")
       .describe("Do you want to sort results by date or by the top attendance"),
     venue: z
@@ -25,7 +25,7 @@ export const ResultsTool = new DynamicStructuredTool({
       .string()
       .describe(
         "The opposition team to filter by - leave blank for all opposition teams",
-      ),
+      ),    
     limit: z
       .number()
       .default(100)
@@ -40,11 +40,16 @@ export const ResultsTool = new DynamicStructuredTool({
       `https://api.tranmere-web.com/result-search/?season=${realseason}&competition=&opposition=${opposition}&manager=&venue=${realvenue}&pens=&sort=${sort}`,
     );
 
-    const results = (await query.json()) as { results: Match[] };
+    const results = (await query.json()) as { 
+      results: Match[],     
+      h2hresults: H2HResult[];
+      h2htotal: H2HTotal[]; 
+    };
 
     const filtered = limit ? results.results.slice(0, limit) : results.results;
 
-    return JSON.stringify(
+    return JSON.stringify( {
+      results: 
       filtered.map((r) => {
         return {
           season: r.season,
@@ -58,6 +63,8 @@ export const ResultsTool = new DynamicStructuredTool({
           referee: r.referee,
         };
       }),
-    );
+      h2hresults: results.h2hresults,
+      h2htotal: results.h2htotal
+    });
   },
 });

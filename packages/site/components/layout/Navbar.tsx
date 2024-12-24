@@ -29,7 +29,6 @@ const mobilenavigation = [
   { name: "Seasons", href: "/season/2024", current: false },
   { name: "Players", href: "/playersearch", current: false },
   { name: "Transfers", href: "/transfer-central", current: false },
-  { name: "AI Chat Bot", href: "/chat", current: false },
   { name: "Blogs & Articles", href: "/blog", current: false },
   { name: "Avatar Builder", href: "/player-builder", current: false },
   { name: "Contact Us", href: "/contact", current: false },

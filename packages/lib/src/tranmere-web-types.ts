@@ -1,3 +1,5 @@
+import { Document } from "@contentful/rich-text-types";
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export interface TavilyResponse {
   answer: string;
@@ -29,7 +31,7 @@ export interface BaseEntity {
 
 export interface Player extends BaseEntity {
   id?: string;
-  biography?: any;
+  biography?: Document;
   foot?: string;
   links?: string;
   pic?: string;

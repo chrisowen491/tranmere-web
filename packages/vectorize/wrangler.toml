@@ -1,11 +1,11 @@
-name = "langchain-test"
+name = "vector_worker"
 main = "src/worker.ts"
 compatibility_date = "2024-01-10"
-node_compat = true
+compatibility_flags = ["nodejs_compat"]
 
 [[vectorize]]
-binding = "VECTORIZE_INDEX"
-index_name = "tranmere-web"
+binding = "VECTORIZE"
+index_name = "tranmere-web-index"
 
 [ai]
 binding = "AI"
