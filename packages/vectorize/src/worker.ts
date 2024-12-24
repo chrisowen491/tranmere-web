@@ -1,11 +1,7 @@
-/*
-import type {
-  VectorizeIndex,
-  Fetcher,
-  Request
-} from '@cloudflare/workers-types';
 
 import { PlayerSeasonSummary } from '@tranmere-web/lib/src/tranmere-web-types';
+import { documentToPlainTextString } from '@contentful/rich-text-plain-text-renderer';
+/*
 import { documentToPlainTextString } from '@contentful/rich-text-plain-text-renderer';
 import { Document } from 'langchain/document';
 import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
@@ -15,52 +11,85 @@ import {
   CloudflareWorkersAIEmbeddings
 } from '@langchain/cloudflare';
 import { IBlogPost, IBlogPostFields } from '@tranmere-web/lib/src/contentful';
+*/
 
 export interface Env {
-  VECTORIZE_INDEX: VectorizeIndex;
-  AI: Fetcher;
+  VECTORIZE: Vectorize;
+  AI: Ai;
   CF_SPACE: string;
   CF_KEY: string;
 }
 
+interface EmbeddingResponse {
+  shape: number[];
+  data: number[][];
+}
+
+
 export default {
   async fetch(request: Request, env: Env) {
     const { pathname } = new URL(request.url);
-    const embeddings = new CloudflareWorkersAIEmbeddings({
-      binding: env.AI,
-      model: '@cf/baai/bge-base-en-v1.5'
-    });
-    const store = new CloudflareVectorizeStore(embeddings, {
-      index: env.VECTORIZE_INDEX
-    });
+    
     if (pathname === '/') {
-      const results = await store.similaritySearch('Ian Muir', 5);
-      return Response.json(results);
+
+      const url = new URL(request.url);
+      // Your query: expect this to match vector ID. 1 in this example
+      let userQuery = "who is Ian Muir";
+      const queryVector: EmbeddingResponse = await env.AI.run(
+        "@cf/baai/bge-base-en-v1.5",
+        {
+          text: [url.searchParams.get('query') || userQuery],
+        },
+      );
+
+      let matches = await env.VECTORIZE.query(queryVector.data[0], {
+        topK: 1,
+      });
+
+      return Response.json({
+        matches: matches,
+      });
+
     } else if (pathname === '/players') {
       const search = await fetch(
         'https://api.tranmere-web.com/player-search/?season=&sort=&filter=',
         { method: 'GET' }
       );
 
+      const errors : string[] = [];
+
       const results = (await search.json()) as unknown as {
         players: PlayerSeasonSummary[];
       };
 
-      const documents: Document[] = [];
-      const ids: string[] = [];
+      let vectors: VectorizeVector[] = [];
 
-      results.players.forEach((player) => {
-        documents.push({
-          pageContent: JSON.stringify(player),
-          metadata: { type: 'Player' }
-        });
-        ids.push(player.Player);
+      let biographies : string[] = [];
+      let playerNames : string[] = [];
+
+      results.players.forEach(async (player) => {
+        if(player.bio?.biography) {
+          const bio = documentToPlainTextString(player.bio?.biography) 
+          biographies.push(`A biography of ${player.Player}. ${bio}`);
+          playerNames.push(player.Player);
+        }
       });
 
-      // Upsertion by id is supported
-      await store.addDocuments(documents, ids);
-      return Response.json({ success: true });
+      const modelResp: EmbeddingResponse = await env.AI.run(
+        "@cf/baai/bge-base-en-v1.5",
+        {
+          text: biographies,
+        },
+      );
+
+      modelResp.data.forEach((vector, idx) => {
+        vectors.push({ id: playerNames[idx], values: vector, metadata: { type: 'Player' } });
+      });
+
+      let inserted = await env.VECTORIZE.upsert(vectors);
+      return Response.json(inserted);
     } else if (pathname === '/blogs') {
+      /*
       const blogsRequest = await fetch(
         `https://cdn.contentful.com/spaces/${env.CF_SPACE}/environments/master/entries?access_token=${env.CF_KEY}&content_type=blogPost`
       );
@@ -105,12 +134,22 @@ export default {
       // Upsertion by id is supported
       await store.addDocuments(documents, ids);
       return Response.json({ success: true });
+      */
     } else if (pathname === '/clear') {
-      await store.delete({ ids: ['id1', 'id2', 'id3'] });
+      const search = await fetch(
+        'https://api.tranmere-web.com/player-search/?season=&sort=&filter=',
+        { method: 'GET' }
+      );
+
+      const errors : string[] = [];
+
+      const results = (await search.json()) as unknown as {
+        players: PlayerSeasonSummary[];
+      };
+      await env.VECTORIZE.deleteByIds(results.players.map((player) => player.Player));
       return Response.json({ success: true });
     }
 
     return Response.json({ error: 'Not Found' }, { status: 404 });
   }
 };
-*/
