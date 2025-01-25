@@ -17,7 +17,8 @@ updates:
     ignore:
       - dependency-name: "esbuild"
       - dependency-name: "cookie" 
-      - dependency-name: "vercel"               
+      - dependency-name: "vercel"   
+      - dependency-name: "tailwindcss"            
 
   - package-ecosystem: "github-actions"
     directory: "/"
