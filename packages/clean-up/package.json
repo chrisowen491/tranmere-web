@@ -19,7 +19,7 @@
       "eslint-import-resolver-typescript": "^3.5.5",
       "eslint-plugin-import": "^2.27.5",
       "typescript": "^5.1.6",
-      "undici": "^7.2.3",
+      "undici": "^7.3.0",
       "eslint": "^9.16.0",
       "prettier": "3.4.2",
       "typescript-eslint": "^8.19.0"
