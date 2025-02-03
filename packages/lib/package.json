@@ -10,9 +10,9 @@
   "author": "Chris Owen",
   "license": "GPL-3.0-only",
   "dependencies": {
-    "@aws-sdk/client-dynamodb": "^3.734.0",
-    "@aws-sdk/client-ses": "^3.734.0",
-    "@aws-sdk/lib-dynamodb": "^3.734.0",
+    "@aws-sdk/client-dynamodb": "^3.741.0",
+    "@aws-sdk/client-ses": "^3.741.0",
+    "@aws-sdk/lib-dynamodb": "^3.741.0",
     "@contentful/rich-text-types": "^17.0.0"
   },
   "devDependencies": {
