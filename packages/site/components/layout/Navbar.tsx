@@ -11,7 +11,7 @@ import {
 import { ThemeSelector } from "@/components/layout/ThemeSelector";
 import SearchBar from "@/components/search/SearchBar";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
-import { useUser } from "@auth0/nextjs-auth0/client";
+import { useUser } from "@auth0/nextjs-auth0";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -122,7 +122,7 @@ export function Navbar() {
                   </Menu>
                 ) : (
                   <Link
-                    href="/api/auth/login"
+                    href="/auth/login"
                     aria-label="login"
                     prefetch={false}
                   >
@@ -174,7 +174,7 @@ export function Navbar() {
                   <DisclosureButton
                     as="a"
                     aria-label="logout"
-                    href="/api/auth/logout"
+                    href="/auth/logout"
                     className="block rounded-md px-3 py-2 text-base font-medium text-gray-50 hover:bg-gray-700 hover:text-white"
                   >
                     Sign out
@@ -198,7 +198,7 @@ export function Navbar() {
                 <div className="flex-shrink-0">
                   <DisclosureButton
                     as="a"
-                    href="/api/auth/login"
+                    href="/auth/login"
                     aria-label="login"
                     className="block rounded-md px-3 py-2 text-base font-medium text-gray-50 hover:bg-gray-700 hover:text-white"
                   >

@@ -1,11 +1,10 @@
-import { DynamicStructuredTool } from "@langchain/core/tools";
+import { tool } from 'ai';
 import { z } from "zod";
 
-export const TransferTool = new DynamicStructuredTool({
-  name: "tranmere-web-transfers-tool",
+export const TransferTool = tool({
   description:
     "Returns information about historic tranmere rovers player transfers - use this to search for transfer information results are sorted by the amount of money involved",
-  schema: z.object({
+    parameters: z.object({
     season: z
       .number()
       .nullable()
@@ -24,7 +23,7 @@ export const TransferTool = new DynamicStructuredTool({
         "The club other than Tranmere Rovers involved in the transfer - leave blank for any club",
       ),
   }),
-  func: async ({ season, type, club }) => {
+  execute: async ({ season, type, club }) => {
     const query = await fetch(
       `https://api.tranmere-web.com/transfer-search/?season${season}=&filter=${type}&club=${club}`,
     );

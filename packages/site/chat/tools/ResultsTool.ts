@@ -1,16 +1,16 @@
-import { DynamicStructuredTool } from "@langchain/core/tools";
+import { tool } from 'ai';
 import { H2HResult, H2HTotal, Match } from "@tranmere-web/lib/src/tranmere-web-types";
 import { z } from "zod";
 
-export const ResultsTool = new DynamicStructuredTool({
-  name: "tranmere-web-results-tool",
+export const ResultsTool = tool({
   description:
-    "Get tranmere rovers results for a particular season including attendances - useful for finding the date of a particular match or for answering questions about top attendance records.",
-  schema: z.object({
+    "Get tranmere rovers results for a particular season or against a particular team.",
+    parameters: z.object({
     season: z
       .number()
+      .optional()
       .describe(
-        "The season to get results from - should be the year the season started e.g. the 1993-94 season should be supplied as 1993. Leave blank for all time records or if a specific season is not mentioned. The current season is 2024 i.e the 2024-25 season",
+        "The season to get results from - should be the year the season started e.g. the 1993-94 season should be supplied as 1993. Leave blank for all time records or if a specific season is not mentioned.",
       ),
     sort: z
       .enum(["Date", "Date Descending", "Top Attendance"])
@@ -33,7 +33,7 @@ export const ResultsTool = new DynamicStructuredTool({
         "How many results to bring back - set to 1 for just the top result",
       ),
   }),
-  func: async ({ season, sort, venue, limit, opposition }) => {
+  execute: async ({ season, sort, venue, limit, opposition }) => {
     const realvenue = venue === "Any" || !venue ? "" : venue;
     const realseason = season === 0 || !season ? "" : `${season}`;
     const query = await fetch(

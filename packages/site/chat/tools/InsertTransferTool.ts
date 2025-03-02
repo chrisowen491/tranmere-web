@@ -1,11 +1,10 @@
-import { DynamicStructuredTool } from "@langchain/core/tools";
+import { tool } from 'ai';
 import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 
-export const InsertTransferTool = new DynamicStructuredTool({
-  name: "tranmere-web-insert-transfers-tool",
+export const InsertTransferTool = tool({
   description: "Add transfers to our player database",
-  schema: z.object({
+  parameters: z.object({
     player: z
       .string()
       .describe("The name of the player involved in the transfer"),
@@ -25,7 +24,7 @@ export const InsertTransferTool = new DynamicStructuredTool({
       .describe("The name of the club the player transferred from"),
     to: z.string().describe("The name of the club the player transferred to"),
   }),
-  func: async ({ player, season, cost, value, from, to }) => {
+  execute: async ({ player, season, cost, value, from, to }) => {
     const body = {
       query: `mutation MyMutation { addTranmereWebPlayerTransfers(season: ${season}, id: "${uuidv4()}", cost: ${cost}, name: "${player}", value: "${value}", from: "${from}", to: "${to}") { id } }`,
       variables: null,
