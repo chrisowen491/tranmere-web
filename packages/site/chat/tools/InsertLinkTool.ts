@@ -1,16 +1,15 @@
-import { DynamicStructuredTool } from "@langchain/core/tools";
+import { tool } from 'ai';
 import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 
-export const InsertLinkTool = new DynamicStructuredTool({
-  name: "tranmere-web-insert-link-tool",
+export const InsertLinkTool = tool({
   description: "Add related links to our player database",
-  schema: z.object({
+  parameters: z.object({
     player: z.string().describe("The name of the player the link is about"),
     link: z.string().describe("The url of the link"),
     description: z.string().describe("The display text of the link"),
   }),
-  func: async ({ player, link, description }) => {
+  execute: async ({ player, link, description }) => {
     const body = {
       query: `mutation MyMutation { addTranmereWebPlayerLinks(description: "${description}", id: "${uuidv4()}", link: "${link}", name: "${player}") { id } }`,
       variables: null,

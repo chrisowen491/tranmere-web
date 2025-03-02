@@ -1,13 +1,13 @@
 "use client";
 
 import { ThemeProvider } from "next-themes";
-import { UserProvider } from "@auth0/nextjs-auth0/client";
+import { Auth0Provider } from "@auth0/nextjs-auth0";
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <UserProvider>
+    <Auth0Provider>
       <ThemeProvider attribute="class" disableTransitionOnChange>
         {children}
       </ThemeProvider>
-    </UserProvider>
+    </Auth0Provider>
   );
 }

@@ -1,11 +1,10 @@
-import { DynamicStructuredTool } from "@langchain/core/tools";
+import { tool } from 'ai';
 import { PlayerSeasonSummary } from "@tranmere-web/lib/src/tranmere-web-types";
 import { z } from "zod";
 
-export const PlayerStatsTool = new DynamicStructuredTool({
-  name: "tranmere-web-player-stats-tool",
+export const PlayerStatsTool = tool({
   description: "Get tranmere rovers player statistics.",
-  schema: z.object({
+  parameters: z.object({
     season: z
       .string()
       .default("")
@@ -26,7 +25,7 @@ export const PlayerStatsTool = new DynamicStructuredTool({
         "How many results to bring back - set to 1 for just the top result - use 60 for searching across a wider range of players",
       ),
   }),
-  func: async ({ season, sort, limit, player }) => {
+  execute: async ({ season, sort, limit, player }) => {
     const query = await fetch(
       `https://api.tranmere-web.com/player-search/?season=${season}&sort=${sort}&filter=`,
     );

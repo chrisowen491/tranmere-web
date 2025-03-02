@@ -1,6 +1,6 @@
 "use client";
 import type { Comment } from "@/lib/comments";
-import { useUser } from "@auth0/nextjs-auth0/client";
+import { useUser } from "@auth0/nextjs-auth0";
 import { useState } from "react";
 import StarIcon from "@heroicons/react/20/solid/StarIcon";
 
