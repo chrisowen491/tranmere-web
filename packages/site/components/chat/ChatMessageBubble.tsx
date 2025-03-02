@@ -9,8 +9,7 @@ export function ChatMessageBubble(props: { message: ExtendedMessage }) {
     props.message.role === "user"
       ? "bg-blue-600 text-gray-50"
       : "bg-green-600 text-gray-50";
-  const avatar =
-    props.message.role === "user" ? userAvatar : props.message.avatar;
+
   return (
     <>
       <div

@@ -19,7 +19,6 @@ export function SmallChatWindow(props: {
   const toggle = () => {
     setChatopen(!chatopen);
   };
-  const [avatar] = useState<string>("Generic");
 
   const { messages, input, setInput, handleInputChange, handleSubmit } = useChat({});
 

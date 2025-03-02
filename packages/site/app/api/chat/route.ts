@@ -6,8 +6,6 @@ import { getSystemPrompt } from "@/chat/prompts/system";
 import { ResultsTool } from "@/chat/tools/ResultsTool";
 import { MatchTool } from "@/chat/tools/MatchTool";
 import { PlayerStatsTool } from "@/chat/tools/PlayerStatsTool";
-import { InsertLinkTool } from "@/chat/tools/InsertLinkTool";
-import { InsertTransferTool } from "@/chat/tools/InsertTransferTool";
 import { TeamLookupTool } from "@/chat/tools/TeamLookupTool";
 import { PlayerProfileTool } from "@/chat/tools/PlayerProfileTool";
 import { ManagerTool } from "@/chat/tools/ManagerTool";
