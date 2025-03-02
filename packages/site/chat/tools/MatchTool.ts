@@ -4,7 +4,7 @@ import { z } from "zod";
 
 export const MatchTool = tool({
   description:
-    "Get tranmere rovers match information from a historic fixture - only use if you know the specific date of the match",
+    "Get tranmere rovers match information (incluidng scorers) from a historic fixture - only use if you know the specific date of the match",
     parameters: z.object({
     date: z
       .string()
@@ -20,7 +20,6 @@ export const MatchTool = tool({
       `https://api.tranmere-web.com/match/${season}/${date}`,
     );
     const results = (await query.json()) as MatchPageData;
-    delete results.apps;
     delete results.id;
     delete results.report;
     delete results.goals;

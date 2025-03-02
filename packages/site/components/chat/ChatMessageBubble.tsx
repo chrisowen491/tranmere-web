@@ -1,6 +1,8 @@
 import { PlayerBubble } from "@/components/chat/PlayerBubble";
 import { ExtendedMessage } from "@/lib/types";
 import Image from "next/image";
+import { MatchMessageBubble } from "./MatchMessageBubble";
+import { ResultsBubble } from "./ResultsBubble";
 
 export function ChatMessageBubble(props: { message: ExtendedMessage }) {
   const userAvatar = props.message.role === "user" ? "/images/2023.png"  : "builder/2010/dreads/7f3f00/none/000000/5b2d01/none/8e740c";
@@ -48,6 +50,36 @@ export function ChatMessageBubble(props: { message: ExtendedMessage }) {
                                 key={props.message.id}
                                 message={part.toolInvocation.result}
                               ></PlayerBubble>
+                            </div>
+                          );
+                      }
+                      break;
+                    }
+
+                    case 'MatchTool': {
+                      switch (part.toolInvocation.state) {
+                        case 'result':
+                          return (
+                            <div key={callId}>
+                              <MatchMessageBubble
+                                key={props.message.id}
+                                message={part.toolInvocation.result}
+                              ></MatchMessageBubble>
+                            </div>
+                          );
+                      }
+                      break;
+                    }
+
+                    case 'ResultsTool': {
+                      switch (part.toolInvocation.state) {
+                        case 'result':
+                          return (
+                            <div key={callId}>
+                              <ResultsBubble
+                                key={props.message.id}
+                                message={part.toolInvocation.result}
+                              ></ResultsBubble>
                             </div>
                           );
                       }

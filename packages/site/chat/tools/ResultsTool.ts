@@ -2,6 +2,22 @@ import { tool } from 'ai';
 import { H2HResult, H2HTotal, Match } from "@tranmere-web/lib/src/tranmere-web-types";
 import { z } from "zod";
 
+export interface ResultsToolData {
+  results: {
+    season: number;
+    date: string;
+    final_score: string;
+    opposition: string;
+    venue: string;
+    attendance: number;
+    competition: string;
+    pens: string;
+    referee: string;
+  }[];
+  h2hresults: H2HResult[];
+  h2htotal: H2HTotal[];
+}
+
 export const ResultsTool = tool({
   description:
     "Get tranmere rovers results for a particular season or against a particular team.",
@@ -13,8 +29,8 @@ export const ResultsTool = tool({
         "The season to get results from - should be the year the season started e.g. the 1993-94 season should be supplied as 1993. Leave blank for all time records or if a specific season is not mentioned.",
       ),
     sort: z
-      .enum(["Date", "Date Descending", "Top Attendance"])
-      .default("Date")
+      .enum(["Oldest", "Most Recent", "Top Attendance"])
+      .default("Most Recent")
       .describe("Do you want to sort results by date or by the top attendance"),
     venue: z
       .enum(["Prenton Park", "Wembley Stadium", "Any"])
@@ -34,10 +50,12 @@ export const ResultsTool = tool({
       ),
   }),
   execute: async ({ season, sort, venue, limit, opposition }) => {
+
     const realvenue = venue === "Any" || !venue ? "" : venue;
+    const realsort = sort === "Oldest" ? "Date" : sort === "Most Recent" ? "Date Descending" : "Top Attendance";
     const realseason = season === 0 || !season ? "" : `${season}`;
     const query = await fetch(
-      `https://api.tranmere-web.com/result-search/?season=${realseason}&competition=&opposition=${opposition}&manager=&venue=${realvenue}&pens=&sort=${sort}`,
+      `https://api.tranmere-web.com/result-search/?season=${realseason}&competition=&opposition=${opposition}&manager=&venue=${realvenue}&pens=&sort=${realsort}`,
     );
 
     const results = (await query.json()) as { 
@@ -54,7 +72,7 @@ export const ResultsTool = tool({
         return {
           season: r.season,
           date: r.date,
-          final_score: `${r.home} ${r.hgoal} ${r.visitor} ${r.vgoal}`,
+          final_score: `${r.home} ${r.ft} ${r.visitor}`,
           opposition: r.opposition,
           venue: r.venue,
           attendance: r.attendance,

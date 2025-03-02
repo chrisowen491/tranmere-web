@@ -121,7 +121,7 @@ export default function CommentPanel(props: {
               </button>
               <button
                 className="text-gray-500"
-                onClick={() => (window.location.href = "/api/auth/logout")}
+                onClick={() => (window.location.href = "/auth/logout")}
               >
                 Log Out
               </button>
@@ -130,7 +130,7 @@ export default function CommentPanel(props: {
             <button
               type="button"
               className="py-2 px-4 rounded bg-blue-600 text-white disabled:opacity-40 hover:bg-blue-700"
-              onClick={() => (window.location.href = "/api/auth/login")}
+              onClick={() => (window.location.href = "/auth/login")}
             >
               Log In
             </button>
