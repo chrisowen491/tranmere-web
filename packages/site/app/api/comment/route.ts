@@ -1,9 +1,9 @@
 export const runtime = "edge";
 
-import { getSession } from "@auth0/nextjs-auth0/edge";
 import { GetCommentsByUrl, type Comment } from "@/lib/comments";
 import { NextRequest, NextResponse } from "next/server";
 import { getRequestContext } from "@cloudflare/next-on-pages";
+import { auth0 } from "@/lib/auth0"
 
 export interface ModerationResult {
   id: string;
@@ -62,7 +62,7 @@ export async function DELETE(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
-    const data = await getSession();
+    const session = await auth0.getSession()
     const body = (await req.json()) as Comment;
 
     // Check Comment Moderation
@@ -95,10 +95,10 @@ export async function POST(req: NextRequest) {
       text: flagged ? "Flagged By Auto Moderation" : body.text,
       rating: body.rating,
       user: {
-        name: data!.user.name,
-        picture: data!.user.picture,
-        sub: data!.user.sub,
-        email: data!.user.email,
+        name: session!.user.name!,
+        picture: session!.user.picture!,
+        sub: session!.user.sub,
+        email: session!.user.email,
       },
     };
 

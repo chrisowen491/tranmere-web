@@ -1,58 +1,29 @@
 "use client";
 
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useChat } from "ai/react";
+import { useChat } from '@ai-sdk/react';
 import { useEffect, useRef, useState } from "react";
-import type { FormEvent } from "react";
 import Image from "next/image";
 
 import { ChatMessageBubble } from "@/components/chat/ChatMessageBubble";
-import {
-  ComplexChatResponse,
-  ExtendedMessage,
-  PlayerProfile,
-} from "../../lib/types";
+
 import { SubmitButton } from "@/components/forms/SubmitButton";
-import {
-  MatchPageData,
-  PlayerSeasonSummary,
-} from "@tranmere-web/lib/src/tranmere-web-types";
 
 export function SmallChatWindow(props: {
   endpoint: string;
   placeholder?: string;
 }) {
-  const { endpoint, placeholder } = props;
-  const [intermediateStepsLoading, setIntermediateStepsLoading] =
-    useState(false);
+  const { placeholder } = props;
 
   const [chatopen, setChatopen] = useState(false);
   const toggle = () => {
     setChatopen(!chatopen);
   };
-  const [avatar] = useState<string>("Generic");
 
-  const {
-    messages,
-    input,
-    setInput,
-    handleInputChange,
-    handleSubmit,
-    isLoading: chatEndpointIsLoading,
-    setMessages,
-  } = useChat({
-    api: endpoint,
-    headers: {
-      "x-avatar": avatar,
-    },
-    streamProtocol: "text",
-    onError: (e) => {
-      toast(e.message, {
-        theme: "dark",
-      });
-    },
-  });
+  const { messages, input, setInput, handleInputChange, handleSubmit } = useChat({});
+
+  const chatEndpointIsLoading = false;
+  const intermediateStepsLoading = false;
 
   const messagesContainerRef = useRef<HTMLDivElement | null>(null);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
@@ -66,136 +37,12 @@ export function SmallChatWindow(props: {
     end.scrollTo({ behavior: "smooth", top: 0 });
   }, [messages]);
 
-  async function sendMessage(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-
-    if (!messages.length) {
-      await new Promise((resolve) => setTimeout(resolve, 300));
-    }
-    if (chatEndpointIsLoading) {
-      return;
-    }
-    const showIntermediateSteps = true;
-    if (!showIntermediateSteps) {
-      handleSubmit(e);
-      // Some extra work to show intermediate steps properly
-    } else {
-      setIntermediateStepsLoading(true);
-      setInput("");
-      const messagesWithUserReply = messages.concat({
-        id: messages.length.toString(),
-        content: input,
-        role: "user",
-      });
-      setMessages(messagesWithUserReply);
-      const response = await fetch(endpoint, {
-        method: "POST",
-        body: JSON.stringify({
-          messages: messagesWithUserReply.map((m) => {
-            return {
-              content: m.content,
-              id: m.content,
-              role: m.role,
-            };
-          }),
-        }),
-        headers: {
-          "x-avatar": avatar,
-        },
-      });
-      setIntermediateStepsLoading(false);
-      const json = (await response.json()) as ComplexChatResponse;
-
-      if (response.status === 200) {
-        const newMessages = messagesWithUserReply;
-        let basereply: ExtendedMessage = {
-          id: `${newMessages.length}`,
-          content: json.output,
-          role: "assistant",
-          avatar: json.avatar,
-        };
-
-        const players: PlayerSeasonSummary[] = [];
-        const profiles: PlayerProfile[] = [];
-        const matches: MatchPageData[] = [];
-
-        if (json.intermediate_steps) {
-          json.intermediate_steps.forEach((step) => {
-            if (step.action.tool === "tranmere-web-player-stats-tool") {
-              const playerStats = JSON.parse(step.observation);
-              if (playerStats.length > 0) {
-                playerStats.forEach((player: PlayerSeasonSummary) => {
-                  players.push(player);
-                });
-              } else {
-                players.push(playerStats);
-              }
-            } else if (
-              step.action.tool === "tranmere-web-player-profile-tool"
-            ) {
-              const player = JSON.parse(step.observation) as PlayerProfile;
-              if (
-                profiles.find((p) => p.player.name === player.player.name) ===
-                undefined
-              )
-                profiles.push(player);
-            } else if (step.action.tool === "tranmere-web-match-tool") {
-              const match = JSON.parse(step.observation);
-              if (match.length > 0) {
-                match.forEach((m: MatchPageData) => {
-                  match.push(m);
-                });
-              } else {
-                matches.push(match);
-              }
-            }
-          });
-        }
-
-        if (players.length > 0) {
-          basereply = {
-            ...basereply,
-            type: "players",
-            players: players,
-            profiles: [],
-          };
-        }
-        if (profiles.length > 0) {
-          basereply = {
-            ...basereply,
-            type: "profiles",
-            profiles: profiles,
-            players: [],
-          };
-        }
-        if (matches.length > 0) {
-          basereply = {
-            ...basereply,
-            type: "matches",
-            matches: matches,
-          };
-        }
-
-        const extraMesages: ExtendedMessage[] = [];
-        extraMesages.push(basereply);
-        setMessages([...newMessages, ...extraMesages]);
-      } else {
-        if (json.error) {
-          toast(json.error, {
-            theme: "dark",
-          });
-          throw new Error(json.error);
-        }
-      }
-      setInput("");
-    }
-  }
 
   const butttonClass =
     "rounded-md bg-sky-500 dark:bg-sky-500 px-2 py-2 text-xs font-semibold text-white shadow-sm hover:bg-green-600 dark:hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mb-4";
 
   return (
-    <form onSubmit={sendMessage}>
+    <form onSubmit={handleSubmit}>
       <div className="fixed bottom-10 right-1 md:right-12 text-blue-500 w-full max-w-96 z-50">
         <div
           className={`bg-indigo-900 rounded-lg relative right-0 bottom-14  ${chatopen ? "block" : "hidden"}`}
