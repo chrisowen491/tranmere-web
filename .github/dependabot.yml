@@ -15,9 +15,7 @@ updates:
           patterns:
             - "*"
     ignore:
-      - dependency-name: "esbuild"
-      - dependency-name: "cookie" 
-      - dependency-name: "vercel"   
+      - dependency-name: "cookie"  
       - dependency-name: "tailwindcss"            
 
   - package-ecosystem: "github-actions"

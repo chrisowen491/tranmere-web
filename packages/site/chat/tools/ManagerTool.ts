@@ -1,12 +1,11 @@
 import { GetAllTranmereManagers } from "@/lib/apiFunctions";
-import { DynamicStructuredTool } from "@langchain/core/tools";
+import { tool } from 'ai';
 import { z } from "zod";
 
-export const ManagerTool = new DynamicStructuredTool({
-  name: "tranmere-web-manager-tool",
+export const ManagerTool = tool({
   description: "Get info about Tranmere Rovers managers",
-  schema: z.object({}),
-  func: async () => {
+  parameters: z.object({}),
+  execute: async () => {
     const managers = await GetAllTranmereManagers();
     return JSON.stringify(managers);
   },

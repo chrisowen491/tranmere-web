@@ -1,17 +1,16 @@
-import { DynamicStructuredTool } from "@langchain/core/tools";
+import { tool } from 'ai';
 import { MatchPageData } from "@tranmere-web/lib/src/tranmere-web-types";
 import { z } from "zod";
 
-export const MatchTool = new DynamicStructuredTool({
-  name: "tranmere-web-match-tool",
+export const MatchTool = tool({
   description:
     "Get tranmere rovers match information from a historic fixture - only use if you know the specific date of the match",
-  schema: z.object({
+    parameters: z.object({
     date: z
       .string()
       .describe("The date the match occured in YYYY-MM-DD format"),
   }),
-  func: async ({ date }) => {
+  execute: async ({ date }) => {
     const theDate = new Date(date);
     const season =
       theDate.getUTCMonth() > 6
