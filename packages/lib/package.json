@@ -17,6 +17,6 @@
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.147",
-    "prettier": "3.5.2"
+    "prettier": "3.5.3"
   }
 }
