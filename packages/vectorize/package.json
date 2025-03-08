@@ -4,7 +4,6 @@
   "description": "",
   "scripts": {
     "worker": "npx wrangler dev --remote",
-    "lint": "eslint .",
     "format": "prettier --write \"src\""
   },
   "author": "Chris Owen",

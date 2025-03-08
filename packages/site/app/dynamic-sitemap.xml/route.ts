@@ -1,6 +1,6 @@
 export const runtime = "edge";
 import { ISitemapField, getServerSideSitemap } from "next-sitemap";
-import { GetAllTeams, GetSeasons } from "@/lib/apiFunctions";
+import { GetAllTeams, GetSeasons } from "@tranmere-web/lib/src/apiFunctions";
 import { getAllArticles, getAllPlayers } from "@/lib/api";
 
 export async function GET() {

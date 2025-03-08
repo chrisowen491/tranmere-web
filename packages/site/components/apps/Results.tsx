@@ -1,5 +1,5 @@
 "use client";
-import { GetSeasons } from "@/lib/apiFunctions";
+import { GetSeasons } from "@tranmere-web/lib/src/apiFunctions";
 import {
   Competition,
   H2HResult,

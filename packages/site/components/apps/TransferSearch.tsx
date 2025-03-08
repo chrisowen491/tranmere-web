@@ -1,5 +1,5 @@
 "use client";
-import { GetSeasons } from "@/lib/apiFunctions";
+import { GetSeasons } from "@tranmere-web/lib/src/apiFunctions";
 import { Team, Transfer } from "@tranmere-web/lib/src/tranmere-web-types";
 import { useState } from "react";
 import { TransferTable } from "./partials/TransferTable";

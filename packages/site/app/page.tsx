@@ -16,14 +16,14 @@ import { TagCloud } from "@/components/blogs/TagCloud";
 import Link from "next/link";
 import {
   GetAllPlayers,
-  GetBaseUrl,
   GetLastMatch,
   GetOnThisDay,
-} from "@/lib/apiFunctions";
+} from "@tranmere-web/lib/src/apiFunctions";
 import { getRequestContext } from "@cloudflare/next-on-pages";
 import { PlayerProfile } from "@/lib/types";
 import { getAllArticles } from "@/lib/api";
 import { SmallChatWindow } from "@/components/chat/SmallChatWindow";
+import { GetBaseUrl } from "@/lib/apiFunctions";
 
 export const runtime = "edge";
 

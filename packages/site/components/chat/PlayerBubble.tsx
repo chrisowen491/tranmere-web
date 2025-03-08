@@ -2,8 +2,7 @@ import Image from "next/image";
 import { LinkButton } from "../forms/LinkButton";
 import { PlayerSeasonSummary } from "@tranmere-web/lib/src/tranmere-web-types";
 
-export function PlayerBubble(props: { message: any}) {
-  
+export function PlayerBubble(props: { message: any }) {
   const seasons = JSON.parse(props.message as string) as PlayerSeasonSummary[];
   return (
     <ul

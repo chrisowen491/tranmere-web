@@ -1,6 +1,9 @@
 export const runtime = "edge";
 import { Title } from "@/components/fragments/Title";
-import { buildImagePath, GetAllTranmereManagers } from "@/lib/apiFunctions";
+import {
+  buildImagePath,
+  GetAllTranmereManagers,
+} from "@tranmere-web/lib/src/apiFunctions";
 import { Metadata } from "next";
 import { UserIcon } from "@heroicons/react/20/solid";
 import Image from "next/image";

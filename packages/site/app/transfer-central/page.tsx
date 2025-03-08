@@ -1,9 +1,10 @@
 import { Title } from "@/components/fragments/Title";
 import { TransferSearch } from "@/components/apps/TransferSearch";
-import { GetAllTeams, GetBaseUrl } from "@/lib/apiFunctions";
+import { GetAllTeams } from "@tranmere-web/lib/src/apiFunctions";
 import { getRequestContext } from "@cloudflare/next-on-pages";
 import { Transfer } from "@tranmere-web/lib/src/tranmere-web-types";
 import { Metadata } from "next";
+import { GetBaseUrl } from "@/lib/apiFunctions";
 export const runtime = "edge";
 
 export const metadata: Metadata = {
