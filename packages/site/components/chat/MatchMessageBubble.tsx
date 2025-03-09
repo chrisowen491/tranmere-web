@@ -1,6 +1,6 @@
-import { LinkButton } from "../forms/LinkButton";
 import Image from "next/image";
 import { MatchPageData } from "@tranmere-web/lib/src/tranmere-web-types";
+import Link from "next/link";
 
 export function MatchMessageBubble(props: { message: any }) {
   console.log(props.message);
@@ -26,10 +26,12 @@ export function MatchMessageBubble(props: { message: any }) {
           {match.homeTeam} {match.score} {match.awayTeam}
         </h3>
         <p>{match.date}</p>
-        <LinkButton
-          text="Match Report"
+        <Link
+          className="underline"
           href={`/match/${match?.season}/${match?.date}`}
-        ></LinkButton>
+        >
+          View Profile
+        </Link>
       </li>
     </ul>
   );

@@ -35,7 +35,7 @@ export function ChatBlock(props: { placeholder?: string }) {
   return (
     <form onSubmit={handleSubmit}>
       <div className="w-full mx-auto px-4 pb-2 sm:px-6 sm:pb-32 sm:pt-16 lg:max-w-7xl lg:px-8">
-        <div className="bg-white px-6 py-8 sm:py-8 lg:px-8">
+        <div className="bg-white px-6 py-16 sm:py-16 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-5xl font-semibold tracking-tight text-gray-900 sm:text-7xl">
               Rovers AI

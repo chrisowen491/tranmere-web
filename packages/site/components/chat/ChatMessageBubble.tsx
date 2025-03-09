@@ -8,7 +8,7 @@ export function ChatMessageBubble(props: { message: ExtendedMessage }) {
   const userAvatar =
     props.message.role === "user"
       ? "/images/2023.png"
-      : "builder/2010/dreads/7f3f00/none/000000/5b2d01/none/8e740c";
+      : "builder/1991/side-parting/ffd3b3/thick-tache/7f3f00/fcb98b/none/bc8a00";
   const message = props.message;
   const colorClassName =
     props.message.role === "user"
@@ -30,7 +30,7 @@ export function ChatMessageBubble(props: { message: ExtendedMessage }) {
             className="h-12 w-12 rounded-full"
           />
         </div>
-        <div className="flex flex-col text-sm">
+        <div className="text-sm w-full">
           <div key={message.id}>
             {message.parts!.map((part) => {
               switch (part.type) {

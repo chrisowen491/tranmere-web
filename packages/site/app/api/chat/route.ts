@@ -8,6 +8,8 @@ import { PlayerStatsTool } from "@tranmere-web/tools/src/PlayerStatsTool";
 import { TeamLookupTool } from "@tranmere-web/tools/src/TeamLookupTool";
 import { PlayerProfileTool } from "@tranmere-web/tools/src/PlayerProfileTool";
 import { ManagerTool } from "@tranmere-web/tools/src/ManagerTool";
+import { FixturesTool } from "@tranmere-web/tools/src/FixturesTool";
+import { LeagueTableTool } from "@tranmere-web/tools/src/LeagueTableTool";
 
 export const maxDuration = 30;
 
@@ -16,7 +18,7 @@ export async function POST(req: Request) {
 
   const result = streamText({
     model: openai("gpt-4o"),
-    system: getSystemPrompt("Goodison"),
+    system: getSystemPrompt("Aldo"),
     messages,
     maxSteps: 10,
     tools: {
@@ -26,13 +28,15 @@ export async function POST(req: Request) {
       PlayerStatsTool,
       MatchTool,
       ResultsTool,
+      FixturesTool,
+      LeagueTableTool,
     },
   });
 
   return result.toDataStreamResponse();
 }
 
-export const getSystemPrompt = function (avatar: string | null) {
+const getSystemPrompt = function (avatar: string | null) {
   let personality = "";
 
   switch (avatar) {

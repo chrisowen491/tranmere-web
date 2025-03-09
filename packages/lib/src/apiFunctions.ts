@@ -15,6 +15,23 @@ const APP_SYNC_OPTIONS = {
   }
 };
 
+export const STANDARD_HEADERS = {
+  headers: {
+    accept:
+      'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+    'accept-language': 'en-US,en;q=0.9',
+    'sec-ch-ua':
+      '"Chromium";v="118", "Google Chrome";v="118", "Not=A?Brand";v="99"',
+    'sec-ch-ua-mobile': '?0',
+    'sec-ch-ua-platform': '"macOS"',
+    'sec-fetch-dest': 'document',
+    'sec-fetch-mode': 'navigate',
+    'sec-fetch-site': 'none',
+    'sec-fetch-user': '?1',
+    'upgrade-insecure-requests': '1'
+  }
+};
+
 export async function GetSvg(input: string): Promise<string> {
   const start =
     '<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">';
