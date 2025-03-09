@@ -63,7 +63,9 @@ export default async function PlayerSearchPage() {
           other years.
         </p>
       </Title>
-      <PlayerSearch default={playerResults.players} season="2023" />
+      <div className="  mx-auto flex w-full max-w-7xl">
+        <PlayerSearch default={playerResults.players} season="2023" />
+      </div>
     </>
   );
 }

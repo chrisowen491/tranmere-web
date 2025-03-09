@@ -4,7 +4,7 @@ import Image from "next/image";
 export function Hero() {
   return (
     <div className="overflow-hidden bg-blue-600 dark:bg-slate-950">
-      <div className="py-4 sm:px-2 relative lg:px-0 lg:py-20">
+      <div className="py-4 sm:px-2 relative lg:px-0 lg:py-20  mx-auto flex w-full max-w-7xl">
         <div className="mx-auto grid grid-cols-1 items-center gap-x-8 gap-y-16 px-4 lg:max-w-8xl lg:grid-cols-2 lg:px-8 xl:gap-x-16 xl:px-12">
           <div className="relative z-10 md:text-center lg:text-left">
             <div className="relative">
@@ -29,7 +29,7 @@ export function Hero() {
             unoptimized={true}
             width={"300"}
             height={"300"}
-            className="absolute bottom-0 right-0 w-2/6 sm:w-1/4 xl:w-1/12"
+            className="absolute bottom-0 right-0 w-2/6 sm:w-1/4 xl:w-3/12"
           />
         </div>
       </div>

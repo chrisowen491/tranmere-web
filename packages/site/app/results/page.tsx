@@ -53,15 +53,17 @@ export default async function ResultsSearchPage() {
           />
         </p>
       </Title>
-      <ResultsSearch
-        teams={teams}
-        managers={managers}
-        competitions={competitions}
-        results={results.results}
-        h2hresults={results.h2hresults}
-        h2htotal={results.h2htotal}
-        season={theYear.toString()}
-      />
+      <div className="  mx-auto flex w-full max-w-7xl">
+        <ResultsSearch
+          teams={teams}
+          managers={managers}
+          competitions={competitions}
+          results={results.results}
+          h2hresults={results.h2hresults}
+          h2htotal={results.h2htotal}
+          season={theYear.toString()}
+        />
+      </div>
     </>
   );
 }

@@ -99,22 +99,24 @@ export default async function GamesPage(props: { params: SlugParams }) {
   return (
     <>
       <Title title={title!}></Title>
-      <ResultsSearch
-        teams={teams}
-        managers={managers}
-        competitions={competitions}
-        results={results.results}
-        venue={venue}
-        manager={manager}
-        pens={pens}
-        sort={sort}
-        opposition={opposition}
-        competition={competition}
-        h2hresults={results.h2hresults}
-        h2htotal={results.h2htotal}
-        season={season}
-        fullDate={true}
-      />
+      <div className="  mx-auto flex w-full max-w-7xl">
+        <ResultsSearch
+          teams={teams}
+          managers={managers}
+          competitions={competitions}
+          results={results.results}
+          venue={venue}
+          manager={manager}
+          pens={pens}
+          sort={sort}
+          opposition={opposition}
+          competition={competition}
+          h2hresults={results.h2hresults}
+          h2htotal={results.h2htotal}
+          season={season}
+          fullDate={true}
+        />
+      </div>
     </>
   );
 }

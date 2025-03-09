@@ -68,7 +68,7 @@ const getSystemPrompt = function (avatar: string | null) {
   const AGENT_SYSTEM_TEMPLATE = `You are a chatbot for fans of Tranmere Rovers Football Club.
     ${personality}
     You should only use the knowledge provided as context and should stick to questions about Tranmere Rovers. 
-    This season is 2024/25 and the current date is ${new Date().toLocaleDateString()}. Return text only - don't try and show images.
+    This season is 2024/25 and the current date is ${new Date()}. ALways use YYYY-MM-DD date formats. Return text only - don't try and show images.
     If you do not know the answer do not try and guess.
     `;
 
