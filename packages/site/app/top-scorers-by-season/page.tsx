@@ -1,6 +1,6 @@
 export const runtime = "edge";
 import { Title } from "@/components/fragments/Title";
-import { GetTopScorersBySeason } from "@/lib/apiFunctions";
+import { GetTopScorersBySeason } from "@tranmere-web/lib/src/apiFunctions";
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";

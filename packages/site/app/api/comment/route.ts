@@ -3,7 +3,7 @@ export const runtime = "edge";
 import { GetCommentsByUrl, type Comment } from "@/lib/comments";
 import { NextRequest, NextResponse } from "next/server";
 import { getRequestContext } from "@cloudflare/next-on-pages";
-import { auth0 } from "@/lib/auth0"
+import { auth0 } from "@/lib/auth0";
 
 export interface ModerationResult {
   id: string;
@@ -62,7 +62,7 @@ export async function DELETE(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
-    const session = await auth0.getSession()
+    const session = await auth0.getSession();
     const body = (await req.json()) as Comment;
 
     // Check Comment Moderation

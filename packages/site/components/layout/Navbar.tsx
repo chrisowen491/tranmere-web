@@ -21,6 +21,7 @@ const navigation = [
   { name: "Players", href: "/playersearch", current: false },
   { name: "Gallery", href: "/page/tag/Gallery", current: false },
   { name: "Blogs & Articles", href: "/blog", current: false },
+  { name: "AI", href: "/ai", current: false },
 ];
 
 const mobilenavigation = [
@@ -30,6 +31,7 @@ const mobilenavigation = [
   { name: "Players", href: "/playersearch", current: false },
   { name: "Transfers", href: "/transfer-central", current: false },
   { name: "Blogs & Articles", href: "/blog", current: false },
+  { name: "AI", href: "/ai", current: false },
   { name: "Avatar Builder", href: "/player-builder", current: false },
   { name: "Contact Us", href: "/contact", current: false },
   { name: "About the Site", href: "/page/blog/about", current: false },
@@ -121,11 +123,7 @@ export function Navbar() {
                     </MenuItems>
                   </Menu>
                 ) : (
-                  <Link
-                    href="/auth/login"
-                    aria-label="login"
-                    prefetch={false}
-                  >
+                  <Link href="/auth/login" aria-label="login" prefetch={false}>
                     <ChatBubbleBottomCenterIcon
                       aria-hidden="true"
                       className="h-6 w-6 text-white"

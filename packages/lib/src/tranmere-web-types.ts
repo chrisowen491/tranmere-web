@@ -1,4 +1,4 @@
-import { Document } from "@contentful/rich-text-types";
+import { Document } from '@contentful/rich-text-types';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export interface TavilyResponse {

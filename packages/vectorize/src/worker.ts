@@ -1,4 +1,3 @@
-
 import { PlayerSeasonSummary } from '@tranmere-web/lib/src/tranmere-web-types';
 import { documentToPlainTextString } from '@contentful/rich-text-plain-text-renderer';
 /*
@@ -25,38 +24,35 @@ interface EmbeddingResponse {
   data: number[][];
 }
 
-
 export default {
   async fetch(request: Request, env: Env) {
     const { pathname } = new URL(request.url);
-    
-    if (pathname === '/') {
 
+    if (pathname === '/') {
       const url = new URL(request.url);
       // Your query: expect this to match vector ID. 1 in this example
-      let userQuery = "who is Ian Muir";
+      let userQuery = 'who is Ian Muir';
       const queryVector: EmbeddingResponse = await env.AI.run(
-        "@cf/baai/bge-base-en-v1.5",
+        '@cf/baai/bge-base-en-v1.5',
         {
-          text: [url.searchParams.get('query') || userQuery],
-        },
+          text: [url.searchParams.get('query') || userQuery]
+        }
       );
 
       let matches = await env.VECTORIZE.query(queryVector.data[0], {
-        topK: 1,
+        topK: 1
       });
 
       return Response.json({
-        matches: matches,
+        matches: matches
       });
-
     } else if (pathname === '/players') {
       const search = await fetch(
         'https://api.tranmere-web.com/player-search/?season=&sort=&filter=',
         { method: 'GET' }
       );
 
-      const errors : string[] = [];
+      const errors: string[] = [];
 
       const results = (await search.json()) as unknown as {
         players: PlayerSeasonSummary[];
@@ -64,26 +60,30 @@ export default {
 
       let vectors: VectorizeVector[] = [];
 
-      let biographies : string[] = [];
-      let playerNames : string[] = [];
+      let biographies: string[] = [];
+      let playerNames: string[] = [];
 
       results.players.forEach(async (player) => {
-        if(player.bio?.biography) {
-          const bio = documentToPlainTextString(player.bio?.biography) 
+        if (player.bio?.biography) {
+          const bio = documentToPlainTextString(player.bio?.biography);
           biographies.push(`A biography of ${player.Player}. ${bio}`);
           playerNames.push(player.Player);
         }
       });
 
       const modelResp: EmbeddingResponse = await env.AI.run(
-        "@cf/baai/bge-base-en-v1.5",
+        '@cf/baai/bge-base-en-v1.5',
         {
-          text: biographies,
-        },
+          text: biographies
+        }
       );
 
       modelResp.data.forEach((vector, idx) => {
-        vectors.push({ id: playerNames[idx], values: vector, metadata: { type: 'Player' } });
+        vectors.push({
+          id: playerNames[idx],
+          values: vector,
+          metadata: { type: 'Player' }
+        });
       });
 
       let inserted = await env.VECTORIZE.upsert(vectors);
@@ -141,12 +141,14 @@ export default {
         { method: 'GET' }
       );
 
-      const errors : string[] = [];
+      const errors: string[] = [];
 
       const results = (await search.json()) as unknown as {
         players: PlayerSeasonSummary[];
       };
-      await env.VECTORIZE.deleteByIds(results.players.map((player) => player.Player));
+      await env.VECTORIZE.deleteByIds(
+        results.players.map((player) => player.Player)
+      );
       return Response.json({ success: true });
     }
 

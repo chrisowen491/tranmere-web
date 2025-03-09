@@ -1,5 +1,8 @@
 "use client";
-import { GetSeasonsForPlayers, replaceSeasonsKit } from "@/lib/apiFunctions";
+import {
+  GetSeasonsForPlayers,
+  replaceSeasonsKit,
+} from "@tranmere-web/lib/src/apiFunctions";
 import { PlayerSeasonSummary } from "@tranmere-web/lib/src/tranmere-web-types";
 import { useState } from "react";
 import { FilterBox } from "@/components/forms/FilterBox";

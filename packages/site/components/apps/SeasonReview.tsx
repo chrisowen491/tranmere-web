@@ -18,7 +18,10 @@ import {
 import { ResultTable } from "./partials/ResultTable";
 import { LinkButton } from "../forms/LinkButton";
 import { BlogItem } from "@/lib/types";
-import { buildImagePath, replaceSeasonsKit } from "@/lib/apiFunctions";
+import {
+  buildImagePath,
+  replaceSeasonsKit,
+} from "@tranmere-web/lib/src/apiFunctions";
 import { areIntervalsOverlapping } from "date-fns";
 import Link from "next/link";
 import Image from "next/image";

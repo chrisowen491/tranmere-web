@@ -4,8 +4,8 @@ import {
   GetAllTeams,
   GetAllCupCompetitions,
   GetAllTranmereManagers,
-  GetBaseUrl,
-} from "@/lib/apiFunctions";
+} from "@tranmere-web/lib/src/apiFunctions";
+import { GetBaseUrl } from "@/lib/apiFunctions";
 import {
   H2HResult,
   H2HTotal,

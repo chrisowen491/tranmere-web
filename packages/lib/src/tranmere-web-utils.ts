@@ -1,6 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { APIGatewayProxyResult } from 'aws-lambda';
-import { DynamoDBDocument, QueryCommandInput } from '@aws-sdk/lib-dynamodb';
+import {
+  DynamoDBDocument,
+  QueryCommandInput,
+  UpdateCommand
+} from '@aws-sdk/lib-dynamodb';
 import { DynamoDB } from '@aws-sdk/client-dynamodb';
 const dynamo = DynamoDBDocument.from(
   new DynamoDB({ apiVersion: '2012-08-10' })
@@ -68,6 +72,11 @@ export class TranmereWebUtils {
     } else {
       return theDate.getFullYear() - 1;
     }
+  }
+
+  simplifyName(first: string) {
+    const name = first.split(' ');
+    return name[0];
   }
 
   getSeasons(): number[] {
@@ -224,6 +233,21 @@ export class TranmereWebUtils {
       }
     });
     return transfers.Items as Transfer[];
+  }
+
+  async updateReport(report: string, day: string): Promise<any> {
+    const params = new UpdateCommand({
+      TableName: DataTables.REPORT_TABLE,
+      Key: {
+        day: day
+      },
+      UpdateExpression: 'set report = :r',
+      ExpressionAttributeValues: {
+        ':r': report
+      },
+      ReturnValues: 'UPDATED_NEW'
+    });
+    return await dynamo.send(params);
   }
 
   async deleteItem(id: string, type: string) {

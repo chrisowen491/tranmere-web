@@ -1,7 +1,7 @@
 "use client";
 
 import "react-toastify/dist/ReactToastify.css";
-import { useChat } from '@ai-sdk/react';
+import { useChat } from "@ai-sdk/react";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
@@ -20,7 +20,8 @@ export function SmallChatWindow(props: {
     setChatopen(!chatopen);
   };
 
-  const { messages, input, setInput, handleInputChange, handleSubmit } = useChat({});
+  const { messages, input, setInput, handleInputChange, handleSubmit } =
+    useChat({});
 
   const chatEndpointIsLoading = false;
   const intermediateStepsLoading = false;
@@ -36,7 +37,6 @@ export function SmallChatWindow(props: {
     });
     end.scrollTo({ behavior: "smooth", top: 0 });
   }, [messages]);
-
 
   const butttonClass =
     "rounded-md bg-sky-500 dark:bg-sky-500 px-2 py-2 text-xs font-semibold text-white shadow-sm hover:bg-green-600 dark:hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mb-4";

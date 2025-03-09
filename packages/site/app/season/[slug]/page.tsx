@@ -1,10 +1,9 @@
 import { Title } from "@/components/fragments/Title";
 import {
   GetAllTranmereManagers,
-  GetBaseUrl,
   GetSeasons,
   GetYear,
-} from "@/lib/apiFunctions";
+} from "@tranmere-web/lib/src/apiFunctions";
 import {
   H2HResult,
   H2HTotal,
@@ -18,6 +17,7 @@ import { getAllArticlesForTag } from "@/lib/api";
 import { SlugParams } from "@/lib/types";
 import { notFound } from "next/navigation";
 import { JumpBox } from "@/components/forms/JumpBox";
+import { GetBaseUrl } from "@/lib/apiFunctions";
 
 export const runtime = "edge";
 

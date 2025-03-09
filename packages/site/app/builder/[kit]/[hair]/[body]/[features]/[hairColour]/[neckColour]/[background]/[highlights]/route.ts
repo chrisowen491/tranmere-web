@@ -1,6 +1,6 @@
 export const runtime = "edge";
 
-import { GetSvg } from "@/lib/apiFunctions";
+import { GetSvg } from "@tranmere-web/lib/src/apiFunctions";
 import { NextResponse } from "next/server";
 
 export async function GET(

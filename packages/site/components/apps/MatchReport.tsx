@@ -11,7 +11,7 @@ import { LinkButton } from "@/components/forms/LinkButton";
 import { BreadcrumbLinks } from "@/components/fragments/BreadcrumbLinks";
 import { PencilSquareIcon, ArrowPathIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
-import { replaceSeasonsKit } from "@/lib/apiFunctions";
+import { replaceSeasonsKit } from "@tranmere-web/lib/src/apiFunctions";
 
 export default function MatchReport(props: {
   match: MatchPageData;

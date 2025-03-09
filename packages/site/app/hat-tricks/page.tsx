@@ -1,6 +1,6 @@
 export const runtime = "edge";
 import { Title } from "@/components/fragments/Title";
-import { GetAllHatTricks } from "@/lib/apiFunctions";
+import { GetAllHatTricks } from "@tranmere-web/lib/src/apiFunctions";
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";

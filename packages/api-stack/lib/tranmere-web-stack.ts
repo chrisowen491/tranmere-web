@@ -220,7 +220,7 @@ export class TranmereWebStack extends cdk.Stack {
     const season = match.addResource('{season}');
     const date = season.addResource('{date}');
 
-    const report = date.addResource('report');
+    const report = api.root.addResource('report');
 
     const profile = api.root.addResource('profile');
     const playerName = profile.addResource('{playerName}');
@@ -287,7 +287,7 @@ export class TranmereWebStack extends cdk.Stack {
       environment: env_variables,
       apiResource: report,
       apiMethod: 'GET',
-      lambdaFile: './lambda/matchreport.ts',
+      lambdaFile: './lambda/matchreportagent.ts',
       schedule: { minute: '50', hour: '22' },
       readWriteTables: [
         TranmereWebMatchReport,

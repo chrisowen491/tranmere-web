@@ -1,7 +1,7 @@
 export const runtime = "edge";
 
 import { NextResponse } from "next/server";
-import { GetSeasons } from "@/lib/apiFunctions";
+import { GetSeasons } from "@tranmere-web/lib/src/apiFunctions";
 
 //export interface Season
 
