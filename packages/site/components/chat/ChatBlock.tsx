@@ -54,10 +54,10 @@ export function ChatBlock(props: { placeholder?: string }) {
             </button>
             <button
               type="button"
-              onClick={() => setInput("Who did we sign Pat Nevin from?")}
+              onClick={() => setInput("When's our next game?")}
               className={butttonClass}
             >
-              Who did we sign Pat Nevin from?
+              When's our next game?
             </button>
           </div>
         </div>

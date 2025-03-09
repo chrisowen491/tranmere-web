@@ -68,12 +68,14 @@ export default async function PlayerSearchPage(props: { params: SlugParams }) {
           other years.
         </p>
       </Title>
-      <PlayerSearch
-        default={playerResults.players}
-        sort={sort!}
-        filter={filter!}
-        season={season!}
-      />
+      <div className="  mx-auto flex w-full max-w-7xl">
+        <PlayerSearch
+          default={playerResults.players}
+          sort={sort!}
+          filter={filter!}
+          season={season!}
+        />
+      </div>
     </>
   );
 }
