@@ -22,7 +22,8 @@ import {
 import { getRequestContext } from "@cloudflare/next-on-pages";
 import { PlayerProfile } from "@/lib/types";
 import { getAllArticles } from "@/lib/api";
-import { GetBaseUrl } from "@/lib/apiFunctions";
+import { GetBaseUrl, getPlaylist } from "@/lib/apiFunctions";
+import YouTubeGallery from "@/components/youtube/YouTubeGallery";
 
 export const runtime = "edge";
 
@@ -137,6 +138,7 @@ export default async function Home() {
   const url =
     GetBaseUrl(getRequestContext().env) + `/page/player/${randomplayer.name}`;
 
+  const playlist = await getPlaylist('UUNMoCVGAOprD7EIJlffOUPg', 4);
   const playerRequest = await fetch(url);
 
   const profile = (await playerRequest.json()) as PlayerProfile;
@@ -179,6 +181,7 @@ export default async function Home() {
               </div>
             </div>
           </div>
+          <YouTubeGallery playlist={playlist!}></YouTubeGallery>
           <div className="pt-8">
             <div className="mx-auto max-w-7xl px-6 lg:px-8">
               <div className="mx-auto max-w-2xl lg:max-w-none">
