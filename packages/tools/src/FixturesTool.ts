@@ -19,7 +19,6 @@ export const FixturesTool = tool({
   }),
   execute: async ({ start, monthsInFuture }) => {
     try {
-
       const future = moment(new Date())
         .add(monthsInFuture, 'months')
         .format('YYYY-MM-DD');
@@ -41,7 +40,7 @@ export const FixturesTool = tool({
 
       return JSON.stringify(response);
     } catch (error) {
-        console.error(error);
+      console.error(error);
       return JSON.stringify({ error: error });
     }
   }

@@ -138,7 +138,7 @@ export default async function Home() {
   const url =
     GetBaseUrl(getRequestContext().env) + `/page/player/${randomplayer.name}`;
 
-  const playlist = await getPlaylist('UUNMoCVGAOprD7EIJlffOUPg', 4);
+  const playlist = await getPlaylist("UUNMoCVGAOprD7EIJlffOUPg", 4);
   const playerRequest = await fetch(url);
 
   const profile = (await playerRequest.json()) as PlayerProfile;

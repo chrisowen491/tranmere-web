@@ -15,10 +15,10 @@ export function GetBaseUrl(env: CloudflareEnv) {
 export async function getPlaylist(channelId: string, count: number) {
   try {
     const response = await fetch(
-      `${YOUTUBE_HOST}/youtube/v3/playlistItems?part=snippet,contentDetails&maxResults=${count}&playlistId=${channelId}&key=${process.env.YOUTUBE_API_KEY}`
+      `${YOUTUBE_HOST}/youtube/v3/playlistItems?part=snippet,contentDetails&maxResults=${count}&playlistId=${channelId}&key=${process.env.YOUTUBE_API_KEY}`,
     );
 
-    const data = await response.json() as YouTubeResponse;
+    const data = (await response.json()) as YouTubeResponse;
 
     return data;
   } catch (err) {
