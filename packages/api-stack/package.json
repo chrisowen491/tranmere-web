@@ -23,7 +23,6 @@
     "@langchain/openai": "^0.4.4",
     "@tranmere-web/lib": "*",
     "ai": "^4.1.54",
-    "axios": "^1.7.8",
     "constructs": "^10.4.2",
     "contentful": "^11.5.3",
     "contentful-management": "^11.47.2",
