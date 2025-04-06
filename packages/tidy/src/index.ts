@@ -6,7 +6,7 @@ interface Env {
 }
 
 export default {
-  async fetch(env: Env) {
+  async fetch(request: Request, env: Env) {
     const endpoint = `https://api.cloudflare.com/client/v4/accounts/${env.CLOUDFLARE_ACCOUNT_ID}/pages/projects/tranmere-web/deployments`;
     const expirationDays = 7;
 
@@ -18,8 +18,6 @@ export default {
     };
 
     const response = await fetch(endpoint, init);
-
-    console.log(response.status);
 
     const deployments = (await response.json()) as Deployments;
 
@@ -60,8 +58,6 @@ export default {
     };
 
     const response = await fetch(endpoint, init);
-
-    console.log(response.status);
 
     const deployments = (await response.json()) as Deployments;
 

@@ -65,7 +65,7 @@ jobs:
           url: 'https://www.tranmere-web.com'
           code: 200
           timeout: 60
-          interval: 10
+          interval: 25
 
       - name: Run Binoculars
         uses: foo-software/binoculars-action@40b0a9d3f6242214723446d3835e203271ade291
