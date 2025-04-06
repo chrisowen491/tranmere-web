@@ -14,9 +14,9 @@
     "cloudflare-deploy": "yarn workspace @tranmere-web/site cloudflare-deploy",
     "site": "yarn workspace @tranmere-web/site site",
     "prepare": "husky",
-    "lint": "npx lerna run lint",
-    "action": "npx lerna run action",
-    "format": "npx lerna run format"
+    "lint": "yarn workspaces run lint",
+    "action": "yarn workspace @tranmere-web/clean-up run action",
+    "format": "yarn workspaces run format"
   },
   "workspaces": [
     "packages/*"
@@ -24,7 +24,6 @@
   "author": "Chris Owen",
   "devDependencies": {
     "husky": "^9.1.4",
-    "lerna": "^8.2.1",
     "typescript": "^5.7.3",
     "wrangler": "^4.6.0"
   },
@@ -32,11 +31,7 @@
     "@types/node": "^22.13.14"
   },
   "resolutions": {
-    "**/path-to-regexp": "8.2.0",
-    "**/semver": "^7.5.3",
     "**/jose": "^5.0.0",
-    "**/tar": "^7.0.0",
-    "**/cookie": "0.7.2",
-    "**/debug": "^4.3.1"
+    "**/cookie": "0.7.2"
   }
 }

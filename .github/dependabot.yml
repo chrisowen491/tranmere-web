@@ -15,7 +15,6 @@ updates:
           patterns:
             - "*"
     ignore:
-      - dependency-name: "next"
       - dependency-name: "cookie"  
       - dependency-name: "tailwindcss"            
 
