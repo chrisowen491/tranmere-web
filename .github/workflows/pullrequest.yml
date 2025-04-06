@@ -25,7 +25,11 @@ jobs:
           API_KEY: ${{ secrets.API_KEY }}
           CONTENTFUL_SPACE_ID: ${{ secrets.CF_SPACE }}
           CONTENTFUL_ACCESS_TOKEN: ${{ secrets.CF_KEY }}
-          AUTH0_CLIENT_SECRET: "dummy_password"
+          AUTH0_CLIENT_SECRET: "dummy_value"
+          AUTH0_DOMAIN: "dummy_value"
+          AUTH0_CLIENT_ID: "dummy_value"
+          AUTH0_ADMIN_EMAIL: "dummy_value"
+          AUTH0_SECRET: "dummy_value"
           API_PORT: "443"
           API_PROTOCOL: "https" 
           API_DOMAIN: "api.tranmere-web.com"
