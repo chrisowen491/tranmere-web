@@ -57,7 +57,7 @@ export function ChatBlock(props: { placeholder?: string }) {
               onClick={() => setInput("When's our next game?")}
               className={butttonClass}
             >
-              When's our next game?
+              When is our next game?
             </button>
           </div>
         </div>
