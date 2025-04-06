@@ -62,10 +62,11 @@ jobs:
       - name: Check HTTP status
         uses: gerdemann/http-status-code@f8e07763c720fb0ee5e95c49605d38fc78dd60f2
         with:
-          url: 'https://www.tranmere-web.com'
+          url: ${{ steps.deploy.outputs.deployment-url }}
           code: 200
           timeout: 60
-          interval: 25
+          interval: 10
+  
 
       - name: Run Binoculars
         uses: foo-software/binoculars-action@40b0a9d3f6242214723446d3835e203271ade291
