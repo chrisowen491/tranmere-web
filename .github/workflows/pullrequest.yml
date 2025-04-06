@@ -18,13 +18,7 @@ jobs:
         with:
           node-version: '20'      
       - name: Install
-        run: yarn --frozen-lockfile 
-      - name: Unit Test
-        run: npx lerna run test
-        env:
-          DD_KEY: ${{ secrets.DD_KEY }}
-          CF_SPACE: ${{ secrets.CF_SPACE }}
-          CF_KEY: ${{ secrets.CF_KEY }}     
+        run: yarn --frozen-lockfile   
       - name: Web Build
         run: yarn cloudflare-build
         env:

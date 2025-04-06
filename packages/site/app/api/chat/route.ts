@@ -17,7 +17,7 @@ export async function POST(req: Request) {
   const { messages } = (await req.json()) as { messages: CoreMessage[] };
 
   const result = streamText({
-    model: openai("gpt-4o"),
+    model: openai('gpt-4o') as any,
     system: getSystemPrompt("Aldo"),
     messages,
     maxSteps: 10,
