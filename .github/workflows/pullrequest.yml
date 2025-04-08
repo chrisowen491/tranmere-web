@@ -34,6 +34,9 @@ jobs:
           API_PORT: "443"
           API_PROTOCOL: "https" 
           API_DOMAIN: "api.tranmere-web.com"
+          NEXTJS_ENV: "production"
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+
 
       - uses: chrnorm/deployment-action@51e93982518dc06e500fe65559032a439663aaac
         name: Create GitHub deployment
