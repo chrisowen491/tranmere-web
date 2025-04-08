@@ -3,9 +3,8 @@ import { getAllArticlesForTag } from "@/lib/api";
 import { GetBaseUrl } from "@/lib/apiFunctions";
 import { GetCommentsByUrl } from "@/lib/comments";
 import { PlayerProfile, SlugParams } from "@/lib/types";
-import { getRequestContext } from "@cloudflare/next-on-pages";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { notFound } from "next/navigation";
-export const runtime = "edge";
 
 export async function generateMetadata(props: { params: SlugParams }) {
   const params = await props.params;
@@ -18,7 +17,7 @@ export async function generateMetadata(props: { params: SlugParams }) {
 export default async function PlayerProfilePage(props: { params: SlugParams }) {
   const params = await props.params;
   const url =
-    GetBaseUrl(getRequestContext().env) +
+    GetBaseUrl(getCloudflareContext().env) +
     `/page/player/${decodeURI(params.slug)}?json=true`;
 
   const playerRequest = await fetch(url);
@@ -30,7 +29,7 @@ export default async function PlayerProfilePage(props: { params: SlugParams }) {
   const articles = await getAllArticlesForTag(100, decodeURI(params.slug));
 
   const comments = await GetCommentsByUrl(
-    getRequestContext().env,
+    getCloudflareContext().env,
     `/page/player/${decodeURI(params.slug)}`,
   );
 

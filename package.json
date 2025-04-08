@@ -33,6 +33,7 @@
   "resolutions": {
     "**/path-to-regexp": "8.2.0",
     "**/jose": "^5.0.0",
-    "**/cookie": "0.7.2"
+    "**/cookie": "0.7.2",
+    "esbuild": "0.25.0"
   }
 }

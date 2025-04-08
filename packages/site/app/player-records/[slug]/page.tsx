@@ -1,10 +1,9 @@
 import { PlayerSearch } from "@/components/apps/PlayerSearch";
 import { Title } from "@/components/fragments/Title";
 import { PlayerSeasonSummary } from "@tranmere-web/lib/src/tranmere-web-types";
-import { getRequestContext } from "@cloudflare/next-on-pages";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { GetBaseUrl } from "@/lib/apiFunctions";
 import { SlugParams } from "@/lib/types";
-export const runtime = "edge";
 
 export async function generateMetadata(props: { params: SlugParams }) {
   const params = await props.params;
@@ -30,7 +29,7 @@ export async function generateMetadata(props: { params: SlugParams }) {
 
 export default async function PlayerSearchPage(props: { params: SlugParams }) {
   const params = await props.params;
-  const base = GetBaseUrl(getRequestContext().env) + "/player-search/";
+  const base = GetBaseUrl(getCloudflareContext().env) + "/player-search/";
 
   let season: string = "";
   let sort: string = "";

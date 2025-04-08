@@ -1,4 +1,3 @@
-export const runtime = "edge";
 import { Title } from "@/components/fragments/Title";
 import { GetAllHatTricks } from "@tranmere-web/lib/src/apiFunctions";
 import { Metadata } from "next";

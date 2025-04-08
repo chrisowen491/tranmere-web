@@ -1,4 +1,3 @@
-export const runtime = "edge";
 import { Title } from "@/components/fragments/Title";
 import {
   buildImagePath,

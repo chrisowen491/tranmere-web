@@ -11,15 +11,13 @@ import {
   PlayerSeasonSummary,
   Transfer,
 } from "@tranmere-web/lib/src/tranmere-web-types";
-import { getRequestContext } from "@cloudflare/next-on-pages";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 import SeasonReview from "@/components/apps/SeasonReview";
 import { getAllArticlesForTag } from "@/lib/api";
 import { SlugParams } from "@/lib/types";
 import { notFound } from "next/navigation";
 import { JumpBox } from "@/components/forms/JumpBox";
 import { GetBaseUrl } from "@/lib/apiFunctions";
-
-export const runtime = "edge";
 
 export async function generateMetadata(props: { params: SlugParams }) {
   const params = await props.params;
@@ -41,7 +39,7 @@ export default async function SeasonPage(props: { params: SlugParams }) {
 
   if (parseInt(season) < 1920 || parseInt(season) > GetYear()) notFound();
 
-  const base = GetBaseUrl(getRequestContext().env) + "/result-search/";
+  const base = GetBaseUrl(getCloudflareContext().env) + "/result-search/";
   let title: string | null = null;
   const sort = "Date";
   const venue = "";
@@ -63,7 +61,7 @@ export default async function SeasonPage(props: { params: SlugParams }) {
   };
 
   const latestSeasonPlayerRequest = await fetch(
-    GetBaseUrl(getRequestContext().env) +
+    GetBaseUrl(getCloudflareContext().env) +
       `/player-search/?season=${season}&sort=&filter=`,
   );
 
@@ -72,7 +70,8 @@ export default async function SeasonPage(props: { params: SlugParams }) {
   };
 
   const request = await fetch(
-    GetBaseUrl(getRequestContext().env) + `/transfer-search/?season=${season}`,
+    GetBaseUrl(getCloudflareContext().env) +
+      `/transfer-search/?season=${season}`,
   );
   const transfers = (await request.json()) as {
     transfers: Transfer[];

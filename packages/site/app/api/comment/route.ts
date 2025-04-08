@@ -1,8 +1,6 @@
-export const runtime = "edge";
-
 import { GetCommentsByUrl, type Comment } from "@/lib/comments";
 import { NextRequest, NextResponse } from "next/server";
-import { getRequestContext } from "@cloudflare/next-on-pages";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { auth0 } from "@/lib/auth0";
 
 export interface ModerationResult {
@@ -48,13 +46,13 @@ export interface CategoryScores {
 export async function DELETE(req: NextRequest) {
   const body = (await req.json()) as { comment: Comment };
 
-  await getRequestContext()
+  await getCloudflareContext()
     .env.DB.prepare("DELETE FROM Ratings WHERE id = ?")
     .bind(body.comment.id)
     .run();
 
   const comments = await GetCommentsByUrl(
-    getRequestContext().env,
+    getCloudflareContext().env,
     body.comment.url,
   );
   return NextResponse.json(comments, { status: 200 });
@@ -76,7 +74,7 @@ export async function POST(req: NextRequest) {
         }),
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${getRequestContext().env.OPENAI_API_KEY ? getRequestContext().env.OPENAI_API_KEY : process.env.OPENAI_API_KEY}`,
+          Authorization: `Bearer ${getCloudflareContext().env.OPENAI_API_KEY ? getCloudflareContext().env.OPENAI_API_KEY : process.env.OPENAI_API_KEY}`,
         },
       },
     );
@@ -102,7 +100,7 @@ export async function POST(req: NextRequest) {
       },
     };
 
-    await getRequestContext()
+    await getCloudflareContext()
       .env.DB.prepare(
         "INSERT INTO Ratings (page_url, image_url, created, sub, user_name, email, rating, comment) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
       )
@@ -118,13 +116,16 @@ export async function POST(req: NextRequest) {
       )
       .run();
 
-    const comments = await GetCommentsByUrl(getRequestContext().env, body.url);
+    const comments = await GetCommentsByUrl(
+      getCloudflareContext().env,
+      body.url,
+    );
 
-    const zone = getRequestContext().env.CLOUDFLARE_ZONE
-      ? getRequestContext().env.CLOUDFLARE_ZONE
+    const zone = getCloudflareContext().env.CLOUDFLARE_ZONE
+      ? getCloudflareContext().env.CLOUDFLARE_ZONE
       : process.env.CLOUDFLARE_ZONE;
-    const key = getRequestContext().env.CLOUDFLARE_API_KEY
-      ? getRequestContext().env.CLOUDFLARE_API_KEY
+    const key = getCloudflareContext().env.CLOUDFLARE_API_KEY
+      ? getCloudflareContext().env.CLOUDFLARE_API_KEY
       : process.env.CLOUDFLARE_API_KEY;
     await fetch(
       `https://api.cloudflare.com/client/v4/zones/${zone}/purge_cache`,
