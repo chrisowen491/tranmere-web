@@ -54,7 +54,7 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_AUTH_KEY }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           workingDirectory: ./packages/site
-          command: pages deploy .open-next --project-name=tranmere-web --branch=${{ github.head_ref }}                
+          command: yarn cloudflare-deploy            
       
       - name: Check HTTP status
         uses: gerdemann/http-status-code@f8e07763c720fb0ee5e95c49605d38fc78dd60f2
