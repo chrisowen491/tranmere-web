@@ -306,7 +306,7 @@ async function getResults(
       location: result.location,
       tier: Number(result.tier),
       season: result.season!.toString(),
-      hgoal: Number(result.hgoal),
+      hgoal: parseAsNumber(result.hgoal),
       vgoal: Number(result.vgoal),
       attendance: Number(result.attendance),
       round: Number(result.round)
@@ -322,6 +322,13 @@ function buildQuery(query, attribute, attributeName) {
   query.ExpressionAttributeValues[`:${attributeName}`] =
     decodeURIComponent(attribute);
   return query;
+}
+
+function parseAsNumber(value: string | number | undefined) {
+  if (value === undefined) {
+    return 0;
+  }
+  return typeof value === 'number' ? value : parseInt(value) || 0;
 }
 
 function buildDefaultSummary(label) {
