@@ -1,6 +1,5 @@
 import { Metadata } from "next";
 import { ContactForm } from "@/components/apps/ContactForm";
-export const runtime = "edge";
 
 export const metadata: Metadata = {
   title: "Contact Us",

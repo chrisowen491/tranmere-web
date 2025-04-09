@@ -1,7 +1,6 @@
 import { ChatBlock } from "@/components/chat/ChatBlock";
 import { Title } from "@/components/fragments/Title";
 import { Metadata } from "next";
-export const runtime = "edge";
 
 export const metadata: Metadata = {
   title: "AI Chat Bot",

@@ -2,8 +2,6 @@ import ArticleList from "@/components/blogs/ArticleList";
 import { getAllArticlesForTag } from "@/lib/api";
 import { SlugParams } from "@/lib/types";
 
-export const runtime = "edge";
-
 export async function generateMetadata(props: { params: SlugParams }) {
   const params = await props.params;
   return {

@@ -1,11 +1,10 @@
 import { PlayerSearch } from "@/components/apps/PlayerSearch";
 import { Title } from "@/components/fragments/Title";
 import { PlayerSeasonSummary } from "@tranmere-web/lib/src/tranmere-web-types";
-import { getRequestContext } from "@cloudflare/next-on-pages";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { Metadata } from "next";
 import { GetBaseUrl } from "@/lib/apiFunctions";
 import { LinkButton } from "@/components/forms/LinkButton";
-export const runtime = "edge";
 
 export const metadata: Metadata = {
   title: "Players Home",
@@ -13,7 +12,7 @@ export const metadata: Metadata = {
 };
 
 export default async function PlayerSearchPage() {
-  const base = GetBaseUrl(getRequestContext().env) + "/player-search/";
+  const base = GetBaseUrl((await getCloudflareContext({async: true})).env) + "/player-search/";
 
   const dateobj = new Date();
   const theYear =

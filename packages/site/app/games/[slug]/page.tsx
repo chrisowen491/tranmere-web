@@ -11,10 +11,8 @@ import {
   H2HTotal,
   Match,
 } from "@tranmere-web/lib/src/tranmere-web-types";
-import { getRequestContext } from "@cloudflare/next-on-pages";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { SlugParams } from "@/lib/types";
-
-export const runtime = "edge";
 
 export async function generateMetadata(props: { params: SlugParams }) {
   const params = await props.params;
@@ -51,7 +49,7 @@ export async function generateMetadata(props: { params: SlugParams }) {
 
 export default async function GamesPage(props: { params: SlugParams }) {
   const params = await props.params;
-  const base = GetBaseUrl(getRequestContext().env) + "/result-search/";
+  const base = GetBaseUrl(getCloudflareContext().env) + "/result-search/";
 
   let title: string | null = null;
   let sort = "Date";

@@ -1,11 +1,10 @@
 import { Title } from "@/components/fragments/Title";
 import { TransferSearch } from "@/components/apps/TransferSearch";
 import { GetAllTeams } from "@tranmere-web/lib/src/apiFunctions";
-import { getRequestContext } from "@cloudflare/next-on-pages";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { Transfer } from "@tranmere-web/lib/src/tranmere-web-types";
 import { Metadata } from "next";
 import { GetBaseUrl } from "@/lib/apiFunctions";
-export const runtime = "edge";
 
 export const metadata: Metadata = {
   title: "Transfers Home",
@@ -13,7 +12,7 @@ export const metadata: Metadata = {
 };
 
 export default async function Transfers() {
-  const base = GetBaseUrl(getRequestContext().env) + "/transfer-search/";
+  const base = GetBaseUrl((await getCloudflareContext({async: true})).env) + "/transfer-search/";
 
   const request = await fetch(base);
   const results = (await request.json()) as {

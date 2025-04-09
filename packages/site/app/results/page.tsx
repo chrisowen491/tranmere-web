@@ -11,10 +11,9 @@ import {
   H2HTotal,
   Match,
 } from "@tranmere-web/lib/src/tranmere-web-types";
-import { getRequestContext } from "@cloudflare/next-on-pages";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { Metadata } from "next";
 import { LinkButton } from "@/components/forms/LinkButton";
-export const runtime = "edge";
 
 export const metadata: Metadata = {
   title: "Results Home",
@@ -22,7 +21,7 @@ export const metadata: Metadata = {
 };
 
 export default async function ResultsSearchPage() {
-  const base = GetBaseUrl(getRequestContext().env) + "/result-search/";
+  const base = GetBaseUrl((await getCloudflareContext({async: true})).env) + "/result-search/";
 
   const dateobj = new Date();
   const theYear =
