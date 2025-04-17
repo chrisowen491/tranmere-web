@@ -21,7 +21,6 @@ Site search is powered by [algloia](https://www.algolia.com/) - with pages index
 
 Dynamic elements are powered using a combination of AWS Lambda, AppSync, DynamoDb and [Contentful CMS](https://www.contentful.com/). Builds are executed using [GitHub Actions](https://github.com/features/actions).
 
-
 ### Prerequisites
 
  * Scripts are designed for Linux/Mac
