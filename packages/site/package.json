@@ -13,7 +13,7 @@
     "cloudflare-deploy": "npx opennextjs-cloudflare deploy",
     "cloudflare-preview": "npx opennextjs-cloudflare build && npx opennextjs-cloudflare preview --port 3001",
     "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
-    "db": "npx wrangler d1 execute tranmere-web --local --file=../sql/schema.sql",
+    "db": "npx wrangler d1 execute tranmere-web --local --file=../sql/schema.sql ",
     "db:remote": "npx wrangler d1 execute tranmere-web --remote --file=../sql/schema.sql"
   },
   "author": "Chris Owen",
