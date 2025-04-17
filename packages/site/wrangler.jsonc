@@ -54,6 +54,12 @@
           "database_id": "cb021697-9af3-4872-b8eb-ce49be71bb8c"
       }
     ],
+    "routes": [
+        {
+          "pattern": "www.tranmere-web.com",
+          "custom_domain": true
+        }
+    ],
     "vars": {
       "API_PORT": "443",
       "API_PROTOCOL": "https",

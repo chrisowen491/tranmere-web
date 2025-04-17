@@ -55,7 +55,7 @@ jobs:
       - name: Check HTTP status
         uses: gerdemann/http-status-code@f8e07763c720fb0ee5e95c49605d38fc78dd60f2
         with:
-          url: ${{ steps.deploy.outputs.deployment-url }}
+          url: https://www.tranmere-web.com
           code: 200
           timeout: 60
           interval: 10

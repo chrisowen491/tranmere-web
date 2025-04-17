@@ -1,0 +1,28 @@
+name = "tranmere-web"
+compatibility_flags = ["nodejs_compat"]
+compatibility_date = "2024-09-23"
+main = ".open-next/worker.js",
+assets = { directory = ".open-next/assets", binding="ASSETS" }
+pages_build_output_dir = ".open-next/assets"
+
+[[vectorize]]
+binding = "VECTORIZE_INDEX"
+index_name = "tranmere-web"
+
+[ai]
+binding = "AI"
+
+[[d1_databases]]
+binding = "DB" # i.e. available in your Worker on env.DB
+database_name = "tranmere-web"
+database_id = "cb021697-9af3-4872-b8eb-ce49be71bb8c"
+
+[[r2_buckets]]
+binding = 'NEXT_INC_CACHE_R2_BUCKET' # <~ valid JavaScript variable name
+bucket_name = 'tranmere-web'
+
+[vars]
+API_PORT="443" 
+API_PROTOCOL="https"
+API_DOMAIN="api.tranmere-web.com"
+API_KEY=""
