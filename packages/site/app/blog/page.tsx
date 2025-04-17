@@ -2,6 +2,8 @@ import ArticleList from "@/components/blogs/ArticleList";
 import { getAllArticles } from "@/lib/api";
 import { Metadata } from "next";
 
+export const revalidate = 7200;
+
 export const metadata: Metadata = {
   title: "Blog Index",
   description: "A listing of all blog article for the site",

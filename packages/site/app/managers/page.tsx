@@ -7,6 +7,8 @@ import { Metadata } from "next";
 import { UserIcon } from "@heroicons/react/20/solid";
 import Image from "next/image";
 
+export const revalidate = 7200;
+
 export const metadata: Metadata = {
   title: "Tranmere Rovers Managerial Records",
   description: "Records of all Tranmere Rovers managers",

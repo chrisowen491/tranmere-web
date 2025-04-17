@@ -4,6 +4,8 @@ import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
+export const revalidate = 7200;
+
 export const metadata: Metadata = {
   title: "Tranmere Hat Tricks",
   description: "Tranmere Rovers Hat Trick Scorers",

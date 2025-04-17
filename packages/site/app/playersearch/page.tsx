@@ -6,6 +6,8 @@ import { Metadata } from "next";
 import { GetBaseUrl } from "@/lib/apiFunctions";
 import { LinkButton } from "@/components/forms/LinkButton";
 
+export const revalidate = 7200;
+
 export const metadata: Metadata = {
   title: "Players Home",
   description: "Tranmere Rovers player infomation index",

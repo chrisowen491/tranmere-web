@@ -25,6 +25,8 @@ import { getAllArticles } from "@/lib/api";
 import { GetBaseUrl, getPlaylist } from "@/lib/apiFunctions";
 import YouTubeGallery from "@/components/youtube/YouTubeGallery";
 
+export const revalidate = 7200;
+
 export const metadata: Metadata = {
   title: "Tranmere-Web: A Tranmere Rovers fansite",
   description:

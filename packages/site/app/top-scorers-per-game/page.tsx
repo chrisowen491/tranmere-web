@@ -6,6 +6,8 @@ import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
+export const revalidate = 7200;
+
 export const metadata: Metadata = {
   title: "Tranmere Top Scorers - Goals Per Game",
   description: "Who has the best goals per game average for Tranmere Rovers",
