@@ -84,7 +84,7 @@ jobs:
         uses: chrnorm/deployment-status@9a72af4586197112e0491ea843682b5dc280d806
         with:
           token: '${{ github.token }}'
-          environment-url: ${{ steps.deploy.outputs.deployment-url }}
+          environment-url: https://www.tranmere-web.com
           deployment-id: ${{ steps.deployment.outputs.deployment_id }}
           state: 'success'          
 
@@ -93,6 +93,6 @@ jobs:
         uses: chrnorm/deployment-status@9a72af4586197112e0491ea843682b5dc280d806
         with:
           token: '${{ github.token }}'
-          environment-url: ${{ steps.deployment.outputs.environment_url }}
+          environment-url: https://www.tranmere-web.com
           deployment-id: ${{ steps.deployment.outputs.deployment_id }}
           state: 'failure'          
