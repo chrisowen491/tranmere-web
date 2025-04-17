@@ -1,5 +1,3 @@
-export const runtime = "edge";
-
 import { openai } from "@ai-sdk/openai";
 import { CoreMessage, streamText } from "ai";
 import { ResultsTool } from "@tranmere-web/tools/src/ResultsTool";
@@ -17,7 +15,7 @@ export async function POST(req: Request) {
   const { messages } = (await req.json()) as { messages: CoreMessage[] };
 
   const result = streamText({
-    model: openai('gpt-4o') as any,
+    model: openai("gpt-4o") as any,
     system: getSystemPrompt("Aldo"),
     messages,
     maxSteps: 10,

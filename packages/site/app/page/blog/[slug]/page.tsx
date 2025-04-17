@@ -1,5 +1,3 @@
-export const runtime = "edge";
-
 import { getArticle, getAssetsByTag } from "@/lib/api";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import { notFound } from "next/navigation";
@@ -7,7 +5,7 @@ import { Kit } from "@/components/blogs/Kit";
 import { Star } from "@/components/blogs/Star";
 import { Title } from "@/components/fragments/Title";
 import { BLOCKS } from "@contentful/rich-text-types";
-import { getRequestContext } from "@cloudflare/next-on-pages";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { GetCommentsByUrl } from "@/lib/comments";
 import { Reviews } from "@/components/comments/Reviews";
 import CommentPanel from "@/components/comments/CommentPanel";
@@ -42,7 +40,7 @@ export default async function BlogPage(props: { params: SlugParams }) {
   );
 
   const url = `/page/blog/${params.slug}`;
-  const comments = await GetCommentsByUrl(getRequestContext().env, url);
+  const comments = await GetCommentsByUrl(getCloudflareContext().env, url);
 
   let score = 0;
   comments.forEach((c) => {

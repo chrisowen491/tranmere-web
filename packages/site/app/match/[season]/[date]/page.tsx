@@ -1,4 +1,4 @@
-import { getRequestContext } from "@cloudflare/next-on-pages";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { MatchParams } from "@/lib/types";
 import { Match, MatchPageData } from "@tranmere-web/lib/src/tranmere-web-types";
 import { GetBaseUrl } from "@/lib/apiFunctions";
@@ -6,11 +6,9 @@ import MatchReport from "@/components/apps/MatchReport";
 import { GetCommentsByUrl } from "@/lib/comments";
 import { notFound } from "next/navigation";
 
-export const runtime = "edge";
-
 export async function generateMetadata(props: { params: MatchParams }) {
   const params = await props.params;
-  const url = `${GetBaseUrl(getRequestContext().env)}/match/${params.season}/${params.date}`;
+  const url = `${GetBaseUrl(getCloudflareContext().env)}/match/${params.season}/${params.date}`;
 
   const matchRequest = await fetch(url);
   const match = (await matchRequest.json()) as MatchPageData;
@@ -23,7 +21,7 @@ export async function generateMetadata(props: { params: MatchParams }) {
 export default async function MatchPage(props: { params: MatchParams }) {
   const params = await props.params;
   const baseUrl = `/match/${params.season}/${params.date}`;
-  const url = `${GetBaseUrl(getRequestContext().env)}${baseUrl}`;
+  const url = `${GetBaseUrl(getCloudflareContext().env)}${baseUrl}`;
 
   const matchRequest = await fetch(url);
 
@@ -31,7 +29,7 @@ export default async function MatchPage(props: { params: MatchParams }) {
 
   const match = (await matchRequest.json()) as MatchPageData;
 
-  const seasonMatchesUrl = `${GetBaseUrl(getRequestContext().env)}/result-search/?season=${match.season}`;
+  const seasonMatchesUrl = `${GetBaseUrl(getCloudflareContext().env)}/result-search/?season=${match.season}`;
 
   const seasonMatches = await fetch(seasonMatchesUrl);
 
@@ -45,7 +43,7 @@ export default async function MatchPage(props: { params: MatchParams }) {
     Math.max(previousMatches.length - 5, 0),
   );
 
-  const comments = await GetCommentsByUrl(getRequestContext().env, baseUrl);
+  const comments = await GetCommentsByUrl(getCloudflareContext().env, baseUrl);
   let score = 0;
   comments.forEach((c) => {
     score = score + c.rating;

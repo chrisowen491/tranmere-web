@@ -1,7 +1,8 @@
 import ArticleList from "@/components/blogs/ArticleList";
 import { getAllArticles } from "@/lib/api";
 import { Metadata } from "next";
-export const runtime = "edge";
+
+export const revalidate = 7200;
 
 export const metadata: Metadata = {
   title: "Blog Index",

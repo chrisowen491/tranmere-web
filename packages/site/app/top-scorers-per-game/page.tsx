@@ -1,11 +1,12 @@
-export const runtime = "edge";
 import { Title } from "@/components/fragments/Title";
 import { GetBaseUrl } from "@/lib/apiFunctions";
-import { getRequestContext } from "@cloudflare/next-on-pages";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { PlayerSeasonSummary } from "@tranmere-web/lib/src/tranmere-web-types";
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+
+export const revalidate = 7200;
 
 export const metadata: Metadata = {
   title: "Tranmere Top Scorers - Goals Per Game",
@@ -13,7 +14,7 @@ export const metadata: Metadata = {
 };
 
 export default async function HatTricks() {
-  const base = GetBaseUrl(getRequestContext().env) + "/player-search/";
+  const base = GetBaseUrl((await getCloudflareContext({async: true})).env) + "/player-search/";
 
   const latestSeasonRequest = await fetch(base + `?season=&sort=Goals&filter=`);
   const playerResults = (await latestSeasonRequest.json()) as {

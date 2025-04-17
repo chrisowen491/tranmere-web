@@ -1,4 +1,3 @@
-export const runtime = "edge";
 import { PlayerAvatarBuilder } from "@/components/apps/PlayerAvatarBuilder";
 import { Title } from "@/components/fragments/Title";
 import { Metadata } from "next";

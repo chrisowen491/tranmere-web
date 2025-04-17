@@ -1,5 +1,3 @@
-export const runtime = "edge";
-
 import { GetSvg } from "@tranmere-web/lib/src/apiFunctions";
 import { NextResponse } from "next/server";
 

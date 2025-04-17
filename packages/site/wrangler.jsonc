@@ -1,0 +1,69 @@
+{
+    "$schema": "node_modules/wrangler/config-schema.json",
+    "main": ".open-next/worker.js",
+    "name": "tranmere-web",
+    "compatibility_date": "2024-12-30",
+    "compatibility_flags": ["nodejs_compat"],
+    "assets": {
+      "directory": ".open-next/assets",
+      "binding": "ASSETS",
+    },
+    "services": [
+      {
+        "binding": "WORKER_SELF_REFERENCE",
+        // The service should match the "name" of your worker
+        "service": "tranmere-web",
+      },
+    ],
+    "r2_buckets": [
+      {
+        "binding": "NEXT_INC_CACHE_R2_BUCKET",
+        "bucket_name": "tranmere-web"
+      }
+    ],
+    "durable_objects": {
+        "bindings": [
+          {
+            "name": "NEXT_CACHE_DO_QUEUE",
+            "class_name": "DOQueueHandler",
+          },
+        ]
+    },
+    "migrations": [
+        {
+          "tag": "v1",
+          "new_sqlite_classes": ["DOQueueHandler"]
+        }
+    ],
+    "vectorize": [{
+      "binding": "VECTORIZE_INDEX",
+      "index_name": "tranmere-web"
+    }],
+    "ai": {
+      "binding": "AI"
+    },
+    "d1_databases": [
+      {
+        "binding": "DB", // i.e. available in your Worker on env.DB
+        "database_name": "tranmere-web",
+        "database_id": "cb021697-9af3-4872-b8eb-ce49be71bb8c"
+      },
+      {
+          "binding": "NEXT_TAG_CACHE_D1",
+          "database_name": "tranmere-web",
+          "database_id": "cb021697-9af3-4872-b8eb-ce49be71bb8c"
+      }
+    ],
+    "routes": [
+        {
+          "pattern": "www.tranmere-web.com",
+          "custom_domain": true
+        }
+    ],
+    "vars": {
+      "API_PORT": "443",
+      "API_PROTOCOL": "https",
+      "API_DOMAIN": "api.tranmere-web.com",
+      "API_KEY": ""
+    }
+}

@@ -19,13 +19,13 @@ import {
   GetLastMatch,
   GetOnThisDay,
 } from "@tranmere-web/lib/src/apiFunctions";
-import { getRequestContext } from "@cloudflare/next-on-pages";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { PlayerProfile } from "@/lib/types";
 import { getAllArticles } from "@/lib/api";
 import { GetBaseUrl, getPlaylist } from "@/lib/apiFunctions";
 import YouTubeGallery from "@/components/youtube/YouTubeGallery";
 
-export const runtime = "edge";
+export const revalidate = 7200;
 
 export const metadata: Metadata = {
   title: "Tranmere-Web: A Tranmere Rovers fansite",
@@ -136,7 +136,8 @@ export default async function Home() {
   const randomplayer = players[Math.floor(Math.random() * players.length)];
 
   const url =
-    GetBaseUrl(getRequestContext().env) + `/page/player/${randomplayer.name}`;
+    GetBaseUrl((await getCloudflareContext({async: true})).env) +
+    `/page/player/${randomplayer.name}`;
 
   const playlist = await getPlaylist("UUNMoCVGAOprD7EIJlffOUPg", 4);
   const playerRequest = await fetch(url);
