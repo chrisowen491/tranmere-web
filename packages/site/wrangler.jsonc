@@ -4,6 +4,7 @@
     "name": "tranmere-web",
     "compatibility_date": "2024-12-30",
     "compatibility_flags": ["nodejs_compat"],
+    "logpush": true,
     "assets": {
       "directory": ".open-next/assets",
       "binding": "ASSETS",
@@ -60,6 +61,9 @@
           "custom_domain": true
         }
     ],
+    "observability": {
+        "enabled": true,
+    },
     "vars": {
       "API_PORT": "443",
       "API_PROTOCOL": "https",
