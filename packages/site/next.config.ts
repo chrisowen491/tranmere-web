@@ -32,20 +32,20 @@ const nextConfig: NextConfig = {
   rewrites: async () => {
 		return [
       {
-				source: '/api/contact-us/:path*',
-				destination: `https://api.tranmere-web.com/contact-us/:path*`,
+				source: '/api/contact-us',
+				destination: `https://api.tranmere-web.com/contact-us/`,
 			},
       {
-				source: '/api/player-search/:path*',
-				destination: `https://api.tranmere-web.com/player-search/:path*`,
+				source: '/api/player-search',
+				destination: `https://api.tranmere-web.com/player-search/`,
 			},
       {
-				source: '/api/result-search/:path*',
-				destination: `https://api.tranmere-web.com/result-search/:path*`,
+				source: '/api/result-search',
+				destination: `https://api.tranmere-web.com/result-search/`,
 			},
       {
-				source: '/api/transfer-search/:path*',
-				destination: `https://api.tranmere-web.com/transfer-search/:path*`,
+				source: '/api/transfer-search',
+				destination: `https://api.tranmere-web.com/transfer-search/`,
 			},
 		]
   }

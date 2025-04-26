@@ -12,6 +12,7 @@
     "api": "yarn workspace @tranmere-web/api-stack local-api",
     "cloudflare-build": "yarn workspace @tranmere-web/site cloudflare-build",
     "cloudflare-deploy": "yarn workspace @tranmere-web/site cloudflare-deploy",
+    "cloudflare-preview": "yarn workspace @tranmere-web/site cloudflare-preview",
     "site": "yarn workspace @tranmere-web/site site",
     "prepare": "husky",
     "lint": "yarn workspaces run lint",
@@ -31,7 +32,6 @@
     "@types/node": "^22.14.1"
   },
   "resolutions": {
-    "**/path-to-regexp": "8.2.0",
     "**/jose": "^5.0.0",
     "**/cookie": "0.7.2",
     "esbuild": "0.25.0"
