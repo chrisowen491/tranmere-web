@@ -24,7 +24,7 @@
     "@algolia/autocomplete-theme-classic": "^1.18.1",
     "@algolia/client-search": "^5.23.4",
     "@auth0/auth0-react": "^2.3.0",
-    "@auth0/nextjs-auth0": "^4.4.2",
+    "@auth0/nextjs-auth0": "^4.5.1",
     "@cloudflare/next-on-pages": "^1.13.11",
     "@cloudflare/workers-types": "^4.20250421.0",
     "@contentful/rich-text-html-renderer": "^17.0.0",
