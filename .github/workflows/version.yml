@@ -20,7 +20,7 @@ jobs:
           app-id: ${{ vars.VERSION_BUMPER_APPID }}
           private-key: ${{ secrets.VERSION_BUMPER_SECRET }}      
       - name: Automated Version Bump
-        uses: phips28/gh-action-bump-version@fdad52b3b3bbe8fad96b8ca18c56127a96f603db
+        uses: phips28/gh-action-bump-version@ba04cec2b3fb07806ab4448c8825f6ff98fac594
         with:
           tag-prefix: 'v'
         env:
