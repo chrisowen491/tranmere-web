@@ -11,6 +11,6 @@
   "license": "GPL-3.0-only",
   "description": "",
   "dependencies": {
-    "wrangler": "^4.15.2"
+    "wrangler": "^4.21.0"
   }
 }
