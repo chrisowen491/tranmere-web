@@ -120,6 +120,7 @@ export function PlayerAvatarBuilder() {
                       <option value="2022gk">2022-22 GK</option>
                       <option value="2023">2023-24 Home</option>
                       <option value="2024">2024-25 Home</option>
+                      <option value="2025">2025-26 Home</option>
                     </select>
                   </div>
                 </div>
