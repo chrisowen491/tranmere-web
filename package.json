@@ -25,11 +25,11 @@
   "author": "Chris Owen",
   "devDependencies": {
     "husky": "^9.1.4",
-    "typescript": "^5.7.3",
-    "wrangler": "^4.15.2"
+    "typescript": "^5.9.2",
+    "wrangler": "^4.27.0"
   },
   "dependencies": {
-    "@types/node": "^22.15.19"
+    "@types/node": "^24.2.0"
   },
   "resolutions": {
     "**/path-to-regexp": "8.2.0",
