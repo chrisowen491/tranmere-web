@@ -16,7 +16,9 @@ updates:
             - "*"
     ignore:
       - dependency-name: "cookie"  
-      - dependency-name: "tailwindcss"            
+      - dependency-name: "tailwindcss"     
+      - dependency-name: "ai"   
+      - dependency-name: "@ai-sdk/openai"       
 
   - package-ecosystem: "github-actions"
     directory: "/"
