@@ -7,7 +7,6 @@ import {
   PlayerSeasonSummary,
   Team
 } from '@tranmere-web/lib/src/tranmere-web-types';
-import fetch from 'node-fetch';
 
 const APP_SYNC_URL = 'https://api.tranmere-web.com';
 const APP_SYNC_OPTIONS = {
