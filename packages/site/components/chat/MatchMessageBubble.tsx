@@ -2,9 +2,8 @@ import Image from "next/image";
 import { MatchPageData } from "@tranmere-web/lib/src/tranmere-web-types";
 import Link from "next/link";
 
-export function MatchMessageBubble(props: { message: any }) {
-  console.log(props.message);
-  const match = JSON.parse(props.message as string) as MatchPageData;
+export function MatchMessageBubble(props: { match:MatchPageData }) {
+  const match = props.match;
   return (
     <ul
       role="list"
@@ -13,11 +12,11 @@ export function MatchMessageBubble(props: { message: any }) {
       <li className="text-sm leading-6 text-gray-50 dark:text-gray-50">
         {match.programme ? (
           <Image
-            alt="Match Programme"
-            width={150}
-            height={400}
+            width={100}
+            height={200}
             src={`https://images.tranmere-web.com/${match.programme}`}
-            className="h-32 w-32 mx-auto"
+            alt={`${match.homeTeam} v ${match.awayTeam} Match Programme ${match.date}`}
+            className="mx-auto"
           />
         ) : (
           ""
@@ -30,7 +29,7 @@ export function MatchMessageBubble(props: { message: any }) {
           className="underline"
           href={`/match/${match?.season}/${match?.date}`}
         >
-          View Profile
+          View Report
         </Link>
       </li>
     </ul>

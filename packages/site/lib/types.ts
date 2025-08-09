@@ -6,7 +6,7 @@ import {
   PlayerSeasonSummary,
   Transfer,
 } from "@tranmere-web/lib/src/tranmere-web-types";
-import type { Message } from "ai/react";
+import { type UIMessage, type ModelMessage } from 'ai';
 
 export type SlugParams = Promise<{ slug: string }>;
 export type MatchParams = Promise<{ season: string; date: string }>;
@@ -103,14 +103,6 @@ export interface Pic {
 
 export interface Blog {
   json: Document;
-}
-
-export interface ExtendedMessage extends Message {
-  avatar?: string;
-  type?: "chat" | "matches" | "profiles" | "players";
-  matches?: MatchPageData[];
-  players?: PlayerSeasonSummary[];
-  profiles?: PlayerProfile[];
 }
 
 export interface ComplexChatResponse {

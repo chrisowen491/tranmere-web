@@ -1,8 +1,8 @@
 import { ResultsToolData } from "@tranmere-web/tools/src/ResultsTool";
 
-export function ResultsBubble(props: { message: any }) {
-  console.log(props.message);
-  const matches = JSON.parse(props.message as string) as ResultsToolData;
+export function ResultsBubble(props: { matches: ResultsToolData }) {
+
+  const matches = props.matches;
   return (
     <table className="table-auto text-xs mb-8">
       <thead>

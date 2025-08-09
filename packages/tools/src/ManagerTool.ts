@@ -4,7 +4,7 @@ import { z } from 'zod';
 
 export const ManagerTool = tool({
   description: 'Get info about Tranmere Rovers managers',
-  parameters: z.object({}),
+  inputSchema: z.object({}),
   execute: async () => {
     const managers = await GetAllTranmereManagers();
     return JSON.stringify(managers);

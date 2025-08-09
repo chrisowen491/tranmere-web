@@ -11,7 +11,7 @@ import { STANDARD_HEADERS } from '@tranmere-web/lib/src/apiFunctions';
 
 export const MatchEventTool = tool({
   description: 'Get match events for when building a match report',
-  parameters: z.object({
+  inputSchema: z.object({
     date: z.string().describe('The date of the fixture in YYYY-MM-DD format')
   }),
   execute: async ({ date }) => {

@@ -540,6 +540,6 @@ export interface PlayerView {
   links: Link[];
   debut: Appearance;
   transfers: Transfer[];
-  appearances: Appearance[];
+  appearances?: Appearance[];
   seasons: PlayerSeasonSummary[];
 }

@@ -4,7 +4,7 @@ import { z } from 'zod';
 
 export const PlayerStatsTool = tool({
   description: 'Get tranmere rovers player statistics.',
-  parameters: z.object({
+  inputSchema: z.object({
     season: z
       .string()
       .default('')

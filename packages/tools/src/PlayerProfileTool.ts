@@ -5,7 +5,7 @@ import fetch from 'node-fetch';
 export const PlayerProfileTool = tool({
   description:
     'Get a full biogropahy of a tranmere rovers player including appearances and goals and transfer history.',
-  parameters: z.object({
+  inputSchema: z.object({
     player: z.string().describe('The player name ')
   }),
   execute: async ({ player }) => {

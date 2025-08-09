@@ -1,10 +1,12 @@
 import { PlayerBubble } from "@/components/chat/PlayerBubble";
-import { ExtendedMessage } from "@/lib/types";
 import Image from "next/image";
 import { MatchMessageBubble } from "./MatchMessageBubble";
 import { ResultsBubble } from "./ResultsBubble";
+import { UIMessage } from "ai";
+import { MatchPageData, PlayerView } from "@tranmere-web/lib/src/tranmere-web-types";
+import { ResultsToolData } from "@tranmere-web/tools/src/ResultsTool";
 
-export function ChatMessageBubble(props: { message: ExtendedMessage }) {
+export function ChatMessageBubble(props: { message: UIMessage }) {
   const userAvatar =
     props.message.role === "user"
       ? "/images/2023.png"
@@ -38,61 +40,50 @@ export function ChatMessageBubble(props: { message: ExtendedMessage }) {
                 case "text":
                   return part.text;
 
-                // for tool invocations, distinguish between the tools and the state:
-                case "tool-invocation": {
-                  const callId = part.toolInvocation.toolCallId;
 
-                  switch (part.toolInvocation.toolName) {
-                    case "PlayerStatsTool": {
-                      switch (part.toolInvocation.state) {
-                        case "result":
-                          return (
-                            <div key={callId}>
-                              <PlayerBubble
-                                key={props.message.id}
-                                message={part.toolInvocation.result}
-                              ></PlayerBubble>
-                            </div>
-                          );
-                      }
-                      break;
-                    }
-
-                    case "MatchTool": {
-                      switch (part.toolInvocation.state) {
-                        case "result":
-                          return (
-                            <div key={callId}>
-                              <MatchMessageBubble
-                                key={props.message.id}
-                                message={part.toolInvocation.result}
-                              ></MatchMessageBubble>
-                            </div>
-                          );
-                      }
-                      break;
-                    }
-
-                    case "ResultsTool": {
-                      switch (part.toolInvocation.state) {
-                        case "result":
-                          return (
-                            <div key={callId}>
-                              <ResultsBubble
-                                key={props.message.id}
-                                message={part.toolInvocation.result}
-                              ></ResultsBubble>
-                            </div>
-                          );
-                      }
-                      break;
-                    }
-
-                    default: {
-                      return ""; //part.toolInvocation.toolName + ' ' + JSON.stringify(part.toolInvocation.args);
-                    }
+                case "tool-PlayerProfileTool": {
+                  if(part.output !== null && part.output !== undefined) {
+                    return (
+                      <div key={part.toolCallId}>
+                        <PlayerBubble
+                          key={props.message.id}
+                          player={JSON.parse(part.output as string) as PlayerView}
+                        ></PlayerBubble>
+                      </div>
+                    );
                   }
+                  break;
                 }
+
+
+                case "tool-MatchTool": {
+                  if(part.output !== null && part.output !== undefined) {
+                    return (
+                      <div key={part.toolCallId}>
+                        <MatchMessageBubble
+                          key={props.message.id}
+                          match={JSON.parse(part.output as string) as MatchPageData}
+                        ></MatchMessageBubble>
+                      </div>
+                    );
+                  }
+                  break;
+                }
+
+                case "tool-ResultsTool": {
+                  if(part.output !== null && part.output !== undefined) {
+                    return (
+                      <div key={part.toolCallId}>
+                        <ResultsBubble
+                          key={props.message.id}
+                          matches={JSON.parse(part.output as string) as ResultsToolData}
+                        ></ResultsBubble>
+                      </div>
+                    );
+                  }
+                  break;
+                }
+
               }
             })}
             <br />
