@@ -1,12 +1,10 @@
 import { Document } from "@contentful/rich-text-types";
 import {
   Appearance,
-  MatchPageData,
   Player,
   PlayerSeasonSummary,
   Transfer,
 } from "@tranmere-web/lib/src/tranmere-web-types";
-import { type UIMessage, type ModelMessage } from 'ai';
 
 export type SlugParams = Promise<{ slug: string }>;
 export type MatchParams = Promise<{ season: string; date: string }>;
