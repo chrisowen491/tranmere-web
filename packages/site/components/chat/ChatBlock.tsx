@@ -2,17 +2,26 @@
 
 import "react-toastify/dist/ReactToastify.css";
 import { useChat } from "@ai-sdk/react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { ChatMessageBubble } from "@/components/chat/ChatMessageBubble";
 
 import { SubmitButton } from "@/components/forms/SubmitButton";
+import { DefaultChatTransport } from "ai";
 
 export function ChatBlock(props: { placeholder?: string }) {
   const { placeholder } = props;
 
-  const { messages, input, setInput, handleInputChange, handleSubmit } =
-    useChat({});
+  const [input, setInput] = useState('');
+  const { messages, sendMessage } = useChat({
+    transport: new DefaultChatTransport({ api: '/api/chat' }),
+  });
+
+  const handleSubmit = (e: { preventDefault: () => void; }) => {
+    e.preventDefault();
+    sendMessage({ text: input });
+    setInput('');
+  };
 
   const chatEndpointIsLoading = false;
   const intermediateStepsLoading = false;
@@ -96,7 +105,7 @@ export function ChatBlock(props: { placeholder?: string }) {
                   className="px-3 py-2 text-xs w-full dark:text-slate-800"
                   value={input}
                   placeholder={placeholder ?? ""}
-                  onChange={handleInputChange}
+                  onChange={e => setInput(e.target.value)}
                 />
               </div>
 

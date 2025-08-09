@@ -25,7 +25,7 @@ export interface ResultsToolData {
 export const ResultsTool = tool({
   description:
     'Get tranmere rovers results for a particular season or against a particular team.',
-  parameters: z.object({
+  inputSchema: z.object({
     season: z
       .number()
       .optional()

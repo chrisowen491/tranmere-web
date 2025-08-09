@@ -16,7 +16,7 @@ const utils = new TranmereWebUtils();
 
 export const LineupsTool = tool({
   description: 'Get lineup information for whren building a match report',
-  parameters: z.object({
+  inputSchema: z.object({
     date: z.string().describe('The date of the fixture in YYYY-MM-DD format'),
     opposition: z.string().describe('The opposition team'),
     competition: z.string().describe('The competition of the fixture'),

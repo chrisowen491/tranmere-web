@@ -4,7 +4,7 @@ import { z } from 'zod';
 export const TransferTool = tool({
   description:
     'Returns information about historic tranmere rovers player transfers - use this to search for transfer information results are sorted by the amount of money involved',
-  parameters: z.object({
+  inputSchema: z.object({
     season: z
       .number()
       .nullable()

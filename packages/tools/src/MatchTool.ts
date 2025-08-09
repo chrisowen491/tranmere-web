@@ -5,7 +5,7 @@ import { z } from 'zod';
 export const MatchTool = tool({
   description:
     'Get tranmere rovers match information (incluidng scorers) from a historic fixture - only use if you know the specific date of the match',
-  parameters: z.object({
+  inputSchema: z.object({
     date: z.string().describe('The date the match occured in YYYY-MM-DD format')
   }),
   execute: async ({ date }) => {

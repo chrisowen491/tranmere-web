@@ -5,7 +5,7 @@ import { STANDARD_HEADERS } from '@tranmere-web/lib/src/apiFunctions';
 
 export const LeagueTableTool = tool({
   description: 'Get current league table standings for Tranmere Rovers.',
-  parameters: z.object({}),
+  inputSchema: z.object({}),
   execute: async () => {
     const teamID = 't44';
     const fixtureUrl = `https://league-tables.football.web.gc.tranmereroversfcservices.co.uk/v1/opta?competitionID=12&teamID=${teamID}&positions=50&seasonID=2024`;

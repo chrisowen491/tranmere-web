@@ -7,7 +7,7 @@ import { STANDARD_HEADERS } from '@tranmere-web/lib/src/apiFunctions';
 
 export const FixturesTool = tool({
   description: 'Get information about upcoming Tranmere Rovers fixtures.',
-  parameters: z.object({
+  inputSchema: z.object({
     start: z
       .string()
       .describe('The date to start searching for fixtures in YYYY-MM-DD format')

@@ -1,12 +1,10 @@
 import { Document } from "@contentful/rich-text-types";
 import {
   Appearance,
-  MatchPageData,
   Player,
   PlayerSeasonSummary,
   Transfer,
 } from "@tranmere-web/lib/src/tranmere-web-types";
-import type { Message } from "ai/react";
 
 export type SlugParams = Promise<{ slug: string }>;
 export type MatchParams = Promise<{ season: string; date: string }>;
@@ -103,14 +101,6 @@ export interface Pic {
 
 export interface Blog {
   json: Document;
-}
-
-export interface ExtendedMessage extends Message {
-  avatar?: string;
-  type?: "chat" | "matches" | "profiles" | "players";
-  matches?: MatchPageData[];
-  players?: PlayerSeasonSummary[];
-  profiles?: PlayerProfile[];
 }
 
 export interface ComplexChatResponse {

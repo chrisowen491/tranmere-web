@@ -1,5 +1,5 @@
 import { openai } from "@ai-sdk/openai";
-import { CoreMessage, streamText } from "ai";
+import { streamText, stepCountIs, convertToModelMessages, UIMessage } from "ai";
 import { ResultsTool } from "@tranmere-web/tools/src/ResultsTool";
 import { MatchTool } from "@tranmere-web/tools/src/MatchTool";
 import { PlayerStatsTool } from "@tranmere-web/tools/src/PlayerStatsTool";
@@ -12,13 +12,13 @@ import { LeagueTableTool } from "@tranmere-web/tools/src/LeagueTableTool";
 export const maxDuration = 30;
 
 export async function POST(req: Request) {
-  const { messages } = (await req.json()) as { messages: CoreMessage[] };
+  const { messages } = (await req.json()) as { messages: UIMessage[] };
 
   const result = streamText({
     model: openai("gpt-4o") as any,
     system: getSystemPrompt("Aldo"),
-    messages,
-    maxSteps: 10,
+    messages: convertToModelMessages(messages),
+    stopWhen: stepCountIs(5),
     tools: {
       ManagerTool,
       PlayerProfileTool,
@@ -31,7 +31,7 @@ export async function POST(req: Request) {
     },
   });
 
-  return result.toDataStreamResponse();
+  return result.toUIMessageStreamResponse();
 }
 
 const getSystemPrompt = function (avatar: string | null) {

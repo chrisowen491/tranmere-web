@@ -17,7 +17,8 @@ export default [
       '**/.next/**',
       '**/.vercel/**',
       '**/.wrangler/**',
-      '**/public/graphs/**'
+      '**/public/graphs/**',
+      '**/.open-next/**',
     ],
   },
   ...compat.config({
