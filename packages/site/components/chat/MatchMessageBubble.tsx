@@ -2,7 +2,7 @@ import Image from "next/image";
 import { MatchPageData } from "@tranmere-web/lib/src/tranmere-web-types";
 import Link from "next/link";
 
-export function MatchMessageBubble(props: { match:MatchPageData }) {
+export function MatchMessageBubble(props: { match: MatchPageData }) {
   const match = props.match;
   return (
     <ul

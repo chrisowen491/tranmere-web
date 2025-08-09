@@ -1,5 +1,5 @@
 import { openai } from "@ai-sdk/openai";
-import { streamText, hasToolCall, convertToModelMessages, UIMessage } from "ai";
+import { streamText, stepCountIs, convertToModelMessages, UIMessage } from "ai";
 import { ResultsTool } from "@tranmere-web/tools/src/ResultsTool";
 import { MatchTool } from "@tranmere-web/tools/src/MatchTool";
 import { PlayerStatsTool } from "@tranmere-web/tools/src/PlayerStatsTool";
@@ -18,7 +18,7 @@ export async function POST(req: Request) {
     model: openai("gpt-4o") as any,
     system: getSystemPrompt("Aldo"),
     messages: convertToModelMessages(messages),
-    stopWhen: hasToolCall('finalizeTask'),
+    stopWhen: stepCountIs(5),
     tools: {
       ManagerTool,
       PlayerProfileTool,
