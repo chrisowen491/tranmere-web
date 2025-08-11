@@ -32,7 +32,7 @@ exports.handler = async (): Promise<APIGatewayProxyResult> => {
   const model = openai('gpt-4.1');
 
   const date = new Date();
-  const day = moment(date).subtract(2, 'day').format('YYYY-MM-DD');
+  const day = moment(date).subtract(1, 'day').format('YYYY-MM-DD');
   console.log(day);
 
   const matchReport = await generateText({
