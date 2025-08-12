@@ -4,13 +4,14 @@ import {
   DataTables
 } from '@tranmere-web/lib/src/tranmere-web-utils';
 import { openai } from '@ai-sdk/openai';
-import { generateObject, generateText } from 'ai';
+import { generateObject, generateText, stepCountIs } from 'ai';
 import { FixturesTool } from '@tranmere-web/tools/src/FixturesTool';
 import { LeagueTableTool } from '@tranmere-web/tools/src/LeagueTableTool';
 import { MatchEventTool } from '@tranmere-web/tools/src/MatchEventTool';
 import { ManagerTool } from '@tranmere-web/tools/src/ManagerTool';
 import { ResultsTool } from '@tranmere-web/tools/src/ResultsTool';
 import { LineupsTool } from '@tranmere-web/tools/src/LineupsTool';
+import { RefereeAndFormationTool } from '@tranmere-web/tools/src/RefereeAndFormationTool';
 import {
   Appearance,
   Goal,
@@ -28,28 +29,34 @@ import {
 const utils = new TranmereWebUtils();
 
 exports.handler = async (): Promise<APIGatewayProxyResult> => {
-  const model = openai('gpt-4o');
+  const model = openai('gpt-4.1');
 
   const date = new Date();
   const day = moment(date).subtract(1, 'day').format('YYYY-MM-DD');
+  console.log(day);
 
   const matchReport = await generateText({
     model,
     tools: {
       FixturesTool,
+      RefereeAndFormationTool,
       LeagueTableTool,
       MatchEventTool,
       ManagerTool,
       ResultsTool
     },
-    maxSteps: 10,
+    temperature: 0.1,
+    stopWhen: stepCountIs(5),
     prompt: `
             You are an agent capable of creating soccer match reports for a tranmere rovers fan site.
             You run at the start of every day. You should first see if any fixtures occured on ${day} and if so, generate a match report without headings. Use <br /> to separate paragraphs but avoid using other HTML.
             You should make the match report interesting by making reference to the current league position, the current manager, formation, the match events, tranmere's form over the past 5 results, plus previous recent meetings with the opponent.
+            Do not guess the referee or attendance - just leave them blank.
+            The current season is ${utils.getYear()}.
             If there are no fixtures today, you should return the words NO_FIXTURE.
         `
   });
+
 
   if (matchReport.text !== 'NO_FIXTURE') {
     await utils.updateReport(matchReport.text, day);
@@ -64,7 +71,7 @@ exports.handler = async (): Promise<APIGatewayProxyResult> => {
           .number()
           .describe('The attendance of the fixture')
           .default(0),
-        referee: z.string().describe('The referee oif the fixture').default(''),
+        referee: z.string().describe('The referee of the fixture').default(''),
         formation: z
           .string()
           .describe('The formation Tranmere played during the game'),
@@ -72,7 +79,7 @@ exports.handler = async (): Promise<APIGatewayProxyResult> => {
         visitor: z.string().describe('The away team of the fixture'),
         season: z
           .string()
-          .describe('The season of the fixture')
+          .describe('The season of the fixture - this should be the year the season started e.g. 2023 for the 2023/24 season')
           .default(utils.getYear().toString()),
         venue: z.string().describe('The venue of the fixture'),
         hgoal: z.number().describe('The score of the home team'),
@@ -83,6 +90,9 @@ exports.handler = async (): Promise<APIGatewayProxyResult> => {
 
         Report to evaluate: ${matchReport.text}`
     });
+    console.log('#####Match');
+    console.log(JSON.stringify(match, null, 2));
+
 
     const translatedCompetition = translateCompetition(match.competition);
 
@@ -165,7 +175,8 @@ exports.handler = async (): Promise<APIGatewayProxyResult> => {
       tools: {
         LineupsTool
       },
-      maxSteps: 1,
+      temperature: 0.1,
+      stopWhen: stepCountIs(1),
       prompt: `
                 Generate lineup information for the following match:
                 Date: ${theMatch.date}
@@ -179,7 +190,7 @@ exports.handler = async (): Promise<APIGatewayProxyResult> => {
     if (lineups.toolResults.length === 1) {
       const call = lineups.toolResults[0];
       if (call.toolName === 'LineupsTool') {
-        const apps = JSON.parse(call.result) as Appearance[];
+        const apps = JSON.parse(call.output as string) as Appearance[];
         for await (const app of apps) {
           await utils.insertUpdateItem(app, DataTables.APPS_TABLE_NAME);
         }
