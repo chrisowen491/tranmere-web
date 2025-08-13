@@ -3,7 +3,7 @@
     "main": ".open-next/worker.js",
     "name": "tranmere-web",
     "compatibility_date": "2024-12-30",
-    "compatibility_flags": ["nodejs_compat"],
+    "compatibility_flags": ["nodejs_compat","experimental","enable_nodejs_http_modules"],
     "logpush": true,
     "assets": {
       "directory": ".open-next/assets",
