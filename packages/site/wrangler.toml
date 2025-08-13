@@ -1,5 +1,5 @@
 name = "tranmere-web"
-compatibility_flags = ["nodejs_compat", "global_fetch_strictly_public"]
+compatibility_flags = ["nodejs_compat", "global_fetch_strictly_public", "experimental", "enable_nodejs_http_modules"]
 compatibility_date = "2024-12-30"
 main = ".open-next/worker.js",
 assets = { directory = ".open-next/assets", binding="ASSETS" }
