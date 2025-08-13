@@ -13,7 +13,7 @@
     "@aws-sdk/client-dynamodb": "^3.812.0",
     "@aws-sdk/lib-dynamodb": "^3.812.0",
     "@tranmere-web/lib": "*",
-    "ai": "^5.0.0",
+    "ai": "^5.0.10",
     "moment": "^2.30.1",
     "uuid": "^11.1.0",
     "zod": "4.0.14"
