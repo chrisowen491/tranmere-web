@@ -16,13 +16,13 @@
   "author": "Chris Owen",
   "license": "GPL-3.0-only",
   "dependencies": {
-    "@ai-sdk/openai": "^2.0.10",
+    "@ai-sdk/openai": "^2.0.15",
     "@contentful/rich-text-from-markdown": "^16.0.0",
-    "@langchain/community": "^0.3.43",
-    "@langchain/core": "^0.3.69",
-    "@langchain/openai": "^0.6.3",
+    "@langchain/community": "^0.3.53",
+    "@langchain/core": "^0.3.71",
+    "@langchain/openai": "^0.6.8",
     "@tranmere-web/lib": "*",
-    "ai": "^5.0.10",
+    "ai": "^5.0.15",
     "constructs": "^10.4.2",
     "contentful": "^11.5.22",
     "contentful-management": "^11.52.2",
@@ -34,12 +34,12 @@
   "devDependencies": {
     "@aws-cdk/aws-appsync-alpha": "^2.59.0-alpha.0",
     "@types/jest": "^30.0.0",
-    "@types/node": "^24.2.0",
-    "aws-cdk": "2.1024.0",
-    "aws-cdk-lib": "2.210.0",
+    "@types/node": "^24.3.0",
+    "aws-cdk": "2.1025.0",
+    "aws-cdk-lib": "2.211.0",
     "eslint": "^9.27.0",
     "jest": "^30.0.5",
     "prettier": "3.6.2",
-    "typescript-eslint": "^8.39.1"
+    "typescript-eslint": "^8.40.0"
   }
 }
