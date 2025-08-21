@@ -2,13 +2,19 @@ import { tool } from 'ai';
 import { z } from 'zod';
 import fetch from 'node-fetch';
 import { STANDARD_HEADERS } from '@tranmere-web/lib/src/apiFunctions';
+import {
+  TranmereWebUtils,
+} from '@tranmere-web/lib/src/tranmere-web-utils';
+
+const utils = new TranmereWebUtils();
 
 export const LeagueTableTool = tool({
   description: 'Get current league table standings for Tranmere Rovers.',
   inputSchema: z.object({}),
   execute: async () => {
     const teamID = 't44';
-    const fixtureUrl = `https://league-tables.football.web.gc.tranmereroversfcservices.co.uk/v1/opta?competitionID=12&teamID=${teamID}&positions=50&seasonID=2024`;
+    const seasonID = utils.getYear();
+    const fixtureUrl = `https://league-tables.football.web.gc.tranmereroversfcservices.co.uk/v1/opta?competitionID=12&teamID=${teamID}&positions=50&seasonID=${seasonID}`;
     const fixturesResponse = await fetch(fixtureUrl, STANDARD_HEADERS);
     const tableData = (await fixturesResponse.json()) as TableResponse;
 

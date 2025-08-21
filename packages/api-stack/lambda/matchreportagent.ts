@@ -4,12 +4,11 @@ import {
   DataTables
 } from '@tranmere-web/lib/src/tranmere-web-utils';
 import { openai } from '@ai-sdk/openai';
-import { generateObject, generateText, stepCountIs } from 'ai';
+import { generateObject, generateText, hasToolCall, stepCountIs } from 'ai';
 import { FixturesTool } from '@tranmere-web/tools/src/FixturesTool';
 import { LeagueTableTool } from '@tranmere-web/tools/src/LeagueTableTool';
 import { MatchEventTool } from '@tranmere-web/tools/src/MatchEventTool';
 import { ManagerTool } from '@tranmere-web/tools/src/ManagerTool';
-import { ResultsTool } from '@tranmere-web/tools/src/ResultsTool';
 import { LineupsTool } from '@tranmere-web/tools/src/LineupsTool';
 import { RefereeAndFormationTool } from '@tranmere-web/tools/src/RefereeAndFormationTool';
 import {
@@ -29,11 +28,11 @@ import {
 const utils = new TranmereWebUtils();
 
 exports.handler = async (): Promise<APIGatewayProxyResult> => {
-  const model = openai('gpt-4.1');
+  const model = openai('gpt-4o');
 
   const date = new Date();
   const day = moment(date).subtract(1, 'day').format('YYYY-MM-DD');
-  console.log(day);
+  console.log(`Generating match Report For ${day}`);
 
   const matchReport = await generateText({
     model,
@@ -42,31 +41,24 @@ exports.handler = async (): Promise<APIGatewayProxyResult> => {
       RefereeAndFormationTool,
       LeagueTableTool,
       MatchEventTool,
-      ManagerTool,
-      ResultsTool
+      ManagerTool
     },
-    temperature: 0.1,
-    stopWhen: stepCountIs(5),
+    stopWhen: stepCountIs(6),
     prompt: `
             You are an agent capable of creating soccer match reports for a tranmere rovers fan site.
             You run at the start of every day. You should first see if any fixtures occured on ${day} and if so, generate a match report without headings. Use <br /> to separate paragraphs but avoid using other HTML.
-            You should make the match report interesting by making reference to the current league position, the current manager, formation, the match events, tranmere's form over the past 5 results, plus previous recent meetings with the opponent.
+            You should make the match report interesting by making reference to the current league position, referee, formation, the current manager, formation, the match events, tranmere's form over the past 5 results, plus previous recent meetings with the opponent.
             Do not guess the referee or attendance - just leave them blank.
             The current season is ${utils.getYear()}.
             If there are no fixtures today, you should return the words NO_FIXTURE.
         `
   });
 
-
   if (matchReport.text !== 'NO_FIXTURE') {
     await utils.updateReport(matchReport.text, day);
     const { object: match } = await generateObject({
       model,
       schema: z.object({
-        date: z
-          .string()
-          .describe('The date of the fixture in YYYY-MM-DD format')
-          .default(day),
         attendance: z
           .number()
           .describe('The attendance of the fixture')
@@ -77,10 +69,6 @@ exports.handler = async (): Promise<APIGatewayProxyResult> => {
           .describe('The formation Tranmere played during the game'),
         home: z.string().describe('The home team of the fixture'),
         visitor: z.string().describe('The away team of the fixture'),
-        season: z
-          .string()
-          .describe('The season of the fixture - this should be the year the season started e.g. 2023 for the 2023/24 season')
-          .default(utils.getYear().toString()),
         venue: z.string().describe('The venue of the fixture'),
         hgoal: z.number().describe('The score of the home team'),
         vgoal: z.number().describe('The score of the away team'),
@@ -90,15 +78,13 @@ exports.handler = async (): Promise<APIGatewayProxyResult> => {
 
         Report to evaluate: ${matchReport.text}`
     });
-    console.log('#####Match');
     console.log(JSON.stringify(match, null, 2));
-
 
     const translatedCompetition = translateCompetition(match.competition);
 
     const theMatch: Match = {
-      date: match.date,
-      attendance: match.attendance,
+      date: day,
+      attendance: match.attendance ? match.attendance : 0,
       referee: match.referee,
       formation: match.formation,
       id: uuidv4(),
@@ -111,7 +97,7 @@ exports.handler = async (): Promise<APIGatewayProxyResult> => {
           ? translateTeamName(match.visitor)
           : translateTeamName(match.home),
       static: 'static',
-      season: match.season,
+      season: utils.getYear().toString(),
       venue: match.venue,
       hgoal: match.hgoal,
       tier: translatedCompetition == 'League Two' ? 4 : 0,
@@ -166,7 +152,7 @@ exports.handler = async (): Promise<APIGatewayProxyResult> => {
         AssistType: obj.AssistType?.valueOf(),
         Season: theMatch.season
       };
-      await utils.insertUpdateItem(goal, DataTables.GOALS_TABLE_NAME);
+      //await utils.insertUpdateItem(goal, DataTables.GOALS_TABLE_NAME);
     }
 
     // Vercel does not allow generate object to use tools - so instead we will use generateText and inspect the tool call results
@@ -198,7 +184,7 @@ exports.handler = async (): Promise<APIGatewayProxyResult> => {
     }
 
     return utils.sendResponse(200, {
-      matchReport,
+      matchReport: matchReport,
       theMatch,
       goals,
       lineups
