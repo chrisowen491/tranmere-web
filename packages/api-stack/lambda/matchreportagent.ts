@@ -4,7 +4,7 @@ import {
   DataTables
 } from '@tranmere-web/lib/src/tranmere-web-utils';
 import { openai } from '@ai-sdk/openai';
-import { generateObject, generateText, hasToolCall, stepCountIs } from 'ai';
+import { generateObject, generateText, stepCountIs } from 'ai';
 import { FixturesTool } from '@tranmere-web/tools/src/FixturesTool';
 import { LeagueTableTool } from '@tranmere-web/tools/src/LeagueTableTool';
 import { MatchEventTool } from '@tranmere-web/tools/src/MatchEventTool';
@@ -152,7 +152,7 @@ exports.handler = async (): Promise<APIGatewayProxyResult> => {
         AssistType: obj.AssistType?.valueOf(),
         Season: theMatch.season
       };
-      //await utils.insertUpdateItem(goal, DataTables.GOALS_TABLE_NAME);
+      await utils.insertUpdateItem(goal, DataTables.GOALS_TABLE_NAME);
     }
 
     // Vercel does not allow generate object to use tools - so instead we will use generateText and inspect the tool call results

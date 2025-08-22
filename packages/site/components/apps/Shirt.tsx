@@ -1,5 +1,4 @@
 "use client";
-import { StarIcon } from '@heroicons/react/20/solid'
 import { CurrencyDollarIcon, GlobeAmericasIcon } from '@heroicons/react/24/outline'
 import { Breadcrumb, BreadcrumbLinks } from '../fragments/BreadcrumbLinks';
 import { Shirt } from '@/lib/types';

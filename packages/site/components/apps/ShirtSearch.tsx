@@ -54,15 +54,15 @@ export function ShirtSearchApp(props: {
 
     const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
     const [products, setProducts] = useState(props.shirts);
-    const [colours, setColours] = useState<string[]>(filters[0].options.map(option => option.value));
-    const [types, setTypes] = useState<string[]>(filters[1].options.map(option => option.value));
-    const [decades, setDecades] = useState<string[]>(filters[2].options.map(option => option.value));
+    //const [colours, setColours] = useState<string[]>(filters[0].options.map(option => option.value));
+    //const [types, setTypes] = useState<string[]>(filters[1].options.map(option => option.value));
+    //const [decades, setDecades] = useState<string[]>(filters[2].options.map(option => option.value));
 
   const onSubmit = async (formData: FormData) => {
     console.log('Submitting form data:');
-    setColours(formData.getAll('color[]') as string[]);
-    setTypes(formData.getAll('type[]') as string[]);
-    setDecades(formData.getAll('decade[]') as string[]);
+    //setColours(formData.getAll('color[]') as string[]);
+    //setTypes(formData.getAll('type[]') as string[]);
+    //setDecades(formData.getAll('decade[]') as string[]);
 
     const filteredProducts = props.shirts.filter(shirt => {
       const submittedColours = (formData.getAll('color[]') as string[]);
