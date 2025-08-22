@@ -19,7 +19,7 @@ const navigation = [
   { name: "Results", href: "/results", current: false },
   { name: "Seasons", href: "/season/2025", current: false },
   { name: "Players", href: "/playersearch", current: false },
-  { name: "Gallery", href: "/page/tag/Gallery", current: false },
+  { name: "Shirts", href: "/shirts", current: false },
   { name: "Blogs & Articles", href: "/blog", current: false },
   { name: "AI", href: "/ai", current: false },
 ];
@@ -31,6 +31,7 @@ const mobilenavigation = [
   { name: "Players", href: "/playersearch", current: false },
   { name: "Transfers", href: "/transfer-central", current: false },
   { name: "Blogs & Articles", href: "/blog", current: false },
+  { name: "Shirts", href: "/shirts", current: false },
   { name: "AI", href: "/ai", current: false },
   { name: "Avatar Builder", href: "/player-builder", current: false },
   { name: "Contact Us", href: "/contact", current: false },

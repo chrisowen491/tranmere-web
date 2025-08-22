@@ -52,6 +52,7 @@ export const navigation = [
     title: "Media",
     links: [
       { title: "Blog", href: "/blog" },
+      { title: "Shirts", href: "/shirts" },
       { title: "Books", href: "/page/blog/books" },
       { title: "Football Cards", href: "/page/blog/football-cards" },
       { title: "Player Avatar Builder", href: "/player-builder" },

@@ -299,3 +299,44 @@ export interface PageInfo {
   totalResults: number;
   resultsPerPage: number;
 }
+
+export interface Shirt {
+  id: string;
+  name: string;
+  price: string;
+  manufacturer: string;
+  href: string;
+  images: ShirtImage[];
+  description: string;
+  variants: string[];
+  use: ShirtUsageType;
+  seasons: number[];
+  color: ShirtColor;
+  decade: string; 
+}
+
+export enum ShirtColor {
+  Red = "Red",
+  Blue = "Blue",
+  Green = "Green",
+  Yellow = "Yellow",
+  Black = "Black",
+  White = "White",
+}
+
+export enum ShirtUsageType {
+  Home = "Home",
+  Away = "Away",
+  Third = "Third",
+  Goalkeeper = "Goalkeeper",
+  GoalkeeperAway = "Goalkeeper Away",
+  Training = "Training",
+  Other = "Other"
+}
+
+export interface ShirtImage {
+  id: number;
+  imageSrc: string;
+  imageAlt: string;
+  primary: boolean;
+}
