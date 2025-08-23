@@ -5,9 +5,6 @@ import {
   GraphQLBlogResponse,
   GraphQLPlayerResponse,
   GraphQLShirtResponse,
-  Shirt,
-  ShirtColor,
-  ShirtUsageType,
 } from "./types";
 
 const ARTICLE_GROUP_FIELDS = `
