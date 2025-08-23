@@ -29,6 +29,14 @@ export interface GraphQLBlogResponse {
   };
 }
 
+export interface GraphQLShirtResponse {
+  data: {
+    shirtCollection: {
+      items: Shirt[];
+    };
+  };
+}
+
 export interface GraphQLAssetsResponse {
   data: {
     assetCollection: {
@@ -301,13 +309,14 @@ export interface PageInfo {
 }
 
 export interface Shirt {
-  id: string;
+  slug: string;
   name: string;
   price: string;
   manufacturer: string;
-  href: string;
-  images: ShirtImage[];
-  description: string;
+  imagesCollection: {
+    items: GalleryImage[];
+  };
+  description: Blog;
   variants: string[];
   use: ShirtUsageType;
   seasons: number[];
@@ -322,6 +331,7 @@ export enum ShirtColor {
   Yellow = "Yellow",
   Black = "Black",
   White = "White",
+  Purple = "Purple"
 }
 
 export enum ShirtUsageType {

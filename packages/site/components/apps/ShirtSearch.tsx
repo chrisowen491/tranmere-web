@@ -23,6 +23,7 @@ export function ShirtSearchApp(props: {
       { value: 'Brown', label: 'Brown' },
       { value: 'Green', label: 'Green' },
       { value: 'Red', label: 'Red' },
+      { value: 'Claret', label: 'Claret' },
       { value: 'Yellow', label: 'Yellow' },
     ],
   },
@@ -264,13 +265,13 @@ export function ShirtSearchApp(props: {
 
                     <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
                     {products.map((product, idx) => (
-                        <Link key={idx} href={product.href} className="group">
+                        <Link key={idx} href={`/shirts/${product.slug}`} className="group">
                             <Image
                                 height={1024}
                                 width={1568}   
                                 loading="lazy"
-                                alt={product.images[0].imageAlt}
-                                src={product.images[0].imageSrc}
+                                alt={product.imagesCollection.items[0].description}
+                                src={product.imagesCollection.items[0].url}
                                 className="aspect-square w-full rounded-lg bg-gray-200 object-cover group-hover:opacity-75 xl:aspect-[7/8]"
                             />
                             <h3 className="mt-4 text-sm text-gray-700">{product.name}</h3>

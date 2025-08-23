@@ -4,6 +4,8 @@ import { Breadcrumb, BreadcrumbLinks } from '../fragments/BreadcrumbLinks';
 import { Shirt } from '@/lib/types';
 import Link from 'next/link';
 import Image from 'next/image';
+import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
+import { BLOCKS } from '@contentful/rich-text-types';
 
 export function ShirtApp(props: {
     shirt: Shirt
@@ -18,7 +20,18 @@ export function ShirtApp(props: {
         href: "/shirts/",
         name: 'Shirts'
     },
+
   ];
+ const Text = ({ children }: any) => (
+    <p className="align-center">{children}</p>
+  );
+
+    const options = {
+      renderNode: {
+        [BLOCKS.PARAGRAPH]: (node: any, children: any) => <Text>{children}</Text>,
+      },
+      renderText: (text: string) => text.replace("!", "?"),
+    };
 
 const policies = [
   { name: 'Images', icon: GlobeAmericasIcon, description: 'Generated With Chat GPT' },
@@ -35,7 +48,7 @@ function classNames(...classes: string[]) {
         <BreadcrumbLinks
             breadcrumbs={breadcrumbs}
             currentpage={product.name}
-            currenthref={product.href}
+            currenthref={`/shirts/${product.slug}`}
          /> 
         <div className="mx-auto mt-8 max-w-2xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
           <div className="lg:grid lg:auto-rows-min lg:grid-cols-12 lg:gap-x-8">
@@ -53,15 +66,15 @@ function classNames(...classes: string[]) {
               <h2 className="sr-only">Images</h2>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 lg:grid-rows-3 lg:gap-8">
-                {product.images.map((image) => (
+                {product.imagesCollection.items.map((image, idx) => (
                   <Image
-                    key={image.id}
-                    alt={image.imageAlt}
-                    src={image.imageSrc}
+                    key={idx}
+                    alt={image.description}
+                    src={image.url}
                     height={1024}
                     width={1568}
                     className={classNames(
-                      image.primary ? 'lg:col-span-2 lg:row-span-2' : 'hidden lg:block',
+                      idx === 0 ? 'lg:col-span-2 lg:row-span-2' : 'hidden lg:block',
                       'rounded-lg',
                     )}
                   />
@@ -72,19 +85,32 @@ function classNames(...classes: string[]) {
             <div className="mt-8 lg:col-span-5">
 
                  <div className="grid grid-cols-2 grid-rows-2 gap-4">
-                    {product.images.map((image) => (
+                    {product.imagesCollection.items.map((image, idx) => (
                     <Image
-                        key={image.id}
-                        alt={image.imageAlt}
-                        src={image.imageSrc}
+                        key={idx}
+                        alt={image.description}
+                        src={image.url}
                         height={1024}
                         width={1568}
                         className={classNames(
-                        image.primary ? 'hidden' : 'lg:hidden h-48 w-96 object-contain col-span-1 row-span-1',
+                        idx === 0 ? 'hidden' : 'lg:hidden h-48 w-96 object-contain col-span-1 row-span-1',
                         'rounded-lg',
                         )}
                     />
                     ))}
+                </div>
+                <div className="mt-10">
+                    <h2 className="text-sm font-medium text-gray-900">Description</h2>
+
+                    <div
+                    className="mt-4 space-y-4 text-sm/6 text-gray-500"
+                    >
+                      {product.description ? (
+                        documentToReactComponents(product.description.json, options)
+                      ) : (
+                        <p>No description available.</p>
+                      )}
+                    </div>
                 </div>
                 <div className="mt-8 border-t border-gray-200 pt-8">
                     <h2 className="text-sm font-medium text-gray-900">Usage</h2>
@@ -117,25 +143,23 @@ function classNames(...classes: string[]) {
 
 
               {/* Product details */}
-              <div className="mt-10">
-                <h2 className="text-sm font-medium text-gray-900">Description</h2>
 
-                <div
-                  dangerouslySetInnerHTML={{ __html: product.description }}
-                  className="mt-4 space-y-4 text-sm/6 text-gray-500"
-                />
-              </div>
 
               <div className="mt-8 border-t border-gray-200 pt-8">
                 <h2 className="text-sm font-medium text-gray-900">Variants</h2>
 
                 <div className="mt-4">
                   <ul role="list" className="list-disc space-y-1 pl-5 text-sm/6 text-gray-500 marker:text-gray-300">
-                    {product.variants.map((item) => (
-                      <li key={item} className="pl-2">
-                        {item}
-                      </li>
-                    ))}
+                    {product.variants ? (
+                         product.variants.map((item) => (
+                          <li key={item} className="pl-2">
+                            {item}
+                          </li>
+                        ))
+                      ) : (
+                        <p>None known.</p>
+                      )}
+                   
                   </ul>
                 </div>
               </div>

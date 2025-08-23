@@ -4,6 +4,7 @@ import {
   GraphQLAssetsResponse,
   GraphQLBlogResponse,
   GraphQLPlayerResponse,
+  GraphQLShirtResponse,
   Shirt,
   ShirtColor,
   ShirtUsageType,
@@ -100,6 +101,11 @@ function extractArticleEntries(fetchResponse: GraphQLBlogResponse) {
   return fetchResponse?.data?.blogPostCollection?.items;
 }
 
+function extractShirtEntries(fetchResponse: GraphQLShirtResponse) {
+  return fetchResponse?.data?.shirtCollection?.items;
+}
+
+
 function extractGalleryImageEntries(fetchResponse: GraphQLAssetsResponse) {
   return fetchResponse?.data?.assetCollection?.items;
 }
@@ -151,6 +157,39 @@ export async function getAllArticles(limit = 3) {
   return extractArticleEntries(articles as GraphQLBlogResponse);
 }
 
+export async function getAllShirts(limit = 60) {
+  const shirts = await fetchGraphQL(
+    `query {
+        shirtCollection(where:{slug_exists: true}, limit: ${limit}) {
+          items {
+            name
+            decade
+            imagesCollection {
+              items {
+                url
+                title
+                description
+              }
+            }
+            color
+            description {
+              json
+            }
+            use
+            seasons
+            variants
+            slug
+            manufacturer
+          }
+        }
+      }`,
+  );
+
+  //console.log(JSON.stringify(articles))
+
+  return extractShirtEntries(shirts as GraphQLShirtResponse);
+}
+
 export async function getAllArticlesForTag(limit = 3, tag: string) {
   const articles = await fetchGraphQL(
     `query {
@@ -179,7 +218,7 @@ export async function getArticle(slug: string) {
   );
   return extractArticleEntries(article as GraphQLBlogResponse)[0];
 }
-
+/*
 export async function getShirts() : Promise<Shirt[]> {
     const shirt : Shirt = {
         id: '1989-home-shirt',
@@ -508,3 +547,4 @@ export async function getShirts() : Promise<Shirt[]> {
 
     return [shirt, shirt2, shirt3, shirt4, shirt5, shirt6, shirt7, shirt8, shirt9, shirt10].sort((a, b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
 }
+    */
