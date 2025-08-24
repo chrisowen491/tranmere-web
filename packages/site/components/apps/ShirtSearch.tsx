@@ -44,6 +44,7 @@ export function ShirtSearchApp(props: {
     id: 'decade',
     name: 'Decade',
     options: [
+      { value: '1970s', label: "1970s" },
       { value: '1980s', label: "1980s" },
       { value: '1990s', label: "1990s" },
       { value: '2000s', label: "2000s" },
@@ -182,7 +183,7 @@ export function ShirtSearchApp(props: {
           <div className="border-b border-gray-200 pb-10">
             <h1 className="text-4xl font-bold tracking-tight text-gray-900">Historic Tranmere Shirts</h1>
             <p className="mt-4 text-base text-gray-500">
-              Checkout out a collection of historic Tranmere Rovers shirts.
+              Checkout out a collection of historic Tranmere Rovers shirts. Images have been generated using AI - which doesn't do badges very well, so these are approximations rather than real photos.
             </p>
           </div>
 
