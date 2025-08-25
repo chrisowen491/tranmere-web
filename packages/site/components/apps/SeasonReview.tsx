@@ -288,7 +288,7 @@ export default function SeasonReview(props: {
                   ""
                 )}
                 <ul role="list" className="mt-6 space-y-6 mb-6">
-                  {props.shirts.map((shirt, idx) => (
+                  {props.shirts.map((shirt) => (
                     <li key={shirt.slug} className="relative flex gap-x-4">
 
                       <Image
