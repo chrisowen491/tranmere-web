@@ -44,6 +44,7 @@ export function ShirtSearchApp(props: {
     id: 'decade',
     name: 'Decade',
     options: [
+      { value: '1960s', label: "1960s" },
       { value: '1970s', label: "1970s" },
       { value: '1980s', label: "1980s" },
       { value: '1990s', label: "1990s" },

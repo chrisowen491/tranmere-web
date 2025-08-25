@@ -13,7 +13,7 @@ import {
 } from "@tranmere-web/lib/src/tranmere-web-types";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import SeasonReview from "@/components/apps/SeasonReview";
-import { getAllArticlesForTag } from "@/lib/api";
+import { getAllArticlesForTag, getAllShirts } from "@/lib/api";
 import { SlugParams } from "@/lib/types";
 import { notFound } from "next/navigation";
 import { JumpBox } from "@/components/forms/JumpBox";
@@ -79,6 +79,9 @@ export default async function SeasonPage(props: { params: SlugParams }) {
 
   const articles = await getAllArticlesForTag(100, season);
 
+  const shirts = (await getAllShirts());
+  const filteredShirts = shirts.filter((s) => s.seasons.includes(season));
+
   const seasons = GetSeasons();
   return (
     <>
@@ -94,6 +97,7 @@ export default async function SeasonPage(props: { params: SlugParams }) {
         season={season}
         transfers={transfers.transfers}
         articles={articles}
+        shirts={filteredShirts}
       ></SeasonReview>
     </>
   );

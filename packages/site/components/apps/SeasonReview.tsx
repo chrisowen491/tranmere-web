@@ -17,7 +17,7 @@ import {
 } from "@tranmere-web/lib/src/tranmere-web-types";
 import { ResultTable } from "./partials/ResultTable";
 import { LinkButton } from "../forms/LinkButton";
-import { BlogItem } from "@/lib/types";
+import { BlogItem, Shirt } from "@/lib/types";
 import {
   buildImagePath,
   replaceSeasonsKit,
@@ -39,6 +39,7 @@ export default function SeasonReview(props: {
   managers: Manager[];
   transfers: Transfer[];
   articles: BlogItem[];
+  shirts: Shirt[]
 }) {
   const seasonInt = parseInt(props.season);
 
@@ -279,6 +280,28 @@ export default function SeasonReview(props: {
                 ) : (
                   ""
                 )}
+                {props.shirts && props.shirts.length > 0 ? (
+                  <h2 className="mt-2 text-2xl font-bold tracking-tight sm:text-2xl px-2">
+                    Shirts
+                  </h2>
+                ) : (
+                  ""
+                )}
+                <ul role="list" className="mt-6 space-y-6 mb-6">
+                  {props.shirts.map((shirt, idx) => (
+                    <li key={shirt.slug} className="relative flex gap-x-4">
+
+                      <Image
+                        src={shirt.imagesCollection.items[0].url}
+                        alt={shirt.name}
+                        height={1024}
+                        width={1568}
+                        className="h-48 w-96 object-contain"
+                      />
+
+                    </li>
+                  ))}
+                </ul>
                 {topScorers && topScorers.length > 0 ? (
                   <>
                     <h2 className="mt-2 text-2xl font-bold tracking-tight sm:text-2xl px-2">
@@ -411,7 +434,6 @@ export default function SeasonReview(props: {
               </p>
             </div>
 
-            {/* Invoice */}
             <div className="px-2 py-2 shadow-sm ring-1 ring-gray-900/5 sm:mx-0 sm:rounded-lg sm:px-2 sm:pb-14 lg:col-span-2 lg:row-span-2 lg:row-end-2  text-xs">
               <ResultTable
                 title="Results"
@@ -421,8 +443,11 @@ export default function SeasonReview(props: {
               ></ResultTable>
             </div>
 
+
             <div className="lg:col-start-3">
-              {/* Activity feed */}
+
+             
+
               {props.transfers && props.transfers.length > 0 ? (
                 <h2 className="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-50">
                   Transfers
@@ -472,6 +497,8 @@ export default function SeasonReview(props: {
                   </li>
                 ))}
               </ul>
+
+
 
               {props.articles && props.articles.length > 0 ? (
                 <h2 className="text-sm font-semibold leading-6 text-gray-900">

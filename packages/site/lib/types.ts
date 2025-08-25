@@ -319,7 +319,7 @@ export interface Shirt {
   description: Blog;
   variants: string[];
   use: ShirtUsageType;
-  seasons: number[];
+  seasons: string[];
   color: ShirtColor;
   decade: string; 
 }
