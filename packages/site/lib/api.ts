@@ -154,7 +154,7 @@ export async function getAllArticles(limit = 3) {
   return extractArticleEntries(articles as GraphQLBlogResponse);
 }
 
-export async function getAllShirts(limit = 60) {
+export async function getAllShirts(limit = 100) {
   const shirts = await fetchGraphQL(
     `query {
         shirtCollection(where:{slug_exists: true}, limit: ${limit}) {
