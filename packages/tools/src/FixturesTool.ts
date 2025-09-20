@@ -25,7 +25,7 @@ export const FixturesTool = tool({
 
       const fixtureUrl = `https://www.bbc.co.uk/wc-data/container/sport-data-scores-fixtures?selectedEndDate=${future}&selectedStartDate=${start}&todayDate=${start}&urn=urn%3Abbc%3Asportsdata%3Afootball%3Ateam%3Atranmere-rovers&useSdApi=false`;
       console.log(fixtureUrl);
-      const fixturesResponse = await fetch(fixtureUrl);
+      const fixturesResponse = await fetch(fixtureUrl, STANDARD_HEADERS);
       const fixtures = (await fixturesResponse.json()) as FixtureSet;
 
       const response = fixtures.eventGroups.map((group) => {
