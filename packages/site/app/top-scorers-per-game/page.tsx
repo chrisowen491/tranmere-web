@@ -51,6 +51,7 @@ export default async function HatTricks() {
                   alt={player.Player}
                   width={200}
                   height={200}
+                  unoptimized={true}
                   src={player.bio!.picLink!}
                   className="mx-auto h-24 w-24 rounded-full"
                 />
