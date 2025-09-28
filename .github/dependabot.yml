@@ -16,8 +16,7 @@ updates:
             - "*"
     ignore:
       - dependency-name: "cookie"  
-      - dependency-name: "tailwindcss"  
-      - dependency-name: "zod" # Ignore zod updates to avoid breaking changes       
+      - dependency-name: "tailwindcss"        
 
   - package-ecosystem: "github-actions"
     directory: "/"
