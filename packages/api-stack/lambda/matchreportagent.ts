@@ -31,7 +31,7 @@ exports.handler = async (): Promise<APIGatewayProxyResult> => {
   const model = openai('gpt-4o');
 
   const date = new Date();
-  const day = moment(date).subtract(1, 'day').format('YYYY-MM-DD');
+  const day = moment(date).subtract(8, 'day').format('YYYY-MM-DD');
   console.log(`Generating match Report For ${day}`);
 
   const matchReport = await generateText({
@@ -47,7 +47,7 @@ exports.handler = async (): Promise<APIGatewayProxyResult> => {
     prompt: `
             You are an agent capable of creating soccer match reports for a tranmere rovers fan site.
             You run at the start of every day. You should first see if any fixtures occured on ${day} and if so, generate a match report without headings. Use <br /> to separate paragraphs but avoid using other HTML.
-            You should make the match report interesting by making reference to the current league position, referee, formation, the current manager, formation, the match events, tranmere's form over the past 5 results, plus previous recent meetings with the opponent.
+            You should make the match report interesting by making reference to the current league position, referee (if known), formation, the current manager, formation, the match events, tranmere's form over the past 5 results, plus previous recent meetings with the opponent.
             Do not guess the referee or attendance - just leave them blank.
             The current season is ${utils.getYear()}.
             If there are no fixtures today, you should return the words NO_FIXTURE.
@@ -69,7 +69,6 @@ exports.handler = async (): Promise<APIGatewayProxyResult> => {
           .describe('The formation Tranmere played during the game'),
         home: z.string().describe('The home team of the fixture'),
         visitor: z.string().describe('The away team of the fixture'),
-        venue: z.string().describe('The venue of the fixture'),
         hgoal: z.number().describe('The score of the home team'),
         vgoal: z.number().describe('The score of the away team'),
         competition: z.string().describe('The competition of the fixture')
@@ -93,12 +92,12 @@ exports.handler = async (): Promise<APIGatewayProxyResult> => {
       home: translateTeamName(match.home),
       visitor: translateTeamName(match.visitor),
       opposition:
-        match.home === 'Tranmere Rovers'
+        translateTeamName(match.home) === 'Tranmere Rovers'
           ? translateTeamName(match.visitor)
           : translateTeamName(match.home),
       static: 'static',
       season: utils.getYear().toString(),
-      venue: match.venue,
+      venue: translateTeamName(match.home) === 'Tranmere Rovers' ? 'Prenton Park' : translateTeamName(match.visitor),
       hgoal: match.hgoal,
       tier: translatedCompetition == 'League Two' ? 4 : 0,
       pens: '',

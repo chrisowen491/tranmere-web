@@ -19,7 +19,8 @@ export function translateTeamName(input: string): string {
   const lookup = input ? input.trim() : '';
   const mapping = {
     'Stevenage Borough': 'Stevege Borough',
-    Stevenage: 'Stevege Borough'
+    Stevenage: 'Stevege Borough',
+    Tranmere: 'Tranmere Rovers'
   };
   return mapping[lookup] ? mapping[lookup] : lookup;
 }
