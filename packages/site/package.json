@@ -85,6 +85,6 @@
     "@tailwindcss/postcss": "^4.1.13",
     "prettier": "^3.6.2",
     "tailwind-scrollbar": "^4.0.2",
-    "wrangler": "^4.38.0"
+    "wrangler": "^4.40.2"
   }
 }
