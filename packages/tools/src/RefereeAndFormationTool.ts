@@ -29,7 +29,7 @@ export const RefereeAndFormationTool = tool({
 
 
       const team = homeTeam === 'Tranmere Rovers' ? 'homeTeam' : 'awayTeam';
-      const referee = lineups.officials.find(ref => ref.type === 'referee');
+      const referee = lineups.officials.find(ref => ref.type === 'Referee');
       
       return JSON.stringify({
         referee: referee ? `${referee.firstName} ${referee.lastName}` : '',
