@@ -26,10 +26,10 @@
   "devDependencies": {
     "husky": "^9.1.4",
     "typescript": "^5.7.3",
-    "wrangler": "^4.38.0"
+    "wrangler": "^4.42.2"
   },
   "dependencies": {
-    "@types/node": "^24.5.2"
+    "@types/node": "^24.7.2"
   },
   "resolutions": {
     "**/path-to-regexp": "8.2.0",
