@@ -45,11 +45,12 @@ exports.handler = async (): Promise<APIGatewayProxyResult> => {
     },
     stopWhen: stepCountIs(6),
     prompt: `
-            You are an agent capable of creating soccer match reports for a tranmere rovers fan site.
+            You are an agent capable of creating soccer match reports for a Tranmere Rovers fan site.
             You run at the start of every day. You should first see if any fixtures occured on ${day} and if so, generate a match report without headings. Use <br /> to separate paragraphs but avoid using other HTML.
             You should make the match report interesting by making reference to the current league position, referee (if known), formation, the current manager, formation, the match events, tranmere's form over the past 5 results, plus previous recent meetings with the opponent.
             Do not guess the referee or attendance - just leave them blank.
             The current season is ${utils.getYear()}.
+            Be explicit on the home and away team.
             If there are no fixtures today, you should return the words NO_FIXTURE.
         `
   });
@@ -61,20 +62,19 @@ exports.handler = async (): Promise<APIGatewayProxyResult> => {
       schema: z.object({
         attendance: z
           .number()
-          .describe('The attendance of the fixture')
+          .describe('The attendance of the fixture if known')
           .default(0),
         referee: z.string().describe('The referee of the fixture').default(''),
         formation: z
           .string()
           .describe('The formation Tranmere played during the game'),
-        home: z.string().describe('The home team of the fixture'),
-        visitor: z.string().describe('The away team of the fixture'),
+        home: z.string().describe('The team designated as the home team'),
+        visitor: z.string().describe('The team designated as the away team'),
         hgoal: z.number().describe('The score of the home team'),
         vgoal: z.number().describe('The score of the away team'),
         competition: z.string().describe('The competition of the fixture')
       }),
-      prompt: `generate a match object from the following match report
-
+      prompt: `generate a match object from the following match report...
         Report to evaluate: ${matchReport.text}`
     });
     console.log(JSON.stringify(match, null, 2));
@@ -97,7 +97,7 @@ exports.handler = async (): Promise<APIGatewayProxyResult> => {
           : translateTeamName(match.home),
       static: 'static',
       season: utils.getYear().toString(),
-      venue: translateTeamName(match.home) === 'Tranmere Rovers' ? 'Prenton Park' : translateTeamName(match.visitor),
+      venue: translateTeamName(match.home) === 'Tranmere Rovers' ? 'Prenton Park' : translateTeamName(match.home),
       hgoal: match.hgoal,
       tier: translatedCompetition == 'League Two' ? 4 : 0,
       pens: '',
