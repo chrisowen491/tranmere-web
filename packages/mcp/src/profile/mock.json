@@ -1,0 +1,34 @@
+{
+    "debut": {},
+    "seasons": [],
+    "transfers": [],
+    "links": [],
+    "image":"https://www.tranmere-web.com/builder/2004/buzzcut/ffd3b3/none/bc9d00/fcb98b/none/bc8a00",
+    "player": {
+        "biography": {
+            "nodeType": "document",
+            "data": {},
+            "content": [
+                {
+                    "nodeType": "paragraph",
+                    "data": {},
+                    "content": [
+                        {
+                            "marks": [],
+                            "nodeType": "text",
+                            "data": {},
+                            "value": "Iain Hume, a Canadian footballer, began his professional career with Tranmere Rovers in 1999 after joining the club as a trainee. He made his debut for Tranmere Rovers on April 15, 2000, in a match against Swindon. Over his time with the club, Hume made a significant impact, appearing in 186 matches, starting 121 of them, and making 65 substitute appearances. He scored a total of 37 goals for Tranmere Rovers. In 2005, Hume transferred to Leicester City for a fee of £500,000."
+                        }
+                    ]
+                }
+            ]
+        },
+        "placeOfBirth": "Edinburgh",
+        "height": null,
+        "dateOfBirth": null,
+        "picLink": "https://www.tranmere-web.com/builder/2004/buzzcut/ffd3b3/none/bc9d00/fcb98b/none/bc8a00",
+        "id": "2tfiK75sMJRLyW6aWmKSnL",
+        "name": "Iain Hume",
+        "position": "Striker"
+    }
+}
