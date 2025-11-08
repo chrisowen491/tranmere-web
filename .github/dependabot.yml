@@ -26,6 +26,6 @@ updates:
     ignore:
       - dependency-name: "cloudflare/wrangler-action"
     groups:
-        github-actions:
+      github-actions:
           patterns:
-            - "*"
+            - "*"      
