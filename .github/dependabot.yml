@@ -25,3 +25,7 @@ updates:
       interval: "weekly"
     ignore:
       - dependency-name: "cloudflare/wrangler-action"
+    groups:
+      github-actions:
+          patterns:
+            - "*"      
