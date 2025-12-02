@@ -18,7 +18,7 @@
 		"@contentful/rich-text-react-renderer": "^16.1.5",
 		"@contentful/rich-text-types": "^17.2.4",
 		"@headlessui/react": "^2.2.9",
-		"@modelcontextprotocol/sdk": "^1.19.1",
+		"@modelcontextprotocol/sdk": "^1.24.0",
 		"@types/node": "^24.5.2",
 		"agents": "^0.2.8",
 		"path-to-regexp": "^8.3.0",
