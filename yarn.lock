@@ -317,15 +317,15 @@
     dpop "^2.1.1"
     es-cookie "~1.3.2"
 
-"@auth0/nextjs-auth0@^4.5.1":
-  version "4.10.0"
-  resolved "https://registry.yarnpkg.com/@auth0/nextjs-auth0/-/nextjs-auth0-4.10.0.tgz#d13797bd886329c8d03b689b658842574d7176ef"
-  integrity sha512-4CBuMlPJ4boxrB5IYisqMh9VBn74PGsspMfZpLG5JvrgDklw2CZsThW+UeAi1YMhE4/3VHyeht2yzN1Fs95bug==
+"@auth0/nextjs-auth0@^4.13.0":
+  version "4.13.0"
+  resolved "https://registry.yarnpkg.com/@auth0/nextjs-auth0/-/nextjs-auth0-4.13.0.tgz#246b57ca6d8f93c5d01c323fd88a3e3acc867ee5"
+  integrity sha512-YHh1H9s7Fi42c5k/9C5RnNc7tQYODdQwRy5X/L4doCJvRltEajOwEy7rQ7ERnuSoWd3mgk4YxPjCAMh4Dg1ceA==
   dependencies:
     "@edge-runtime/cookies" "^5.0.1"
     "@panva/hkdf" "^1.2.1"
     jose "^6.0.11"
-    oauth4webapi "^3.1.2"
+    oauth4webapi "^3.8.2"
     openid-client "^6.8.0"
     swr "^2.2.5"
 
@@ -10826,10 +10826,10 @@ oauth-sign@~0.9.0:
   resolved "https://registry.npmjs.org/oauth-sign/-/oauth-sign-0.9.0.tgz"
   integrity sha512-fexhUFFPTGV8ybAtSIGbV6gOkSv8UtRbDBnAyLQw4QPKkgNlsH2ByPGtMUqdWkos6YCRmAqViwgZrJc/mRDzZQ==
 
-oauth4webapi@^3.1.2, oauth4webapi@^3.8.1:
-  version "3.8.1"
-  resolved "https://registry.yarnpkg.com/oauth4webapi/-/oauth4webapi-3.8.1.tgz#a6e205570c09e33aa656982c85e78841a57a6fec"
-  integrity sha512-olkZDELNycOWQf9LrsELFq8n05LwJgV8UkrS0cburk6FOwf8GvLam+YB+Uj5Qvryee+vwWOfQVeI5Vm0MVg7SA==
+oauth4webapi@^3.8.1, oauth4webapi@^3.8.2:
+  version "3.8.3"
+  resolved "https://registry.yarnpkg.com/oauth4webapi/-/oauth4webapi-3.8.3.tgz#8a3e36b88a52db5e619907f031bff3770b2ed1a4"
+  integrity sha512-pQ5BsX3QRTgnt5HxgHwgunIRaDXBdkT23tf8dfzmtTIL2LTpdmxgbpbBm0VgFWAIDlezQvQCTgnVIUmHupXHxw==
 
 object-assign@^4, object-assign@^4.0.1, object-assign@^4.1.1:
   version "4.1.1"
