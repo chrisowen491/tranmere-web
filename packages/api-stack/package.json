@@ -19,7 +19,7 @@
     "@ai-sdk/openai": "^2.0.32",
     "@contentful/rich-text-from-markdown": "^16.1.5",
     "@langchain/community": "^0.3.56",
-    "@langchain/core": "^0.3.77",
+    "@langchain/core": "^0.3.80",
     "@langchain/openai": "^0.6.13",
     "@tranmere-web/lib": "*",
     "ai": "^5.0.48",
