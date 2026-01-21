@@ -30,7 +30,7 @@
     "@tranmere-web/lib": "*",
     "add": "^2.0.6",
     "langchain": "^0.3.34",
-    "wrangler": "^4.38.0",
+    "wrangler": "^4.59.1",
     "yarn": "^1.22.22"
   }
 }

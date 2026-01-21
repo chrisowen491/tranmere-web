@@ -87,6 +87,6 @@
     "prettier": "^3.6.2",
     "tailwind-scrollbar": "^4.0.2",
     "typescript": "^5.7.3",
-    "wrangler": "^4.38.0"
+    "wrangler": "^4.59.1"
   }
 }
