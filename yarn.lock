@@ -11,14 +11,6 @@
     "@ai-sdk/provider-utils" "3.0.12"
     "@vercel/oidc" "3.0.2"
 
-"@ai-sdk/openai@2.0.48":
-  version "2.0.48"
-  resolved "https://registry.yarnpkg.com/@ai-sdk/openai/-/openai-2.0.48.tgz#7d6f3083bad229de5f3bfc31bf19f577dbb91de0"
-  integrity sha512-dIGOVtHaScTNIQzxkE4I8T5PpoutFWxonR/awdRz+5sCpoO7V2kVL44+X6piJbQIMdFYUK/h+HTX3+BjTbRHmw==
-  dependencies:
-    "@ai-sdk/provider" "2.0.0"
-    "@ai-sdk/provider-utils" "3.0.12"
-
 "@ai-sdk/openai@^2.0.10", "@ai-sdk/openai@^2.0.32":
   version "2.0.49"
   resolved "https://registry.yarnpkg.com/@ai-sdk/openai/-/openai-2.0.49.tgz#6b1e153a5118545e1f46ccccf5a1e6af5ca916b5"
@@ -1921,7 +1913,7 @@
   resolved "https://registry.yarnpkg.com/@biomejs/cli-win32-x64/-/cli-win32-x64-2.2.5.tgz#f0f3a85c5fb7954661fe454ef2df998205df1570"
   integrity sha512-F/jhuXCssPFAuciMhHKk00xnCAxJRS/pUzVfXYmOMUp//XW7mO6QeCjsjvnm8L4AO/dG2VOB0O+fJPiJ2uXtIw==
 
-"@cfworker/json-schema@^4.0.2":
+"@cfworker/json-schema@^4.0.2", "@cfworker/json-schema@^4.1.1":
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/@cfworker/json-schema/-/json-schema-4.1.1.tgz#4a2a3947ee9fa7b7c24be981422831b8674c3be6"
   integrity sha512-gAmrUZSGtKc3AiBL71iNWxDsyUC5uMaKKGdvzYsBoTW/xi42JQHl7eKV2OYzCUqvc+D2RCcf7EXY2iCyFIk6og==
@@ -2684,6 +2676,11 @@
   resolved "https://registry.npmjs.org/@heroicons/react/-/react-2.2.0.tgz"
   integrity sha512-LMcepvRaS9LYHJGsF0zzmgKCUim/X3N/DQKc4jepAXJ7l8QxJ1PmxJzqplF2Z3FE4PqBAIGyJAQ/w4B5dsqbtQ==
 
+"@hono/node-server@^1.19.7":
+  version "1.19.9"
+  resolved "https://registry.yarnpkg.com/@hono/node-server/-/node-server-1.19.9.tgz#8f37119b1acf283fd3f6035f3d1356fdb97a09ac"
+  integrity sha512-vHL6w3ecZsky+8P5MD+eFfaGTyCeOHUIFYMGpQGbrBTSmNNoxv0if69rEZ5giu36weC5saFuznL411gRX7bJDw==
+
 "@humanfs/core@^0.19.1":
   version "0.19.1"
   resolved "https://registry.yarnpkg.com/@humanfs/core/-/core-0.19.1.tgz#17c55ca7d426733fe3c561906b8173c336b40a77"
@@ -3420,12 +3417,14 @@
   dependencies:
     moo "^0.5.1"
 
-"@modelcontextprotocol/sdk@^1.19.1", "@modelcontextprotocol/sdk@^1.20.0":
-  version "1.20.0"
-  resolved "https://registry.yarnpkg.com/@modelcontextprotocol/sdk/-/sdk-1.20.0.tgz#3ff5c58ef23dd2a62ca93a2cc8b8e51f945e53b6"
-  integrity sha512-kOQ4+fHuT4KbR2iq2IjeV32HiihueuOf1vJkq18z08CLZ1UQrTc8BXJpVfxZkq45+inLLD+D4xx4nBjUelJa4Q==
+"@modelcontextprotocol/sdk@1.25.2", "@modelcontextprotocol/sdk@^1.19.1":
+  version "1.25.2"
+  resolved "https://registry.yarnpkg.com/@modelcontextprotocol/sdk/-/sdk-1.25.2.tgz#2284560b4e044b4ce5f328ee180931110cb8c5cf"
+  integrity sha512-LZFeo4F9M5qOhC/Uc1aQSrBHxMrvxett+9KLHt7OhcExtoiRN9DKgbZffMP/nxjutWDQpfMDfP3nkHI4X9ijww==
   dependencies:
-    ajv "^6.12.6"
+    "@hono/node-server" "^1.19.7"
+    ajv "^8.17.1"
+    ajv-formats "^3.0.1"
     content-type "^1.0.5"
     cors "^2.8.5"
     cross-spawn "^7.0.5"
@@ -3433,10 +3432,12 @@
     eventsource-parser "^3.0.0"
     express "^5.0.1"
     express-rate-limit "^7.5.0"
+    jose "^6.1.1"
+    json-schema-typed "^8.0.2"
     pkce-challenge "^5.0.0"
     raw-body "^3.0.0"
-    zod "^3.23.8"
-    zod-to-json-schema "^3.24.1"
+    zod "^3.25 || ^4.0"
+    zod-to-json-schema "^3.25.0"
 
 "@motionone/animation@^10.12.0":
   version "10.18.0"
@@ -5839,23 +5840,21 @@ agentkeepalive@^4.2.1:
   dependencies:
     humanize-ms "^1.2.1"
 
-agents@^0.2.8:
-  version "0.2.12"
-  resolved "https://registry.yarnpkg.com/agents/-/agents-0.2.12.tgz#9b7dfce7848c58dc3b67604757f8d0f63b375b48"
-  integrity sha512-5oW2B5T2FOxmg+C11WAnMzV3ILLoI2sTqa3r1qxLymSZcnaP/37J17atts2o/lRFjWVWua/Y9mHSaBvm0XFdjw==
+agents@^0.3.7:
+  version "0.3.7"
+  resolved "https://registry.yarnpkg.com/agents/-/agents-0.3.7.tgz#8e4524b8a64d25f45a2f88601d67f3b2d1121763"
+  integrity sha512-s9NJFv75Vv0rAX+awGwq6Lfn9CWJt935dRcYwfqlAxTJsL4vFCk4cBsK6ptp6Iolv2Etw25Z8eMa2XBq6LS1/w==
   dependencies:
-    "@ai-sdk/openai" "2.0.48"
-    "@modelcontextprotocol/sdk" "^1.20.0"
-    ai "5.0.68"
-    cron-schedule "^5.0.4"
+    "@cfworker/json-schema" "^4.1.1"
+    "@modelcontextprotocol/sdk" "1.25.2"
+    cron-schedule "^6.0.0"
     json-schema "^0.4.0"
     json-schema-to-typescript "^15.0.4"
-    mimetext "^3.0.27"
+    mimetext "^3.0.28"
     nanoid "^5.1.6"
-    partyserver "^0.0.75"
-    partysocket "1.1.6"
-    zod "^3.25.76"
-    zod-to-ts "^1.2.0"
+    partyserver "^0.1.2"
+    partysocket "1.1.11"
+    yargs "^18.0.0"
 
 ai@5.0.68, ai@^5.0.10, ai@^5.0.48:
   version "5.0.68"
@@ -5867,6 +5866,13 @@ ai@5.0.68, ai@^5.0.10, ai@^5.0.48:
     "@ai-sdk/provider-utils" "3.0.12"
     "@opentelemetry/api" "1.9.0"
 
+ajv-formats@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/ajv-formats/-/ajv-formats-3.0.1.tgz#3d5dc762bca17679c3c2ea7e90ad6b7532309578"
+  integrity sha512-8iUql50EUR+uUcdRQ3HDqa6EVyo3docL8g5WJ3FNcWmu62IbkGUue/pEyLBW8VGKKucTPgqeks4fIU1DA4yowQ==
+  dependencies:
+    ajv "^8.0.0"
+
 ajv@8.12.0:
   version "8.12.0"
   resolved "https://registry.yarnpkg.com/ajv/-/ajv-8.12.0.tgz#d1a0527323e22f53562c567c00991577dfbe19d1"
@@ -5877,7 +5883,7 @@ ajv@8.12.0:
     require-from-string "^2.0.2"
     uri-js "^4.2.2"
 
-ajv@^6.12.3, ajv@^6.12.4, ajv@^6.12.6:
+ajv@^6.12.3, ajv@^6.12.4:
   version "6.12.6"
   resolved "https://registry.npmjs.org/ajv/-/ajv-6.12.6.tgz"
   integrity sha512-j3fVLgvTo527anyYyJOGTYJbG+vnnQYvE0m5mmkc1TK+nxAppkCLMIL0aZ4dblVCNoGShhm+kzE4ZUykBoMg4g==
@@ -5887,7 +5893,7 @@ ajv@^6.12.3, ajv@^6.12.4, ajv@^6.12.6:
     json-schema-traverse "^0.4.1"
     uri-js "^4.2.2"
 
-ajv@^8.0.1:
+ajv@^8.0.0, ajv@^8.0.1, ajv@^8.17.1:
   version "8.17.1"
   resolved "https://registry.npmjs.org/ajv/-/ajv-8.17.1.tgz"
   integrity sha512-B/gBuNg5SiMTrPkC+A2+cW0RszwxYmn6VYxB/inlBStS5nx6xHIt/ehKRhIMhqusl7a8LjQoZnjCs5vhwxOQ1g==
@@ -6928,10 +6934,10 @@ cors@^2.8.5:
     object-assign "^4"
     vary "^1"
 
-cron-schedule@^5.0.4:
-  version "5.0.4"
-  resolved "https://registry.yarnpkg.com/cron-schedule/-/cron-schedule-5.0.4.tgz#406a2e962c9f69445d24e1f69549a46e245d6f8c"
-  integrity sha512-nH0a49E/kSVk6BeFgKZy4uUsy6D2A16p120h5bYD9ILBhQu7o2sJFH+WI4R731TSBQ0dB1Ik7inB/dRAB4C8QQ==
+cron-schedule@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/cron-schedule/-/cron-schedule-6.0.0.tgz#62f4fa6a980c2c14f322deaaaeee4c27f9f0c84f"
+  integrity sha512-BoZaseYGXOo5j5HUwTaegIog3JJbuH4BbrY9A1ArLjXpy+RWb3mV28F/9Gv1dDA7E2L8kngWva4NWisnLTyfgQ==
 
 cross-fetch@^3.1.5:
   version "3.2.0"
@@ -9774,7 +9780,7 @@ jiti@^2.6.0:
   resolved "https://registry.yarnpkg.com/jiti/-/jiti-2.6.1.tgz#178ef2fc9a1a594248c20627cd820187a4d78d92"
   integrity sha512-ekilCSN1jwRvIbgeg/57YFh8qQDNbwDb9xT/qu2DAHbFFZUicIl4ygVaAvzveMhMVr3LnpSKTNnwt8PoOfmKhQ==
 
-jose@4.14.4, jose@^5.0.0, jose@^6.0.11, jose@^6.1.0:
+jose@4.14.4, jose@^5.0.0, jose@^6.0.11, jose@^6.1.0, jose@^6.1.1:
   version "5.10.0"
   resolved "https://registry.yarnpkg.com/jose/-/jose-5.10.0.tgz#c37346a099d6467c401351a9a0c2161e0f52c4be"
   integrity sha512-s+3Al/p9g32Iq+oqXxkW//7jk2Vig6FF1CFqzVXoTUXt2qz89YWbL+OwS17NFYEvxC35n0FKeGO2LGYSxeM2Gg==
@@ -9877,6 +9883,11 @@ json-schema-traverse@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npmjs.org/json-schema-traverse/-/json-schema-traverse-1.0.0.tgz"
   integrity sha512-NM8/P9n3XjXhIZn1lLhkFaACTOURQXjWhV4BA/RnOv8xvgqtqpAX9IO4mRQxSx1Rlo4tqzeqb0sOlruaOy3dug==
+
+json-schema-typed@^8.0.2:
+  version "8.0.2"
+  resolved "https://registry.yarnpkg.com/json-schema-typed/-/json-schema-typed-8.0.2.tgz#e98ee7b1899ff4a184534d1f167c288c66bbeff4"
+  integrity sha512-fQhoXdcvc3V28x7C7BMs4P5+kNlgUURe2jmUT1T//oBRMDrqy1QPelJimwZGo7Hg9VPV3EQV5Bnq4hbFy2vetA==
 
 json-schema@0.4.0, json-schema@^0.4.0:
   version "0.4.0"
@@ -10445,10 +10456,10 @@ mime@^3.0.0:
   resolved "https://registry.yarnpkg.com/mime/-/mime-3.0.0.tgz#b374550dca3a0c18443b0c950a6a58f1931cf7a7"
   integrity sha512-jSCU7/VB1loIWBZe14aEYHU/+1UMEHoaO7qxCOVJOw9GgH72VAWppxNcjU+x9a2k3GSIBXNKxXQFqRvvZ7vr3A==
 
-mimetext@^3.0.27:
-  version "3.0.27"
-  resolved "https://registry.yarnpkg.com/mimetext/-/mimetext-3.0.27.tgz#464dd17eadf46cd9479f2c877872972ddc08be52"
-  integrity sha512-mUhWAsZD1N/K6dbN4+a5Yq78OPnYQw1ubOSMasBntsLQ2S7KVNlvDEA8dwpr4a7PszWMzeslKahAprtwYMgaBA==
+mimetext@^3.0.28:
+  version "3.0.28"
+  resolved "https://registry.yarnpkg.com/mimetext/-/mimetext-3.0.28.tgz#ffa6292cd13c0913b0783161cd93018203debc09"
+  integrity sha512-eQXpbNrtxLCjUtiVbR/qR09dbPgZ2o+KR1uA7QKqGhbn8QV7HIL16mXXsobBL4/8TqoYh1us31kfz+dNfCev9g==
   dependencies:
     "@babel/runtime" "^7.26.0"
     "@babel/runtime-corejs3" "^7.26.0"
@@ -10633,15 +10644,10 @@ mz@^2.7.0:
     object-assign "^4.0.1"
     thenify-all "^1.0.0"
 
-nanoid@^3.3.11:
+nanoid@^3.3.11, nanoid@^3.3.6:
   version "3.3.11"
   resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.3.11.tgz#4f4f112cefbe303202f2199838128936266d185b"
   integrity sha512-N8SpfPUnUp1bK+PMYW8qSWdl9U+wwNWI4QKxOYDy9JAro3WMX7p2OeVRF9v+347pnakNevPmiHhNmZ2HbFA76w==
-
-nanoid@^3.3.6:
-  version "3.3.8"
-  resolved "https://registry.npmjs.org/nanoid/-/nanoid-3.3.8.tgz"
-  integrity sha512-WNLf5Sd8oZxOm+TzppcYk8gVOgP+l58xNy58D0nbUnOxOWRWvlcCV4kUF7ltmI6PsrLl/BgKEyS4mqsGChFN0w==
 
 nanoid@^5.1.6:
   version "5.1.6"
@@ -11097,17 +11103,17 @@ parseurl@^1.3.3, parseurl@~1.3.3:
   resolved "https://registry.yarnpkg.com/parseurl/-/parseurl-1.3.3.tgz#9da19e7bee8d12dff0513ed5b76957793bc2e8d4"
   integrity sha512-CiyeOxFT/JZyN5m0z9PfXw4SCBJ6Sygz1Dpl0wqjlhDEGGBP1GnsUVEL0p63hoG1fcj3fHynXi9NYO4nWOL+qQ==
 
-partyserver@^0.0.75:
-  version "0.0.75"
-  resolved "https://registry.yarnpkg.com/partyserver/-/partyserver-0.0.75.tgz#e7171d15181167f77e1ef61889d02480392066a5"
-  integrity sha512-i/18vvdxuGjx+rpQ+fDdExlvQoRb7EfTF+6b+kA2ILEpHemtpLWV8NdgDrOPEklRNdCc/4WlzDtYn05d17aZAQ==
+partyserver@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/partyserver/-/partyserver-0.1.2.tgz#7dbdff6eea2d1961f7cfe6be8c3e3a52f1db8984"
+  integrity sha512-9ca0wnl8JPYUzPZst76dNndnLxHPnqUHnpYeVa7/+k3rzQeFuPkI9InqOanupkVmEvRTW2/HIKu/wfAeAqTorw==
   dependencies:
     nanoid "^5.1.6"
 
-partysocket@1.1.6:
-  version "1.1.6"
-  resolved "https://registry.yarnpkg.com/partysocket/-/partysocket-1.1.6.tgz#01b06dc9889df446700fcbce24ca41a5e98b533c"
-  integrity sha512-LkEk8N9hMDDsDT0iDK0zuwUDFVrVMUXFXCeN3850Ng8wtjPqPBeJlwdeY6ROlJSEh3tPoTTasXoSBYH76y118w==
+partysocket@1.1.11:
+  version "1.1.11"
+  resolved "https://registry.yarnpkg.com/partysocket/-/partysocket-1.1.11.tgz#a1708cd799f1688015fb770a9ca96c537ebd109c"
+  integrity sha512-P0EtOQiAwvLriqLgdThcSaREfz3bP77LkLSdmXq680BosPKvGSoGTh/d0g3S+UNmaqcw89Ad7JXHHKyRx3xU9Q==
   dependencies:
     event-target-polyfill "^0.0.4"
 
@@ -13626,25 +13632,30 @@ youch@4.1.0-beta.10:
     cookie "^1.0.2"
     youch-core "^0.3.3"
 
-zod-to-json-schema@^3.22.3, zod-to-json-schema@^3.24.1, zod-to-json-schema@^3.24.5:
+zod-to-json-schema@^3.22.3, zod-to-json-schema@^3.24.5:
   version "3.24.6"
   resolved "https://registry.npmjs.org/zod-to-json-schema/-/zod-to-json-schema-3.24.6.tgz"
   integrity sha512-h/z3PKvcTcTetyjl1fkj79MHNEjm+HpD6NXheWjzOekY7kV+lwDYnHw+ivHkijnCSMz1yJaWBD9vu/Fcmk+vEg==
 
-zod-to-ts@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/zod-to-ts/-/zod-to-ts-1.2.0.tgz#873a2fd8242d7b649237be97e0c64d7954ae0c51"
-  integrity sha512-x30XE43V+InwGpvTySRNz9kB7qFU8DlyEy7BsSTCHPH1R0QasMmHWZDCzYm6bVXtj/9NNJAZF3jW8rzFvH5OFA==
+zod-to-json-schema@^3.25.0:
+  version "3.25.1"
+  resolved "https://registry.yarnpkg.com/zod-to-json-schema/-/zod-to-json-schema-3.25.1.tgz#7f24962101a439ddade2bf1aeab3c3bfec7d84ba"
+  integrity sha512-pM/SU9d3YAggzi6MtR4h7ruuQlqKtad8e9S0fmxcMi+ueAK5Korys/aWcV9LIIHTVbj01NdzxcnXSN+O74ZIVA==
 
 zod@3.22.3:
   version "3.22.3"
   resolved "https://registry.yarnpkg.com/zod/-/zod-3.22.3.tgz#2fbc96118b174290d94e8896371c95629e87a060"
   integrity sha512-EjIevzuJRiRPbVH4mGc8nApb/lVLKVpmUhAaR5R5doKGfAnGJ6Gr3CViAVjP+4FWSxCsybeWQdcgCtbX+7oZug==
 
-zod@^3.21.4, zod@^3.23.8, zod@^3.25.32, zod@^3.25.76:
+zod@^3.21.4, zod@^3.25.32:
   version "3.25.76"
   resolved "https://registry.yarnpkg.com/zod/-/zod-3.25.76.tgz#26841c3f6fd22a6a2760e7ccb719179768471e34"
   integrity sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==
+
+"zod@^3.25 || ^4.0":
+  version "4.3.6"
+  resolved "https://registry.yarnpkg.com/zod/-/zod-4.3.6.tgz#89c56e0aa7d2b05107d894412227087885ab112a"
+  integrity sha512-rftlrkhHZOcjDwkGlnUtZZkvaPHCsDATp4pGpuOOMDaTdDDXF91wuVDJoWoPsKX/3YPQ5fHuF3STjcYyKr+Qhg==
 
 zod@^4.0.14, zod@^4.1.8:
   version "4.1.12"
