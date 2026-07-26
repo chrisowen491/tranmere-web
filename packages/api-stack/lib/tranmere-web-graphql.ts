@@ -143,7 +143,6 @@ export class TranmereWebGraphQL extends Construct {
           tableName,
           table
         );
-        table.grantReadData(new iam.ServicePrincipal('appsync.amazonaws.com'));
         dynamoDataSources.createResolver(tableName + 'resolver', {
           typeName: 'Query',
           fieldName: 'list' + tableName,
@@ -166,9 +165,6 @@ export class TranmereWebGraphQL extends Construct {
         });
 
         if (props.tables[i].putSchema) {
-          table.grantWriteData(
-            new iam.ServicePrincipal('appsync.amazonaws.com')
-          );
           dynamoDataSources.createResolver(tableName + 'PutResolver', {
             typeName: 'Mutation',
             fieldName: 'add' + tableName,
