@@ -69,7 +69,7 @@ jobs:
           node-version: '24'    
       - name: Install Data Dog CI
         run: | 
-          yarn global add @datadog/datadog-ci@${{ vars.DataDogCIVersion}}
+          yarn global add @datadog/datadog-ci @datadog/datadog-ci-plugin-lambda
       # https://docs.datadoghq.com/serverless/aws_lambda/installation/nodejs/?tab=awssam    
       - name: Instrument
         run: | 

@@ -1,0 +1,15 @@
+{
+  "name": "tranmere-web/tranmere-web",
+  "mode": "vendored",
+  "dependencies": {
+    "sickn33/antigravity-awesome-skills": {
+      "version": "3dfb633b153dbf118cd95fea0a6112d99c4f6d05",
+      "source": "https://github.com/sickn33/antigravity-awesome-skills",
+      "include": {
+        "skills": [
+          "agents-md"
+        ]
+      }
+    }
+  }
+}
