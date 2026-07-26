@@ -25,10 +25,10 @@
   "author": "Chris Owen",
   "devDependencies": {
     "husky": "^9.1.4",
-    "typescript": "^5.7.3",
+    "typescript": "6.0.3",
     "wrangler": "^4.38.0"
   },
   "dependencies": {
-    "@types/node": "^24.5.2"
+    "@types/node": "^26.1.1"
   }
 }
