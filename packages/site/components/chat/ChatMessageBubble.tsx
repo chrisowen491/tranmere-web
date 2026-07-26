@@ -3,7 +3,10 @@ import Image from "next/image";
 import { MatchMessageBubble } from "./MatchMessageBubble";
 import { ResultsBubble } from "./ResultsBubble";
 import { UIMessage } from "ai";
-import { MatchPageData, PlayerView } from "@tranmere-web/lib/src/tranmere-web-types";
+import {
+  MatchPageData,
+  PlayerView,
+} from "@tranmere-web/lib/src/tranmere-web-types";
 import { ResultsToolData } from "@tranmere-web/tools/src/ResultsTool";
 
 export function ChatMessageBubble(props: { message: UIMessage }) {
@@ -40,14 +43,15 @@ export function ChatMessageBubble(props: { message: UIMessage }) {
                 case "text":
                   return part.text;
 
-
                 case "tool-PlayerProfileTool": {
-                  if(part.output !== null && part.output !== undefined) {
+                  if (part.output !== null && part.output !== undefined) {
                     return (
                       <div key={part.toolCallId}>
                         <PlayerBubble
                           key={props.message.id}
-                          player={JSON.parse(part.output as string) as PlayerView}
+                          player={
+                            JSON.parse(part.output as string) as PlayerView
+                          }
                         ></PlayerBubble>
                       </div>
                     );
@@ -55,14 +59,15 @@ export function ChatMessageBubble(props: { message: UIMessage }) {
                   break;
                 }
 
-
                 case "tool-MatchTool": {
-                  if(part.output !== null && part.output !== undefined) {
+                  if (part.output !== null && part.output !== undefined) {
                     return (
                       <div key={part.toolCallId}>
                         <MatchMessageBubble
                           key={props.message.id}
-                          match={JSON.parse(part.output as string) as MatchPageData}
+                          match={
+                            JSON.parse(part.output as string) as MatchPageData
+                          }
                         ></MatchMessageBubble>
                       </div>
                     );
@@ -71,19 +76,20 @@ export function ChatMessageBubble(props: { message: UIMessage }) {
                 }
 
                 case "tool-ResultsTool": {
-                  if(part.output !== null && part.output !== undefined) {
+                  if (part.output !== null && part.output !== undefined) {
                     return (
                       <div key={part.toolCallId}>
                         <ResultsBubble
                           key={props.message.id}
-                          matches={JSON.parse(part.output as string) as ResultsToolData}
+                          matches={
+                            JSON.parse(part.output as string) as ResultsToolData
+                          }
                         ></ResultsBubble>
                       </div>
                     );
                   }
                   break;
                 }
-
               }
             })}
             <br />

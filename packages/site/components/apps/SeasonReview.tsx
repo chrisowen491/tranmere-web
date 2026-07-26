@@ -39,7 +39,7 @@ export default function SeasonReview(props: {
   managers: Manager[];
   transfers: Transfer[];
   articles: BlogItem[];
-  shirts: Shirt[]
+  shirts: Shirt[];
 }) {
   const seasonInt = parseInt(props.season);
 
@@ -290,7 +290,6 @@ export default function SeasonReview(props: {
                 <ul role="list" className="mt-6 space-y-6 mb-6">
                   {props.shirts.map((shirt) => (
                     <li key={shirt.slug} className="relative flex gap-x-4">
-
                       <Image
                         src={shirt.imagesCollection.items[0].url}
                         alt={shirt.name}
@@ -298,7 +297,6 @@ export default function SeasonReview(props: {
                         width={1568}
                         className="h-48 w-96 object-contain"
                       />
-
                     </li>
                   ))}
                 </ul>
@@ -443,11 +441,7 @@ export default function SeasonReview(props: {
               ></ResultTable>
             </div>
 
-
             <div className="lg:col-start-3">
-
-             
-
               {props.transfers && props.transfers.length > 0 ? (
                 <h2 className="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-50">
                   Transfers
@@ -497,8 +491,6 @@ export default function SeasonReview(props: {
                   </li>
                 ))}
               </ul>
-
-
 
               {props.articles && props.articles.length > 0 ? (
                 <h2 className="text-sm font-semibold leading-6 text-gray-900">

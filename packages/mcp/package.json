@@ -4,8 +4,8 @@
 	"private": true,
 	"scripts": {
 		"deploy": "wrangler deploy",
-    	"lint": "eslint .",
-    	"format": "prettier --write \"src\"",
+		"lint": "eslint .",
+		"format": "prettier --write \"src\"",
 		"dev": "wrangler dev",
 		"cf-typegen": "wrangler types",
 		"type-check": "tsc --noEmit",

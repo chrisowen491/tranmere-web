@@ -97,7 +97,10 @@ exports.handler = async (): Promise<APIGatewayProxyResult> => {
           : translateTeamName(match.home),
       static: 'static',
       season: utils.getYear().toString(),
-      venue: translateTeamName(match.home) === 'Tranmere Rovers' ? 'Prenton Park' : translateTeamName(match.home),
+      venue:
+        translateTeamName(match.home) === 'Tranmere Rovers'
+          ? 'Prenton Park'
+          : translateTeamName(match.home),
       hgoal: match.hgoal,
       tier: translatedCompetition == 'League Two' ? 4 : 0,
       pens: '',

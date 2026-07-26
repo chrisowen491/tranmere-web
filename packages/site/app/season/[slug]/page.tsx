@@ -79,7 +79,7 @@ export default async function SeasonPage(props: { params: SlugParams }) {
 
   const articles = await getAllArticlesForTag(100, season);
 
-  const shirts = (await getAllShirts());
+  const shirts = await getAllShirts();
   const filteredShirts = shirts.filter((s) => s.seasons.includes(season));
 
   const seasons = GetSeasons();

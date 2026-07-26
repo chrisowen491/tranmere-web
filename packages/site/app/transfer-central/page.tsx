@@ -12,7 +12,9 @@ export const metadata: Metadata = {
 };
 
 export default async function Transfers() {
-  const base = GetBaseUrl((await getCloudflareContext({async: true})).env) + "/transfer-search/";
+  const base =
+    GetBaseUrl((await getCloudflareContext({ async: true })).env) +
+    "/transfer-search/";
 
   const request = await fetch(base);
   const results = (await request.json()) as {

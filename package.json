@@ -5,8 +5,8 @@
   "private": "true",
   "license": "GPL-3.0-only",
   "engines": {
-    "npm": ">=9.5.0",
-    "node": ">=20.14.0"
+    "yarn": ">=1.22.22",
+    "node": ">=24"
   },
   "scripts": {
     "api": "yarn workspace @tranmere-web/api-stack local-api",
@@ -30,10 +30,5 @@
   },
   "dependencies": {
     "@types/node": "^24.5.2"
-  },
-  "resolutions": {
-    "**/path-to-regexp": "8.2.0",
-    "**/jose": "^5.0.0",
-    "**/cookie": "0.7.2"
   }
 }

@@ -14,7 +14,9 @@ export const metadata: Metadata = {
 };
 
 export default async function PlayerSearchPage() {
-  const base = GetBaseUrl((await getCloudflareContext({async: true})).env) + "/player-search/";
+  const base =
+    GetBaseUrl((await getCloudflareContext({ async: true })).env) +
+    "/player-search/";
 
   const dateobj = new Date();
   const theYear =

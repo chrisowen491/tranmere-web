@@ -21,7 +21,9 @@ export const metadata: Metadata = {
 };
 
 export default async function ResultsSearchPage() {
-  const base = GetBaseUrl((await getCloudflareContext({async: true})).env) + "/result-search/";
+  const base =
+    GetBaseUrl((await getCloudflareContext({ async: true })).env) +
+    "/result-search/";
 
   const dateobj = new Date();
   const theYear =

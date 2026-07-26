@@ -136,7 +136,7 @@ export default async function Home() {
   const randomplayer = players[Math.floor(Math.random() * players.length)];
 
   const url =
-    GetBaseUrl((await getCloudflareContext({async: true})).env) +
+    GetBaseUrl((await getCloudflareContext({ async: true })).env) +
     `/page/player/${randomplayer.name}`;
 
   const playlist = await getPlaylist("UUNMoCVGAOprD7EIJlffOUPg", 4);

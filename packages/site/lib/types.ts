@@ -321,7 +321,7 @@ export interface Shirt {
   use: ShirtUsageType;
   seasons: string[];
   color: ShirtColor;
-  decade: string; 
+  decade: string;
 }
 
 export enum ShirtColor {
@@ -331,7 +331,7 @@ export enum ShirtColor {
   Yellow = "Yellow",
   Black = "Black",
   White = "White",
-  Purple = "Purple"
+  Purple = "Purple",
 }
 
 export enum ShirtUsageType {
@@ -341,7 +341,7 @@ export enum ShirtUsageType {
   Goalkeeper = "Goalkeeper",
   GoalkeeperAway = "Goalkeeper Away",
   Training = "Training",
-  Other = "Other"
+  Other = "Other",
 }
 
 export interface ShirtImage {

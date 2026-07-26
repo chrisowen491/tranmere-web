@@ -1,5 +1,5 @@
-import { Transfer } from "server/types";
-import { LinkButton } from "./LinkButton";
+import { Transfer } from 'server/types';
+import { LinkButton } from './LinkButton';
 
 export function PlayerTransfersTable(props: {
   title: string;

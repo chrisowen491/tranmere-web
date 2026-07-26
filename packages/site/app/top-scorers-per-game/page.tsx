@@ -14,7 +14,9 @@ export const metadata: Metadata = {
 };
 
 export default async function HatTricks() {
-  const base = GetBaseUrl((await getCloudflareContext({async: true})).env) + "/player-search/";
+  const base =
+    GetBaseUrl((await getCloudflareContext({ async: true })).env) +
+    "/player-search/";
 
   const latestSeasonRequest = await fetch(base + `?season=&sort=Goals&filter=`);
   const playerResults = (await latestSeasonRequest.json()) as {

@@ -2,9 +2,7 @@ import { tool } from 'ai';
 import { z } from 'zod';
 import fetch from 'node-fetch';
 import { STANDARD_HEADERS } from '@tranmere-web/lib/src/apiFunctions';
-import {
-  TranmereWebUtils,
-} from '@tranmere-web/lib/src/tranmere-web-utils';
+import { TranmereWebUtils } from '@tranmere-web/lib/src/tranmere-web-utils';
 
 const utils = new TranmereWebUtils();
 

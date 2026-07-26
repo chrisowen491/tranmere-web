@@ -35,7 +35,6 @@ export const LineupsTool = tool({
       const lineupResponse = await fetch(lineup_url, STANDARD_HEADERS);
       const lineups = (await lineupResponse.json()) as TeamLineups;
 
-
       const team = homeTeam === 'Tranmere Rovers' ? 'homeTeam' : 'awayTeam';
       const apps: Appearance[] = [];
       for await (const element of lineups[team].players.starters) {
@@ -44,7 +43,7 @@ export const LineupsTool = tool({
             s.substitutedOn &&
             s.substitutedOn.playerOffName === element.displayName
         );
-        try{
+        try {
           const app: Appearance = {
             id: uuidv4(),
             Date: day!,

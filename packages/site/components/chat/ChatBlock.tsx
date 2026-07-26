@@ -12,15 +12,15 @@ import { DefaultChatTransport } from "ai";
 export function ChatBlock(props: { placeholder?: string }) {
   const { placeholder } = props;
 
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
   const { messages, sendMessage } = useChat({
-    transport: new DefaultChatTransport({ api: '/api/chat' }),
+    transport: new DefaultChatTransport({ api: "/api/chat" }),
   });
 
-  const handleSubmit = (e: { preventDefault: () => void; }) => {
+  const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
     sendMessage({ text: input });
-    setInput('');
+    setInput("");
   };
 
   const chatEndpointIsLoading = false;
@@ -105,7 +105,7 @@ export function ChatBlock(props: { placeholder?: string }) {
                   className="px-3 py-2 text-xs w-full dark:text-slate-800"
                   value={input}
                   placeholder={placeholder ?? ""}
-                  onChange={e => setInput(e.target.value)}
+                  onChange={(e) => setInput(e.target.value)}
                 />
               </div>
 

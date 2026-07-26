@@ -1,5 +1,5 @@
-import { PlayerSeasonSummary } from "@tranmere-web/lib/src/tranmere-web-types";
-import { LinkButton } from "./LinkButton";
+import { PlayerSeasonSummary } from '@tranmere-web/lib/src/tranmere-web-types';
+import { LinkButton } from './LinkButton';
 
 export function PlayerStatsTable(props: {
   title: string;

@@ -8,9 +8,9 @@ import {
 import moment from 'moment';
 import { STANDARD_HEADERS } from '@tranmere-web/lib/src/apiFunctions';
 
-
 export const RefereeAndFormationTool = tool({
-  description: 'Get referee and formation information for when building a match report',
+  description:
+    'Get referee and formation information for when building a match report',
   inputSchema: z.object({
     date: z.string().describe('The date of the fixture in YYYY-MM-DD format'),
     homeTeam: z.string().describe('The home team of the fixture')
@@ -27,15 +27,13 @@ export const RefereeAndFormationTool = tool({
       const lineupResponse = await fetch(lineup_url, STANDARD_HEADERS);
       const lineups = (await lineupResponse.json()) as TeamLineups;
 
-
       const team = homeTeam === 'Tranmere Rovers' ? 'homeTeam' : 'awayTeam';
-      const referee = lineups.officials.find(ref => ref.type === 'Referee');
-      
+      const referee = lineups.officials.find((ref) => ref.type === 'Referee');
+
       return JSON.stringify({
         referee: referee ? `${referee.firstName} ${referee.lastName}` : '',
-        formation: lineups[team].formation,
+        formation: lineups[team].formation
       });
-      
     } else {
       return 'Could not find the fixture';
     }

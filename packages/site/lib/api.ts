@@ -102,7 +102,6 @@ function extractShirtEntries(fetchResponse: GraphQLShirtResponse) {
   return fetchResponse?.data?.shirtCollection?.items;
 }
 
-
 function extractGalleryImageEntries(fetchResponse: GraphQLAssetsResponse) {
   return fetchResponse?.data?.assetCollection?.items;
 }

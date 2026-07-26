@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from 'next/link';
 
 export function LinkButton(props: { text: string; href: string }) {
   return (
