@@ -20,7 +20,7 @@
 		"@headlessui/react": "^2.2.9",
 		"@modelcontextprotocol/sdk": "^1.29.0",
 		"@types/node": "^26.1.1",
-		"agents": "^0.2.8",
+		"agents": "^0.3.10",
 		"path-to-regexp": "^8.3.0",
 		"zod": "^4.4.3"
 	},
