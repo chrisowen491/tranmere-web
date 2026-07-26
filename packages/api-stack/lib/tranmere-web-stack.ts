@@ -114,6 +114,7 @@ export class TranmereWebStack extends cdk.Stack {
       { tableName: 'TranmereWebMatchReport', grantIndexPermissions: true }
     );
 
+    /*
     const TranmereWebUserPool = cognito.UserPool.fromUserPoolArn(
       this,
       'TranmereWebUserPool',
@@ -126,7 +127,7 @@ export class TranmereWebStack extends cdk.Stack {
         cognitoUserPools: [TranmereWebUserPool]
       }
     );
-
+*/
     /*
     const TranmereWebMatchReport = new ddb.Table(this, 'TranmereWebMatchReport', {
       tableName: "TranmereWebMatchReport",
@@ -294,21 +295,6 @@ export class TranmereWebStack extends cdk.Stack {
         TranmereWebGames,
         TranmereWebAppsTable,
         TranmereWebGoalsTable
-      ]
-    });
-
-    new TranmereWebLambda(this, 'ProfileBuilderFunction', {
-      environment: env_variables,
-      apiResource: playerName,
-      apiMethod: 'GET',
-      lambdaFile: './lambda/profileBuilder.ts',
-      authorizer: cognitoAuthorizer,
-      scopes: 'TranmereWeb/matches.read',
-      readWriteTables: [
-        TranmereWebPlayerLinks,
-        TranmereWebPlayerTable,
-        TranmereWebPlayerSeasonSummaryTable,
-        TranmereWebPlayerTransfers
       ]
     });
 
