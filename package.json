@@ -25,7 +25,7 @@
   "author": "Chris Owen",
   "devDependencies": {
     "husky": "^9.1.4",
-    "typescript": "^7.0.2",
+    "typescript": "6.0.3",
     "wrangler": "^4.38.0"
   },
   "dependencies": {
