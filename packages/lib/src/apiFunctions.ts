@@ -49,7 +49,7 @@ export async function GetSvg(input: string): Promise<string> {
 
 export function GetYear(): number {
   const theDate = new Date();
-  if (theDate.getUTCMonth() > 6) {
+  if (theDate.getUTCMonth() >= 6) {
     return theDate.getFullYear();
   } else {
     return theDate.getFullYear() - 1;

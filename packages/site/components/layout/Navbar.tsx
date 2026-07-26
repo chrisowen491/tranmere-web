@@ -14,10 +14,11 @@ import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { useUser } from "@auth0/nextjs-auth0";
 import Link from "next/link";
 import Image from "next/image";
+import { GetYear } from "@tranmere-web/lib/src/apiFunctions";
 
 const navigation = [
   { name: "Results", href: "/results", current: false },
-  { name: "Seasons", href: "/season/2025", current: false },
+  { name: "Seasons", href: "/season/" + GetYear(), current: false },
   { name: "Players", href: "/playersearch", current: false },
   { name: "Shirts", href: "/shirts", current: false },
   { name: "Blogs & Articles", href: "/blog", current: false },
@@ -27,7 +28,7 @@ const navigation = [
 const mobilenavigation = [
   { name: "Home", href: "/", current: false },
   { name: "Results", href: "/results", current: false },
-  { name: "Seasons", href: "/season/2025", current: false },
+  { name: "Seasons", href: "/season/" + GetYear(), current: false },
   { name: "Players", href: "/playersearch", current: false },
   { name: "Transfers", href: "/transfer-central", current: false },
   { name: "Blogs & Articles", href: "/blog", current: false },

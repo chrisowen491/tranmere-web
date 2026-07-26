@@ -5,6 +5,7 @@ import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { Metadata } from "next";
 import { GetBaseUrl } from "@/lib/apiFunctions";
 import { LinkButton } from "@/components/forms/LinkButton";
+import { GetYear } from "@tranmere-web/lib/src/apiFunctions";
 
 export const revalidate = 7200;
 
@@ -18,11 +19,7 @@ export default async function PlayerSearchPage() {
     GetBaseUrl((await getCloudflareContext({ async: true })).env) +
     "/player-search/";
 
-  const dateobj = new Date();
-  const theYear =
-    dateobj.getUTCMonth() > 6
-      ? dateobj.getFullYear()
-      : dateobj.getFullYear() - 1;
+  const theYear = GetYear();
 
   const latestSeasonRequest = await fetch(
     base + `?season=${theYear}&sort=&filter=`,

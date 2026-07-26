@@ -4,7 +4,7 @@ import { Construct } from 'constructs';
 import * as acm from 'aws-cdk-lib/aws-certificatemanager';
 import * as ddb from 'aws-cdk-lib/aws-dynamodb';
 import * as iam from 'aws-cdk-lib/aws-iam';
-import * as cognito from 'aws-cdk-lib/aws-cognito';
+//import * as cognito from 'aws-cdk-lib/aws-cognito';
 import { TranmereWebLambda } from './tranmere-web-lambda';
 import { TranmereWebGraphQL } from './tranmere-web-graphql';
 
@@ -223,8 +223,8 @@ export class TranmereWebStack extends cdk.Stack {
 
     const report = api.root.addResource('report');
 
-    const profile = api.root.addResource('profile');
-    const playerName = profile.addResource('{playerName}');
+    //const profile = api.root.addResource('profile');
+    //const playerName = profile.addResource('{playerName}');
     const page = api.root.addResource('page');
     const pageName = page.addResource('{pageName}');
     const classifier = pageName.addResource('{classifier}');

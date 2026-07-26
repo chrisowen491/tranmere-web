@@ -4,6 +4,7 @@ import {
   GetAllTeams,
   GetAllCupCompetitions,
   GetAllTranmereManagers,
+  GetYear,
 } from "@tranmere-web/lib/src/apiFunctions";
 import { GetBaseUrl } from "@/lib/apiFunctions";
 import {
@@ -25,12 +26,7 @@ export default async function ResultsSearchPage() {
     GetBaseUrl((await getCloudflareContext({ async: true })).env) +
     "/result-search/";
 
-  const dateobj = new Date();
-  const theYear =
-    dateobj.getUTCMonth() > 6
-      ? dateobj.getFullYear()
-      : dateobj.getFullYear() - 1;
-
+  const theYear = GetYear();
   const competitions = await GetAllCupCompetitions();
   const managers = await GetAllTranmereManagers();
   const teams = await GetAllTeams();
