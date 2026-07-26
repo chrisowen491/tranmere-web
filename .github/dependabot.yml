@@ -9,14 +9,19 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "weekly"
-    versioning-strategy: increase  
+    versioning-strategy: increase
     groups:
-        node-deps:
-          patterns:
-            - "*"
-    ignore:
-      - dependency-name: "cookie"  
-      - dependency-name: "tailwindcss"        
+      node-minor-patch:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+      node-major:
+        patterns:
+          - "*"
+        update-types:
+          - "major"
 
   - package-ecosystem: "github-actions"
     directory: "/"
@@ -27,5 +32,5 @@ updates:
       - dependency-name: "cloudflare/wrangler-action"
     groups:
       github-actions:
-          patterns:
-            - "*"      
+        patterns:
+          - "*"
