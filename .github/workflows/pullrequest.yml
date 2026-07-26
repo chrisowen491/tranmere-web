@@ -13,8 +13,8 @@ jobs:
       contents: read
       deployments: write 
     steps:
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-      - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: '24'      
       - name: Install
@@ -39,7 +39,7 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_AUTH_KEY }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
-      - uses: chrnorm/deployment-action@51e93982518dc06e500fe65559032a439663aaac
+      - uses: chrnorm/deployment-action@500aa6a23c81ffa1acf71072aee3cfa2cc2e556a
         name: Create GitHub deployment
         id: deployment
         with:
@@ -68,7 +68,7 @@ jobs:
 
       - name: Update deployment status (success)
         if: success()
-        uses: chrnorm/deployment-status@9a72af4586197112e0491ea843682b5dc280d806
+        uses: chrnorm/deployment-status@6df8d036fd2fee9eb82936733953da1f8382b41e
         with:
           token: '${{ github.token }}'
           environment-url: https://www.tranmere-web.com
@@ -77,7 +77,7 @@ jobs:
   
       - name: Update deployment status (failure)
         if: failure()
-        uses: chrnorm/deployment-status@9a72af4586197112e0491ea843682b5dc280d806
+        uses: chrnorm/deployment-status@6df8d036fd2fee9eb82936733953da1f8382b41e
         with:
           token: '${{ github.token }}'
           environment-url: https://www.tranmere-web.com
