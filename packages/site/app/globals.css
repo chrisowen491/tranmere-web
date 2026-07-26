@@ -2,25 +2,124 @@
 @tailwind components;
 @tailwind utilities;
 
-#navsearch {
-  position: relative;
+:root {
+  --paper: #f4f0e8;
+  --ink: #071a2b;
+  --blue: #1557ff;
 }
 
-#navsearch .ais-Hits {
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--paper);
+}
+
+::selection {
+  background: #1557ff;
+  color: white;
+}
+
+.font-display {
+  font-family: var(--font-lexend), sans-serif;
+}
+
+.archive-grid {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.055) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: linear-gradient(to right, black, transparent 78%);
+}
+
+.section-kicker {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #1557ff;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.section-kicker::before {
+  content: "";
+  height: 1px;
+  width: 2.5rem;
+  background: currentColor;
+}
+
+.navsearch .ais-SearchBox-form {
+  position: relative;
+  background: transparent !important;
+}
+
+.navsearch .ais-SearchBox-input {
+  height: 2.5rem;
+  width: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  border-radius: 0 !important;
+  background: rgba(255, 255, 255, 0.04) !important;
+  padding: 0 2.4rem 0 2.5rem;
+  color: white !important;
+  font-size: 0.8rem;
+  box-shadow: none !important;
+}
+
+.navsearch .ais-SearchBox-input::placeholder {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.navsearch .ais-SearchBox-input:focus {
+  border-color: #93c5fd;
+  outline: 1px solid #93c5fd;
+  outline-offset: 0;
+  box-shadow: none;
+}
+
+.navsearch .ais-SearchBox-submit,
+.navsearch .ais-SearchBox-reset {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.navsearch .ais-Hits {
   position: absolute;
-  top: 50;
+  top: calc(100% + 0.5rem);
   left: 0;
   width: 100%;
   cursor: pointer;
   z-index: 100;
+  border: 1px solid rgba(7, 26, 43, 0.15);
+  background: #f4f0e8;
+  color: #071a2b;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.24);
 }
 
-#navsearch .ais-SearchBox-input {
-  padding-left: 2.5rem;
+.navsearch .ais-Hits-list {
+  margin: 0;
 }
 
-#navsearch .ais-Hits-item:hover {
-  background-color: #064cdb;
+.navsearch .ais-Hits-item {
+  border: 0;
+  border-bottom: 1px solid rgba(7, 26, 43, 0.12);
+  padding: 0;
+  font-size: 0.85rem;
+  font-weight: 650;
+}
+
+.navsearch .ais-Hits-item:last-child {
+  border-bottom: 0;
+}
+
+.navsearch .ais-Hits-item a {
+  padding: 0.8rem 1rem;
+}
+
+.navsearch .ais-Hits-item:hover,
+.navsearch .ais-Hits-item:focus-within {
+  background-color: #1557ff;
   color: white;
 }
 

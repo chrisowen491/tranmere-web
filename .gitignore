@@ -26,6 +26,7 @@ csv/
 /packaged.yaml
 /data/apps-master/AllResults.xlsx
 /packages/clean-up/dist
+/packages/site/dist
 /tranmere-web-api/sam/search/package-lock.json
 
 set_env.sh

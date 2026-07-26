@@ -25,6 +25,11 @@
 - Test the API: `yarn workspace @tranmere-web/api-stack test`
 - Synthesize infrastructure: `yarn workspace @tranmere-web/api-stack synth`
 
+
+## Local Development
+
+- A copy of the site can run locally by calling `yarn site` thsi runs the local website on `http://localhost:3001` aginst the productyion API.
+
 ## Project Structure
 
 - See `docs/ARCHITECTURE.md` for system boundaries, data ownership, request flows, and deployment architecture.

@@ -1,225 +1,72 @@
+"use client";
+
 import {
   Disclosure,
   DisclosureButton,
   DisclosurePanel,
 } from "@headlessui/react";
-import {
-  Bars3Icon,
-  XMarkIcon,
-  ChatBubbleBottomCenterIcon,
-} from "@heroicons/react/24/outline";
-import { ThemeSelector } from "@/components/layout/ThemeSelector";
-import SearchBar from "@/components/search/SearchBar";
-import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
-import { useUser } from "@auth0/nextjs-auth0";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import Image from "next/image";
 import { GetYear } from "@tranmere-web/lib/src/apiFunctions";
+import SearchBar from "@/components/search/SearchBar";
 
 const navigation = [
-  { name: "Results", href: "/results", current: false },
-  { name: "Seasons", href: "/season/" + GetYear(), current: false },
-  { name: "Players", href: "/playersearch", current: false },
-  { name: "Shirts", href: "/shirts", current: false },
-  { name: "Blogs & Articles", href: "/blog", current: false },
-  { name: "AI", href: "/ai", current: false },
-];
-
-const mobilenavigation = [
-  { name: "Home", href: "/", current: false },
-  { name: "Results", href: "/results", current: false },
-  { name: "Seasons", href: "/season/" + GetYear(), current: false },
-  { name: "Players", href: "/playersearch", current: false },
-  { name: "Transfers", href: "/transfer-central", current: false },
-  { name: "Blogs & Articles", href: "/blog", current: false },
-  { name: "Shirts", href: "/shirts", current: false },
-  { name: "AI", href: "/ai", current: false },
-  { name: "Avatar Builder", href: "/player-builder", current: false },
-  { name: "Contact Us", href: "/contact", current: false },
-  { name: "About the Site", href: "/page/blog/about", current: false },
+  { name: "Results", href: "/results" },
+  { name: "Seasons", href: `/season/${GetYear()}` },
+  { name: "Players", href: "/playersearch" },
+  { name: "Fantasy XI", href: "/fantasy-team" },
+  { name: "Shirts", href: "/shirts" },
+  { name: "Stories", href: "/blog" },
 ];
 
 export function Navbar() {
-  const { user } = useUser();
-
   return (
-    <>
-      <Disclosure as="nav" className="bg-blue-900 dark:bg-slate-950">
-        <div className="mx-auto max-w-7xl px-2 sm:px-4 lg:px-8">
-          <div className="relative flex h-16 items-center justify-between">
-            <div className="flex items-center px-2 lg:px-0">
-              <div className="flex-shrink-0">
-                <Link href="/">
-                  <Image
-                    src="/assets/images/logo_white_transparent.png"
-                    alt="Tranmere-Web Logo"
-                    width={450}
-                    height={260}
-                    className="hidden h-12 w-auto fill-slate-700 lg:block dark:fill-sky-100"
-                  />
-                </Link>
-              </div>
-              <div className="hidden lg:ml-6 lg:block">
-                <div className="flex space-x-4">
-                  {navigation.map((item) => (
-                    <Link
-                      key={item.name}
-                      href={item.href}
-                      className="rounded-md px-3 py-2 text-sm font-medium text-white  hover:bg-rose-950 hover:text-white"
-                    >
-                      {item.name}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            </div>
-            <div className="flex flex-1 justify-center lg:ml-6 lg:justify-end">
-              <SearchBar></SearchBar>
-            </div>
-            <div className="flex lg:hidden">
-              {/* Mobile menu button */}
-              <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-gray-50 hover:bg-rose-950 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
-                <span className="absolute -inset-0.5" />
-                <span className="sr-only">Open main menu</span>
-                <Bars3Icon
-                  aria-hidden="true"
-                  className="block h-6 w-6 group-data-[open]:hidden"
-                />
-                <XMarkIcon
-                  aria-hidden="true"
-                  className="hidden h-6 w-6 group-data-[open]:block"
-                />
-              </DisclosureButton>
-            </div>
-            <div className="hidden lg:ml-4 lg:block">
-              <div className="flex items-center">
-                <ThemeSelector className="relative z-10 px-2" />
-
-                {user ? (
-                  <Menu as="div" className="relative ml-4 flex-shrink-0">
-                    <div>
-                      <MenuButton className="relative flex rounded-full text-sm text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-                        <span className="absolute -inset-1.5" />
-                        <span className="sr-only">Open user menu</span>
-                        <img
-                          src={user.picture!}
-                          alt={user.name!}
-                          className=" rounded-full h-6 w-6 mx-1 fill-slate-50 group-hover:fill-slate-500 dark:group-hover:fill-slate-300"
-                        />
-                      </MenuButton>
-                    </div>
-                    <MenuItems
-                      transition
-                      className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
-                    >
-                      <MenuItem>
-                        <Link
-                          href="/auth/logout"
-                          aria-label="logout"
-                          prefetch={false}
-                          className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
-                        >
-                          Sign out
-                        </Link>
-                      </MenuItem>
-                    </MenuItems>
-                  </Menu>
-                ) : (
-                  <Link href="/auth/login" aria-label="login" prefetch={false}>
-                    <ChatBubbleBottomCenterIcon
-                      aria-hidden="true"
-                      className="h-6 w-6 text-white"
-                    />
-                  </Link>
-                )}
-              </div>
-            </div>
-          </div>
+    <Disclosure
+      as="nav"
+      className="relative z-50 border-b border-white/15 bg-[#071a2b] text-white"
+    >
+      <div className="mx-auto flex h-[74px] max-w-7xl items-center px-6 sm:px-10 lg:px-12">
+        <Link href="/" className="mr-auto flex items-center gap-3">
+          <span className="grid h-9 w-9 place-items-center border border-white/30 text-xs font-black tracking-tight">
+            TW
+          </span>
+          <span className="font-display text-xl font-semibold tracking-[-0.03em]">
+            Tranmere-Web
+          </span>
+        </Link>
+        <div className="hidden items-center gap-1 lg:flex">
+          {navigation.map((item) => (
+            <Link
+              key={item.name}
+              href={item.href}
+              className="whitespace-nowrap px-3 py-3 text-sm font-semibold text-white/70 transition hover:text-white"
+            >
+              {item.name}
+            </Link>
+          ))}
+          <SearchBar className="ml-3 w-56" />
         </div>
-
-        <DisclosurePanel className="lg:hidden">
-          <div className="space-y-1 px-2 pb-3 pt-2">
-            {mobilenavigation.map((item, idx) => (
-              <DisclosureButton
-                as="a"
-                key={idx}
-                href={item.href}
-                className="block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white"
-              >
-                {item.name}
-              </DisclosureButton>
-            ))}
-          </div>
-          {user ? (
-            <div className="border-t border-gray-700 pb-3 pt-4">
-              <div className="flex items-center px-5">
-                <div className="flex-shrink-0">
-                  <img
-                    src={user.picture!}
-                    alt={user.name!}
-                    className="h-10 w-10 rounded-full"
-                  />
-                </div>
-                <div className="ml-3">
-                  <div className="text-base font-medium text-white">
-                    {user.name}
-                  </div>
-                  <div className="text-sm font-medium text-gray-400">
-                    {user.email}
-                  </div>
-                </div>
-              </div>
-              <div className="flex items-center px-5">
-                <div className="flex-shrink-0">
-                  <DisclosureButton
-                    as="a"
-                    aria-label="logout"
-                    href="/auth/logout"
-                    className="block rounded-md px-3 py-2 text-base font-medium text-gray-50 hover:bg-gray-700 hover:text-white"
-                  >
-                    Sign out
-                  </DisclosureButton>
-                </div>
-                <div className="ml-3">
-                  <div className="flex items-center px-5">
-                    <div className="flex-shrink-0 text-gray-50">
-                      Change Theme:
-                    </div>
-                    <div className="flex-shrink-0">
-                      <ThemeSelector className="relative z-10 px-2" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ) : (
-            <div className="border-t border-gray-700 pb-3 pt-4">
-              <div className="flex items-center px-5">
-                <div className="flex-shrink-0">
-                  <DisclosureButton
-                    as="a"
-                    href="/auth/login"
-                    aria-label="login"
-                    className="block rounded-md px-3 py-2 text-base font-medium text-gray-50 hover:bg-gray-700 hover:text-white"
-                  >
-                    Sign In
-                  </DisclosureButton>
-                </div>
-                <div className="ml-3">
-                  <div className="flex items-center px-5">
-                    <div className="flex-shrink-0 text-gray-50">
-                      Change Theme:
-                    </div>
-                    <div className="flex-shrink-0">
-                      <ThemeSelector className="relative z-10 px-2" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-        </DisclosurePanel>
-      </Disclosure>
-    </>
+        <DisclosureButton className="group ml-4 grid h-10 w-10 place-items-center border border-white/20 lg:hidden">
+          <span className="sr-only">Open main menu</span>
+          <Bars3Icon className="h-5 w-5 group-data-[open]:hidden" />
+          <XMarkIcon className="hidden h-5 w-5 group-data-[open]:block" />
+        </DisclosureButton>
+      </div>
+      <DisclosurePanel className="border-t border-white/15 px-6 py-5 lg:hidden">
+        <div className="grid gap-1">
+          {navigation.map((item) => (
+            <DisclosureButton
+              as={Link}
+              key={item.name}
+              href={item.href}
+              className="border-b border-white/10 py-3 text-base font-semibold text-white/80"
+            >
+              {item.name}
+            </DisclosureButton>
+          ))}
+          <SearchBar className="mt-4" />
+        </div>
+      </DisclosurePanel>
+    </Disclosure>
   );
 }

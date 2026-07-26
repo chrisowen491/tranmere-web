@@ -188,19 +188,33 @@ export async function GetAllTeams(): Promise<Team[]> {
 }
 
 export async function GetAllPlayers(): Promise<Player[]> {
-  const query: string = encodeURIComponent(
-    '{listTranmereWebPlayerTable(limit:500){items{name picLink}}}'
-  );
-  const result = await fetch(
-    `${APP_SYNC_URL}/graphql?query=${query}`,
-    APP_SYNC_OPTIONS
-  );
+  const results: Player[] = [];
+  let nextToken: string | null = null;
 
-  const list = (await result.json()) as {
-    data: { listTranmereWebPlayerTable: { items: Player[] } };
-  };
+  do {
+    const paginationArgument = nextToken
+      ? `,nextToken:${JSON.stringify(nextToken)}`
+      : '';
+    const query: string = encodeURIComponent(
+      `{listTranmereWebPlayerTable(limit:500${paginationArgument}){items{name picLink} nextToken}}`
+    );
+    const result = await fetch(
+      `${APP_SYNC_URL}/graphql?query=${query}`,
+      APP_SYNC_OPTIONS
+    );
 
-  const results: Player[] = list.data.listTranmereWebPlayerTable.items;
+    const list = (await result.json()) as {
+      data: {
+        listTranmereWebPlayerTable: {
+          items: Player[];
+          nextToken: string | null;
+        };
+      };
+    };
+
+    results.push(...list.data.listTranmereWebPlayerTable.items);
+    nextToken = list.data.listTranmereWebPlayerTable.nextToken;
+  } while (nextToken);
 
   results.sort(function (a: Team, b: Team) {
     if (a.name < b.name) return -1;

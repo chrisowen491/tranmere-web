@@ -9,7 +9,10 @@ import {
   Team,
 } from "@tranmere-web/lib/src/tranmere-web-types";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
-import { XMarkIcon } from "@heroicons/react/24/outline";
+import {
+  AdjustmentsHorizontalIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
 
 import { useState } from "react";
 import { ResultTable } from "@/components/apps/partials/ResultTable";
@@ -80,9 +83,9 @@ export function ResultsSearch(props: {
   }
 
   return (
-    <div className="mx-auto w-full px-2">
-      <Dialog open={open} onClose={setOpen} className="relative z-10">
-        <div className="fixed inset-0" />
+    <div className="mx-auto w-full px-6 pt-10 sm:px-10 lg:px-12">
+      <Dialog open={open} onClose={setOpen} className="relative z-[60]">
+        <div className="fixed inset-0 bg-[#071a2b]/45 backdrop-blur-sm" />
 
         <div className="fixed inset-0 overflow-hidden">
           <div className="absolute inset-0 overflow-hidden">
@@ -91,17 +94,17 @@ export function ResultsSearch(props: {
                 transition
                 className="pointer-events-auto w-screen max-w-md transform transition duration-500 ease-in-out data-[closed]:translate-x-full sm:duration-700"
               >
-                <div className="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
-                  <div className="bg-indigo-700 px-4 py-6 sm:px-6">
+                <div className="flex h-full flex-col overflow-y-scroll bg-[#fffdf8] shadow-2xl">
+                  <div className="bg-[#071a2b] px-5 py-6 sm:px-6">
                     <div className="flex items-center justify-between">
-                      <DialogTitle className="text-base font-semibold leading-6 text-white">
-                        Filter Controls
+                      <DialogTitle className="font-display text-2xl font-semibold text-white">
+                        Filter matches
                       </DialogTitle>
                       <div className="ml-3 flex h-7 items-center">
                         <button
                           type="button"
                           onClick={() => setOpen(false)}
-                          className="relative rounded-md bg-indigo-700 text-indigo-200 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
+                          className="relative text-white/60 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
                         >
                           <span className="absolute -inset-2.5" />
                           <span className="sr-only">Close panel</span>
@@ -110,20 +113,20 @@ export function ResultsSearch(props: {
                       </div>
                     </div>
                     <div className="mt-1">
-                      <p className="text-sm text-indigo-300">
-                        Filter results using the controls below.
+                      <p className="text-sm text-white/60">
+                        Narrow the archive by season, competition or opponent.
                       </p>
                     </div>
                   </div>
-                  <div className="relative flex-1 px-4 sm:px-6">
+                  <div className="relative flex-1 px-5 sm:px-6">
                     <form
                       onSubmit={(e) => {
                         e.preventDefault();
                         onSubmit(new FormData(e.currentTarget));
                       }}
                     >
-                      <div className="p-4 ">
-                        <div className="border-b border-gray-900/10 pb-12">
+                      <div className="py-4">
+                        <div className="border-b border-[#071a2b]/10 pb-10">
                           <div className="mt-10">
                             <FilterBox
                               title="Season"
@@ -209,7 +212,7 @@ export function ResultsSearch(props: {
                             ></FilterBox>
                           </div>
                         </div>
-                        <div className="mt-6 flex items-center justify-end gap-x-6">
+                        <div className="mt-6 flex items-center justify-end">
                           <SubmitButton text={"Search"}></SubmitButton>
                         </div>
                       </div>
@@ -222,32 +225,41 @@ export function ResultsSearch(props: {
         </div>
       </Dialog>
 
-      <button
-        type="button"
-        onClick={showFilters}
-        className="
-        bg-green-500 
-        dark:bg-blue-600
-        px-3 py-2 
-        text-sm 
-        font-semibold 
-        text-white 
-        shadow-sm 
-        hover:bg-green-600 
-        dark:hover:bg-sky-400 
-        focus-visible:outline 
-        focus-visible:outline-2 
-        focus-visible:outline-offset-2 
-        focus-visible:outline-indigo-600
-        w-full
-        "
-      >
-        Filter Controls
-      </button>
+      <div className="flex flex-wrap items-end justify-between gap-4 border-t border-[#071a2b]/15 pt-6">
+        <div>
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-700">
+            Results archive
+          </p>
+          <h2 className="mt-2 font-display text-3xl font-semibold">
+            {season
+              ? `${season}/${String(Number(season) + 1).slice(-2)}`
+              : "All seasons"}
+          </h2>
+          <p className="mt-1 text-sm text-[#071a2b]/55">
+            {results.length === 0
+              ? "No recorded matches in this selection"
+              : `${results.length.toLocaleString()} matches found`}
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={showFilters}
+          className="inline-flex items-center gap-2 bg-blue-700 px-5 py-3 text-sm font-bold text-white transition hover:bg-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
+        >
+          <AdjustmentsHorizontalIcon className="h-5 w-5" />
+          Filter matches
+        </button>
+      </div>
 
       {loading ? (
-        <div id="loading">
-          <div className="spinner-grow text-primary" role="status">
+        <div
+          id="loading"
+          className="mt-6 border border-[#071a2b]/15 bg-[#fffdf8] px-5 py-8 text-center"
+        >
+          <div role="status">
+            <span className="font-mono text-xs uppercase tracking-[0.16em] text-blue-700">
+              Updating results…
+            </span>
             <span className="sr-only">Loading...</span>
           </div>
         </div>

@@ -26,6 +26,21 @@ export const metadata: Metadata = {
     template: "%s | Tranmere-Web.com",
     default: "Tranmere-Web",
   },
+  description:
+    "The independent archive of Tranmere Rovers results, players, shirts, stories and statistics.",
+  metadataBase: new URL("https://www.tranmere-web.com"),
+  openGraph: {
+    title: "Tranmere-Web",
+    description: "A century of Rovers, one living archive.",
+    type: "website",
+    images: [{ url: "/og.png", width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Tranmere-Web",
+    description: "A century of Rovers, one living archive.",
+    images: ["/og.png"],
+  },
 };
 
 export default function RootLayout({
@@ -39,7 +54,7 @@ export default function RootLayout({
       className={clsx("h-full antialiased", inter.variable, lexend.variable)}
       suppressHydrationWarning
     >
-      <body className="flex min-h-full bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-200">
+      <body className="flex min-h-full bg-[#f4f0e8] text-[#071a2b]">
         <Providers>
           <Layout>{children}</Layout>
         </Providers>

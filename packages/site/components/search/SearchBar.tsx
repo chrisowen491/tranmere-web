@@ -44,30 +44,24 @@ function EmptyQueryBoundary(options: QueryBoundary) {
 
 function Hit({ hit }: HitProps) {
   return (
-    <div className="" onClick={() => (window.location.href = hit.link)}>
-      <div className="">
-        <div className="">
-          <div className=" dark:text-gray-600 dark:hover:text-gray-50 hover:text-gray-50">
-            {hit.name}
-          </div>
-        </div>
-      </div>
-    </div>
+    <a href={hit.link} className="block">
+      {hit.name}
+    </a>
   );
 }
 
-export default function SearchBar() {
+export default function SearchBar({ className = "" }: { className?: string }) {
   return (
-    <div id="navsearch" className="w-full max-w-lg lg:max-w-xs">
+    <div className={`navsearch relative w-full ${className}`}>
       <InstantSearch
         searchClient={client}
         indexName="TranmereWeb"
         future={{ preserveSharedStateOnUnmount: true }}
       >
         <div className="algolia-autocomplete relative">
-          <SearchBox searchAsYouType={true} />
+          <SearchBox searchAsYouType={true} placeholder="Search archive" />
           <EmptyQueryBoundary fallback={null}>
-            <Hits hitComponent={Hit} className="dark:bg-slate-950" />
+            <Hits hitComponent={Hit} />
           </EmptyQueryBoundary>
         </div>
       </InstantSearch>

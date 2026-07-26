@@ -1,11 +1,9 @@
 import { PlayerSearch } from "@/components/apps/PlayerSearch";
-import { Title } from "@/components/fragments/Title";
 import { PlayerSeasonSummary } from "@tranmere-web/lib/src/tranmere-web-types";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { Metadata } from "next";
 import { GetBaseUrl } from "@/lib/apiFunctions";
-import { LinkButton } from "@/components/forms/LinkButton";
-import { GetYear } from "@tranmere-web/lib/src/apiFunctions";
+import Link from "next/link";
 
 export const revalidate = 7200;
 
@@ -19,53 +17,54 @@ export default async function PlayerSearchPage() {
     GetBaseUrl((await getCloudflareContext({ async: true })).env) +
     "/player-search/";
 
-  const theYear = GetYear();
-
-  const latestSeasonRequest = await fetch(
-    base + `?season=${theYear}&sort=&filter=`,
-  );
+  const latestSeasonRequest = await fetch(base + `?sort=&filter=`);
   const playerResults = (await latestSeasonRequest.json()) as {
     players: PlayerSeasonSummary[];
   };
 
   return (
-    <>
-      <Title title="Players Search" subTitle="Player Records" summary={""}>
-        <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-50">
-          Search for players by season or position - or view{" "}
-          <LinkButton
-            href="/player-records/most-appearances"
-            text="appearance records"
-          />{" "}
-          or{" "}
-          <LinkButton href="/player-records/top-scorers" text="top scorers" />,
-          You can also see players with just{" "}
-          <LinkButton
-            href="/player-records/only-one-appearance"
-            text="one appearance"
-          />{" "}
-          and browse{" "}
-          <LinkButton
-            href="/top-scorers-by-season"
-            text="top scorers by season"
-          />{" "}
-          or players with <LinkButton href="/hat-tricks" text="hat tricks" />{" "}
-          and{" "}
-          <LinkButton
-            href="/top-scorers-per-game"
-            text="Top goals per game"
-          ></LinkButton>
-          .
-        </p>
-        <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-50">
-          Use the filters to switch season or focus on a groups of players.
-          Player records only go far back as 1977, though I am slowly filling in
-          other years.
-        </p>
-      </Title>
-      <div className="  mx-auto flex w-full max-w-7xl">
-        <PlayerSearch default={playerResults.players} season="2023" />
+    <main className="pb-24 text-[#071a2b]">
+      <header className="border-b border-[#071a2b]/10">
+        <div className="mx-auto max-w-7xl px-6 py-14 sm:px-10 lg:px-12 lg:py-20">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-700">
+            Player archive
+          </p>
+          <div className="mt-3 grid gap-8 lg:grid-cols-[minmax(0,1fr)_420px] lg:items-end">
+            <div>
+              <h1 className="max-w-3xl font-display text-5xl font-semibold tracking-[-0.04em] sm:text-6xl">
+                Every player. Every season.
+              </h1>
+              <p className="mt-5 max-w-2xl text-lg leading-8 text-[#071a2b]/65">
+                Explore Tranmere careers from 1977 onwards. Filter the archive
+                by season or position, then open any player for their complete
+                Rovers record.
+              </p>
+            </div>
+            <nav
+              aria-label="Player record highlights"
+              className="grid grid-cols-2 gap-px border border-[#071a2b]/15 bg-[#071a2b]/15"
+            >
+              {[
+                ["Most appearances", "/player-records/most-appearances"],
+                ["Top scorers", "/player-records/top-scorers"],
+                ["Hat-tricks", "/hat-tricks"],
+                ["Season leaders", "/top-scorers-by-season"],
+              ].map(([label, href]) => (
+                <Link
+                  key={href}
+                  href={href}
+                  className="bg-[#fffdf8] px-4 py-4 text-sm font-bold transition hover:bg-[#e8e2d6] hover:text-blue-700"
+                >
+                  {label}
+                </Link>
+              ))}
+            </nav>
+          </div>
+        </div>
+      </header>
+      <div className="mx-auto w-full max-w-7xl">
+        <PlayerSearch default={playerResults.players} />
       </div>
-    </>
+    </main>
   );
 }

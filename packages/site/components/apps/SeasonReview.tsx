@@ -219,14 +219,22 @@ export default function SeasonReview(props: {
           <div className="mx-auto grid max-w-2xl grid-cols-1 grid-rows-1 items-start gap-x-8 gap-y-8 lg:mx-0 lg:max-w-none lg:grid-cols-3">
             <div className="lg:col-start-3 lg:row-end-1">
               <h2 className="sr-only">Summary</h2>
-              <div className="rounded-lg bg-gray-50 shadow-sm ring-1 ring-gray-900/5 dark:bg-gray-900 mb-2">
+              <aside className="mb-2 border border-[#071a2b]/15 bg-[#fffdf8] p-5">
+                <div className="mb-5 border-b border-[#071a2b]/15 pb-5">
+                  <p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-700">
+                    Season archive
+                  </p>
+                  <h2 className="mt-2 font-display text-2xl font-semibold">
+                    Squad &amp; staff
+                  </h2>
+                </div>
                 {managers && managers.length > 0 ? (
                   <>
-                    <h2 className="mt-2 text-2xl font-bold tracking-tight sm:text-2xl px-2">
+                    <h3 className="text-xs font-bold uppercase tracking-[0.14em] text-[#071a2b]/65">
                       Managers
-                    </h2>
-                    <table className="min-w-full divide-y divide-gray-300  text-xs">
-                      <thead className="thead-dark  text-xs font-semibold">
+                    </h3>
+                    <table className="mt-2 min-w-full text-xs">
+                      <thead className="border-b border-[#071a2b]/15 text-xs font-semibold">
                         <tr>
                           <th scope="col" className="px-3 py-3.5 text-left">
                             Name
@@ -252,12 +260,12 @@ export default function SeasonReview(props: {
                                         200,
                                         200,
                                       )}
-                                      className="h-11 w-11 rounded-full"
+                                      className="h-11 w-11 object-cover"
                                     />
                                   ) : (
                                     <PhotoIcon
                                       aria-hidden="true"
-                                      className="h-11 w-11 text-indigo-600  rounded-full dark:text-indigo-50"
+                                      className="h-11 w-11 text-blue-700"
                                     />
                                   )}
                                 </div>
@@ -281,9 +289,9 @@ export default function SeasonReview(props: {
                   ""
                 )}
                 {props.shirts && props.shirts.length > 0 ? (
-                  <h2 className="mt-2 text-2xl font-bold tracking-tight sm:text-2xl px-2">
+                  <h3 className="mt-6 border-t border-[#071a2b]/15 pt-5 text-xs font-bold uppercase tracking-[0.14em] text-[#071a2b]/65">
                     Shirts
-                  </h2>
+                  </h3>
                 ) : (
                   ""
                 )}
@@ -302,11 +310,11 @@ export default function SeasonReview(props: {
                 </ul>
                 {topScorers && topScorers.length > 0 ? (
                   <>
-                    <h2 className="mt-2 text-2xl font-bold tracking-tight sm:text-2xl px-2">
+                    <h3 className="mt-6 border-t border-[#071a2b]/15 pt-5 text-xs font-bold uppercase tracking-[0.14em] text-[#071a2b]/65">
                       Top Scorer
-                    </h2>
-                    <table className="min-w-full divide-y divide-gray-300">
-                      <thead className="thead-dark  text-xs font-semibold">
+                    </h3>
+                    <table className="mt-2 min-w-full">
+                      <thead className="border-b border-[#071a2b]/15 text-xs font-semibold">
                         <tr>
                           <th scope="col" className="px-3 py-3.5 text-left">
                             Name
@@ -333,7 +341,7 @@ export default function SeasonReview(props: {
                                     src={replaceSeasonsKit(
                                       topScorers[0].bio.picLink,
                                     )}
-                                    className="h-11 w-11 rounded-full"
+                                    className="h-11 w-11 bg-[#e8e2d6] object-cover"
                                   />
                                 ) : (
                                   ""
@@ -360,11 +368,11 @@ export default function SeasonReview(props: {
                 ) : (
                   ""
                 )}
-                <h2 className="mt-2 text-2xl font-bold tracking-tight sm:text-2xl px-2">
+                <h3 className="mt-6 border-t border-[#071a2b]/15 pt-5 text-xs font-bold uppercase tracking-[0.14em] text-[#071a2b]/65">
                   Player Data
-                </h2>
-                <table className="min-w-full divide-y divide-gray-300">
-                  <thead className="thead-dark  text-xs font-semibold">
+                </h3>
+                <table className="mt-2 min-w-full">
+                  <thead className="border-b border-[#071a2b]/15 text-xs font-semibold">
                     <tr>
                       <th scope="col" className="px-3 py-3.5 text-left">
                         Name
@@ -377,7 +385,7 @@ export default function SeasonReview(props: {
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-200  text-xs">
+                  <tbody className="divide-y divide-[#071a2b]/10 text-xs">
                     {props.players.map((player, idx) => (
                       <tr key={idx}>
                         <td className="whitespace-nowrap px-1 md:px-3 py-4">
@@ -393,12 +401,12 @@ export default function SeasonReview(props: {
                                     player.bio.picLink,
                                     props.season,
                                   )}
-                                  className="h-11 w-11 rounded-full"
+                                  className="h-11 w-11 bg-[#e8e2d6] object-cover"
                                 />
                               ) : (
                                 <UserIcon
                                   aria-hidden="true"
-                                  className="h-11 w-11 text-indigo-600  rounded-full dark:text-indigo-50"
+                                  className="h-11 w-11 text-blue-700"
                                 />
                               )}
                             </div>
@@ -420,10 +428,10 @@ export default function SeasonReview(props: {
                     ))}
                   </tbody>
                 </table>
-              </div>
-              <p className="mt-6">
+              </aside>
+              <p className="mt-4">
                 <Link
-                  className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  className="inline-flex w-full items-center justify-center bg-blue-700 px-3 py-3 text-sm font-bold text-white transition hover:bg-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
                   prefetch={false}
                   href={`/player-records/${props.season}`}
                 >
