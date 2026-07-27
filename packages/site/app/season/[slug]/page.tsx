@@ -1,4 +1,3 @@
-import { Title } from "@/components/fragments/Title";
 import {
   GetAllTranmereManagers,
   GetSeasons,
@@ -16,7 +15,6 @@ import SeasonReview from "@/components/apps/SeasonReview";
 import { getAllArticlesForTag, getAllShirts } from "@/lib/api";
 import { SlugParams } from "@/lib/types";
 import { notFound } from "next/navigation";
-import { JumpBox } from "@/components/forms/JumpBox";
 import { GetBaseUrl } from "@/lib/apiFunctions";
 
 export async function generateMetadata(props: { params: SlugParams }) {
@@ -47,8 +45,6 @@ export default async function SeasonPage(props: { params: SlugParams }) {
   const opposition = "";
   const competition = "";
   const managers = await GetAllTranmereManagers();
-
-  title = "Season: " + season;
 
   const latestSeasonRequest = await fetch(
     base +
@@ -84,21 +80,17 @@ export default async function SeasonPage(props: { params: SlugParams }) {
 
   const seasons = GetSeasons();
   return (
-    <>
-      <Title title={title!}>
-        <JumpBox season={season} seasons={seasons}></JumpBox>
-      </Title>
-      <SeasonReview
-        managers={managers}
-        results={results.results}
-        h2hresults={results.h2hresults}
-        h2htotal={results.h2htotal}
-        players={playerResults.players}
-        season={season}
-        transfers={transfers.transfers}
-        articles={articles}
-        shirts={filteredShirts}
-      ></SeasonReview>
-    </>
+    <SeasonReview
+      managers={managers}
+      results={results.results}
+      h2hresults={results.h2hresults}
+      h2htotal={results.h2htotal}
+      players={playerResults.players}
+      season={season}
+      seasons={seasons}
+      transfers={transfers.transfers}
+      articles={articles}
+      shirts={filteredShirts}
+    ></SeasonReview>
   );
 }

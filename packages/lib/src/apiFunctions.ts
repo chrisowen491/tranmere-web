@@ -210,7 +210,7 @@ export async function GetAllPlayers(): Promise<Player[]> {
       ? `,nextToken:${JSON.stringify(nextToken)}`
       : '';
     const query: string = encodeURIComponent(
-      `{listTranmereWebPlayerTable(limit:500${paginationArgument}){items{name picLink} nextToken}}`
+      `{listTranmereWebPlayerTable(limit:500${paginationArgument}){items{name picLink position} nextToken}}`
     );
     const result = await fetch(
       `${APP_SYNC_URL}/graphql?query=${query}`,
@@ -226,7 +226,11 @@ export async function GetAllPlayers(): Promise<Player[]> {
       };
     };
 
-    results.push(...list.data.listTranmereWebPlayerTable.items);
+    results.push(
+      ...list.data.listTranmereWebPlayerTable.items.filter(
+        (player) => player?.name
+      )
+    );
     nextToken = list.data.listTranmereWebPlayerTable.nextToken;
   } while (nextToken);
 

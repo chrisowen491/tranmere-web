@@ -5,6 +5,7 @@ import {
 } from "@tranmere-web/lib/src/tranmere-web-types";
 import { LinkButton } from "@/components/forms/LinkButton";
 import Image from "next/image";
+import Link from "next/link";
 
 function trimDate(input?: string) {
   if (!input) {
@@ -215,9 +216,14 @@ export function ResultTable(props: {
                         {result.competition}
                       </td>
                       <td className="whitespace-nowrap px-1 py-4 text-center sm:px-3">
-                        <span className="inline-flex min-w-14 justify-center bg-[#071a2b] px-2 py-1.5 font-mono text-xs font-bold text-white">
+                        <Link
+                          href={`/match/${result.season}/${result.date}`}
+                          prefetch={false}
+                          aria-label={`View match report for ${result.opposition}, ${result.ft}`}
+                          className="inline-flex min-w-14 justify-center bg-[#071a2b] px-2 py-1.5 font-mono text-xs font-bold text-white transition hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
+                        >
                           {result.ft}
-                        </span>
+                        </Link>
                       </td>
                       <td className="whitespace-nowrap hidden px-1 sm:px-3 py-3.5 md:table-cell text-center">
                         {result.attendance}

@@ -10,6 +10,7 @@ import {
   MagnifyingGlassIcon,
   TrophyIcon,
   UserGroupIcon,
+  QuestionMarkCircleIcon,
 } from "@heroicons/react/24/outline";
 import {
   GetAllPlayers,
@@ -382,6 +383,37 @@ export default async function Home() {
               Don’t just browse Rovers history. Build with it.
             </h2>
           </div>
+
+          <Link
+            href="/who-am-i"
+            className="group mb-6 grid overflow-hidden border border-[#071a2b]/15 bg-[#fffdf8] sm:grid-cols-[0.7fr_1.3fr]"
+          >
+            <div className="relative grid min-h-64 place-items-center overflow-hidden bg-emerald-700 text-white">
+              <div className="archive-grid absolute inset-0 opacity-40" />
+              <QuestionMarkCircleIcon className="relative h-28 w-28 transition duration-300 group-hover:rotate-6 group-hover:scale-105" />
+              <span className="absolute bottom-5 left-5 font-mono text-xs font-bold uppercase tracking-[0.15em] text-white/65">
+                One player · Five clues
+              </span>
+            </div>
+            <div className="flex flex-col justify-between p-7 sm:p-9">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.16em] text-emerald-700">
+                  Daily game
+                </p>
+                <h3 className="mt-4 font-display text-4xl font-semibold tracking-[-0.035em]">
+                  Who am I?
+                </h3>
+                <p className="mt-4 max-w-xl leading-7 text-[#071a2b]/60">
+                  Identify today’s Rovers player from their position, career
+                  record and debut. Every wrong answer unlocks another clue.
+                </p>
+              </div>
+              <span className="mt-8 inline-flex items-center gap-3 text-sm font-bold text-emerald-700">
+                Play today’s game
+                <ArrowRightIcon className="h-4 w-4 transition group-hover:translate-x-1" />
+              </span>
+            </div>
+          </Link>
 
           <div className="grid gap-6 lg:grid-cols-2">
             <Link
