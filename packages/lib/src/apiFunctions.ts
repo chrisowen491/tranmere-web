@@ -32,19 +32,33 @@ export const STANDARD_HEADERS = {
   }
 };
 
-export async function GetSvg(input: string): Promise<string> {
+export async function GetSvg(
+  input: string,
+  siteOrigin?: string
+): Promise<string> {
   const start =
     '<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">';
   const end = '</svg>';
 
-  const request = await fetch(
+  const sources = [
+    ...(siteOrigin
+      ? [new URL(`/builder/${input}`, siteOrigin).toString()]
+      : []),
     `https://raw.githubusercontent.com/chrisowen491/tranmere-web/refs/heads/master/packages/site/public/builder/${input}`
-  );
-  if (request.status !== 200) {
-    return '';
+  ];
+
+  for (const source of sources) {
+    try {
+      const request = await fetch(source, { cache: 'no-store' });
+      if (request.ok) {
+        return (await request.text()).replace(start, '').replace(end, '');
+      }
+    } catch {
+      // Try the next source when a local server or remote fallback is unavailable.
+    }
   }
-  const body = (await request.text()).replace(start, '').replace(end, '');
-  return body;
+
+  return '';
 }
 
 export function GetYear(): number {

@@ -24,13 +24,19 @@ export async function GET(
     '<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">';
   const background = `<g><title>background</title><rect fill="${data.background}" id="canvas_background" height="514" width="514" y="-1" x="-1"/></g>`;
   const end = "</svg>";
+  let siteOrigin : string | null = new URL(request.url).origin;
+  if(!siteOrigin.includes("localhost")) {
+    siteOrigin = null
+  }
 
-  const body = await GetSvg("body.svg");
-  const hair = await GetSvg(`hair/${data.hair}.svg`);
-  const hairBg = await GetSvg(`hair/bg/${data.hair}.svg`);
-  const features = await GetSvg(`features/${data.features}.svg`);
-  const kit = await GetSvg(`kits/home/${data.kit}.svg`);
-  const collar = await GetSvg(`kits/home/collars/${data.kit}.svg`);
+  const [body, hair, hairBg, features, kit, collar] = await Promise.all([
+    GetSvg("body.svg", siteOrigin!),
+    GetSvg(`hair/${data.hair}.svg`, siteOrigin!),
+    GetSvg(`hair/bg/${data.hair}.svg`, siteOrigin!),
+    GetSvg(`features/${data.features}.svg`, siteOrigin!),
+    GetSvg(`kits/home/${data.kit}.svg`, siteOrigin!),
+    GetSvg(`kits/home/collars/${data.kit}.svg`, siteOrigin!),
+  ]);
 
   let svg = `${start}${background}${hairBg}${kit}${body}${hair}${features}${collar}${end}`;
 
