@@ -1,0 +1,4 @@
+interface:
+  display_name: "Create Tranmere Kits"
+  short_description: "Build archive-style Tranmere kit SVGs"
+  default_prompt: "Use $create-tranmere-kits to add a new historical or current Tranmere shirt to the avatar builder."

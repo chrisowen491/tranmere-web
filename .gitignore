@@ -93,4 +93,8 @@ wip/mcp
 .vscode/skills
 .github/skills
 .codex
-.agents
+.agents/*
+!.agents/skills/
+.agents/skills/*
+!.agents/skills/create-tranmere-kits/
+!.agents/skills/create-tranmere-kits/**
