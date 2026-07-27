@@ -56,7 +56,7 @@ export default async function ResultsSearchPage() {
             </div>
             <nav
               aria-label="Featured result collections"
-              className="grid grid-cols-2 gap-px border border-[#071a2b]/15 bg-[#071a2b]/15"
+              className="grid grid-cols-2 gap-px border border-[#071a2b]/15 bg-[#071a2b]/15 sm:grid-cols-3"
             >
               <Link
                 href="/games/at-wembley"
@@ -69,6 +69,12 @@ export default async function ResultsSearchPage() {
                 className="bg-[#fffdf8] px-4 py-4 text-sm font-bold transition hover:bg-[#e8e2d6] hover:text-blue-700"
               >
                 Penalty shootouts
+              </Link>
+              <Link
+                href="/head-to-head"
+                className="col-span-2 bg-[#fffdf8] px-4 py-4 text-sm font-bold transition hover:bg-[#e8e2d6] hover:text-blue-700 sm:col-span-1"
+              >
+                Head-to-head
               </Link>
             </nav>
           </div>

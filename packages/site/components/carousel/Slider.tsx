@@ -14,7 +14,7 @@ const Slider = (props: { images: GalleryImage[]; title: string }) => {
               <div key={idx} className="group relative">
                 <div className="aspect-h-1 aspect-w-1 w-full rounded-md bg-indigo-200 dark:bg-black lg:aspect-none group-hover:opacity-75 lg:h-80">
                   <Image
-                    alt={elem.description}
+                    alt={elem.description ? elem.description : "Image"}
                     src={elem.url}
                     width={400}
                     height={400}
