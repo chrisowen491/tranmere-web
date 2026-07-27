@@ -29,28 +29,8 @@ export async function GET(
   const hair = await GetSvg(`hair/${data.hair}.svg`);
   const hairBg = await GetSvg(`hair/bg/${data.hair}.svg`);
   const features = await GetSvg(`features/${data.features}.svg`);
-  const kitRequest = await fetch(
-    new URL(`/builder/kits/home/${data.kit}.svg`, request.url),
-  );
-  const kit = kitRequest.ok
-    ? (await kitRequest.text())
-        .replace(
-          '<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">',
-          "",
-        )
-        .replace("</svg>", "")
-    : "";
-  const collarRequest = await fetch(
-    new URL(`/builder/kits/home/collars/${data.kit}.svg`, request.url),
-  );
-  const collar = collarRequest.ok
-    ? (await collarRequest.text())
-        .replace(
-          '<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">',
-          "",
-        )
-        .replace("</svg>", "")
-    : "";
+  const kit = await GetSvg(`kits/home/${data.kit}.svg`);
+  const collar = await GetSvg(`kits/home/collars/${data.kit}.svg`);
 
   let svg = `${start}${background}${hairBg}${kit}${body}${hair}${features}${collar}${end}`;
 
