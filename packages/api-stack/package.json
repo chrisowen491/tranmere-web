@@ -35,7 +35,7 @@
     "@aws-cdk/aws-appsync-alpha": "^2.59.0-alpha.0",
     "@eslint/js": "^10.0.1",
     "@types/jest": "^30.0.0",
-    "@types/node": "^26.1.1",
+    "@types/node": "^26.1.2",
     "aws-cdk": "^2.1029.2",
     "aws-cdk-lib": "^2.216.0",
     "eslint": "^10.8.0",
