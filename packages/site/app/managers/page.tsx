@@ -3,11 +3,10 @@ import {
   CalendarDaysIcon,
   UserIcon,
 } from "@heroicons/react/24/outline";
-import {
-  buildImagePath,
-  GetAllTranmereManagers,
-} from "@tranmere-web/lib/src/apiFunctions";
+import { buildImagePath } from "@tranmere-web/lib/src/apiFunctions";
 import type { Manager } from "@tranmere-web/lib/src/tranmere-web-types";
+import { getManagers } from "@/lib/managers";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -45,7 +44,9 @@ function isCurrentManager(manager: Manager) {
 }
 
 export default async function ManagerRecords() {
-  const managers = await GetAllTranmereManagers();
+  const managers = await getManagers(
+    (await getCloudflareContext({ async: true })).env.DB,
+  );
   const currentManager = managers.find(isCurrentManager);
   const earliestManager = managers.at(-1);
   const earliestYear = earliestManager?.dateJoined.match(/\d{4}/)?.[0];

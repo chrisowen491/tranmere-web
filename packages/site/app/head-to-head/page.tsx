@@ -1,8 +1,7 @@
 import { ArrowUpRightIcon } from "@heroicons/react/24/outline";
-import {
-  GetAllTeams,
-  GetAllTranmereManagers,
-} from "@tranmere-web/lib/src/apiFunctions";
+import { GetAllTeams } from "@tranmere-web/lib/src/apiFunctions";
+import { getManagers } from "@/lib/managers";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -32,9 +31,10 @@ function tagSize(name: string) {
 }
 
 export default async function HeadToHeadPage() {
+  const db = (await getCloudflareContext({ async: true })).env.DB;
   const [allTeams, managers] = await Promise.all([
     GetAllTeams(),
-    GetAllTranmereManagers(),
+    getManagers(db),
   ]);
   const managerNames = new Set(managers.map((manager) => manager.name));
   const teams = allTeams.filter((team) => !managerNames.has(team.name));

@@ -14,19 +14,9 @@ exports.handler = async (
 
   const summarySearch = await utils.getPlayerSummary(playerName);
 
-  const transfers = await utils.getPlayerTransfers(playerName);
-
   const appearances = await utils.getAppsByPlayer(
     decodeURIComponent(playerName)
   );
-
-  const amendedTansfers: any[] = [];
-  for (const transfer of transfers!) {
-    transfer.club =
-      transfer.from == 'Tranmere Rovers' ? transfer.to : transfer.from;
-    transfer.type = transfer.from == 'Tranmere Rovers' ? 'right' : 'left';
-    amendedTansfers.push(transfer);
-  }
 
   const links = await utils.getPlayerLinks(playerName);
 
@@ -38,7 +28,6 @@ exports.handler = async (
   const playerview: PlayerView = {
     debut: appearances[0],
     seasons: summarySearch,
-    transfers: amendedTansfers,
     links: links,
     image: utils.buildImagePath('photos/kop.jpg', 1920, 1080),
     player: player,

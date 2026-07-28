@@ -2,7 +2,7 @@ import { getArticle, getAssetsByTag } from "@/lib/api";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import { notFound } from "next/navigation";
 import { Kit } from "@/components/blogs/Kit";
-import { Star } from "@/components/blogs/Star";
+import { StarGrid } from "@/components/blogs/StarGrid";
 import { BLOCKS } from "@contentful/rich-text-types";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { GetCommentsByUrl } from "@/lib/comments";
@@ -45,6 +45,10 @@ export default async function BlogPage(props: { params: SlugParams }) {
   });
 
   const avg = Math.round(score / comments.length);
+  const blocks = article.blocksCollection?.items ?? [];
+  const stars = blocks.filter((block) => block.__typename === "Star");
+  const kits = blocks.filter((block) => block.__typename === "Kit");
+  const graphs = blocks.filter((block) => block.__typename === "Graph");
 
   const options = {
     renderNode: {
@@ -56,13 +60,17 @@ export default async function BlogPage(props: { params: SlugParams }) {
     <main className="pb-24 text-[#071a2b]">
       <header className="border-b border-[#071a2b]/10">
         <div
-          className={`mx-auto grid max-w-7xl px-6 py-12 sm:px-10 lg:px-12 lg:py-16 ${
+          className={`mx-auto grid max-w-7xl px-6 sm:px-10 lg:px-12 ${
             article.pic
-              ? "gap-0 lg:grid-cols-[minmax(0,1fr)_minmax(380px,0.8fr)]"
-              : ""
+              ? "gap-0 py-12 lg:grid-cols-[minmax(0,1fr)_minmax(380px,0.8fr)] lg:py-16"
+              : "py-8 lg:py-10"
           }`}
         >
-          <div className="flex flex-col justify-center border border-[#071a2b]/15 bg-[#fffdf8] p-7 sm:p-10 lg:p-12">
+          <div
+            className={`flex flex-col justify-center border border-[#071a2b]/15 bg-[#fffdf8] p-7 sm:p-10 ${
+              article.pic ? "lg:p-12" : "lg:p-10"
+            }`}
+          >
             <Link
               href="/blog"
               className="text-xs font-bold uppercase tracking-[0.16em] text-blue-700"
@@ -138,62 +146,31 @@ export default async function BlogPage(props: { params: SlugParams }) {
             ) : (
               ""
             )}
-            {article.blocksCollection &&
-            article.blocksCollection.items.length > 0 ? (
-              <div className="py-2 sm:py-2">
-                <div className="mx-auto max-w-7xl px-6 lg:px-8">
-                  <ul
-                    role="list"
-                    className="mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 text-center sm:grid-cols-3 md:grid-cols-4 lg:mx-0 lg:max-w-none lg:grid-cols-5 xl:grid-cols-6"
-                  >
-                    {article.blocksCollection.items.map((block, idx) => (
-                      <li key={idx} className="list-none">
-                        {block.__typename == "Kit" ? (
-                          <Kit season={block.season!} image={block.img!}></Kit>
-                        ) : (
-                          <>
-                            {block.__typename == "Star" ? (
-                              <Star
-                                name={block.name!}
-                                notes={block.notes!}
-                                match={block.match!}
-                                season={block.season!}
-                                date={block.date!}
-                                programme={block.programme!}
-                              ></Star>
-                            ) : (
-                              ""
-                            )}
-                          </>
-                        )}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            ) : (
-              ""
-            )}
-            {article.blocksCollection &&
-            article.blocksCollection.items.length > 0 ? (
-              <div className="">
-                <div className="w-full">
-                  {article.blocksCollection.items.map((block, idx) => (
-                    <div key={idx} style={{}}>
-                      {block.__typename == "Graph" ? (
-                        <LineGraph
-                          title={block.title!}
-                          chart={block.chart!.data}
-                        ></LineGraph>
-                      ) : (
-                        ""
-                      )}
-                    </div>
+            {stars.length > 0 && <StarGrid stars={stars} />}
+
+            {kits.length > 0 && (
+              <section className="not-prose mt-12 border-t border-[#071a2b]/15 pt-8">
+                <ul
+                  role="list"
+                  className="grid grid-cols-2 gap-8 text-center sm:grid-cols-3 lg:grid-cols-4"
+                >
+                  {kits.map((block, idx) => (
+                    <li key={`${block.season}-${idx}`} className="list-none">
+                      <Kit season={block.season!} image={block.img!} />
+                    </li>
                   ))}
-                </div>
+                </ul>
+              </section>
+            )}
+
+            {graphs.length > 0 && (
+              <div className="not-prose mt-12 space-y-10">
+                {graphs.map((block, idx) => (
+                  <div key={`${block.title}-${idx}`}>
+                    <LineGraph title={block.title!} chart={block.chart!.data} />
+                  </div>
+                ))}
               </div>
-            ) : (
-              ""
             )}
           </div>
           <CommentPanel

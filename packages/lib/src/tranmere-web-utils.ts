@@ -16,7 +16,6 @@ import {
   Appearance,
   Match,
   Report,
-  Transfer,
   Link,
   PlayerSeasonSummary
 } from './tranmere-web-types';
@@ -218,21 +217,6 @@ export class TranmereWebUtils {
       Limit: 1
     });
     return debutSearch.Items![0] as Appearance;
-  }
-
-  async getPlayerTransfers(playerName: string): Promise<Transfer[]> {
-    const transfers = await dynamo.query({
-      TableName: DataTables.TRANSFER_TABLE,
-      KeyConditionExpression: '#name = :name',
-      IndexName: 'ByNameIndex',
-      ExpressionAttributeNames: {
-        '#name': 'name'
-      },
-      ExpressionAttributeValues: {
-        ':name': decodeURIComponent(playerName)
-      }
-    });
-    return transfers.Items as Transfer[];
   }
 
   async updateReport(report: string, day: string): Promise<any> {

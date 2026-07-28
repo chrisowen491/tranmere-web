@@ -230,7 +230,6 @@ export class TranmereWebStack extends cdk.Stack {
     const classifier = pageName.addResource('{classifier}');
     const player_search = api.root.addResource('player-search');
     const result_search = api.root.addResource('result-search');
-    const transfer_search = api.root.addResource('transfer-search');
     //const on = api.root.addResource('on');
     //const upload = api.root.addResource('upload');
 
@@ -314,14 +313,6 @@ export class TranmereWebStack extends cdk.Stack {
       readTables: [TranmereWebGames]
     });
 
-    new TranmereWebLambda(this, 'TransferSearchFunction', {
-      environment: env_variables,
-      lambdaFile: './lambda/transfersearch.ts',
-      apiResource: transfer_search,
-      apiMethod: 'GET',
-      readTables: [TranmereWebPlayerTransfers]
-    });
-
     new TranmereWebLambda(this, 'OnThisDayFunction', {
       environment: env_variables,
       lambdaFile: './lambda/onThisDayJob.ts',
@@ -338,8 +329,7 @@ export class TranmereWebStack extends cdk.Stack {
       apiMethod: 'POST',
       readWriteTables: [
         TranmereWebMediaSyncTable,
-        TranmereWebPlayerTable,
-        TranmereWebStarsTable
+        TranmereWebPlayerTable
       ]
     });
 
@@ -367,7 +357,6 @@ export class TranmereWebStack extends cdk.Stack {
         TranmereWebGoalsTable,
         TranmereWebPlayerSeasonSummaryTable,
         TranmereWebPlayerTable,
-        TranmereWebPlayerTransfers,
         TranmereWebPlayerLinks
       ]
     });

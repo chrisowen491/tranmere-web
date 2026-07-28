@@ -1,7 +1,6 @@
 import {
   Competition,
   HatTrick,
-  Manager,
   Match,
   Player,
   PlayerSeasonSummary,
@@ -128,36 +127,6 @@ export async function GetTopScorersBySeason(): Promise<PlayerSeasonSummary[]> {
       results.push(players.players[0]);
   }
   return results;
-}
-
-export async function GetAllTranmereManagers(): Promise<Manager[]> {
-  const query = encodeURIComponent(
-    '{listTranmereWebManagers(limit:300){items{name dateLeft dateJoined programmePath}}}'
-  );
-  const results = await fetch(
-    `${APP_SYNC_URL}/graphql?query=${query}&v=4`,
-    APP_SYNC_OPTIONS
-  );
-
-  const managers: Manager[] = [];
-
-  const list = (await results.json()) as {
-    data: { listTranmereWebManagers: { items: Manager[] } };
-  };
-
-  for (const manager of list.data.listTranmereWebManagers.items) {
-    let dateLeft = 'now';
-    if (manager.dateLeft) dateLeft = manager.dateLeft;
-    manager.dateLeftText = dateLeft;
-    managers.push(manager);
-  }
-  managers.sort(function (a, b) {
-    if (a.dateJoined < b.dateJoined) return 1;
-    if (a.dateJoined > b.dateJoined) return -1;
-    return 0;
-  });
-
-  return managers;
 }
 
 export async function GetLastMatch(): Promise<Match> {

@@ -5,6 +5,8 @@ import { GetCommentsByUrl } from "@/lib/comments";
 import { PlayerProfile, SlugParams } from "@/lib/types";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { notFound } from "next/navigation";
+import { biographyToText } from "@/lib/playerProfileCorrections";
+import { getTransfers } from "@/lib/transfers";
 
 export async function generateMetadata(props: { params: SlugParams }) {
   const params = await props.params;
@@ -16,9 +18,9 @@ export async function generateMetadata(props: { params: SlugParams }) {
 
 export default async function PlayerProfilePage(props: { params: SlugParams }) {
   const params = await props.params;
+  const env = getCloudflareContext().env;
   const url =
-    GetBaseUrl(getCloudflareContext().env) +
-    `/page/player/${decodeURI(params.slug)}?json=true`;
+    GetBaseUrl(env) + `/page/player/${decodeURI(params.slug)}?json=true`;
 
   const playerRequest = await fetch(url);
 
@@ -26,10 +28,14 @@ export default async function PlayerProfilePage(props: { params: SlugParams }) {
 
   if (!profile || !profile.player) notFound();
 
-  const articles = await getAllArticlesForTag(100, decodeURI(params.slug));
+  const [articles, transfers] = await Promise.all([
+    getAllArticlesForTag(100, decodeURI(params.slug)),
+    getTransfers(env.DB, { playerName: profile.player.name }),
+  ]);
+  profile.transfers = transfers;
 
   const comments = await GetCommentsByUrl(
-    getCloudflareContext().env,
+    env,
     `/page/player/${decodeURI(params.slug)}`,
   );
 
@@ -47,6 +53,15 @@ export default async function PlayerProfilePage(props: { params: SlugParams }) {
         articles={articles}
         comments={comments}
         avg={avg}
+        editableProfile={{
+          dateOfBirth: profile.player.dateOfBirth ?? "",
+          biography: biographyToText(profile.player.biography),
+          picLink: profile.player.picLink ?? "",
+          foot: profile.player.foot ?? "",
+          height: profile.player.height ?? "",
+          placeOfBirth: profile.player.placeOfBirth ?? "",
+          position: profile.player.position ?? "",
+        }}
       ></PlayerProfileView>
     </>
   );

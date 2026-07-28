@@ -1,5 +1,6 @@
 import { Transfer } from "@tranmere-web/lib/src/tranmere-web-types";
 import { LinkButton } from "@/components/forms/LinkButton";
+import { ArrowDownLeftIcon, ArrowUpRightIcon } from "@heroicons/react/20/solid";
 
 export function PlayerTransfersTable(props: {
   title: string;
@@ -28,22 +29,46 @@ export function PlayerTransfersTable(props: {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 text-sm">
-                {props.records.map((record, idx) => (
-                  <tr key={idx}>
-                    <td className="whitespace-nowrap px-3 py-4">
-                      <LinkButton
-                        text={record.season.toString()}
-                        href={`/player-records/${record.season}`}
-                      ></LinkButton>
-                    </td>
-                    <td className="whitespace-nowrap px-3 py-4">
-                      {record.club}
-                    </td>
-                    <td className="whitespace-nowrap px-3 py-4">
-                      {record.value}
-                    </td>
-                  </tr>
-                ))}
+                {props.records.map((record, idx) => {
+                  const isDeparture = record.type === "out";
+                  const club =
+                    record.club ||
+                    (isDeparture ? record.to : record.from) ||
+                    "Unknown club";
+
+                  return (
+                    <tr key={`${record.id}-${idx}`}>
+                      <td className="whitespace-nowrap px-3 py-4">
+                        <LinkButton
+                          text={record.season.toString()}
+                          href={`/player-records/${record.season}`}
+                        ></LinkButton>
+                      </td>
+                      <td className="px-3 py-4">
+                        <div className="flex items-center gap-3">
+                          <span
+                            className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-bold uppercase tracking-[0.08em] text-white ${
+                              isDeparture ? "bg-[#071a2b]" : "bg-blue-700"
+                            }`}
+                          >
+                            {isDeparture ? (
+                              <ArrowUpRightIcon className="h-4 w-4" />
+                            ) : (
+                              <ArrowDownLeftIcon className="h-4 w-4" />
+                            )}
+                            {isDeparture ? "Out" : "In"}
+                          </span>
+                          <span className="whitespace-nowrap font-semibold">
+                            {isDeparture ? "to" : "from"} {club}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-4">
+                        {record.value || "Undisclosed"}
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>

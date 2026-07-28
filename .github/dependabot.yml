@@ -12,6 +12,7 @@ updates:
     versioning-strategy: increase
     ignore:
       - dependency-name: "tailwindcss"
+      - dependency-name: "eslint"
       - dependency-name: "typescript"
         versions:
           - ">=7.0.0"

@@ -5,6 +5,7 @@ import { GetBaseUrl } from "@/lib/apiFunctions";
 import MatchReport from "@/components/apps/MatchReport";
 import { GetCommentsByUrl } from "@/lib/comments";
 import { notFound } from "next/navigation";
+import { getApprovedAttendance } from "@/lib/attendanceCorrections";
 
 export async function generateMetadata(props: { params: MatchParams }) {
   const params = await props.params;
@@ -12,6 +13,14 @@ export async function generateMetadata(props: { params: MatchParams }) {
 
   const matchRequest = await fetch(url);
   const match = (await matchRequest.json()) as MatchPageData;
+  const approvedAttendance = await getApprovedAttendance(
+    getCloudflareContext().env.DB,
+    params.season,
+    params.date,
+  );
+  if (approvedAttendance !== null) {
+    match.attendance = approvedAttendance;
+  }
   return {
     title: `Match Summary - ${match.homeTeam} ${match.score} ${match.awayTeam}`,
     description: `Match Summary For ${match.homeTeam} ${match.score} ${match.awayTeam} - ${match.date}`,

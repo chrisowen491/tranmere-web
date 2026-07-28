@@ -2,10 +2,10 @@ import { ResultsSearch } from "@/components/apps/Results";
 import {
   GetAllTeams,
   GetAllCupCompetitions,
-  GetAllTranmereManagers,
   GetYear,
 } from "@tranmere-web/lib/src/apiFunctions";
 import { GetBaseUrl } from "@/lib/apiFunctions";
+import { getManagers } from "@/lib/managers";
 import {
   H2HResult,
   H2HTotal,
@@ -21,14 +21,15 @@ export const metadata: Metadata = {
 };
 
 export default async function ResultsSearchPage() {
-  const base =
-    GetBaseUrl((await getCloudflareContext({ async: true })).env) +
-    "/result-search/";
+  const env = (await getCloudflareContext({ async: true })).env;
+  const base = GetBaseUrl(env) + "/result-search/";
 
   const theYear = GetYear();
-  const competitions = await GetAllCupCompetitions();
-  const managers = await GetAllTranmereManagers();
-  const teams = await GetAllTeams();
+  const [competitions, managers, teams] = await Promise.all([
+    GetAllCupCompetitions(),
+    getManagers(env.DB),
+    GetAllTeams(),
+  ]);
 
   const latestSeasonRequest = await fetch(base + `?season=${theYear}`);
   const results = (await latestSeasonRequest.json()) as {

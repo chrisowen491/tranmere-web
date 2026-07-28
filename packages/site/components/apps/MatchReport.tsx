@@ -10,6 +10,7 @@ import { Reviews } from "@/components/comments/Reviews";
 import { BreadcrumbLinks } from "@/components/fragments/BreadcrumbLinks";
 import { ArrowPathIcon, UserIcon } from "@heroicons/react/24/outline";
 import { replaceSeasonsKit } from "@tranmere-web/lib/src/apiFunctions";
+import { AttendanceCorrectionForm } from "./AttendanceCorrectionForm";
 
 const positionOrder = [
   "Goalkeeper",
@@ -116,6 +117,13 @@ export default function MatchReport(props: {
                 <dd className="mt-2 font-mono font-bold">
                   {match.attendance?.toLocaleString() || "—"}
                 </dd>
+                <AttendanceCorrectionForm
+                  season={match.season.toString()}
+                  matchDate={match.date}
+                  homeTeam={match.homeTeam ?? "Tranmere Rovers"}
+                  awayTeam={match.awayTeam ?? match.opposition ?? "Unknown"}
+                  currentAttendance={match.attendance ?? null}
+                />
               </div>
               {match.referee && (
                 <div className="col-span-2 border-t border-[#071a2b]/15 py-5">

@@ -1,8 +1,4 @@
-import {
-  GetAllTranmereManagers,
-  GetSeasons,
-  GetYear,
-} from "@tranmere-web/lib/src/apiFunctions";
+import { GetSeasons, GetYear } from "@tranmere-web/lib/src/apiFunctions";
 import {
   H2HResult,
   H2HTotal,
@@ -16,6 +12,7 @@ import { getAllArticlesForTag, getAllShirts } from "@/lib/api";
 import { SlugParams } from "@/lib/types";
 import { notFound } from "next/navigation";
 import { GetBaseUrl } from "@/lib/apiFunctions";
+import { getManagers } from "@/lib/managers";
 
 export async function generateMetadata(props: { params: SlugParams }) {
   const params = await props.params;
@@ -37,14 +34,15 @@ export default async function SeasonPage(props: { params: SlugParams }) {
 
   if (parseInt(season) < 1920 || parseInt(season) > GetYear()) notFound();
 
-  const base = GetBaseUrl(getCloudflareContext().env) + "/result-search/";
-  let title: string | null = null;
+  const env = (await getCloudflareContext({ async: true })).env;
+  const baseUrl = GetBaseUrl(env);
+  const base = baseUrl + "/result-search/";
   const sort = "Date";
   const venue = "";
   const pens = "";
   const opposition = "";
   const competition = "";
-  const managers = await GetAllTranmereManagers();
+  const managers = await getManagers(env.DB);
 
   const latestSeasonRequest = await fetch(
     base +
@@ -57,19 +55,17 @@ export default async function SeasonPage(props: { params: SlugParams }) {
   };
 
   const latestSeasonPlayerRequest = await fetch(
-    GetBaseUrl(getCloudflareContext().env) +
-      `/player-search/?season=${season}&sort=&filter=`,
+    baseUrl + `/player-search/?season=${season}&sort=&filter=`,
   );
 
   const playerResults = (await latestSeasonPlayerRequest.json()) as {
     players: PlayerSeasonSummary[];
   };
 
-  const request = await fetch(
-    GetBaseUrl(getCloudflareContext().env) +
-      `/transfer-search/?season=${season}`,
+  const transferRequest = await fetch(
+    baseUrl + `/transfer-search/?season=${season}`,
   );
-  const transfers = (await request.json()) as {
+  const transfers = (await transferRequest.json()) as {
     transfers: Transfer[];
   };
 

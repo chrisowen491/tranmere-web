@@ -15,6 +15,8 @@ import { PlayerAppsTable } from "@/components/apps/partials/PlayerAppTable";
 import { BreadcrumbLinks } from "@/components/fragments/BreadcrumbLinks";
 import { Reviews } from "@/components/comments/Reviews";
 import CommentPanel from "@/components/comments/CommentPanel";
+import { PlayerProfileCorrectionForm } from "./PlayerProfileCorrectionForm";
+import type { EditablePlayerProfile } from "@/lib/playerProfileCorrections";
 
 const breadcrumbs = [
   { id: 1, name: "Home", href: "/" },
@@ -26,6 +28,7 @@ export default function PlayerProfileView(props: {
   comments: Comment[];
   articles: BlogItem[];
   avg: number;
+  editableProfile: EditablePlayerProfile;
 }) {
   const profile = props.player;
   const { player } = profile;
@@ -237,8 +240,29 @@ export default function PlayerProfileView(props: {
                   )}
                 </div>
               )}
+              {player.foot && (
+                <div className="py-4">
+                  <dt className="text-xs font-bold uppercase tracking-[0.12em] text-[#071a2b]/50">
+                    Preferred foot
+                  </dt>
+                  <dd className="mt-1 font-semibold">{player.foot}</dd>
+                </div>
+              )}
+              {player.height && (
+                <div className="py-4">
+                  <dt className="text-xs font-bold uppercase tracking-[0.12em] text-[#071a2b]/50">
+                    Height
+                  </dt>
+                  <dd className="mt-1 font-semibold">{player.height}</dd>
+                </div>
+              )}
             </dl>
           </div>
+
+          <PlayerProfileCorrectionForm
+            playerName={player.name}
+            current={props.editableProfile}
+          />
 
           {props.articles.length > 0 && (
             <div className="border border-[#071a2b]/15 bg-[#fffdf8] p-5">

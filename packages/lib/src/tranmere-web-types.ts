@@ -38,6 +38,7 @@ export interface Player extends BaseEntity {
   position?: string;
   dateOfBirth?: string;
   placeOfBirth?: string;
+  height?: string;
 }
 
 export interface Manager {
@@ -106,11 +107,10 @@ export interface MatchEvent {
   description: string;
 }
 
-export interface DBMatch
-  extends Omit<
-    Match,
-    'season' | 'hgoal' | 'vgoal' | 'attendance' | 'round' | 'tier'
-  > {
+export interface DBMatch extends Omit<
+  Match,
+  'season' | 'hgoal' | 'vgoal' | 'attendance' | 'round' | 'tier'
+> {
   season?: number | string;
   hgoal?: number | string;
   vgoal?: number | string;
@@ -539,7 +539,6 @@ export interface PlayerView {
   player: Player;
   links: Link[];
   debut: Appearance;
-  transfers: Transfer[];
   appearances?: Appearance[];
   seasons: PlayerSeasonSummary[];
 }

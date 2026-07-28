@@ -3,9 +3,9 @@ import { Title } from "@/components/fragments/Title";
 import {
   GetAllTeams,
   GetAllCupCompetitions,
-  GetAllTranmereManagers,
 } from "@tranmere-web/lib/src/apiFunctions";
 import { GetBaseUrl } from "@/lib/apiFunctions";
+import { getManagers } from "@/lib/managers";
 import {
   H2HResult,
   H2HTotal,
@@ -49,7 +49,8 @@ export async function generateMetadata(props: { params: SlugParams }) {
 
 export default async function GamesPage(props: { params: SlugParams }) {
   const params = await props.params;
-  const base = GetBaseUrl(getCloudflareContext().env) + "/result-search/";
+  const env = getCloudflareContext().env;
+  const base = GetBaseUrl(env) + "/result-search/";
 
   let title: string | null = null;
   let sort = "Date";
@@ -59,9 +60,11 @@ export default async function GamesPage(props: { params: SlugParams }) {
   let opposition = "";
   const competition = "";
   const manager = "";
-  const competitions = await GetAllCupCompetitions();
-  const managers = await GetAllTranmereManagers();
-  const teams = await GetAllTeams();
+  const [competitions, managers, teams] = await Promise.all([
+    GetAllCupCompetitions(),
+    getManagers(env.DB),
+    GetAllTeams(),
+  ]);
 
   if (params.slug === "at-wembley") {
     venue = "Wembley Stadium";

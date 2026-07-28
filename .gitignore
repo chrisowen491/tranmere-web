@@ -98,3 +98,4 @@ wip/mcp
 .agents/skills/*
 !.agents/skills/create-tranmere-kits/
 !.agents/skills/create-tranmere-kits/**
+**/backups/dynamodb/**

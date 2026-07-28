@@ -1,12 +1,11 @@
 import eslint from '@eslint/js';
+import nextVitals from 'eslint-config-next/core-web-vitals';
 import tseslint from 'typescript-eslint';
-import { FlatCompat } from '@eslint/eslintrc'
 
-const compat = new FlatCompat({
-  // import.meta.dirname is available after Node.js v20.11.0
-  baseDirectory: import.meta.dirname,
-  recommendedConfig: eslint.configs.recommended,
-})
+const typescriptRecommendedRules = Object.assign(
+  {},
+  ...tseslint.configs.recommended.map((config) => config.rules ?? {}),
+);
 
 export default [
   {
@@ -19,15 +18,18 @@ export default [
       '**/.wrangler/**',
       '**/public/graphs/**',
       '**/.open-next/**',
+      '**/dist/**',
     ],
   },
-  ...compat.config({
-    extends: ['eslint:recommended', 'next'],
-  }),
-  ...tseslint.configs.recommended,
+  eslint.configs.recommended,
+  ...nextVitals,
   {
+    files: ['**/*.{ts,tsx}'],
     rules: {
-        '@typescript-eslint/no-explicit-any': 'off',
-    }
-  }
+      ...typescriptRecommendedRules,
+      '@typescript-eslint/no-explicit-any': 'off',
+      'no-useless-assignment': 'off',
+      'react-hooks/set-state-in-effect': 'off',
+    },
+  },
 ];
