@@ -8,7 +8,6 @@ import { generateObject, generateText, stepCountIs } from 'ai';
 import { FixturesTool } from '@tranmere-web/tools/src/FixturesTool';
 import { LeagueTableTool } from '@tranmere-web/tools/src/LeagueTableTool';
 import { MatchEventTool } from '@tranmere-web/tools/src/MatchEventTool';
-import { ManagerTool } from '@tranmere-web/tools/src/ManagerTool';
 import { LineupsTool } from '@tranmere-web/tools/src/LineupsTool';
 import { RefereeAndFormationTool } from '@tranmere-web/tools/src/RefereeAndFormationTool';
 import {
@@ -40,14 +39,13 @@ exports.handler = async (): Promise<APIGatewayProxyResult> => {
       FixturesTool,
       RefereeAndFormationTool,
       LeagueTableTool,
-      MatchEventTool,
-      ManagerTool
+      MatchEventTool
     },
     stopWhen: stepCountIs(6),
     prompt: `
             You are an agent capable of creating soccer match reports for a Tranmere Rovers fan site.
             You run at the start of every day. You should first see if any fixtures occured on ${day} and if so, generate a match report without headings. Use <br /> to separate paragraphs but avoid using other HTML.
-            You should make the match report interesting by making reference to the current league position, referee (if known), formation, the current manager, formation, the match events, tranmere's form over the past 5 results, plus previous recent meetings with the opponent.
+            You should make the match report interesting by making reference to the current league position, referee (if known), formation, the current manager (Darrell Clarke newly appointed in summer 2026), formation, the match events, tranmere's form over the past 5 results, plus previous recent meetings with the opponent.
             Do not guess the referee or attendance - just leave them blank.
             The current season is ${utils.getYear()}.
             Be explicit on the home and away team.
