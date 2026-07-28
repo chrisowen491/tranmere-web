@@ -1,0 +1,31 @@
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+  <g id="hair">
+    <path
+      fill="#HAIR"
+      d="M163 108V92c0-18 8-35 21-48l10-7 9 2 9-11 12 2 9-11 12 3 11-8 12 7 13-4 11 11 14-1 8 13 11 2c14 14 23 31 23 51v23c-9-9-18-16-28-21-16-9-37-13-64-13-25 0-45 4-61 12-12 6-22 13-31 22v-8Z"
+    />
+    <path
+      fill="#HAIR"
+      d="M164 102c15-18 39-29 63-32 33-5 76 0 100 20-11 1-22 4-31 9-12 6-22 14-31 24-8-8-17-14-27-18-22-9-48-10-74-3Z"
+    />
+    <g
+      fill="none"
+      stroke="#HAIR"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path stroke-width="10" d="M180 72c-9 23-10 48-5 75 2 12 1 23-5 34" />
+      <path stroke-width="9" d="M195 60c-4 23-1 43 7 61 5 12 4 24-3 38" />
+      <path stroke-width="11" d="M215 51c-7 21-6 40 2 57 6 13 5 28-3 44" />
+      <path stroke-width="9" d="M236 45c-3 20 1 37 11 52 7 11 8 23 2 37" />
+      <path stroke-width="10" d="M260 43c-2 20 4 36 16 50 8 9 11 21 7 35" />
+      <path stroke-width="9" d="M283 46c2 17 9 31 22 42 10 9 14 20 12 34" />
+      <path stroke-width="11" d="M305 52c6 18 15 31 27 40 10 8 14 20 13 36" />
+      <path stroke-width="9" d="M327 65c8 18 12 37 10 56-2 15 1 29 9 41" />
+      <path stroke-width="8" d="M187 93c13 11 17 25 12 41" />
+      <path stroke-width="8" d="M222 83c14 11 18 25 13 42" />
+      <path stroke-width="8" d="M294 82c-10 12-12 26-6 43" />
+      <path stroke-width="8" d="M320 94c-7 11-8 23-3 36" />
+    </g>
+  </g>
+</svg>

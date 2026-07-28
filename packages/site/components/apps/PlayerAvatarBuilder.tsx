@@ -238,6 +238,7 @@ export function PlayerAvatarBuilder() {
                     <option>curtains</option>
                     <option>high-forehead</option>
                     <option>dreads</option>
+                    <option>zane-okoro</option>
                     <option>eighties</option>
                     <option>big-curly</option>
                     <option>mullit</option>
