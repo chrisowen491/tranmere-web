@@ -1,0 +1,9 @@
+{
+  "name": "tranmere-web/create-contentful-blog-post",
+  "description": "Research, write, create, and optionally publish TranmereWeb blog posts in the connected Contentful space. Use when asked to draft or create a Tranmere Rovers news, signing, match, history, player, kit, or club blog post; populate the `blogPost` content type; revise a proposed post before creation; or publish a newly created blog entry.",
+  "private": true,
+  "skills": [
+    "."
+  ],
+  "version": "0.1.0"
+}

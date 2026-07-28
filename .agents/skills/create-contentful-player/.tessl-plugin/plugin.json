@@ -1,0 +1,9 @@
+{
+  "name": "tranmere-web/create-contentful-player",
+  "description": "Research, create, complete, and optionally publish TranmereWeb player profiles in the connected Contentful space. Use when asked to add a Tranmere Rovers player, create a `player` entry, fill missing player details or biography fields, apply the standard avatar, or publish a completed player profile.",
+  "private": true,
+  "skills": [
+    "."
+  ],
+  "version": "0.2.0"
+}

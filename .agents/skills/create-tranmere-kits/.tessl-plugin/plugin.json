@@ -1,0 +1,9 @@
+{
+  "name": "tranmere-web/create-tranmere-kits",
+  "description": "Create, edit, and integrate Tranmere Rovers kit SVGs for this repository's player avatar builder. Use when adding a home, away, third, or goalkeeper shirt from a photo or historical reference; correcting kit colours, stripes, collars, sponsors, crests, manufacturers, cuffs, or alignment; adding a season to the kit selector; or validating a kit through the `/builder/...` SVG route.",
+  "private": true,
+  "skills": [
+    "."
+  ],
+  "version": "0.1.0"
+}
