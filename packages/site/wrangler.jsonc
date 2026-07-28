@@ -37,10 +37,12 @@
     ],
     "vectorize": [{
       "binding": "VECTORIZE_INDEX",
-      "index_name": "tranmere-web"
+      "index_name": "tranmere-web",
+      "remote": true
     }],
     "ai": {
-      "binding": "AI"
+      "binding": "AI",
+      "remote": true
     },
     "d1_databases": [
       {

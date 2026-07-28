@@ -1,0 +1,4 @@
+interface:
+  display_name: "Create Contentful Player"
+  short_description: "Research and create Tranmere player profiles"
+  default_prompt: "Use $create-contentful-player to research and create a Tranmere player entry in Contentful."

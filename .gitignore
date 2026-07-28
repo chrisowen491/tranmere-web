@@ -98,4 +98,8 @@ wip/mcp
 .agents/skills/*
 !.agents/skills/create-tranmere-kits/
 !.agents/skills/create-tranmere-kits/**
+!.agents/skills/create-contentful-blog-post/
+!.agents/skills/create-contentful-blog-post/**
+!.agents/skills/create-contentful-player/
+!.agents/skills/create-contentful-player/**
 **/backups/dynamodb/**

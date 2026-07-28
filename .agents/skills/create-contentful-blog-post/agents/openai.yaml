@@ -1,0 +1,4 @@
+interface:
+  display_name: "Create Contentful Blog Post"
+  short_description: "Research and draft Tranmere blog posts"
+  default_prompt: "Use $create-contentful-blog-post to research and create a new Tranmere blog post in Contentful."
