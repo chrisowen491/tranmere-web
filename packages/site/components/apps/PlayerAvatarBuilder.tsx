@@ -6,7 +6,7 @@ import DOMPurify from "dompurify";
 
 export function PlayerAvatarBuilder() {
   const base = "/builder/";
-  const [kit, setKit] = useState("1966");
+  const [kit, setKit] = useState("2026");
   const [hair, setHair] = useState("simple");
   const [skinColour, setSkinColour] = useState("ffd3b3");
   const [neckColour, setNeckColour] = useState("fcb98b");
