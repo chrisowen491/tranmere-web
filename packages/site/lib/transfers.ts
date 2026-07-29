@@ -1,4 +1,4 @@
-import type { Team, Transfer } from "@tranmere-web/lib/src/tranmere-web-types";
+import type { Transfer } from "@tranmere-web/lib/src/tranmere-web-types";
 
 export interface TransferRow {
   id: string;
@@ -151,21 +151,4 @@ export async function getTransfers(
   ).all<TransferRow>();
 
   return result.results.map(mapTransfer);
-}
-
-export async function getTransferTeams(db: D1Database): Promise<Team[]> {
-  const result = await db
-    .prepare(
-      `SELECT club AS name
-       FROM (
-         SELECT from_club AS club FROM Transfers
-         UNION
-         SELECT to_club AS club FROM Transfers
-       )
-       WHERE club <> ''
-       ORDER BY club ASC`,
-    )
-    .all<{ name: string }>();
-
-  return result.results;
 }

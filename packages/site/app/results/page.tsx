@@ -1,10 +1,10 @@
 import { ResultsSearch } from "@/components/apps/Results";
 import {
-  GetAllTeams,
   GetAllCupCompetitions,
   GetYear,
 } from "@tranmere-web/lib/src/apiFunctions";
 import { GetBaseUrl } from "@/lib/apiFunctions";
+import { getClubs } from "@/lib/clubs";
 import { getManagers } from "@/lib/managers";
 import {
   H2HResult,
@@ -28,7 +28,7 @@ export default async function ResultsSearchPage() {
   const [competitions, managers, teams] = await Promise.all([
     GetAllCupCompetitions(),
     getManagers(env.DB),
-    GetAllTeams(),
+    getClubs(env.DB),
   ]);
 
   const latestSeasonRequest = await fetch(base + `?season=${theYear}`);

@@ -1,9 +1,12 @@
 import { ISitemapField, getServerSideSitemap } from "next-sitemap";
-import { GetAllTeams, GetSeasons } from "@tranmere-web/lib/src/apiFunctions";
+import { GetSeasons } from "@tranmere-web/lib/src/apiFunctions";
 import { getAllArticles, getAllPlayers } from "@/lib/api";
+import { getClubs } from "@/lib/clubs";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 
 export async function GET() {
-  const teams = await GetAllTeams();
+  const db = (await getCloudflareContext({ async: true })).env.DB;
+  const teams = await getClubs(db);
   const articles = await getAllArticles(50);
   const seasons = GetSeasons();
   const players = await getAllPlayers();

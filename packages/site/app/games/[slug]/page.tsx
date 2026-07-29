@@ -1,10 +1,8 @@
 import { ResultsSearch } from "@/components/apps/Results";
 import { Title } from "@/components/fragments/Title";
-import {
-  GetAllTeams,
-  GetAllCupCompetitions,
-} from "@tranmere-web/lib/src/apiFunctions";
+import { GetAllCupCompetitions } from "@tranmere-web/lib/src/apiFunctions";
 import { GetBaseUrl } from "@/lib/apiFunctions";
+import { getClubs } from "@/lib/clubs";
 import { getManagers } from "@/lib/managers";
 import {
   H2HResult,
@@ -63,7 +61,7 @@ export default async function GamesPage(props: { params: SlugParams }) {
   const [competitions, managers, teams] = await Promise.all([
     GetAllCupCompetitions(),
     getManagers(env.DB),
-    GetAllTeams(),
+    getClubs(env.DB),
   ]);
 
   if (params.slug === "at-wembley") {

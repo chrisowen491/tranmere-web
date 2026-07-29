@@ -1,9 +1,8 @@
 import { TransferSearch } from "@/components/apps/TransferSearch";
-import { GetAllTeams } from "@tranmere-web/lib/src/apiFunctions";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
-import { Transfer } from "@tranmere-web/lib/src/tranmere-web-types";
 import { Metadata } from "next";
-import { GetBaseUrl } from "@/lib/apiFunctions";
+import { getClubs } from "@/lib/clubs";
+import { getTransfers } from "@/lib/transfers";
 
 export const metadata: Metadata = {
   title: "Transfers Home",
@@ -11,16 +10,11 @@ export const metadata: Metadata = {
 };
 
 export default async function Transfers() {
-  const base =
-    GetBaseUrl((await getCloudflareContext({ async: true })).env) +
-    "/transfer-search/";
-
-  const request = await fetch(base);
-  const results = (await request.json()) as {
-    transfers: Transfer[];
-  };
-
-  const teams = await GetAllTeams();
+  const env = (await getCloudflareContext({ async: true })).env;
+  const [transfers, teams] = await Promise.all([
+    getTransfers(env.DB),
+    getClubs(env.DB),
+  ]);
 
   return (
     <main className="pb-24 text-[#071a2b]">
@@ -40,7 +34,7 @@ export default async function Transfers() {
           </div>
         </div>
       </header>
-      <TransferSearch default={results.transfers} teams={teams} />
+      <TransferSearch default={transfers} teams={teams} />
     </main>
   );
 }

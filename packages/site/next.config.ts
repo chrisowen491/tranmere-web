@@ -44,10 +44,6 @@ const nextConfig: NextConfig = {
 				source: '/api/result-search',
 				destination: `https://api.tranmere-web.com/result-search/`,
 			},
-      {
-				source: '/api/transfer-search',
-				destination: `https://api.tranmere-web.com/transfer-search/`,
-			},
 		]
   }
 };

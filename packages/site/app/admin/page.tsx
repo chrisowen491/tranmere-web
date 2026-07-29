@@ -5,6 +5,7 @@ import { getCloudflareContext } from "@opennextjs/cloudflare";
 import {
   ArrowRightIcon,
   ArrowsRightLeftIcon,
+  BuildingOffice2Icon,
   CalendarDaysIcon,
   UserCircleIcon,
   UserGroupIcon,
@@ -158,6 +159,14 @@ export default async function AdminPage() {
                 "Add managerial appointments or edit names, dates and programme images.",
               action: "Manage managers",
               icon: UserGroupIcon,
+            },
+            {
+              href: "/admin/clubs",
+              title: "Clubs",
+              description:
+                "Manage club names, abbreviations, colours, divisions and locations.",
+              action: "Manage clubs",
+              icon: BuildingOffice2Icon,
             },
           ].map((item) => {
             const Icon = item.icon;

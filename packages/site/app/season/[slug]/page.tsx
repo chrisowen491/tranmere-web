@@ -4,7 +4,6 @@ import {
   H2HTotal,
   Match,
   PlayerSeasonSummary,
-  Transfer,
 } from "@tranmere-web/lib/src/tranmere-web-types";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import SeasonReview from "@/components/apps/SeasonReview";
@@ -13,6 +12,7 @@ import { SlugParams } from "@/lib/types";
 import { notFound } from "next/navigation";
 import { GetBaseUrl } from "@/lib/apiFunctions";
 import { getManagers } from "@/lib/managers";
+import { getTransfers } from "@/lib/transfers";
 
 export async function generateMetadata(props: { params: SlugParams }) {
   const params = await props.params;
@@ -62,12 +62,7 @@ export default async function SeasonPage(props: { params: SlugParams }) {
     players: PlayerSeasonSummary[];
   };
 
-  const transferRequest = await fetch(
-    baseUrl + `/transfer-search/?season=${season}`,
-  );
-  const transfers = (await transferRequest.json()) as {
-    transfers: Transfer[];
-  };
+  const transfers = await getTransfers(env.DB, { season });
 
   const articles = await getAllArticlesForTag(100, season);
 
@@ -84,7 +79,7 @@ export default async function SeasonPage(props: { params: SlugParams }) {
       players={playerResults.players}
       season={season}
       seasons={seasons}
-      transfers={transfers.transfers}
+      transfers={transfers}
       articles={articles}
       shirts={filteredShirts}
     ></SeasonReview>

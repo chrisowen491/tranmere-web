@@ -147,29 +147,6 @@ export async function GetLastMatch(): Promise<Match> {
   return match;
 }
 
-export async function GetAllTeams(): Promise<Team[]> {
-  const query: string = encodeURIComponent(
-    '{listTranmereWebClubs(limit:500){items{name}}}'
-  );
-  const result = await fetch(
-    `${APP_SYNC_URL}/graphql?query=${query}`,
-    APP_SYNC_OPTIONS
-  );
-
-  const list = (await result.json()) as {
-    data: { listTranmereWebClubs: { items: Team[] } };
-  };
-
-  const results: Team[] = list.data.listTranmereWebClubs.items;
-
-  results.sort(function (a: Team, b: Team) {
-    if (a.name < b.name) return -1;
-    if (a.name > b.name) return 1;
-    return 0;
-  });
-  return results;
-}
-
 export async function GetAllPlayers(): Promise<Player[]> {
   const results: Player[] = [];
   let nextToken: string | null = null;
@@ -233,21 +210,22 @@ export async function GetOnThisDay(): Promise<Match | null> {
 }
 
 export async function GetAllCupCompetitions(): Promise<Competition[]> {
-  const query = encodeURIComponent(
-    '{listTranmereWebCompetitions(limit:500){items{name}}}'
-  );
-
-  const competitions = await fetch(
-    `${APP_SYNC_URL}/graphql?query=${query}`,
-    APP_SYNC_OPTIONS
-  );
-
-  const list = (await competitions.json()) as {
-    data: { listTranmereWebCompetitions: { items: Competition[] } };
-  };
-
-  const results: Competition[] = list.data.listTranmereWebCompetitions.items;
-  return results;
+  return [
+    'Anglo Italian Cup',
+    'Associate Members Cup',
+    'FA Cup',
+    'FA Trophy',
+    'FL Trophy',
+    'Freight Rover Trophy',
+    'Friendly',
+    'Johnstones Paint Trophy',
+    'LDV Trophy',
+    'League Cup',
+    'Leyland Daf Trophy',
+    'Play Offs',
+    'Sherpa Van Trophy',
+    'Zenith Data Systems Trophy',
+  ].map((name) => ({ name }));
 }
 
 export async function GetAllHatTricks(): Promise<HatTrick[]> {
