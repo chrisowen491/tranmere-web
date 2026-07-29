@@ -8,9 +8,20 @@ import CommentPanel from "@/components/comments/CommentPanel";
 import type { Comment } from "@/lib/comments";
 import { Reviews } from "@/components/comments/Reviews";
 import { BreadcrumbLinks } from "@/components/fragments/BreadcrumbLinks";
-import { ArrowPathIcon, UserIcon } from "@heroicons/react/24/outline";
+import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import { replaceSeasonsKit } from "@tranmere-web/lib/src/apiFunctions";
 import { AttendanceCorrectionForm } from "./AttendanceCorrectionForm";
+
+const defaultPlayerAvatar =
+  "https://www.tranmere-web.com/builder/2026/none/cccccc/none/000000/cccccc/none/cccccc";
+
+function playerAvatar(picLink: string | undefined, season: number) {
+  if (!picLink || picLink.endsWith("/blank.svg")) {
+    return replaceSeasonsKit(defaultPlayerAvatar, season.toString())
+  } else {
+    return replaceSeasonsKit(picLink, season.toString());
+  }
+}
 
 const positionOrder = [
   "Goalkeeper",
@@ -38,7 +49,7 @@ export default function MatchReport(props: {
   const lineupLines = [
     players.filter((player) => player.bio?.position === "Striker"),
     players.filter((player) =>
-      ["Winger", "Central Midfielder"].includes(player.bio?.position ?? ""),
+      ["Winger", "Central Midfielder", ""].includes(player.bio?.position ?? ""),
     ),
     players.filter((player) =>
       ["Full Back", "Central Defender"].includes(player.bio?.position ?? ""),
@@ -210,21 +221,17 @@ export default function MatchReport(props: {
                           aria-label={player.Name}
                           className="relative grid h-14 w-14 place-items-center overflow-hidden rounded-full border border-white/45 bg-[#f4f0e8] transition hover:ring-4 hover:ring-blue-200/30 sm:h-24 sm:w-24"
                         >
-                          {player.bio?.picLink ? (
-                            <Image
-                              alt=""
-                              width={112}
-                              height={112}
-                              unoptimized
-                              src={replaceSeasonsKit(
-                                player.bio.picLink,
-                                match.season.toString(),
-                              )}
-                              className="h-full w-full object-cover"
-                            />
-                          ) : (
-                            <UserIcon className="h-8 w-8 text-blue-700" />
-                          )}
+                          <Image
+                            alt=""
+                            width={112}
+                            height={112}
+                            unoptimized
+                            src={playerAvatar(
+                              player.bio?.picLink,
+                              parseInt(match.season),
+                            )}
+                            className="h-full w-full object-cover"
+                          />
                         </Link>
                         <Link
                           href={`/page/player/${player.Name}`}
@@ -233,7 +240,7 @@ export default function MatchReport(props: {
                           {player.Name}
                         </Link>
                         <span className="mt-1 hidden font-mono text-[10px] uppercase text-white/55 sm:block">
-                          {player.bio?.position}
+                          {player.bio?.position ?? "Position unknown"}
                         </span>
                         <div className="mt-1 flex min-h-4 items-center justify-center gap-1">
                           {player.YellowCard && (
