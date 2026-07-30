@@ -136,6 +136,13 @@ export default async function ManagerRecords() {
                 <ArrowRightIcon className="h-4 w-4" />
               </Link>
               <Link
+                href="/manager-fingerprints"
+                className="inline-flex items-center gap-3 border border-[#071a2b] bg-[#fffdf8] px-5 py-4 text-sm font-bold text-[#071a2b] transition hover:bg-white"
+              >
+                Manager fingerprints
+                <ArrowRightIcon className="h-4 w-4" />
+              </Link>
+              <Link
                 href="/results"
                 className="inline-flex items-center gap-3 border border-[#071a2b] bg-[#071a2b] px-5 py-4 text-sm font-bold text-white transition hover:bg-blue-700"
               >

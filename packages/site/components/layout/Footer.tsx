@@ -30,6 +30,7 @@ const linkGroups = [
     links: [
       { label: "Managers", href: "/managers" },
       { label: "Manager comparison", href: "/manager-comparison" },
+      { label: "Manager fingerprints", href: "/manager-fingerprints" },
       { label: "Manager’s Trusted XI", href: "/manager-trusted-xi" },
       { label: "About", href: "/page/blog/about" },
       { label: "Contact", href: "/contact" },
