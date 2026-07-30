@@ -1,218 +1,250 @@
 "use client";
-import {
-  CurrencyDollarIcon,
-  GlobeAmericasIcon,
-} from "@heroicons/react/24/outline";
-import { Breadcrumb, BreadcrumbLinks } from "../fragments/BreadcrumbLinks";
+
 import { Shirt } from "@/lib/types";
-import Link from "next/link";
-import Image from "next/image";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
-import { BLOCKS } from "@contentful/rich-text-types";
+import {
+  ArrowLeftIcon,
+  CalendarDaysIcon,
+  InformationCircleIcon,
+  PaintBrushIcon,
+  SparklesIcon,
+  TagIcon,
+} from "@heroicons/react/24/outline";
+import Image from "next/image";
+import Link from "next/link";
 
-export function ShirtApp(props: { shirt: Shirt }) {
-  const product = props.shirt;
+function factValue(value: string | undefined) {
+  return value && value !== "Other" ? value : "Not recorded";
+}
 
-  const breadcrumbs: Breadcrumb[] = [
-    { id: 1, name: "Home", href: "/" },
-    {
-      id: 2,
-      href: "/shirts/",
-      name: "Shirts",
-    },
-  ];
-  const Text = ({ children }: any) => (
-    <p className="align-center">{children}</p>
-  );
-
-  const options = {
-    renderNode: {
-      [BLOCKS.PARAGRAPH]: (node: any, children: any) => <Text>{children}</Text>,
-    },
-    renderText: (text: string) => text.replace("!", "?"),
-  };
-
-  const policies = [
-    {
-      name: "Images",
-      icon: GlobeAmericasIcon,
-      description: "Generated With Chat GPT",
-    },
-    {
-      name: "Prices",
-      icon: CurrencyDollarIcon,
-      description: "Prices Are Listed As Sold On Launch",
-    },
-  ];
-
-  function classNames(...classes: string[]) {
-    return classes.filter(Boolean).join(" ");
-  }
+export function ShirtApp({ shirt }: { shirt: Shirt }) {
+  const images = shirt.imagesCollection.items;
+  const primaryImage = images[0];
+  const firstSeason = shirt.seasons[0];
+  const lastSeason = shirt.seasons.at(-1);
+  const seasonRange =
+    firstSeason === lastSeason ? firstSeason : `${firstSeason}–${lastSeason}`;
+  const variants = shirt.variants?.filter(Boolean) ?? [];
 
   return (
-    <div className="pb-16 pt-6 sm:pb-24">
-      <BreadcrumbLinks
-        breadcrumbs={breadcrumbs}
-        currentpage={product.name}
-        currenthref={`/shirts/${product.slug}`}
-      />
-      <div className="mx-auto mt-8 max-w-2xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
-        <div className="lg:grid lg:auto-rows-min lg:grid-cols-12 lg:gap-x-8">
-          <div className="lg:col-span-5 lg:col-start-8">
-            <div className="flex justify-between">
-              <h1 className="text-xl font-medium text-gray-900">
-                {product.name}
-              </h1>
-              <p className="text-xl font-medium text-gray-900">
-                {product.price}
+    <main className="min-h-screen bg-[#f4f0e8] pb-24 text-[#071a2b]">
+      <header className="relative overflow-hidden border-b border-white/10 bg-[#071a2b] text-white">
+        <div className="archive-grid absolute inset-0 opacity-25" />
+        <div className="relative mx-auto max-w-7xl px-6 pb-16 pt-8 sm:px-10 lg:px-12 lg:pb-24">
+          <Link
+            href="/shirts"
+            className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-white/55 transition hover:text-white"
+          >
+            <ArrowLeftIcon className="h-4 w-4" />
+            The shirt archive
+          </Link>
+
+          <div className="mt-14 grid gap-10 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-end">
+            <div>
+              <p className="flex items-center gap-3 text-xs font-bold uppercase tracking-[0.2em] text-blue-300">
+                <span className="h-px w-10 bg-blue-400" />
+                Kit study · {shirt.use}
               </p>
+              <h1 className="mt-7 max-w-4xl font-display text-5xl font-semibold leading-[0.92] tracking-[-0.055em] sm:text-7xl lg:text-8xl">
+                {shirt.name}
+              </h1>
             </div>
-            {/* Reviews */}
-          </div>
 
-          {/* Image gallery */}
-          <div className="mt-8 lg:col-span-7 lg:col-start-1 lg:row-span-3 lg:row-start-1 lg:mt-0">
-            <h2 className="sr-only">Images</h2>
-
-            <div className="grid grid-cols-1 lg:grid-cols-2 lg:grid-rows-3 lg:gap-8">
-              {product.imagesCollection.items.map((image, idx) => (
-                <Image
-                  key={idx}
-                  alt={image.description}
-                  src={image.url}
-                  height={1024}
-                  width={1568}
-                  className={classNames(
-                    idx === 0
-                      ? "lg:col-span-2 lg:row-span-2"
-                      : "hidden lg:block",
-                    "rounded-lg",
-                  )}
-                />
-              ))}
-            </div>
-          </div>
-
-          <div className="mt-8 lg:col-span-5">
-            <div className="grid grid-cols-2 grid-rows-2 gap-4">
-              {product.imagesCollection.items.map((image, idx) => (
-                <Image
-                  key={idx}
-                  alt={image.description}
-                  src={image.url}
-                  height={1024}
-                  width={1568}
-                  className={classNames(
-                    idx === 0
-                      ? "hidden"
-                      : "lg:hidden h-48 w-96 object-contain col-span-1 row-span-1",
-                    "rounded-lg",
-                  )}
-                />
-              ))}
-            </div>
-            <div className="mt-10">
-              <h2 className="text-sm font-medium text-gray-900">Description</h2>
-
-              <div className="mt-4 space-y-4 text-sm/6 text-gray-500">
-                {product.description ? (
-                  documentToReactComponents(product.description.json, options)
-                ) : (
-                  <p>No description available.</p>
-                )}
+            <div className="grid grid-cols-2 border border-white/15">
+              <div className="border-r border-white/15 p-5">
+                <span className="block font-display text-3xl font-semibold">
+                  {seasonRange || "—"}
+                </span>
+                <span className="mt-2 block font-mono text-[10px] uppercase tracking-[0.16em] text-white/45">
+                  Seasons worn
+                </span>
+              </div>
+              <div className="p-5">
+                <span className="block font-display text-3xl font-semibold">
+                  {shirt.color}
+                </span>
+                <span className="mt-2 block font-mono text-[10px] uppercase tracking-[0.16em] text-white/45">
+                  Primary colour
+                </span>
               </div>
             </div>
-            <div className="mt-8 border-t border-gray-200 pt-8">
-              <h2 className="text-sm font-medium text-gray-900">Usage</h2>
-              <div className="mt-4">{product.use}</div>
-            </div>
-
-            <div className="mt-8 border-t border-gray-200 pt-8">
-              <h2 className="text-sm font-medium text-gray-900">Colour</h2>
-              <div className="mt-4">{product.color}</div>
-            </div>
-
-            <div className="mt-8 border-t border-gray-200 pt-8">
-              <h2 className="text-sm font-medium text-gray-900">
-                Seasons In Use
-              </h2>
-
-              <div className="mt-4">
-                <ul
-                  role="list"
-                  className="list-disc space-y-1 pl-5 text-sm/6 text-gray-500 marker:text-gray-300"
-                >
-                  {product.seasons.map((season) => (
-                    <li key={season} className="pl-2">
-                      <Link href={`/season/${season}`}>{season}</Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-
-            {/* Product details */}
-
-            <div className="mt-8 border-t border-gray-200 pt-8">
-              <h2 className="text-sm font-medium text-gray-900">Variants</h2>
-
-              <div className="mt-4">
-                <ul
-                  role="list"
-                  className="list-disc space-y-1 pl-5 text-sm/6 text-gray-500 marker:text-gray-300"
-                >
-                  {product.variants ? (
-                    product.variants.map((item) => (
-                      <li key={item} className="pl-2">
-                        {item}
-                      </li>
-                    ))
-                  ) : (
-                    <p>None known.</p>
-                  )}
-                </ul>
-              </div>
-            </div>
-
-            <div className="mt-8 border-t border-gray-200 pt-8">
-              <h2 className="text-sm font-medium text-gray-900">
-                Manufacturer
-              </h2>
-
-              <div className="mt-4">{product.manufacturer}</div>
-            </div>
-
-            {/* Policies */}
-            <section aria-labelledby="policies-heading" className="mt-10">
-              <h2 id="policies-heading" className="sr-only">
-                Our Policies
-              </h2>
-
-              <dl className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
-                {policies.map((policy) => (
-                  <div
-                    key={policy.name}
-                    className="rounded-lg border border-gray-200 bg-gray-50 p-6 text-center"
-                  >
-                    <dt>
-                      <policy.icon
-                        aria-hidden="true"
-                        className="mx-auto size-6 shrink-0 text-gray-400"
-                      />
-                      <span className="mt-4 text-sm font-medium text-gray-900">
-                        {policy.name}
-                      </span>
-                    </dt>
-                    <dd className="mt-1 text-sm text-gray-500">
-                      {policy.description}
-                    </dd>
-                  </div>
-                ))}
-              </dl>
-            </section>
           </div>
         </div>
-      </div>
-    </div>
+      </header>
+
+      <section className="mx-auto grid max-w-7xl gap-10 px-6 py-12 sm:px-10 lg:grid-cols-[minmax(0,1.35fr)_minmax(340px,0.65fr)] lg:px-12 lg:py-16">
+        <div className="min-w-0">
+          <div className="relative overflow-hidden border border-[#071a2b]/15 bg-[#fffdf8]">
+            <div className="absolute left-5 top-5 z-10 bg-blue-700 px-3 py-2 font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-white">
+              Archive reconstruction
+            </div>
+            <div className="absolute right-5 top-5 z-10 font-mono text-[10px] uppercase tracking-[0.16em] text-[#071a2b]/35">
+              Tranmere-Web
+            </div>
+            {primaryImage ? (
+              <div className="relative aspect-[4/5] w-full sm:aspect-[5/4] lg:aspect-[4/5]">
+                <Image
+                  src={primaryImage.url}
+                  alt={
+                    primaryImage.description ||
+                    `${shirt.name} archive reconstruction`
+                  }
+                  fill
+                  priority
+                  sizes="(min-width: 1024px) 760px, 100vw"
+                  className="object-contain p-5 sm:p-10"
+                />
+              </div>
+            ) : (
+              <div className="grid aspect-[4/5] place-items-center text-sm text-[#071a2b]/45">
+                No kit image available
+              </div>
+            )}
+          </div>
+
+          {images.length > 1 && (
+            <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3">
+              {images.slice(1).map((image) => (
+                <div
+                  key={image.url}
+                  className="relative aspect-square overflow-hidden border border-[#071a2b]/15 bg-[#fffdf8]"
+                >
+                  <Image
+                    src={image.url}
+                    alt={image.description || `${shirt.name} detail`}
+                    fill
+                    sizes="(min-width: 640px) 240px, 50vw"
+                    className="object-contain p-4"
+                  />
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <aside className="min-w-0 lg:sticky lg:top-6 lg:self-start">
+          <section className="border border-[#071a2b]/15 bg-[#fffdf8] p-6 sm:p-8">
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-blue-700">
+              The shirt
+            </p>
+            <h2 className="mt-3 font-display text-3xl font-semibold tracking-[-0.035em]">
+              A piece of Rovers history
+            </h2>
+            <div className="mt-6 text-base leading-7 text-[#071a2b]/65 [&_p+p]:mt-4">
+              {shirt.description ? (
+                documentToReactComponents(shirt.description.json)
+              ) : (
+                <p>
+                  A clean {shirt.color.toLowerCase()} {shirt.use.toLowerCase()}{" "}
+                  shirt from the {shirt.decade} archive, reconstructed to
+                  preserve the look of the kit worn at the time.
+                </p>
+              )}
+            </div>
+
+            <dl className="mt-8 grid grid-cols-2 border-l border-t border-[#071a2b]/15">
+              {[
+                {
+                  label: "Usage",
+                  value: shirt.use,
+                  icon: TagIcon,
+                },
+                {
+                  label: "Colour",
+                  value: shirt.color,
+                  icon: PaintBrushIcon,
+                },
+                {
+                  label: "Manufacturer",
+                  value: factValue(shirt.manufacturer),
+                  icon: SparklesIcon,
+                },
+                {
+                  label: "Era",
+                  value: shirt.decade || "Not recorded",
+                  icon: CalendarDaysIcon,
+                },
+              ].map((fact) => (
+                <div
+                  key={fact.label}
+                  className="min-h-32 border-b border-r border-[#071a2b]/15 p-4"
+                >
+                  <fact.icon className="h-5 w-5 text-blue-700" />
+                  <dt className="mt-4 font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-[#071a2b]/40">
+                    {fact.label}
+                  </dt>
+                  <dd className="mt-1 text-sm font-bold">{fact.value}</dd>
+                </div>
+              ))}
+            </dl>
+          </section>
+
+          <section className="mt-5 border border-[#071a2b]/15 bg-[#fffdf8] p-6 sm:p-8">
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-blue-700">
+              Seasons in use
+            </p>
+            <div className="mt-5 flex flex-wrap gap-2">
+              {shirt.seasons.map((season) => (
+                <Link
+                  key={season}
+                  href={`/season/${season}`}
+                  className="border border-[#071a2b]/20 bg-[#f4f0e8] px-3 py-2 font-mono text-xs font-bold transition hover:border-blue-700 hover:bg-blue-700 hover:text-white"
+                >
+                  {season}
+                </Link>
+              ))}
+            </div>
+          </section>
+
+          <section className="mt-5 border border-[#071a2b]/15 bg-[#fffdf8] p-6 sm:p-8">
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-blue-700">
+              Known variants
+            </p>
+            {variants.length > 0 ? (
+              <ul className="mt-4 space-y-2 text-sm leading-6 text-[#071a2b]/65">
+                {variants.map((variant) => (
+                  <li key={variant} className="border-l-2 border-blue-700 pl-3">
+                    {variant}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="mt-3 text-sm text-[#071a2b]/55">
+                No contemporary variants are currently recorded.
+              </p>
+            )}
+          </section>
+
+          <section className="mt-5 bg-[#071a2b] p-6 text-white sm:p-8">
+            <InformationCircleIcon className="h-6 w-6 text-blue-300" />
+            <h2 className="mt-4 font-display text-2xl font-semibold">
+              About this reconstruction
+            </h2>
+            <p className="mt-3 text-sm leading-6 text-white/60">
+              Archive kit images are AI-assisted visual studies based on known
+              colours and period details. They are illustrative rather than
+              original match-worn photographs.
+            </p>
+          </section>
+        </aside>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-12">
+        <Link
+          href="/shirts"
+          className="group flex items-center justify-between border-y border-[#071a2b]/15 py-8"
+        >
+          <span>
+            <span className="block text-xs font-bold uppercase tracking-[0.16em] text-blue-700">
+              Continue exploring
+            </span>
+            <span className="mt-2 block font-display text-3xl font-semibold">
+              Browse the complete shirt archive
+            </span>
+          </span>
+          <ArrowLeftIcon className="h-7 w-7 rotate-180 transition group-hover:translate-x-1" />
+        </Link>
+      </section>
+    </main>
   );
 }

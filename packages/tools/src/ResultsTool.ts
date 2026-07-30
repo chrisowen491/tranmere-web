@@ -28,9 +28,9 @@ export const ResultsTool = tool({
   inputSchema: z.object({
     season: z
       .number()
-      .optional()
+      .default(0)
       .describe(
-        'The season to get results from - should be the year the season started e.g. the 1993-94 season should be supplied as 1993. Leave blank for all time records or if a specific season is not mentioned.'
+        'The season to get results from - should be the year the season started e.g. the 1993-94 season should be supplied as 1993. Set as zero for all time records or if a specific season is not mentioned.'
       ),
     sort: z
       .enum(['Oldest', 'Most Recent', 'Top Attendance'])

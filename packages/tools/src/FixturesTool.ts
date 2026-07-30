@@ -14,12 +14,12 @@ export const FixturesTool = tool({
       .default(moment(new Date()).add(1, 'minute').format('YYYY-MM-DD')),
     monthsInFuture: z
       .number()
-      .describe('The number of months in the future to search for fixtures')
-      .default(1)
+      .describe('The number of months in the future to search for fixtures - default to zero if no time period specied')
+      .default(0)
   }),
   execute: async ({ start, monthsInFuture }) => {
     try {
-      const future = moment(new Date())
+      const future = monthsInFuture == 0 ? start : moment(new Date())
         .add(monthsInFuture, 'months')
         .format('YYYY-MM-DD');
 

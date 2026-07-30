@@ -10,6 +10,10 @@ import { SubmitButton } from "@/components/forms/SubmitButton";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import {
   AdjustmentsHorizontalIcon,
+  ArrowUpRightIcon,
+  ChartBarIcon,
+  TrophyIcon,
+  UserGroupIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { UserIcon } from "@heroicons/react/20/solid";
@@ -29,6 +33,20 @@ export function PlayerSearch(props: {
   const [players, setPlayers] = useState(props.default);
   const [season, setSeason] = useState(props.season);
   const [loading, setLoading] = useState(false);
+  const maxAppearances = Math.max(
+    ...players.map((player) => player.starts + player.subs),
+    1,
+  );
+  const appearanceLeader = [...players].sort(
+    (a, b) => b.starts + b.subs - (a.starts + a.subs),
+  )[0];
+  const goalsLeader = [...players].sort(
+    (a, b) => b.goals - a.goals || b.starts - a.starts,
+  )[0];
+  const totalAppearances = players.reduce(
+    (total, player) => total + player.starts + player.subs,
+    0,
+  );
 
   const filters = [
     {
@@ -203,107 +221,207 @@ export function PlayerSearch(props: {
       ) : (
         ""
       )}
-      <div className="mt-7 border border-[#071a2b]/15 bg-[#fffdf8]">
+
+      {players.length > 0 && (
+        <div className="mt-7 grid border border-[#071a2b]/15 bg-[#fffdf8] sm:grid-cols-3">
+          <div className="border-b border-[#071a2b]/15 p-5 sm:border-b-0 sm:border-r">
+            <ChartBarIcon className="h-5 w-5 text-blue-700" />
+            <p className="mt-4 font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-[#071a2b]/40">
+              Appearance leader
+            </p>
+            <p className="mt-1 truncate font-display text-2xl font-semibold">
+              {appearanceLeader.Player}
+            </p>
+            <p className="mt-1 text-xs text-[#071a2b]/50">
+              {appearanceLeader.starts + appearanceLeader.subs} appearances
+            </p>
+          </div>
+          <div className="border-b border-[#071a2b]/15 p-5 sm:border-b-0 sm:border-r">
+            <TrophyIcon className="h-5 w-5 text-blue-700" />
+            <p className="mt-4 font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-[#071a2b]/40">
+              Leading scorer
+            </p>
+            <p className="mt-1 truncate font-display text-2xl font-semibold">
+              {goalsLeader.Player}
+            </p>
+            <p className="mt-1 text-xs text-[#071a2b]/50">
+              {goalsLeader.goals} goals
+            </p>
+          </div>
+          <div className="p-5">
+            <UserGroupIcon className="h-5 w-5 text-blue-700" />
+            <p className="mt-4 font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-[#071a2b]/40">
+              Archive volume
+            </p>
+            <p className="mt-1 font-display text-2xl font-semibold">
+              {totalAppearances.toLocaleString()}
+            </p>
+            <p className="mt-1 text-xs text-[#071a2b]/50">
+              Combined recorded appearances
+            </p>
+          </div>
+        </div>
+      )}
+
+      <div className="mt-5 overflow-hidden border border-[#071a2b]/15 bg-[#fffdf8]">
+        <div className="flex items-end justify-between gap-4 border-b border-[#071a2b]/15 bg-[#071a2b] px-5 py-5 text-white">
+          <div>
+            <p className="font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-blue-300">
+              Player index
+            </p>
+            <h2 className="mt-1 font-display text-2xl font-semibold">
+              Archive rankings
+            </h2>
+          </div>
+          <p className="hidden font-mono text-[10px] uppercase tracking-[0.14em] text-white/40 sm:block">
+            {season
+              ? `${season}/${String(Number(season) + 1).slice(-2)}`
+              : "All-time records"}
+          </p>
+        </div>
         <div className="overflow-x-auto">
-          <table className="min-w-full">
-            <thead className="border-b border-[#071a2b]/15 bg-[#f4f0e8] text-xs font-bold uppercase tracking-[0.1em] text-[#071a2b]/60">
+          <table className="min-w-[620px] w-full">
+            <thead className="border-b border-[#071a2b]/15 bg-[#e8e2d6] font-mono text-[10px] font-bold uppercase tracking-[0.12em] text-[#071a2b]/55">
               <tr>
-                <th scope="col" className="px-5 py-4 text-left">
+                <th scope="col" className="w-14 px-4 py-4 text-center">
+                  Rank
+                </th>
+                <th scope="col" className="px-4 py-4 text-left">
                   Player
                 </th>
-                <th scope="col" className="py-3.5">
-                  Starts
+                <th scope="col" className="min-w-52 px-4 py-4">
+                  Appearances
                 </th>
-                <th scope="col" className="px-3 py-3.5">
+                <th scope="col" className="px-4 py-4 text-center">
                   Goals
                 </th>
-                <th scope="col" className="hidden px-3 py-3.5 lg:table-cell">
+                <th
+                  scope="col"
+                  className="hidden px-4 py-4 text-center md:table-cell"
+                >
                   Assists
                 </th>
-                <th scope="col" className="hidden px-3 py-3.5 lg:table-cell">
-                  Headers
+                <th scope="col" className="hidden px-4 py-4 lg:table-cell">
+                  Goal detail
                 </th>
-                <th scope="col" className="hidden px-3 py-3.5 lg:table-cell">
-                  Free Kicks
-                </th>
-                <th
-                  scope="col"
-                  className="hidden px-1 md:px-3 py-3.5 lg:table-cell"
-                >
-                  Penalties
-                </th>
-                <th
-                  scope="col"
-                  className="hidden px-1 md:px-3 py-3.5 lg:table-cell"
-                >
-                  Red Cards
-                </th>
-                <th
-                  scope="col"
-                  className="hidden px-1 md:px-3 py-3.5 lg:table-cell"
-                >
-                  Yellow Cards
+                <th scope="col" className="hidden px-5 py-4 lg:table-cell">
+                  Cards
                 </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[#071a2b]/10 text-sm">
-              {players.map((player, idx) => (
-                <tr key={idx} className="transition hover:bg-[#f4f0e8]">
-                  <td className="whitespace-nowrap px-5 py-3">
-                    <div className="flex items-center">
-                      <div className="h-11 w-11 flex-shrink-0">
-                        {player.bio?.picLink ? (
-                          <Image
-                            alt={player.Player}
-                            width={100}
-                            height={100}
-                            unoptimized={true}
-                            src={replaceSeasonsKit(player.bio.picLink, season)}
-                            className="h-11 w-11 bg-[#e8e2d6] object-cover"
-                          />
-                        ) : (
-                          <UserIcon
-                            aria-hidden="true"
-                            className="h-11 w-11 bg-[#e8e2d6] p-2 text-blue-700"
-                          />
-                        )}
+              {players.map((player, idx) => {
+                const apps = player.starts + player.subs;
+                return (
+                  <tr
+                    key={`${player.Player}-${player.Season}-${idx}`}
+                    className="group transition hover:bg-blue-50/60"
+                  >
+                    <td className="px-4 py-4 text-center font-mono text-xs font-bold text-[#071a2b]/35">
+                      {(idx + 1).toString().padStart(2, "0")}
+                    </td>
+                    <td className="whitespace-nowrap px-4 py-3">
+                      <div className="flex items-center">
+                        <div className="h-12 w-12 flex-shrink-0 overflow-hidden border border-[#071a2b]/10 bg-[#e8e2d6]">
+                          {player.bio?.picLink ? (
+                            <Image
+                              alt={player.Player}
+                              width={100}
+                              height={100}
+                              unoptimized={true}
+                              src={replaceSeasonsKit(
+                                player.bio.picLink,
+                                season,
+                              )}
+                              className="h-full w-full object-cover"
+                            />
+                          ) : (
+                            <UserIcon
+                              aria-hidden="true"
+                              className="h-full w-full p-2 text-blue-700"
+                            />
+                          )}
+                        </div>
+                        <div className="ml-3">
+                          <Link
+                            href={`/page/player/${player.Player}`}
+                            className="inline-flex items-center gap-1 font-display text-base font-semibold hover:text-blue-700"
+                          >
+                            {player.Player}
+                            <ArrowUpRightIcon className="h-3.5 w-3.5 opacity-25 transition group-hover:opacity-100" />
+                          </Link>
+                          {player.bio?.position && (
+                            <p className="mt-1 font-mono text-[9px] font-bold uppercase tracking-[0.1em] text-[#071a2b]/35">
+                              {player.bio.position}
+                            </p>
+                          )}
+                        </div>
                       </div>
-                      <div className="ml-3">
-                        <Link
-                          href={`/page/player/${player.Player}`}
-                          className="font-semibold hover:text-blue-700"
-                        >
-                          {player.Player}
-                        </Link>
+                    </td>
+                    <td className="px-4 py-4">
+                      <div className="flex items-center justify-between gap-3">
+                        <span className="font-mono text-sm font-bold">
+                          {apps}
+                        </span>
+                        <span className="text-xs text-[#071a2b]/45">
+                          {player.starts} + {player.subs}
+                        </span>
                       </div>
-                    </div>
-                  </td>
-                  <td className="whitespace-nowrap px-1 md:px-3 py-4 text-center">
-                    {player.starts} ({player.subs})
-                  </td>
-                  <td className="whitespace-nowrap px-1 md:px-3 py-4 text-center">
-                    {player.goals}
-                  </td>
-                  <td className="whitespace-nowrap hidden px-1 md:px-3 py-3.5 lg:table-cell text-center">
-                    {player.assists}
-                  </td>
-                  <td className="whitespace-nowrap hidden px-1 md:px-3 py-3.5 lg:table-cell text-center">
-                    {player.headers}
-                  </td>
-                  <td className="whitespace-nowrap hidden px-1 md:px-3 py-3.5 lg:table-cell text-center">
-                    {player.freekicks}
-                  </td>
-                  <td className="whitespace-nowrap hidden px-1 md:px-3 py-3.5 lg:table-cell text-center">
-                    {player.penalties}
-                  </td>
-                  <td className="whitespace-nowrap hidden px-1 md:px-3 py-3.5 lg:table-cell text-center">
-                    {player.red}
-                  </td>
-                  <td className="whitespace-nowrap hidden px-1 md:px-3 py-3.5 lg:table-cell text-center">
-                    {player.yellow}
-                  </td>
-                </tr>
-              ))}
+                      <div className="mt-2 h-1.5 bg-[#e8e2d6]">
+                        <div
+                          className="h-full bg-blue-700 transition group-hover:bg-blue-500"
+                          style={{
+                            width: `${(apps / maxAppearances) * 100}%`,
+                          }}
+                        />
+                      </div>
+                    </td>
+                    <td className="px-4 py-4 text-center">
+                      <span
+                        className={
+                          player.goals > 0
+                            ? "inline-grid min-h-9 min-w-9 place-items-center bg-blue-700 px-2 font-mono font-bold text-white"
+                            : "font-mono text-[#071a2b]/30"
+                        }
+                      >
+                        {player.goals}
+                      </span>
+                    </td>
+                    <td className="hidden px-4 py-4 text-center font-mono font-bold md:table-cell">
+                      {player.assists}
+                    </td>
+                    <td className="hidden px-4 py-4 lg:table-cell">
+                      <div className="flex gap-1">
+                        {[
+                          player.headers,
+                          player.freekicks,
+                          player.penalties,
+                        ].map((value, statIndex) => (
+                          <span
+                            key={statIndex}
+                            className="inline-flex min-w-7 items-center justify-center bg-[#e8e2d6] px-2 py-1 font-mono text-[10px] font-bold text-[#071a2b]/65"
+                          >
+                            {value}
+                          </span>
+                        ))}
+                      </div>
+                      <p className="mt-1.5 font-mono text-[9px] uppercase tracking-[0.08em] text-[#071a2b]/35">
+                        Head · FK · Pen
+                      </p>
+                    </td>
+                    <td className="hidden px-5 py-4 lg:table-cell">
+                      <div className="flex gap-1">
+                        <span className="inline-flex min-w-7 items-center justify-center bg-amber-100 px-2 py-1 font-mono text-[10px] font-bold text-amber-900">
+                          {player.yellow}
+                        </span>
+                        <span className="inline-flex min-w-7 items-center justify-center bg-red-100 px-2 py-1 font-mono text-[10px] font-bold text-red-800">
+                          {player.red}
+                        </span>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>

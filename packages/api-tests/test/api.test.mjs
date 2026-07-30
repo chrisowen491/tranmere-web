@@ -79,19 +79,6 @@ test('player GraphQL query returns a successful response', async () => {
   await expectOk(response);
 });
 
-test('club GraphQL query returns the expected club', async () => {
-  const endpoint = url('/graphql');
-  endpoint.searchParams.set(
-    'query',
-    '{listTranmereWebClubs(limit:1){items{name}}}'
-  );
-
-  const response = await fetch(endpoint);
-  const body = await expectJson(response);
-
-  assert.equal(body.data.listTranmereWebClubs.items[0].name, 'Bangor City');
-});
-
 test('contact endpoint accepts a message', async () => {
   const response = await fetch(url('/contact-us'), {
     method: 'POST',

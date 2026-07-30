@@ -25,6 +25,9 @@ export function TransferTable(props: { title: string; records: Transfer[] }) {
                 <th scope="col" className="hidden px-4 py-4 sm:table-cell">
                   Season
                 </th>
+                <th scope="col" className="hidden px-4 py-4 lg:table-cell">
+                  Date
+                </th>
                 <th scope="col" className="px-4 py-4">
                   Direction
                 </th>
@@ -61,6 +64,9 @@ export function TransferTable(props: { title: string; records: Transfer[] }) {
                       >
                         {record.season}
                       </Link>
+                    </td>
+                    <td className="hidden whitespace-nowrap px-4 py-4 font-mono text-xs text-[#071a2b]/55 lg:table-cell">
+                      {record.date || "—"}
                     </td>
                     <td className="whitespace-nowrap px-4 py-4">
                       <span

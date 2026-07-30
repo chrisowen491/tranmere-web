@@ -71,8 +71,13 @@ CREATE TABLE IF NOT EXISTS Transfers (
   to_club TEXT NOT NULL,
   fee_description TEXT NOT NULL,
   cost INTEGER NOT NULL DEFAULT 0,
+  transfer_date TEXT,
   CHECK (season BETWEEN 1800 AND 2200),
-  CHECK (cost >= 0)
+  CHECK (cost >= 0),
+  CHECK (
+    transfer_date IS NULL
+    OR transfer_date GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]'
+  )
 );
 
 CREATE INDEX IF NOT EXISTS Transfers_player_idx
@@ -86,6 +91,9 @@ CREATE INDEX IF NOT EXISTS Transfers_from_club_idx
 
 CREATE INDEX IF NOT EXISTS Transfers_to_club_idx
   ON Transfers (to_club, season);
+
+CREATE INDEX IF NOT EXISTS Transfers_date_idx
+  ON Transfers (transfer_date);
 
 CREATE TABLE IF NOT EXISTS Managers (
   id TEXT NOT NULL PRIMARY KEY,

@@ -120,13 +120,29 @@ export default async function ManagerRecords() {
                 Appointed {formatDate(currentManager.dateJoined)}
               </p>
             </div>
-            <Link
-              href="/results"
-              className="inline-flex items-center gap-3 justify-self-start border border-[#071a2b] bg-[#071a2b] px-5 py-4 text-sm font-bold text-white transition hover:bg-blue-700 md:justify-self-end"
-            >
-              Explore match records
-              <ArrowRightIcon className="h-4 w-4" />
-            </Link>
+            <div className="flex flex-wrap gap-3 md:justify-self-end">
+              <Link
+                href="/manager-comparison"
+                className="inline-flex items-center gap-3 border border-blue-700 bg-blue-700 px-5 py-4 text-sm font-bold text-white transition hover:bg-blue-800"
+              >
+                Compare managers
+                <ArrowRightIcon className="h-4 w-4" />
+              </Link>
+              <Link
+                href="/manager-trusted-xi"
+                className="inline-flex items-center gap-3 border border-[#071a2b] bg-[#fffdf8] px-5 py-4 text-sm font-bold text-[#071a2b] transition hover:bg-white"
+              >
+                Trusted XI
+                <ArrowRightIcon className="h-4 w-4" />
+              </Link>
+              <Link
+                href="/results"
+                className="inline-flex items-center gap-3 border border-[#071a2b] bg-[#071a2b] px-5 py-4 text-sm font-bold text-white transition hover:bg-blue-700"
+              >
+                Match records
+                <ArrowRightIcon className="h-4 w-4" />
+              </Link>
+            </div>
           </div>
         </section>
       )}

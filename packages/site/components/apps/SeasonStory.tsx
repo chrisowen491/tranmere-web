@@ -236,6 +236,12 @@ export function SeasonStory(props: {
           </a>
           <a
             className="text-white/55 transition hover:text-white"
+            href="#season-timeline"
+          >
+            Timeline
+          </a>
+          <a
+            className="text-white/55 transition hover:text-white"
             href="#season-archive"
           >
             Full archive
@@ -268,10 +274,10 @@ export function SeasonStory(props: {
             </p>
             <div className="mt-9 flex flex-wrap gap-3">
               <a
-                href="#season-journey"
+                href="#season-timeline"
                 className="inline-flex items-center gap-2 bg-white px-5 py-3 text-sm font-bold text-[#071a2b] transition hover:bg-emerald-300"
               >
-                Explore the story
+                Follow the timeline
                 <ArrowRightIcon className="h-4 w-4" aria-hidden="true" />
               </a>
               <a

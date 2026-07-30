@@ -17,6 +17,7 @@ interface TransferRequest {
   toClub?: string;
   feeDescription?: string;
   cost?: number;
+  date?: string;
 }
 
 function error(message: string, status: number) {
@@ -38,6 +39,8 @@ function validateTransfer(body: TransferRequest): TransferInput | null {
   const toClub = body.toClub?.trim().slice(0, 200);
   const season = Number(body.season);
   const cost = Number(body.cost);
+  const date = body.date?.trim() || null;
+  const parsedDate = date ? new Date(`${date}T00:00:00Z`) : null;
 
   if (
     !playerName ||
@@ -48,6 +51,16 @@ function validateTransfer(body: TransferRequest): TransferInput | null {
     season > 2200 ||
     !Number.isSafeInteger(cost) ||
     cost < 0
+  ) {
+    return null;
+  }
+
+  if (date && !/^\d{4}-\d{2}-\d{2}$/.test(date)) return null;
+  if (
+    date &&
+    (!parsedDate ||
+      Number.isNaN(parsedDate.getTime()) ||
+      parsedDate.toISOString().slice(0, 10) !== date)
   ) {
     return null;
   }
@@ -63,6 +76,7 @@ function validateTransfer(body: TransferRequest): TransferInput | null {
     toClub,
     feeDescription: body.feeDescription?.trim().slice(0, 200) || "",
     cost,
+    date,
   };
 }
 

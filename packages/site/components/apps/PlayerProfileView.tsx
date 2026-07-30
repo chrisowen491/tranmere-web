@@ -202,6 +202,21 @@ export default function PlayerProfileView(props: {
         </div>
 
         <aside className="space-y-6">
+          <Link
+            href={`/player-partnerships?player=${encodeURIComponent(player.name)}`}
+            className="group flex items-center justify-between bg-[#071a2b] p-5 text-white transition hover:bg-blue-700"
+          >
+            <span>
+              <span className="block font-mono text-[9px] font-bold uppercase tracking-[0.14em] text-blue-300">
+                Partnership explorer
+              </span>
+              <span className="mt-2 block font-display text-xl font-semibold">
+                Find who played alongside {player.name}
+              </span>
+            </span>
+            <ArrowUpRightIcon className="h-5 w-5 transition group-hover:-translate-y-1 group-hover:translate-x-1" />
+          </Link>
+
           <div className="border border-[#071a2b]/15 bg-[#fffdf8] p-5">
             <p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-700">
               Profile

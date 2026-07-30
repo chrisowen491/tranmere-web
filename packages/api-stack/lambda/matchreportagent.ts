@@ -30,9 +30,10 @@ exports.handler = async (): Promise<APIGatewayProxyResult> => {
   const model = openai('gpt-4o');
 
   const date = new Date();
-  const day = moment(date).subtract(1, 'day').format('YYYY-MM-DD');
+  const day = moment(date).subtract(0, 'day').format('YYYY-MM-DD');
   console.log(`Generating match Report For ${day}`);
 
+  // ${utils.getYear()}
   const matchReport = await generateText({
     model,
     tools: {
@@ -44,10 +45,12 @@ exports.handler = async (): Promise<APIGatewayProxyResult> => {
     stopWhen: stepCountIs(6),
     prompt: `
             You are an agent capable of creating soccer match reports for a Tranmere Rovers fan site.
-            You run at the start of every day. You should first see if any fixtures occured on ${day} and if so, generate a match report without headings. Use <br /> to separate paragraphs but avoid using other HTML.
-            You should make the match report interesting by making reference to the current league position, referee (if known), formation, the current manager (Darrell Clarke newly appointed in summer 2026), formation, the match events, tranmere's form over the past 5 results, plus previous recent meetings with the opponent.
-            Do not guess the referee or attendance - just leave them blank.
-            The current season is ${utils.getYear()}.
+            You run at the start of every day. You should first see if any fixtures occured on ${day} (in the 'FixturesTool' set monthsInFuture to 0 ) and if so, generate a match report without headings. 
+            Use <br /> to separate paragraphs but avoid using other HTML.
+            You should make the match report interesting by making reference to the current league position , formation, the manager (assume Darrel Clarke), the match events, tranmere's form over the past 5 results, plus previous recent meetings with the opponent.
+            Do not guess the referee - just leave them blank.
+            If this match was more than a few days ago - the league table is probably out of date so don't use it in the report in such cases.
+            The current season is 2026.
             Be explicit on the home and away team.
             If there are no fixtures today, you should return the words NO_FIXTURE.
         `
@@ -58,11 +61,6 @@ exports.handler = async (): Promise<APIGatewayProxyResult> => {
     const { object: match } = await generateObject({
       model,
       schema: z.object({
-        attendance: z
-          .number()
-          .describe('The attendance of the fixture if known')
-          .default(0),
-        referee: z.string().describe('The referee of the fixture').default(''),
         formation: z
           .string()
           .describe('The formation Tranmere played during the game'),
@@ -81,8 +79,8 @@ exports.handler = async (): Promise<APIGatewayProxyResult> => {
 
     const theMatch: Match = {
       date: day,
-      attendance: match.attendance ? match.attendance : 0,
-      referee: match.referee,
+      attendance: 0,
+      referee: '',
       formation: match.formation,
       id: uuidv4(),
       programme: '#N/A',

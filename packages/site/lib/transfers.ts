@@ -8,6 +8,7 @@ export interface TransferRow {
   to_club: string;
   fee_description: string;
   cost: number;
+  transfer_date: string | null;
 }
 
 export interface TransferInput {
@@ -17,6 +18,7 @@ export interface TransferInput {
   toClub: string;
   feeDescription: string;
   cost: number;
+  date: string | null;
 }
 
 export interface TransferFilters {
@@ -32,6 +34,7 @@ export function mapTransfer(row: TransferRow): Transfer {
     id: row.id,
     name: row.player_name,
     season: row.season,
+    date: row.transfer_date || undefined,
     from: row.from_club,
     to: row.to_club,
     value: row.fee_description,
@@ -44,7 +47,8 @@ export function mapTransfer(row: TransferRow): Transfer {
 export async function getTransferById(db: D1Database, id: string) {
   const row = await db
     .prepare(
-      `SELECT id, player_name, season, from_club, to_club, fee_description, cost
+      `SELECT id, player_name, season, from_club, to_club, fee_description, cost,
+              transfer_date
        FROM Transfers
        WHERE id = ?`,
     )
@@ -61,8 +65,9 @@ export async function createTransfer(
   await db
     .prepare(
       `INSERT INTO Transfers (
-        id, player_name, season, from_club, to_club, fee_description, cost
-      ) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+        id, player_name, season, from_club, to_club, fee_description, cost,
+        transfer_date
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
     )
     .bind(
       id,
@@ -72,6 +77,7 @@ export async function createTransfer(
       transfer.toClub,
       transfer.feeDescription,
       transfer.cost,
+      transfer.date,
     )
     .run();
   return getTransferById(db, id);
@@ -86,7 +92,7 @@ export async function updateTransfer(
     .prepare(
       `UPDATE Transfers
        SET player_name = ?, season = ?, from_club = ?, to_club = ?,
-           fee_description = ?, cost = ?
+           fee_description = ?, cost = ?, transfer_date = ?
        WHERE id = ?`,
     )
     .bind(
@@ -96,6 +102,7 @@ export async function updateTransfer(
       transfer.toClub,
       transfer.feeDescription,
       transfer.cost,
+      transfer.date,
       id,
     )
     .run();
@@ -141,10 +148,11 @@ export async function getTransfers(
 
   const where = conditions.length ? `WHERE ${conditions.join(" AND ")}` : "";
   const statement = db.prepare(
-    `SELECT id, player_name, season, from_club, to_club, fee_description, cost
+    `SELECT id, player_name, season, from_club, to_club, fee_description, cost,
+            transfer_date
      FROM Transfers
      ${where}
-     ORDER BY cost DESC, season DESC, player_name ASC`,
+     ORDER BY season DESC, transfer_date DESC, cost DESC, player_name ASC`,
   );
   const result = await (
     values.length ? statement.bind(...values) : statement

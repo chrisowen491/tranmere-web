@@ -207,6 +207,7 @@ export interface Transfer {
   id: string;
   name: string;
   season: number;
+  date?: string;
   from: string;
   to: string;
   value: string;

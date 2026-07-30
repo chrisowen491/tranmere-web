@@ -66,6 +66,57 @@ const archiveLinks = [
   },
 ];
 
+const exploreLinks = [
+  {
+    label: "Transfer Central",
+    detail: "Arrivals, departures and fees",
+    href: "/transfer-central",
+    icon: ArrowTrendingUpIcon,
+  },
+  {
+    label: "Managers",
+    detail: "Every spell in the dugout",
+    href: "/managers",
+    icon: UserGroupIcon,
+  },
+  {
+    label: "Manager comparison",
+    detail: "Put two tenures head to head",
+    href: "/manager-comparison",
+    icon: ChartBarSquareIcon,
+  },
+  {
+    label: "Trusted XI",
+    detail: "Each manager’s most-used team",
+    href: "/manager-trusted-xi",
+    icon: UserGroupIcon,
+  },
+  {
+    label: "Head-to-head",
+    detail: "Every opponent and meeting",
+    href: "/head-to-head",
+    icon: ArrowsRightLeftIcon,
+  },
+  {
+    label: "Rovers connections",
+    detail: "Clubs linked by players and matches",
+    href: "/rovers-connections",
+    icon: ArrowsRightLeftIcon,
+  },
+  {
+    label: "Player search",
+    detail: "Find any player in the archive",
+    href: "/playersearch",
+    icon: MagnifyingGlassIcon,
+  },
+  {
+    label: "Player partnerships",
+    detail: "Discover who played together",
+    href: "/player-partnerships",
+    icon: UserGroupIcon,
+  },
+];
+
 function PromoPlayer({ player }: { player: Player }) {
   return (
     <div className="flex w-20 flex-col items-center text-center">
@@ -511,47 +562,49 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="border-b border-[#071a2b]/15 bg-[#f4f0e8]">
+      <section
+        id="explore-archive"
+        className="border-b border-[#071a2b]/15 bg-[#f4f0e8]"
+      >
         <div className="mx-auto max-w-7xl px-6 py-16 sm:px-10 lg:px-12 lg:py-24">
-          <div className="mb-10 flex flex-wrap items-end justify-between gap-5">
+          <div className="flex flex-wrap items-end justify-between gap-5 border-b border-[#071a2b]/15 pb-8">
             <div>
               <p className="section-kicker">Explore the archive</p>
               <h2 className="mt-4 font-display text-4xl font-semibold tracking-[-0.035em]">
                 Follow your own path.
               </h2>
             </div>
-            <div className="flex flex-wrap gap-x-6 gap-y-3">
-              <Link
-                href="/transfer-central"
-                className="inline-flex items-center gap-2 border-b border-[#071a2b] pb-1 text-sm font-bold"
-              >
-                <ArrowTrendingUpIcon className="h-4 w-4" />
-                Transfer Central
-              </Link>
-              <Link
-                href="/managers"
-                className="inline-flex items-center gap-2 border-b border-[#071a2b] pb-1 text-sm font-bold"
-              >
-                <UserGroupIcon className="h-4 w-4" />
-                Browse managers
-              </Link>
-              <Link
-                href="/head-to-head"
-                className="inline-flex items-center gap-2 border-b border-[#071a2b] pb-1 text-sm font-bold"
-              >
-                <ArrowsRightLeftIcon className="h-4 w-4" />
-                Browse head-to-heads
-              </Link>
-              <Link
-                href="/playersearch"
-                className="inline-flex items-center gap-2 border-b border-[#071a2b] pb-1 text-sm font-bold"
-              >
-                <MagnifyingGlassIcon className="h-4 w-4" />
-                Search the collection
-              </Link>
-            </div>
+            <p className="max-w-sm text-sm leading-6 text-[#071a2b]/55">
+              Move through the archive by people, clubs, transfers or the
+              stories hidden between them.
+            </p>
           </div>
-          <div className="grid border-l border-t border-[#071a2b]/20 sm:grid-cols-2 lg:grid-cols-4">
+
+          <nav
+            aria-label="Archive tools"
+            className="mt-8 grid gap-px border border-[#071a2b]/15 bg-[#071a2b]/15 sm:grid-cols-2 lg:grid-cols-4"
+          >
+            {exploreLinks.map((item) => (
+              <Link
+                key={item.label}
+                href={item.href}
+                className="group flex min-h-28 items-start gap-4 bg-[#fffdf8] p-4 transition hover:bg-[#071a2b] hover:text-white"
+              >
+                <item.icon className="mt-0.5 h-5 w-5 flex-none text-blue-700 group-hover:text-blue-300" />
+                <span className="min-w-0">
+                  <strong className="block font-display text-lg font-semibold">
+                    {item.label}
+                  </strong>
+                  <span className="mt-1.5 block text-xs leading-5 text-[#071a2b]/50 group-hover:text-white/55">
+                    {item.detail}
+                  </span>
+                </span>
+                <ArrowRightIcon className="ml-auto h-4 w-4 flex-none opacity-25 transition group-hover:translate-x-1 group-hover:opacity-100" />
+              </Link>
+            ))}
+          </nav>
+
+          <div className="mt-12 grid border-l border-t border-[#071a2b]/20 sm:grid-cols-2 lg:grid-cols-4">
             {archiveLinks.map((item) => (
               <Link
                 key={item.label}

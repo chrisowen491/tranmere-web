@@ -83,6 +83,22 @@ export async function getClubById(db: D1Database, id: string) {
   return row ? mapClub(row) : null;
 }
 
+export async function getClubByName(db: D1Database, name: string) {
+  const row = await db
+    .prepare(
+      `SELECT id, name, short_name, three_letter_name, nicknames,
+              primary_colour, secondary_colour, highest_division,
+              latitude, longitude
+       FROM Clubs
+       WHERE name = ?
+       COLLATE NOCASE`,
+    )
+    .bind(name)
+    .first<ClubRow>();
+
+  return row ? mapClub(row) : null;
+}
+
 export async function createClub(db: D1Database, id: string, club: ClubInput) {
   await db
     .prepare(

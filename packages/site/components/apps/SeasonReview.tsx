@@ -26,6 +26,7 @@ import { areIntervalsOverlapping } from "date-fns";
 import Link from "next/link";
 import Image from "next/image";
 import { SeasonStory } from "./SeasonStory";
+import { SeasonTimeline } from "./SeasonTimeline";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -138,6 +139,13 @@ export default function SeasonReview(props: {
           transfers={props.transfers}
           shirts={props.shirts}
           seasons={props.seasons}
+        />
+        <SeasonTimeline
+          season={props.season}
+          results={props.results}
+          managers={managers}
+          transfers={props.transfers}
+          articles={props.articles}
         />
         <div id="season-archive">
           <header className="relative isolate">

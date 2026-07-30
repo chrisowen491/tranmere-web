@@ -18,6 +18,7 @@ function sortTransfers(transfers: Transfer[]) {
   return [...transfers].sort(
     (a, b) =>
       b.season - a.season ||
+      (b.date || "").localeCompare(a.date || "") ||
       a.name.localeCompare(b.name) ||
       a.id.localeCompare(b.id),
   );
@@ -48,6 +49,7 @@ export function TransferAdmin({
         transfer.to,
         transfer.value,
         transfer.season.toString(),
+        transfer.date || "",
       ].some((value) => value.toLowerCase().includes(query)),
     );
   }, [search, transfers]);
@@ -75,6 +77,7 @@ export function TransferAdmin({
           toClub: formData.get("toClub"),
           feeDescription: formData.get("feeDescription"),
           cost: Number(formData.get("cost")),
+          date: formData.get("date"),
         }),
       });
       const result = (await response.json()) as {
@@ -197,6 +200,22 @@ export function TransferAdmin({
             />
           </div>
           <div>
+            <label htmlFor="transfer-date" className={labelClass}>
+              Transfer date <span className="font-normal">(optional)</span>
+            </label>
+            <input
+              id="transfer-date"
+              name="date"
+              type="date"
+              defaultValue={editing?.date}
+              className={inputClass}
+            />
+            <p className="mt-2 text-xs leading-5 text-[#071a2b]/45">
+              Leave blank for historical records where the exact date is
+              unknown.
+            </p>
+          </div>
+          <div>
             <label htmlFor="transfer-to" className={labelClass}>
               To
             </label>
@@ -300,6 +319,7 @@ export function TransferAdmin({
               <tr>
                 <th className="px-5 py-4">Player</th>
                 <th className="px-4 py-4">Season</th>
+                <th className="px-4 py-4">Date</th>
                 <th className="px-4 py-4">Move</th>
                 <th className="px-4 py-4">Fee</th>
                 <th className="px-5 py-4 text-right">Action</th>
@@ -315,6 +335,9 @@ export function TransferAdmin({
                     </td>
                     <td className="px-4 py-4 font-mono text-xs">
                       {transfer.season}
+                    </td>
+                    <td className="whitespace-nowrap px-4 py-4 font-mono text-xs">
+                      {transfer.date || "—"}
                     </td>
                     <td className="whitespace-nowrap px-4 py-4">
                       <span className="inline-flex items-center gap-1 text-xs font-bold">
