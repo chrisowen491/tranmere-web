@@ -1,4 +1,0 @@
-interface:
-  display_name: "Create Contentful Player"
-  short_description: "Create player profiles and accurate avatars"
-  default_prompt: "Use $create-contentful-player to research a Tranmere player, create an accurate avatar, and add the profile to Contentful."

@@ -116,7 +116,7 @@ export function TransferAdmin({
   }
 
   return (
-    <div className="grid gap-8 lg:grid-cols-[380px_minmax(0,1fr)] lg:items-start">
+    <div className="grid gap-8 lg:grid-cols-[350px_minmax(0,1fr)] lg:items-start xl:grid-cols-[380px_minmax(0,1fr)]">
       <section className="border border-[#071a2b]/15 bg-[#fffdf8] p-6 lg:sticky lg:top-6">
         <div className="flex items-start justify-between gap-4">
           <div>
@@ -314,15 +314,15 @@ export function TransferAdmin({
         </div>
 
         <div className="mt-6 overflow-x-auto border border-[#071a2b]/15 bg-[#fffdf8]">
-          <table className="min-w-full text-left text-sm">
+          <table className="w-full min-w-[680px] table-fixed text-left text-sm">
             <thead className="border-b border-[#071a2b]/15 bg-[#071a2b] text-xs font-bold uppercase tracking-[0.1em] text-white/65">
               <tr>
-                <th className="px-5 py-4">Player</th>
-                <th className="px-4 py-4">Season</th>
-                <th className="px-4 py-4">Date</th>
-                <th className="px-4 py-4">Move</th>
-                <th className="px-4 py-4">Fee</th>
-                <th className="px-5 py-4 text-right">Action</th>
+                <th className="w-[27%] px-5 py-4">Player</th>
+                <th className="w-[10%] px-3 py-4">Season</th>
+                <th className="w-[15%] px-3 py-4">Date</th>
+                <th className="w-[22%] px-3 py-4">Move</th>
+                <th className="w-[16%] px-3 py-4">Fee</th>
+                <th className="w-[10%] px-4 py-4 text-right">Action</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[#071a2b]/10">
@@ -330,29 +330,31 @@ export function TransferAdmin({
                 const departure = transfer.from === "Tranmere Rovers";
                 return (
                   <tr key={transfer.id} className="hover:bg-[#f4f0e8]">
-                    <td className="whitespace-nowrap px-5 py-4 font-semibold">
+                    <td className="break-words px-5 py-4 font-semibold leading-5">
                       {transfer.name}
                     </td>
-                    <td className="px-4 py-4 font-mono text-xs">
+                    <td className="px-3 py-4 font-mono text-xs">
                       {transfer.season}
                     </td>
-                    <td className="whitespace-nowrap px-4 py-4 font-mono text-xs">
+                    <td className="whitespace-nowrap px-3 py-4 font-mono text-xs">
                       {transfer.date || "—"}
                     </td>
-                    <td className="whitespace-nowrap px-4 py-4">
-                      <span className="inline-flex items-center gap-1 text-xs font-bold">
+                    <td className="px-3 py-4">
+                      <span className="flex items-start gap-1 text-xs font-bold leading-5">
                         {departure ? (
-                          <ArrowUpRightIcon className="h-4 w-4 text-[#071a2b]/45" />
+                          <ArrowUpRightIcon className="mt-0.5 h-4 w-4 shrink-0 text-[#071a2b]/45" />
                         ) : (
-                          <ArrowDownLeftIcon className="h-4 w-4 text-blue-700" />
+                          <ArrowDownLeftIcon className="mt-0.5 h-4 w-4 shrink-0 text-blue-700" />
                         )}
-                        {departure ? transfer.to : transfer.from}
+                        <span className="break-words">
+                          {departure ? transfer.to : transfer.from}
+                        </span>
                       </span>
                     </td>
-                    <td className="whitespace-nowrap px-4 py-4 text-xs">
+                    <td className="break-words px-3 py-4 text-xs leading-5">
                       {transfer.value || "Undisclosed"}
                     </td>
-                    <td className="px-5 py-4 text-right">
+                    <td className="px-4 py-4 text-right">
                       <button
                         type="button"
                         onClick={() => {

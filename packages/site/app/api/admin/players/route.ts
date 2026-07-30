@@ -1,5 +1,11 @@
 import { auth0 } from "@/lib/auth0";
-import { getPlayerById, updatePlayer, type PlayerInput } from "@/lib/players";
+import {
+  createPlayer,
+  getPlayerById,
+  getPlayerByName,
+  updatePlayer,
+  type PlayerInput,
+} from "@/lib/players";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { revalidatePath } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
@@ -96,6 +102,36 @@ function validatePlayer(body: PlayerRequest): PlayerInput | null {
   };
 }
 
+function revalidatePlayerPages(name: string) {
+  revalidatePath(`/page/player/${name}`);
+  revalidatePath("/playersearch");
+  revalidatePath("/fantasy-team");
+  revalidatePath("/who-am-i");
+}
+
+export async function POST(request: NextRequest) {
+  if (!(await requireAdmin())) {
+    return error("You do not have permission to manage players.", 403);
+  }
+
+  const body = (await request.json()) as PlayerRequest;
+  const player = validatePlayer(body);
+  if (!player) {
+    return error("Enter valid player profile details.", 400);
+  }
+
+  const db = getCloudflareContext().env.DB;
+  if (await getPlayerByName(db, player.name)) {
+    return error(`A player named ${player.name} already exists.`, 409);
+  }
+
+  const created = await createPlayer(db, player);
+  if (!created) return error("The player could not be created.", 500);
+
+  revalidatePlayerPages(created.name);
+  return NextResponse.json({ player: created }, { status: 201 });
+}
+
 export async function PATCH(request: NextRequest) {
   if (!(await requireAdmin())) {
     return error("You do not have permission to manage players.", 403);
@@ -112,9 +148,9 @@ export async function PATCH(request: NextRequest) {
   if (!existing) return error("That player could not be found.", 404);
 
   const updated = await updatePlayer(db, body.id, player);
-  revalidatePath(`/page/player/${existing.name}`);
+  revalidatePlayerPages(existing.name);
   if (existing.name !== player.name) {
-    revalidatePath(`/page/player/${player.name}`);
+    revalidatePlayerPages(player.name);
   }
   return NextResponse.json({ player: updated });
 }

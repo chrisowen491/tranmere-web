@@ -100,7 +100,7 @@ wip/mcp
 !.agents/skills/create-tranmere-kits/**
 !.agents/skills/create-contentful-blog-post/
 !.agents/skills/create-contentful-blog-post/**
-!.agents/skills/create-contentful-player/
-!.agents/skills/create-contentful-player/**
+!.agents/skills/create-player-profile/
+!.agents/skills/create-player-profile/**
 **/backups/dynamodb/**
 **/generated/**

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Create Player Profile"
+  short_description: "Create D1 player profiles, avatars and transfers"
+  default_prompt: "Use $create-player-profile to research a Tranmere player, create an accurate avatar and profile, and record their transfer when they are a new signing."

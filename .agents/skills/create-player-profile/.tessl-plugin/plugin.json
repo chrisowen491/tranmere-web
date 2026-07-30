@@ -1,0 +1,9 @@
+{
+  "name": "tranmere-web/create-player-profile",
+  "description": "Research, create, and update TranmereWeb D1 player profiles through the protected admin pages, including accurate avatar-builder likenesses and incoming transfers for verified new signings.",
+  "private": true,
+  "skills": [
+    "."
+  ],
+  "version": "0.4.0"
+}

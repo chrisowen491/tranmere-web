@@ -37,8 +37,17 @@ export default async function PlayerProfilePage(props: { params: SlugParams }) {
   try {
     const playerRequest = await fetch(url);
     if (playerRequest.ok) {
-      const careerProfile = (await playerRequest.json()) as PlayerProfile;
-      if (careerProfile?.player) profile = careerProfile;
+      const careerProfile =
+        (await playerRequest.json()) as Partial<PlayerProfile>;
+      profile = {
+        ...profile,
+        ...careerProfile,
+        player: careerProfile.player ?? profile.player,
+        seasons: careerProfile.seasons ?? profile.seasons,
+        appearances: careerProfile.appearances ?? profile.appearances,
+        transfers: careerProfile.transfers ?? profile.transfers,
+        links: careerProfile.links ?? profile.links,
+      };
     }
   } catch {
     // D1 owns the profile; career statistics are optional enrichment.

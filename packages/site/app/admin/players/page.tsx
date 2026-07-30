@@ -10,7 +10,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Manage players",
-  description: "Review and edit locally migrated Tranmere player records.",
+  description: "Create and edit Tranmere player records.",
 };
 
 export default async function PlayerAdminPage() {
@@ -51,8 +51,7 @@ export default async function PlayerAdminPage() {
                 Manage players
               </h1>
               <p className="mt-4 max-w-2xl text-base leading-7 text-white/65">
-                Review and edit the player records imported into the local D1
-                database.
+                Create player profiles and maintain the records stored in D1.
               </p>
             </div>
             <dl className="grid grid-cols-2 border border-white/15">

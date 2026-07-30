@@ -151,6 +151,32 @@ export async function getPlayerByName(db: D1Database, name: string) {
   return row ? mapPlayer(row) : null;
 }
 
+export async function createPlayer(db: D1Database, player: PlayerInput) {
+  const id = crypto.randomUUID();
+  await db
+    .prepare(
+      `INSERT INTO Players (
+         id, name, date_of_birth, biography_markdown, pic_link, foot, height,
+         place_of_birth, position, links_json
+       )
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    )
+    .bind(
+      id,
+      player.name,
+      player.dateOfBirth,
+      player.biographyMarkdown,
+      player.picLink,
+      player.foot,
+      player.height,
+      player.placeOfBirth,
+      player.position,
+      JSON.stringify(player.links),
+    )
+    .run();
+  return getPlayerById(db, id);
+}
+
 export async function updatePlayer(
   db: D1Database,
   id: string,

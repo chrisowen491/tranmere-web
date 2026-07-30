@@ -5,6 +5,8 @@ import {
   CheckCircleIcon,
   IdentificationIcon,
   PencilSquareIcon,
+  PlusIcon,
+  XMarkIcon,
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import { useMemo, useState } from "react";
@@ -21,6 +23,21 @@ const positions = [
   "Central Midfielder",
   "Full Back",
 ];
+
+function newPlayer(): PlayerRecord {
+  return {
+    id: "",
+    name: "",
+    dateOfBirth: null,
+    biographyMarkdown: null,
+    picLink: null,
+    foot: null,
+    height: null,
+    placeOfBirth: null,
+    position: null,
+    links: [],
+  };
+}
 
 function completeness(player: PlayerRecord) {
   return [
@@ -41,6 +58,7 @@ export function PlayerAdmin({
 }) {
   const [players, setPlayers] = useState(initialPlayers);
   const [editing, setEditing] = useState<PlayerRecord | null>(null);
+  const [isCreating, setIsCreating] = useState(false);
   const [search, setSearch] = useState("");
   const [positionFilter, setPositionFilter] = useState("all");
   const [saving, setSaving] = useState(false);
@@ -79,10 +97,10 @@ export function PlayerAdmin({
 
     try {
       const response = await fetch("/api/admin/players", {
-        method: "PATCH",
+        method: isCreating ? "POST" : "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          id: editing.id,
+          ...(!isCreating && { id: editing.id }),
           name: data.get("name"),
           dateOfBirth: data.get("dateOfBirth"),
           biographyMarkdown: data.get("biographyMarkdown"),
@@ -104,13 +122,21 @@ export function PlayerAdmin({
       if (!response.ok || !result.player) {
         throw new Error(result.message || "The player could not be saved.");
       }
-      setPlayers((records) =>
-        records.map((record) =>
-          record.id === result.player!.id ? result.player! : record,
-        ),
-      );
+      setPlayers((records) => {
+        const next = isCreating
+          ? [...records, result.player!]
+          : records.map((record) =>
+              record.id === result.player!.id ? result.player! : record,
+            );
+        return next.sort((a, b) =>
+          a.name.localeCompare(b.name, undefined, { sensitivity: "base" }),
+        );
+      });
       setEditing(result.player);
-      setMessage(`${result.player.name} was updated in local D1.`);
+      setIsCreating(false);
+      setMessage(
+        `${result.player.name} was ${isCreating ? "created" : "updated"} in D1.`,
+      );
     } catch (reason) {
       setIsError(true);
       setMessage(
@@ -126,12 +152,34 @@ export function PlayerAdmin({
   return (
     <div className="grid gap-8 lg:grid-cols-[430px_minmax(0,1fr)] lg:items-start">
       <aside className="border border-[#071a2b]/15 bg-[#fffdf8] p-6 lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto">
-        <p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-700">
-          {editing ? "Edit player" : "Select a player"}
-        </p>
-        <h2 className="mt-2 font-display text-3xl font-semibold">
-          {editing?.name || "Player profile"}
-        </h2>
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-700">
+              {isCreating
+                ? "Create player"
+                : editing
+                  ? "Edit player"
+                  : "Select a player"}
+            </p>
+            <h2 className="mt-2 font-display text-3xl font-semibold">
+              {isCreating ? "New player" : editing?.name || "Player profile"}
+            </h2>
+          </div>
+          {!isCreating && (
+            <button
+              type="button"
+              onClick={() => {
+                setEditing(newPlayer());
+                setIsCreating(true);
+                setMessage("");
+              }}
+              className="inline-flex shrink-0 items-center gap-1.5 bg-blue-700 px-3 py-2 text-[10px] font-bold uppercase tracking-[0.1em] text-white hover:bg-blue-800"
+            >
+              <PlusIcon className="h-4 w-4" />
+              New player
+            </button>
+          )}
+        </div>
 
         {message && (
           <p
@@ -146,7 +194,7 @@ export function PlayerAdmin({
 
         {editing ? (
           <form
-            key={editing.id}
+            key={isCreating ? "new-player" : editing.id}
             className="mt-6 space-y-5"
             onSubmit={(event) => {
               event.preventDefault();
@@ -172,8 +220,10 @@ export function PlayerAdmin({
                 <p className="font-bold text-[#071a2b]">
                   {completeness(editing)}/7 fields complete
                 </p>
-                <p className="mt-1 truncate font-mono">{editing.id}</p>
-                {nameCounts.get(editing.name)! > 1 && (
+                <p className="mt-1 truncate font-mono">
+                  {isCreating ? "ID generated when saved" : editing.id}
+                </p>
+                {!isCreating && nameCounts.get(editing.name)! > 1 && (
                   <p className="mt-2 font-bold uppercase tracking-[0.1em] text-amber-700">
                     Duplicate name
                   </p>
@@ -280,14 +330,39 @@ export function PlayerAdmin({
                 className={`${inputClass} font-mono text-xs`}
               />
             </label>
-            <button
-              type="submit"
-              disabled={saving}
-              className="inline-flex w-full items-center justify-center gap-2 bg-blue-700 px-5 py-3 text-xs font-bold uppercase tracking-[0.12em] text-white hover:bg-blue-800 disabled:opacity-50"
-            >
-              <PencilSquareIcon className="h-4 w-4" />
-              {saving ? "Saving…" : "Save player"}
-            </button>
+            <div className="flex gap-3">
+              {isCreating && (
+                <button
+                  type="button"
+                  disabled={saving}
+                  onClick={() => {
+                    setEditing(null);
+                    setIsCreating(false);
+                    setMessage("");
+                  }}
+                  className="inline-flex items-center justify-center gap-2 border border-[#071a2b]/20 px-4 py-3 text-xs font-bold uppercase tracking-[0.12em] hover:bg-[#f4f0e8] disabled:opacity-50"
+                >
+                  <XMarkIcon className="h-4 w-4" />
+                  Cancel
+                </button>
+              )}
+              <button
+                type="submit"
+                disabled={saving}
+                className="inline-flex flex-1 items-center justify-center gap-2 bg-blue-700 px-5 py-3 text-xs font-bold uppercase tracking-[0.12em] text-white hover:bg-blue-800 disabled:opacity-50"
+              >
+                {isCreating ? (
+                  <PlusIcon className="h-4 w-4" />
+                ) : (
+                  <PencilSquareIcon className="h-4 w-4" />
+                )}
+                {saving
+                  ? "Saving…"
+                  : isCreating
+                    ? "Create player"
+                    : "Save player"}
+              </button>
+            </div>
           </form>
         ) : (
           <div className="mt-8 text-sm leading-6 text-[#071a2b]/55">
@@ -374,6 +449,7 @@ export function PlayerAdmin({
                       type="button"
                       onClick={() => {
                         setEditing(player);
+                        setIsCreating(false);
                         setMessage("");
                         window.scrollTo({ top: 0, behavior: "smooth" });
                       }}
