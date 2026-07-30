@@ -1,9 +1,9 @@
 import { PlayerSearch } from "@/components/apps/PlayerSearch";
-import { PlayerSeasonSummary } from "@tranmere-web/lib/src/tranmere-web-types";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { Metadata } from "next";
 import { GetBaseUrl } from "@/lib/apiFunctions";
 import Link from "next/link";
+import { getPlayerStatistics } from "@/lib/playerStatistics";
 
 export const revalidate = 7200;
 
@@ -13,14 +13,8 @@ export const metadata: Metadata = {
 };
 
 export default async function PlayerSearchPage() {
-  const base =
-    GetBaseUrl((await getCloudflareContext({ async: true })).env) +
-    "/player-search/";
-
-  const latestSeasonRequest = await fetch(base + `?sort=&filter=`);
-  const playerResults = (await latestSeasonRequest.json()) as {
-    players: PlayerSeasonSummary[];
-  };
+  const env = (await getCloudflareContext({ async: true })).env;
+  const players = await getPlayerStatistics(env.DB, GetBaseUrl(env));
 
   return (
     <main className="pb-24 text-[#071a2b]">
@@ -63,7 +57,7 @@ export default async function PlayerSearchPage() {
         </div>
       </header>
       <div className="mx-auto w-full max-w-7xl">
-        <PlayerSearch default={playerResults.players} />
+        <PlayerSearch default={players} />
       </div>
     </main>
   );

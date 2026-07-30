@@ -48,7 +48,7 @@ export function PlayerProfileCorrectionReview({
       );
       setMessage(
         status === "approved"
-          ? `${correction.playerName}'s changes were approved for manual publication.`
+          ? `${correction.playerName}'s changes were approved and published.`
           : `${correction.playerName}'s changes were rejected.`,
       );
     } catch (error) {
@@ -204,7 +204,7 @@ export function PlayerProfileCorrectionReview({
                         }
                         className="bg-emerald-700 px-5 py-3 text-xs font-bold uppercase tracking-[0.12em] text-white hover:bg-emerald-800 disabled:opacity-50"
                       >
-                        Approve for update
+                        Approve &amp; publish
                       </button>
                       <button
                         type="button"

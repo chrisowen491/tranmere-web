@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Match, MatchPageData } from "@tranmere-web/lib/src/tranmere-web-types";
+import { Match } from "@tranmere-web/lib/src/tranmere-web-types";
 import { ResultTable } from "@/components/apps/partials/ResultTable";
 import CommentPanel from "@/components/comments/CommentPanel";
 import type { Comment } from "@/lib/comments";
@@ -11,16 +11,10 @@ import { BreadcrumbLinks } from "@/components/fragments/BreadcrumbLinks";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import { replaceSeasonsKit } from "@tranmere-web/lib/src/apiFunctions";
 import { AttendanceCorrectionForm } from "./AttendanceCorrectionForm";
+import type { MatchPageView } from "@/lib/matchPlayers";
 
-const defaultPlayerAvatar =
-  "https://www.tranmere-web.com/builder/2026/none/cccccc/none/000000/cccccc/none/cccccc";
-
-function playerAvatar(picLink: string | undefined, season: number) {
-  if (!picLink || picLink.endsWith("/blank.svg")) {
-    return replaceSeasonsKit(defaultPlayerAvatar, season.toString())
-  } else {
-    return replaceSeasonsKit(picLink, season.toString());
-  }
+function playerAvatar(picLink: string, season: number) {
+  return replaceSeasonsKit(picLink, season.toString());
 }
 
 const positionOrder = [
@@ -33,7 +27,7 @@ const positionOrder = [
 ];
 
 export default function MatchReport(props: {
-  match: MatchPageData;
+  match: MatchPageView;
   next: Match[];
   previous: Match[];
   comments: Comment[];
@@ -43,18 +37,20 @@ export default function MatchReport(props: {
   const { match } = props;
   const players = [...(match.apps ?? [])].sort(
     (a, b) =>
-      positionOrder.indexOf(a.bio?.position ?? "") -
-      positionOrder.indexOf(b.bio?.position ?? ""),
+      positionOrder.indexOf(a.profile.position ?? "") -
+      positionOrder.indexOf(b.profile.position ?? ""),
   );
   const lineupLines = [
-    players.filter((player) => player.bio?.position === "Striker"),
+    players.filter((player) => player.profile.position === "Striker"),
     players.filter((player) =>
-      ["Winger", "Central Midfielder", ""].includes(player.bio?.position ?? ""),
+      ["Winger", "Central Midfielder", ""].includes(
+        player.profile.position ?? "",
+      ),
     ),
     players.filter((player) =>
-      ["Full Back", "Central Defender"].includes(player.bio?.position ?? ""),
+      ["Full Back", "Central Defender"].includes(player.profile.position ?? ""),
     ),
-    players.filter((player) => player.bio?.position === "Goalkeeper"),
+    players.filter((player) => player.profile.position === "Goalkeeper"),
   ].filter((line) => line.length > 0);
 
   const breadcrumbs = [
@@ -227,7 +223,7 @@ export default function MatchReport(props: {
                             height={112}
                             unoptimized
                             src={playerAvatar(
-                              player.bio?.picLink,
+                              player.profile.picLink,
                               parseInt(match.season),
                             )}
                             className="h-full w-full object-cover"
@@ -240,7 +236,7 @@ export default function MatchReport(props: {
                           {player.Name}
                         </Link>
                         <span className="mt-1 hidden font-mono text-[10px] uppercase text-white/55 sm:block">
-                          {player.bio?.position ?? "Position unknown"}
+                          {player.profile.position ?? "Position unknown"}
                         </span>
                         <div className="mt-1 flex min-h-4 items-center justify-center gap-1">
                           {player.YellowCard && (

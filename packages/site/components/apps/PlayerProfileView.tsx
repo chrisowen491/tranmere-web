@@ -4,8 +4,6 @@ import { Fragment } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
-import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
-import { Document } from "@contentful/rich-text-types";
 import { ArrowUpRightIcon } from "@heroicons/react/20/solid";
 import { BlogItem, PlayerProfile } from "@/lib/types";
 import type { Comment } from "@/lib/comments";
@@ -23,11 +21,69 @@ const breadcrumbs = [
   { id: 2, name: "Players", href: "/playersearch" },
 ];
 
+function inlineMarkdown(value: string) {
+  const parts = value.split(
+    /(\[[^\]]+\]\(https?:\/\/[^)]+\)|\*\*[^*]+\*\*|\*[^*]+\*)/g,
+  );
+  return parts.map((part, index) => {
+    const link = part.match(/^\[([^\]]+)\]\((https?:\/\/[^)]+)\)$/);
+    if (link) {
+      return (
+        <a
+          key={index}
+          href={link[2]}
+          target="_blank"
+          rel="noreferrer"
+          className="font-semibold text-blue-700 underline underline-offset-2"
+        >
+          {link[1]}
+        </a>
+      );
+    }
+    if (part.startsWith("**") && part.endsWith("**")) {
+      return <strong key={index}>{part.slice(2, -2)}</strong>;
+    }
+    if (part.startsWith("*") && part.endsWith("*")) {
+      return <em key={index}>{part.slice(1, -1)}</em>;
+    }
+    return part.replace(/\\([\\`*_[\]<>])/g, "$1");
+  });
+}
+
+function MarkdownBiography({ value }: { value: string | null }) {
+  if (!value) {
+    return <p>No biography is currently available for this player.</p>;
+  }
+
+  return value.split(/\n{2,}/).map((block, index) => {
+    const lines = block.split("\n");
+    if (lines.every((line) => /^- /.test(line))) {
+      return (
+        <ul key={index}>
+          {lines.map((line) => (
+            <li key={line}>{inlineMarkdown(line.slice(2))}</li>
+          ))}
+        </ul>
+      );
+    }
+    const heading = block.match(/^(#{1,6}) (.+)$/);
+    if (heading) {
+      return (
+        <h3 key={index} className="font-display text-xl font-semibold">
+          {inlineMarkdown(heading[2])}
+        </h3>
+      );
+    }
+    return <p key={index}>{inlineMarkdown(block)}</p>;
+  });
+}
+
 export default function PlayerProfileView(props: {
   player: PlayerProfile;
   comments: Comment[];
   articles: BlogItem[];
   avg: number;
+  biographyMarkdown: string | null;
   editableProfile: EditablePlayerProfile;
 }) {
   const profile = props.player;
@@ -144,9 +200,7 @@ export default function PlayerProfileView(props: {
                 Tranmere story
               </p>
               <div className="prose prose-sm mt-3 max-w-none leading-7 text-[#071a2b]/75">
-                {documentToReactComponents(
-                  player.biography as unknown as Document,
-                )}
+                <MarkdownBiography value={props.biographyMarkdown} />
               </div>
             </div>
           </div>
@@ -187,7 +241,7 @@ export default function PlayerProfileView(props: {
               </TabPanel>
               <TabPanel>
                 <PlayerAppsTable
-                  records={profile.appearances!}
+                  records={profile.appearances ?? []}
                   title="Appearances"
                 />
               </TabPanel>
@@ -235,12 +289,20 @@ export default function PlayerProfileView(props: {
                 <dt className="text-xs font-bold uppercase tracking-[0.12em] text-[#071a2b]/50">
                   Debut
                 </dt>
-                <dd className="mt-1 font-semibold">
-                  {profile.debut.Opposition}
-                </dd>
-                <dd className="mt-1 font-mono text-xs text-[#071a2b]/55">
-                  {profile.debut.Date}
-                </dd>
+                {profile.debut ? (
+                  <>
+                    <dd className="mt-1 font-semibold">
+                      {profile.debut.Opposition}
+                    </dd>
+                    <dd className="mt-1 font-mono text-xs text-[#071a2b]/55">
+                      {profile.debut.Date}
+                    </dd>
+                  </>
+                ) : (
+                  <dd className="mt-1 text-sm text-[#071a2b]/55">
+                    No first-team appearance recorded
+                  </dd>
+                )}
               </div>
               {player.dateOfBirth && (
                 <div className="py-4">

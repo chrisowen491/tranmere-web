@@ -1,7 +1,13 @@
-import { GetCommentsByUrl, type Comment } from "@/lib/comments";
+import {
+  deleteComment,
+  GetCommentsByUrl,
+  getCommentById,
+  type Comment,
+} from "@/lib/comments";
 import { NextRequest, NextResponse } from "next/server";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { auth0 } from "@/lib/auth0";
+import { revalidatePath } from "next/cache";
 
 export interface ModerationResult {
   id: string;
@@ -45,16 +51,40 @@ export interface CategoryScores {
 
 export async function DELETE(req: NextRequest) {
   const body = (await req.json()) as { comment: Comment };
+  const id = Number(body.comment.id);
+  if (!Number.isSafeInteger(id) || id < 1) {
+    return NextResponse.json(
+      { message: "Invalid comment ID." },
+      { status: 400 },
+    );
+  }
 
-  await getCloudflareContext()
-    .env.DB.prepare("DELETE FROM Ratings WHERE id = ?")
-    .bind(body.comment.id)
-    .run();
+  const session = await auth0.getSession();
+  const env = getCloudflareContext().env;
+  const existing = await getCommentById(env.DB, id);
+  if (!existing) {
+    return NextResponse.json(
+      { message: "That comment could not be found." },
+      { status: 404 },
+    );
+  }
 
-  const comments = await GetCommentsByUrl(
-    getCloudflareContext().env,
-    body.comment.url,
+  const adminEmail = env.AUTH0_ADMIN_EMAIL || process.env.AUTH0_ADMIN_EMAIL;
+  const isAuthor = session?.user.sub === existing.user.sub;
+  const isAdmin = Boolean(
+    session && adminEmail && session.user.email === adminEmail,
   );
+  if (!isAuthor && !isAdmin) {
+    return NextResponse.json(
+      { message: "You cannot delete this comment." },
+      { status: 403 },
+    );
+  }
+
+  await deleteComment(env.DB, id);
+  revalidatePath(existing.url);
+
+  const comments = await GetCommentsByUrl(env, existing.url);
   return NextResponse.json(comments, { status: 200 });
 }
 

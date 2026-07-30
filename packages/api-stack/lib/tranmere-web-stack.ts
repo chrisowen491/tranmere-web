@@ -302,7 +302,7 @@ export class TranmereWebStack extends cdk.Stack {
       lambdaFile: './lambda/playersearch.ts',
       apiResource: player_search,
       apiMethod: 'GET',
-      readTables: [TranmereWebPlayerTable, TranmereWebPlayerSeasonSummaryTable]
+      readTables: [TranmereWebPlayerSeasonSummaryTable]
     });
 
     new TranmereWebLambda(this, 'ResultsSearchFunction', {
@@ -339,7 +339,6 @@ export class TranmereWebStack extends cdk.Stack {
       apiResource: date,
       apiMethod: 'GET',
       readTables: [
-        TranmereWebPlayerTable,
         TranmereWebGames,
         TranmereWebGoalsTable,
         TranmereWebAppsTable,
@@ -356,7 +355,6 @@ export class TranmereWebStack extends cdk.Stack {
         TranmereWebAppsTable,
         TranmereWebGoalsTable,
         TranmereWebPlayerSeasonSummaryTable,
-        TranmereWebPlayerTable,
         TranmereWebPlayerLinks
       ]
     });

@@ -17,6 +17,7 @@ export async function GET(request: NextRequest) {
   try {
     const env = (await getCloudflareContext({ async: true })).env;
     const partnership = await getPlayerPartnership(
+      env.DB,
       GetBaseUrl(env),
       firstPlayer,
       secondPlayer,

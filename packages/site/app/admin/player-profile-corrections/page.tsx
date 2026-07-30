@@ -52,8 +52,8 @@ export default async function PlayerProfileCorrectionsAdminPage() {
               </h1>
               <p className="mt-4 max-w-2xl text-base leading-7 text-white/65">
                 Compare the submitted fields with the current player record and
-                check the source before marking a correction ready for manual
-                publication.
+                check the source. Approved corrections are published directly to
+                the D1 player profile.
               </p>
             </div>
             <div className="border border-white/15 px-5 py-4">

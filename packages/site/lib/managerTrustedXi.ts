@@ -1,11 +1,11 @@
 import type {
   Appearance,
   Match,
-  Player,
   PlayerSeasonSummary,
 } from "@tranmere-web/lib/src/tranmere-web-types";
 import type { ManagerRecord } from "@/lib/managers";
 import type { PlayerProfile } from "@/lib/types";
+import { getPlayersByNames, type PlayerRecord } from "@/lib/players";
 
 export interface TrustedXiPlayer {
   name: string;
@@ -43,7 +43,7 @@ function seasonsForManager(manager: ManagerRecord) {
   return Array.from({ length: final - first + 1 }, (_, index) => first + index);
 }
 
-function positionGroup(position?: string) {
+function positionGroup(position?: string | null) {
   const value = position?.toLowerCase() || "";
   if (value.includes("goalkeeper")) return "goalkeeper";
   if (value.includes("full back") || value.includes("fullback"))
@@ -90,6 +90,7 @@ async function inBatches<T, R>(
 }
 
 export async function getManagerTrustedXi(
+  db: D1Database,
   baseUrl: string,
   manager: ManagerRecord,
 ): Promise<ManagerTrustedXi> {
@@ -105,15 +106,20 @@ export async function getManagerTrustedXi(
         .players;
     }),
   );
-  const candidates = new Map<string, { player: Player; appearances: number }>();
+  const playerProfiles = await getPlayersByNames(
+    db,
+    seasonSummaries.flat().map((summary) => summary.Player),
+  );
+  const candidates = new Map<
+    string,
+    { player: PlayerRecord; appearances: number }
+  >();
   seasonSummaries.flat().forEach((summary) => {
     const existing = candidates.get(summary.Player);
+    const player = playerProfiles.get(summary.Player);
+    if (!player) return;
     candidates.set(summary.Player, {
-      player: summary.bio || {
-        name: summary.Player,
-        picLink: "",
-        position: "",
-      },
+      player,
       appearances: (existing?.appearances || 0) + summary.starts + summary.subs,
     });
   });
@@ -157,8 +163,8 @@ export async function getManagerTrustedXi(
     if (!appearances.length) return null;
     return {
       name,
-      position: profile.player.position || "",
-      picLink: profile.player.picLink || "",
+      position: playerProfiles.get(name)?.position || "",
+      picLink: playerProfiles.get(name)?.picLink || "",
       starts: appearances.filter(
         (appearance) => !appearance.Type?.toLowerCase().includes("sub"),
       ).length,

@@ -12,7 +12,6 @@ import {
   H2HTotal,
   Manager,
   Match,
-  PlayerSeasonSummary,
   Transfer,
 } from "@tranmere-web/lib/src/tranmere-web-types";
 import { ResultTable } from "./partials/ResultTable";
@@ -27,6 +26,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { SeasonStory } from "./SeasonStory";
 import { SeasonTimeline } from "./SeasonTimeline";
+import type { PlayerStatisticsView } from "@/lib/playerStatistics";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -36,7 +36,7 @@ export default function SeasonReview(props: {
   results: Match[];
   h2hresults: H2HResult[];
   h2htotal: H2HTotal[];
-  players: PlayerSeasonSummary[];
+  players: PlayerStatisticsView[];
   season: string;
   managers: Manager[];
   transfers: Transfer[];
@@ -356,14 +356,14 @@ export default function SeasonReview(props: {
                             <td className="whitespace-nowrap px-1 md:px-3 py-4">
                               <div className="flex items-center">
                                 <div className="h-11 w-11 flex-shrink-0">
-                                  {topScorers[0].bio?.picLink ? (
+                                  {topScorers[0].profile.picLink ? (
                                     <Image
                                       width={200}
                                       height={200}
                                       unoptimized={true}
                                       alt={topScorers[0].Player}
                                       src={replaceSeasonsKit(
-                                        topScorers[0].bio.picLink,
+                                        topScorers[0].profile.picLink,
                                       )}
                                       className="h-11 w-11 bg-[#e8e2d6] object-cover"
                                     />
@@ -415,14 +415,14 @@ export default function SeasonReview(props: {
                           <td className="whitespace-nowrap px-1 md:px-3 py-4">
                             <div className="flex items-center">
                               <div className="h-11 w-11 flex-shrink-0">
-                                {player.bio?.picLink ? (
+                                {player.profile.picLink ? (
                                   <Image
                                     width={200}
                                     height={200}
                                     unoptimized={true}
                                     alt={player.Player}
                                     src={replaceSeasonsKit(
-                                      player.bio.picLink,
+                                      player.profile.picLink,
                                       props.season,
                                     )}
                                     className="h-11 w-11 bg-[#e8e2d6] object-cover"

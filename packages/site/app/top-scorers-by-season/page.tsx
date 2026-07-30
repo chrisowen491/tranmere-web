@@ -1,14 +1,10 @@
-import {
-  ArrowRightIcon,
-  ChartBarIcon,
-  TrophyIcon,
-  UserIcon,
-} from "@heroicons/react/24/outline";
+import { ArrowRightIcon, ChartBarIcon } from "@heroicons/react/24/outline";
 import { GetTopScorersBySeason } from "@tranmere-web/lib/src/apiFunctions";
-import type { PlayerSeasonSummary } from "@tranmere-web/lib/src/tranmere-web-types";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { enrichPlayerStatistics } from "@/lib/playerStatistics";
 
 export const revalidate = 7200;
 
@@ -16,14 +12,6 @@ export const metadata: Metadata = {
   title: "Top Scorers By Season",
   description: "Tranmere Rovers leading goalscorer for every season",
 };
-
-const defaultPlayerImageSignature =
-  "simple/cccccc/none/cccccc/cccccc/none/cccccc";
-
-function hasPlayerImage(player: PlayerSeasonSummary) {
-  const image = player.bio?.picLink;
-  return image && !image.toLowerCase().includes(defaultPlayerImageSignature);
-}
 
 function seasonLabel(season: string) {
   const start = Number(season);
@@ -33,7 +21,11 @@ function seasonLabel(season: string) {
 }
 
 export default async function TopScorersBySeason() {
-  const topScorers = await GetTopScorersBySeason();
+  const env = (await getCloudflareContext({ async: true })).env;
+  const topScorers = await enrichPlayerStatistics(
+    env.DB,
+    await GetTopScorersBySeason(),
+  );
   const newestFirst = [...topScorers].reverse();
   const highestTotal = Math.max(...topScorers.map((player) => player.goals));
   const recordScorer = topScorers.find(
@@ -102,18 +94,14 @@ export default async function TopScorersBySeason() {
               className="group flex items-center gap-5 border border-[#071a2b]/15 bg-[#071a2b] p-5 text-white"
             >
               <div className="grid h-20 w-20 shrink-0 place-items-center overflow-hidden bg-white/10">
-                {hasPlayerImage(recordScorer) ? (
-                  <Image
-                    src={recordScorer.bio!.picLink!}
-                    alt={recordScorer.Player}
-                    width={160}
-                    height={160}
-                    unoptimized
-                    className="h-full w-full object-cover transition group-hover:scale-105"
-                  />
-                ) : (
-                  <TrophyIcon className="h-9 w-9 text-blue-300" />
-                )}
+                <Image
+                  src={recordScorer.profile.picLink}
+                  alt={recordScorer.Player}
+                  width={160}
+                  height={160}
+                  unoptimized
+                  className="h-full w-full object-cover transition group-hover:scale-105"
+                />
               </div>
               <div className="min-w-0">
                 <p className="font-mono text-[9px] uppercase tracking-[0.16em] text-blue-300">
@@ -185,18 +173,14 @@ export default async function TopScorersBySeason() {
               >
                 <div className="flex items-center gap-4">
                   <div className="h-20 w-20 shrink-0 overflow-hidden bg-[#071a2b]">
-                    {hasPlayerImage(player) ? (
-                      <Image
-                        alt={player.Player}
-                        width={160}
-                        height={160}
-                        unoptimized
-                        src={player.bio!.picLink!}
-                        className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
-                      />
-                    ) : (
-                      <UserIcon className="h-full w-full p-5 text-white/20" />
-                    )}
+                    <Image
+                      alt={player.Player}
+                      width={160}
+                      height={160}
+                      unoptimized
+                      src={player.profile.picLink}
+                      className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+                    />
                   </div>
                   <div className="min-w-0 flex-1">
                     <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-blue-700">

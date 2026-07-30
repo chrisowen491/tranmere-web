@@ -1,14 +1,15 @@
 import { auth0 } from "@/lib/auth0";
-import { GetBaseUrl } from "@/lib/apiFunctions";
-import type { PlayerProfile } from "@/lib/types";
 import {
-  biographyToText,
+  approvePlayerProfileCorrection,
   ensurePlayerProfileCorrectionsTable,
+  normalizeDateOfBirth,
   playerPositions,
   type EditablePlayerProfile,
   type PlayerProfileCorrectionStatus,
 } from "@/lib/playerProfileCorrections";
+import { getPlayerByName, type PlayerRecord } from "@/lib/players";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
+import { revalidatePath } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
 interface SubmissionRequest {
@@ -53,19 +54,31 @@ function getAdminEmail() {
   return env.AUTH0_ADMIN_EMAIL || process.env.AUTH0_ADMIN_EMAIL;
 }
 
-function profileSnapshot(profile: PlayerProfile): EditablePlayerProfile {
+function profileSnapshot(player: PlayerRecord): EditablePlayerProfile {
   return {
-    dateOfBirth: profile.player.dateOfBirth ?? "",
-    biography: biographyToText(profile.player.biography) ?? "",
-    picLink: profile.player.picLink ?? "",
-    foot: profile.player.foot ?? "",
-    height: profile.player.height ?? "",
-    placeOfBirth: profile.player.placeOfBirth ?? "",
-    position: profile.player.position ?? "",
+    dateOfBirth: player.dateOfBirth ?? "",
+    biography: player.biographyMarkdown ?? "",
+    picLink: player.picLink ?? "",
+    foot: player.foot ?? "",
+    height: player.height ?? "",
+    placeOfBirth: player.placeOfBirth ?? "",
+    position: player.position ?? "",
   };
 }
 
-export async function POST(request: NextRequest) {
+async function withD1ResetRetry<T>(operation: () => Promise<T>) {
+  try {
+    return await operation();
+  } catch (reason) {
+    const message = reason instanceof Error ? reason.message : String(reason);
+    if (!message.includes("D1 DB storage caused object to be reset")) {
+      throw reason;
+    }
+    return operation();
+  }
+}
+
+async function submitCorrection(request: NextRequest) {
   const session = await auth0.getSession();
   if (!session)
     return error("Please log in before submitting a correction.", 401);
@@ -94,6 +107,13 @@ export async function POST(request: NextRequest) {
 
   if (Object.keys(changes).length === 0) {
     return error("Please change at least one profile field.", 400);
+  }
+  if (changes.dateOfBirth !== undefined) {
+    const dateOfBirth = normalizeDateOfBirth(changes.dateOfBirth);
+    if (dateOfBirth === null) {
+      return error("Choose a valid date of birth.", 400);
+    }
+    changes.dateOfBirth = dateOfBirth;
   }
   if (changes.picLink && !/^https:\/\//i.test(changes.picLink)) {
     return error("Picture links must use a secure https:// address.", 400);
@@ -127,16 +147,10 @@ export async function POST(request: NextRequest) {
   }
 
   const env = getCloudflareContext().env;
-  const playerResponse = await fetch(
-    `${GetBaseUrl(env)}/page/player/${encodeURIComponent(requestedName)}?json=true`,
-  );
-  if (!playerResponse.ok) return error("That player could not be found.", 404);
+  const player = await getPlayerByName(env.DB, requestedName);
+  if (!player) return error("That player could not be found.", 404);
 
-  const profile = (await playerResponse.json()) as PlayerProfile;
-  if (!profile.player?.name)
-    return error("That player could not be found.", 404);
-
-  const current = profileSnapshot(profile);
+  const current = profileSnapshot(player);
   const actualChanges = Object.fromEntries(
     Object.entries(changes).filter(
       ([field, value]) =>
@@ -148,45 +162,63 @@ export async function POST(request: NextRequest) {
     return error("Those details already appear on the player profile.", 409);
   }
 
-  await ensurePlayerProfileCorrectionsTable(env.DB);
+  await withD1ResetRetry(() => ensurePlayerProfileCorrectionsTable(env.DB));
   const changesJson = JSON.stringify(actualChanges);
-  const duplicate = await env.DB.prepare(
-    `SELECT id FROM PlayerProfileCorrections
-     WHERE player_name = ? AND submitted_by_sub = ? AND changes_json = ?
-       AND status = 'pending'
-     LIMIT 1`,
-  )
-    .bind(profile.player.name, session.user.sub, changesJson)
-    .first();
+  const duplicate = await withD1ResetRetry(() =>
+    env.DB.prepare(
+      `SELECT id FROM PlayerProfileCorrections
+       WHERE player_name = ? AND submitted_by_sub = ? AND changes_json = ?
+         AND status = 'pending'
+       LIMIT 1`,
+    )
+      .bind(player.name, session.user.sub, changesJson)
+      .first(),
+  );
   if (duplicate) {
     return error("You have already submitted these changes for review.", 409);
   }
 
-  await env.DB.prepare(
-    `INSERT INTO PlayerProfileCorrections (
-      id, player_name, current_json, changes_json, source, explanation,
-      submitted_by_sub, submitted_by_name, submitted_by_email, submitted_at,
-      status
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending')`,
-  )
-    .bind(
-      crypto.randomUUID(),
-      profile.player.name,
-      JSON.stringify(current),
-      changesJson,
-      source,
-      body.explanation?.trim().slice(0, 1000) || null,
-      session.user.sub,
-      session.user.name || session.user.email || "Supporter",
-      session.user.email || null,
-      new Date().toISOString(),
+  const correctionId = crypto.randomUUID();
+  await withD1ResetRetry(() =>
+    env.DB.prepare(
+      `INSERT INTO PlayerProfileCorrections (
+        id, player_name, current_json, changes_json, source, explanation,
+        submitted_by_sub, submitted_by_name, submitted_by_email, submitted_at,
+        status
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending')
+      ON CONFLICT(id) DO NOTHING`,
     )
-    .run();
+      .bind(
+        correctionId,
+        player.name,
+        JSON.stringify(current),
+        changesJson,
+        source,
+        body.explanation?.trim().slice(0, 1000) || null,
+        session.user.sub,
+        session.user.name || session.user.email || "Supporter",
+        session.user.email || null,
+        new Date().toISOString(),
+      )
+      .run(),
+  );
 
   return NextResponse.json(
     { message: "Profile correction submitted for review." },
     { status: 201 },
   );
+}
+
+export async function POST(request: NextRequest) {
+  try {
+    return await submitCorrection(request);
+  } catch (reason) {
+    console.error("Unable to submit player profile correction", reason);
+    return error(
+      "The correction service was temporarily unavailable. Please try again.",
+      503,
+    );
+  }
 }
 
 export async function PATCH(request: NextRequest) {
@@ -202,6 +234,45 @@ export async function PATCH(request: NextRequest) {
   }
 
   const db = getCloudflareContext().env.DB;
+  const reviewNote = body.reviewNote?.trim().slice(0, 1000) || null;
+
+  if (body.status === "approved") {
+    try {
+      const player = await approvePlayerProfileCorrection(
+        db,
+        body.id,
+        session.user.email,
+        reviewNote,
+      );
+      if (!player) {
+        return error("This correction has already been reviewed.", 409);
+      }
+
+      revalidatePath(`/page/player/${player.name}`);
+      revalidatePath("/");
+      revalidatePath("/playersearch");
+      revalidatePath("/fantasy-team");
+      revalidatePath("/who-am-i");
+      revalidatePath("/player-partnerships");
+      revalidatePath("/manager-trusted-xi");
+      revalidatePath("/top-scorers-by-season");
+      revalidatePath("/top-scorers-per-game");
+      revalidatePath("/player-records/[slug]", "page");
+      revalidatePath("/season/[slug]", "page");
+
+      return NextResponse.json({
+        message: "Correction approved and published to the player profile.",
+      });
+    } catch (reason) {
+      return error(
+        reason instanceof Error
+          ? reason.message
+          : "The correction could not be published.",
+        400,
+      );
+    }
+  }
+
   await ensurePlayerProfileCorrectionsTable(db);
   const correction = await db
     .prepare(
@@ -224,15 +295,12 @@ export async function PATCH(request: NextRequest) {
       body.status,
       session.user.email,
       new Date().toISOString(),
-      body.reviewNote?.trim().slice(0, 1000) || null,
+      reviewNote,
       body.id,
     )
     .run();
 
   return NextResponse.json({
-    message:
-      body.status === "approved"
-        ? "Correction approved for manual publication."
-        : "Correction rejected.",
+    message: "Correction rejected.",
   });
 }

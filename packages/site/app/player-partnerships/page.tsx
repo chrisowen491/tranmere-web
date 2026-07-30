@@ -1,9 +1,9 @@
-import { GetAllPlayers } from "@tranmere-web/lib/src/apiFunctions";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import type { Metadata } from "next";
 import { PlayerPartnershipExplorer } from "@/components/apps/PlayerPartnershipExplorer";
 import { GetBaseUrl } from "@/lib/apiFunctions";
 import { getPlayerPartnership } from "@/lib/playerPartnership";
+import { getUniquePlayers } from "@/lib/players";
 
 export const revalidate = 7200;
 
@@ -18,10 +18,7 @@ export default async function PlayerPartnershipsPage(props: {
 }) {
   const env = (await getCloudflareContext({ async: true })).env;
   const searchParams = await props.searchParams;
-  const allPlayers = await GetAllPlayers();
-  const players = [
-    ...new Map(allPlayers.map((player) => [player.name, player])).values(),
-  ];
+  const players = await getUniquePlayers(env.DB);
   const requestedPlayer = searchParams.player;
   const firstPlayer =
     requestedPlayer && players.some((player) => player.name === requestedPlayer)
@@ -35,6 +32,7 @@ export default async function PlayerPartnershipsPage(props: {
     ? preferredSecond
     : players.find((player) => player.name !== firstPlayer)!.name;
   const initialPartnership = await getPlayerPartnership(
+    env.DB,
     GetBaseUrl(env),
     firstPlayer,
     secondPlayer,

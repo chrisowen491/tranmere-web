@@ -1,9 +1,9 @@
 import { PlayerSearch } from "@/components/apps/PlayerSearch";
 import { Title } from "@/components/fragments/Title";
-import { PlayerSeasonSummary } from "@tranmere-web/lib/src/tranmere-web-types";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { GetBaseUrl } from "@/lib/apiFunctions";
 import { SlugParams } from "@/lib/types";
+import { getPlayerStatistics } from "@/lib/playerStatistics";
 
 export async function generateMetadata(props: { params: SlugParams }) {
   const params = await props.params;
@@ -29,7 +29,7 @@ export async function generateMetadata(props: { params: SlugParams }) {
 
 export default async function PlayerSearchPage(props: { params: SlugParams }) {
   const params = await props.params;
-  const base = GetBaseUrl(getCloudflareContext().env) + "/player-search/";
+  const env = (await getCloudflareContext({ async: true })).env;
 
   let season: string = "";
   let sort: string = "";
@@ -50,13 +50,11 @@ export default async function PlayerSearchPage(props: { params: SlugParams }) {
     title = "Player Stats - Season " + params.slug;
   }
 
-  const latestSeasonRequest = await fetch(
-    base + `?season=${season}&sort=${sort}&filter=${filter}`,
-  );
-
-  const playerResults = (await latestSeasonRequest.json()) as {
-    players: PlayerSeasonSummary[];
-  };
+  const players = await getPlayerStatistics(env.DB, GetBaseUrl(env), {
+    season,
+    sort,
+    filter,
+  });
 
   return (
     <>
@@ -69,7 +67,7 @@ export default async function PlayerSearchPage(props: { params: SlugParams }) {
       </Title>
       <div className="  mx-auto flex w-full max-w-7xl">
         <PlayerSearch
-          default={playerResults.players}
+          default={players}
           sort={sort!}
           filter={filter!}
           season={season!}

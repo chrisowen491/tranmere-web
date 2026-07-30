@@ -10,7 +10,6 @@ import {
   TrophyIcon,
   UserGroupIcon,
 } from "@heroicons/react/24/outline";
-import type { Player } from "@tranmere-web/lib/src/tranmere-web-types";
 import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
@@ -18,6 +17,9 @@ import type {
   PartnershipMatch,
   PlayerPartnership,
 } from "@/lib/playerPartnership";
+import type { PlayerRecord } from "@/lib/players";
+
+type PartnershipPlayer = Pick<PlayerRecord, "name" | "picLink" | "position">;
 
 function seasonLabel(season: string) {
   return `${season}/${String(Number(season) + 1).slice(-2)}`;
@@ -56,7 +58,7 @@ function PlayerAutosuggest({
 }: {
   id: string;
   label: string;
-  players: Player[];
+  players: PartnershipPlayer[];
   value: string;
   onChange: (name: string) => void;
   excludedPlayer: string;
@@ -83,7 +85,7 @@ function PlayerAutosuggest({
       .slice(0, 8);
   }, [excludedPlayer, players, query]);
 
-  function selectPlayer(player: Player) {
+  function selectPlayer(player: PartnershipPlayer) {
     onChange(player.name);
     setQuery(player.name);
     setOpen(false);
@@ -215,7 +217,7 @@ export function PlayerPartnershipExplorer({
   players,
   initialPartnership,
 }: {
-  players: Player[];
+  players: PartnershipPlayer[];
   initialPartnership: PlayerPartnership;
 }) {
   const sortedPlayers = [...players].sort((a, b) =>
@@ -334,7 +336,7 @@ export function PlayerPartnershipExplorer({
             [firstDetails, partnership.firstPlayer],
             [secondDetails, partnership.secondPlayer],
           ].map(([details, name], index) => {
-            const player = details as Player | undefined;
+            const player = details as PartnershipPlayer | undefined;
             return (
               <div
                 key={String(name)}

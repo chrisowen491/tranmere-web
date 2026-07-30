@@ -12,18 +12,12 @@ import {
   UserGroupIcon,
   QuestionMarkCircleIcon,
 } from "@heroicons/react/24/outline";
-import {
-  GetAllPlayers,
-  GetOnThisDay,
-  GetYear,
-} from "@tranmere-web/lib/src/apiFunctions";
-import type {
-  MatchPageData,
-  Player,
-} from "@tranmere-web/lib/src/tranmere-web-types";
+import { GetOnThisDay, GetYear } from "@tranmere-web/lib/src/apiFunctions";
+import type { MatchPageData } from "@tranmere-web/lib/src/tranmere-web-types";
 import { GetBaseUrl } from "@/lib/apiFunctions";
 import { getAllArticles, getAllShirts } from "@/lib/api";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
+import { getUniquePlayers, type PlayerRecord } from "@/lib/players";
 
 export const revalidate = 7200;
 
@@ -117,7 +111,7 @@ const exploreLinks = [
   },
 ];
 
-function PromoPlayer({ player }: { player: Player }) {
+function PromoPlayer({ player }: { player: PlayerRecord }) {
   return (
     <div className="flex w-20 flex-col items-center text-center">
       <div className="h-16 w-16 overflow-hidden rounded-full border border-white/45 bg-[#f4f0e8]">
@@ -138,6 +132,7 @@ function PromoPlayer({ player }: { player: Player }) {
 }
 
 export default async function Home() {
+  const env = (await getCloudflareContext({ async: true })).env;
   const now = new Date();
   const dayOfYear = Math.floor(
     (Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()) -
@@ -151,7 +146,7 @@ export default async function Home() {
   }).format(now);
 
   const [players, onThisDay, shirts, articles] = await Promise.all([
-    GetAllPlayers(),
+    getUniquePlayers(env.DB),
     GetOnThisDay(),
     getAllShirts(),
     getAllArticles(4),
@@ -173,7 +168,6 @@ export default async function Home() {
 
   let featuredMatch: MatchPageData | null = null;
   if (onThisDay) {
-    const env = (await getCloudflareContext({ async: true })).env;
     const matchRequest = await fetch(
       `${GetBaseUrl(env)}/match/${onThisDay.season}/${onThisDay.date}`,
     );

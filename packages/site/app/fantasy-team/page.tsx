@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
-import { GetAllPlayers } from "@tranmere-web/lib/src/apiFunctions";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { FantasyTeamBuilder } from "@/components/apps/FantasyTeamBuilder";
+import { getUniquePlayers } from "@/lib/players";
 
 export const revalidate = 7200;
 
@@ -14,7 +15,8 @@ const defaultPlayerImageSignature =
   "simple/cccccc/none/cccccc/cccccc/none/cccccc";
 
 export default async function FantasyTeamPage() {
-  const players = await GetAllPlayers();
+  const env = (await getCloudflareContext({ async: true })).env;
+  const players = await getUniquePlayers(env.DB);
   const availablePlayers = players
     .filter(
       (player) =>

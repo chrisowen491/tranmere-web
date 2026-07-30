@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
-import { GetAllPlayers } from "@tranmere-web/lib/src/apiFunctions";
 import { GetBaseUrl } from "@/lib/apiFunctions";
 import type { PlayerProfile } from "@/lib/types";
 import { WhoAmIGame } from "@/components/apps/WhoAmIGame";
+import { getUniquePlayers } from "@/lib/players";
 
 export const revalidate = 3600;
 
@@ -34,12 +34,13 @@ function hash(value: string) {
   return result >>> 0;
 }
 
-function avatarSeason(picLink?: string) {
+function avatarSeason(picLink?: string | null) {
   return picLink?.match(/\/builder\/(\d{4})\//)?.[1];
 }
 
 export default async function WhoAmIPage() {
-  const players = await GetAllPlayers();
+  const context = await getCloudflareContext({ async: true });
+  const players = await getUniquePlayers(context.env.DB);
   const eligiblePlayers = players.filter(
     (player) =>
       player.picLink &&
@@ -48,7 +49,6 @@ export default async function WhoAmIPage() {
   );
   const date = dailyKey();
   const dailyPlayer = eligiblePlayers[hash(date) % eligiblePlayers.length];
-  const context = await getCloudflareContext({ async: true });
   const profileRequest = await fetch(
     `${GetBaseUrl(context.env)}/page/player/${encodeURIComponent(dailyPlayer.name)}?json=true`,
   );
@@ -76,8 +76,8 @@ export default async function WhoAmIPage() {
         candidates={players.map((player) => player.name)}
         player={{
           name: dailyPlayer.name,
-          position: profile?.player.position ?? dailyPlayer.position!,
-          image: profile?.image ?? dailyPlayer.picLink!,
+          position: dailyPlayer.position!,
+          image: dailyPlayer.picLink!,
           firstSeason:
             seasons.at(0)?.Season ?? avatarSeason(dailyPlayer.picLink),
           lastSeason:

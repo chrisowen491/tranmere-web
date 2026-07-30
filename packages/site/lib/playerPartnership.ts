@@ -3,6 +3,7 @@ import type {
   Match,
 } from "@tranmere-web/lib/src/tranmere-web-types";
 import type { PlayerProfile } from "@/lib/types";
+import { getPlayersByNames } from "@/lib/players";
 
 export interface PartnershipMatch {
   date: string;
@@ -45,10 +46,16 @@ function matchResult(match?: Match) {
 }
 
 export async function getPlayerPartnership(
+  db: D1Database,
   baseUrl: string,
   firstPlayer: string,
   secondPlayer: string,
 ): Promise<PlayerPartnership> {
+  const profiles = await getPlayersByNames(db, [firstPlayer, secondPlayer]);
+  if (!profiles.has(firstPlayer) || !profiles.has(secondPlayer)) {
+    throw new Error("Player not found");
+  }
+
   const loadProfile = async (name: string) => {
     const response = await fetch(
       `${baseUrl}/page/player/${encodeURIComponent(name)}?json=true`,

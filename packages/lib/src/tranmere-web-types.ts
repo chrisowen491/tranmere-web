@@ -537,7 +537,7 @@ export interface MatchPageData extends Match {
 
 export interface PlayerView {
   image: string;
-  player: Player;
+  player?: Player;
   links: Link[];
   debut: Appearance;
   appearances?: Appearance[];

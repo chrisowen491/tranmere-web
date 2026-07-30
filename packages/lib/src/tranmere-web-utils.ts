@@ -34,7 +34,6 @@ import {
 
 export enum DataTables {
   APPS_TABLE_NAME = 'TranmereWebAppsTable',
-  PLAYER_TABLE_NAME = 'TranmereWebPlayerTable',
   GOALS_TABLE_NAME = 'TranmereWebGoalsTable',
   RESULTS_TABLE = 'TranmereWebGames',
   TRANSFER_TABLE = 'TranmereWebPlayerTransfers',
@@ -146,24 +145,6 @@ export class TranmereWebUtils {
     return await dynamo.put(params);
   }
 
-  async getPlayer(playerName: string): Promise<Player | null> {
-    const playerSearch = await dynamo.query({
-      TableName: DataTables.PLAYER_TABLE_NAME,
-      KeyConditionExpression: '#name = :name',
-      ExpressionAttributeNames: {
-        '#name': 'name'
-      },
-      ExpressionAttributeValues: {
-        ':name': decodeURIComponent(playerName)
-      },
-      IndexName: 'ByNameIndex',
-      Limit: 1
-    });
-
-    const players = playerSearch.Items as Player[];
-    return players.length > 0 ? players[0] : null;
-  }
-
   async getPlayerLinks(playerName: string): Promise<Link[]> {
     const links = await dynamo.query({
       TableName: DataTables.LINKS_TABLE,
@@ -243,13 +224,6 @@ export class TranmereWebUtils {
       }
     };
     return await dynamo.delete(params);
-  }
-
-  async getAllPlayersFromDb(): Promise<Player[]> {
-    const squadSearch = await dynamo.scan({
-      TableName: DataTables.PLAYER_TABLE_NAME
-    });
-    return squadSearch.Items!.map((p) => p as Player);
   }
 
   async getAppsByPlayer(playerName: string): Promise<Appearance[]> {

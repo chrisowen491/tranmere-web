@@ -28,10 +28,14 @@ export function PlayerOfTheDay(props: { profile: PlayerProfile }) {
           {profile.player.name}
         </p>
         <p className="mt-2 max-w-lg text-sm/6 text-gray-600 dark:text-indigo-50">
-          <strong>Debut:</strong> {profile.debut.Opposition}{" "}
-          {profile.debut.Date}
-          <br />
-          {profile.appearances!.length} apps, {goals} goals
+          {profile.debut ? (
+            <>
+              <strong>Debut:</strong> {profile.debut.Opposition}{" "}
+              {profile.debut.Date}
+              <br />
+            </>
+          ) : null}
+          {profile.appearances?.length ?? 0} apps, {goals} goals
           <br />
           <LinkButton
             text="View Player Profile"

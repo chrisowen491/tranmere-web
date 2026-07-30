@@ -21,7 +21,11 @@ export default async function ManagerTrustedXiPage() {
     managers.find(
       (manager) => !manager.dateLeft.toLowerCase().startsWith("now"),
     )!;
-  const initialXi = await getManagerTrustedXi(GetBaseUrl(env), defaultManager);
+  const initialXi = await getManagerTrustedXi(
+    env.DB,
+    GetBaseUrl(env),
+    defaultManager,
+  );
 
   return (
     <main className="min-h-screen bg-[#f4f0e8] text-[#071a2b]">

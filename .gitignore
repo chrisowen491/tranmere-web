@@ -103,3 +103,4 @@ wip/mcp
 !.agents/skills/create-contentful-player/
 !.agents/skills/create-contentful-player/**
 **/backups/dynamodb/**
+**/generated/**

@@ -2,9 +2,7 @@ import {
   Competition,
   HatTrick,
   Match,
-  Player,
   PlayerSeasonSummary,
-  Team
 } from '@tranmere-web/lib/src/tranmere-web-types';
 
 const APP_SYNC_URL = 'https://api.tranmere-web.com';
@@ -147,47 +145,6 @@ export async function GetLastMatch(): Promise<Match> {
   return match;
 }
 
-export async function GetAllPlayers(): Promise<Player[]> {
-  const results: Player[] = [];
-  let nextToken: string | null = null;
-
-  do {
-    const paginationArgument = nextToken
-      ? `,nextToken:${JSON.stringify(nextToken)}`
-      : '';
-    const query: string = encodeURIComponent(
-      `{listTranmereWebPlayerTable(limit:500${paginationArgument}){items{name picLink position} nextToken}}`
-    );
-    const result = await fetch(
-      `${APP_SYNC_URL}/graphql?query=${query}`,
-      APP_SYNC_OPTIONS
-    );
-
-    const list = (await result.json()) as {
-      data: {
-        listTranmereWebPlayerTable: {
-          items: Player[];
-          nextToken: string | null;
-        };
-      };
-    };
-
-    results.push(
-      ...list.data.listTranmereWebPlayerTable.items.filter(
-        (player) => player?.name
-      )
-    );
-    nextToken = list.data.listTranmereWebPlayerTable.nextToken;
-  } while (nextToken);
-
-  results.sort(function (a: Team, b: Team) {
-    if (a.name < b.name) return -1;
-    if (a.name > b.name) return 1;
-    return 0;
-  });
-  return results;
-}
-
 export async function GetOnThisDay(): Promise<Match | null> {
   const dateobj = new Date();
   const day = dateobj.toISOString().slice(0, 10).substr(5);
@@ -242,12 +199,6 @@ export async function GetAllHatTricks(): Promise<HatTrick[]> {
   };
 
   const results: HatTrick[] = list.data.listTranmereWebHatTricks.items;
-
-  const players = await GetAllPlayers();
-
-  results.forEach((r) => {
-    r.picLink = players.find((p) => p.name === r.Player)?.picLink;
-  });
 
   results.sort(function (a, b) {
     if (a.Date < b.Date) return -1;

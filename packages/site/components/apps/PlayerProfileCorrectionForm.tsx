@@ -62,7 +62,15 @@ export function PlayerProfileCorrectionForm({
           explanation: formData.get("explanation"),
         }),
       });
-      const result = (await response.json()) as { message?: string };
+      const responseBody = await response.text();
+      let result: { message?: string } = {};
+      if (responseBody) {
+        try {
+          result = JSON.parse(responseBody) as { message?: string };
+        } catch {
+          result = {};
+        }
+      }
       if (!response.ok) {
         throw new Error(result.message || "The correction could not be sent.");
       }
@@ -146,9 +154,8 @@ export function PlayerProfileCorrectionForm({
                 <input
                   id="dateOfBirth"
                   name="dateOfBirth"
+                  type="date"
                   defaultValue={current.dateOfBirth}
-                  maxLength={100}
-                  placeholder="For example: 12 March 1978"
                   className={inputClass}
                 />
               </div>

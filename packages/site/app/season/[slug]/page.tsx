@@ -3,7 +3,6 @@ import {
   H2HResult,
   H2HTotal,
   Match,
-  PlayerSeasonSummary,
 } from "@tranmere-web/lib/src/tranmere-web-types";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import SeasonReview from "@/components/apps/SeasonReview";
@@ -13,6 +12,7 @@ import { notFound } from "next/navigation";
 import { GetBaseUrl } from "@/lib/apiFunctions";
 import { getManagers } from "@/lib/managers";
 import { getTransfers } from "@/lib/transfers";
+import { getPlayerStatistics } from "@/lib/playerStatistics";
 
 export async function generateMetadata(props: { params: SlugParams }) {
   const params = await props.params;
@@ -54,13 +54,7 @@ export default async function SeasonPage(props: { params: SlugParams }) {
     h2htotal: H2HTotal[];
   };
 
-  const latestSeasonPlayerRequest = await fetch(
-    baseUrl + `/player-search/?season=${season}&sort=&filter=`,
-  );
-
-  const playerResults = (await latestSeasonPlayerRequest.json()) as {
-    players: PlayerSeasonSummary[];
-  };
+  const players = await getPlayerStatistics(env.DB, baseUrl, { season });
 
   const transfers = await getTransfers(env.DB, { season });
 
@@ -76,7 +70,7 @@ export default async function SeasonPage(props: { params: SlugParams }) {
       results={results.results}
       h2hresults={results.h2hresults}
       h2htotal={results.h2htotal}
-      players={playerResults.players}
+      players={players}
       season={season}
       seasons={seasons}
       transfers={transfers}

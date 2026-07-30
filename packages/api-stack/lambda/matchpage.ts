@@ -4,15 +4,11 @@ import {
   ProgrammeImage
 } from '@tranmere-web/lib/src/tranmere-web-utils';
 import {
-  Appearance,
   Goal,
-  Player,
   MatchPageData
 } from '@tranmere-web/lib/src/tranmere-web-types';
 
 const utils = new TranmereWebUtils();
-
-const playerMap = new Map<string, Player>();
 
 const re = /\/\d\d\d\d\//gm;
 const re3 = /\/\d\d\d\d[A-Za-z]\//gm;
@@ -34,13 +30,6 @@ exports.handler = async (
 ): Promise<APIGatewayProxyResult> => {
   const date = event.pathParameters!.date;
   const season = parseInt(event.pathParameters!.season!);
-
-  if (!playerMap.get('John Aldridge')) {
-    const squadSearch = await utils.getAllPlayersFromDb();
-    squadSearch.forEach((player) => {
-      playerMap.set(player.name, player);
-    });
-  }
 
   const match = await utils.getResultForDate(season, date!);
 
@@ -72,27 +61,6 @@ exports.handler = async (
     delete view.ticket;
   }
   view.formattedGoals = formatGoals(view.goals);
-
-  const noPositionList: Appearance[] = [];
-  for (const app of view.apps) {
-    if (playerMap.get(app.Name)) {
-      app.bio = playerMap.get(app.Name);
-
-      if (app.bio && app.bio.picLink) {
-        let theSeason = season;
-        if (seasonMapping.get(season)) theSeason = seasonMapping.get(season)!;
-        app.bio.picLink = app.bio.picLink.replace(re, '/' + theSeason + '/');
-        app.bio.picLink = app.bio.picLink.replace(re3, '/' + theSeason + '/');
-      }
-    } else {
-      app.bio = {
-        name: app.Name,
-        picLink:
-          'https://images.ctfassets.net/pz711f8blqyy/1GOdp93iMC7T3l9L9UUqaM/0ea20a8950cdfb6f0239788f93747d74/blank.svg'
-      };
-      noPositionList.push(app);
-    }
-  }
 
   view.substitutes = view.apps
     .filter((a) => a.SubbedBy)

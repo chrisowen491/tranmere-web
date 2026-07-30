@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
       );
     }
     return NextResponse.json(
-      await getManagerTrustedXi(GetBaseUrl(env), manager),
+      await getManagerTrustedXi(env.DB, GetBaseUrl(env), manager),
     );
   } catch {
     return NextResponse.json(

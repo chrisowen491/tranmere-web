@@ -8,7 +8,6 @@ import {
 import {
   Manager,
   Match,
-  PlayerSeasonSummary,
   Transfer,
 } from "@tranmere-web/lib/src/tranmere-web-types";
 import { Shirt, ShirtUsageType } from "@/lib/types";
@@ -16,6 +15,7 @@ import { replaceSeasonsKit } from "@tranmere-web/lib/src/apiFunctions";
 import Image from "next/image";
 import Link from "next/link";
 import { JumpBox } from "../forms/JumpBox";
+import type { PlayerStatisticsView } from "@/lib/playerStatistics";
 
 type Outcome = "W" | "D" | "L";
 
@@ -104,7 +104,7 @@ function playerInitials(name: string) {
     .slice(0, 2);
 }
 
-function positionGroup(position?: string) {
+function positionGroup(position?: string | null) {
   const normalized = position?.toLowerCase() ?? "";
   if (normalized.includes("goalkeeper")) return "goalkeeper";
   if (
@@ -127,7 +127,7 @@ function positionGroup(position?: string) {
   return "other";
 }
 
-function buildMostUsedXi(players: PlayerSeasonSummary[]) {
+function buildMostUsedXi(players: PlayerStatisticsView[]) {
   const ranked = [...players].sort(
     (a, b) => b.starts + b.subs - (a.starts + a.subs),
   );
@@ -137,7 +137,7 @@ function buildMostUsedXi(players: PlayerSeasonSummary[]) {
     const positionalPlayers = ranked.filter(
       (player) =>
         !selected.has(player.Player) &&
-        positionGroup(player.bio?.position) === group,
+        positionGroup(player.profile.position) === group,
     );
     const fallbackPlayers = ranked.filter(
       (player) => !selected.has(player.Player),
@@ -165,7 +165,7 @@ function buildMostUsedXi(players: PlayerSeasonSummary[]) {
 export function SeasonStory(props: {
   season: string;
   results: Match[];
-  players: PlayerSeasonSummary[];
+  players: PlayerStatisticsView[];
   managers: Manager[];
   transfers: Transfer[];
   shirts: Shirt[];
@@ -307,9 +307,9 @@ export function SeasonStory(props: {
                 height={560}
                 className="relative z-10 h-80 w-80 object-contain drop-shadow-[0_25px_30px_rgba(0,0,0,0.35)]"
               />
-            ) : topScorer?.bio?.picLink ? (
+            ) : topScorer?.profile.picLink ? (
               <Image
-                src={replaceSeasonsKit(topScorer.bio.picLink, props.season)}
+                src={replaceSeasonsKit(topScorer.profile.picLink, props.season)}
                 alt={topScorer.Player}
                 width={420}
                 height={420}
@@ -479,10 +479,10 @@ export function SeasonStory(props: {
                           className="group flex w-20 flex-col items-center text-center"
                         >
                           <span className="grid h-12 w-12 place-items-center overflow-hidden rounded-full border-2 border-white bg-[#071a2b] text-xs font-bold text-white shadow-md transition group-hover:bg-blue-700">
-                            {player.bio?.picLink ? (
+                            {player.profile.picLink ? (
                               <Image
                                 src={replaceSeasonsKit(
-                                  player.bio.picLink,
+                                  player.profile.picLink,
                                   props.season,
                                 )}
                                 alt=""
@@ -499,7 +499,8 @@ export function SeasonStory(props: {
                             {player.Player}
                           </span>
                           <span className="text-[0.6rem] text-[#071a2b]/50">
-                            {player.bio?.position ?? `${player.starts} starts`}
+                            {player.profile.position ??
+                              `${player.starts} starts`}
                           </span>
                         </Link>
                       ))}

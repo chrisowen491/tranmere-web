@@ -10,7 +10,6 @@ exports.handler = async (
   const classifier = event.pathParameters!.classifier;
 
   const playerName = classifier!;
-  const player = await utils.getPlayer(playerName);
 
   const summarySearch = await utils.getPlayerSummary(playerName);
 
@@ -20,17 +19,11 @@ exports.handler = async (
 
   const links = await utils.getPlayerLinks(playerName);
 
-  if (!player) {
-    console.log('Player not found: ' + playerName);
-    return utils.sendResponse(404, { message: 'Player not found' });
-  }
-
   const playerview: PlayerView = {
     debut: appearances[0],
     seasons: summarySearch,
     links: links,
     image: utils.buildImagePath('photos/kop.jpg', 1920, 1080),
-    player: player,
     appearances: appearances
   };
 

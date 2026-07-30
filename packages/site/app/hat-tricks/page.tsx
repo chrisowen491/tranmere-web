@@ -2,13 +2,17 @@ import {
   ArrowRightIcon,
   CalendarDaysIcon,
   TrophyIcon,
-  UserIcon,
 } from "@heroicons/react/24/outline";
 import { GetAllHatTricks } from "@tranmere-web/lib/src/apiFunctions";
 import type { HatTrick } from "@tranmere-web/lib/src/tranmere-web-types";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import {
+  getPlayerStatisticsProfiles,
+  type PlayerStatisticsProfile,
+} from "@/lib/playerStatistics";
 
 export const revalidate = 7200;
 
@@ -17,14 +21,8 @@ export const metadata: Metadata = {
   description: "Tranmere Rovers hat-trick scorers since 1977",
 };
 
-const defaultPlayerImageSignature =
-  "simple/cccccc/none/cccccc/cccccc/none/cccccc";
-
-function hasPlayerImage(record: HatTrick) {
-  return (
-    record.picLink &&
-    !record.picLink.toLowerCase().includes(defaultPlayerImageSignature)
-  );
+interface HatTrickView extends Omit<HatTrick, "picLink"> {
+  profile: PlayerStatisticsProfile;
 }
 
 function formatDate(value: string) {
@@ -42,7 +40,20 @@ function formatDate(value: string) {
 }
 
 export default async function HatTricks() {
-  const records = await GetAllHatTricks();
+  const env = (await getCloudflareContext({ async: true })).env;
+  const legacyRecords = await GetAllHatTricks();
+  const profiles = await getPlayerStatisticsProfiles(
+    env.DB,
+    legacyRecords.map((record) => record.Player),
+  );
+  const records = legacyRecords.map<HatTrickView>((record) => ({
+    Date: record.Date,
+    Player: record.Player,
+    Opposition: record.Opposition,
+    Goals: record.Goals,
+    Season: record.Season,
+    profile: profiles.get(record.Player)!,
+  }));
   const playerTotals = records.reduce<Map<string, number>>((totals, record) => {
     totals.set(record.Player, (totals.get(record.Player) ?? 0) + 1);
     return totals;
@@ -169,18 +180,14 @@ export default async function HatTricks() {
                   aria-label={`View ${record.Player}'s player profile`}
                   className="relative h-24 w-24 shrink-0 overflow-hidden bg-[#071a2b]"
                 >
-                  {hasPlayerImage(record) ? (
-                    <Image
-                      width={160}
-                      height={160}
-                      alt={record.Player}
-                      src={record.picLink!}
-                      unoptimized
-                      className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
-                    />
-                  ) : (
-                    <UserIcon className="h-full w-full p-6 text-white/20" />
-                  )}
+                  <Image
+                    width={160}
+                    height={160}
+                    alt={record.Player}
+                    src={record.profile.picLink}
+                    unoptimized
+                    className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+                  />
                 </Link>
 
                 <div className="min-w-0 flex-1">

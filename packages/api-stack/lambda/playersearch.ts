@@ -14,13 +14,6 @@ const dynamo = DynamoDBDocument.from(
 exports.handler = async (
   event: APIGatewayEvent
 ): Promise<APIGatewayProxyResult> => {
-  const squadSearch = await dynamo.scan({
-    TableName: DataTables.PLAYER_TABLE_NAME
-  });
-  const playerHash: any = {};
-  for (const member of squadSearch.Items!) {
-    playerHash[member.name] = member;
-  }
 
   let season = event.queryStringParameters
     ? event.queryStringParameters.season
@@ -59,16 +52,6 @@ exports.handler = async (
 
   for (const result of results) {
     delete result.TimeToLive;
-    result.bio = playerHash[result.Player];
-    if (result.bio && result.bio.picLink) {
-      result.bio.pic = {
-        fields: {
-          file: {
-            url: result.bio.picLink
-          }
-        }
-      };
-    }
   }
 
   if (filter) {

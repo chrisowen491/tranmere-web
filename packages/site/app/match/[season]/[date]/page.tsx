@@ -6,6 +6,7 @@ import MatchReport from "@/components/apps/MatchReport";
 import { GetCommentsByUrl } from "@/lib/comments";
 import { notFound } from "next/navigation";
 import { getApprovedAttendance } from "@/lib/attendanceCorrections";
+import { enrichMatchPlayers } from "@/lib/matchPlayers";
 
 export async function generateMetadata(props: { params: MatchParams }) {
   const params = await props.params;
@@ -29,16 +30,20 @@ export async function generateMetadata(props: { params: MatchParams }) {
 
 export default async function MatchPage(props: { params: MatchParams }) {
   const params = await props.params;
+  const env = (await getCloudflareContext({ async: true })).env;
   const baseUrl = `/match/${params.season}/${params.date}`;
-  const url = `${GetBaseUrl(getCloudflareContext().env)}${baseUrl}`;
+  const url = `${GetBaseUrl(env)}${baseUrl}`;
 
   const matchRequest = await fetch(url);
 
   if (matchRequest.status != 200) notFound();
 
-  const match = (await matchRequest.json()) as MatchPageData;
+  const match = await enrichMatchPlayers(
+    env.DB,
+    (await matchRequest.json()) as MatchPageData,
+  );
 
-  const seasonMatchesUrl = `${GetBaseUrl(getCloudflareContext().env)}/result-search/?season=${match.season}`;
+  const seasonMatchesUrl = `${GetBaseUrl(env)}/result-search/?season=${match.season}`;
 
   const seasonMatches = await fetch(seasonMatchesUrl);
 
@@ -52,7 +57,7 @@ export default async function MatchPage(props: { params: MatchParams }) {
     Math.max(previousMatches.length - 5, 0),
   );
 
-  const comments = await GetCommentsByUrl(getCloudflareContext().env, baseUrl);
+  const comments = await GetCommentsByUrl(env, baseUrl);
   let score = 0;
   comments.forEach((c) => {
     score = score + c.rating;

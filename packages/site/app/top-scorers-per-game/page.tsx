@@ -1,10 +1,10 @@
 import { Title } from "@/components/fragments/Title";
 import { GetBaseUrl } from "@/lib/apiFunctions";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
-import { PlayerSeasonSummary } from "@tranmere-web/lib/src/tranmere-web-types";
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { getPlayerStatistics } from "@/lib/playerStatistics";
 
 export const revalidate = 7200;
 
@@ -14,23 +14,16 @@ export const metadata: Metadata = {
 };
 
 export default async function HatTricks() {
-  const base =
-    GetBaseUrl((await getCloudflareContext({ async: true })).env) +
-    "/player-search/";
-
-  const latestSeasonRequest = await fetch(base + `?season=&sort=Goals&filter=`);
-  const playerResults = (await latestSeasonRequest.json()) as {
-    players: PlayerSeasonSummary[];
-  };
-
-  const players = playerResults.players.filter((p) => p.Apps > 20);
-  players.forEach((p) => {
-    p.goalsPerGame = Math.round((p.goals / p.Apps) * 100) / 100;
-  });
-
-  players.sort((a, b) => {
-    return b.goalsPerGame! - a.goalsPerGame!;
-  });
+  const env = (await getCloudflareContext({ async: true })).env;
+  const players = (
+    await getPlayerStatistics(env.DB, GetBaseUrl(env), { sort: "Goals" })
+  )
+    .filter((player) => player.Apps > 20)
+    .map((player) => ({
+      ...player,
+      goalsPerGame: Math.round((player.goals / player.Apps) * 100) / 100,
+    }))
+    .sort((a, b) => b.goalsPerGame - a.goalsPerGame);
 
   return (
     <>
@@ -54,7 +47,7 @@ export default async function HatTricks() {
                   width={200}
                   height={200}
                   unoptimized={true}
-                  src={player.bio!.picLink!}
+                  src={player.profile.picLink}
                   className="mx-auto h-24 w-24 rounded-full"
                 />
                 <h3 className="mt-6 text-base font-semibold leading-7 tracking-tight text-gray-900 dark:text-gray-50">

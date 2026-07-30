@@ -7,6 +7,8 @@ import {
   ArrowsRightLeftIcon,
   BuildingOffice2Icon,
   CalendarDaysIcon,
+  ChatBubbleLeftRightIcon,
+  IdentificationIcon,
   UserCircleIcon,
   UserGroupIcon,
 } from "@heroicons/react/24/outline";
@@ -144,6 +146,22 @@ export default async function AdminPage() {
 
         <div className="grid gap-5 md:grid-cols-2">
           {[
+            {
+              href: "/admin/players",
+              title: "Players",
+              description:
+                "Review and edit the player profiles imported into the local D1 database.",
+              action: "Manage players",
+              icon: IdentificationIcon,
+            },
+            {
+              href: "/admin/comments",
+              title: "Comments & ratings",
+              description:
+                "Review, edit or remove supporter comments and ratings from across the site.",
+              action: "Manage comments",
+              icon: ChatBubbleLeftRightIcon,
+            },
             {
               href: "/admin/transfers",
               title: "Transfers",

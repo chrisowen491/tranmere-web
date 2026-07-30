@@ -193,7 +193,7 @@ export interface Args {
 }
 
 export interface PlayerProfile {
-  debut: Appearance;
+  debut?: Appearance;
   seasons: PlayerSeasonSummary[];
   transfers: Transfer[];
   links: HyperLink[];
