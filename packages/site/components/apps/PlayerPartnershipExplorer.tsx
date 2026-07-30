@@ -4,14 +4,16 @@ import {
   ArrowPathIcon,
   ArrowRightIcon,
   CalendarDaysIcon,
+  CheckIcon,
   FireIcon,
+  MagnifyingGlassIcon,
   TrophyIcon,
   UserGroupIcon,
 } from "@heroicons/react/24/outline";
 import type { Player } from "@tranmere-web/lib/src/tranmere-web-types";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import type {
   PartnershipMatch,
   PlayerPartnership,
@@ -42,6 +44,171 @@ function formatDate(date: string) {
     year: "numeric",
     timeZone: "UTC",
   }).format(new Date(date));
+}
+
+function PlayerAutosuggest({
+  id,
+  label,
+  players,
+  value,
+  onChange,
+  excludedPlayer,
+}: {
+  id: string;
+  label: string;
+  players: Player[];
+  value: string;
+  onChange: (name: string) => void;
+  excludedPlayer: string;
+}) {
+  const [query, setQuery] = useState(value);
+  const [open, setOpen] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const suggestions = useMemo(() => {
+    const search = query.trim().toLowerCase();
+    return players
+      .filter(
+        (player) =>
+          player.name !== excludedPlayer &&
+          (!search || player.name.toLowerCase().includes(search)),
+      )
+      .sort((a, b) => {
+        const aStarts = a.name.toLowerCase().startsWith(search);
+        const bStarts = b.name.toLowerCase().startsWith(search);
+        return (
+          Number(bStarts) - Number(aStarts) || a.name.localeCompare(b.name)
+        );
+      })
+      .slice(0, 8);
+  }, [excludedPlayer, players, query]);
+
+  function selectPlayer(player: Player) {
+    onChange(player.name);
+    setQuery(player.name);
+    setOpen(false);
+    setActiveIndex(0);
+  }
+
+  return (
+    <div>
+      <label
+        htmlFor={id}
+        className="mb-2 block font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-[#071a2b]/50"
+      >
+        {label}
+      </label>
+      <div className="relative">
+        <MagnifyingGlassIcon
+          className="pointer-events-none absolute left-4 top-3.5 h-5 w-5 text-[#071a2b]/35"
+          aria-hidden="true"
+        />
+        <input
+          id={id}
+          role="combobox"
+          aria-autocomplete="list"
+          aria-controls={`${id}-suggestions`}
+          aria-expanded={open}
+          aria-activedescendant={
+            open && suggestions[activeIndex]
+              ? `${id}-option-${activeIndex}`
+              : undefined
+          }
+          autoComplete="off"
+          value={query}
+          onFocus={() => {
+            setOpen(true);
+            setActiveIndex(0);
+          }}
+          onBlur={() => {
+            setOpen(false);
+            setQuery(value);
+          }}
+          onChange={(event) => {
+            const nextQuery = event.target.value;
+            setQuery(nextQuery);
+            setOpen(true);
+            setActiveIndex(0);
+            const exactMatch = players.find(
+              (player) =>
+                player.name.toLowerCase() === nextQuery.trim().toLowerCase() &&
+                player.name !== excludedPlayer,
+            );
+            if (exactMatch) onChange(exactMatch.name);
+          }}
+          onKeyDown={(event) => {
+            if (event.key === "ArrowDown") {
+              event.preventDefault();
+              setOpen(true);
+              setActiveIndex((index) =>
+                Math.min(index + 1, suggestions.length - 1),
+              );
+            } else if (event.key === "ArrowUp") {
+              event.preventDefault();
+              setActiveIndex((index) => Math.max(index - 1, 0));
+            } else if (event.key === "Enter" && open) {
+              event.preventDefault();
+              const suggestion = suggestions[activeIndex];
+              if (suggestion) selectPlayer(suggestion);
+            } else if (event.key === "Escape") {
+              setOpen(false);
+              setQuery(value);
+            }
+          }}
+          className="w-full border border-[#071a2b]/20 bg-[#fffdf8] py-3 pl-11 pr-10 text-sm font-bold focus:border-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700/15"
+        />
+        {query === value && (
+          <CheckIcon
+            className="pointer-events-none absolute right-4 top-3.5 h-5 w-5 text-emerald-600"
+            aria-hidden="true"
+          />
+        )}
+
+        {open && (
+          <div
+            id={`${id}-suggestions`}
+            role="listbox"
+            className="absolute z-30 mt-1 max-h-80 w-full overflow-y-auto border border-[#071a2b]/20 bg-[#fffdf8] shadow-xl"
+          >
+            {suggestions.length > 0 ? (
+              suggestions.map((player, index) => (
+                <button
+                  id={`${id}-option-${index}`}
+                  key={player.name}
+                  type="button"
+                  role="option"
+                  aria-selected={player.name === value}
+                  onMouseDown={(event) => event.preventDefault()}
+                  onClick={() => selectPlayer(player)}
+                  onMouseEnter={() => setActiveIndex(index)}
+                  className={`flex w-full items-center justify-between gap-4 border-b border-[#071a2b]/10 px-4 py-3 text-left last:border-b-0 ${
+                    index === activeIndex
+                      ? "bg-blue-700 text-white"
+                      : "hover:bg-blue-50"
+                  }`}
+                >
+                  <span className="font-semibold">{player.name}</span>
+                  <span
+                    className={`text-xs ${
+                      index === activeIndex
+                        ? "text-white/65"
+                        : "text-[#071a2b]/45"
+                    }`}
+                  >
+                    {player.position || "Rovers player"}
+                  </span>
+                </button>
+              ))
+            ) : (
+              <p className="px-4 py-5 text-sm text-[#071a2b]/50">
+                No players match “{query}”.
+              </p>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
 }
 
 export function PlayerPartnershipExplorer({
@@ -122,41 +289,25 @@ export function PlayerPartnershipExplorer({
       <section className="border-b border-[#071a2b]/15 bg-[#e8e2d6]">
         <div className="mx-auto max-w-7xl px-6 py-8 sm:px-10 lg:px-12">
           <div className="grid gap-4 lg:grid-cols-[1fr_auto_1fr_auto] lg:items-end">
-            <label>
-              <span className="mb-2 block font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-[#071a2b]/50">
-                First player
-              </span>
-              <select
-                value={firstPlayer}
-                onChange={(event) => setFirstPlayer(event.target.value)}
-                className="w-full border border-[#071a2b]/20 bg-[#fffdf8] px-4 py-3 text-sm font-bold focus:border-blue-700 focus:outline-none"
-              >
-                {sortedPlayers.map((player) => (
-                  <option key={player.name} value={player.name}>
-                    {player.name}
-                  </option>
-                ))}
-              </select>
-            </label>
+            <PlayerAutosuggest
+              id="first-partnership-player"
+              label="First player"
+              players={sortedPlayers}
+              value={firstPlayer}
+              excludedPlayer={secondPlayer}
+              onChange={setFirstPlayer}
+            />
             <span className="hidden pb-3 font-display text-2xl text-[#071a2b]/30 lg:block">
               +
             </span>
-            <label>
-              <span className="mb-2 block font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-[#071a2b]/50">
-                Second player
-              </span>
-              <select
-                value={secondPlayer}
-                onChange={(event) => setSecondPlayer(event.target.value)}
-                className="w-full border border-[#071a2b]/20 bg-[#fffdf8] px-4 py-3 text-sm font-bold focus:border-blue-700 focus:outline-none"
-              >
-                {sortedPlayers.map((player) => (
-                  <option key={player.name} value={player.name}>
-                    {player.name}
-                  </option>
-                ))}
-              </select>
-            </label>
+            <PlayerAutosuggest
+              id="second-partnership-player"
+              label="Second player"
+              players={sortedPlayers}
+              value={secondPlayer}
+              excludedPlayer={firstPlayer}
+              onChange={setSecondPlayer}
+            />
             <button
               type="button"
               onClick={explore}
