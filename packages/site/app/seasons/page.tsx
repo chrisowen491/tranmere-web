@@ -20,7 +20,10 @@ function seasonLabel(season: number) {
 }
 
 export default function SeasonsIndexPage() {
-  const decades = GetSeasons().reduce((groups, season) => {
+  const seasons = GetSeasons().filter(
+    (season) => season < 1939 || season > 1944,
+  );
+  const decades = seasons.reduce((groups, season) => {
     const decade = Math.floor(season / 10) * 10;
     groups.set(decade, [...(groups.get(decade) ?? []), season]);
     return groups;
@@ -37,7 +40,7 @@ export default function SeasonsIndexPage() {
           url: "https://www.tranmere-web.com/seasons",
           mainEntity: {
             "@type": "ItemList",
-            numberOfItems: GetSeasons().length,
+            numberOfItems: seasons.length,
           },
         }}
       />
@@ -68,7 +71,7 @@ export default function SeasonsIndexPage() {
             <div className="border border-white/15 p-6">
               <CalendarDaysIcon className="h-6 w-6 text-blue-300" />
               <p className="mt-8 font-display text-5xl font-semibold">
-                {GetSeasons().length}
+                {seasons.length}
               </p>
               <p className="mt-2 font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-white/45">
                 Recorded seasons

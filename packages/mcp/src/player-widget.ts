@@ -1,4 +1,4 @@
-export const PLAYERS_UI_URI = 'ui://tranmere-web/players-v4.html';
+export const PLAYERS_UI_URI = 'ui://tranmere-web/players-v7.html';
 
 export const playersWidgetHtml = `
 <!doctype html>
@@ -321,16 +321,95 @@ export const playersWidgetHtml = `
         playersElement.appendChild(fragment);
       }
 
+      function parseOutput(output) {
+        if (typeof output === "string") {
+          try {
+            return parseOutput(JSON.parse(output));
+          } catch {
+            return null;
+          }
+        }
+
+        const candidates = [
+          output?.structuredContent,
+          output?.toolOutput,
+          output?.result?.structuredContent,
+          output?.result,
+          output?.widgetState,
+          output?.globals?.widgetState,
+          output?.globals?.toolOutput,
+          output
+        ];
+        return candidates.find((candidate) => Array.isArray(candidate?.players)) || null;
+      }
+
+      function renderOutput(output) {
+        const parsed = parseOutput(output);
+        if (parsed) render(parsed);
+        return parsed;
+      }
+
+      function saveWidgetState(output) {
+        if (typeof window.openai?.setWidgetState !== "function") return;
+
+        const parsed = parseOutput(output);
+        if (!parsed) return;
+
+        Promise.resolve(window.openai.setWidgetState({
+          count: parsed.count,
+          players: parsed.players
+        })).catch(() => {
+          // Widget state is a progressive enhancement; live tool output still renders.
+        });
+      }
+
+      const initializeRequestId = 1;
+
       window.addEventListener("message", (event) => {
         if (event.source !== window.parent) return;
         const message = event.data;
         if (!message || message.jsonrpc !== "2.0") return;
+
+        if (message.id === initializeRequestId && message.result) {
+          window.parent.postMessage({
+            jsonrpc: "2.0",
+            method: "ui/notifications/initialized"
+          }, "*");
+          return;
+        }
+
         if (message.method === "ui/notifications/tool-result") {
-          render(message.params?.structuredContent);
+          const output = message.params?.structuredContent ?? message.params?.result ?? message.params;
+          renderOutput(output);
+          saveWidgetState(output);
         }
       }, { passive: true });
 
-      if (window.openai?.toolOutput) render(window.openai.toolOutput);
+      window.addEventListener("openai:set_globals", (event) => {
+        const globals = event.detail?.globals ?? event.detail ?? {};
+        renderOutput(globals.widgetState);
+        const output = globals.toolOutput;
+        if (renderOutput(output)) saveWidgetState(output);
+      }, { passive: true });
+
+      renderOutput(window.openai?.widgetState);
+      renderOutput(window.openai?.toolOutput);
+
+      window.parent.postMessage({
+        jsonrpc: "2.0",
+        id: initializeRequestId,
+        method: "ui/initialize",
+        params: {
+          protocolVersion: "2026-01-26",
+          appCapabilities: {
+            availableDisplayModes: ["inline"]
+          },
+          appInfo: {
+            name: "Tranmere player profiles",
+            version: "1.0.0"
+          }
+        }
+      }, "*");
     </script>
   </body>
 </html>

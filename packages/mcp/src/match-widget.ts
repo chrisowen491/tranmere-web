@@ -1,4 +1,4 @@
-export const MATCH_UI_URI = 'ui://tranmere-web/match-v3.html';
+export const MATCH_UI_URI = 'ui://tranmere-web/match-v5.html';
 
 export const matchWidgetHtml = `
 <!doctype html>
@@ -99,6 +99,31 @@ export const matchWidgetHtml = `
 
       .body { padding: 18px; }
 
+      .programme {
+        display: grid;
+        grid-template-columns: 116px minmax(0, 1fr);
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 18px;
+        padding: 14px;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: linear-gradient(135deg, var(--soft), var(--surface));
+      }
+
+      .programme img {
+        display: block;
+        width: 116px;
+        max-height: 164px;
+        border-radius: 6px;
+        box-shadow: 0 8px 18px rgb(7 29 73 / 22%);
+        object-fit: contain;
+      }
+
+      .programme-copy { min-width: 0; }
+      .programme-copy h2 { margin-bottom: 5px; }
+      .programme-copy p { margin: 0; color: var(--muted); line-height: 1.5; }
+
       .facts {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -189,6 +214,8 @@ export const matchWidgetHtml = `
         .teams { gap: 8px; }
         .result { min-width: 70px; font-size: 24px; }
         .body { padding: 14px; }
+        .programme { grid-template-columns: 88px minmax(0, 1fr); gap: 12px; }
+        .programme img { width: 88px; max-height: 132px; }
       }
     </style>
   </head>
@@ -265,6 +292,26 @@ export const matchWidgetHtml = `
 
         const body = document.createElement("div");
         body.className = "body";
+
+        if (match.programmeUrl) {
+          const programme = document.createElement("section");
+          programme.className = "programme";
+          const cover = document.createElement("img");
+          cover.src = String(match.programmeUrl);
+          cover.alt = text(match.homeTeam) + " v " + text(match.awayTeam) + " match programme";
+          cover.loading = "lazy";
+          cover.addEventListener("error", () => programme.remove());
+          const copy = document.createElement("div");
+          copy.className = "programme-copy";
+          const heading = document.createElement("h2");
+          heading.textContent = "Match programme";
+          const detail = document.createElement("p");
+          detail.textContent = "Programme cover from the Tranmere Rovers archive.";
+          copy.append(heading, detail);
+          programme.append(cover, copy);
+          body.appendChild(programme);
+        }
+
         const facts = document.createElement("dl");
         facts.className = "facts";
         facts.append(
@@ -332,8 +379,43 @@ export const matchWidgetHtml = `
         root.appendChild(body);
       }
 
+      function extractMatch(output) {
+        if (typeof output === "string") {
+          try {
+            return extractMatch(JSON.parse(output));
+          } catch {
+            return null;
+          }
+        }
+
+        const candidates = [
+          output?.match,
+          output?.structuredContent?.match,
+          output?.toolOutput?.match,
+          output?.result?.structuredContent?.match,
+          output?.result?.match,
+          output?.widgetState?.match,
+          output?.globals?.widgetState?.match,
+          output?.globals?.toolOutput?.match
+        ];
+        return candidates.find((match) => match?.date) || null;
+      }
+
       function renderOutput(output) {
-        render(output?.match ?? output?.structuredContent?.match);
+        const match = extractMatch(output);
+        if (match) render(match);
+        return match;
+      }
+
+      function saveWidgetState(output) {
+        if (typeof window.openai?.setWidgetState !== "function") return;
+
+        const match = extractMatch(output);
+        if (!match) return;
+
+        Promise.resolve(window.openai.setWidgetState({ match })).catch(() => {
+          // Widget state is a progressive enhancement; live tool output still renders.
+        });
       }
 
       const initializeRequestId = 1;
@@ -353,13 +435,17 @@ export const matchWidgetHtml = `
 
         if (message.method === "ui/notifications/tool-result") {
           renderOutput(message.params);
+          saveWidgetState(message.params);
         }
       }, { passive: true });
 
       window.addEventListener("openai:set_globals", (event) => {
-        renderOutput(event.detail?.globals?.toolOutput);
+        const globals = event.detail?.globals ?? event.detail ?? {};
+        renderOutput(globals.widgetState);
+        if (renderOutput(globals.toolOutput)) saveWidgetState(globals.toolOutput);
       }, { passive: true });
 
+      renderOutput(window.openai?.widgetState);
       renderOutput(window.openai?.toolOutput);
 
       window.parent.postMessage({

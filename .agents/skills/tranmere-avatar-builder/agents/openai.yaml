@@ -1,0 +1,8 @@
+interface:
+  display_name: Tranmere Rovers Avatar Builder
+  short_description: Create shareable Tranmere Rovers player avatars
+  default_prompt: Use $tranmere-avatar-builder to create a shareable Tranmere Rovers -style avatar.
+  icon_small: assets/icon.svg
+  icon_large: assets/icon.svg
+policy:
+  allow_implicit_invocation: true

@@ -33,6 +33,8 @@ const linkGroups = [
       { label: "Manager fingerprints", href: "/manager-fingerprints" },
       { label: "Manager’s Trusted XI", href: "/manager-trusted-xi" },
       { label: "About", href: "/page/blog/about" },
+      { label: "Terms of service", href: "/page/blog/terms-of-service" },
+      { label: "Privacy policy", href: "/page/blog/privacy-policy" },
       { label: "Contact", href: "/contact" },
     ],
   },

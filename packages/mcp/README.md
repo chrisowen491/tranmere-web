@@ -55,7 +55,7 @@ permission from the token's `permissions` or `scope` claim.
 ## Player UI
 
 `GetPlayers` returns structured player data and links to the versioned MCP Apps
-resource `ui://tranmere-web/players-v4.html`. Compatible clients render the
+resource `ui://tranmere-web/players-v6.html`. Compatible clients render the
 resource as a responsive player-card grid. The resource uses
 `text/html;profile=mcp-app` and receives results through
 `ui/notifications/tool-result`; ChatGPT's output-template alias is also
@@ -75,10 +75,10 @@ duplicate.
 `GetMatchByDate` accepts an exact date in `YYYY-MM-DD` format, derives the
 football season, and retrieves the match from `api.tranmere-web.com`. It returns
 the score, match details, goals, lineup, substitutes, and report excerpt as
-structured data linked to `ui://tranmere-web/match-v3.html`. Compatible clients
+structured data linked to `ui://tranmere-web/match-v5.html`. Compatible clients
 render that resource as a responsive match card with a link to the full match
-page. The server also retains the `match-v1.html` and `match-v2.html` resource
-URIs as compatibility aliases for clients with cached tool metadata.
+page and a programme cover when the archive has one. The server retains earlier
+resource URIs as compatibility aliases for clients with cached tool metadata.
 
 ## Results search
 

@@ -1,0 +1,9 @@
+{
+  "name": "tranmere-web/tranmere-avatar-builder",
+  "description": "Create a suitable, shareable Tranmere Rovers-inspired player avatar with Tranmere-Web’s Avatar Studio. Use when asked to turn a player description, an attached photo, or public web photo references into a stateless avatar URL and inline preview; use for real players, historical players, fan-made players, and fictional Rovers characters.",
+  "private": true,
+  "skills": [
+    "."
+  ],
+  "version": "0.1.0"
+}
