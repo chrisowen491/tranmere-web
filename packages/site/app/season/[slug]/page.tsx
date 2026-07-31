@@ -77,7 +77,7 @@ export default async function SeasonPage(props: { params: SlugParams }) {
       <JsonLd
         data={breadcrumbJsonLd([
           { name: "Home", pathname: "/" },
-          { name: "Seasons", pathname: `/season/${GetYear()}` },
+          { name: "Seasons", pathname: "/seasons" },
           {
             name: `${season}/${String(Number(season) + 1).slice(-2)}`,
             pathname: `/season/${season}`,

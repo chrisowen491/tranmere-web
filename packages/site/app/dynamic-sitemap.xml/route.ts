@@ -28,7 +28,7 @@ export async function GET() {
   });
   seasons.forEach((t) => {
     pages.push({
-      loc: `https://www.tranmere-web.com/games/${t}`,
+      loc: `https://www.tranmere-web.com/season/${t}`,
       lastmod: new Date().toISOString(),
     });
   });

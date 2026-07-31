@@ -7,12 +7,11 @@ import {
 } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import { GetYear } from "@tranmere-web/lib/src/apiFunctions";
 import SearchBar from "@/components/search/SearchBar";
 
 const navigation = [
   { name: "Results", href: "/results" },
-  { name: "Seasons", href: `/season/${GetYear()}` },
+  { name: "Seasons", href: "/seasons" },
   { name: "Players", href: "/playersearch" },
   { name: "Fantasy XI", href: "/fantasy-team" },
   { name: "Shirts", href: "/shirts" },
