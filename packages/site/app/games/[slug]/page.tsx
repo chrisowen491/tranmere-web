@@ -11,6 +11,7 @@ import {
 } from "@tranmere-web/lib/src/tranmere-web-types";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { SlugParams } from "@/lib/types";
+import { pageMetadata } from "@/lib/seo";
 
 export async function generateMetadata(props: { params: SlugParams }) {
   const params = await props.params;
@@ -39,10 +40,11 @@ export async function generateMetadata(props: { params: SlugParams }) {
     title = "Results vs " + decodeURI(params.slug);
   }
 
-  return {
-    title: title,
-    description: description,
-  };
+  return pageMetadata({
+    title: title ?? "Tranmere Rovers results",
+    description: description ?? "Tranmere Rovers results archive.",
+    pathname: `/games/${encodeURIComponent(params.slug)}`,
+  });
 }
 
 export default async function GamesPage(props: { params: SlugParams }) {

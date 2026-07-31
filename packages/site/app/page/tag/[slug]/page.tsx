@@ -1,13 +1,16 @@
 import ArticleList from "@/components/blogs/ArticleList";
 import { getAllArticlesForTag } from "@/lib/api";
 import { SlugParams } from "@/lib/types";
+import { pageMetadata } from "@/lib/seo";
 
 export async function generateMetadata(props: { params: SlugParams }) {
   const params = await props.params;
-  return {
-    title: `Articles Tagged ${params.slug}`,
-    description: `All TranmereWeb.com articles tagged with  ${params.slug}`,
-  };
+  const tag = decodeURI(params.slug);
+  return pageMetadata({
+    title: `Tranmere Rovers articles tagged ${tag}`,
+    description: `Tranmere-Web archive articles tagged ${tag}.`,
+    pathname: `/page/tag/${encodeURIComponent(tag)}`,
+  });
 }
 
 export default async function TagPage(props: { params: SlugParams }) {

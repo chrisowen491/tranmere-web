@@ -21,6 +21,7 @@ import { getClubByName } from "@/lib/clubs";
 import { getManagers } from "@/lib/managers";
 import { getTransfers } from "@/lib/transfers";
 import type { SlugParams } from "@/lib/types";
+import { pageMetadata } from "@/lib/seo";
 
 export const revalidate = 7200;
 
@@ -57,10 +58,11 @@ export async function generateMetadata(props: {
 }): Promise<Metadata> {
   const { slug } = await props.params;
   const club = decodeURIComponent(slug);
-  return {
+  return pageMetadata({
     title: `${club} connections`,
     description: `Explore the players, transfers and matches connecting ${club} with Tranmere Rovers.`,
-  };
+    pathname: `/rovers-connections/${encodeURIComponent(club)}`,
+  });
 }
 
 export default async function RoversConnectionPage(props: {
@@ -178,6 +180,42 @@ export default async function RoversConnectionPage(props: {
           ))}
         </div>
       </section>
+
+      <nav
+        aria-label={`Explore ${club.name} archive links`}
+        className="mx-auto grid max-w-7xl gap-px border-x border-b border-[#071a2b]/15 bg-[#071a2b]/15 sm:grid-cols-3"
+      >
+        <Link
+          href={`/games/${encodeURIComponent(club.name)}`}
+          className="bg-[#fffdf8] px-5 py-4 text-sm font-bold transition hover:bg-blue-50 hover:text-blue-700"
+        >
+          Complete head-to-head
+        </Link>
+        {latestMeeting ? (
+          <Link
+            href={matchHref(latestMeeting)}
+            className="bg-[#fffdf8] px-5 py-4 text-sm font-bold transition hover:bg-blue-50 hover:text-blue-700"
+          >
+            Latest meeting
+          </Link>
+        ) : (
+          <span className="bg-[#fffdf8] px-5 py-4 text-sm font-bold text-[#071a2b]/35">
+            No meeting recorded yet
+          </span>
+        )}
+        {linkedPlayers[0] ? (
+          <Link
+            href={`/page/player/${encodeURIComponent(linkedPlayers[0].name)}`}
+            className="bg-[#fffdf8] px-5 py-4 text-sm font-bold transition hover:bg-blue-50 hover:text-blue-700"
+          >
+            Notable shared player · {linkedPlayers[0].name}
+          </Link>
+        ) : (
+          <span className="bg-[#fffdf8] px-5 py-4 text-sm font-bold text-[#071a2b]/35">
+            No shared players recorded
+          </span>
+        )}
+      </nav>
 
       <div className="mx-auto max-w-7xl px-6 py-14 sm:px-10 lg:px-12 lg:py-20">
         <section>

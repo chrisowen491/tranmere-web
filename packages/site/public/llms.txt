@@ -1,0 +1,43 @@
+# Tranmere-Web
+
+> An independent, supporter-built archive of Tranmere Rovers Football Club history: results, player records, managers, transfers, shirts and stories.
+
+Tranmere-Web is not affiliated with Tranmere Rovers Football Club. Use it as a historical archive and link back to the relevant record when citing information. Match and player data may be amended as the archive is researched.
+
+## Main archive
+
+- [Home](https://www.tranmere-web.com/): archive overview, featured history and ways to explore.
+- [Results](https://www.tranmere-web.com/results): searchable match results by season, opponent and competition.
+- [Players](https://www.tranmere-web.com/playersearch): player statistics and archive rankings from 1977 onwards.
+- [Seasons](https://www.tranmere-web.com/season/2026): season stories, squads, results and timelines; replace `2026` with a season's opening year.
+- [Transfers](https://www.tranmere-web.com/transfer-central): transfers in and out of Prenton Park.
+- [Managers](https://www.tranmere-web.com/managers): Tranmere manager history.
+- [Shirts](https://www.tranmere-web.com/shirts): historical Tranmere kits and shirt archive.
+- [Stories](https://www.tranmere-web.com/blog): archive articles, features and club history.
+
+## Research entry points
+
+- [Head-to-head index](https://www.tranmere-web.com/head-to-head): results against individual opponents.
+- [Rovers connections](https://www.tranmere-web.com/rovers-connections): players and links shared with other clubs.
+- [Player partnerships](https://www.tranmere-web.com/player-partnerships): appearances shared by pairs of Tranmere players.
+- [Player records](https://www.tranmere-web.com/player-records/most-appearances): appearance and scoring records.
+- [Season top scorers](https://www.tranmere-web.com/top-scorers-by-season): leading scorer for each recorded season.
+- [Hat-tricks](https://www.tranmere-web.com/hat-tricks): recorded Tranmere hat-tricks.
+
+## URL patterns
+
+- Player profile: `https://www.tranmere-web.com/page/player/{player-name}`
+- Match report: `https://www.tranmere-web.com/match/{season-opening-year}/{YYYY-MM-DD}`
+- Season: `https://www.tranmere-web.com/season/{season-opening-year}`
+- Head-to-head results: `https://www.tranmere-web.com/games/{opponent-name}`
+- Article: `https://www.tranmere-web.com/page/blog/{article-slug}`
+
+## Machine-readable discovery
+
+- [Robots policy](https://www.tranmere-web.com/robots.txt)
+- [Sitemap index](https://www.tranmere-web.com/sitemap.xml)
+- [Dynamic sitemap](https://www.tranmere-web.com/dynamic-sitemap.xml)
+
+## Preferred use
+
+For questions about a particular match, player, season or opponent, use the relevant canonical page above. Preserve original dates, scores, competition names and player names. Clearly distinguish confirmed archive data from any inference.

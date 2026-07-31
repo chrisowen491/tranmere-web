@@ -4,6 +4,7 @@ import localFont from "next/font/local";
 import clsx from "clsx";
 import { Providers } from "@/app/providers";
 import { Layout } from "@/components/layout/Layout";
+import { JsonLd, sportsTeamJsonLd } from "@/components/seo/JsonLd";
 
 import "@/styles/tailwind.css";
 import "./globals.css";
@@ -55,6 +56,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="flex min-h-full bg-[#f4f0e8] text-[#071a2b]">
+        <JsonLd data={sportsTeamJsonLd} />
         <Providers>
           <Layout>{children}</Layout>
         </Providers>

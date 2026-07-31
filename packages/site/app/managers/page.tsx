@@ -7,16 +7,18 @@ import { buildImagePath } from "@tranmere-web/lib/src/apiFunctions";
 import type { Manager } from "@tranmere-web/lib/src/tranmere-web-types";
 import { getManagers } from "@/lib/managers";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
-import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { absoluteUrl, breadcrumbJsonLd, JsonLd } from "@/components/seo/JsonLd";
+import { pageMetadata } from "@/lib/seo";
 
 export const revalidate = 7200;
 
-export const metadata: Metadata = {
-  title: "Tranmere Rovers Managerial Records",
-  description: "Records of all Tranmere Rovers managers",
-};
+export const metadata = pageMetadata({
+  title: "Tranmere Rovers managers",
+  description: "The complete record of Tranmere Rovers first-team managers.",
+  pathname: "/managers",
+});
 
 function formatDate(value?: string) {
   if (!value || value.toLowerCase().startsWith("now")) {
@@ -53,6 +55,33 @@ export default async function ManagerRecords() {
 
   return (
     <main className="min-h-screen bg-[#f4f0e8] text-[#071a2b]">
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          name: "Tranmere Rovers managers",
+          url: absoluteUrl("/managers"),
+          mainEntity: {
+            "@type": "ItemList",
+            itemListElement: managers.map((manager, index) => ({
+              "@type": "ListItem",
+              position: index + 1,
+              item: {
+                "@type": "Person",
+                name: manager.name,
+                jobTitle: "Football manager",
+                memberOf: { "@id": "https://www.tranmere-web.com/#team" },
+              },
+            })),
+          },
+        }}
+      />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Home", pathname: "/" },
+          { name: "Managers", pathname: "/managers" },
+        ])}
+      />
       <header className="relative overflow-hidden border-b border-white/15 bg-[#071a2b] text-white">
         <div className="archive-grid absolute inset-0 opacity-30" />
         <div className="relative mx-auto max-w-7xl px-6 py-16 sm:px-10 lg:px-12 lg:py-24">

@@ -1,16 +1,18 @@
 import { PlayerSearch } from "@/components/apps/PlayerSearch";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
-import { Metadata } from "next";
 import { GetBaseUrl } from "@/lib/apiFunctions";
 import Link from "next/link";
 import { getPlayerStatistics } from "@/lib/playerStatistics";
+import { breadcrumbJsonLd, JsonLd } from "@/components/seo/JsonLd";
+import { pageMetadata } from "@/lib/seo";
 
 export const revalidate = 7200;
 
-export const metadata: Metadata = {
-  title: "Players Home",
-  description: "Tranmere Rovers player infomation index",
-};
+export const metadata = pageMetadata({
+  title: "Tranmere Rovers players",
+  description: "Tranmere Rovers player profiles, appearances and statistics.",
+  pathname: "/playersearch",
+});
 
 export default async function PlayerSearchPage() {
   const env = (await getCloudflareContext({ async: true })).env;
@@ -18,6 +20,26 @@ export default async function PlayerSearchPage() {
 
   return (
     <main className="pb-24 text-[#071a2b]">
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          name: "Tranmere Rovers player archive",
+          description:
+            "Tranmere Rovers player statistics and profiles from 1977 onwards.",
+          url: "https://www.tranmere-web.com/playersearch",
+          mainEntity: {
+            "@type": "ItemList",
+            numberOfItems: players.length,
+          },
+        }}
+      />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Home", pathname: "/" },
+          { name: "Players", pathname: "/playersearch" },
+        ])}
+      />
       <header className="border-b border-[#071a2b]/10">
         <div className="mx-auto max-w-7xl px-6 py-14 sm:px-10 lg:px-12 lg:py-20">
           <p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-700">

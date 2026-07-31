@@ -4,6 +4,7 @@ import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { GetBaseUrl } from "@/lib/apiFunctions";
 import { SlugParams } from "@/lib/types";
 import { getPlayerStatistics } from "@/lib/playerStatistics";
+import { pageMetadata } from "@/lib/seo";
 
 export async function generateMetadata(props: { params: SlugParams }) {
   const params = await props.params;
@@ -21,10 +22,12 @@ export async function generateMetadata(props: { params: SlugParams }) {
     title = "Tranmere Record Goalscorers";
   }
 
-  return {
-    title: title,
-    description: description,
-  };
+  return pageMetadata({
+    title: title ?? "Tranmere Rovers player records",
+    description:
+      description ?? "Tranmere Rovers player records and statistics.",
+    pathname: `/player-records/${encodeURIComponent(params.slug)}`,
+  });
 }
 
 export default async function PlayerSearchPage(props: { params: SlugParams }) {

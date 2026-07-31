@@ -7,13 +7,17 @@ import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { notFound } from "next/navigation";
 import { getTransfers } from "@/lib/transfers";
 import { getPlayerByName } from "@/lib/players";
+import { pageMetadata } from "@/lib/seo";
+import { absoluteUrl, breadcrumbJsonLd, JsonLd } from "@/components/seo/JsonLd";
 
 export async function generateMetadata(props: { params: SlugParams }) {
   const params = await props.params;
-  return {
-    title: `Player Profile - ${decodeURI(params.slug)}`,
-    description: `Player Profile for the Tranmere Rovers career of ${decodeURI(params.slug)}`,
-  };
+  const name = decodeURI(params.slug);
+  return pageMetadata({
+    title: `Player Profile – ${name}`,
+    description: `Career profile, appearances, goals and transfers for Tranmere Rovers player ${name}.`,
+    pathname: `/page/player/${encodeURIComponent(name)}`,
+  });
 }
 
 export default async function PlayerProfilePage(props: { params: SlugParams }) {
@@ -90,6 +94,30 @@ export default async function PlayerProfilePage(props: { params: SlugParams }) {
 
   return (
     <>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "Person",
+          name: d1Player.name,
+          url: absoluteUrl(`/page/player/${encodeURIComponent(d1Player.name)}`),
+          image: d1Player.picLink || undefined,
+          birthDate: d1Player.dateOfBirth || undefined,
+          birthPlace: d1Player.placeOfBirth || undefined,
+          jobTitle: d1Player.position || "Footballer",
+          memberOf: { "@id": "https://www.tranmere-web.com/#team" },
+          description: d1Player.biographyMarkdown || undefined,
+        }}
+      />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Home", pathname: "/" },
+          { name: "Players", pathname: "/playersearch" },
+          {
+            name: d1Player.name,
+            pathname: `/page/player/${encodeURIComponent(d1Player.name)}`,
+          },
+        ])}
+      />
       <PlayerProfileView
         player={profile}
         articles={articles}

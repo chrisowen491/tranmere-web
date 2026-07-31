@@ -12,14 +12,21 @@ import { LineGraph } from "@/components/charts/LineGraph";
 import Slider from "@/components/carousel/Slider";
 import Link from "next/link";
 import { SlugParams } from "@/lib/types";
+import { pageMetadata } from "@/lib/seo";
+import { absoluteUrl, breadcrumbJsonLd, JsonLd } from "@/components/seo/JsonLd";
 
 export async function generateMetadata(props: { params: SlugParams }) {
   const params = await props.params;
   const article = await getArticle(params.slug);
-  return {
-    title: article ? article.title : "",
-    description: article ? article.description : "",
-  };
+  if (!article) return {};
+  return pageMetadata({
+    title: article.title,
+    description:
+      article.description || `Tranmere Rovers story: ${article.title}`,
+    pathname: `/page/blog/${params.slug}`,
+    image: article.pic?.url,
+    article: true,
+  });
 }
 
 export default async function BlogPage(props: { params: SlugParams }) {
@@ -58,6 +65,34 @@ export default async function BlogPage(props: { params: SlugParams }) {
 
   return (
     <main className="pb-24 text-[#071a2b]">
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "Article",
+          headline: article.title,
+          description: article.description || undefined,
+          url: absoluteUrl(url),
+          datePublished: article.datePosted || undefined,
+          dateModified: article.datePosted || undefined,
+          author: {
+            "@type": "Organization",
+            name: article.author || "Tranmere-Web",
+          },
+          publisher: {
+            "@type": "Organization",
+            name: "Tranmere-Web",
+            url: absoluteUrl("/"),
+          },
+          image: article.pic?.url || undefined,
+        }}
+      />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Home", pathname: "/" },
+          { name: "Stories", pathname: "/blog" },
+          { name: article.title, pathname: url },
+        ])}
+      />
       <header className="border-b border-[#071a2b]/10">
         <div
           className={`mx-auto grid max-w-7xl px-6 sm:px-10 lg:px-12 ${

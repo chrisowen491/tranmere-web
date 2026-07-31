@@ -7,6 +7,8 @@ import { GetCommentsByUrl } from "@/lib/comments";
 import { notFound } from "next/navigation";
 import { getApprovedAttendance } from "@/lib/attendanceCorrections";
 import { enrichMatchPlayers } from "@/lib/matchPlayers";
+import { pageMetadata } from "@/lib/seo";
+import { absoluteUrl, breadcrumbJsonLd, JsonLd } from "@/components/seo/JsonLd";
 
 export async function generateMetadata(props: { params: MatchParams }) {
   const params = await props.params;
@@ -22,10 +24,11 @@ export async function generateMetadata(props: { params: MatchParams }) {
   if (approvedAttendance !== null) {
     match.attendance = approvedAttendance;
   }
-  return {
-    title: `Match Summary - ${match.homeTeam} ${match.score} ${match.awayTeam}`,
-    description: `Match Summary For ${match.homeTeam} ${match.score} ${match.awayTeam} - ${match.date}`,
-  };
+  return pageMetadata({
+    title: `${match.homeTeam} ${match.score} ${match.awayTeam}`,
+    description: `${match.competition ?? "Football"} match report: ${match.homeTeam} ${match.score} ${match.awayTeam}, played on ${match.date}.`,
+    pathname: `/match/${params.season}/${params.date}`,
+  });
 }
 
 export default async function MatchPage(props: { params: MatchParams }) {
@@ -66,13 +69,47 @@ export default async function MatchPage(props: { params: MatchParams }) {
   const avg = Math.round(score / comments.length);
 
   return (
-    <MatchReport
-      match={match}
-      next={next}
-      previous={previous}
-      comments={comments}
-      url={baseUrl}
-      avg={avg}
-    ></MatchReport>
+    <>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "SportsEvent",
+          name: `${match.homeTeam} ${match.score} ${match.awayTeam}`,
+          url: absoluteUrl(baseUrl),
+          startDate: match.date,
+          eventStatus: "https://schema.org/EventScheduled",
+          competitor: [
+            { "@type": "SportsTeam", name: match.homeTeam },
+            { "@type": "SportsTeam", name: match.awayTeam },
+          ],
+          location: match.venue
+            ? { "@type": "Place", name: match.venue }
+            : undefined,
+          description: `${match.competition ?? "Football"} match: ${match.homeTeam} ${match.score} ${match.awayTeam}.`,
+        }}
+      />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Home", pathname: "/" },
+          { name: "Results", pathname: "/results" },
+          {
+            name: `${match.season}/${Number(match.season) + 1}`,
+            pathname: `/season/${match.season}`,
+          },
+          {
+            name: `${match.homeTeam} ${match.score} ${match.awayTeam}`,
+            pathname: baseUrl,
+          },
+        ])}
+      />
+      <MatchReport
+        match={match}
+        next={next}
+        previous={previous}
+        comments={comments}
+        url={baseUrl}
+        avg={avg}
+      ></MatchReport>
+    </>
   );
 }

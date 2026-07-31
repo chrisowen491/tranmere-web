@@ -105,6 +105,13 @@ export default function PlayerProfileView(props: {
         ? firstSeason
         : `${firstSeason}–${lastSeason}`
       : "—";
+  const latestAppearance = profile.appearances
+    ?.filter(
+      (appearance) =>
+        /^\d{4}$/.test(appearance.Season) &&
+        /^\d{4}-\d{2}-\d{2}$/.test(appearance.Date),
+    )
+    .sort((a, b) => b.Date.localeCompare(a.Date))[0];
 
   const profileLinks = [
     {
@@ -256,6 +263,45 @@ export default function PlayerProfileView(props: {
         </div>
 
         <aside className="space-y-6">
+          <nav
+            aria-label={`${player.name} career archive links`}
+            className="border border-[#071a2b]/15 bg-[#fffdf8] p-5"
+          >
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-700">
+              Explore this career
+            </p>
+            <div className="mt-4 grid gap-px border border-[#071a2b]/15 bg-[#071a2b]/15 sm:grid-cols-2 lg:grid-cols-1">
+              {firstSeason && (
+                <Link
+                  href={`/season/${firstSeason}`}
+                  className="bg-[#fffdf8] px-4 py-3 text-sm font-bold transition hover:bg-blue-50 hover:text-blue-700"
+                >
+                  Seasons · {careerSpan}
+                </Link>
+              )}
+              {latestAppearance && (
+                <Link
+                  href={`/match/${latestAppearance.Season}/${latestAppearance.Date}`}
+                  className="bg-[#fffdf8] px-4 py-3 text-sm font-bold transition hover:bg-blue-50 hover:text-blue-700"
+                >
+                  Latest recorded match
+                </Link>
+              )}
+              <Link
+                href="/transfer-central"
+                className="bg-[#fffdf8] px-4 py-3 text-sm font-bold transition hover:bg-blue-50 hover:text-blue-700"
+              >
+                Transfer archive
+              </Link>
+              <Link
+                href="/managers"
+                className="bg-[#fffdf8] px-4 py-3 text-sm font-bold transition hover:bg-blue-50 hover:text-blue-700"
+              >
+                Managers during this era
+              </Link>
+            </div>
+          </nav>
+
           <Link
             href={`/player-partnerships?player=${encodeURIComponent(player.name)}`}
             className="group flex items-center justify-between bg-[#071a2b] p-5 text-white transition hover:bg-blue-700"

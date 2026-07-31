@@ -13,19 +13,18 @@ import { GetBaseUrl } from "@/lib/apiFunctions";
 import { getManagers } from "@/lib/managers";
 import { getTransfers } from "@/lib/transfers";
 import { getPlayerStatistics } from "@/lib/playerStatistics";
+import { pageMetadata } from "@/lib/seo";
+import { breadcrumbJsonLd, JsonLd } from "@/components/seo/JsonLd";
 
 export async function generateMetadata(props: { params: SlugParams }) {
   const params = await props.params;
-  let description: string | null = null;
-  let title: string | null = null;
-
-  title = "Season Review - " + decodeURI(params.slug) + " Tranmere-Web";
-  description = "Tranmere Rovers Season Review : " + decodeURI(params.slug);
-
-  return {
-    title: title,
-    description: description,
-  };
+  const season = decodeURI(params.slug);
+  const seasonLabel = `${season}/${String(Number(season) + 1).slice(-2)}`;
+  return pageMetadata({
+    title: `Tranmere Rovers ${seasonLabel} season review`,
+    description: `Tranmere Rovers ${seasonLabel} results, players, transfers and season story.`,
+    pathname: `/season/${season}`,
+  });
 }
 
 export default async function SeasonPage(props: { params: SlugParams }) {
@@ -65,17 +64,38 @@ export default async function SeasonPage(props: { params: SlugParams }) {
 
   const seasons = GetSeasons();
   return (
-    <SeasonReview
-      managers={managers}
-      results={results.results}
-      h2hresults={results.h2hresults}
-      h2htotal={results.h2htotal}
-      players={players}
-      season={season}
-      seasons={seasons}
-      transfers={transfers}
-      articles={articles}
-      shirts={filteredShirts}
-    ></SeasonReview>
+    <>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          name: `Tranmere Rovers ${season}/${String(Number(season) + 1).slice(-2)} season`,
+          description: `Tranmere Rovers results, squad, transfers and season story for ${season}/${String(Number(season) + 1).slice(-2)}.`,
+          url: `https://www.tranmere-web.com/season/${season}`,
+        }}
+      />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Home", pathname: "/" },
+          { name: "Seasons", pathname: `/season/${GetYear()}` },
+          {
+            name: `${season}/${String(Number(season) + 1).slice(-2)}`,
+            pathname: `/season/${season}`,
+          },
+        ])}
+      />
+      <SeasonReview
+        managers={managers}
+        results={results.results}
+        h2hresults={results.h2hresults}
+        h2htotal={results.h2htotal}
+        players={players}
+        season={season}
+        seasons={seasons}
+        transfers={transfers}
+        articles={articles}
+        shirts={filteredShirts}
+      ></SeasonReview>
+    </>
   );
 }

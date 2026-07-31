@@ -12,13 +12,15 @@ import {
   Match,
 } from "@tranmere-web/lib/src/tranmere-web-types";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
-import { Metadata } from "next";
 import Link from "next/link";
+import { breadcrumbJsonLd, JsonLd } from "@/components/seo/JsonLd";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Results Home",
-  description: "Tranmere Rovers results infomation index",
-};
+export const metadata = pageMetadata({
+  title: "Tranmere Rovers results",
+  description: "Search the complete Tranmere Rovers match-results archive.",
+  pathname: "/results",
+});
 
 export default async function ResultsSearchPage() {
   const env = (await getCloudflareContext({ async: true })).env;
@@ -40,6 +42,21 @@ export default async function ResultsSearchPage() {
 
   return (
     <main className="pb-24 text-[#071a2b]">
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          name: "Tranmere Rovers results archive",
+          description: "Searchable Tranmere Rovers match results archive.",
+          url: "https://www.tranmere-web.com/results",
+        }}
+      />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Home", pathname: "/" },
+          { name: "Results", pathname: "/results" },
+        ])}
+      />
       <header className="border-b border-[#071a2b]/10">
         <div className="mx-auto max-w-7xl px-6 py-14 sm:px-10 lg:px-12 lg:py-20">
           <p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-700">
