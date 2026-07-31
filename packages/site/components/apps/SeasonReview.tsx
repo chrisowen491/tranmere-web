@@ -28,10 +28,6 @@ import { SeasonStory } from "./SeasonStory";
 import { SeasonTimeline } from "./SeasonTimeline";
 import type { PlayerStatisticsView } from "@/lib/playerStatistics";
 
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(" ");
-}
-
 export default function SeasonReview(props: {
   results: Match[];
   h2hresults: H2HResult[];
@@ -46,19 +42,18 @@ export default function SeasonReview(props: {
 }) {
   const seasonInt = parseInt(props.season);
 
-  props.managers.forEach((manager) => {
-    if (manager.dateLeft == "now()") {
-      manager.dateLeft = new Date().toISOString();
-    }
-  });
-
   const managers = props.managers.filter((manager) =>
     areIntervalsOverlapping(
       {
         start: new Date(seasonInt, 6, 20),
         end: new Date(seasonInt + 1, 4, 15),
       },
-      { start: new Date(manager.dateJoined), end: new Date(manager.dateLeft) },
+      {
+        start: new Date(manager.dateJoined),
+        end: manager.dateLeft.toLowerCase().startsWith("now")
+          ? new Date()
+          : new Date(manager.dateLeft),
+      },
     ),
   );
 
@@ -474,56 +469,6 @@ export default function SeasonReview(props: {
               </div>
 
               <div className="lg:col-start-3">
-                {props.transfers && props.transfers.length > 0 ? (
-                  <h2 className="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-50">
-                    Transfers
-                  </h2>
-                ) : (
-                  ""
-                )}
-                <ul role="list" className="mt-6 space-y-6 mb-6">
-                  {props.transfers.map((transfer, idx) => (
-                    <li key={transfer.id} className="relative flex gap-x-4">
-                      <div
-                        className={classNames(
-                          idx === props.transfers.length - 1
-                            ? "h-6"
-                            : "-bottom-6",
-                          "absolute left-0 top-0 flex w-6 justify-center",
-                        )}
-                      >
-                        <div className="w-px bg-gray-200" />
-                      </div>
-                      <>
-                        <div className="relative flex h-6 w-6 flex-none items-center justify-center bg-white">
-                          {transfer.type === "in" ? (
-                            <ChevronRightIcon
-                              aria-hidden="true"
-                              className="h-12 w-12 text-green-300"
-                            />
-                          ) : (
-                            <ChevronLeftIcon
-                              aria-hidden="true"
-                              className="h-12 w-12 text-red-300"
-                            />
-                          )}
-                        </div>
-                        <p className="flex-auto py-0.5 text-xs leading-5 text-gray-500 dark:text-gray-50">
-                          <span className="font-medium text-gray-900 dark:text-gray-50">
-                            {transfer.name}
-                          </span>{" "}
-                          {transfer.type === "in" ? (
-                            <>from {transfer.from}</>
-                          ) : (
-                            <>to {transfer.to}</>
-                          )}
-                          {transfer.value ? <> ({transfer.value})</> : ""}
-                        </p>
-                      </>
-                    </li>
-                  ))}
-                </ul>
-
                 {props.articles && props.articles.length > 0 ? (
                   <h2 className="text-sm font-semibold leading-6 text-gray-900">
                     Articles

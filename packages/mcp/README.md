@@ -1,50 +1,112 @@
-# Building a Remote MCP Server on Cloudflare (Without Auth)
+# MCP Server (createMcpHandler)
 
-This example allows you to deploy a remote MCP server that doesn't require authentication on Cloudflare Workers. 
+The simplest way to run a stateless MCP server on Cloudflare Workers. Uses `createMcpHandler` from the Agents SDK to handle all MCP protocol details in one line.
 
-## Get started: 
+## What it demonstrates
 
-[![Deploy to Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/ai/tree/main/demos/remote-mcp-authless)
+- **`createMcpHandler`** — the Agents SDK helper that turns an `McpServer` factory into a Worker-compatible fetch handler
+- **Minimal setup** — define tools in a factory, pass the factory to `createMcpHandler`, done
+- **Stateless** — no Durable Objects, no persistent state, each request is independent
 
-This will deploy your MCP server to a URL like: `remote-mcp-server-authless.<your-account>.workers.dev/sse`
+## Running
 
-Alternatively, you can use the command line below to get the remote MCP Server created on your local machine:
-```bash
-npm create cloudflare@latest -- my-mcp-server --template=cloudflare/ai/demos/remote-mcp-authless
+```sh
+yarn --frozen-lockfile
+yarn workspace @tranmere-web/mcp start
 ```
 
-## Customizing your MCP Server
+Open the browser to see the built-in tool tester, or connect with the [MCP Inspector](https://github.com/modelcontextprotocol/inspector) at `http://localhost:5173/mcp`.
 
-To add your own [tools](https://developers.cloudflare.com/agents/model-context-protocol/tools/) to the MCP server, define each tool inside the `init()` method of `src/index.ts` using `this.server.tool(...)`. 
+## Auth0 authentication
 
-## Connect to Cloudflare AI Playground
+The production MCP endpoint is `https://mcp.tranmere-web.com/mcp`. It acts as
+an OAuth protected resource and validates Auth0 RS256 access tokens.
 
-You can connect to your MCP server from the Cloudflare AI Playground, which is a remote MCP client:
+Create an Auth0 API with:
 
-1. Go to https://playground.ai.cloudflare.com/
-2. Enter your deployed MCP server URL (`remote-mcp-server-authless.<your-account>.workers.dev/sse`)
-3. You can now use your MCP tools directly from the playground!
+- Identifier: `https://mcp.tranmere-web.com/mcp`
+- Signing algorithm: `RS256`
+- Token dialect: `rfc9068_profile_authz`
+- Permissions:
+  - `read:players`
+  - `read:clubs`
+  - `read:transfers`
+  - `read:managers`
+  - `read:matches`
 
-## Connect Claude Desktop to your MCP server
+Enable **Resource Parameter Compatibility Profile**, **Include Issuer in
+Authorization Responses**, and **Client ID Metadata Document Registration** in
+the Auth0 tenant settings. Assign the required API permissions to the Auth0
+roles or users that should be allowed to connect.
 
-You can also connect to your remote MCP server from local MCP clients, by using the [mcp-remote proxy](https://www.npmjs.com/package/mcp-remote). 
+The Worker publishes protected-resource metadata at:
 
-To connect to your MCP server from Claude Desktop, follow [Anthropic's Quickstart](https://modelcontextprotocol.io/quickstart/user) and within Claude Desktop go to Settings > Developer > Edit Config.
+```text
+https://mcp.tranmere-web.com/.well-known/oauth-protected-resource
+https://mcp.tranmere-web.com/.well-known/oauth-protected-resource/mcp
+```
 
-Update with this configuration:
+Unauthenticated calls to `/mcp` receive an RFC 9728 `WWW-Authenticate`
+challenge. Individual tools also enforce their corresponding `read:*`
+permission from the token's `permissions` or `scope` claim.
 
-```json
-{
-  "mcpServers": {
-    "calculator": {
-      "command": "npx",
-      "args": [
-        "mcp-remote",
-        "http://localhost:8787/sse"  // or remote-mcp-server-authless.your-account.workers.dev/sse
-      ]
-    }
-  }
+## Player UI
+
+`GetPlayers` returns structured player data and links to the versioned MCP Apps
+resource `ui://tranmere-web/players-v4.html`. Compatible clients render the
+resource as a responsive player-card grid. The resource uses
+`text/html;profile=mcp-app` and receives results through
+`ui/notifications/tool-result`; ChatGPT's output-template alias is also
+published for compatibility.
+
+## Match UI
+
+`GetMatchByDate` accepts an exact date in `YYYY-MM-DD` format, derives the
+football season, and retrieves the match from `api.tranmere-web.com`. It returns
+the score, match details, goals, lineup, substitutes, and report excerpt as
+structured data linked to `ui://tranmere-web/match-v3.html`. Compatible clients
+render that resource as a responsive match card with a link to the full match
+page. The server also retains the `match-v1.html` and `match-v2.html` resource
+URIs as compatibility aliases for clients with cached tool metadata.
+
+## Results search
+
+`SearchResults` is a data-only tool that searches the existing results API by
+season start year, exact opposition team name, or both. It returns up to 100
+results by default in most-recent-first order and accepts an optional limit of
+up to 500. It uses the existing `read:matches` permission.
+
+## How it works
+
+```typescript
+import { McpServer } from '@modelcontextprotocol/server';
+import { createMcpHandler } from 'agents/mcp/server';
+import { z } from 'zod';
+
+function createServer() {
+  const server = new McpServer({ name: 'Hello MCP Server', version: '1.0.0' });
+  server.registerTool(
+    'hello',
+    {
+      description: 'Returns a greeting',
+      inputSchema: { name: z.string().optional() }
+    },
+    async ({ name }) => ({
+      content: [{ type: 'text', text: `Hello, ${name ?? 'World'}!` }]
+    })
+  );
+  return server;
 }
+
+export default {
+  fetch(request, env, ctx) {
+    return createMcpHandler(createServer)(request, env, ctx);
+  }
+} satisfies ExportedHandler;
 ```
 
-Restart Claude and you should see the tools become available. 
+## Related examples
+
+- [`mcp`](../mcp/) — stateful MCP server with `McpAgent` and Durable Objects
+- [`mcp-worker-authenticated`](../mcp-worker-authenticated/) — adding OAuth authentication
+- [`mcp-client`](../mcp-client/) — connecting to MCP servers as a client

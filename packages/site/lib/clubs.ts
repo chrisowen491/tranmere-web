@@ -1,17 +1,6 @@
+import { queryClubRows } from "@tranmere-web/lib/src/d1-queries";
+import type { ClubRow } from "@tranmere-web/lib/src/d1-types";
 import type { Team } from "@tranmere-web/lib/src/tranmere-web-types";
-
-export interface ClubRow {
-  id: string;
-  name: string;
-  short_name: string | null;
-  three_letter_name: string | null;
-  nicknames: string | null;
-  primary_colour: string | null;
-  secondary_colour: string | null;
-  highest_division: number | null;
-  latitude: number | null;
-  longitude: number | null;
-}
 
 export interface ClubRecord extends Team {
   id: string;
@@ -55,17 +44,8 @@ export async function getClubs(db: D1Database): Promise<Team[]> {
 }
 
 export async function getClubRecords(db: D1Database) {
-  const result = await db
-    .prepare(
-      `SELECT id, name, short_name, three_letter_name, nicknames,
-              primary_colour, secondary_colour, highest_division,
-              latitude, longitude
-       FROM Clubs
-       ORDER BY name ASC`,
-    )
-    .all<ClubRow>();
-
-  return result.results.map(mapClub);
+  const rows = await queryClubRows(db);
+  return rows.map(mapClub);
 }
 
 export async function getClubById(db: D1Database, id: string) {

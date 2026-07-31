@@ -1,15 +1,6 @@
-import { Document } from '@contentful/rich-text-types';
+import type { Document } from '@contentful/rich-text-types';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-export interface TavilyResponse {
-  answer: string;
-  results: TavilyResult[];
-}
-
-export interface TavilyResult {
-  title: string;
-  url: string;
-}
 
 export interface BaseView {
   name: string;
@@ -537,8 +528,6 @@ export interface MatchPageData extends Match {
 
 export interface PlayerView {
   image: string;
-  player?: Player;
-  links: Link[];
   debut: Appearance;
   appearances?: Appearance[];
   seasons: PlayerSeasonSummary[];

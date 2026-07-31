@@ -46,6 +46,7 @@
 
 - Follow the nearest ESLint, Prettier, and TypeScript configuration.
 - Keep workspace dependencies expressed with the existing `*` convention.
+- Put reusable D1 entity types and shared SQL read queries in `packages/lib/`.
 - Add tests under `packages/api-stack/test/` for API/CDK behavior.
 - Do not run deploy or remote database commands unless explicitly requested.
 

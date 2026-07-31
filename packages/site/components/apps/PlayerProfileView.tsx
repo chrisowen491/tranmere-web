@@ -168,7 +168,7 @@ export default function PlayerProfileView(props: {
             <dl className="mt-8 grid grid-cols-3 border-y border-[#071a2b]/15">
               <div className="py-5 pr-3">
                 <dt className="text-xs font-bold uppercase tracking-[0.12em] text-[#071a2b]/55">
-                  Appearances
+                  Apps
                 </dt>
                 <dd className="mt-2 font-mono text-3xl font-bold">
                   {totalStarts + totalSubs}

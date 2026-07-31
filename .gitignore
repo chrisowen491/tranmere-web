@@ -31,6 +31,7 @@ csv/
 
 set_env.sh
 set_env.bat
+.dev.vars
 template.yml
 .aws-sam
 

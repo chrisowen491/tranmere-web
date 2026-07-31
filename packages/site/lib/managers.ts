@@ -1,12 +1,6 @@
+import { queryManagerRows } from "@tranmere-web/lib/src/d1-queries";
+import type { ManagerRow } from "@tranmere-web/lib/src/d1-types";
 import type { Manager } from "@tranmere-web/lib/src/tranmere-web-types";
-
-export interface ManagerRow {
-  id: string;
-  name: string;
-  date_joined: string;
-  date_left: string;
-  programme_path: string | null;
-}
 
 export interface ManagerRecord extends Manager {
   id: string;
@@ -31,15 +25,8 @@ export function mapManager(row: ManagerRow): ManagerRecord {
 }
 
 export async function getManagers(db: D1Database) {
-  const result = await db
-    .prepare(
-      `SELECT id, name, date_joined, date_left, programme_path
-       FROM Managers
-       ORDER BY date_joined DESC, name ASC`,
-    )
-    .all<ManagerRow>();
-
-  return result.results.map(mapManager);
+  const rows = await queryManagerRows(db);
+  return rows.map(mapManager);
 }
 
 export async function getManagerById(db: D1Database, id: string) {

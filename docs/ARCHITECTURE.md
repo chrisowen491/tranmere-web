@@ -6,13 +6,16 @@ Tranmere Web is an independent fan site about Tranmere Rovers, an English
 football club. It brings together historical and current information about
 players, matches, results, seasons, managers, transfers, shirts, records, and
 club stories. It also provides interactive features such as player and result
-searches, comments, AI-generated match reports, and a player-profile MCP tool.
+searches, comments, AI-generated match reports, and an authenticated MCP API.
 
 The application is a TypeScript monorepo. Its production architecture is split
 across two cloud platforms:
 
 - Cloudflare runs the public Next.js site and the optional Worker services.
-- AWS runs the serverless API and stores structured football data.
+- Cloudflare D1 stores migrated football entities and site-owned operational
+  data.
+- AWS runs the serverless API and stores match, appearance, and derived data
+  that has not moved to D1.
 - Contentful supplies editorial content and media.
 
 ## System context
@@ -41,6 +44,7 @@ flowchart LR
     end
 
     Contentful[Contentful CMS]
+    Auth0[Auth0 OAuth authorization server]
     YouTube[YouTube API]
     OpenAI[OpenAI API]
 
@@ -53,7 +57,10 @@ flowchart LR
     Site --> Cache
     Site --> CFAI
     Site --> OpenAI
+    MCP --> D1
     MCP --> Gateway
+    AIClient --> Auth0
+    MCP --> Auth0
     Gateway --> Lambda
     Gateway --> AppSync
     Lambda --> Dynamo
@@ -74,12 +81,12 @@ The root is a Yarn Classic workspace using Node.js 24.
 | -------------------- | --------------------------------------------------------------------------------------------- |
 | `packages/site`      | Public Next.js website, UI components, server routes, and Cloudflare deployment configuration |
 | `packages/api-stack` | AWS CDK infrastructure, API Gateway, Lambda handlers, AppSync, scheduled jobs, and unit tests |
-| `packages/lib`       | Shared football domain types, mappings, utilities, and data-access helpers                    |
+| `packages/lib`       | Shared football domain types, D1 entity types and read queries, mappings, and utilities       |
 | `packages/tools`     | Reusable AI tools for matches, players, teams, results, lineups, managers, and transfers      |
-| `packages/mcp`       | Cloudflare-hosted Model Context Protocol server and player-profile widget                     |
+| `packages/mcp`       | Auth0-protected Cloudflare MCP server exposing read-only D1 and match API tools               |
 | `packages/vectorize` | Worker for creating and querying player biography embeddings                                  |
 | `packages/tidy`      | Scheduled Worker that removes old Cloudflare deployments                                      |
-| `packages/sql`       | D1 schema and local database commands                                                         |
+| `packages/sql`       | D1 schema, migrations, generated imports, and database commands                               |
 | `packages/api-tests` | Newman acceptance tests for deployed APIs                                                     |
 
 `packages/site` and `packages/api-stack` form the main user-facing system. The
@@ -108,7 +115,8 @@ configuration provides:
 - an R2-backed incremental cache;
 - a D1-backed Next.js cache-tag store;
 - a Durable Object queue for cache revalidation;
-- D1 access for application data such as comments;
+- D1 access for players, clubs, managers, transfers, comments, ratings,
+  corrections, and cache metadata;
 - Workers AI and Vectorize bindings for AI features;
 - the custom domain `www.tranmere-web.com`.
 
@@ -116,7 +124,29 @@ The site obtains its AWS API base URL from Cloudflare environment bindings.
 Contentful and YouTube are called directly from server-side site code for
 editorial content, images, shirts, and video playlists.
 
-## AWS API and data services
+## D1 data services
+
+Cloudflare D1 is the primary store for football entities that have been
+migrated out of DynamoDB:
+
+- `Players`, including profile fields, Markdown biographies, avatar links, and
+  related links;
+- `Clubs`;
+- `Managers`;
+- `Transfers`;
+- submitted attendance and player-profile corrections;
+- comments and ratings.
+
+The canonical schema and migrations live in `packages/sql`. Local and remote
+databases are separate migration targets; applying or populating the remote
+database is an explicit deployment operation.
+
+Reusable D1 row contracts live in `packages/lib/src/d1-types.ts`. Shared,
+read-only query builders live in `packages/lib/src/d1-queries.ts` and are used
+by both the site and MCP Worker. Route-specific composition and administrative
+write operations remain in `packages/site`.
+
+## AWS API and remaining data services
 
 The backend in `packages/api-stack` is defined with AWS CDK. API Gateway exposes
 the public API at `api.tranmere-web.com` and sends requests to Node.js Lambda
@@ -128,7 +158,6 @@ The main REST capabilities are:
 | ----------------------------------- | ---------------------------------------------- |
 | `GET /player-search`                | Search and sort player and season-summary data |
 | `GET /result-search`                | Search match results                           |
-| `GET /transfer-search`              | Search player transfers                        |
 | `GET /match/{season}/{date}`        | Assemble a complete match page                 |
 | `GET /page/{pageName}/{classifier}` | Assemble dynamic views such as player profiles |
 | `GET /report`                       | Return or generate match-report data           |
@@ -148,10 +177,10 @@ Several EventBridge-triggered jobs maintain derived data:
 - “on this day” records;
 - AI-assisted match reports.
 
-AppSync provides a GraphQL view over selected DynamoDB tables, including clubs,
-competitions, managers, players, links, transfers, stars, hat-tricks, matches,
-and “on this day” data. Mutations are currently defined for player links and
-transfers.
+AppSync and legacy Lambda paths still expose selected DynamoDB data. Migrated
+entities should be read from D1 by new site code; DynamoDB remains relevant for
+matches, appearances, goals, season summaries, competitions, and other
+unmigrated or legacy records.
 
 The CDK stack imports existing DynamoDB tables by name or ARN. It does not own
 the lifecycle of those tables, so deleting or replacing the stack does not
@@ -161,31 +190,32 @@ constitute a database migration strategy.
 
 The system separates editorial content from structured football statistics:
 
-| Data                                                                        | System of record                  | Typical consumers                             |
-| --------------------------------------------------------------------------- | --------------------------------- | --------------------------------------------- |
-| Articles, biographies, shirt content, and media                             | Contentful                        | Next.js pages and some Lambda jobs            |
-| Players, appearances, goals, matches, transfers, clubs, and derived records | DynamoDB                          | Lambda handlers, AppSync, site pages, and MCP |
-| Comments and Next.js cache tags                                             | Cloudflare D1                     | Site route handlers and OpenNext              |
-| Incremental-render cache                                                    | Cloudflare R2 and Durable Objects | OpenNext runtime                              |
-| Player biography embeddings                                                 | Cloudflare Vectorize              | Experimental semantic-search features         |
-| Static images, fonts, charts, and builder assets                            | `packages/site/public`            | Browser via the site Worker                   |
+| Data                                                    | System of record                  | Typical consumers                      |
+| ------------------------------------------------------- | --------------------------------- | -------------------------------------- |
+| Articles, shirt content, and editorial media            | Contentful                        | Next.js pages and some Lambda jobs     |
+| Players, biographies, clubs, managers, and transfers    | Cloudflare D1                     | Site pages, administration, and MCP    |
+| Comments, ratings, corrections, and Next.js cache tags  | Cloudflare D1                     | Site routes, admin pages, and OpenNext |
+| Matches, appearances, goals, and remaining derived data | DynamoDB                          | Lambda, AppSync, tools, and site pages |
+| Incremental-render cache                                | Cloudflare R2 and Durable Objects | OpenNext runtime                       |
+| Player biography embeddings                             | Cloudflare Vectorize              | Experimental semantic search           |
+| Static images, fonts, charts, and builder assets        | `packages/site/public`            | Browser via the site Worker            |
 
 Shared interfaces in `packages/lib/src/tranmere-web-types.ts` describe the
-football domain across packages. Shared mappings and utilities normalize player,
-team, competition, image, and season data. This package is the closest thing to
-a domain layer; it should remain independent of UI concerns.
+football domain across packages. D1 row types and reusable SQL reads are also
+owned by `packages/lib`. Shared mappings and utilities normalize player, team,
+competition, image, and season data. This package is the closest thing to a
+domain and read-data layer; it should remain independent of UI concerns.
 
 ## Typical request flows
 
 ### Viewing a player profile
 
 1. A visitor requests `/page/player/{slug}` from the Cloudflare-hosted site.
-2. The Next.js server component calls
-   `api.tranmere-web.com/page/player/{slug}`.
-3. API Gateway invokes the dynamic-page Lambda.
-4. The Lambda reads the relevant player, appearance, goal, transfer, link, and
-   season-summary records from DynamoDB.
-5. The site combines that response with related Contentful articles and renders
+2. The Next.js server component reads the player profile and transfer history
+   from D1.
+3. The site calls the AWS API for appearance, goal, match, and season-summary
+   data that still resides in DynamoDB.
+4. The site combines those records with related Contentful articles and renders
    the page.
 
 ### Viewing an article
@@ -195,12 +225,28 @@ a domain layer; it should remain independent of UI concerns.
 3. Next.js renders the rich-text article and referenced media or content blocks.
 4. OpenNext caches the rendered result according to the Next.js cache settings.
 
-### Using the MCP player tool
+### Using the MCP server
 
-1. An MCP client connects to the Cloudflare Worker over `/mcp` or `/sse`.
-2. The tool calls the public AWS player-profile endpoint.
-3. The Worker returns structured player information.
-4. Compatible clients can render the bundled React profile widget.
+1. An MCP client discovers protected-resource metadata from
+   `/.well-known/oauth-protected-resource/mcp`.
+2. Auth0 authenticates the user through OAuth authorization code with PKCE. The
+   production resource/audience is `https://mcp.tranmere-web.com/mcp`.
+3. The client sends the Auth0 bearer token to the stateless Cloudflare Worker at
+   `/mcp`.
+4. The Worker verifies the RS256 signature, issuer, and exact audience.
+5. `GetPlayers`, `GetClubs`, `GetTransfers`, or `GetManagers` uses the shared
+   `packages/lib` D1 queries and returns structured data through MCP.
+6. `GetMatchByDate` and the data-only `SearchResults` tool request match data
+   from the AWS API by date or by season/opposition filters.
+7. `GetPlayers` and `GetMatchByDate` link their results to versioned MCP Apps
+   HTML resources, so compatible clients can render responsive player and match
+   cards. The other tools remain data-only.
+
+Auth0 user-delegated client grants control which third-party clients can obtain
+tokens for the MCP audience. Tool scopes are advertised and enforced when
+present. ChatGPT CIMD tokens currently arrive audience-bound without custom
+scope claims, so a token with no permissions is accepted only after the issuer,
+signature, and exact audience have been verified.
 
 ## AI features
 
@@ -227,6 +273,9 @@ GitHub Actions deploys the two main runtime areas independently:
   run AWS tests, deploy the CDK stack, add Datadog Lambda instrumentation, and
   run Newman acceptance tests.
 - Changes under `packages/tidy` deploy its maintenance Worker.
+- `packages/mcp` has its own Cloudflare Worker build and deployment lifecycle;
+  it binds directly to the production D1 database and uses Auth0 environment
+  configuration.
 
 Pull requests build the Cloudflare site as a deployment check. CodeQL and the
 OpenSSF Scorecard workflows provide additional security checks. Dependabot
@@ -242,13 +291,18 @@ services.
 
 - Keep presentation and route composition in `packages/site`.
 - Keep AWS resources and Lambda entry points in `packages/api-stack`.
-- Put shared domain types and platform-neutral football logic in `packages/lib`.
+- Put shared domain types, reusable D1 entity types, shared SQL reads, and
+  platform-neutral football logic in `packages/lib`.
+- Keep D1 schema and ordered migrations in `packages/sql`.
+- Keep page-specific D1 composition and administrative writes in
+  `packages/site`.
 - Put reusable model tools in `packages/tools`; tools should retrieve facts from
   authoritative application services rather than duplicate storage logic.
-- Treat Contentful as editorial storage and DynamoDB as structured football
-  storage.
+- Treat Contentful as editorial storage, D1 as the system of record for migrated
+  entities, and DynamoDB as the store for remaining match/statistical data.
 - Access DynamoDB through Lambda or AppSync rather than directly from the
   browser.
+- Access D1 from server-side Workers and route handlers, not browser bundles.
 - Add Cloudflare-specific bindings to the appropriate Wrangler configuration
   and type them in the consuming workspace.
 - Treat `.next`, `.open-next`, `.wrangler`, and `cdk.out` as generated output.
@@ -267,6 +321,9 @@ services.
 - Shared types are imported through workspace source paths in several places.
   Changes to `packages/lib` can therefore affect the site, Lambdas, and Workers
   at build time.
+- D1 migration is incremental, so some pages intentionally combine D1 entity
+  data with AWS match and appearance data. Avoid reintroducing API reads for an
+  entity already owned by D1.
 - `packages/vectorize` and `packages/mcp` are adjacent services with their own
   deployment lifecycles; they are not required for the core website to serve
   standard fan content.

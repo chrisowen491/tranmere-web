@@ -1,15 +1,6 @@
+import { queryTransferRows } from "@tranmere-web/lib/src/d1-queries";
+import type { TransferRow } from "@tranmere-web/lib/src/d1-types";
 import type { Transfer } from "@tranmere-web/lib/src/tranmere-web-types";
-
-export interface TransferRow {
-  id: string;
-  player_name: string;
-  season: number;
-  from_club: string;
-  to_club: string;
-  fee_description: string;
-  cost: number;
-  transfer_date: string | null;
-}
 
 export interface TransferInput {
   playerName: string;
@@ -114,49 +105,20 @@ export async function getTransfers(
   db: D1Database,
   filters: TransferFilters = {},
 ) {
-  const conditions: string[] = [];
-  const values: (string | number)[] = [];
+  const season =
+    filters.season && /^\d{4}$/.test(filters.season)
+      ? Number(filters.season)
+      : undefined;
+  const rows = await queryTransferRows(db, {
+    player: filters.playerName,
+    playerMatch: "exact",
+    season,
+    club: filters.club,
+    direction:
+      filters.filter === "In" || filters.filter === "Out"
+        ? filters.filter
+        : undefined,
+  });
 
-  if (filters.playerName) {
-    conditions.push("player_name = ?");
-    values.push(filters.playerName);
-  }
-
-  if (filters.season && /^\d{4}$/.test(filters.season)) {
-    conditions.push("season = ?");
-    values.push(Number(filters.season));
-  }
-
-  if (filters.filter === "In") {
-    conditions.push("to_club = ?");
-    values.push("Tranmere Rovers");
-    if (filters.club) {
-      conditions.push("from_club = ?");
-      values.push(filters.club);
-    }
-  } else if (filters.filter === "Out") {
-    conditions.push("from_club = ?");
-    values.push("Tranmere Rovers");
-    if (filters.club) {
-      conditions.push("to_club = ?");
-      values.push(filters.club);
-    }
-  } else if (filters.club) {
-    conditions.push("(from_club = ? OR to_club = ?)");
-    values.push(filters.club, filters.club);
-  }
-
-  const where = conditions.length ? `WHERE ${conditions.join(" AND ")}` : "";
-  const statement = db.prepare(
-    `SELECT id, player_name, season, from_club, to_club, fee_description, cost,
-            transfer_date
-     FROM Transfers
-     ${where}
-     ORDER BY season DESC, transfer_date DESC, cost DESC, player_name ASC`,
-  );
-  const result = await (
-    values.length ? statement.bind(...values) : statement
-  ).all<TransferRow>();
-
-  return result.results.map(mapTransfer);
+  return rows.map(mapTransfer);
 }

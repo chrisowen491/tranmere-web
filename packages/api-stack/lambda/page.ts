@@ -17,12 +17,9 @@ exports.handler = async (
     decodeURIComponent(playerName)
   );
 
-  const links = await utils.getPlayerLinks(playerName);
-
   const playerview: PlayerView = {
     debut: appearances[0],
     seasons: summarySearch,
-    links: links,
     image: utils.buildImagePath('photos/kop.jpg', 1920, 1080),
     appearances: appearances
   };

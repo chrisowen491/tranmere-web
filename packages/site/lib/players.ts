@@ -1,15 +1,5 @@
-export interface PlayerRow {
-  id: string;
-  name: string;
-  date_of_birth: string | null;
-  biography_markdown: string | null;
-  pic_link: string | null;
-  foot: string | null;
-  height: string | null;
-  place_of_birth: string | null;
-  position: string | null;
-  links_json: string;
-}
+import { queryPlayerRows } from "@tranmere-web/lib/src/d1-queries";
+import type { PlayerRow } from "@tranmere-web/lib/src/d1-types";
 
 export interface PlayerRecord {
   id: string;
@@ -56,14 +46,8 @@ const playerColumns = `id, name, date_of_birth, biography_markdown, pic_link,
   foot, height, place_of_birth, position, links_json`;
 
 export async function getPlayers(db: D1Database) {
-  const result = await db
-    .prepare(
-      `SELECT ${playerColumns}
-       FROM Players
-       ORDER BY name ASC, id ASC`,
-    )
-    .all<PlayerRow>();
-  return result.results.map(mapPlayer);
+  const rows = await queryPlayerRows(db);
+  return rows.map(mapPlayer);
 }
 
 function playerCompleteness(player: PlayerRecord) {

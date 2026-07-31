@@ -96,7 +96,7 @@ function buildChapters(
   transfers: Transfer[],
 ) {
   const firstYear = Number(season);
-  const seasonStart = new Date(firstYear, 5, 1);
+  const seasonStart = new Date(firstYear, 4, 1);
   const seasonEnd = new Date(firstYear + 1, 5, 30);
   const chapters = new Map<string, MonthChapter>();
 
@@ -229,10 +229,10 @@ export function SeasonTimeline(props: {
                   <ArrowsRightLeftIcon className="h-4 w-4" aria-hidden="true" />
                 </span>
                 <p className="text-xs font-bold uppercase tracking-[0.15em] text-blue-700">
-                  Opening chapter
+                  May · Opening chapter
                 </p>
                 <h3 className="mt-2 font-display text-2xl font-semibold">
-                  The squad takes shape
+                  Squad Changes
                 </h3>
                 <details className="group mt-2">
                   <summary className="flex cursor-pointer list-none items-center justify-between border-b border-[#071a2b]/15 pb-4 text-sm text-[#071a2b]/55 [&::-webkit-details-marker]:hidden">
