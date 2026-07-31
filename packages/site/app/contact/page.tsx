@@ -2,10 +2,11 @@ import { Metadata } from "next";
 import { ContactForm } from "@/components/apps/ContactForm";
 
 export const metadata: Metadata = {
-  title: "Contact Us",
-  description: "Contact us page",
+  title: "Contact Tranmere-Web",
+  description:
+    "Contact the independent Tranmere Rovers archive with questions, corrections and site feedback.",
 };
 
-export default async function Transfers() {
-  return <ContactForm></ContactForm>;
+export default function ContactPage() {
+  return <ContactForm />;
 }

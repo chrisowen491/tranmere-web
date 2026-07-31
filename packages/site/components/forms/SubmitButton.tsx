@@ -1,10 +1,12 @@
 export function SubmitButton(props: {
   text?: string;
   children?: React.ReactNode;
+  disabled?: boolean;
 }) {
   return (
     <button
       type="submit"
+      disabled={props.disabled}
       className="rounded-md 
       bg-green-500 
       dark:bg-sky-400
@@ -18,7 +20,9 @@ export function SubmitButton(props: {
       focus-visible:outline 
       focus-visible:outline-2 
       focus-visible:outline-offset-2 
-      focus-visible:outline-indigo-600"
+      focus-visible:outline-indigo-600
+      disabled:cursor-not-allowed
+      disabled:opacity-60"
     >
       {props.text}
       {props.children}
