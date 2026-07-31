@@ -63,7 +63,10 @@ export async function enrichPlayerStatistics(
     subs: player.subs,
     freekicks: player.freekicks,
     goalsPerGame: player.goalsPerGame,
-    profile: profiles.get(player.Player)!,
+    profile: profiles.get(player.Player) ?? {
+      picLink: defaultPlayerAvatar,
+      position: null,
+    },
   }));
 }
 

@@ -10,7 +10,9 @@ export const MCP_SCOPES = [
   'read:clubs',
   'read:transfers',
   'read:managers',
-  'read:matches'
+  'read:matches',
+  'write:players',
+  'write:transfers'
 ] as const;
 
 export interface McpAuthContext {
@@ -113,7 +115,8 @@ export async function authenticateRequest(
 
 export function permissionDenied(
   auth: McpAuthContext,
-  permission: (typeof MCP_SCOPES)[number]
+  permission: (typeof MCP_SCOPES)[number],
+  allowUnscopedToken = true
 ) {
   if (auth.permissions.has(permission)) return null;
 
@@ -122,7 +125,12 @@ export function permissionDenied(
   // audience-bound access token without a scope claim. API access is still
   // restricted by Auth0's user-delegated client grant, and authenticateRequest
   // has already verified the issuer, signature, and exact MCP audience.
-  if (auth.permissions.size === 0) return null;
+  if (allowUnscopedToken && auth.permissions.size === 0) return null;
+
+  console.warn('MCP permission denied', {
+    requiredPermission: permission,
+    permissions: [...auth.permissions]
+  });
 
   return {
     content: [

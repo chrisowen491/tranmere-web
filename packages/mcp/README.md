@@ -33,6 +33,8 @@ Create an Auth0 API with:
   - `read:transfers`
   - `read:managers`
   - `read:matches`
+  - `write:players`
+  - `write:transfers`
 
 Enable **Resource Parameter Compatibility Profile**, **Include Issuer in
 Authorization Responses**, and **Client ID Metadata Document Registration** in
@@ -58,6 +60,15 @@ resource as a responsive player-card grid. The resource uses
 `text/html;profile=mcp-app` and receives results through
 `ui/notifications/tool-result`; ChatGPT's output-template alias is also
 published for compatibility.
+
+`CreatePlayerProfile` creates a new player record in D1 after checking for an
+existing exact-name match. It requires the strict `write:players` Auth0
+permission; unlike read tools, an unscoped audience token cannot create data.
+
+`CreateTransfer` creates a transfer record using canonical club names from the
+Clubs D1 table. It requires the strict `write:transfers` Auth0 permission,
+checks that Tranmere Rovers is on exactly one side, and rejects an exact
+duplicate.
 
 ## Match UI
 

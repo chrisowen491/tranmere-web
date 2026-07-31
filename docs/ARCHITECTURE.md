@@ -241,6 +241,12 @@ domain and read-data layer; it should remain independent of UI concerns.
 7. `GetPlayers` and `GetMatchByDate` link their results to versioned MCP Apps
    HTML resources, so compatible clients can render responsive player and match
    cards. The other tools remain data-only.
+8. `CreatePlayerProfile` is a strict `write:players`-scoped operation that
+   inserts a validated new player record into D1 after an exact-name duplicate
+   check.
+9. `CreateTransfer` is a strict `write:transfers`-scoped operation that uses
+   canonical Clubs D1 data before inserting a validated, non-duplicate transfer
+   record.
 
 Auth0 user-delegated client grants control which third-party clients can obtain
 tokens for the MCP audience. Tool scopes are advertised and enforced when
