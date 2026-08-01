@@ -18,7 +18,7 @@ import type { EditablePlayerProfile } from "@/lib/playerProfileCorrections";
 
 const breadcrumbs = [
   { id: 1, name: "Home", href: "/" },
-  { id: 2, name: "Players", href: "/playersearch" },
+  { id: 2, name: "Players", href: "/players" },
 ];
 
 function inlineMarkdown(value: string) {
@@ -303,7 +303,7 @@ export default function PlayerProfileView(props: {
           </nav>
 
           <Link
-            href={`/player-partnerships?player=${encodeURIComponent(player.name)}`}
+            href={`/players/partnerships?player=${encodeURIComponent(player.name)}`}
             className="group flex items-center justify-between bg-[#071a2b] p-5 text-white transition hover:bg-blue-700"
           >
             <span>

@@ -104,7 +104,7 @@ function validatePlayer(body: PlayerRequest): PlayerInput | null {
 
 function revalidatePlayerPages(name: string) {
   revalidatePath(`/page/player/${name}`);
-  revalidatePath("/playersearch");
+  revalidatePath("/players");
   revalidatePath("/fantasy-team");
   revalidatePath("/who-am-i");
 }

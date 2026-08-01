@@ -191,9 +191,7 @@ export function ManagerFingerprints({
     .sort((a, b) => b.starts - a.starts)
     .slice(0, 5);
   const recentMatches = [...matches]
-    .sort(
-      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
-    )
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     .slice(0, 5);
 
   async function analyse() {
@@ -280,7 +278,8 @@ export function ManagerFingerprints({
               <div className="archive-grid absolute inset-0 opacity-20" />
               <div className="relative">
                 <p className="font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-blue-300">
-                  {formatDate(manager.dateJoined)}–{formatDate(manager.dateLeft)}
+                  {formatDate(manager.dateJoined)}–
+                  {formatDate(manager.dateLeft)}
                 </p>
                 <h2 className="mt-4 font-display text-4xl font-semibold tracking-[-0.04em] sm:text-6xl">
                   {manager.name}
@@ -337,7 +336,9 @@ export function ManagerFingerprints({
                 </dd>
               </div>
               <div className="flex items-center justify-between gap-4">
-                <dt className="text-sm text-[#071a2b]/55">Conceded per match</dt>
+                <dt className="text-sm text-[#071a2b]/55">
+                  Conceded per match
+                </dt>
                 <dd className="font-mono font-bold">
                   {fingerprint.concededAverage.toFixed(2)}
                 </dd>
@@ -440,7 +441,7 @@ export function ManagerFingerprints({
               ))}
             </ol>
             <Link
-              href="/manager-trusted-xi"
+              href="/managers/trusted-xi"
               className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-blue-700 hover:text-blue-900"
             >
               See the complete trusted XI
@@ -503,13 +504,13 @@ export function ManagerFingerprints({
               icon: TrophyIcon,
               title: "Compare the record",
               copy: "Put this tenure directly alongside another manager.",
-              href: "/manager-comparison",
+              href: "/managers/comparison",
             },
             {
               icon: ShieldCheckIcon,
               title: "See the full XI",
               copy: "Explore the most-started team in a natural shape.",
-              href: "/manager-trusted-xi",
+              href: "/managers/trusted-xi",
             },
             {
               icon: HomeIcon,

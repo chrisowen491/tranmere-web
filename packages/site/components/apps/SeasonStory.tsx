@@ -127,6 +127,14 @@ function positionGroup(position?: string | null) {
   return "other";
 }
 
+function arrangeWidePlayers<T>(widePlayers: T[], centralPlayers: T[]) {
+  if (widePlayers.length < 2) {
+    return [...widePlayers, ...centralPlayers];
+  }
+
+  return [widePlayers[0], ...centralPlayers, ...widePlayers.slice(1).reverse()];
+}
+
 function buildMostUsedXi(players: PlayerStatisticsView[]) {
   const ranked = [...players].sort(
     (a, b) => b.starts + b.subs - (a.starts + a.subs),
@@ -159,7 +167,16 @@ function buildMostUsedXi(players: PlayerStatisticsView[]) {
   const midfield = select("midfield", 4);
   const attack = select("attack", 2);
 
-  return [attack, midfield, defence, goalkeeper];
+  const orderedMidfield = arrangeWidePlayers(
+    midfield.filter((player) => player.profile.position === "Winger"),
+    midfield.filter((player) => player.profile.position !== "Winger"),
+  );
+  const orderedDefence = arrangeWidePlayers(
+    defence.filter((player) => player.profile.position === "Full Back"),
+    defence.filter((player) => player.profile.position !== "Full Back"),
+  );
+
+  return [attack, orderedMidfield, orderedDefence, goalkeeper];
 }
 
 export function SeasonStory(props: {

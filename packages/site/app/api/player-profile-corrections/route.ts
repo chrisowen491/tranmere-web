@@ -250,14 +250,14 @@ export async function PATCH(request: NextRequest) {
 
       revalidatePath(`/page/player/${player.name}`);
       revalidatePath("/");
-      revalidatePath("/playersearch");
+      revalidatePath("/players");
       revalidatePath("/fantasy-team");
       revalidatePath("/who-am-i");
-      revalidatePath("/player-partnerships");
-      revalidatePath("/manager-trusted-xi");
-      revalidatePath("/top-scorers-by-season");
-      revalidatePath("/top-scorers-per-game");
-      revalidatePath("/player-records/[slug]", "page");
+      revalidatePath("/players/partnerships");
+      revalidatePath("/managers/trusted-xi");
+      revalidatePath("/players/top-scorers-by-season");
+      revalidatePath("/players/lethal-finishers");
+      revalidatePath("/players/records/[slug]", "page");
       revalidatePath("/season/[slug]", "page");
 
       return NextResponse.json({

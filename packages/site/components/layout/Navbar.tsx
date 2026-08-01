@@ -12,7 +12,7 @@ import SearchBar from "@/components/search/SearchBar";
 const navigation = [
   { name: "Results", href: "/results" },
   { name: "Seasons", href: "/seasons" },
-  { name: "Players", href: "/playersearch" },
+  { name: "Players", href: "/players" },
   { name: "Fantasy XI", href: "/fantasy-team" },
   { name: "Shirts", href: "/shirts" },
   { name: "Stories", href: "/blog" },

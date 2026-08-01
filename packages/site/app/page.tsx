@@ -43,7 +43,7 @@ const archiveLinks = [
   {
     label: "Player index",
     detail: "Profiles, appearances and goals",
-    href: "/playersearch",
+    href: "/players",
     icon: UserGroupIcon,
   },
   {
@@ -76,13 +76,13 @@ const exploreLinks = [
   {
     label: "Manager comparison",
     detail: "Put two tenures head to head",
-    href: "/manager-comparison",
+    href: "/managers/comparison",
     icon: ChartBarSquareIcon,
   },
   {
     label: "Trusted XI",
     detail: "Each manager’s most-used team",
-    href: "/manager-trusted-xi",
+    href: "/managers/trusted-xi",
     icon: UserGroupIcon,
   },
   {
@@ -100,13 +100,13 @@ const exploreLinks = [
   {
     label: "Player search",
     detail: "Find any player in the archive",
-    href: "/playersearch",
+    href: "/players",
     icon: MagnifyingGlassIcon,
   },
   {
     label: "Player partnerships",
     detail: "Discover who played together",
-    href: "/player-partnerships",
+    href: "/players/partnerships",
     icon: UserGroupIcon,
   },
 ];
@@ -505,7 +505,7 @@ export default async function Home() {
             </Link>
 
             <Link
-              href="/player-builder"
+              href="/players/avatar-builder"
               className="group grid min-h-[540px] overflow-hidden border border-[#071a2b]/15 bg-[#fffdf8] sm:grid-cols-[1.05fr_0.95fr]"
             >
               <div className="relative min-h-[400px] overflow-hidden bg-[#132c82] sm:min-h-0">

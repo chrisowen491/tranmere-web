@@ -12,7 +12,7 @@ const linkGroups = [
     label: "Archive",
     links: [
       { label: "Results", href: "/results" },
-      { label: "Players", href: "/playersearch" },
+      { label: "Players", href: "/players" },
       { label: "Transfers", href: "/transfer-central" },
       { label: "Articles", href: "/blog" },
     ],
@@ -22,16 +22,16 @@ const linkGroups = [
     links: [
       { label: "Head-to-head", href: "/head-to-head" },
       { label: "Rovers connections", href: "/rovers-connections" },
-      { label: "Player partnerships", href: "/player-partnerships" },
+      { label: "Player partnerships", href: "/players/partnerships" },
     ],
   },
   {
     label: "The club",
     links: [
       { label: "Managers", href: "/managers" },
-      { label: "Manager comparison", href: "/manager-comparison" },
-      { label: "Manager fingerprints", href: "/manager-fingerprints" },
-      { label: "Manager’s Trusted XI", href: "/manager-trusted-xi" },
+      { label: "Manager comparison", href: "/managers/comparison" },
+      { label: "Manager fingerprints", href: "/managers/fingerprints" },
+      { label: "Manager’s Trusted XI", href: "/managers/trusted-xi" },
       { label: "About", href: "/page/blog/about" },
       { label: "Terms of service", href: "/page/blog/terms-of-service" },
       { label: "Privacy policy", href: "/page/blog/privacy-policy" },

@@ -59,7 +59,7 @@ export function TransferTable(props: { title: string; records: Transfer[] }) {
                     </td>
                     <td className="hidden whitespace-nowrap px-4 py-4 sm:table-cell">
                       <Link
-                        href={`/player-records/${record.season}`}
+                        href={`/players/records/${record.season}`}
                         className="font-mono text-xs text-blue-700"
                       >
                         {record.season}

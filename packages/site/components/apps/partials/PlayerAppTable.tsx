@@ -174,7 +174,7 @@ export function PlayerAppsTable({
                   <td className="whitespace-nowrap px-5 py-4">
                     <p className="font-mono text-xs font-bold">{record.Date}</p>
                     <Link
-                      href={`/player-records/${record.Season}`}
+                      href={`/players/records/${record.Season}`}
                       className="mt-1 inline-block text-[10px] font-bold text-blue-700 hover:underline"
                     >
                       {seasonLabel(record.Season)}

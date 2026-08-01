@@ -13,20 +13,27 @@ export const navigation = [
   {
     title: "Players",
     links: [
-      { title: "Player Search", href: "/playersearch" },
+      { title: "Player Search", href: "/players" },
       {
         title: "Most Tranmere Appearances",
-        href: "/player-records/most-appearances",
+        href: "/players/records/most-appearances",
       },
-      { title: "Most Tranmere Goals", href: "/player-records/top-scorers" },
+      { title: "Most Tranmere Goals", href: "/players/records/top-scorers" },
       {
         title: "Only Played Once",
-        href: "/player-records/only-one-appearance",
+        href: "/players/records/only-one-appearance",
       },
-      { title: "Top Scorers By Season", href: "/top-scorers-by-season" },
+      {
+        title: "Misfiring Strikers",
+        href: "/players/misfiring-strikers",
+      },
+      {
+        title: "Top Scorers By Season",
+        href: "/players/top-scorers-by-season",
+      },
       {
         title: "Hat Tricks",
-        href: "/hat-tricks",
+        href: "/players/hat-tricks",
       },
       {
         title: "Opposition Stars",
@@ -55,7 +62,7 @@ export const navigation = [
       { title: "Shirts", href: "/shirts" },
       { title: "Books", href: "/page/blog/books" },
       { title: "Football Cards", href: "/page/blog/football-cards" },
-      { title: "Player Avatar Builder", href: "/player-builder" },
+      { title: "Player Avatar Builder", href: "/players/avatar-builder" },
     ],
   },
 ];

@@ -103,7 +103,7 @@ export function PlayerTransfersTable({
               >
                 <div>
                   <Link
-                    href={`/player-records/${record.season}`}
+                    href={`/players/records/${record.season}`}
                     className="font-display text-xl font-semibold hover:text-blue-700"
                   >
                     {seasonLabel(record.season)}

@@ -182,25 +182,25 @@ export function SeasonTimeline(props: {
       className="border-b border-[#071a2b]/15 bg-[#fffdf8] text-[#071a2b]"
     >
       <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8 lg:py-24">
-        <div className="grid gap-12 lg:grid-cols-[0.36fr_0.64fr] lg:gap-20">
-          <header className="lg:sticky lg:top-8 lg:self-start">
+        <div className="grid gap-12 lg:grid-cols-[minmax(300px,0.4fr)_minmax(0,0.6fr)] lg:gap-14">
+          <header className="border border-[#071a2b]/15 bg-white/45 p-6 shadow-[8px_8px_0_rgba(7,26,43,0.05)] sm:p-8 lg:sticky lg:top-8 lg:self-start">
             <p className="section-kicker">Season timeline</p>
-            <h2 className="mt-4 font-display text-4xl font-semibold tracking-[-0.04em] sm:text-5xl">
+            <h2 className="mt-4 max-w-lg font-display text-4xl font-semibold leading-[0.98] tracking-[-0.04em] sm:text-[2.8rem]">
               The campaign, month by month
             </h2>
-            <p className="mt-5 max-w-md text-base leading-7 text-[#071a2b]/60">
+            <p className="mt-5 max-w-lg text-base leading-7 text-[#071a2b]/60">
               Follow the rhythm of the season through every result, change in
               the dugout and recorded player movement.
             </p>
 
-            <dl className="mt-8 grid grid-cols-3 border-y border-[#071a2b]/15">
+            <dl className="mt-7 grid grid-cols-3 overflow-hidden border border-[#071a2b]/15 bg-[#fffdf8]">
               {[
                 ["Months", chapters.length],
                 ["Matches", completedMatches.length],
                 ["Wins", wins],
               ].map(([label, value]) => (
                 <div
-                  className="border-r border-[#071a2b]/15 py-4 last:border-r-0"
+                  className="border-r border-[#071a2b]/15 px-3 py-4 last:border-r-0 sm:px-4"
                   key={label}
                 >
                   <dt className="text-[0.62rem] font-bold uppercase tracking-[0.14em] text-[#071a2b]/45">
@@ -215,7 +215,7 @@ export function SeasonTimeline(props: {
 
             <Link
               href={`/results?season=${props.season}`}
-              className="mt-7 inline-flex items-center gap-2 text-sm font-bold text-blue-700 hover:text-[#071a2b]"
+              className="mt-6 inline-flex items-center gap-2 bg-blue-700 px-4 py-3 text-sm font-bold text-white transition hover:bg-[#071a2b]"
             >
               Open the complete results archive
               <ArrowRightIcon className="h-4 w-4" aria-hidden="true" />

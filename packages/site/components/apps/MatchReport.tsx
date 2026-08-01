@@ -26,6 +26,34 @@ const positionOrder = [
   "Striker",
 ];
 
+function arrangeWidePlayers<T>(widePlayers: T[], centralPlayers: T[]) {
+  if (widePlayers.length < 2) {
+    return [...widePlayers, ...centralPlayers];
+  }
+
+  return [widePlayers[0], ...centralPlayers, ...widePlayers.slice(1).reverse()];
+}
+
+function penaltyOutcome(pens?: string, homeTeam?: string, awayTeam?: string) {
+  if (!pens) return null;
+
+  const winner = pens.match(/^(.+?)\s+win(?:s)?\b/i)?.[1]?.toLowerCase();
+  const tranmereWon = winner?.includes("tranmere");
+  const tranmerePlayed = [homeTeam, awayTeam].some((team) =>
+    team?.toLowerCase().includes("tranmere"),
+  );
+
+  if (winner && tranmerePlayed) {
+    return {
+      label: tranmereWon ? "Won on penalties" : "Lost on penalties",
+      detail: pens,
+      won: tranmereWon,
+    };
+  }
+
+  return { label: "Penalty shootout", detail: pens, won: false };
+}
+
 export default function MatchReport(props: {
   match: MatchPageView;
   next: Match[];
@@ -35,23 +63,31 @@ export default function MatchReport(props: {
   avg: number;
 }) {
   const { match } = props;
+  const penalty = penaltyOutcome(match.pens, match.homeTeam, match.awayTeam);
   const players = [...(match.apps ?? [])].sort(
     (a, b) =>
       positionOrder.indexOf(a.profile.position ?? "") -
       positionOrder.indexOf(b.profile.position ?? ""),
   );
-  const lineupLines = [
-    players.filter((player) => player.profile.position === "Striker"),
+  const forwards = players.filter(
+    (player) => player.profile.position === "Striker",
+  );
+  const midfield = arrangeWidePlayers(
+    players.filter((player) => player.profile.position === "Winger"),
     players.filter((player) =>
-      ["Winger", "Central Midfielder", ""].includes(
-        player.profile.position ?? "",
-      ),
+      ["Central Midfielder", ""].includes(player.profile.position ?? ""),
     ),
-    players.filter((player) =>
-      ["Full Back", "Central Defender"].includes(player.profile.position ?? ""),
-    ),
-    players.filter((player) => player.profile.position === "Goalkeeper"),
-  ].filter((line) => line.length > 0);
+  );
+  const defence = arrangeWidePlayers(
+    players.filter((player) => player.profile.position === "Full Back"),
+    players.filter((player) => player.profile.position === "Central Defender"),
+  );
+  const goalkeepers = players.filter(
+    (player) => player.profile.position === "Goalkeeper",
+  );
+  const lineupLines = [forwards, midfield, defence, goalkeepers].filter(
+    (line) => line.length > 0,
+  );
 
   const breadcrumbs = [
     { id: 1, name: "Home", href: "/" },
@@ -109,6 +145,22 @@ export default function MatchReport(props: {
               </span>
               {match.awayTeam}
             </h1>
+
+            {penalty && (
+              <p
+                className={`mt-5 inline-flex w-fit items-center border px-3 py-2 text-xs font-bold uppercase tracking-[0.12em] ${
+                  penalty.won
+                    ? "border-emerald-700/25 bg-emerald-50 text-emerald-800"
+                    : "border-red-700/20 bg-red-50 text-red-800"
+                }`}
+              >
+                {penalty.label}
+                <span className="mx-2 text-current/35">·</span>
+                <span className="normal-case tracking-normal">
+                  {penalty.detail}
+                </span>
+              </p>
+            )}
 
             <dl className="mt-8 grid grid-cols-2 border-y border-[#071a2b]/15 text-sm">
               <div className="py-5 pr-4">

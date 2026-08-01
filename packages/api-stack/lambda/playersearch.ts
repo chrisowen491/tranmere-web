@@ -14,7 +14,6 @@ const dynamo = DynamoDBDocument.from(
 exports.handler = async (
   event: APIGatewayEvent
 ): Promise<APIGatewayProxyResult> => {
-
   let season = event.queryStringParameters
     ? event.queryStringParameters.season
     : null;
@@ -27,6 +26,11 @@ exports.handler = async (
   const filter = event.queryStringParameters
     ? event.queryStringParameters.filter
     : null;
+  const limitParameter = event.queryStringParameters?.limit;
+  const requestedLimit = limitParameter ? Number(limitParameter) : Number.NaN;
+  const limit = Number.isInteger(requestedLimit)
+    ? Math.min(Math.max(requestedLimit, 1), 1000)
+    : 50;
 
   if (!season) season = 'TOTAL';
 
@@ -104,5 +108,5 @@ exports.handler = async (
     });
   }
 
-  return utils.sendResponse(200, { players: results.slice(0, 50) });
+  return utils.sendResponse(200, { players: results.slice(0, limit) });
 };

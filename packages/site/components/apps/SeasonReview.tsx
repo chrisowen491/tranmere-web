@@ -245,7 +245,7 @@ export default function SeasonReview(props: {
               All results
             </Link>
             <Link
-              href={`/player-records/${props.season}`}
+              href={`/players/records/${props.season}`}
               className="bg-[#fffdf8] px-5 py-4 text-sm font-bold transition hover:bg-blue-50 hover:text-blue-700"
             >
               Season squad
@@ -490,7 +490,7 @@ export default function SeasonReview(props: {
                   <Link
                     className="inline-flex w-full items-center justify-center bg-blue-700 px-3 py-3 text-sm font-bold text-white transition hover:bg-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
                     prefetch={false}
-                    href={`/player-records/${props.season}`}
+                    href={`/players/records/${props.season}`}
                   >
                     Full Player Records
                   </Link>

@@ -151,21 +151,21 @@ export default async function ManagerRecords() {
             </div>
             <div className="flex flex-wrap gap-3 md:justify-self-end">
               <Link
-                href="/manager-comparison"
+                href="/managers/comparison"
                 className="inline-flex items-center gap-3 border border-blue-700 bg-blue-700 px-5 py-4 text-sm font-bold text-white transition hover:bg-blue-800"
               >
                 Compare managers
                 <ArrowRightIcon className="h-4 w-4" />
               </Link>
               <Link
-                href="/manager-trusted-xi"
+                href="/managers/trusted-xi"
                 className="inline-flex items-center gap-3 border border-[#071a2b] bg-[#fffdf8] px-5 py-4 text-sm font-bold text-[#071a2b] transition hover:bg-white"
               >
                 Trusted XI
                 <ArrowRightIcon className="h-4 w-4" />
               </Link>
               <Link
-                href="/manager-fingerprints"
+                href="/managers/fingerprints"
                 className="inline-flex items-center gap-3 border border-[#071a2b] bg-[#fffdf8] px-5 py-4 text-sm font-bold text-[#071a2b] transition hover:bg-white"
               >
                 Manager fingerprints

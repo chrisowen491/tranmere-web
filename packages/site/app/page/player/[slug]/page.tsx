@@ -111,7 +111,7 @@ export default async function PlayerProfilePage(props: { params: SlugParams }) {
       <JsonLd
         data={breadcrumbJsonLd([
           { name: "Home", pathname: "/" },
-          { name: "Players", pathname: "/playersearch" },
+          { name: "Players", pathname: "/players" },
           {
             name: d1Player.name,
             pathname: `/page/player/${encodeURIComponent(d1Player.name)}`,

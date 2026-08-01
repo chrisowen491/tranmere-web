@@ -20,6 +20,7 @@ export interface PlayerStatisticsOptions {
   season?: string;
   sort?: string;
   filter?: string;
+  limit?: number;
 }
 
 export async function getPlayerStatisticsProfiles(
@@ -118,8 +119,9 @@ export async function getPlayerStatistics(
 ) {
   const search = new URLSearchParams({
     season: options.season ?? "",
-    sort: "",
-    filter: "",
+    sort: options.sort ?? "",
+    filter: options.filter ?? "",
+    limit: options.limit?.toString() ?? "",
   });
   const response = await fetch(`${baseUrl}/player-search/?${search}`, {
     next: { revalidate: 7200 },
