@@ -11,7 +11,6 @@ const dynamo = DynamoDBDocument.from(
 );
 import {
   Goal,
-  Player,
   ImageEdits,
   Appearance,
   Match,
@@ -19,18 +18,6 @@ import {
   Link,
   PlayerSeasonSummary
 } from './tranmere-web-types';
-
-//const APP_SYNC_URL = 'https://api.tranmere-web.com';
-//const APP_SYNC_OPTIONS = {
-//  headers: {
-//    //'x-api-key': this.APP_SYNC_KEY
-//  }
-//};
-//const apiOptions = {
-//  headers: {
-//    //'x-api-key': this.API_KEY
-//  }
-//};
 
 export enum DataTables {
   APPS_TABLE_NAME = 'TranmereWebAppsTable',

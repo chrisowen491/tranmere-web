@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "vite dev",
+    "lint": "eslint .",
     "deploy": "vite build && wrangler deploy",
     "types": "wrangler types env.d.ts --include-runtime false"
   },

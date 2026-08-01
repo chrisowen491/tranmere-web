@@ -10,8 +10,6 @@ import {
 
 const utils = new TranmereWebUtils();
 
-const re = /\/\d\d\d\d\//gm;
-const re3 = /\/\d\d\d\d[A-Za-z]\//gm;
 const seasonMapping = new Map<number, number>();
 seasonMapping.set(1978, 1977);
 seasonMapping.set(1984, 1983);
