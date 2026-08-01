@@ -288,7 +288,6 @@ export class TranmereWebStack extends cdk.Stack {
       apiResource: report,
       apiMethod: 'GET',
       lambdaFile: './lambda/matchreportagent.ts',
-      schedule: { minute: '50', hour: '22' },
       readWriteTables: [
         TranmereWebMatchReport,
         TranmereWebGames,
