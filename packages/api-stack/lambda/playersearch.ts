@@ -100,6 +100,14 @@ exports.handler = async (
       if (a.goals > b.goals) return -1;
       return 0;
     });
+  } else if (sort == 'Subs') {
+    results.sort(function (a, b) {
+      if (a.subs < b.subs) return 1;
+      if (a.subs > b.subs) return -1;
+      if (a.starts > b.starts) return 1;
+      if (a.starts < b.starts) return -1;
+      return 0;
+    });
   } else {
     results.sort(function (a, b) {
       if (a.Apps < b.Apps) return 1;

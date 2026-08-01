@@ -8,6 +8,7 @@ export const navigation = [
         href: "/games/at-wembley",
       },
       { title: "Penalty Shootouts", href: "/games/penalty-shootouts" },
+      { title: "FA Cup Record", href: "/results/fa-cup" },
     ],
   },
   {
@@ -27,6 +28,7 @@ export const navigation = [
         title: "Misfiring Strikers",
         href: "/players/misfiring-strikers",
       },
+      { title: "Super Subs", href: "/players/super-subs" },
       {
         title: "Top Scorers By Season",
         href: "/players/top-scorers-by-season",

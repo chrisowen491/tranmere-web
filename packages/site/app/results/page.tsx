@@ -12,6 +12,7 @@ import {
   Match,
 } from "@tranmere-web/lib/src/tranmere-web-types";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
+import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { breadcrumbJsonLd, JsonLd } from "@/components/seo/JsonLd";
 import { pageMetadata } from "@/lib/seo";
@@ -74,26 +75,35 @@ export default async function ResultsSearchPage() {
             </div>
             <nav
               aria-label="Featured result collections"
-              className="grid grid-cols-2 gap-px border border-[#071a2b]/15 bg-[#071a2b]/15 sm:grid-cols-3"
+              className="rounded-sm border border-[#071a2b]/15 bg-[#fffdf8] p-2 shadow-[0_12px_28px_rgba(7,26,43,0.06)]"
             >
-              <Link
-                href="/games/at-wembley"
-                className="bg-[#fffdf8] px-4 py-4 text-sm font-bold transition hover:bg-[#e8e2d6] hover:text-blue-700"
-              >
-                Wembley matches
-              </Link>
-              <Link
-                href="/games/penalty-shootouts"
-                className="bg-[#fffdf8] px-4 py-4 text-sm font-bold transition hover:bg-[#e8e2d6] hover:text-blue-700"
-              >
-                Penalty shootouts
-              </Link>
-              <Link
-                href="/head-to-head"
-                className="col-span-2 bg-[#fffdf8] px-4 py-4 text-sm font-bold transition hover:bg-[#e8e2d6] hover:text-blue-700 sm:col-span-1"
-              >
-                Head-to-head
-              </Link>
+              <p className="px-3 pt-2 text-xs font-bold uppercase tracking-[0.15em] text-[#071a2b]/45">
+                Explore the archive
+              </p>
+              <div className="mt-3 grid grid-cols-2 gap-2">
+                {[
+                  ["Wembley matches", "/games/at-wembley"],
+                  ["Penalty shootouts", "/games/penalty-shootouts"],
+                  ["FA Cup archive", "/results/fa-cup"],
+                  ["League Cup archive", "/results/league-cup"],
+                ].map(([label, href]) => (
+                  <Link
+                    key={href}
+                    href={href}
+                    className="group flex min-h-20 flex-col justify-between rounded-sm bg-[#f4f0e8] px-4 py-3 text-sm font-bold transition hover:bg-[#071a2b] hover:text-white"
+                  >
+                    {label}
+                    <ArrowRightIcon className="mt-3 h-4 w-4 text-blue-700 transition-transform group-hover:translate-x-1 group-hover:text-white" />
+                  </Link>
+                ))}
+                <Link
+                  href="/head-to-head"
+                  className="group col-span-2 flex items-center justify-between rounded-sm bg-blue-700 px-4 py-3 text-sm font-bold text-white transition hover:bg-[#071a2b]"
+                >
+                  Head-to-head records
+                  <ArrowRightIcon className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </Link>
+              </div>
             </nav>
           </div>
         </div>

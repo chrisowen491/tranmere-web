@@ -13,6 +13,7 @@ const linkGroups = [
     links: [
       { label: "Results", href: "/results" },
       { label: "Players", href: "/players" },
+      { label: "Managers", href: "/managers" },
       { label: "Transfers", href: "/transfer-central" },
       { label: "Articles", href: "/blog" },
     ],
@@ -26,16 +27,20 @@ const linkGroups = [
     ],
   },
   {
-    label: "The club",
+    label: "Fun stuff",
     links: [
-      { label: "Managers", href: "/managers" },
-      { label: "Manager comparison", href: "/managers/comparison" },
-      { label: "Manager fingerprints", href: "/managers/fingerprints" },
-      { label: "Manager’s Trusted XI", href: "/managers/trusted-xi" },
+      { label: "Fantasy XI", href: "/fantasy-team" },
+      { label: "Who am I?", href: "/who-am-i" },
+      { label: "Player builder", href: "/players/avatar-builder" },
+    ],
+  },
+  {
+    label: "Site",
+    links: [
       { label: "About", href: "/page/blog/about" },
-      { label: "Terms of service", href: "/page/blog/terms-of-service" },
-      { label: "Privacy policy", href: "/page/blog/privacy-policy" },
       { label: "Contact", href: "/contact" },
+      { label: "Privacy policy", href: "/page/blog/privacy-policy" },
+      { label: "Terms of service", href: "/page/blog/terms-of-service" },
     ],
   },
 ];
@@ -46,7 +51,7 @@ export default function Footer() {
   return (
     <footer className="bg-[#071a2b] text-white">
       <div className="mx-auto max-w-7xl px-6 py-16 sm:px-10 lg:px-12">
-        <div className="grid gap-12 border-b border-white/15 pb-14 lg:grid-cols-[minmax(0,1fr)_minmax(560px,0.95fr)] lg:items-start">
+        <div className="grid gap-12 border-b border-white/15 pb-14 lg:grid-cols-[minmax(0,0.9fr)_minmax(620px,1.1fr)] lg:items-start">
           <div>
             <div className="flex items-center gap-3">
               <span className="grid h-9 w-9 place-items-center border border-white/30 text-xs font-black">
@@ -62,7 +67,7 @@ export default function Footer() {
             </p>
           </div>
           <nav
-            className="grid grid-cols-2 gap-x-8 gap-y-10 sm:grid-cols-3 lg:gap-x-12"
+            className="grid grid-cols-2 gap-x-8 gap-y-10 sm:grid-cols-4 lg:gap-x-8"
             aria-label="Footer"
           >
             {linkGroups.map((group) => (

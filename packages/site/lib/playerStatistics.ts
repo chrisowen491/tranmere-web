@@ -97,6 +97,14 @@ function sortPlayers(players: PlayerStatisticsView[], sort?: string) {
         a.Player.localeCompare(b.Player),
     );
   }
+  if (sort === "Subs") {
+    return players.sort(
+      (a, b) =>
+        b.subs - a.subs ||
+        a.starts - b.starts ||
+        a.Player.localeCompare(b.Player),
+    );
+  }
   return players;
 }
 

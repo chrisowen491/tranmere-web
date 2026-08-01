@@ -67,6 +67,7 @@ export default async function PlayerSearchPage() {
                 ["Hat-tricks", "/players/hat-tricks"],
                 ["Season leaders", "/players/top-scorers-by-season"],
                 ["Lethal finishers", "/players/lethal-finishers"],
+                ["Super subs", "/players/super-subs"],
                 ["Misfiring strikers", "/players/misfiring-strikers"],
               ].map(([label, href]) => (
                 <Link
