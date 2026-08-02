@@ -23,7 +23,8 @@
   "vars": {
     "AUTH0_DOMAIN": "dev-uy840dgvbfl4cef3.us.auth0.com",
     "AUTH0_AUDIENCE": "https://mcp.tranmere-web.com/mcp",
-    "API_BASE_URL": "https://api.tranmere-web.com"
+    "API_BASE_URL": "https://api.tranmere-web.com",
+    "MCP_WIDGET_DOMAIN": "https://mcp.tranmere-web.com"
   },
   "d1_databases": [
     {

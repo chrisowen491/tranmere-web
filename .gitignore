@@ -97,6 +97,7 @@ wip/mcp
 .agents/skills/tessl__agents-md
 .agents/skills/tessl__agents-md/**
 .agents/skills/create-match-report/**
+.agents/skills/match-report-ingestion/**
 **/backups/dynamodb/**
 **/generated/**
 chatgpt-app-submission.json

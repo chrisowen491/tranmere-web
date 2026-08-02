@@ -19,7 +19,7 @@ Do not infer protected characteristics beyond what is visibly apparent. Do not u
 
 ## Build the avatar
 
-1. Use the `control-browser` skill and open `https://www.tranmere-web.com/player-builder`.
+1. Use the `control-browser` skill and open `https://www.tranmere-web.com/players/avatar-builder`.
 2. Inspect the visible controls before choosing values. The page currently provides Kit, Skin, Neck, Hair Shape, Hair Colour, Hair Highlights, Facial Feature, and Background.
 3. Match the most distinctive visible traits first: skin tone, hair shape/length, hair colour, facial hair, then kit era. Set Background to `Transparent` by default. Use white or another background only when the user requests it.
 4. For a real Tranmere player, choose the kit era that fits the requested period. If no period is supplied, use the current home kit. For a fictional fan character, use the current home kit unless requested otherwise.

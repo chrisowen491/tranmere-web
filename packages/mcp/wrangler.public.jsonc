@@ -1,0 +1,27 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "tranmere-web-public-mcp",
+  "compatibility_date": "2026-06-11",
+  "compatibility_flags": ["nodejs_compat"],
+  "main": "src/public-server.ts",
+  "assets": {
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/mcp"]
+  },
+  "observability": {
+    "enabled": true
+  },
+  "upload_source_maps": true,
+  "vars": {
+    "API_BASE_URL": "https://api.tranmere-web.com",
+    "MCP_WIDGET_DOMAIN": "https://public-mcp.tranmere-web.com"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "tranmere-web",
+      "database_id": "cb021697-9af3-4872-b8eb-ce49be71bb8c",
+      "remote": true
+    }
+  ]
+}

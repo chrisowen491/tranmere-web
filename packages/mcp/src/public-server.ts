@@ -1,20 +1,16 @@
 import { createMcpHandler } from 'agents/mcp/server';
-import {
-  authenticateRequest,
-  protectedResourceMetadata
-} from './auth';
-import { createServer } from './server-factory';
+import { createServer, publicReadAccess } from './server-factory';
 
 export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext) {
     const url = new URL(request.url);
 
-    if (
-      url.pathname === '/.well-known/oauth-protected-resource' ||
-      url.pathname === '/.well-known/oauth-protected-resource/mcp'
-    ) {
-      return Response.json(protectedResourceMetadata(env), {
-        headers: { 'Cache-Control': 'no-store' }
+    if (url.pathname === '/.well-known/openai-apps-challenge') {
+      return new Response('bSgNO8kgIeXtO4EG6b5_VMwH2VfEiSNBIcgaOTL8cg4', {
+        headers: {
+          'Content-Type': 'text/plain; charset=utf-8',
+          'Cache-Control': 'public, max-age=300'
+        }
       });
     }
 
@@ -31,23 +27,21 @@ export default {
       .catch(() => null);
     const toolCall = message?.method === 'tools/call';
     if (toolCall) {
-      console.log('MCP tool call', {
+      console.log('Public MCP tool call', {
         tool: message.params?.name,
         arguments: message.params?.arguments
       });
     }
 
-    const auth = await authenticateRequest(request, env);
-    if (auth instanceof Response) return auth;
-
     const response = await createMcpHandler(() =>
-      createServer(env, auth, {
-        includeWriteTools: true,
-        name: 'Tranmere-Web MCP'
+      createServer(env, publicReadAccess, {
+        includeWriteTools: false,
+        name: 'Tranmere-Web Public MCP'
       })
     )(request, env, ctx);
+
     if (toolCall) {
-      console.log('MCP tool response', {
+      console.log('Public MCP tool response', {
         status: response.status,
         body: (await response.clone().text()).slice(0, 8_000)
       });

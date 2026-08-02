@@ -69,8 +69,11 @@ export function GetYear(): number {
 
 export function GetSeasons(): number[] {
   const seasons: number[] = [];
+  const wartimeSeasons = new Set([1939, 1940, 1941, 1942, 1943, 1944]);
   for (let i = GetYear(); i > 1920; i--) {
-    seasons.push(i);
+    if (!wartimeSeasons.has(i)) {
+      seasons.push(i);
+    }
   }
   return seasons;
 }

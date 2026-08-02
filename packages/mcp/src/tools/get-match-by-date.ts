@@ -58,7 +58,7 @@ export function registerGetMatchByDateTool({ server, env, auth }: ToolContext) {
           _meta: {
             ui: {
               prefersBorder: false,
-              domain: 'https://mcp.tranmere-web.com',
+              domain: env.MCP_WIDGET_DOMAIN,
               csp: {
                 connectDomains: [],
                 resourceDomains: ['https://images.tranmere-web.com']
