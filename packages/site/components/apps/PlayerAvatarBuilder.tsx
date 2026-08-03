@@ -239,6 +239,7 @@ export function PlayerAvatarBuilder() {
                     <option>side-parting-curl</option>
                     <option>droopy-fringe</option>
                     <option>curtains</option>
+                    <option>feathered</option>
                     <option>high-forehead</option>
                     <option>dreads</option>
                     <option>zane-okoro</option>
