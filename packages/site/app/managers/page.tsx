@@ -45,6 +45,19 @@ function isCurrentManager(manager: Manager) {
   );
 }
 
+function managerImageSource(imagePath: string, width: number, height: number) {
+  if (imagePath.startsWith("/") || /^https?:\/\//i.test(imagePath)) {
+    return imagePath;
+  }
+
+  return buildImagePath(imagePath, width, height);
+}
+
+function managerStructuredImage(imagePath: string) {
+  const source = managerImageSource(imagePath, 640, 480);
+  return source.startsWith("/") ? absoluteUrl(source) : source;
+}
+
 export default async function ManagerRecords() {
   const managers = await getManagers(
     (await getCloudflareContext({ async: true })).env.DB,
@@ -71,6 +84,9 @@ export default async function ManagerRecords() {
                 name: manager.name,
                 jobTitle: "Football manager",
                 memberOf: { "@id": "https://www.tranmere-web.com/#team" },
+                image: manager.imagePath
+                  ? managerStructuredImage(manager.imagePath)
+                  : undefined,
               },
             })),
           },
@@ -125,13 +141,17 @@ export default async function ManagerRecords() {
         <section className="border-b border-[#071a2b]/15 bg-[#e8e2d6]">
           <div className="mx-auto grid max-w-7xl gap-8 px-6 py-10 sm:px-10 md:grid-cols-[180px_1fr_auto] md:items-center lg:px-12">
             <div className="aspect-[4/3] overflow-hidden border border-[#071a2b]/15 bg-[#fffdf8]">
-              {currentManager.programmePath ? (
+              {currentManager.imagePath ? (
                 <Image
-                  alt={`${currentManager.name} programme`}
+                  alt={currentManager.name}
                   height={300}
                   width={400}
-                  src={buildImagePath(currentManager.programmePath, 400, 300)}
-                  className="h-full w-full object-cover"
+                  src={managerImageSource(
+                    currentManager.imagePath,
+                    400,
+                    300,
+                  )}
+                  className="h-full w-full object-cover object-top"
                 />
               ) : (
                 <UserIcon className="h-full w-full p-10 text-blue-700/35" />
@@ -208,13 +228,13 @@ export default async function ManagerRecords() {
                 className="group bg-[#fffdf8] p-4 transition hover:bg-white sm:p-5"
               >
                 <div className="relative aspect-[4/3] overflow-hidden bg-[#e8e2d6]">
-                  {manager.programmePath ? (
+                  {manager.imagePath ? (
                     <Image
-                      alt={`${manager.name} programme`}
+                      alt={manager.name}
                       height={480}
                       width={640}
-                      src={buildImagePath(manager.programmePath, 640, 480)}
-                      className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.025]"
+                      src={managerImageSource(manager.imagePath, 640, 480)}
+                      className="h-full w-full object-cover object-top transition duration-500 group-hover:scale-[1.025]"
                     />
                   ) : (
                     <div className="grid h-full place-items-center bg-[#071a2b]">

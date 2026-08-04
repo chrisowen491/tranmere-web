@@ -35,7 +35,7 @@ function seasonForDate(value: string) {
 }
 
 function seasonsForManager(manager: ManagerRecord) {
-  const first = Math.max(1977, seasonForDate(manager.dateJoined));
+  const first = Math.max(1960, seasonForDate(manager.dateJoined));
   const dateLeft = manager.dateLeft.toLowerCase().startsWith("now")
     ? new Date().toISOString().slice(0, 10)
     : manager.dateLeft;

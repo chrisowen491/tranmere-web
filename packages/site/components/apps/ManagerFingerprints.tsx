@@ -8,8 +8,11 @@ import {
   ShieldCheckIcon,
   SparklesIcon,
   TrophyIcon,
+  UserIcon,
 } from "@heroicons/react/24/outline";
+import { buildImagePath } from "@tranmere-web/lib/src/apiFunctions";
 import type { Match } from "@tranmere-web/lib/src/tranmere-web-types";
+import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import type { ManagerRecord } from "@/lib/managers";
@@ -20,6 +23,14 @@ interface FingerprintMetric {
   value: number;
   display: string;
   detail: string;
+}
+
+function managerImageSource(imagePath: string, width: number, height: number) {
+  if (imagePath.startsWith("/") || /^https?:\/\//i.test(imagePath)) {
+    return imagePath;
+  }
+
+  return buildImagePath(imagePath, width, height);
 }
 
 function formatDate(value: string) {
@@ -185,7 +196,7 @@ export function ManagerFingerprints({
   const availableManagers = managers.filter(
     (item) =>
       item.dateLeft.toLowerCase().startsWith("now") ||
-      item.dateLeft >= "1977-01-01",
+      item.dateLeft >= "1960-01-01",
   );
   const trustedCore = [...xi.rows.flat()]
     .sort((a, b) => b.starts - a.starts)
@@ -276,24 +287,42 @@ export function ManagerFingerprints({
           <div className="overflow-hidden bg-[#071a2b] text-white">
             <div className="relative p-7 sm:p-10">
               <div className="archive-grid absolute inset-0 opacity-20" />
-              <div className="relative">
-                <p className="font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-blue-300">
-                  {formatDate(manager.dateJoined)}–
-                  {formatDate(manager.dateLeft)}
-                </p>
-                <h2 className="mt-4 font-display text-4xl font-semibold tracking-[-0.04em] sm:text-6xl">
-                  {manager.name}
-                </h2>
-                <div className="mt-8 max-w-xl border-l-2 border-blue-400 pl-5">
-                  <p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-300">
-                    Archive archetype
+              <div className="relative grid gap-8 sm:grid-cols-[minmax(0,1fr)_10rem] sm:items-center">
+                <div>
+                  <p className="font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-blue-300">
+                    {formatDate(manager.dateJoined)}–
+                    {formatDate(manager.dateLeft)}
                   </p>
-                  <h3 className="mt-2 font-display text-3xl font-semibold">
-                    {fingerprint.archetype}
-                  </h3>
-                  <p className="mt-3 text-sm leading-6 text-white/60">
-                    {fingerprint.summary}
-                  </p>
+                  <h2 className="mt-4 font-display text-4xl font-semibold tracking-[-0.04em] sm:text-6xl">
+                    {manager.name}
+                  </h2>
+                  <div className="mt-8 max-w-xl border-l-2 border-blue-400 pl-5">
+                    <p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-300">
+                      Archive archetype
+                    </p>
+                    <h3 className="mt-2 font-display text-3xl font-semibold">
+                      {fingerprint.archetype}
+                    </h3>
+                    <p className="mt-3 text-sm leading-6 text-white/60">
+                      {fingerprint.summary}
+                    </p>
+                  </div>
+                </div>
+                <div className="mx-auto aspect-[4/5] w-36 overflow-hidden border border-white/20 bg-white/5 sm:w-40">
+                  {manager.imagePath ? (
+                    <Image
+                      src={managerImageSource(manager.imagePath, 400, 500)}
+                      alt={`${manager.name}, Tranmere Rovers manager`}
+                      width={400}
+                      height={500}
+                      unoptimized
+                      className="h-full w-full object-cover object-top"
+                    />
+                  ) : (
+                    <span className="grid h-full place-items-center">
+                      <UserIcon className="h-16 w-16 text-white/20" />
+                    </span>
+                  )}
                 </div>
               </div>
             </div>

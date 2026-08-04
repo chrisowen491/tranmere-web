@@ -149,7 +149,7 @@ export async function queryManagerRows(
   if (options.query) values.push(`%${options.query}%`);
 
   const sql = withLimit(
-    `SELECT id, name, date_joined, date_left, programme_path
+    `SELECT id, name, date_joined, date_left, programme_path, image_path
      FROM Managers
      ${where}
      ORDER BY date_joined DESC, name ASC`,

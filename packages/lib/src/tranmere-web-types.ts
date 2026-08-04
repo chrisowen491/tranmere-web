@@ -38,6 +38,7 @@ export interface Manager {
   dateLeft: string;
   dateLeftText?: string;
   programmePath?: string;
+  imagePath?: string;
 }
 
 export type Team = BaseEntity;

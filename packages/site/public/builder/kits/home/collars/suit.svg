@@ -1,0 +1,26 @@
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+    <g id="collar">
+        <g>
+            <path stroke-dasharray="5,5" fill="#ffffff" d="m256,356l-30,30l-31.996,-70.056l17.996,-11.944l44,52z"/>
+        </g>
+        <g>
+            <path stroke-dasharray="5,5" fill="#ffffff" d="m256,356l30,30l31.996,-70.056l-17.996,-11.944l-44,52z"/>
+        </g>
+    </g>
+    <g id="sleeves">
+      <path fill="#0e3157" d="m132.09262,513.07187l-66.42734,0l0,-83.68575l66.42734,0l0,83.68575z" id="svg_63"/>
+      <path stroke="null" d="m378.30297,429.67353l67.40171,0l0,86.68575l-67.40171,0l0,-86.68575z" fill="#0e3157" id="svg_64"/>
+    </g>
+    <g id="flower">
+      <path fill="none" stroke="#5c7d43" stroke-width="5" stroke-linecap="round" d="M329 466c12-31 24-56 42-76"/>
+    <path fill="#6f8d4e" d="M354 421l-24-16 28 4-8-25 18 21 8-27 2 33 27-12-24 22-27 0z"/>
+    <g fill="#ffffff">
+      <circle cx="367" cy="414" r="13"/>
+      <circle cx="382" cy="417" r="12"/>
+      <circle cx="375" cy="432" r="13"/>
+      <circle cx="357" cy="430" r="12"/>
+      <circle cx="353" cy="415" r="10"/>
+    </g>
+    <circle cx="369" cy="423" r="7" fill="#e7dd9c"/>
+    </g>
+</svg>

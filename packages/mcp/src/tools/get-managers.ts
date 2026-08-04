@@ -12,7 +12,8 @@ const outputSchema = z.object({
       name: z.string(),
       dateJoined: z.string(),
       dateLeft: z.string(),
-      programmePath: z.string().nullable()
+      programmePath: z.string().nullable(),
+      imagePath: z.string().nullable()
     })
   )
 });
@@ -59,7 +60,8 @@ export function registerGetManagersTool({ server, env, auth }: ToolContext) {
         name: manager.name,
         dateJoined: manager.date_joined,
         dateLeft: manager.date_left,
-        programmePath: manager.programme_path
+        programmePath: manager.programme_path,
+        imagePath: manager.image_path
       }));
       const output = { count: managers.length, managers };
       return {

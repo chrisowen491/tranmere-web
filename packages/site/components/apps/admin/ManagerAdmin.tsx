@@ -70,6 +70,7 @@ export function ManagerAdmin({
           dateJoined: formData.get("dateJoined"),
           dateLeft: formData.get("dateLeft"),
           programmePath: formData.get("programmePath"),
+          imagePath: formData.get("imagePath"),
         }),
       });
       const result = (await response.json()) as {
@@ -208,6 +209,19 @@ export function ManagerAdmin({
               className={inputClass}
             />
           </div>
+          <div>
+            <label htmlFor="manager-image" className={labelClass}>
+              Manager image path
+            </label>
+            <input
+              id="manager-image"
+              name="imagePath"
+              maxLength={500}
+              defaultValue={editing?.imagePath}
+              placeholder="For example: managers/john-king.jpg"
+              className={inputClass}
+            />
+          </div>
           <button
             type="submit"
             disabled={saving}
@@ -265,7 +279,12 @@ export function ManagerAdmin({
                     {manager.name}
                     {manager.programmePath && (
                       <span className="ml-2 text-[10px] font-bold uppercase tracking-[0.1em] text-blue-700">
-                        Image
+                        Programme
+                      </span>
+                    )}
+                    {manager.imagePath && (
+                      <span className="ml-2 text-[10px] font-bold uppercase tracking-[0.1em] text-emerald-700">
+                        Portrait
                       </span>
                     )}
                   </td>

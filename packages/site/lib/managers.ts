@@ -11,6 +11,7 @@ export interface ManagerInput {
   dateJoined: string;
   dateLeft: string;
   programmePath: string;
+  imagePath: string;
 }
 
 export function mapManager(row: ManagerRow): ManagerRecord {
@@ -21,6 +22,7 @@ export function mapManager(row: ManagerRow): ManagerRecord {
     dateLeft: row.date_left,
     dateLeftText: row.date_left,
     programmePath: row.programme_path || undefined,
+    imagePath: row.image_path || undefined,
   };
 }
 
@@ -32,7 +34,7 @@ export async function getManagers(db: D1Database) {
 export async function getManagerById(db: D1Database, id: string) {
   const row = await db
     .prepare(
-      `SELECT id, name, date_joined, date_left, programme_path
+      `SELECT id, name, date_joined, date_left, programme_path, image_path
        FROM Managers
        WHERE id = ?`,
     )
@@ -49,8 +51,10 @@ export async function createManager(
 ) {
   await db
     .prepare(
-      `INSERT INTO Managers (id, name, date_joined, date_left, programme_path)
-       VALUES (?, ?, ?, ?, ?)`,
+      `INSERT INTO Managers (
+         id, name, date_joined, date_left, programme_path, image_path
+       )
+       VALUES (?, ?, ?, ?, ?, ?)`,
     )
     .bind(
       id,
@@ -58,6 +62,7 @@ export async function createManager(
       manager.dateJoined,
       manager.dateLeft,
       manager.programmePath,
+      manager.imagePath,
     )
     .run();
 
@@ -72,7 +77,8 @@ export async function updateManager(
   const result = await db
     .prepare(
       `UPDATE Managers
-       SET name = ?, date_joined = ?, date_left = ?, programme_path = ?
+       SET name = ?, date_joined = ?, date_left = ?, programme_path = ?,
+           image_path = ?
        WHERE id = ?`,
     )
     .bind(
@@ -80,6 +86,7 @@ export async function updateManager(
       manager.dateJoined,
       manager.dateLeft,
       manager.programmePath,
+      manager.imagePath,
       id,
     )
     .run();

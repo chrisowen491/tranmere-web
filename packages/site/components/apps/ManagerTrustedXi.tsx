@@ -7,7 +7,9 @@ import {
   ShieldCheckIcon,
   StarIcon,
   TrophyIcon,
+  UserIcon,
 } from "@heroicons/react/24/outline";
+import { buildImagePath } from "@tranmere-web/lib/src/apiFunctions";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -16,6 +18,14 @@ import type {
   ManagerTrustedXi as ManagerTrustedXiData,
   TrustedXiPlayer,
 } from "@/lib/managerTrustedXi";
+
+function managerImageSource(imagePath: string, width: number, height: number) {
+  if (imagePath.startsWith("/") || /^https?:\/\//i.test(imagePath)) {
+    return imagePath;
+  }
+
+  return buildImagePath(imagePath, width, height);
+}
 
 function formatDate(value: string) {
   if (value.toLowerCase().startsWith("now")) return "present";
@@ -92,7 +102,7 @@ export function ManagerTrustedXi({
   const availableManagers = managers.filter(
     (manager) =>
       manager.dateLeft.toLowerCase().startsWith("now") ||
-      manager.dateLeft >= "1977-01-01",
+      manager.dateLeft >= "1960-01-01",
   );
   const allPlayers = xi.rows.flat();
   const totalStarts = allPlayers.reduce(
@@ -207,16 +217,40 @@ export function ManagerTrustedXi({
 
           <aside className="space-y-5">
             <div className="bg-[#071a2b] p-6 text-white">
-              <p className="font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-blue-300">
-                Managerial record
-              </p>
-              <h3 className="mt-3 font-display text-3xl font-semibold">
-                {xi.manager.name}
-              </h3>
-              <p className="mt-2 text-xs text-white/45">
-                {formatDate(xi.manager.dateJoined)}–
-                {formatDate(xi.manager.dateLeft)}
-              </p>
+              <div className="flex items-center gap-4">
+                <div className="h-24 w-20 flex-none overflow-hidden border border-white/20 bg-white/5">
+                  {xi.manager.imagePath ? (
+                    <Image
+                      src={managerImageSource(
+                        xi.manager.imagePath,
+                        240,
+                        288,
+                      )}
+                      alt={`${xi.manager.name}, Tranmere Rovers manager`}
+                      width={240}
+                      height={288}
+                      unoptimized
+                      className="h-full w-full object-cover object-top"
+                    />
+                  ) : (
+                    <span className="grid h-full place-items-center">
+                      <UserIcon className="h-10 w-10 text-white/20" />
+                    </span>
+                  )}
+                </div>
+                <div className="min-w-0">
+                  <p className="font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-blue-300">
+                    Managerial record
+                  </p>
+                  <h3 className="mt-2 font-display text-3xl font-semibold">
+                    {xi.manager.name}
+                  </h3>
+                  <p className="mt-2 text-xs text-white/45">
+                    {formatDate(xi.manager.dateJoined)}–
+                    {formatDate(xi.manager.dateLeft)}
+                  </p>
+                </div>
+              </div>
               <div className="mt-7 grid grid-cols-3 divide-x divide-white/15 text-center">
                 {[
                   ["Won", xi.wins],

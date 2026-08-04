@@ -1,0 +1,55 @@
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+  <g id="glasses">
+    <path
+      d="M164 148c7-4 13-6 19-6m146 0c6 0 12 2 19 6"
+      fill="none"
+      stroke="#44515c"
+      stroke-linecap="round"
+      stroke-width="4"
+    />
+    <rect
+      x="181"
+      y="141"
+      width="64"
+      height="34"
+      rx="12"
+      fill="#dcecf5"
+      fill-opacity=".12"
+      stroke="#657580"
+      stroke-width="4"
+    />
+    <rect
+      x="267"
+      y="141"
+      width="64"
+      height="34"
+      rx="12"
+      fill="#dcecf5"
+      fill-opacity=".12"
+      stroke="#657580"
+      stroke-width="4"
+    />
+    <path
+      d="M245 151c6-5 16-5 22 0"
+      fill="none"
+      stroke="#657580"
+      stroke-linecap="round"
+      stroke-width="4"
+    />
+    <path
+      d="M189 149c12-5 26-6 40-3m47 1c14-4 28-3 42 2"
+      fill="none"
+      stroke="#f5fbff"
+      stroke-linecap="round"
+      stroke-opacity=".7"
+      stroke-width="2"
+    />
+    <path
+      d="M183 146l-19 4m167-4 17 4"
+      fill="none"
+      stroke="#657580"
+      stroke-linecap="round"
+      stroke-width="4"
+    />
+  </g>
+</svg>

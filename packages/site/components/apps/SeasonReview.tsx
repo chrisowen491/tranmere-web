@@ -28,6 +28,14 @@ import { SeasonStory } from "./SeasonStory";
 import { SeasonTimeline } from "./SeasonTimeline";
 import type { PlayerStatisticsView } from "@/lib/playerStatistics";
 
+function managerImageSource(imagePath: string, width: number, height: number) {
+  if (imagePath.startsWith("/") || /^https?:\/\//i.test(imagePath)) {
+    return imagePath;
+  }
+
+  return buildImagePath(imagePath, width, height);
+}
+
 export default function SeasonReview(props: {
   results: Match[];
   h2hresults: H2HResult[];
@@ -302,17 +310,17 @@ export default function SeasonReview(props: {
                               <td className="whitespace-nowrap px-1 md:px-1 py-4">
                                 <div className="flex items-center">
                                   <div className="h-11 w-11 flex-shrink-0">
-                                    {manager.programmePath ? (
+                                    {manager.imagePath ? (
                                       <Image
-                                        alt="Programme With Manager On Cover"
+                                        alt={manager.name}
                                         height={200}
                                         width={200}
-                                        src={buildImagePath(
-                                          manager.programmePath!,
+                                        src={managerImageSource(
+                                          manager.imagePath,
                                           200,
                                           200,
                                         )}
-                                        className="h-11 w-11 object-cover"
+                                        className="h-11 w-11 object-cover object-top"
                                       />
                                     ) : (
                                       <PhotoIcon

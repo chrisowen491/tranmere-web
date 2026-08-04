@@ -151,6 +151,10 @@ export function PlayerAvatarBuilder() {
                     <option value="1966">1966-68 Home</option>
                     <option value="1960">1957-62 Home</option>
                     <option value="1960gk">1960s GK</option>
+                    <option value="suit">Suit Option 1</option>
+                    <option value="suit2">Suit Option 2</option>
+                    <option value="suit3">Suit Option 3</option>
+                    <option value="tracksuit">Tracksuit</option>
                   </select>
                 </div>
               </div>
@@ -236,6 +240,7 @@ export function PlayerAvatarBuilder() {
                     <option>slick</option>
                     <option>stylish</option>
                     <option>receeding</option>
+                    <option>receding-comb-over</option>
                     <option>side-parting-curl</option>
                     <option>droopy-fringe</option>
                     <option>curtains</option>
@@ -288,6 +293,7 @@ export function PlayerAvatarBuilder() {
                   >
                     <option value="000000">Black</option>
                     <option value="7f3f00">Brown</option>
+                    <option value="9c6f4b">Fading Brown</option>
                     <option value="bc9d00">Blonde</option>
                     <option value="bc6a21">Light Brown</option>
                     <option value="666666">Gray</option>
@@ -314,6 +320,7 @@ export function PlayerAvatarBuilder() {
                   >
                     <option value="000000">Black</option>
                     <option value="7f3f00">Brown</option>
+                    <option value="9c6f4b">Fading Brown</option>
                     <option value="bc9d00">Blonde</option>
                     <option value="bc6a21">Light Brown</option>
                     <option value="666666">Gray</option>
@@ -348,6 +355,7 @@ export function PlayerAvatarBuilder() {
                     <option>small-beard-shadow</option>
                     <option>shadow</option>
                     <option>brows</option>
+                    <option value="glasses">Glasses</option>
                     <option>quiff</option>
                     <option>droopy-hair</option>
                     <option>fringe</option>

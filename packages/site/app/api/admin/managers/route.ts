@@ -15,6 +15,7 @@ interface ManagerRequest {
   dateJoined?: string;
   dateLeft?: string;
   programmePath?: string;
+  imagePath?: string;
 }
 
 function error(message: string, status: number) {
@@ -63,6 +64,7 @@ function validateManager(body: ManagerRequest): ManagerInput | null {
     dateJoined,
     dateLeft: /^(now|now\(\))$/i.test(dateLeft) ? "now()" : dateLeft,
     programmePath: body.programmePath?.trim().slice(0, 500) || "",
+    imagePath: body.imagePath?.trim().slice(0, 500) || "",
   };
 }
 
