@@ -7,10 +7,13 @@ import {
   ChartBarIcon,
   FireIcon,
   TrophyIcon,
+  UserIcon,
 } from "@heroicons/react/24/outline";
+import { buildImagePath } from "@tranmere-web/lib/src/apiFunctions";
 import type { Manager, Match } from "@tranmere-web/lib/src/tranmere-web-types";
+import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 interface ManagerSelection {
   manager: Manager;
@@ -31,6 +34,14 @@ interface ManagerStats {
   bestUnbeatenRun: number;
   homeWinRate: number;
   awayWinRate: number;
+}
+
+function managerImageSource(imagePath: string, width: number, height: number) {
+  if (imagePath.startsWith("/") || /^https?:\/\//i.test(imagePath)) {
+    return imagePath;
+  }
+
+  return buildImagePath(imagePath, width, height);
 }
 
 function managerKey(manager: Manager) {
@@ -191,14 +202,36 @@ export function ManagerComparison({
   const [leftMatches, setLeftMatches] = useState(initialMatches[0]);
   const [rightMatches, setRightMatches] = useState(initialMatches[1]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const comparisonRequest = useRef(0);
   const leftManager = selections.find((item) => item.key === leftKey)!;
   const rightManager = selections.find((item) => item.key === rightKey)!;
   const leftStats = calculateStats(leftMatches);
   const rightStats = calculateStats(rightMatches);
 
-  async function compare() {
-    if (!leftManager || !rightManager) return;
+  async function compare(
+    nextLeftKey = leftKey,
+    nextRightKey = rightKey,
+  ) {
+    const nextLeftManager = selections.find(
+      (item) => item.key === nextLeftKey,
+    );
+    const nextRightManager = selections.find(
+      (item) => item.key === nextRightKey,
+    );
+
+    if (
+      !nextLeftManager ||
+      !nextRightManager ||
+      nextLeftKey === nextRightKey
+    ) {
+      return;
+    }
+
+    const requestId = comparisonRequest.current + 1;
+    comparisonRequest.current = requestId;
     setLoading(true);
+    setError("");
     const loadMatches = async (selection: ManagerSelection) => {
       const manager = selection.manager;
       const dateLeft = manager.dateLeft.toLowerCase().startsWith("now")
@@ -215,13 +248,22 @@ export function ManagerComparison({
 
     try {
       const [left, right] = await Promise.all([
-        loadMatches(leftManager),
-        loadMatches(rightManager),
+        loadMatches(nextLeftManager),
+        loadMatches(nextRightManager),
       ]);
+
+      if (comparisonRequest.current !== requestId) return;
+
       setLeftMatches(left);
       setRightMatches(right);
+    } catch {
+      if (comparisonRequest.current === requestId) {
+        setError("Unable to update the comparison. Please try again.");
+      }
     } finally {
-      setLoading(false);
+      if (comparisonRequest.current === requestId) {
+        setLoading(false);
+      }
     }
   }
 
@@ -236,11 +278,19 @@ export function ManagerComparison({
               </span>
               <select
                 value={leftKey}
-                onChange={(event) => setLeftKey(event.target.value)}
+                onChange={(event) => {
+                  const nextKey = event.target.value;
+                  setLeftKey(nextKey);
+                  void compare(nextKey, rightKey);
+                }}
                 className="w-full border border-[#071a2b]/20 bg-[#fffdf8] px-4 py-3 text-sm font-bold focus:border-blue-700 focus:outline-none"
               >
                 {selections.map((item) => (
-                  <option key={item.key} value={item.key}>
+                  <option
+                    key={item.key}
+                    value={item.key}
+                    disabled={item.key === rightKey}
+                  >
                     {item.label}
                   </option>
                 ))}
@@ -255,11 +305,19 @@ export function ManagerComparison({
               </span>
               <select
                 value={rightKey}
-                onChange={(event) => setRightKey(event.target.value)}
+                onChange={(event) => {
+                  const nextKey = event.target.value;
+                  setRightKey(nextKey);
+                  void compare(leftKey, nextKey);
+                }}
                 className="w-full border border-[#071a2b]/20 bg-[#fffdf8] px-4 py-3 text-sm font-bold focus:border-blue-700 focus:outline-none"
               >
                 {selections.map((item) => (
-                  <option key={item.key} value={item.key}>
+                  <option
+                    key={item.key}
+                    value={item.key}
+                    disabled={item.key === leftKey}
+                  >
                     {item.label}
                   </option>
                 ))}
@@ -267,7 +325,7 @@ export function ManagerComparison({
             </label>
             <button
               type="button"
-              onClick={compare}
+              onClick={() => void compare()}
               disabled={loading || leftKey === rightKey}
               className="inline-flex min-h-12 items-center justify-center gap-2 bg-blue-700 px-6 text-sm font-bold text-white transition hover:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-40"
             >
@@ -277,22 +335,49 @@ export function ManagerComparison({
               {loading ? "Comparing…" : "Compare"}
             </button>
           </div>
+          {error && (
+            <p className="mt-4 text-sm font-semibold text-red-800">{error}</p>
+          )}
         </div>
       </section>
 
       <div className="mx-auto max-w-7xl px-6 py-14 sm:px-10 lg:px-12 lg:py-20">
         <section className="grid border border-[#071a2b]/15 bg-[#fffdf8] lg:grid-cols-[1fr_1.2fr_1fr]">
           <div className="border-b border-[#071a2b]/15 p-6 lg:border-b-0 lg:border-r lg:p-8">
-            <p className="font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-blue-700">
-              First tenure
-            </p>
-            <h2 className="mt-3 font-display text-4xl font-semibold tracking-[-0.04em]">
-              {leftManager?.manager.name}
-            </h2>
-            <p className="mt-3 text-sm text-[#071a2b]/50">
-              {leftManager?.label.split(" · ")[1]}
-            </p>
-            <p className="mt-10 font-display text-6xl font-semibold text-blue-700">
+            <div className="flex items-start gap-5">
+              <div className="h-28 w-24 flex-none overflow-hidden border border-[#071a2b]/15 bg-[#e8e2d6]">
+                {leftManager?.manager.imagePath ? (
+                  <Image
+                    src={managerImageSource(
+                      leftManager.manager.imagePath,
+                      240,
+                      280,
+                    )}
+                    alt={`${leftManager.manager.name}, Tranmere Rovers manager`}
+                    width={240}
+                    height={280}
+                    unoptimized
+                    className="h-full w-full object-cover object-top"
+                  />
+                ) : (
+                  <span className="grid h-full place-items-center">
+                    <UserIcon className="h-12 w-12 text-[#071a2b]/20" />
+                  </span>
+                )}
+              </div>
+              <div className="min-w-0">
+                <p className="font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-blue-700">
+                  First tenure
+                </p>
+                <h2 className="mt-3 font-display text-4xl font-semibold tracking-[-0.04em]">
+                  {leftManager?.manager.name}
+                </h2>
+                <p className="mt-3 text-sm text-[#071a2b]/50">
+                  {leftManager?.label.split(" · ")[1]}
+                </p>
+              </div>
+            </div>
+            <p className="mt-8 font-display text-6xl font-semibold text-blue-700">
               {leftStats.winRate.toFixed(1)}
               <span className="text-2xl">%</span>
             </p>
@@ -338,16 +423,40 @@ export function ManagerComparison({
           </div>
 
           <div className="border-b border-[#071a2b]/15 p-6 lg:border-b-0 lg:border-l lg:p-8">
-            <p className="font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-blue-700">
-              Second tenure
-            </p>
-            <h2 className="mt-3 font-display text-4xl font-semibold tracking-[-0.04em]">
-              {rightManager?.manager.name}
-            </h2>
-            <p className="mt-3 text-sm text-[#071a2b]/50">
-              {rightManager?.label.split(" · ")[1]}
-            </p>
-            <p className="mt-10 font-display text-6xl font-semibold text-blue-700">
+            <div className="flex items-start gap-5">
+              <div className="h-28 w-24 flex-none overflow-hidden border border-[#071a2b]/15 bg-[#e8e2d6]">
+                {rightManager?.manager.imagePath ? (
+                  <Image
+                    src={managerImageSource(
+                      rightManager.manager.imagePath,
+                      240,
+                      280,
+                    )}
+                    alt={`${rightManager.manager.name}, Tranmere Rovers manager`}
+                    width={240}
+                    height={280}
+                    unoptimized
+                    className="h-full w-full object-cover object-top"
+                  />
+                ) : (
+                  <span className="grid h-full place-items-center">
+                    <UserIcon className="h-12 w-12 text-[#071a2b]/20" />
+                  </span>
+                )}
+              </div>
+              <div className="min-w-0">
+                <p className="font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-blue-700">
+                  Second tenure
+                </p>
+                <h2 className="mt-3 font-display text-4xl font-semibold tracking-[-0.04em]">
+                  {rightManager?.manager.name}
+                </h2>
+                <p className="mt-3 text-sm text-[#071a2b]/50">
+                  {rightManager?.label.split(" · ")[1]}
+                </p>
+              </div>
+            </div>
+            <p className="mt-8 font-display text-6xl font-semibold text-blue-700">
               {rightStats.winRate.toFixed(1)}
               <span className="text-2xl">%</span>
             </p>

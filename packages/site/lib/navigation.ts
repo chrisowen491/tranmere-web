@@ -50,7 +50,7 @@ export const navigation = [
   {
     title: "Stats",
     links: [
-      { title: "Highest Attendances", href: "/games/top-attendances" },
+      { title: "Highest Attendances", href: "/results/top-attendances" },
       {
         title: "Highest Prenton Park Attendances",
         href: "/games/top-home-attendances",

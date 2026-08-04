@@ -151,6 +151,7 @@ export default async function ManagerRecords() {
                     400,
                     300,
                   )}
+                  unoptimized
                   className="h-full w-full object-cover object-top"
                 />
               ) : (
@@ -234,6 +235,7 @@ export default async function ManagerRecords() {
                       height={480}
                       width={640}
                       src={managerImageSource(manager.imagePath, 640, 480)}
+                      unoptimized
                       className="h-full w-full object-cover object-top transition duration-500 group-hover:scale-[1.025]"
                     />
                   ) : (

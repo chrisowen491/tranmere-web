@@ -86,11 +86,14 @@ export default async function ResultsSearchPage() {
                   ["Penalty shootouts", "/games/penalty-shootouts"],
                   ["FA Cup archive", "/results/fa-cup"],
                   ["League Cup archive", "/results/league-cup"],
+                  ["Highest attendances", "/results/top-attendances"],
                 ].map(([label, href]) => (
                   <Link
                     key={href}
                     href={href}
-                    className="group flex min-h-20 flex-col justify-between rounded-sm bg-[#f4f0e8] px-4 py-3 text-sm font-bold transition hover:bg-[#071a2b] hover:text-white"
+                    className={`group flex min-h-20 flex-col justify-between rounded-sm bg-[#f4f0e8] px-4 py-3 text-sm font-bold transition hover:bg-[#071a2b] hover:text-white ${
+                      href === "/results/top-attendances" ? "col-span-2" : ""
+                    }`}
                   >
                     {label}
                     <ArrowRightIcon className="mt-3 h-4 w-4 text-blue-700 transition-transform group-hover:translate-x-1 group-hover:text-white" />

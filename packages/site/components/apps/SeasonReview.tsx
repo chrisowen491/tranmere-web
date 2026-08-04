@@ -320,6 +320,7 @@ export default function SeasonReview(props: {
                                           200,
                                           200,
                                         )}
+                                        unoptimized
                                         className="h-11 w-11 object-cover object-top"
                                       />
                                     ) : (
