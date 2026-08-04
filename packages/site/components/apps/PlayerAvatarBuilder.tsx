@@ -240,6 +240,7 @@ export function PlayerAvatarBuilder() {
                     <option>droopy-fringe</option>
                     <option>curtains</option>
                     <option>feathered</option>
+                    <option>big-seventies</option>
                     <option>high-forehead</option>
                     <option>dreads</option>
                     <option>zane-okoro</option>
@@ -311,9 +312,15 @@ export function PlayerAvatarBuilder() {
                       setHighlights(DOMPurify.sanitize(e.target.value));
                     }}
                   >
-                    <option value="8e740c">Brown</option>
-                    <option value="bc8a00">Blonde</option>
-                    <option value="562a01">Dark Brown</option>
+                    <option value="000000">Black</option>
+                    <option value="7f3f00">Brown</option>
+                    <option value="bc9d00">Blonde</option>
+                    <option value="bc6a21">Light Brown</option>
+                    <option value="666666">Gray</option>
+                    <option value="0000ff">Baz-Blue</option>
+                    <option value="512904">Dark Brown</option>
+                    <option value="efef64">Yellow</option>
+                    <option value="cccccc">Silver</option>
                   </select>
                 </div>
               </div>
