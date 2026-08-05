@@ -1,5 +1,9 @@
 import { auth0 } from "@/lib/auth0";
 import {
+  MANAGER_FORMATIONS,
+  type ManagerFormation,
+} from "@tranmere-web/lib/src/manager-constants";
+import {
   createManager,
   getManagerById,
   updateManager,
@@ -16,6 +20,7 @@ interface ManagerRequest {
   dateLeft?: string;
   programmePath?: string;
   imagePath?: string;
+  favouriteFormation?: string;
 }
 
 function error(message: string, status: number) {
@@ -59,12 +64,21 @@ function validateManager(body: ManagerRequest): ManagerInput | null {
 
   if (isDate(dateLeft) && dateLeft < dateJoined) return null;
 
+  const requestedFormation = body.favouriteFormation?.trim() || "";
+  if (
+    requestedFormation &&
+    !MANAGER_FORMATIONS.includes(requestedFormation as ManagerFormation)
+  ) {
+    return null;
+  }
+
   return {
     name,
     dateJoined,
     dateLeft: /^(now|now\(\))$/i.test(dateLeft) ? "now()" : dateLeft,
     programmePath: body.programmePath?.trim().slice(0, 500) || "",
     imagePath: body.imagePath?.trim().slice(0, 500) || "",
+    favouriteFormation: requestedFormation as ManagerFormation | "",
   };
 }
 
@@ -76,7 +90,7 @@ export async function POST(request: NextRequest) {
   const manager = validateManager((await request.json()) as ManagerRequest);
   if (!manager) {
     return error(
-      "Enter a name and valid appointment and departure dates.",
+      "Enter valid manager details, dates and favourite formation.",
       400,
     );
   }
@@ -99,7 +113,7 @@ export async function PATCH(request: NextRequest) {
   const manager = validateManager(body);
   if (!body.id || !manager) {
     return error(
-      "Enter a name and valid appointment and departure dates.",
+      "Enter valid manager details, dates and favourite formation.",
       400,
     );
   }

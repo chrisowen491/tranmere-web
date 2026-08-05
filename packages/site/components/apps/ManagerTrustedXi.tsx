@@ -221,11 +221,7 @@ export function ManagerTrustedXi({
                 <div className="h-24 w-20 flex-none overflow-hidden border border-white/20 bg-white/5">
                   {xi.manager.imagePath ? (
                     <Image
-                      src={managerImageSource(
-                        xi.manager.imagePath,
-                        240,
-                        288,
-                      )}
+                      src={managerImageSource(xi.manager.imagePath, 240, 288)}
                       alt={`${xi.manager.name}, Tranmere Rovers manager`}
                       width={240}
                       height={288}
@@ -313,7 +309,9 @@ export function ManagerTrustedXi({
               <p className="mt-3 text-sm leading-6 text-[#071a2b]/60">
                 Players are ranked by starts made between the manager&rsquo;s
                 exact appointment and departure dates, then placed using their
-                primary position. Duplicate match appearances are counted once.
+                preferred formation, primary position and then secondary
+                position. Remaining gaps use the closest positional fit.
+                Duplicate match appearances are counted once.
               </p>
               <p className="mt-3 text-xs text-[#071a2b]/40">
                 Individual appearance coverage begins with the{" "}
@@ -349,7 +347,9 @@ export function ManagerTrustedXi({
                       {player.name}
                     </strong>
                     <span className="text-xs text-[#071a2b]/45">
-                      {player.position || "Player"}
+                      {[player.position, player.secondaryPosition]
+                        .filter(Boolean)
+                        .join(" / ") || "Player"}
                     </span>
                   </span>
                   <span className="text-right font-mono text-xs">

@@ -12,26 +12,12 @@ import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import { replaceSeasonsKit } from "@tranmere-web/lib/src/apiFunctions";
 import { AttendanceCorrectionForm } from "./AttendanceCorrectionForm";
 import type { MatchPageView } from "@/lib/matchPlayers";
+import type { ManagerRecord } from "@/lib/managers";
+import { arrangeMatchLineup, formationLabel } from "@/lib/matchLineup";
+import { ManagerFormation } from "@tranmere-web/lib/src/manager-constants";
 
 function playerAvatar(picLink: string, season: number) {
   return replaceSeasonsKit(picLink, season.toString());
-}
-
-const positionOrder = [
-  "Goalkeeper",
-  "Full Back",
-  "Central Defender",
-  "Central Midfielder",
-  "Winger",
-  "Striker",
-];
-
-function arrangeWidePlayers<T>(widePlayers: T[], centralPlayers: T[]) {
-  if (widePlayers.length < 2) {
-    return [...widePlayers, ...centralPlayers];
-  }
-
-  return [widePlayers[0], ...centralPlayers, ...widePlayers.slice(1).reverse()];
 }
 
 function penaltyOutcome(pens?: string, homeTeam?: string, awayTeam?: string) {
@@ -61,33 +47,19 @@ export default function MatchReport(props: {
   comments: Comment[];
   url: string;
   avg: number;
+  manager: ManagerRecord | null;
 }) {
   const { match } = props;
   const penalty = penaltyOutcome(match.pens, match.homeTeam, match.awayTeam);
-  const players = [...(match.apps ?? [])].sort(
-    (a, b) =>
-      positionOrder.indexOf(a.profile.position ?? "") -
-      positionOrder.indexOf(b.profile.position ?? ""),
-  );
-  const forwards = players.filter(
-    (player) => player.profile.position === "Striker",
-  );
-  const midfield = arrangeWidePlayers(
-    players.filter((player) => player.profile.position === "Winger"),
-    players.filter((player) =>
-      ["Central Midfielder", ""].includes(player.profile.position ?? ""),
-    ),
-  );
-  const defence = arrangeWidePlayers(
-    players.filter((player) => player.profile.position === "Full Back"),
-    players.filter((player) => player.profile.position === "Central Defender"),
-  );
-  const goalkeepers = players.filter(
-    (player) => player.profile.position === "Goalkeeper",
-  );
-  const lineupLines = [forwards, midfield, defence, goalkeepers].filter(
-    (line) => line.length > 0,
-  );
+  const players = match.apps ?? [];
+  let formation : ManagerFormation | undefined = "442";
+  if(match.formation && (match.formation as ManagerFormation) != null) {
+    formation = match.formation as ManagerFormation;
+  } else if(props.manager?.favouriteFormation) {
+    formation = props.manager?.favouriteFormation;
+  }
+
+  const lineup = arrangeMatchLineup(players, formation);
 
   const breadcrumbs = [
     { id: 1, name: "Home", href: "/" },
@@ -245,7 +217,8 @@ export default function MatchReport(props: {
                 </h2>
               </div>
               <p className="font-mono text-xs text-[#071a2b]/45">
-                Ordered by playing position
+                {formationLabel(lineup.formation)}
+                {props.manager ? ` · ${props.manager.name}` : ""}
               </p>
             </div>
 
@@ -254,7 +227,7 @@ export default function MatchReport(props: {
               <div className="pointer-events-none absolute inset-x-4 top-1/2 border-t border-white/25" />
               <div className="pointer-events-none absolute left-1/2 top-1/2 h-32 w-32 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/25" />
               <div className="relative z-10 flex min-h-[654px] flex-col justify-between">
-                {lineupLines.map((line, lineIndex) => (
+                {lineup.rows.map((line, lineIndex) => (
                   <div
                     key={lineIndex}
                     className="flex min-h-32 items-center justify-around gap-1"
@@ -288,7 +261,12 @@ export default function MatchReport(props: {
                           {player.Name}
                         </Link>
                         <span className="mt-1 hidden font-mono text-[10px] uppercase text-white/55 sm:block">
-                          {player.profile.position ?? "Position unknown"}
+                          {[
+                            player.profile.position,
+                            player.profile.secondaryPosition,
+                          ]
+                            .filter(Boolean)
+                            .join(" / ") || "Position unknown"}
                         </span>
                         <div className="mt-1 flex min-h-4 items-center justify-center gap-1">
                           {player.YellowCard && (

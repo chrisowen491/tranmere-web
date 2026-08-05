@@ -7,6 +7,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { useMemo, useState } from "react";
 import type { ManagerRecord } from "@/lib/managers";
+import { MANAGER_FORMATIONS } from "@tranmere-web/lib/src/manager-constants";
 
 const inputClass =
   "mt-2 block w-full border border-[#071a2b]/20 bg-white px-3 py-2.5 text-sm focus:border-blue-700 focus:outline-none";
@@ -43,9 +44,12 @@ export function ManagerAdmin({
     const query = search.trim().toLowerCase();
     if (!query) return managers;
     return managers.filter((manager) =>
-      [manager.name, manager.dateJoined, manager.dateLeft].some((value) =>
-        value.toLowerCase().includes(query),
-      ),
+      [
+        manager.name,
+        manager.dateJoined,
+        manager.dateLeft,
+        manager.favouriteFormation,
+      ].some((value) => value?.toLowerCase().includes(query)),
     );
   }, [managers, search]);
 
@@ -71,6 +75,7 @@ export function ManagerAdmin({
           dateLeft: formData.get("dateLeft"),
           programmePath: formData.get("programmePath"),
           imagePath: formData.get("imagePath"),
+          favouriteFormation: formData.get("favouriteFormation"),
         }),
       });
       const result = (await response.json()) as {
@@ -197,6 +202,24 @@ export function ManagerAdmin({
             </p>
           </div>
           <div>
+            <label htmlFor="manager-formation" className={labelClass}>
+              Favourite formation
+            </label>
+            <select
+              id="manager-formation"
+              name="favouriteFormation"
+              defaultValue={editing?.favouriteFormation || ""}
+              className={inputClass}
+            >
+              <option value="">Not recorded</option>
+              {MANAGER_FORMATIONS.map((formation) => (
+                <option key={formation} value={formation}>
+                  {formation}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
             <label htmlFor="manager-programme" className={labelClass}>
               Programme image path
             </label>
@@ -269,6 +292,7 @@ export function ManagerAdmin({
                 <th className="px-5 py-4">Manager</th>
                 <th className="px-4 py-4">Appointed</th>
                 <th className="px-4 py-4">Departed</th>
+                <th className="px-4 py-4">Formation</th>
                 <th className="px-5 py-4 text-right">Action</th>
               </tr>
             </thead>
@@ -293,6 +317,9 @@ export function ManagerAdmin({
                   </td>
                   <td className="whitespace-nowrap px-4 py-4 font-mono text-xs">
                     {displayDate(manager.dateLeft)}
+                  </td>
+                  <td className="whitespace-nowrap px-4 py-4 font-mono text-xs">
+                    {manager.favouriteFormation || "—"}
                   </td>
                   <td className="px-5 py-4 text-right">
                     <button

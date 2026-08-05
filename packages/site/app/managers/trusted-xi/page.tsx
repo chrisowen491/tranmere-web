@@ -42,13 +42,13 @@ export default async function ManagerTrustedXiPage() {
             trusted XI.
           </h1>
           <p className="mt-7 max-w-2xl text-lg leading-8 text-white/65">
-            Pick a managerial spell and reveal the goalkeeper, back four,
-            midfield and strike partnership they started most often.
+            Pick a managerial spell and reveal the XI they trusted most,
+            arranged in their preferred formation.
           </p>
           <div className="mt-10 flex flex-wrap gap-x-8 gap-y-4 border-t border-white/15 pt-7 font-mono text-xs uppercase tracking-[0.16em] text-white/50">
             <span>Exact tenure dates</span>
-            <span>Primary positions</span>
-            <span>4–4–2 archive XI</span>
+            <span>Primary &amp; secondary positions</span>
+            <span>Manager&rsquo;s preferred shape</span>
           </div>
         </div>
       </header>

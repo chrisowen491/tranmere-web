@@ -1,4 +1,5 @@
 import type { Document } from '@contentful/rich-text-types';
+import type { ManagerFormation } from './manager-constants';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -40,6 +41,7 @@ export interface Manager {
   dateLeftText?: string;
   programmePath?: string;
   imagePath?: string;
+  favouriteFormation?: ManagerFormation;
 }
 
 export type Team = BaseEntity;

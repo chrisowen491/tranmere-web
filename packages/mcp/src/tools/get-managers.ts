@@ -1,5 +1,6 @@
 import { queryManagerRows } from '@tranmere-web/lib/src/d1-queries';
 import type { ManagerRow } from '@tranmere-web/lib/src/d1-types';
+import { MANAGER_FORMATIONS } from '@tranmere-web/lib/src/manager-constants';
 import { z } from 'zod';
 import { permissionDenied } from '../auth';
 import type { ToolContext } from './context';
@@ -13,7 +14,8 @@ const outputSchema = z.object({
       dateJoined: z.string(),
       dateLeft: z.string(),
       programmePath: z.string().nullable(),
-      imagePath: z.string().nullable()
+      imagePath: z.string().nullable(),
+      favouriteFormation: z.enum(MANAGER_FORMATIONS).nullable()
     })
   )
 });
@@ -61,7 +63,8 @@ export function registerGetManagersTool({ server, env, auth }: ToolContext) {
         dateJoined: manager.date_joined,
         dateLeft: manager.date_left,
         programmePath: manager.programme_path,
-        imagePath: manager.image_path
+        imagePath: manager.image_path,
+        favouriteFormation: manager.favourite_formation
       }));
       const output = { count: managers.length, managers };
       return {

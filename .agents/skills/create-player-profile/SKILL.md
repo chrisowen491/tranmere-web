@@ -31,10 +31,11 @@ Create verified, consistent TranmereWeb player profiles through the Tranmere-Web
 3. Populate only verified facts. Leave unknown optional fields blank.
 4. Write a short, neutral biography in British English and Markdown.
 5. Use `https://www.tranmere-web.com/player-builder` to build the best available avatar from a current reference photo when a clear image is available. Use the default `picLink` only when the user requests it or a reliable likeness cannot be made.
-6. Preview the final avatar visually in the player builder before entering its generated URL.
-7. Call `CreatePlayerProfile` only when the user's request authorises that mutation. It requires a token containing `write:players`; if access is denied, ask the user to grant that permission rather than falling back to a direct D1 write.
-8. Confirm the created player through `GetPlayers` and, when useful, open `/page/player/<encoded-name>`.
-9. If the player is a verified new signing, follow the **New-signing transfer** workflow below.
+6. SElect an appropriate kit for the player based on teh time period thye played fior Tranmere Rovers
+7. Preview the final avatar visually in the player builder before entering its generated URL.
+8. Call `CreatePlayerProfile` only when the user's request authorises that mutation. It requires a token containing `write:players`; if access is denied, ask the user to grant that permission rather than falling back to a direct D1 write.
+9. Confirm the created player through `GetPlayers` and, when useful, open `/page/player/<encoded-name>`.
+10. If the player is a verified new signing, follow the **New-signing transfer** workflow below.
 
 Do not call Contentful for player profiles. Do not write directly to D1. Use `CreatePlayerProfile` for new records; it performs validation and exact-name duplicate checks.
 
@@ -46,6 +47,8 @@ When the user has not supplied the facts:
 - Use primary sources for current details and reputable databases only to fill gaps.
 - Cross-check conflicting dates, places, heights, feet, and positions.
 - Omit uncertain information rather than guessing.
+- Do not refer to Tranmere rovers playing statistics - as these are displayed elsewhere on the profile page.
+- Do not refer to win % or anything like that - since this is subjective.
 
 When browsing, keep a short source list for the final response.
 
@@ -109,12 +112,13 @@ Build the avatar URL as:
 1. Find a recent, front-facing reference from an official club, league, association, or national-team source where possible.
 2. Record the visible skin and neck tone, hair silhouette and colour, facial hair, and other prominent features.
 3. Open `https://www.tranmere-web.com/player-builder` and inspect the rendered controls and avatar; do not judge a hair option by its name alone.
-4. Use `2026` for outfield players and `2026gk` for goalkeepers unless the user requests another kit.
-5. Match the broad silhouette first. Use compatible skin and neck colours, one recognisable facial-feature layer, and `000000` for black hair unless clearly inappropriate.
-6. Set the background segment to `none`.
-7. Use the live player builder preview and generated SVG URL to compare the avatar visually with the reference. Iterate by changing one control at a time.
-8. Show the best avatar to the user when likeness is subjective or they are actively refining it.
-9. Enter the final absolute builder URL in `Picture link`.
+4. Use an appropriate home kit for outfield players based on the tim e period they played for Tranmere Rovers and an appropriate kgk kit for goalkeepers unless the user requests another kit.
+5. Match the broad silhouette first. Use compatible skin and neck colours, one recognisable facial-feature layer, and an appropriate hair colour.
+6. If you do not have a likelness for the player set skin, neck and hair colours to `cccccc` for a gray sioluette.
+7. Set the background segment to `none`.
+8. Use the live player builder preview and generated SVG URL to compare the avatar visually with the reference. Iterate by changing one control at a time.
+9. Show the best avatar to the user when likeness is subjective or they are actively refining it.
+10. Enter the final absolute builder URL in `Picture link`.
 
 The builder is stylised and limited. Describe the result as the closest available match, never an exact likeness. Do not modify builder SVG assets unless the user separately asks for a new builder feature.
 

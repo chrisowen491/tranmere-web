@@ -9,6 +9,7 @@ interface D1Result<T> {
 interface D1PreparedStatement {
   bind(...values: D1Value[]): D1PreparedStatement;
   all<T>(): Promise<D1Result<T>>;
+  first<T>(): Promise<T | null>;
 }
 
 export interface D1DatabaseReader {
@@ -149,7 +150,8 @@ export async function queryManagerRows(
   if (options.query) values.push(`%${options.query}%`);
 
   const sql = withLimit(
-    `SELECT id, name, date_joined, date_left, programme_path, image_path
+    `SELECT id, name, date_joined, date_left, programme_path, image_path,
+            favourite_formation
      FROM Managers
      ${where}
      ORDER BY date_joined DESC, name ASC`,
@@ -158,4 +160,26 @@ export async function queryManagerRows(
   );
 
   return (await all<ManagerRow>(db, sql, values)).results;
+}
+
+export async function queryManagerAtDateRow(
+  db: D1DatabaseReader,
+  matchDate: string
+) {
+  const date = matchDate.slice(0, 10);
+  return db
+    .prepare(
+      `SELECT id, name, date_joined, date_left, programme_path, image_path,
+              favourite_formation
+       FROM Managers
+       WHERE date_joined <= ?
+         AND (
+           lower(date_left) IN ('now', 'now()', 'present')
+           OR date_left >= ?
+         )
+       ORDER BY date_joined DESC
+       LIMIT 1`
+    )
+    .bind(date, date)
+    .first<ManagerRow>();
 }

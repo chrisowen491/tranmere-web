@@ -42,6 +42,15 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  redirects() {
+    return [
+      {
+        source: '/page/player/Dick%20Johnson',
+        destination: '//page/player/Dickie%20Johnson',
+        permanent: true,
+      },
+    ]
+  },
 };
 
 export default nextConfig;

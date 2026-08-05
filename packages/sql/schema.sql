@@ -101,7 +101,8 @@ CREATE TABLE IF NOT EXISTS Managers (
   date_joined TEXT NOT NULL,
   date_left TEXT NOT NULL,
   programme_path TEXT,
-  image_path TEXT
+  image_path TEXT,
+  favourite_formation TEXT
 );
 
 CREATE INDEX IF NOT EXISTS Managers_date_joined_idx

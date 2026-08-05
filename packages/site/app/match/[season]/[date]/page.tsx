@@ -9,6 +9,7 @@ import { getApprovedAttendance } from "@/lib/attendanceCorrections";
 import { enrichMatchPlayers } from "@/lib/matchPlayers";
 import { pageMetadata } from "@/lib/seo";
 import { absoluteUrl, breadcrumbJsonLd, JsonLd } from "@/components/seo/JsonLd";
+import { getManagerAtDate } from "@/lib/managers";
 
 export async function generateMetadata(props: { params: MatchParams }) {
   const params = await props.params;
@@ -41,10 +42,11 @@ export default async function MatchPage(props: { params: MatchParams }) {
 
   if (matchRequest.status != 200) notFound();
 
-  const match = await enrichMatchPlayers(
-    env.DB,
-    (await matchRequest.json()) as MatchPageData,
-  );
+  const matchData = (await matchRequest.json()) as MatchPageData;
+  const [match, manager] = await Promise.all([
+    enrichMatchPlayers(env.DB, matchData),
+    getManagerAtDate(env.DB, matchData.date),
+  ]);
 
   const seasonMatchesUrl = `${GetBaseUrl(env)}/result-search/?season=${match.season}`;
 
@@ -109,6 +111,7 @@ export default async function MatchPage(props: { params: MatchParams }) {
         comments={comments}
         url={baseUrl}
         avg={avg}
+        manager={manager}
       ></MatchReport>
     </>
   );

@@ -6,10 +6,12 @@ import type {
 import type { ManagerRecord } from "@/lib/managers";
 import type { PlayerProfile } from "@/lib/types";
 import { getPlayersByNames, type PlayerRecord } from "@/lib/players";
+import { arrangeLineup, formationLabel } from "@/lib/matchLineup";
 
 export interface TrustedXiPlayer {
   name: string;
   position: string;
+  secondaryPosition: string;
   picLink: string;
   starts: number;
   substituteAppearances: number;
@@ -18,7 +20,7 @@ export interface TrustedXiPlayer {
 
 export interface ManagerTrustedXi {
   manager: ManagerRecord;
-  formation: "4–4–2";
+  formation: string;
   rows: TrustedXiPlayer[][];
   matches: number;
   wins: number;
@@ -136,7 +138,11 @@ export async function getManagerTrustedXi(
         "other",
       ].flatMap((group) =>
         [...candidates.entries()]
-          .filter(([, value]) => positionGroup(value.player.position) === group)
+          .filter(
+            ([, value]) =>
+              positionGroup(value.player.position) === group ||
+              positionGroup(value.player.secondaryPosition) === group,
+          )
           .sort((a, b) => b[1].appearances - a[1].appearances)
           .slice(0, group === "other" ? 8 : 12)
           .map(([name]) => name),
@@ -164,6 +170,7 @@ export async function getManagerTrustedXi(
     return {
       name,
       position: playerProfiles.get(name)?.position || "",
+      secondaryPosition: playerProfiles.get(name)?.secondaryPosition || "",
       picLink: playerProfiles.get(name)?.picLink || "",
       starts: appearances.filter(
         (appearance) => !appearance.Type?.toLowerCase().includes("sub"),
@@ -187,32 +194,16 @@ export async function getManagerTrustedXi(
           b.substituteAppearances -
           (a.starts + a.substituteAppearances),
     );
-  const selected = new Set<string>();
-  const take = (group: string, count: number) => {
-    const positional = ranked.filter(
-      (player) =>
-        !selected.has(player.name) && positionGroup(player.position) === group,
-    );
-    const fallback = ranked.filter((player) => !selected.has(player.name));
-    const result = [...positional, ...fallback]
-      .filter(
-        (player, index, all) =>
-          all.findIndex((candidate) => candidate.name === player.name) ===
-          index,
-      )
-      .slice(0, count);
-    result.forEach((player) => selected.add(player.name));
-    return result;
-  };
-  const goalkeeper = take("goalkeeper", 1);
-  const fullbacks = take("fullback", 2);
-  const defenders = take("defender", 2);
-  const wingers = take("winger", 2);
-  const midfielders = take("midfielder", 2);
-  const strikers = take("striker", 2);
-  const defined = (
-    player: TrustedXiPlayer | undefined,
-  ): player is TrustedXiPlayer => Boolean(player);
+  const lineup = arrangeLineup(
+    ranked,
+    manager.favouriteFormation,
+    (player) => ({
+      position: player.position,
+      secondaryPosition: player.secondaryPosition,
+    }),
+    (_player, index) => Math.max(0, 100 - index),
+  );
+  const selectedPlayers = lineup.rows.flat();
 
   const resultResponse = await fetch(
     `${baseUrl}/result-search/?manager=${encodeURIComponent(
@@ -232,18 +223,14 @@ export async function getManagerTrustedXi(
 
   return {
     manager,
-    formation: "4–4–2",
-    rows: [
-      strikers,
-      [wingers[0], ...midfielders, wingers[1]].filter(defined),
-      [fullbacks[0], ...defenders, fullbacks[1]].filter(defined),
-      goalkeeper,
-    ],
+    formation: formationLabel(lineup.formation),
+    rows: lineup.rows,
     matches: matches.length,
     wins: outcomes.filter((outcome) => outcome === "W").length,
     draws: outcomes.filter((outcome) => outcome === "D").length,
     losses: outcomes.filter((outcome) => outcome === "L").length,
-    captain: ranked[0]?.name || "",
+    captain:
+      [...selectedPlayers].sort((a, b) => b.starts - a.starts)[0]?.name || "",
     archiveStarts: `${firstSeasonLabel(seasons[0])}`,
   };
 }

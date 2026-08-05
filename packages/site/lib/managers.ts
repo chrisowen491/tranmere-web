@@ -1,5 +1,9 @@
-import { queryManagerRows } from "@tranmere-web/lib/src/d1-queries";
+import {
+  queryManagerAtDateRow,
+  queryManagerRows,
+} from "@tranmere-web/lib/src/d1-queries";
 import type { ManagerRow } from "@tranmere-web/lib/src/d1-types";
+import type { ManagerFormation } from "@tranmere-web/lib/src/manager-constants";
 import type { Manager } from "@tranmere-web/lib/src/tranmere-web-types";
 
 export interface ManagerRecord extends Manager {
@@ -12,6 +16,7 @@ export interface ManagerInput {
   dateLeft: string;
   programmePath: string;
   imagePath: string;
+  favouriteFormation: ManagerFormation | "";
 }
 
 export function mapManager(row: ManagerRow): ManagerRecord {
@@ -23,6 +28,8 @@ export function mapManager(row: ManagerRow): ManagerRecord {
     dateLeftText: row.date_left,
     programmePath: row.programme_path || undefined,
     imagePath: row.image_path || undefined,
+    favouriteFormation:
+      (row.favourite_formation as ManagerFormation | null) || undefined,
   };
 }
 
@@ -31,10 +38,16 @@ export async function getManagers(db: D1Database) {
   return rows.map(mapManager);
 }
 
+export async function getManagerAtDate(db: D1Database, matchDate: string) {
+  const row = await queryManagerAtDateRow(db, matchDate);
+  return row ? mapManager(row) : null;
+}
+
 export async function getManagerById(db: D1Database, id: string) {
   const row = await db
     .prepare(
-      `SELECT id, name, date_joined, date_left, programme_path, image_path
+      `SELECT id, name, date_joined, date_left, programme_path, image_path,
+              favourite_formation
        FROM Managers
        WHERE id = ?`,
     )
@@ -52,9 +65,10 @@ export async function createManager(
   await db
     .prepare(
       `INSERT INTO Managers (
-         id, name, date_joined, date_left, programme_path, image_path
+         id, name, date_joined, date_left, programme_path, image_path,
+         favourite_formation
        )
-       VALUES (?, ?, ?, ?, ?, ?)`,
+       VALUES (?, ?, ?, ?, ?, ?, ?)`,
     )
     .bind(
       id,
@@ -63,6 +77,7 @@ export async function createManager(
       manager.dateLeft,
       manager.programmePath,
       manager.imagePath,
+      manager.favouriteFormation || null,
     )
     .run();
 
@@ -78,7 +93,7 @@ export async function updateManager(
     .prepare(
       `UPDATE Managers
        SET name = ?, date_joined = ?, date_left = ?, programme_path = ?,
-           image_path = ?
+           image_path = ?, favourite_formation = ?
        WHERE id = ?`,
     )
     .bind(
@@ -87,6 +102,7 @@ export async function updateManager(
       manager.dateLeft,
       manager.programmePath,
       manager.imagePath,
+      manager.favouriteFormation || null,
       id,
     )
     .run();

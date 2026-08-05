@@ -7,6 +7,7 @@ export const defaultPlayerAvatar =
 export interface PlayerStatisticsProfile {
   picLink: string;
   position: string | null;
+  secondaryPosition: string | null;
 }
 
 export interface PlayerStatisticsView extends Omit<
@@ -36,6 +37,7 @@ export async function getPlayerStatisticsProfiles(
         {
           picLink: profile?.picLink || defaultPlayerAvatar,
           position: profile?.position || null,
+          secondaryPosition: profile?.secondaryPosition || null,
         },
       ];
     }),
@@ -67,6 +69,7 @@ export async function enrichPlayerStatistics(
     profile: profiles.get(player.Player) ?? {
       picLink: defaultPlayerAvatar,
       position: null,
+      secondaryPosition: null,
     },
   }));
 }
