@@ -1,3 +1,4 @@
+import { PLAYER_POSITIONS } from '@tranmere-web/lib/src/player-constants';
 import { z } from 'zod';
 import { permissionDenied } from '../auth';
 import type { ToolContext } from './context';
@@ -27,16 +28,7 @@ const inputSchema = z.object({
   foot: z.enum(['Left', 'Right']).optional(),
   height: z.string().trim().max(100).optional(),
   placeOfBirth: z.string().trim().max(300).optional(),
-  position: z
-    .enum([
-      'Goalkeeper',
-      'Striker',
-      'Winger',
-      'Central Defender',
-      'Central Midfielder',
-      'Full Back'
-    ])
-    .optional(),
+  position: z.enum(PLAYER_POSITIONS).optional(),
   links: z.array(z.url().max(2_000)).max(20).optional()
 });
 

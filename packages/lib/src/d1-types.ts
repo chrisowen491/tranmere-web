@@ -8,6 +8,7 @@ export interface PlayerRow {
   height: string | null;
   place_of_birth: string | null;
   position: string | null;
+  secondary_position: string | null;
   links_json: string;
 }
 

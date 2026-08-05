@@ -66,6 +66,7 @@ export default async function PlayerProfilePage(props: { params: SlugParams }) {
     height: d1Player.height ?? undefined,
     placeOfBirth: d1Player.placeOfBirth ?? undefined,
     position: d1Player.position ?? undefined,
+    secondaryPosition: d1Player.secondaryPosition ?? undefined,
   };
   profile.links = d1Player.links.map((link, index) => {
     const hostname = new URL(link).hostname.replace(/^www\./, "");
@@ -103,7 +104,10 @@ export default async function PlayerProfilePage(props: { params: SlugParams }) {
           image: d1Player.picLink || undefined,
           birthDate: d1Player.dateOfBirth || undefined,
           birthPlace: d1Player.placeOfBirth || undefined,
-          jobTitle: d1Player.position || "Footballer",
+          jobTitle:
+            [d1Player.position, d1Player.secondaryPosition]
+              .filter(Boolean)
+              .join(" / ") || "Footballer",
           memberOf: { "@id": "https://www.tranmere-web.com/#team" },
           description: d1Player.biographyMarkdown || undefined,
         }}

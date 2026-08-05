@@ -8,6 +8,7 @@ import {
   PlusIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
+import { PLAYER_POSITIONS } from "@tranmere-web/lib/src/player-constants";
 import Image from "next/image";
 import { useMemo, useState } from "react";
 
@@ -15,15 +16,6 @@ const inputClass =
   "mt-2 block w-full border border-[#071a2b]/20 bg-white px-3 py-2.5 text-sm focus:border-blue-700 focus:outline-none";
 const labelClass =
   "block text-[10px] font-bold uppercase tracking-[0.12em] text-[#071a2b]/55";
-const positions = [
-  "Goalkeeper",
-  "Striker",
-  "Winger",
-  "Central Defender",
-  "Central Midfielder",
-  "Full Back",
-];
-
 function newPlayer(): PlayerRecord {
   return {
     id: "",
@@ -35,6 +27,7 @@ function newPlayer(): PlayerRecord {
     height: null,
     placeOfBirth: null,
     position: null,
+    secondaryPosition: null,
     links: [],
   };
 }
@@ -77,7 +70,9 @@ export function PlayerAdmin({
     const query = search.trim().toLowerCase();
     return players.filter(
       (player) =>
-        (positionFilter === "all" || player.position === positionFilter) &&
+        (positionFilter === "all" ||
+          player.position === positionFilter ||
+          player.secondaryPosition === positionFilter) &&
         (!query ||
           [
             player.name,
@@ -109,6 +104,7 @@ export function PlayerAdmin({
           height: data.get("height"),
           placeOfBirth: data.get("placeOfBirth"),
           position: data.get("position"),
+          secondaryPosition: data.get("secondaryPosition"),
           links: String(data.get("links") || "")
             .split(/\r?\n/)
             .map((link) => link.trim())
@@ -266,20 +262,37 @@ export function PlayerAdmin({
             </div>
             <div className="grid grid-cols-2 gap-4">
               <label className={labelClass}>
-                Position
+                Primary position
                 <select
                   name="position"
                   defaultValue={editing.position || ""}
                   className={inputClass}
                 >
                   <option value="">Unknown</option>
-                  {positions.map((position) => (
+                  {PLAYER_POSITIONS.map((position) => (
                     <option key={position} value={position}>
                       {position}
                     </option>
                   ))}
                 </select>
               </label>
+              <label className={labelClass}>
+                Secondary position
+                <select
+                  name="secondaryPosition"
+                  defaultValue={editing.secondaryPosition || ""}
+                  className={inputClass}
+                >
+                  <option value="">None</option>
+                  {PLAYER_POSITIONS.map((position) => (
+                    <option key={position} value={position}>
+                      {position}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
               <label className={labelClass}>
                 Height
                 <input
@@ -290,16 +303,16 @@ export function PlayerAdmin({
                   className={inputClass}
                 />
               </label>
+              <label className={labelClass}>
+                Place of birth
+                <input
+                  name="placeOfBirth"
+                  maxLength={300}
+                  defaultValue={editing.placeOfBirth || ""}
+                  className={inputClass}
+                />
+              </label>
             </div>
-            <label className={labelClass}>
-              Place of birth
-              <input
-                name="placeOfBirth"
-                maxLength={300}
-                defaultValue={editing.placeOfBirth || ""}
-                className={inputClass}
-              />
-            </label>
             <label className={labelClass}>
               Picture link
               <input
@@ -395,7 +408,7 @@ export function PlayerAdmin({
               className="block w-full border border-[#071a2b]/20 bg-white px-4 py-3 text-sm focus:border-blue-700 focus:outline-none"
             >
               <option value="all">All positions</option>
-              {positions.map((position) => (
+              {PLAYER_POSITIONS.map((position) => (
                 <option key={position} value={position}>
                   {position}
                 </option>
@@ -436,7 +449,14 @@ export function PlayerAdmin({
                     )}
                   </td>
                   <td className="whitespace-nowrap px-4 py-4 text-xs">
-                    {player.position || "Unknown"}
+                    <span className="block">
+                      {player.position || "Unknown"}
+                    </span>
+                    {player.secondaryPosition && (
+                      <span className="mt-1 block text-[#071a2b]/45">
+                        {player.secondaryPosition}
+                      </span>
+                    )}
                   </td>
                   <td className="whitespace-nowrap px-4 py-4">
                     <span className="inline-flex items-center gap-1.5 text-xs">

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Season Book Match Ingestion"
+  short_description: "Import historical line-ups from season-book scans"
+  default_prompt: "Use $ingest-season-book-match to add a confirmed historical match line-up from this season-book image."

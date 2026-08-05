@@ -1,0 +1,12 @@
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+  <g id="collar">
+    <line stroke-width="10" stroke="#0000ff" y2="379.45312" x2="257" y1="351.45313" x1="226" fill="none"/>
+    <line stroke="#0000ff" stroke-width="26" transform="rotate(11.289350509643555 264.989898681641,367.18627929687506) " y2="383.68396" x2="251.86521" y1="350.68864" x1="278.1146" fill="none"/>
+    <g>
+        <path fill="#0000ff" d="m256,358l-30,30l-31.996,-70.056l17.996,-11.944l44,52z" stroke="#b2b2b2"/>
+    </g>
+    <g>
+        <path fill="#0000ff" d="m256,358l30,30l31.996,-70.056l-17.996,-11.944l-44,52z" stroke="#b2b2b2"/>
+    </g>
+  </g>
+</svg>        

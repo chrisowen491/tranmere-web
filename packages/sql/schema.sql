@@ -140,6 +140,7 @@ CREATE TABLE IF NOT EXISTS Players (
   height TEXT,
   place_of_birth TEXT,
   position TEXT,
+  secondary_position TEXT,
   links_json TEXT NOT NULL DEFAULT '[]',
   CHECK (
     date_of_birth IS NULL
@@ -149,6 +150,17 @@ CREATE TABLE IF NOT EXISTS Players (
   CHECK (
     position IS NULL
     OR position IN (
+      'Goalkeeper',
+      'Striker',
+      'Winger',
+      'Central Defender',
+      'Central Midfielder',
+      'Full Back'
+    )
+  ),
+  CHECK (
+    secondary_position IS NULL
+    OR secondary_position IN (
       'Goalkeeper',
       'Striker',
       'Winger',

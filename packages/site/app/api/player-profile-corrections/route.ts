@@ -3,12 +3,12 @@ import {
   approvePlayerProfileCorrection,
   ensurePlayerProfileCorrectionsTable,
   normalizeDateOfBirth,
-  playerPositions,
   type EditablePlayerProfile,
   type PlayerProfileCorrectionStatus,
 } from "@/lib/playerProfileCorrections";
 import { getPlayerByName, type PlayerRecord } from "@/lib/players";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
+import { PLAYER_POSITIONS } from "@tranmere-web/lib/src/player-constants";
 import { revalidatePath } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -85,9 +85,10 @@ async function submitCorrection(request: NextRequest) {
 
   const body = (await request.json()) as SubmissionRequest;
   const requestedName = body.playerName?.trim();
-  const source = body.source?.trim().slice(0, 1000);
-  if (!requestedName || !source || source.length < 3) {
-    return error("A player and source description are required.", 400);
+  const source =
+    typeof body.source === "string" ? body.source.trim().slice(0, 1000) : "";
+  if (!requestedName) {
+    return error("Choose a player before submitting a correction.", 400);
   }
 
   const submittedChanges = body.changes;
@@ -139,8 +140,8 @@ async function submitCorrection(request: NextRequest) {
   }
   if (
     changes.position !== undefined &&
-    !playerPositions.includes(
-      changes.position as (typeof playerPositions)[number],
+    !PLAYER_POSITIONS.includes(
+      changes.position as (typeof PLAYER_POSITIONS)[number],
     )
   ) {
     return error("Choose a valid primary position.", 400);

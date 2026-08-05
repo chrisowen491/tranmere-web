@@ -7,17 +7,11 @@ import {
   type PlayerInput,
 } from "@/lib/players";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
+import { PLAYER_POSITIONS } from "@tranmere-web/lib/src/player-constants";
 import { revalidatePath } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
-const positions = new Set([
-  "Goalkeeper",
-  "Striker",
-  "Winger",
-  "Central Defender",
-  "Central Midfielder",
-  "Full Back",
-]);
+const positions = new Set<string>(PLAYER_POSITIONS);
 const feet = new Set(["Left", "Right"]);
 
 interface PlayerRequest {
@@ -30,6 +24,7 @@ interface PlayerRequest {
   height?: string | null;
   placeOfBirth?: string | null;
   position?: string | null;
+  secondaryPosition?: string | null;
   links?: string[];
 }
 
@@ -72,6 +67,7 @@ function validatePlayer(body: PlayerRequest): PlayerInput | null {
   const dateOfBirth = optional(body.dateOfBirth, 10);
   const foot = optional(body.foot, 20);
   const position = optional(body.position, 100);
+  const secondaryPosition = optional(body.secondaryPosition, 100);
   const picLink = optional(body.picLink, 2000);
   const links = [...new Set(body.links || [])]
     .map((link) => link.trim())
@@ -83,6 +79,8 @@ function validatePlayer(body: PlayerRequest): PlayerInput | null {
     (dateOfBirth && !validDate(dateOfBirth)) ||
     (foot && !feet.has(foot)) ||
     (position && !positions.has(position)) ||
+    (secondaryPosition && !positions.has(secondaryPosition)) ||
+    (position && secondaryPosition && position === secondaryPosition) ||
     (picLink && !validWebUrl(picLink)) ||
     links.some((link) => !validWebUrl(link))
   ) {
@@ -98,6 +96,7 @@ function validatePlayer(body: PlayerRequest): PlayerInput | null {
     height: optional(body.height, 100),
     placeOfBirth: optional(body.placeOfBirth, 300),
     position,
+    secondaryPosition,
     links,
   };
 }

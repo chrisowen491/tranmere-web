@@ -11,6 +11,7 @@ export interface PlayerRecord {
   height: string | null;
   placeOfBirth: string | null;
   position: string | null;
+  secondaryPosition: string | null;
   links: string[];
 }
 
@@ -38,12 +39,13 @@ export function mapPlayer(row: PlayerRow): PlayerRecord {
     height: row.height,
     placeOfBirth: row.place_of_birth,
     position: row.position,
+    secondaryPosition: row.secondary_position,
     links: parseLinks(row.links_json),
   };
 }
 
 const playerColumns = `id, name, date_of_birth, biography_markdown, pic_link,
-  foot, height, place_of_birth, position, links_json`;
+  foot, height, place_of_birth, position, secondary_position, links_json`;
 
 export async function getPlayers(db: D1Database) {
   const rows = await queryPlayerRows(db);
@@ -59,6 +61,7 @@ function playerCompleteness(player: PlayerRecord) {
     player.height,
     player.placeOfBirth,
     player.position,
+    player.secondaryPosition,
   ].filter(Boolean).length;
 }
 
@@ -124,7 +127,8 @@ export async function getPlayerByName(db: D1Database, name: string) {
          (foot IS NOT NULL) +
          (height IS NOT NULL) +
          (place_of_birth IS NOT NULL) +
-         (position IS NOT NULL)
+         (position IS NOT NULL) +
+         (secondary_position IS NOT NULL)
        ) DESC,
        length(biography_markdown) DESC,
        id ASC
@@ -141,9 +145,9 @@ export async function createPlayer(db: D1Database, player: PlayerInput) {
     .prepare(
       `INSERT INTO Players (
          id, name, date_of_birth, biography_markdown, pic_link, foot, height,
-         place_of_birth, position, links_json
+         place_of_birth, position, secondary_position, links_json
        )
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     )
     .bind(
       id,
@@ -155,6 +159,7 @@ export async function createPlayer(db: D1Database, player: PlayerInput) {
       player.height,
       player.placeOfBirth,
       player.position,
+      player.secondaryPosition,
       JSON.stringify(player.links),
     )
     .run();
@@ -171,7 +176,7 @@ export async function updatePlayer(
       `UPDATE Players
        SET name = ?, date_of_birth = ?, biography_markdown = ?, pic_link = ?,
            foot = ?, height = ?, place_of_birth = ?, position = ?,
-           links_json = ?
+           secondary_position = ?, links_json = ?
        WHERE id = ?`,
     )
     .bind(
@@ -183,6 +188,7 @@ export async function updatePlayer(
       player.height,
       player.placeOfBirth,
       player.position,
+      player.secondaryPosition,
       JSON.stringify(player.links),
       id,
     )

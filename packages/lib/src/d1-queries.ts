@@ -50,7 +50,7 @@ export async function queryPlayerRows(
 
   const sql = withLimit(
     `SELECT id, name, date_of_birth, biography_markdown, pic_link, foot, height,
-            place_of_birth, position, links_json
+            place_of_birth, position, secondary_position, links_json
      FROM Players
      ${where}
      ORDER BY name ASC, id ASC`,

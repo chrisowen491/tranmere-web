@@ -27,6 +27,7 @@ export interface Player extends BaseEntity {
   links?: string;
   pic?: string;
   position?: string;
+  secondaryPosition?: string;
   dateOfBirth?: string;
   placeOfBirth?: string;
   height?: string;

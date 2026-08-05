@@ -151,7 +151,7 @@ export function PlayerProfileCorrectionReview({
                       Source
                     </p>
                     <p className="mt-2 whitespace-pre-wrap text-sm leading-6 text-[#071a2b]/70">
-                      {correction.source}
+                      {correction.source || "No source supplied."}
                     </p>
                     {correction.explanation && (
                       <>

@@ -146,7 +146,8 @@ export function PlayerAvatarBuilder() {
                     <option value="1980">1980-81 Home</option>
                     <option value="1979">1979-80 Home</option>
                     <option value="1977">1977-78 Home</option>
-                    <option value="1972">1972-74 Home</option>
+                    <option value="1976">1976-77 Home</option>
+                    <option value="1972">1972-75 Home</option>
                     <option value="1970">1970-71 Home</option>
                     <option value="1966">1966-68 Home</option>
                     <option value="1960">1957-62 Home</option>

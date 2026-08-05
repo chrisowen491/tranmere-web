@@ -1,16 +1,8 @@
 import type { Document } from "@contentful/rich-text-types";
+import { PLAYER_POSITIONS } from "@tranmere-web/lib/src/player-constants";
 import { getPlayerByName } from "@/lib/players";
 
 export type PlayerProfileCorrectionStatus = "pending" | "approved" | "rejected";
-
-export const playerPositions = [
-  "Goalkeeper",
-  "Striker",
-  "Winger",
-  "Central Defender",
-  "Central Midfielder",
-  "Full Back",
-] as const;
 
 export interface EditablePlayerProfile {
   dateOfBirth?: string;
@@ -184,7 +176,7 @@ function validateApprovedChanges(changes: EditablePlayerProfile) {
   }
   if (
     position &&
-    !playerPositions.includes(position as (typeof playerPositions)[number])
+    !PLAYER_POSITIONS.includes(position as (typeof PLAYER_POSITIONS)[number])
   ) {
     throw new Error("The proposed player position is invalid.");
   }

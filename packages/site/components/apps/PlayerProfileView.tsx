@@ -112,6 +112,9 @@ export default function PlayerProfileView(props: {
         /^\d{4}-\d{2}-\d{2}$/.test(appearance.Date),
     )
     .sort((a, b) => b.Date.localeCompare(a.Date))[0];
+  const positionLabel =
+    [player.position, player.secondaryPosition].filter(Boolean).join(" / ") ||
+    "Tranmere Rovers";
 
   const profileLinks = [
     {
@@ -158,7 +161,7 @@ export default function PlayerProfileView(props: {
 
           <div className="flex flex-col justify-center border border-[#071a2b]/15 bg-[#fffdf8] p-6 sm:p-10 lg:border-l-0 lg:p-12">
             <p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-700">
-              {careerSpan} · {player.position || "Tranmere Rovers"}
+              {careerSpan} · {positionLabel}
             </p>
             <h1 className="mt-3 font-display text-5xl font-semibold tracking-[-0.04em] sm:text-6xl">
               {player.name}
@@ -331,6 +334,16 @@ export default function PlayerProfileView(props: {
                 </dt>
                 <dd className="mt-1 font-semibold">{player.position || "—"}</dd>
               </div>
+              {player.secondaryPosition && (
+                <div className="py-4">
+                  <dt className="text-xs font-bold uppercase tracking-[0.12em] text-[#071a2b]/50">
+                    Secondary position
+                  </dt>
+                  <dd className="mt-1 font-semibold">
+                    {player.secondaryPosition}
+                  </dd>
+                </div>
+              )}
               <div className="py-4">
                 <dt className="text-xs font-bold uppercase tracking-[0.12em] text-[#071a2b]/50">
                   Debut

@@ -1,10 +1,10 @@
 "use client";
 
 import {
-  playerPositions,
   type EditablePlayerProfile,
 } from "@/lib/playerProfileCorrections";
 import { useUser } from "@auth0/nextjs-auth0";
+import { PLAYER_POSITIONS } from "@tranmere-web/lib/src/player-constants";
 import { useState } from "react";
 
 const inputClass =
@@ -211,8 +211,8 @@ export function PlayerProfileCorrectionForm({
                   id="position"
                   name="position"
                   defaultValue={
-                    playerPositions.includes(
-                      current.position as (typeof playerPositions)[number],
+                    PLAYER_POSITIONS.includes(
+                      current.position as (typeof PLAYER_POSITIONS)[number],
                     )
                       ? current.position
                       : ""
@@ -220,7 +220,7 @@ export function PlayerProfileCorrectionForm({
                   className={inputClass}
                 >
                   <option value="">Leave unchanged</option>
-                  {playerPositions.map((position) => (
+                  {PLAYER_POSITIONS.map((position) => (
                     <option key={position} value={position}>
                       {position}
                     </option>
@@ -256,16 +256,14 @@ export function PlayerProfileCorrectionForm({
               </div>
               <div>
                 <label htmlFor="profileSource" className={labelClass}>
-                  Source
+                  Source <span className="font-normal">(optional)</span>
                 </label>
                 <textarea
                   id="profileSource"
                   name="source"
-                  required
-                  minLength={3}
                   maxLength={1000}
                   rows={3}
-                  placeholder="Describe where this information came from"
+                  placeholder="Describe where this information came from, if available"
                   className={`${inputClass} resize-y`}
                 />
               </div>
