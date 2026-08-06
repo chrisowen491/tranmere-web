@@ -1,11 +1,10 @@
 import { TransferAdmin } from "@/components/apps/admin/TransferAdmin";
-import { auth0 } from "@/lib/auth0";
+import { requireAdminPage } from "@/lib/adminAuth";
 import { getClubs } from "@/lib/clubs";
 import { getTransfers } from "@/lib/transfers";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound, redirect } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 
@@ -15,15 +14,8 @@ export const metadata: Metadata = {
 };
 
 export default async function TransferAdminPage() {
-  const session = await auth0.getSession();
-  if (!session) {
-    redirect(`/auth/login?returnTo=${encodeURIComponent("/admin/transfers")}`);
-  }
-
+  await requireAdminPage("/admin/transfers");
   const env = getCloudflareContext().env;
-  const adminEmail = env.AUTH0_ADMIN_EMAIL || process.env.AUTH0_ADMIN_EMAIL;
-  if (!adminEmail || session.user.email !== adminEmail) notFound();
-
   const [transfers, teams] = await Promise.all([
     getTransfers(env.DB),
     getClubs(env.DB),

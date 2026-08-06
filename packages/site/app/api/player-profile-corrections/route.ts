@@ -1,4 +1,5 @@
 import { auth0 } from "@/lib/auth0";
+import { getAdminSession } from "@/lib/adminAuth";
 import {
   approvePlayerProfileCorrection,
   ensurePlayerProfileCorrectionsTable,
@@ -47,11 +48,6 @@ const maxLengths: Record<keyof EditablePlayerProfile, number> = {
 
 function error(message: string, status: number) {
   return NextResponse.json({ message }, { status });
-}
-
-function getAdminEmail() {
-  const env = getCloudflareContext().env;
-  return env.AUTH0_ADMIN_EMAIL || process.env.AUTH0_ADMIN_EMAIL;
 }
 
 function profileSnapshot(player: PlayerRecord): EditablePlayerProfile {
@@ -223,9 +219,8 @@ export async function POST(request: NextRequest) {
 }
 
 export async function PATCH(request: NextRequest) {
-  const session = await auth0.getSession();
-  const adminEmail = getAdminEmail();
-  if (!session || !adminEmail || session.user.email !== adminEmail) {
+  const session = await getAdminSession();
+  if (!session) {
     return error("You do not have permission to review corrections.", 403);
   }
 

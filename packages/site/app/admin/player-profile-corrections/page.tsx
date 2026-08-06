@@ -1,10 +1,9 @@
 import { PlayerProfileCorrectionReview } from "@/components/apps/admin/PlayerProfileCorrectionReview";
-import { auth0 } from "@/lib/auth0";
+import { requireAdminPage } from "@/lib/adminAuth";
 import { getPlayerProfileCorrections } from "@/lib/playerProfileCorrections";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound, redirect } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 
@@ -14,19 +13,8 @@ export const metadata: Metadata = {
 };
 
 export default async function PlayerProfileCorrectionsAdminPage() {
-  const session = await auth0.getSession();
-  if (!session) {
-    redirect(
-      `/auth/login?returnTo=${encodeURIComponent(
-        "/admin/player-profile-corrections",
-      )}`,
-    );
-  }
-
+  await requireAdminPage("/admin/player-profile-corrections");
   const env = getCloudflareContext().env;
-  const adminEmail = env.AUTH0_ADMIN_EMAIL || process.env.AUTH0_ADMIN_EMAIL;
-  if (!adminEmail || session.user.email !== adminEmail) notFound();
-
   const corrections = await getPlayerProfileCorrections(env.DB, "pending");
 
   return (

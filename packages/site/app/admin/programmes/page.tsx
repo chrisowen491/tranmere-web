@@ -1,10 +1,9 @@
 import { ProgrammeAdmin } from "@/components/apps/admin/ProgrammeAdmin";
-import { auth0 } from "@/lib/auth0";
+import { requireAdminPage } from "@/lib/adminAuth";
 import { getProgrammes } from "@/lib/programmes";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound, redirect } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 
@@ -14,15 +13,8 @@ export const metadata: Metadata = {
 };
 
 export default async function ProgrammeAdminPage() {
-  const session = await auth0.getSession();
-  if (!session) {
-    redirect(`/auth/login?returnTo=${encodeURIComponent("/admin/programmes")}`);
-  }
-
+  await requireAdminPage("/admin/programmes");
   const env = getCloudflareContext().env;
-  const adminEmail = env.AUTH0_ADMIN_EMAIL || process.env.AUTH0_ADMIN_EMAIL;
-  if (!adminEmail || session.user.email !== adminEmail) notFound();
-
   const programmes = await getProgrammes(env.DB);
 
   return (

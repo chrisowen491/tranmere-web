@@ -1,4 +1,4 @@
-import { auth0 } from "@/lib/auth0";
+import { getAdminSession } from "@/lib/adminAuth";
 import {
   MANAGER_FORMATIONS,
   type ManagerFormation,
@@ -24,15 +24,6 @@ interface ManagerRequest {
 
 function error(message: string, status: number) {
   return NextResponse.json({ message }, { status });
-}
-
-async function requireAdmin() {
-  const session = await auth0.getSession();
-  const env = getCloudflareContext().env;
-  const adminEmail = env.AUTH0_ADMIN_EMAIL || process.env.AUTH0_ADMIN_EMAIL;
-  return session && adminEmail && session.user.email === adminEmail
-    ? session
-    : null;
 }
 
 function isDate(value: string) {
@@ -81,7 +72,7 @@ function validateManager(body: ManagerRequest): ManagerInput | null {
 }
 
 export async function POST(request: NextRequest) {
-  if (!(await requireAdmin())) {
+  if (!(await getAdminSession())) {
     return error("You do not have permission to manage managers.", 403);
   }
 
@@ -103,7 +94,7 @@ export async function POST(request: NextRequest) {
 }
 
 export async function PATCH(request: NextRequest) {
-  if (!(await requireAdmin())) {
+  if (!(await getAdminSession())) {
     return error("You do not have permission to manage managers.", 403);
   }
 

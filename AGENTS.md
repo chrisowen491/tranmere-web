@@ -7,6 +7,7 @@
 - Run a workspace command: `yarn workspace <workspace-name> <script>`
 - Start the site: `yarn site`
 - Start the local API: `yarn api`
+- Prefer vitest over jest for unit testing
 
 ## File-Scoped Commands
 

@@ -1,10 +1,9 @@
 import { AttendanceCorrectionReview } from "@/components/apps/admin/AttendanceCorrectionReview";
+import { requireAdminPage } from "@/lib/adminAuth";
 import { getAttendanceCorrections } from "@/lib/attendanceCorrections";
-import { auth0 } from "@/lib/auth0";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound, redirect } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 
@@ -14,21 +13,8 @@ export const metadata: Metadata = {
 };
 
 export default async function AttendanceCorrectionsAdminPage() {
-  const session = await auth0.getSession();
-  if (!session) {
-    redirect(
-      `/auth/login?returnTo=${encodeURIComponent(
-        "/admin/attendance-corrections",
-      )}`,
-    );
-  }
-
+  await requireAdminPage("/admin/attendance-corrections");
   const env = getCloudflareContext().env;
-  const adminEmail = env.AUTH0_ADMIN_EMAIL || process.env.AUTH0_ADMIN_EMAIL;
-  if (!adminEmail || session.user.email !== adminEmail) {
-    notFound();
-  }
-
   const corrections = await getAttendanceCorrections(env.DB, "pending");
 
   return (

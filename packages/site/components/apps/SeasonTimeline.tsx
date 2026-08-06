@@ -67,6 +67,24 @@ function resultLabel(match: Match) {
   return `${goalsFor(match)}–${goalsAgainst(match)}`;
 }
 
+function outcomeClass(result: Outcome) {
+  return {
+    W: "bg-emerald-600",
+    D: "bg-slate-500",
+    L: "bg-red-600",
+  }[result];
+}
+
+function outcomeCounts(matches: Match[]) {
+  return matches.reduce(
+    (counts, match) => {
+      counts[outcome(match)] += 1;
+      return counts;
+    },
+    { W: 0, D: 0, L: 0 } satisfies Record<Outcome, number>,
+  );
+}
+
 function dayLabel(value: string) {
   const date = parseDate(value);
   if (!date) return value;
@@ -171,23 +189,23 @@ export function SeasonTimeline(props: {
   articles: BlogItem[];
   achievements: readonly HonoursAchievement[];
 }) {
+  const { season, results, managers, transfers, articles, achievements } =
+    props;
   const chapters = buildChapters(
-    props.season,
-    props.results,
-    props.managers,
-    props.transfers,
-    props.achievements,
+    season,
+    results,
+    managers,
+    transfers,
+    achievements,
   );
-  const undatedTransfers = props.transfers.filter(
+  const undatedTransfers = transfers.filter(
     (transfer) => !parseDate(transfer.date),
   );
-  const completedMatches = props.results.filter(
+  const completedMatches = results.filter(
     (match) =>
       typeof match.hgoal === "number" && typeof match.vgoal === "number",
   );
-  const wins = completedMatches.filter(
-    (match) => outcome(match) === "W",
-  ).length;
+  const wins = outcomeCounts(completedMatches).W;
   if (chapters.length === 0 && undatedTransfers.length === 0) return null;
 
   return (
@@ -228,7 +246,7 @@ export function SeasonTimeline(props: {
             </dl>
 
             <Link
-              href={`/results?season=${props.season}`}
+              href={`/results?season=${season}`}
               className="mt-6 inline-flex items-center gap-2 bg-blue-700 px-4 py-3 text-sm font-bold text-white transition hover:bg-[#071a2b]"
             >
               Open the complete results archive
@@ -296,15 +314,7 @@ export function SeasonTimeline(props: {
 
             <ol>
               {chapters.map((chapter, chapterIndex) => {
-                const monthWins = chapter.matches.filter(
-                  (match) => outcome(match) === "W",
-                ).length;
-                const monthDraws = chapter.matches.filter(
-                  (match) => outcome(match) === "D",
-                ).length;
-                const monthLosses = chapter.matches.filter(
-                  (match) => outcome(match) === "L",
-                ).length;
+                const form = outcomeCounts(chapter.matches);
 
                 return (
                   <li
@@ -357,13 +367,7 @@ export function SeasonTimeline(props: {
                                   <span
                                     key={`${match.date}-${match.opposition}`}
                                     title={`${match.opposition}: ${resultLabel(match)}`}
-                                    className={`grid h-7 w-7 place-items-center text-[0.65rem] font-bold text-white ${
-                                      result === "W"
-                                        ? "bg-emerald-600"
-                                        : result === "D"
-                                          ? "bg-slate-500"
-                                          : "bg-red-600"
-                                    }`}
+                                    className={`grid h-7 w-7 place-items-center text-[0.65rem] font-bold text-white ${outcomeClass(result)}`}
                                   >
                                     {result}
                                   </span>
@@ -374,8 +378,8 @@ export function SeasonTimeline(props: {
                         </div>
                         <div className="mt-3 flex items-center justify-between border-b border-[#071a2b]/15 pb-4 text-xs">
                           <span className="font-bold uppercase tracking-[0.12em] text-[#071a2b]/45">
-                            {chapter.matches.length} matches · {monthWins}W{" "}
-                            {monthDraws}D {monthLosses}L
+                            {chapter.matches.length} matches · {form.W}W{" "}
+                            {form.D}D {form.L}L
                           </span>
                           <span className="font-bold text-blue-700 group-open:hidden">
                             Open chapter +
@@ -496,13 +500,7 @@ export function SeasonTimeline(props: {
                                   {dayLabel(match.date)}
                                 </span>
                                 <span
-                                  className={`grid h-6 w-6 place-items-center text-[0.62rem] font-bold text-white ${
-                                    result === "W"
-                                      ? "bg-emerald-600"
-                                      : result === "D"
-                                        ? "bg-slate-500"
-                                        : "bg-red-600"
-                                  }`}
+                                  className={`grid h-6 w-6 place-items-center text-[0.62rem] font-bold text-white ${outcomeClass(result)}`}
                                 >
                                   {result}
                                 </span>
@@ -528,7 +526,7 @@ export function SeasonTimeline(props: {
               })}
             </ol>
 
-            {props.articles.length > 0 && (
+            {articles.length > 0 && (
               <aside className="mt-14 border border-[#071a2b]/15 bg-[#f4f0e8] p-6 sm:p-8">
                 <div className="flex items-center gap-3">
                   <NewspaperIcon
@@ -545,7 +543,7 @@ export function SeasonTimeline(props: {
                   </div>
                 </div>
                 <div className="mt-6 grid gap-3 sm:grid-cols-2">
-                  {props.articles.slice(0, 4).map((article) => (
+                  {articles.slice(0, 4).map((article) => (
                     <Link
                       href={`/page/blog/${article.slug}`}
                       key={article.sys.id}

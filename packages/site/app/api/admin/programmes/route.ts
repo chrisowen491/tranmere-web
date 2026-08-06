@@ -1,4 +1,4 @@
-import { auth0 } from "@/lib/auth0";
+import { getAdminSession } from "@/lib/adminAuth";
 import {
   createProgramme,
   deleteProgramme,
@@ -20,15 +20,6 @@ interface ProgrammeRequest {
 
 function error(message: string, status: number) {
   return NextResponse.json({ message }, { status });
-}
-
-async function requireAdmin() {
-  const session = await auth0.getSession();
-  const env = getCloudflareContext().env;
-  const adminEmail = env.AUTH0_ADMIN_EMAIL || process.env.AUTH0_ADMIN_EMAIL;
-  return session && adminEmail && session.user.email === adminEmail
-    ? session
-    : null;
 }
 
 function validateProgramme(body: ProgrammeRequest): ProgrammeInput | null {
@@ -61,13 +52,18 @@ function revalidateProgrammes() {
 }
 
 export async function POST(request: NextRequest) {
-  if (!(await requireAdmin())) {
+  if (!(await getAdminSession())) {
     return error("You do not have permission to manage programmes.", 403);
   }
 
-  const programme = validateProgramme((await request.json()) as ProgrammeRequest);
+  const programme = validateProgramme(
+    (await request.json()) as ProgrammeRequest,
+  );
   if (!programme) {
-    return error("Enter a valid PDF URL, match name, date and page count.", 400);
+    return error(
+      "Enter a valid PDF URL, match name, date and page count.",
+      400,
+    );
   }
 
   const db = getCloudflareContext().env.DB;
@@ -81,7 +77,7 @@ export async function POST(request: NextRequest) {
 }
 
 export async function PATCH(request: NextRequest) {
-  if (!(await requireAdmin())) {
+  if (!(await getAdminSession())) {
     return error("You do not have permission to manage programmes.", 403);
   }
 
@@ -89,14 +85,20 @@ export async function PATCH(request: NextRequest) {
   const programme = validateProgramme(body);
   const originalUrl = body.originalUrl?.trim();
   if (!originalUrl || !programme) {
-    return error("Enter a valid PDF URL, match name, date and page count.", 400);
+    return error(
+      "Enter a valid PDF URL, match name, date and page count.",
+      400,
+    );
   }
 
   const db = getCloudflareContext().env.DB;
   if (!(await getProgrammeByUrl(db, originalUrl))) {
     return error("That programme could not be found.", 404);
   }
-  if (originalUrl !== programme.url && (await getProgrammeByUrl(db, programme.url))) {
+  if (
+    originalUrl !== programme.url &&
+    (await getProgrammeByUrl(db, programme.url))
+  ) {
     return error("A programme with that PDF URL already exists.", 409);
   }
 
@@ -106,14 +108,17 @@ export async function PATCH(request: NextRequest) {
 }
 
 export async function DELETE(request: NextRequest) {
-  if (!(await requireAdmin())) {
+  if (!(await getAdminSession())) {
     return error("You do not have permission to manage programmes.", 403);
   }
 
   const { url } = (await request.json()) as ProgrammeRequest;
   if (!url?.trim()) return error("Choose a programme to delete.", 400);
 
-  const deleted = await deleteProgramme(getCloudflareContext().env.DB, url.trim());
+  const deleted = await deleteProgramme(
+    getCloudflareContext().env.DB,
+    url.trim(),
+  );
   if (!deleted) return error("That programme could not be found.", 404);
 
   revalidateProgrammes();

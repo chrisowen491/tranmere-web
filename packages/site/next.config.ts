@@ -42,18 +42,18 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/pdfs/:path*",
-        destination: `https://programes.tranmere-web.com/:path*`
-      }
+        destination: `https://programes.tranmere-web.com/:path*`,
+      },
     ];
   },
   redirects() {
     return [
       {
-        source: '/page/player/Dick%20Johnson',
-        destination: '//page/player/Dickie%20Johnson',
+        source: "/page/player/Dick%20Johnson",
+        destination: "/page/player/Dickie%20Johnson",
         permanent: true,
       },
-    ]
+    ];
   },
 };
 

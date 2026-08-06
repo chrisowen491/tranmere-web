@@ -14,6 +14,7 @@
     "cloudflare-deploy": "yarn workspace @tranmere-web/site cloudflare-deploy",
     "cloudflare-preview": "yarn workspace @tranmere-web/site cloudflare-preview",
     "site": "yarn workspace @tranmere-web/site site",
+    "test": "yarn workspaces run test",
     "prepare": "husky",
     "lint": "yarn workspaces run lint",
     "action": "yarn workspace @tranmere-web/clean-up run action",

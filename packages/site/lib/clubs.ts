@@ -16,7 +16,7 @@ export interface ClubRecord extends Team {
 
 export type ClubInput = Omit<ClubRecord, "id">;
 
-function mapClub(row: ClubRow): ClubRecord {
+export function mapClub(row: ClubRow): ClubRecord {
   return {
     id: row.id,
     name: row.name,

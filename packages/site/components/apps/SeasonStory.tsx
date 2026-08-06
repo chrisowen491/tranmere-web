@@ -20,6 +20,12 @@ import type { HonoursAchievement } from "@tranmere-web/lib/src/honours-constants
 
 type Outcome = "W" | "D" | "L";
 
+const DIVISION_NAMES: Record<number, Record<number, string>> = {
+  0: { 2: "Division 2", 3: "Division 3", 4: "Division 4" },
+  1: { 2: "Division 1", 3: "Division 2", 4: "Division 3" },
+  2: { 2: "The Championship", 3: "League One", 4: "League Two" },
+};
+
 function isTranmereHome(match: Match) {
   return (
     match.location === "H" ||
@@ -66,24 +72,17 @@ function shortDate(date: string) {
 }
 
 function divisionName(results: Match[], season: number) {
-  const tier = results.find(
-    (result) =>
-      (result.competition === "League" ||
-        result.competition === "Conference") &&
-      result.tier,
-  )?.tier;
+  const tier = results.reduce<number | undefined>((currentTier, result) => {
+    const isLeague =
+      result.competition === "League" || result.competition === "Conference";
+    return isLeague && result.tier ? result.tier : currentTier;
+  }, undefined);
 
   if (tier === 5) return "National League";
-  if (season < 1992) return tier ? `Division ${tier}` : "Season archive";
-  if (season < 2004) {
-    if (tier === 4) return "Division 3";
-    if (tier === 3) return "Division 2";
-    if (tier === 2) return "Division 1";
-  }
-  if (tier === 4) return "League Two";
-  if (tier === 3) return "League One";
-  if (tier === 2) return "The Championship";
-  return "Season archive";
+  if (!tier) return "Season archive";
+
+  const era = season < 1992 ? 0 : season < 2004 ? 1 : 2;
+  return DIVISION_NAMES[era]?.[tier] ?? "Season archive";
 }
 
 function uniqueMatches(matches: Array<Match | undefined>) {
@@ -136,6 +135,46 @@ function arrangeWidePlayers<T>(widePlayers: T[], centralPlayers: T[]) {
   return [widePlayers[0], ...centralPlayers, ...widePlayers.slice(1).reverse()];
 }
 
+function maxBy<T>(items: T[], score: (item: T) => number) {
+  return items.reduce<T | undefined>(
+    (best, item) => (!best || score(item) > score(best) ? item : best),
+    undefined,
+  );
+}
+
+function summarizeResults(results: Match[]) {
+  return results.reduce(
+    (summary, match) => {
+      const result = outcome(match);
+      summary[result] += 1;
+      summary.scored += goalsFor(match);
+      summary.conceded += goalsAgainst(match);
+      if (match.attendance && match.attendance > 0) {
+        summary.attendanceTotal += match.attendance;
+        summary.attendanceCount += 1;
+      }
+      return summary;
+    },
+    {
+      W: 0,
+      D: 0,
+      L: 0,
+      scored: 0,
+      conceded: 0,
+      attendanceTotal: 0,
+      attendanceCount: 0,
+    },
+  );
+}
+
+function outcomeClass(result: Outcome) {
+  return {
+    W: "bg-emerald-600",
+    D: "bg-[#64748b]",
+    L: "bg-red-600",
+  }[result];
+}
+
 function buildMostUsedXi(players: PlayerStatisticsView[]) {
   const ranked = [...players].sort(
     (a, b) => b.starts + b.subs - (a.starts + a.subs),
@@ -143,22 +182,14 @@ function buildMostUsedXi(players: PlayerStatisticsView[]) {
   const selected = new Set<string>();
 
   function select(group: string, count: number) {
-    const positionalPlayers = ranked.filter(
-      (player) =>
-        !selected.has(player.Player) &&
-        positionGroup(player.profile.position) === group,
+    const available = ranked.filter((player) => !selected.has(player.Player));
+    const positional = available.filter(
+      (player) => positionGroup(player.profile.position) === group,
     );
-    const fallbackPlayers = ranked.filter(
-      (player) => !selected.has(player.Player),
-    );
-    const selection = [...positionalPlayers, ...fallbackPlayers]
-      .filter(
-        (player, index, candidates) =>
-          candidates.findIndex(
-            (candidate) => candidate.Player === player.Player,
-          ) === index,
-      )
-      .slice(0, count);
+    const selection = [
+      ...positional,
+      ...available.filter((player) => !positional.includes(player)),
+    ].slice(0, count);
     selection.forEach((player) => selected.add(player.Player));
     return selection;
   }
@@ -190,39 +221,35 @@ export function SeasonStory(props: {
   seasons: number[];
   achievements: readonly HonoursAchievement[];
 }) {
-  const season = Number(props.season);
-  const completedResults = props.results.filter(
+  const {
+    season: seasonValue,
+    results,
+    players,
+    managers,
+    transfers,
+    shirts,
+    seasons,
+    achievements,
+  } = props;
+  const season = Number(seasonValue);
+  const completedResults = results.filter(
     (result) =>
       typeof result.hgoal === "number" && typeof result.vgoal === "number",
   );
-  const wins = completedResults.filter((result) => outcome(result) === "W");
-  const draws = completedResults.filter((result) => outcome(result) === "D");
-  const losses = completedResults.filter((result) => outcome(result) === "L");
-  const scored = completedResults.reduce(
-    (total, result) => total + goalsFor(result),
-    0,
-  );
-  const conceded = completedResults.reduce(
-    (total, result) => total + goalsAgainst(result),
-    0,
-  );
-  const attendances = completedResults
-    .map((result) => result.attendance ?? 0)
-    .filter((attendance) => attendance > 0);
-  const averageAttendance = attendances.length
-    ? Math.round(
-        attendances.reduce((total, attendance) => total + attendance, 0) /
-          attendances.length,
-      )
+  const summary = summarizeResults(completedResults);
+  const averageAttendance = summary.attendanceCount
+    ? Math.round(summary.attendanceTotal / summary.attendanceCount)
     : 0;
-  const topScorer = [...props.players].sort((a, b) => b.goals - a.goals)[0];
-  const mostUsedXi = buildMostUsedXi(props.players);
-  const biggestWin = [...wins].sort(
-    (a, b) => goalsFor(b) - goalsAgainst(b) - (goalsFor(a) - goalsAgainst(a)),
-  )[0];
-  const highestAttendance = [...completedResults].sort(
-    (a, b) => (b.attendance ?? 0) - (a.attendance ?? 0),
-  )[0];
+  const topScorer = maxBy(players, (player) => player.goals);
+  const mostUsedXi = buildMostUsedXi(players);
+  const biggestWin = maxBy(
+    completedResults.filter((result) => outcome(result) === "W"),
+    (result) => goalsFor(result) - goalsAgainst(result),
+  );
+  const highestAttendance = maxBy(
+    completedResults,
+    (result) => result.attendance ?? 0,
+  );
   const storyMoments = uniqueMatches([
     completedResults[0],
     biggestWin,
@@ -234,10 +261,9 @@ export function SeasonStory(props: {
     highestAttendance,
     completedResults.at(-1),
   ]).slice(0, 3);
-  const managerNames = props.managers.map((manager) => manager.name).join(", ");
+  const managerNames = managers.map((manager) => manager.name).join(", ");
   const homeShirt =
-    props.shirts.find((shirt) => shirt.use === ShirtUsageType.Home) ??
-    props.shirts[0];
+    shirts.find((shirt) => shirt.use === ShirtUsageType.Home) ?? shirts[0];
   const shirt = homeShirt?.imagesCollection.items[0];
 
   return (
@@ -267,11 +293,11 @@ export function SeasonStory(props: {
           </a>
           <Link
             className="ml-auto hidden text-white/55 transition hover:text-white md:block"
-            href={`/results?season=${props.season}`}
+            href={`/results?season=${seasonValue}`}
           >
             All results
           </Link>
-          <JumpBox compact season={props.season} seasons={props.seasons} />
+          <JumpBox compact season={seasonValue} seasons={seasons} />
         </div>
       </div>
 
@@ -284,14 +310,14 @@ export function SeasonStory(props: {
               Season story · {divisionName(completedResults, season)}
             </p>
             <h2 className="mt-5 font-display text-6xl font-semibold tracking-[-0.055em] sm:text-7xl">
-              {seasonLabel(props.season)}
+              {seasonLabel(seasonValue)}
             </h2>
             <p className="mt-5 max-w-2xl text-xl leading-8 text-white/65">
               {completedResults.length > 0
-                ? `${wins.length} wins, ${scored} goals and a campaign told match by match.`
+                ? `${summary.W} wins, ${summary.scored} goals and a campaign told match by match.`
                 : "The people, shirts and records that shaped the campaign."}
             </p>
-            {props.achievements.length > 0 && (
+            {achievements.length > 0 && (
               <Link
                 href="/honours"
                 className="mt-7 flex max-w-2xl items-start gap-4 border border-amber-300/35 bg-amber-300/[0.08] p-4 transition hover:border-amber-300/70 hover:bg-amber-300/[0.12]"
@@ -304,7 +330,7 @@ export function SeasonStory(props: {
                     Honours season
                   </span>
                   <span className="mt-1 block font-display text-xl font-semibold text-white">
-                    {props.achievements
+                    {achievements
                       .map((achievement) => achievement.title)
                       .join(" · ")}
                   </span>
@@ -333,11 +359,11 @@ export function SeasonStory(props: {
                 Browse the archive
               </a>
             </div>
-            {(managerNames || props.transfers.length > 0) && (
+            {(managerNames || transfers.length > 0) && (
               <div className="mt-10 flex flex-wrap gap-x-8 gap-y-3 border-t border-white/15 pt-6 text-sm text-white/60">
                 {managerNames && <span>Manager: {managerNames}</span>}
-                {props.transfers.length > 0 && (
-                  <span>{props.transfers.length} recorded transfers</span>
+                {transfers.length > 0 && (
+                  <span>{transfers.length} recorded transfers</span>
                 )}
               </div>
             )}
@@ -348,14 +374,14 @@ export function SeasonStory(props: {
             {shirt ? (
               <Image
                 src={shirt.url}
-                alt={`${seasonLabel(props.season)} Tranmere shirt`}
+                alt={`${seasonLabel(seasonValue)} Tranmere shirt`}
                 width={560}
                 height={560}
                 className="relative z-10 h-80 w-80 object-contain drop-shadow-[0_25px_30px_rgba(0,0,0,0.35)]"
               />
             ) : topScorer?.profile.picLink ? (
               <Image
-                src={replaceSeasonsKit(topScorer.profile.picLink, props.season)}
+                src={replaceSeasonsKit(topScorer.profile.picLink, seasonValue)}
                 alt={topScorer.Player}
                 width={420}
                 height={420}
@@ -376,10 +402,10 @@ export function SeasonStory(props: {
         <dl className="mx-auto grid max-w-7xl grid-cols-2 px-6 sm:grid-cols-3 lg:grid-cols-6 lg:px-8">
           {[
             ["Matches", completedResults.length],
-            ["Wins", wins.length],
-            ["Draws", draws.length],
-            ["Defeats", losses.length],
-            ["Goals", `${scored}–${conceded}`],
+            ["Wins", summary.W],
+            ["Draws", summary.D],
+            ["Defeats", summary.L],
+            ["Goals", `${summary.scored}–${summary.conceded}`],
             [
               "Average gate",
               averageAttendance
@@ -529,7 +555,7 @@ export function SeasonStory(props: {
                               <Image
                                 src={replaceSeasonsKit(
                                   player.profile.picLink,
-                                  props.season,
+                                  seasonValue,
                                 )}
                                 alt=""
                                 width={80}
@@ -606,13 +632,7 @@ export function SeasonStory(props: {
                   return (
                     <span
                       key={`${match.date}-${match.opposition}`}
-                      className={`grid h-6 w-6 place-items-center text-[0.6rem] font-bold text-white ${
-                        result === "W"
-                          ? "bg-emerald-600"
-                          : result === "D"
-                            ? "bg-[#64748b]"
-                            : "bg-red-600"
-                      }`}
+                      className={`grid h-6 w-6 place-items-center text-[0.6rem] font-bold text-white ${outcomeClass(result)}`}
                     >
                       {result}
                     </span>

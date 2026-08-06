@@ -2,6 +2,10 @@ import { tool } from 'ai';
 import { PlayerSeasonSummary } from '@tranmere-web/lib/src/tranmere-web-types';
 import { z } from 'zod';
 
+interface LegacyPlayerSeasonSummary extends PlayerSeasonSummary {
+  bio?: { pic?: string };
+}
+
 export const PlayerStatsTool = tool({
   description: 'Get tranmere rovers player statistics.',
   inputSchema: z.object({
@@ -30,9 +34,11 @@ export const PlayerStatsTool = tool({
       `https://api.tranmere-web.com/player-search/?season=${season}&sort=${sort}&filter=`
     );
 
-    const players = (await query.json()) as { players: PlayerSeasonSummary[] };
+    const players = (await query.json()) as {
+      players: LegacyPlayerSeasonSummary[];
+    };
 
-    let filtered: PlayerSeasonSummary[] = [];
+    let filtered: LegacyPlayerSeasonSummary[] = [];
 
     if (player) {
       filtered = players.players.filter((p) => p.Player === player);
@@ -42,9 +48,8 @@ export const PlayerStatsTool = tool({
 
     return JSON.stringify(
       filtered.map((p) => {
-        p.picLink = p.bio?.pic;
-        delete p.bio;
-        return p;
+        const { bio, ...statistics } = p;
+        return { ...statistics, picLink: bio?.pic };
       })
     );
   }

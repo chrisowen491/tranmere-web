@@ -5,6 +5,7 @@
   "scripts": {
     "site": "next dev --turbo -p 3001",
     "build": "next build",
+    "test": "vitest run",
     "postbuild": "next-sitemap",
     "lint": "eslint .",
     "start": "next start",
@@ -84,6 +85,8 @@
     "@tailwindcss/postcss": "^4.1.11",
     "prettier": "^3.9.6",
     "tailwind-scrollbar": "^4.0.2",
+    "vite": "^8.0.0",
+    "vitest": "^4.0.18",
     "wrangler": "^4.118.0"
   }
 }

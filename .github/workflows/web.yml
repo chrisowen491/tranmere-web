@@ -25,6 +25,8 @@ jobs:
       # Run a build step here if your project requires
       - name: Install
         run: yarn --frozen-lockfile 
+      - name: Install
+        run: yarn test        
       - name: Build
         run: yarn cloudflare-build
         env:

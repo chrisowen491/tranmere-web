@@ -7,7 +7,8 @@
   "scripts": {
     "build": "tsc -b",
     "lint": "eslint .",
-    "format": "prettier --write \"src\""
+    "format": "prettier --write \"src\"",
+    "test": "yarn" 
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.1101.0",

@@ -1,10 +1,9 @@
 import { CommentAdmin } from "@/components/apps/admin/CommentAdmin";
-import { auth0 } from "@/lib/auth0";
+import { requireAdminPage } from "@/lib/adminAuth";
 import { getAllComments } from "@/lib/comments";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound, redirect } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 
@@ -14,15 +13,8 @@ export const metadata: Metadata = {
 };
 
 export default async function CommentAdminPage() {
-  const session = await auth0.getSession();
-  if (!session) {
-    redirect(`/auth/login?returnTo=${encodeURIComponent("/admin/comments")}`);
-  }
-
+  await requireAdminPage("/admin/comments");
   const env = getCloudflareContext().env;
-  const adminEmail = env.AUTH0_ADMIN_EMAIL || process.env.AUTH0_ADMIN_EMAIL;
-  if (!adminEmail || session.user.email !== adminEmail) notFound();
-
   const comments = await getAllComments(env.DB);
   const average = comments.length
     ? comments.reduce((total, comment) => total + comment.rating, 0) /

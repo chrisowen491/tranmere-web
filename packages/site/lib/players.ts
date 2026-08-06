@@ -93,12 +93,33 @@ export async function getUniquePlayers(db: D1Database) {
 }
 
 export async function getPlayersByNames(db: D1Database, names: string[]) {
-  const requested = new Set(names);
-  const players = await getUniquePlayers(db);
+  const requested = [...new Set(names)].filter(Boolean);
+  if (requested.length === 0) return new Map<string, PlayerRecord>();
+
+  const rows: PlayerRow[] = [];
+  const chunkSize = 50;
+  for (let index = 0; index < requested.length; index += chunkSize) {
+    const chunk = requested.slice(index, index + chunkSize);
+    const placeholders = chunk.map(() => "?").join(", ");
+    const result = await db
+      .prepare(
+        `SELECT ${playerColumns}
+         FROM Players
+         WHERE name IN (${placeholders})`,
+      )
+      .bind(...chunk)
+      .all<PlayerRow>();
+    rows.push(...result.results);
+  }
+
+  const players = rows.map(mapPlayer);
   return new Map(
     players
-      .filter((player) => requested.has(player.name))
-      .map((player) => [player.name, player]),
+      .reduce((unique, player) => {
+        unique.set(player.name, preferPlayer(unique.get(player.name), player));
+        return unique;
+      }, new Map<string, PlayerRecord>())
+      .entries(),
   );
 }
 

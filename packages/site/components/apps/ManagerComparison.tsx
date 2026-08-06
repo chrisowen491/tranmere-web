@@ -36,6 +36,8 @@ interface ManagerStats {
   awayWinRate: number;
 }
 
+type Outcome = "W" | "D" | "L";
+
 function managerImageSource(imagePath: string, width: number, height: number) {
   if (imagePath.startsWith("/") || /^https?:\/\//i.test(imagePath)) {
     return imagePath;
@@ -65,20 +67,15 @@ function resultFor(match: Match) {
   const scored = home ? match.hgoal : match.vgoal;
   const conceded = home ? match.vgoal : match.hgoal;
   return {
-    label: scored > conceded ? "W" : scored < conceded ? "L" : "D",
+    label: (scored > conceded ? "W" : scored < conceded ? "L" : "D") as Outcome,
     scored,
     conceded,
     home,
   };
 }
 
-function winRate(matches: Match[]) {
-  if (!matches.length) return 0;
-  return (
-    (matches.filter((match) => resultFor(match).label === "W").length /
-      matches.length) *
-    100
-  );
+function percentage(value: number, total: number) {
+  return total ? (value / total) * 100 : 0;
 }
 
 function calculateStats(matches: Match[]): ManagerStats {
@@ -94,11 +91,22 @@ function calculateStats(matches: Match[]): ManagerStats {
   let lost = 0;
   let goalsFor = 0;
   let goalsAgainst = 0;
+  let homeMatches = 0;
+  let homeWins = 0;
+  let awayMatches = 0;
+  let awayWins = 0;
 
   chronological.forEach((match) => {
     const result = resultFor(match);
     goalsFor += result.scored;
     goalsAgainst += result.conceded;
+    if (result.home) {
+      homeMatches += 1;
+      if (result.label === "W") homeWins += 1;
+    } else {
+      awayMatches += 1;
+      if (result.label === "W") awayWins += 1;
+    }
 
     if (result.label === "W") {
       won += 1;
@@ -118,9 +126,6 @@ function calculateStats(matches: Match[]): ManagerStats {
     bestUnbeatenRun = Math.max(bestUnbeatenRun, unbeatenRun);
   });
 
-  const homeMatches = matches.filter((match) => resultFor(match).home);
-  const awayMatches = matches.filter((match) => !resultFor(match).home);
-
   return {
     played: matches.length,
     won,
@@ -128,13 +133,34 @@ function calculateStats(matches: Match[]): ManagerStats {
     lost,
     goalsFor,
     goalsAgainst,
-    winRate: matches.length ? (won / matches.length) * 100 : 0,
+    winRate: percentage(won, matches.length),
     pointsPerGame: matches.length ? (won * 3 + drawn) / matches.length : 0,
     bestWinningRun,
     bestUnbeatenRun,
-    homeWinRate: winRate(homeMatches),
-    awayWinRate: winRate(awayMatches),
+    homeWinRate: percentage(homeWins, homeMatches),
+    awayWinRate: percentage(awayWins, awayMatches),
   };
+}
+
+async function loadManagerMatches(selection: ManagerSelection) {
+  const { dateJoined, dateLeft } = selection.manager;
+  const endDate = dateLeft.toLowerCase().startsWith("now")
+    ? new Date().toISOString().slice(0, 10)
+    : dateLeft;
+  const managerRange = encodeURIComponent(`${dateJoined},${endDate}`);
+  const response = await fetch(
+    `/api/result-search?manager=${managerRange}&sort=Date`,
+  );
+  if (!response.ok) throw new Error("Unable to load manager results");
+  return ((await response.json()) as { results: Match[] }).results;
+}
+
+function outcomeClass(result: Outcome) {
+  return {
+    W: "bg-blue-700",
+    D: "bg-slate-500",
+    L: "bg-red-700",
+  }[result];
 }
 
 function StatRow({
@@ -177,6 +203,151 @@ function StatRow({
   );
 }
 
+function ManagerSelect({
+  label,
+  value,
+  disabledKey,
+  selections,
+  onChange,
+}: {
+  label: string;
+  value: string;
+  disabledKey: string;
+  selections: ManagerSelection[];
+  onChange: (key: string) => void;
+}) {
+  return (
+    <label>
+      <span className="mb-2 block font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-[#071a2b]/50">
+        {label}
+      </span>
+      <select
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+        className="w-full border border-[#071a2b]/20 bg-[#fffdf8] px-4 py-3 text-sm font-bold focus:border-blue-700 focus:outline-none"
+      >
+        {selections.map((selection) => (
+          <option
+            key={selection.key}
+            value={selection.key}
+            disabled={selection.key === disabledKey}
+          >
+            {selection.label}
+          </option>
+        ))}
+      </select>
+    </label>
+  );
+}
+
+function ManagerSummary({
+  selection,
+  stats,
+  tenure,
+}: {
+  selection: ManagerSelection;
+  stats: ManagerStats;
+  tenure: string;
+}) {
+  const { manager, label } = selection;
+
+  return (
+    <div className="border-b border-[#071a2b]/15 p-6 lg:border-b-0 lg:border-r lg:last:border-l lg:last:border-r-0 lg:p-8">
+      <div className="flex items-start gap-5">
+        <div className="h-28 w-24 flex-none overflow-hidden border border-[#071a2b]/15 bg-[#e8e2d6]">
+          {manager.imagePath ? (
+            <Image
+              src={managerImageSource(manager.imagePath, 240, 280)}
+              alt={`${manager.name}, Tranmere Rovers manager`}
+              width={240}
+              height={280}
+              unoptimized
+              className="h-full w-full object-cover object-top"
+            />
+          ) : (
+            <span className="grid h-full place-items-center">
+              <UserIcon className="h-12 w-12 text-[#071a2b]/20" />
+            </span>
+          )}
+        </div>
+        <div className="min-w-0">
+          <p className="font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-blue-700">
+            {tenure}
+          </p>
+          <h2 className="mt-3 font-display text-4xl font-semibold tracking-[-0.04em]">
+            {manager.name}
+          </h2>
+          <p className="mt-3 text-sm text-[#071a2b]/50">
+            {label.split(" · ")[1]}
+          </p>
+        </div>
+      </div>
+      <p className="mt-8 font-display text-6xl font-semibold text-blue-700">
+        {stats.winRate.toFixed(1)}
+        <span className="text-2xl">%</span>
+      </p>
+      <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.14em] text-[#071a2b]/40">
+        Win rate
+      </p>
+    </div>
+  );
+}
+
+function LatestMatches({
+  selection,
+  matches,
+}: {
+  selection: ManagerSelection;
+  matches: Match[];
+}) {
+  const latestMatches = matches
+    .toSorted((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    .slice(0, 5);
+
+  return (
+    <div>
+      <div className="border-b border-[#071a2b]/15 pb-5">
+        <p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-700">
+          Latest matches
+        </p>
+        <h3 className="mt-2 font-display text-3xl font-semibold">
+          {selection.manager.name}
+        </h3>
+      </div>
+      <div className="border-x border-[#071a2b]/15">
+        {latestMatches.map((match) => {
+          const result = resultFor(match);
+          return (
+            <Link
+              key={`${match.season}-${match.date}`}
+              href={`/match/${match.season}/${match.date.slice(0, 10)}`}
+              className="group grid grid-cols-[36px_1fr_auto] items-center gap-3 border-b border-[#071a2b]/15 bg-[#fffdf8] p-3 transition hover:bg-blue-50"
+            >
+              <span
+                className={`grid h-8 w-8 place-items-center font-mono text-[10px] font-bold text-white ${outcomeClass(result.label)}`}
+              >
+                {result.label}
+              </span>
+              <span>
+                <span className="block text-sm font-bold">
+                  {match.opposition}
+                </span>
+                <span className="font-mono text-[9px] uppercase tracking-[0.08em] text-[#071a2b]/40">
+                  {formatDate(match.date)}
+                </span>
+              </span>
+              <span className="flex items-center gap-2 font-mono text-xs font-bold">
+                {result.scored}–{result.conceded}
+                <ArrowRightIcon className="h-3.5 w-3.5 text-[#071a2b]/25 transition group-hover:translate-x-1 group-hover:text-blue-700" />
+              </span>
+            </Link>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 export function ManagerComparison({
   managers,
   initialMatches,
@@ -209,22 +380,13 @@ export function ManagerComparison({
   const leftStats = calculateStats(leftMatches);
   const rightStats = calculateStats(rightMatches);
 
-  async function compare(
-    nextLeftKey = leftKey,
-    nextRightKey = rightKey,
-  ) {
-    const nextLeftManager = selections.find(
-      (item) => item.key === nextLeftKey,
-    );
+  async function compare(nextLeftKey = leftKey, nextRightKey = rightKey) {
+    const nextLeftManager = selections.find((item) => item.key === nextLeftKey);
     const nextRightManager = selections.find(
       (item) => item.key === nextRightKey,
     );
 
-    if (
-      !nextLeftManager ||
-      !nextRightManager ||
-      nextLeftKey === nextRightKey
-    ) {
+    if (!nextLeftManager || !nextRightManager || nextLeftKey === nextRightKey) {
       return;
     }
 
@@ -232,24 +394,11 @@ export function ManagerComparison({
     comparisonRequest.current = requestId;
     setLoading(true);
     setError("");
-    const loadMatches = async (selection: ManagerSelection) => {
-      const manager = selection.manager;
-      const dateLeft = manager.dateLeft.toLowerCase().startsWith("now")
-        ? new Date().toISOString().slice(0, 10)
-        : manager.dateLeft;
-      const response = await fetch(
-        `/api/result-search?manager=${encodeURIComponent(
-          `${manager.dateJoined},${dateLeft}`,
-        )}&sort=Date`,
-      );
-      if (!response.ok) throw new Error("Unable to load manager results");
-      return ((await response.json()) as { results: Match[] }).results;
-    };
 
     try {
       const [left, right] = await Promise.all([
-        loadMatches(nextLeftManager),
-        loadMatches(nextRightManager),
+        loadManagerMatches(nextLeftManager),
+        loadManagerMatches(nextRightManager),
       ]);
 
       if (comparisonRequest.current !== requestId) return;
@@ -272,57 +421,29 @@ export function ManagerComparison({
       <section className="border-b border-[#071a2b]/15 bg-[#e8e2d6]">
         <div className="mx-auto max-w-7xl px-6 py-8 sm:px-10 lg:px-12">
           <div className="grid gap-4 lg:grid-cols-[1fr_auto_1fr_auto] lg:items-end">
-            <label>
-              <span className="mb-2 block font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-[#071a2b]/50">
-                First manager
-              </span>
-              <select
-                value={leftKey}
-                onChange={(event) => {
-                  const nextKey = event.target.value;
-                  setLeftKey(nextKey);
-                  void compare(nextKey, rightKey);
-                }}
-                className="w-full border border-[#071a2b]/20 bg-[#fffdf8] px-4 py-3 text-sm font-bold focus:border-blue-700 focus:outline-none"
-              >
-                {selections.map((item) => (
-                  <option
-                    key={item.key}
-                    value={item.key}
-                    disabled={item.key === rightKey}
-                  >
-                    {item.label}
-                  </option>
-                ))}
-              </select>
-            </label>
+            <ManagerSelect
+              label="First manager"
+              value={leftKey}
+              disabledKey={rightKey}
+              selections={selections}
+              onChange={(nextKey) => {
+                setLeftKey(nextKey);
+                void compare(nextKey, rightKey);
+              }}
+            />
             <span className="hidden pb-3 font-display text-2xl text-[#071a2b]/30 lg:block">
               vs
             </span>
-            <label>
-              <span className="mb-2 block font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-[#071a2b]/50">
-                Second manager
-              </span>
-              <select
-                value={rightKey}
-                onChange={(event) => {
-                  const nextKey = event.target.value;
-                  setRightKey(nextKey);
-                  void compare(leftKey, nextKey);
-                }}
-                className="w-full border border-[#071a2b]/20 bg-[#fffdf8] px-4 py-3 text-sm font-bold focus:border-blue-700 focus:outline-none"
-              >
-                {selections.map((item) => (
-                  <option
-                    key={item.key}
-                    value={item.key}
-                    disabled={item.key === leftKey}
-                  >
-                    {item.label}
-                  </option>
-                ))}
-              </select>
-            </label>
+            <ManagerSelect
+              label="Second manager"
+              value={rightKey}
+              disabledKey={leftKey}
+              selections={selections}
+              onChange={(nextKey) => {
+                setRightKey(nextKey);
+                void compare(leftKey, nextKey);
+              }}
+            />
             <button
               type="button"
               onClick={() => void compare()}
@@ -343,48 +464,11 @@ export function ManagerComparison({
 
       <div className="mx-auto max-w-7xl px-6 py-14 sm:px-10 lg:px-12 lg:py-20">
         <section className="grid border border-[#071a2b]/15 bg-[#fffdf8] lg:grid-cols-[1fr_1.2fr_1fr]">
-          <div className="border-b border-[#071a2b]/15 p-6 lg:border-b-0 lg:border-r lg:p-8">
-            <div className="flex items-start gap-5">
-              <div className="h-28 w-24 flex-none overflow-hidden border border-[#071a2b]/15 bg-[#e8e2d6]">
-                {leftManager?.manager.imagePath ? (
-                  <Image
-                    src={managerImageSource(
-                      leftManager.manager.imagePath,
-                      240,
-                      280,
-                    )}
-                    alt={`${leftManager.manager.name}, Tranmere Rovers manager`}
-                    width={240}
-                    height={280}
-                    unoptimized
-                    className="h-full w-full object-cover object-top"
-                  />
-                ) : (
-                  <span className="grid h-full place-items-center">
-                    <UserIcon className="h-12 w-12 text-[#071a2b]/20" />
-                  </span>
-                )}
-              </div>
-              <div className="min-w-0">
-                <p className="font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-blue-700">
-                  First tenure
-                </p>
-                <h2 className="mt-3 font-display text-4xl font-semibold tracking-[-0.04em]">
-                  {leftManager?.manager.name}
-                </h2>
-                <p className="mt-3 text-sm text-[#071a2b]/50">
-                  {leftManager?.label.split(" · ")[1]}
-                </p>
-              </div>
-            </div>
-            <p className="mt-8 font-display text-6xl font-semibold text-blue-700">
-              {leftStats.winRate.toFixed(1)}
-              <span className="text-2xl">%</span>
-            </p>
-            <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.14em] text-[#071a2b]/40">
-              Win rate
-            </p>
-          </div>
+          <ManagerSummary
+            selection={leftManager}
+            stats={leftStats}
+            tenure="First tenure"
+          />
 
           <div className="order-3 border-t border-[#071a2b]/15 lg:order-none lg:border-x-0 lg:border-y-0">
             <div className="bg-[#071a2b] px-5 py-4 text-center text-white">
@@ -422,48 +506,11 @@ export function ManagerComparison({
             />
           </div>
 
-          <div className="border-b border-[#071a2b]/15 p-6 lg:border-b-0 lg:border-l lg:p-8">
-            <div className="flex items-start gap-5">
-              <div className="h-28 w-24 flex-none overflow-hidden border border-[#071a2b]/15 bg-[#e8e2d6]">
-                {rightManager?.manager.imagePath ? (
-                  <Image
-                    src={managerImageSource(
-                      rightManager.manager.imagePath,
-                      240,
-                      280,
-                    )}
-                    alt={`${rightManager.manager.name}, Tranmere Rovers manager`}
-                    width={240}
-                    height={280}
-                    unoptimized
-                    className="h-full w-full object-cover object-top"
-                  />
-                ) : (
-                  <span className="grid h-full place-items-center">
-                    <UserIcon className="h-12 w-12 text-[#071a2b]/20" />
-                  </span>
-                )}
-              </div>
-              <div className="min-w-0">
-                <p className="font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-blue-700">
-                  Second tenure
-                </p>
-                <h2 className="mt-3 font-display text-4xl font-semibold tracking-[-0.04em]">
-                  {rightManager?.manager.name}
-                </h2>
-                <p className="mt-3 text-sm text-[#071a2b]/50">
-                  {rightManager?.label.split(" · ")[1]}
-                </p>
-              </div>
-            </div>
-            <p className="mt-8 font-display text-6xl font-semibold text-blue-700">
-              {rightStats.winRate.toFixed(1)}
-              <span className="text-2xl">%</span>
-            </p>
-            <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.14em] text-[#071a2b]/40">
-              Win rate
-            </p>
-          </div>
+          <ManagerSummary
+            selection={rightManager}
+            stats={rightStats}
+            tenure="Second tenure"
+          />
         </section>
 
         <section className="mt-8 grid border-l border-t border-[#071a2b]/15 sm:grid-cols-2 lg:grid-cols-4">
@@ -511,70 +558,8 @@ export function ManagerComparison({
         </section>
 
         <section className="mt-12 grid gap-8 lg:grid-cols-2">
-          {[
-            [leftManager, leftMatches],
-            [rightManager, rightMatches],
-          ].map(([selection, matches], columnIndex) => {
-            const managerSelection = selection as ManagerSelection;
-            const managerMatches = (matches as Match[])
-              .toSorted(
-                (a, b) =>
-                  new Date(b.date).getTime() - new Date(a.date).getTime(),
-              )
-              .slice(0, 5);
-            return (
-              <div key={`${managerSelection.key}-${columnIndex}`}>
-                <div className="border-b border-[#071a2b]/15 pb-5">
-                  <p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-700">
-                    Latest matches
-                  </p>
-                  <h3 className="mt-2 font-display text-3xl font-semibold">
-                    {managerSelection.manager.name}
-                  </h3>
-                </div>
-                <div className="border-x border-[#071a2b]/15">
-                  {managerMatches.map((match) => {
-                    const result = resultFor(match);
-                    return (
-                      <Link
-                        key={`${match.season}-${match.date}`}
-                        href={`/match/${match.season}/${match.date.slice(0, 10)}`}
-                        className="group grid grid-cols-[36px_1fr_auto] items-center gap-3 border-b border-[#071a2b]/15 bg-[#fffdf8] p-3 transition hover:bg-blue-50"
-                      >
-                        <span
-                          className={`grid h-8 w-8 place-items-center font-mono text-[10px] font-bold text-white ${
-                            result.label === "W"
-                              ? "bg-blue-700"
-                              : result.label === "L"
-                                ? "bg-red-700"
-                                : "bg-slate-500"
-                          }`}
-                        >
-                          {result.label}
-                        </span>
-                        <span>
-                          <span className="block text-sm font-bold">
-                            {match.opposition}
-                          </span>
-                          <span className="font-mono text-[9px] uppercase tracking-[0.08em] text-[#071a2b]/40">
-                            {new Date(match.date).toLocaleDateString("en-GB", {
-                              day: "numeric",
-                              month: "short",
-                              year: "numeric",
-                            })}
-                          </span>
-                        </span>
-                        <span className="flex items-center gap-2 font-mono text-xs font-bold">
-                          {result.scored}–{result.conceded}
-                          <ArrowRightIcon className="h-3.5 w-3.5 text-[#071a2b]/25 transition group-hover:translate-x-1 group-hover:text-blue-700" />
-                        </span>
-                      </Link>
-                    );
-                  })}
-                </div>
-              </div>
-            );
-          })}
+          <LatestMatches selection={leftManager} matches={leftMatches} />
+          <LatestMatches selection={rightManager} matches={rightMatches} />
         </section>
       </div>
     </div>

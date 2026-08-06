@@ -7,6 +7,7 @@ import {
 import { NextRequest, NextResponse } from "next/server";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { auth0 } from "@/lib/auth0";
+import { getAdminSession } from "@/lib/adminAuth";
 import { revalidatePath } from "next/cache";
 
 export interface ModerationResult {
@@ -69,11 +70,8 @@ export async function DELETE(req: NextRequest) {
     );
   }
 
-  const adminEmail = env.AUTH0_ADMIN_EMAIL || process.env.AUTH0_ADMIN_EMAIL;
   const isAuthor = session?.user.sub === existing.user.sub;
-  const isAdmin = Boolean(
-    session && adminEmail && session.user.email === adminEmail,
-  );
+  const isAdmin = Boolean(await getAdminSession());
   if (!isAuthor && !isAdmin) {
     return NextResponse.json(
       { message: "You cannot delete this comment." },

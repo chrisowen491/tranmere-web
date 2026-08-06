@@ -1,4 +1,4 @@
-import { auth0 } from "@/lib/auth0";
+import { getAdminSession } from "@/lib/adminAuth";
 import { deleteComment, getCommentById, updateComment } from "@/lib/comments";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { revalidatePath } from "next/cache";
@@ -14,21 +14,12 @@ function error(message: string, status: number) {
   return NextResponse.json({ message }, { status });
 }
 
-async function requireAdmin() {
-  const session = await auth0.getSession();
-  const env = getCloudflareContext().env;
-  const adminEmail = env.AUTH0_ADMIN_EMAIL || process.env.AUTH0_ADMIN_EMAIL;
-  return session && adminEmail && session.user.email === adminEmail
-    ? session
-    : null;
-}
-
 function validId(value?: number) {
   return Number.isSafeInteger(value) && Number(value) > 0;
 }
 
 export async function PATCH(request: NextRequest) {
-  if (!(await requireAdmin())) {
+  if (!(await getAdminSession())) {
     return error("You do not have permission to manage comments.", 403);
   }
 
@@ -54,7 +45,7 @@ export async function PATCH(request: NextRequest) {
 }
 
 export async function DELETE(request: NextRequest) {
-  if (!(await requireAdmin())) {
+  if (!(await getAdminSession())) {
     return error("You do not have permission to manage comments.", 403);
   }
 
