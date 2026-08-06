@@ -3,10 +3,10 @@ import {
   GetSeasonsForPlayers,
   replaceSeasonsKit,
 } from "@tranmere-web/lib/src/apiFunctions";
-import { PlayerSeasonSummary } from "@tranmere-web/lib/src/tranmere-web-types";
 import { useState } from "react";
 import { FilterBox } from "@/components/forms/FilterBox";
 import { SubmitButton } from "@/components/forms/SubmitButton";
+import type { PlayerStatisticsView } from "@/lib/playerStatistics";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import {
   AdjustmentsHorizontalIcon,
@@ -21,7 +21,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 export function PlayerSearch(props: {
-  default: PlayerSeasonSummary[];
+  default: PlayerStatisticsView[];
   filter?: string;
   sort?: string;
   season?: string;
@@ -91,7 +91,7 @@ export function PlayerSearch(props: {
         `?season=${formData.get("season")}&sort=${formData.get("sort")}&filter=${formData.get("filter")}`,
     );
     const playerResults = (await latestSeasonRequest.json()) as {
-      players: PlayerSeasonSummary[];
+      players: PlayerStatisticsView[];
     };
 
     setPlayers(playerResults.players);
@@ -323,14 +323,14 @@ export function PlayerSearch(props: {
                     <td className="whitespace-nowrap px-4 py-3">
                       <div className="flex items-center">
                         <div className="h-12 w-12 flex-shrink-0 overflow-hidden border border-[#071a2b]/10 bg-[#e8e2d6]">
-                          {player.bio?.picLink ? (
+                          {player.profile.picLink ? (
                             <Image
                               alt={player.Player}
                               width={100}
                               height={100}
                               unoptimized={true}
                               src={replaceSeasonsKit(
-                                player.bio.picLink,
+                                player.profile.picLink,
                                 season,
                               )}
                               className="h-full w-full object-cover"
@@ -350,9 +350,9 @@ export function PlayerSearch(props: {
                             {player.Player}
                             <ArrowUpRightIcon className="h-3.5 w-3.5 opacity-25 transition group-hover:opacity-100" />
                           </Link>
-                          {player.bio?.position && (
+                          {player.profile.position && (
                             <p className="mt-1 font-mono text-[9px] font-bold uppercase tracking-[0.1em] text-[#071a2b]/35">
-                              {player.bio.position}
+                              {player.profile.position}
                             </p>
                           )}
                         </div>

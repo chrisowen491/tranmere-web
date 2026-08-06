@@ -161,7 +161,7 @@ export default async function TopScorersBySeason() {
           </Link>
         </div>
 
-        <ol className="grid gap-px border border-[#071a2b]/15 bg-[#071a2b]/15 sm:grid-cols-2 lg:grid-cols-3">
+        <ol className="grid gap-px border border-[#071a2b]/15 bg-[#071a2b]/15 sm:grid-cols-2">
           {newestFirst.map((player) => (
             <li
               key={`${player.Season}-${player.Player}`}
