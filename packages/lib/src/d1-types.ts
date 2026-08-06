@@ -44,3 +44,10 @@ export interface ManagerRow {
   image_path: string | null;
   favourite_formation: string | null;
 }
+
+export interface ProgrammeRow {
+  url: string;
+  match_name: string;
+  match_date: string;
+  pages: number;
+}

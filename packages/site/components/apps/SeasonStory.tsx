@@ -16,6 +16,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { JumpBox } from "../forms/JumpBox";
 import type { PlayerStatisticsView } from "@/lib/playerStatistics";
+import type { HonoursAchievement } from "@tranmere-web/lib/src/honours-constants";
 
 type Outcome = "W" | "D" | "L";
 
@@ -187,6 +188,7 @@ export function SeasonStory(props: {
   transfers: Transfer[];
   shirts: Shirt[];
   seasons: number[];
+  achievements: readonly HonoursAchievement[];
 }) {
   const season = Number(props.season);
   const completedResults = props.results.filter(
@@ -289,6 +291,33 @@ export function SeasonStory(props: {
                 ? `${wins.length} wins, ${scored} goals and a campaign told match by match.`
                 : "The people, shirts and records that shaped the campaign."}
             </p>
+            {props.achievements.length > 0 && (
+              <Link
+                href="/honours"
+                className="mt-7 flex max-w-2xl items-start gap-4 border border-amber-300/35 bg-amber-300/[0.08] p-4 transition hover:border-amber-300/70 hover:bg-amber-300/[0.12]"
+              >
+                <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-amber-300 text-[#071a2b]">
+                  <TrophyIcon className="h-6 w-6" aria-hidden="true" />
+                </span>
+                <span>
+                  <span className="block text-[0.65rem] font-bold uppercase tracking-[0.17em] text-amber-300">
+                    Honours season
+                  </span>
+                  <span className="mt-1 block font-display text-xl font-semibold text-white">
+                    {props.achievements
+                      .map((achievement) => achievement.title)
+                      .join(" · ")}
+                  </span>
+                  <span className="mt-1 block text-xs text-white/50">
+                    View the complete Rovers roll of honour
+                  </span>
+                </span>
+                <ArrowRightIcon
+                  className="ml-auto mt-3 h-4 w-4 shrink-0 text-amber-300"
+                  aria-hidden="true"
+                />
+              </Link>
+            )}
             <div className="mt-9 flex flex-wrap gap-3">
               <a
                 href="#season-timeline"

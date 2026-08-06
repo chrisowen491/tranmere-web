@@ -15,7 +15,7 @@
 | Lint a file   | `yarn workspace <workspace-name> eslint path/to/file.ts`           |
 | Format a file | `yarn prettier --write path/to/file.ts`                            |
 | Test API file | `yarn workspace @tranmere-web/api-stack test path/to/file.test.ts` |
-| Typecheck MCP | `yarn workspace remote-mcp-server-authless type-check`             |
+| Lint MCP      | `yarn workspace @tranmere-web/mcp lint`                            |
 
 ## Validation
 
@@ -25,14 +25,13 @@
 - Test the API: `yarn workspace @tranmere-web/api-stack test`
 - Synthesize infrastructure: `yarn workspace @tranmere-web/api-stack synth`
 
-
 ## Local Development
 
-- A copy of the site can run locally by calling `yarn site` thsi runs the local website on `http://localhost:3001` aginst the productyion API.
+- Run `yarn site` to serve the local website at `http://localhost:3001` against the production API.
 
 ## Project Structure
 
-- See `docs/ARCHITECTURE.md` for system boundaries, data ownership, request flows, and deployment architecture.
+- See `docs/ARCHITECTURE.md` for system boundaries and `docs/FEATURES.md` for the implemented feature catalogue.
 - `packages/site/`: Next.js site and Cloudflare deployment
 - `packages/api-stack/`: AWS CDK stack, Lambda handlers, and Jest tests
 - `packages/lib/`: shared AWS and Contentful library

@@ -1,4 +1,10 @@
-import type { ClubRow, ManagerRow, PlayerRow, TransferRow } from './d1-types';
+import type {
+  ClubRow,
+  ManagerRow,
+  PlayerRow,
+  ProgrammeRow,
+  TransferRow,
+} from './d1-types';
 
 type D1Value = string | number | null;
 
@@ -180,4 +186,24 @@ export async function queryManagerAtDateRow(
     )
     .bind(date, date)
     .first<ManagerRow>();
+}
+
+export async function queryProgrammeRows(
+  db: D1DatabaseReader,
+  options: QueryOptions = {}
+) {
+  const values: D1Value[] = [];
+  const where = options.query ? 'WHERE match_name LIKE ?' : '';
+  if (options.query) values.push(`%${options.query}%`);
+
+  const sql = withLimit(
+    `SELECT url, match_name, match_date, pages
+     FROM Programmes
+     ${where}
+     ORDER BY match_date DESC, match_name ASC`,
+    values,
+    options.limit
+  );
+
+  return (await all<ProgrammeRow>(db, sql, values)).results;
 }

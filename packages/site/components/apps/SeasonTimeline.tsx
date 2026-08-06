@@ -2,6 +2,7 @@ import {
   ArrowRightIcon,
   ArrowsRightLeftIcon,
   NewspaperIcon,
+  TrophyIcon,
   UserIcon,
 } from "@heroicons/react/24/outline";
 import {
@@ -11,6 +12,7 @@ import {
 } from "@tranmere-web/lib/src/tranmere-web-types";
 import { BlogItem } from "@/lib/types";
 import Link from "next/link";
+import type { HonoursAchievement } from "@tranmere-web/lib/src/honours-constants";
 
 type Outcome = "W" | "D" | "L";
 
@@ -21,6 +23,7 @@ interface MonthChapter {
   managersJoining: Manager[];
   managersLeaving: Manager[];
   transfers: Transfer[];
+  achievements: HonoursAchievement[];
 }
 
 function parseDate(value?: string) {
@@ -94,6 +97,7 @@ function buildChapters(
   results: Match[],
   managers: Manager[],
   transfers: Transfer[],
+  achievements: readonly HonoursAchievement[],
 ) {
   const firstYear = Number(season);
   const seasonStart = new Date(firstYear, 4, 1);
@@ -111,6 +115,7 @@ function buildChapters(
       managersJoining: [],
       managersLeaving: [],
       transfers: [],
+      achievements: [],
     };
     chapters.set(key, chapter);
     return chapter;
@@ -139,6 +144,13 @@ function buildChapters(
     }
   });
 
+  achievements.forEach((achievement) => {
+    const date = parseDate(achievement.achievedOn);
+    if (date && date >= seasonStart && date <= seasonEnd) {
+      ensureChapter(date).achievements.push(achievement);
+    }
+  });
+
   return [...chapters.values()]
     .sort((a, b) => a.date.getTime() - b.date.getTime())
     .map((chapter) => ({
@@ -157,12 +169,14 @@ export function SeasonTimeline(props: {
   managers: Manager[];
   transfers: Transfer[];
   articles: BlogItem[];
+  achievements: readonly HonoursAchievement[];
 }) {
   const chapters = buildChapters(
     props.season,
     props.results,
     props.managers,
     props.transfers,
+    props.achievements,
   );
   const undatedTransfers = props.transfers.filter(
     (transfer) => !parseDate(transfer.date),
@@ -297,8 +311,19 @@ export function SeasonTimeline(props: {
                     className="relative border-l border-[#071a2b]/20 pb-12 pl-8 last:pb-0 sm:pl-12"
                     key={chapter.key}
                   >
-                    <span className="absolute -left-2 top-1 h-4 w-4 rounded-full border-4 border-[#fffdf8] bg-emerald-500 ring-1 ring-[#071a2b]/20" />
-                    <details className="group" open={chapterIndex === 0}>
+                    <span
+                      className={`absolute -left-2 top-1 h-4 w-4 rounded-full border-4 border-[#fffdf8] ring-1 ring-[#071a2b]/20 ${
+                        chapter.achievements.length > 0
+                          ? "bg-amber-400"
+                          : "bg-emerald-500"
+                      }`}
+                    />
+                    <details
+                      className="group"
+                      open={
+                        chapterIndex === 0 || chapter.achievements.length > 0
+                      }
+                    >
                       <summary className="cursor-pointer list-none [&::-webkit-details-marker]:hidden">
                         <div className="flex flex-wrap items-start justify-between gap-4">
                           <div>
@@ -309,6 +334,17 @@ export function SeasonTimeline(props: {
                             <h3 className="mt-1 font-display text-3xl font-semibold">
                               {monthLabel(chapter.date)}
                             </h3>
+                            {chapter.achievements.length > 0 && (
+                              <span className="mt-2 inline-flex items-center gap-1.5 bg-amber-100 px-2.5 py-1 text-[0.62rem] font-bold uppercase tracking-[0.14em] text-amber-900">
+                                <TrophyIcon
+                                  className="h-3.5 w-3.5"
+                                  aria-hidden="true"
+                                />
+                                {chapter.achievements.length === 1
+                                  ? "Honour achieved"
+                                  : `${chapter.achievements.length} honours achieved`}
+                              </span>
+                            )}
                           </div>
                           {chapter.matches.length > 0 && (
                             <div
@@ -401,6 +437,45 @@ export function SeasonTimeline(props: {
                                 <span className="shrink-0 font-mono text-xs text-[#071a2b]/45">
                                   {transfer.date}
                                 </span>
+                              </Link>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {chapter.achievements.length > 0 && (
+                        <div className="mt-5 border-l-4 border-amber-500 bg-amber-50 p-4">
+                          <p className="flex items-center gap-2 text-[0.65rem] font-bold uppercase tracking-[0.14em] text-amber-800">
+                            <TrophyIcon
+                              className="h-4 w-4"
+                              aria-hidden="true"
+                            />
+                            Season achievement
+                          </p>
+                          <div className="mt-3 space-y-3">
+                            {chapter.achievements.map((achievement) => (
+                              <Link
+                                href="/honours"
+                                key={`${achievement.achievedOn}-${achievement.title}`}
+                                className="group flex items-start justify-between gap-4"
+                              >
+                                <span>
+                                  <strong className="block group-hover:text-blue-700">
+                                    {achievement.title}
+                                  </strong>
+                                  <span className="mt-1 block text-xs leading-5 text-[#071a2b]/55">
+                                    {achievement.detail}
+                                  </span>
+                                </span>
+                                <time
+                                  dateTime={achievement.achievedOn}
+                                  className="shrink-0 font-mono text-xs text-amber-900/65"
+                                >
+                                  {new Intl.DateTimeFormat("en-GB", {
+                                    day: "numeric",
+                                    month: "short",
+                                  }).format(new Date(achievement.achievedOn))}
+                                </time>
                               </Link>
                             ))}
                           </div>

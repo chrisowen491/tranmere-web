@@ -10,6 +10,7 @@ export default {
     "./node_modules/flowbite-react/lib/**/*.js",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    './node_modules/react-pdf-flipbook-viewer/**/*.{js,ts,jsx,tsx}',
   ],
   darkMode: 'selector',
   theme: {

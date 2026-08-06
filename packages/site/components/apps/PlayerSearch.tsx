@@ -3,6 +3,7 @@ import {
   GetSeasonsForPlayers,
   replaceSeasonsKit,
 } from "@tranmere-web/lib/src/apiFunctions";
+import { PlayerSeasonSummary } from "@tranmere-web/lib/src/tranmere-web-types";
 import { useState } from "react";
 import { FilterBox } from "@/components/forms/FilterBox";
 import { SubmitButton } from "@/components/forms/SubmitButton";
@@ -18,13 +19,9 @@ import {
 import { UserIcon } from "@heroicons/react/20/solid";
 import Image from "next/image";
 import Link from "next/link";
-import {
-  defaultPlayerAvatar,
-  type PlayerStatisticsView,
-} from "@/lib/playerStatistics";
 
 export function PlayerSearch(props: {
-  default: PlayerStatisticsView[];
+  default: PlayerSeasonSummary[];
   filter?: string;
   sort?: string;
   season?: string;
@@ -36,7 +33,6 @@ export function PlayerSearch(props: {
   const [players, setPlayers] = useState(props.default);
   const [season, setSeason] = useState(props.season);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const maxAppearances = Math.max(
     ...players.map((player) => player.starts + player.subs),
     1,
@@ -87,34 +83,19 @@ export function PlayerSearch(props: {
     setOpen(true);
   }
   const onSubmit = async (formData: FormData) => {
+    setSeason(formData.get("season") as string);
     setLoading(true);
-    setError(null);
 
-    try {
-      const search = new URLSearchParams({
-        season: String(formData.get("season") ?? ""),
-        sort: String(formData.get("sort") ?? ""),
-        filter: String(formData.get("filter") ?? ""),
-      });
-      const latestSeasonRequest = await fetch(`${base}?${search}`);
-      if (!latestSeasonRequest.ok) {
-        throw new Error("Player statistics could not be loaded.");
-      }
-      const playerResults = (await latestSeasonRequest.json()) as {
-        players?: PlayerStatisticsView[];
-      };
-      if (!Array.isArray(playerResults.players)) {
-        throw new Error("Player statistics could not be loaded.");
-      }
+    const latestSeasonRequest = await fetch(
+      base +
+        `?season=${formData.get("season")}&sort=${formData.get("sort")}&filter=${formData.get("filter")}`,
+    );
+    const playerResults = (await latestSeasonRequest.json()) as {
+      players: PlayerSeasonSummary[];
+    };
 
-      setPlayers(playerResults.players);
-      setSeason(String(formData.get("season") ?? ""));
-      setOpen(false);
-    } catch {
-      setError("The player archive could not be updated. Please try again.");
-    } finally {
-      setLoading(false);
-    }
+    setPlayers(playerResults.players);
+    setLoading(false);
   };
 
   return (
@@ -241,15 +222,6 @@ export function PlayerSearch(props: {
         ""
       )}
 
-      {error && (
-        <p
-          role="alert"
-          className="mt-6 border border-red-200 bg-red-50 px-5 py-4 text-sm font-semibold text-red-800"
-        >
-          {error}
-        </p>
-      )}
-
       {players.length > 0 && (
         <div className="mt-7 grid border border-[#071a2b]/15 bg-[#fffdf8] sm:grid-cols-3">
           <div className="border-b border-[#071a2b]/15 p-5 sm:border-b-0 sm:border-r">
@@ -340,10 +312,6 @@ export function PlayerSearch(props: {
             <tbody className="divide-y divide-[#071a2b]/10 text-sm">
               {players.map((player, idx) => {
                 const apps = player.starts + player.subs;
-                const profile = player.profile ?? {
-                  picLink: defaultPlayerAvatar,
-                  position: null,
-                };
                 return (
                   <tr
                     key={`${player.Player}-${player.Season}-${idx}`}
@@ -355,13 +323,16 @@ export function PlayerSearch(props: {
                     <td className="whitespace-nowrap px-4 py-3">
                       <div className="flex items-center">
                         <div className="h-12 w-12 flex-shrink-0 overflow-hidden border border-[#071a2b]/10 bg-[#e8e2d6]">
-                          {profile.picLink ? (
+                          {player.bio?.picLink ? (
                             <Image
                               alt={player.Player}
                               width={100}
                               height={100}
                               unoptimized={true}
-                              src={replaceSeasonsKit(profile.picLink, season)}
+                              src={replaceSeasonsKit(
+                                player.bio.picLink,
+                                season,
+                              )}
                               className="h-full w-full object-cover"
                             />
                           ) : (
@@ -379,9 +350,9 @@ export function PlayerSearch(props: {
                             {player.Player}
                             <ArrowUpRightIcon className="h-3.5 w-3.5 opacity-25 transition group-hover:opacity-100" />
                           </Link>
-                          {profile.position && (
+                          {player.bio?.position && (
                             <p className="mt-1 font-mono text-[9px] font-bold uppercase tracking-[0.1em] text-[#071a2b]/35">
-                              {profile.position}
+                              {player.bio.position}
                             </p>
                           )}
                         </div>

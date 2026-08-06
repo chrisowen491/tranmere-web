@@ -8,6 +8,7 @@ import {
   BuildingOffice2Icon,
   CalendarDaysIcon,
   ChatBubbleLeftRightIcon,
+  DocumentTextIcon,
   IdentificationIcon,
   UserCircleIcon,
   UserGroupIcon,
@@ -185,6 +186,14 @@ export default async function AdminPage() {
                 "Manage club names, abbreviations, colours, divisions and locations.",
               action: "Manage clubs",
               icon: BuildingOffice2Icon,
+            },
+            {
+              href: "/admin/programmes",
+              title: "Programmes",
+              description:
+                "Add digitised programme PDFs and keep their match details up to date.",
+              action: "Manage programmes",
+              icon: DocumentTextIcon,
             },
           ].map((item) => {
             const Icon = item.icon;

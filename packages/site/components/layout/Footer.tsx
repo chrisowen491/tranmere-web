@@ -12,6 +12,8 @@ const linkGroups = [
     label: "Archive",
     links: [
       { label: "Results", href: "/results" },
+      { label: "Honours", href: "/honours" },
+      { label: "Programmes", href: "/programmes" },
       { label: "Players", href: "/players" },
       { label: "Managers", href: "/managers" },
       { label: "Transfers", href: "/transfer-central" },

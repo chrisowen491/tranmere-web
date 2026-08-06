@@ -17,7 +17,8 @@
     "prepare": "husky",
     "lint": "yarn workspaces run lint",
     "action": "yarn workspace @tranmere-web/clean-up run action",
-    "format": "yarn workspaces run format"
+    "format": "yarn workspaces run format",
+    "postinstall": "patch-package"
   },
   "workspaces": [
     "packages/*"
@@ -25,6 +26,7 @@
   "author": "Chris Owen",
   "devDependencies": {
     "husky": "^9.1.4",
+    "patch-package": "^8.0.0",
     "typescript": "6.0.3",
     "wrangler": "^4.118.0"
   },

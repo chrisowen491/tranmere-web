@@ -27,6 +27,7 @@ import Image from "next/image";
 import { SeasonStory } from "./SeasonStory";
 import { SeasonTimeline } from "./SeasonTimeline";
 import type { PlayerStatisticsView } from "@/lib/playerStatistics";
+import { HONOURS_SEASONS } from "@tranmere-web/lib/src/honours-constants";
 
 function managerImageSource(imagePath: string, width: number, height: number) {
   if (imagePath.startsWith("/") || /^https?:\/\//i.test(imagePath)) {
@@ -49,6 +50,9 @@ export default function SeasonReview(props: {
   seasons: number[];
 }) {
   const seasonInt = parseInt(props.season);
+  const achievements =
+    HONOURS_SEASONS.find((honours) => honours.season === seasonInt)
+      ?.achievements ?? [];
 
   const managers = props.managers.filter((manager) =>
     areIntervalsOverlapping(
@@ -142,6 +146,7 @@ export default function SeasonReview(props: {
           transfers={props.transfers}
           shirts={props.shirts}
           seasons={props.seasons}
+          achievements={achievements}
         />
         <SeasonTimeline
           season={props.season}
@@ -149,6 +154,7 @@ export default function SeasonReview(props: {
           managers={managers}
           transfers={props.transfers}
           articles={props.articles}
+          achievements={achievements}
         />
         <div id="season-archive">
           <header className="relative isolate">

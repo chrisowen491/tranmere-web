@@ -40,6 +40,10 @@ const nextConfig: NextConfig = {
         source: "/api/result-search",
         destination: `https://api.tranmere-web.com/result-search/`,
       },
+      {
+        source: "/pdfs/:path*",
+        destination: `https://programes.tranmere-web.com/:path*`
+      }
     ];
   },
   redirects() {

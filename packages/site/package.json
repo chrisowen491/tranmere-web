@@ -71,6 +71,7 @@
     "react-instantsearch": "^7.15.7",
     "react-instantsearch-nextjs": "^1.0.1",
     "react-instantsearch-router-nextjs": "7.41.0",
+    "react-pdf-flipbook-viewer": "^0.2.0",
     "react-responsive-carousel": "^3.2.23",
     "react-spring": "^10.0.0",
     "react-toastify": "^11.0.5",
