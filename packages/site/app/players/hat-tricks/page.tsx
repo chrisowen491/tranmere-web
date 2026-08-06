@@ -236,7 +236,7 @@ export default async function HatTricks() {
 
         <div className="mt-8 flex items-start gap-3 border border-[#071a2b]/15 bg-[#e8e2d6] p-5 text-sm leading-6 text-[#071a2b]/65">
           <TrophyIcon className="mt-0.5 h-5 w-5 shrink-0 text-blue-700" />
-          This archive currently covers first-team hat-tricks from the 1977/78
+          This archive currently covers first-team hat-tricks from the 1967/78
           season onwards.
         </div>
       </section>
