@@ -34,44 +34,6 @@ const formations: Record<ManagerFormation, FormationSlot[][]> = {
     ],
     [{ id: "goalkeeper", position: "Goalkeeper" }],
   ],
-  "433": [
-    [
-      { id: "forward-left", position: "Winger" },
-      { id: "forward-centre", position: "Striker" },
-      { id: "forward-right", position: "Winger" },
-    ],
-    [
-      { id: "mid-left", position: "Central Midfielder" },
-      { id: "mid-centre", position: "Central Midfielder" },
-      { id: "mid-right", position: "Central Midfielder" },
-    ],
-    [
-      { id: "def-left", position: "Full Back" },
-      { id: "def-centre-left", position: "Central Defender" },
-      { id: "def-centre-right", position: "Central Defender" },
-      { id: "def-right", position: "Full Back" },
-    ],
-    [{ id: "goalkeeper", position: "Goalkeeper" }],
-  ],
-  "532": [
-    [
-      { id: "st-left", position: "Striker" },
-      { id: "st-right", position: "Striker" },
-    ],
-    [
-      { id: "mid-left", position: "Central Midfielder" },
-      { id: "mid-centre", position: "Central Midfielder" },
-      { id: "mid-right", position: "Central Midfielder" },
-    ],
-    [
-      { id: "def-left", position: "Full Back" },
-      { id: "def-centre-left", position: "Central Defender" },
-      { id: "def-centre", position: "Central Defender" },
-      { id: "def-centre-right", position: "Central Defender" },
-      { id: "def-right", position: "Full Back" },
-    ],
-    [{ id: "goalkeeper", position: "Goalkeeper" }],
-  ],
   "4-4-2": [
     [
       { id: "st-left", position: "Striker" },

@@ -41,7 +41,6 @@ export interface ManagerRow {
   name: string;
   date_joined: string;
   date_left: string;
-  programme_path: string | null;
   image_path: string | null;
   favourite_formation: string | null;
 }

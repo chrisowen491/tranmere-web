@@ -174,7 +174,7 @@ export default async function AdminPage() {
               href: "/admin/managers",
               title: "Managers",
               description:
-                "Add managerial appointments or edit names, dates and programme images.",
+                "Add managerial appointments or edit names, dates, formations and portraits.",
               action: "Manage managers",
               icon: UserGroupIcon,
             },

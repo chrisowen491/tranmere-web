@@ -150,8 +150,7 @@ export async function queryManagerRows(
   if (options.query) values.push(`%${options.query}%`);
 
   const sql = withLimit(
-    `SELECT id, name, date_joined, date_left, programme_path, image_path,
-            favourite_formation
+    `SELECT id, name, date_joined, date_left, image_path, favourite_formation
      FROM Managers
      ${where}
      ORDER BY date_joined DESC, name ASC`,
@@ -169,8 +168,7 @@ export async function queryManagerAtDateRow(
   const date = matchDate.slice(0, 10);
   return db
     .prepare(
-      `SELECT id, name, date_joined, date_left, programme_path, image_path,
-              favourite_formation
+      `SELECT id, name, date_joined, date_left, image_path, favourite_formation
        FROM Managers
        WHERE date_joined <= ?
          AND (

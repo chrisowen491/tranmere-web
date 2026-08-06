@@ -73,7 +73,6 @@ export function ManagerAdmin({
           name: formData.get("name"),
           dateJoined: formData.get("dateJoined"),
           dateLeft: formData.get("dateLeft"),
-          programmePath: formData.get("programmePath"),
           imagePath: formData.get("imagePath"),
           favouriteFormation: formData.get("favouriteFormation"),
         }),
@@ -220,19 +219,6 @@ export function ManagerAdmin({
             </select>
           </div>
           <div>
-            <label htmlFor="manager-programme" className={labelClass}>
-              Programme image path
-            </label>
-            <input
-              id="manager-programme"
-              name="programmePath"
-              maxLength={500}
-              defaultValue={editing?.programmePath}
-              placeholder="For example: 2025-26/1.png"
-              className={inputClass}
-            />
-          </div>
-          <div>
             <label htmlFor="manager-image" className={labelClass}>
               Manager image path
             </label>
@@ -301,11 +287,6 @@ export function ManagerAdmin({
                 <tr key={manager.id} className="hover:bg-[#f4f0e8]">
                   <td className="whitespace-nowrap px-5 py-4 font-semibold">
                     {manager.name}
-                    {manager.programmePath && (
-                      <span className="ml-2 text-[10px] font-bold uppercase tracking-[0.1em] text-blue-700">
-                        Programme
-                      </span>
-                    )}
                     {manager.imagePath && (
                       <span className="ml-2 text-[10px] font-bold uppercase tracking-[0.1em] text-emerald-700">
                         Portrait

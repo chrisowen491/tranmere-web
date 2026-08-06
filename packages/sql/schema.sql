@@ -100,7 +100,6 @@ CREATE TABLE IF NOT EXISTS Managers (
   name TEXT NOT NULL,
   date_joined TEXT NOT NULL,
   date_left TEXT NOT NULL,
-  programme_path TEXT,
   image_path TEXT,
   favourite_formation TEXT
 );

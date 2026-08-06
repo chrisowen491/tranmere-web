@@ -14,7 +14,6 @@ export interface ManagerInput {
   name: string;
   dateJoined: string;
   dateLeft: string;
-  programmePath: string;
   imagePath: string;
   favouriteFormation: ManagerFormation | "";
 }
@@ -26,7 +25,6 @@ export function mapManager(row: ManagerRow): ManagerRecord {
     dateJoined: row.date_joined,
     dateLeft: row.date_left,
     dateLeftText: row.date_left,
-    programmePath: row.programme_path || undefined,
     imagePath: row.image_path || undefined,
     favouriteFormation:
       (row.favourite_formation as ManagerFormation | null) || undefined,
@@ -46,8 +44,7 @@ export async function getManagerAtDate(db: D1Database, matchDate: string) {
 export async function getManagerById(db: D1Database, id: string) {
   const row = await db
     .prepare(
-      `SELECT id, name, date_joined, date_left, programme_path, image_path,
-              favourite_formation
+      `SELECT id, name, date_joined, date_left, image_path, favourite_formation
        FROM Managers
        WHERE id = ?`,
     )
@@ -65,17 +62,15 @@ export async function createManager(
   await db
     .prepare(
       `INSERT INTO Managers (
-         id, name, date_joined, date_left, programme_path, image_path,
-         favourite_formation
+         id, name, date_joined, date_left, image_path, favourite_formation
        )
-       VALUES (?, ?, ?, ?, ?, ?, ?)`,
+       VALUES (?, ?, ?, ?, ?, ?)`,
     )
     .bind(
       id,
       manager.name,
       manager.dateJoined,
       manager.dateLeft,
-      manager.programmePath,
       manager.imagePath,
       manager.favouriteFormation || null,
     )
@@ -92,15 +87,14 @@ export async function updateManager(
   const result = await db
     .prepare(
       `UPDATE Managers
-       SET name = ?, date_joined = ?, date_left = ?, programme_path = ?,
-           image_path = ?, favourite_formation = ?
+       SET name = ?, date_joined = ?, date_left = ?, image_path = ?,
+           favourite_formation = ?
        WHERE id = ?`,
     )
     .bind(
       manager.name,
       manager.dateJoined,
       manager.dateLeft,
-      manager.programmePath,
       manager.imagePath,
       manager.favouriteFormation || null,
       id,

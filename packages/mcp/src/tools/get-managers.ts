@@ -13,7 +13,6 @@ const outputSchema = z.object({
       name: z.string(),
       dateJoined: z.string(),
       dateLeft: z.string(),
-      programmePath: z.string().nullable(),
       imagePath: z.string().nullable(),
       favouriteFormation: z.enum(MANAGER_FORMATIONS).nullable()
     })
@@ -62,7 +61,6 @@ export function registerGetManagersTool({ server, env, auth }: ToolContext) {
         name: manager.name,
         dateJoined: manager.date_joined,
         dateLeft: manager.date_left,
-        programmePath: manager.programme_path,
         imagePath: manager.image_path,
         favouriteFormation: manager.favourite_formation
       }));

@@ -18,7 +18,6 @@ interface ManagerRequest {
   name?: string;
   dateJoined?: string;
   dateLeft?: string;
-  programmePath?: string;
   imagePath?: string;
   favouriteFormation?: string;
 }
@@ -76,7 +75,6 @@ function validateManager(body: ManagerRequest): ManagerInput | null {
     name,
     dateJoined,
     dateLeft: /^(now|now\(\))$/i.test(dateLeft) ? "now()" : dateLeft,
-    programmePath: body.programmePath?.trim().slice(0, 500) || "",
     imagePath: body.imagePath?.trim().slice(0, 500) || "",
     favouriteFormation: requestedFormation as ManagerFormation | "",
   };
