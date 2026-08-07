@@ -19,7 +19,6 @@ exports.handler = async (
   const playerview: PlayerView = {
     debut: appearances[0],
     seasons: summarySearch,
-    image: utils.buildImagePath('photos/kop.jpg', 1920, 1080),
     appearances: appearances
   };
 

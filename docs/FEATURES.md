@@ -6,29 +6,29 @@ data ownership and system boundaries.
 
 ## Home and Discovery
 
-| Feature              | Route                  | Summary                                                                              |
-| -------------------- | ---------------------- | ------------------------------------------------------------------------------------ |
-| Archive landing page | `/`                    | Promotes the match, player, shirt, season, manager, transfer and editorial archives. |
-| On this day          | `/`                    | Surfaces matches and moments associated with the current calendar date.              |
-| Site search          | Header search          | Algolia-backed search across indexed archive content.                                |
-| Dynamic sitemap      | `/dynamic-sitemap.xml` | Adds database-backed archive pages to the generated XML sitemaps.                    |
+| Feature              | Route                  | Summary                                                                                     |
+| -------------------- | ---------------------- | ------------------------------------------------------------------------------------------- |
+| Archive landing page | `/`                    | Promotes the match, player, shirt, season, manager, transfer and editorial archives.        |
+| On this day          | `/`                    | Shows a historic same-date fixture with teams, score and a programme where one is recorded. |
+| Site search          | Header search          | Algolia-backed search across indexed archive content.                                       |
+| Dynamic sitemap      | `/dynamic-sitemap.xml` | Adds database-backed archive pages to the generated XML sitemaps.                           |
 
 ## Matches, Results and Seasons
 
-| Feature             | Route                      | Summary                                                                                                                                             |
-| ------------------- | -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Results archive     | `/results`                 | Searches and filters the complete results archive by season, competition, opponent and manager.                                                     |
-| Match record        | `/match/[season]/[date]`   | Shows score, report, programme, attendance, officials, formation-aware team sheet, goals, cards, substitutions, comments and ratings when recorded. |
-| Season index        | `/seasons`                 | Lists recorded seasons by decade while excluding the wartime seasons without matches.                                                               |
-| Season review       | `/season/[season]`         | Combines results, squad statistics, most-used XI, manager, transfers, shirt and a month-by-month season timeline.                                   |
-| Honours archive     | `/honours`                 | Collects every title, promotion, play-off triumph and landmark cup run with links to its season archive.                                            |
-| Head-to-head index  | `/head-to-head`            | Provides an opponent tag cloud linking to complete club records.                                                                                    |
-| Opponent record     | `/games/[club]`            | Shows the full match history against a selected opponent.                                                                                           |
-| FA Cup archive      | `/results/fa-cup`          | Summarises runs, rounds reached, notable matches, records and programme covers.                                                                     |
-| League Cup archive  | `/results/league-cup`      | Summarises League Cup progress, notable runs, records and programme covers.                                                                         |
-| Penalty shootouts   | `/games/penalty-shootouts` | Presents every recorded shootout with match links and outcomes.                                                                                     |
-| Wembley archive     | `/games/at-wembley`        | Presents every recorded Tranmere match at Wembley.                                                                                                  |
-| Highest attendances | `/results/top-attendances` | Ranks the top 50 crowds and includes programme covers where available.                                                                              |
+| Feature             | Route                      | Summary                                                                                                                                                       |
+| ------------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Results archive     | `/results`                 | Searches and filters the D1-backed results archive by season, competition, opponent and manager.                                                              |
+| Match record        | `/match/[season]/[date]`   | Combines D1 match facts and reports with API player apps/goals to show score, programme, attendance, formation-aware team sheet, cards, comments and ratings. |
+| Season index        | `/seasons`                 | Lists recorded seasons by decade while excluding the wartime seasons without matches.                                                                         |
+| Season review       | `/season/[season]`         | Combines results, squad statistics, most-used XI, manager, transfers, shirt and a month-by-month season timeline.                                             |
+| Honours archive     | `/honours`                 | Collects every title, promotion, play-off triumph and landmark cup run with links to its season archive.                                                      |
+| Head-to-head index  | `/head-to-head`            | Provides an opponent tag cloud linking to complete club records.                                                                                              |
+| Opponent record     | `/games/[club]`            | Shows the full match history against a selected opponent.                                                                                                     |
+| FA Cup archive      | `/results/fa-cup`          | Summarises runs, rounds reached, notable matches, records and programme covers.                                                                               |
+| League Cup archive  | `/results/league-cup`      | Summarises League Cup progress, notable runs, records and programme covers.                                                                                   |
+| Penalty shootouts   | `/games/penalty-shootouts` | Presents every recorded shootout with match links and outcomes.                                                                                               |
+| Wembley archive     | `/games/at-wembley`        | Presents every recorded Tranmere match at Wembley.                                                                                                            |
+| Highest attendances | `/results/top-attendances` | Ranks the top 50 crowds and includes programme covers where available.                                                                                        |
 
 ## Players
 
@@ -75,6 +75,7 @@ data ownership and system boundaries.
 - Auth0 login and logout are available from the footer.
 - Visitors can post match comments and ratings.
 - Logged-in users can propose attendance corrections and player-profile changes.
+- Logged-in users can also propose a corrected match formation.
 - Player-profile proposals support optional source descriptions.
 - Approval workflows protect published records until an administrator accepts a
   correction.
@@ -90,7 +91,9 @@ The authenticated `/admin` hub links to:
 - transfer creation and editing;
 - manager creation and editing;
 - club creation and editing;
-- programme creation and editing; and
+- programme creation and editing;
+- game creation and editing, with season filtering and controlled competition,
+  formation and kit options; and
 - comment and rating moderation.
 
 Admin routes compare the Auth0 session email with the configured administrator

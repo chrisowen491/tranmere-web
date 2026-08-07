@@ -4,6 +4,7 @@ import {
 } from '@tranmere-web/lib/src/tranmere-web-utils';
 import {
   Goal,
+  Match,
   MatchPageData
 } from '@tranmere-web/lib/src/tranmere-web-types';
 
@@ -15,11 +16,12 @@ exports.handler = async (
   const date = event.pathParameters!.date;
   const season = parseInt(event.pathParameters!.season!);
 
-  const match = await utils.getResultForDate(season, date!);
-
-  if (!match) {
-    console.log('Match not found: ' + date);
-    return utils.sendResponse(404, { message: 'Match not found' });
+  const match : Match = {
+    date: '',
+    season: '',
+    hgoal: 0,
+    vgoal: 0,
+    tier: 0
   }
 
   const view: MatchPageData = match!;
