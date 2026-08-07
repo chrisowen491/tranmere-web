@@ -1,8 +1,5 @@
-import type {
-  H2HResult,
-  H2HTotal,
-  Match
-} from '@tranmere-web/lib/src/tranmere-web-types';
+import { queryGameRows } from '@tranmere-web/lib/src/d1-queries';
+import type { GameRow } from '@tranmere-web/lib/src/d1-types';
 import { z } from 'zod';
 import { permissionDenied } from '../auth';
 import type { ToolContext } from './context';
@@ -37,7 +34,7 @@ export function registerSearchResultsTool({ server, env, auth }: ToolContext) {
     {
       title: 'Search Tranmere results',
       description:
-        'Search the Tranmere Rovers results archive by season opening year, opposition, or both. Use this to find a set of fixtures before calling GetMatchByDate for a full report. At least one of season or opposition is required; season 2025 means the 2025/26 season.',
+        'Search the TranmereWeb database of Tranmere Rovers results by season opening year, opposition, or both. Use this to find fixtures before calling GetMatchByDate for player events and a full report. At least one of season or opposition is required; season 2025 means the 2025/26 season.',
       inputSchema: z.object({
         season: z
           .number()
@@ -83,49 +80,29 @@ export function registerSearchResultsTool({ server, env, auth }: ToolContext) {
           ],
           isError: true
         };
-      const query = new URLSearchParams({
-        season: season ? String(season) : '',
-        competition: '',
-        opposition: normalizedOpposition ?? '',
-        manager: '',
-        venue: '',
-        pens: '',
-        sort: 'Date Descending'
+      const rows = await queryGameRows(env.DB, {
+        season,
+        opposition: normalizedOpposition,
+        sort: 'date-desc',
+        limit
       });
-      const response = await fetch(
-        `${env.API_BASE_URL}/result-search/?${query.toString()}`
-      );
-      if (!response.ok)
-        return {
-          content: [
-            {
-              type: 'text',
-              text: `The results API returned HTTP ${response.status}.`
-            }
-          ],
-          isError: true
-        };
-      const data = await response.json<{
-        results: Match[];
-        h2hresults: H2HResult[];
-        h2htotal: H2HTotal[];
-      }>();
-      const results = (data.results ?? []).slice(0, limit).map((match) => {
+      const results = rows.map((match: GameRow) => {
         const matchSeason = String(match.season);
         return {
           season: matchSeason,
-          date: match.date,
-          homeTeam: match.home || 'Unknown',
-          awayTeam: match.visitor || 'Unknown',
-          score: match.ft || `${match.hgoal}-${match.vgoal}`,
+          date: match.match_date,
+          homeTeam: match.home_team,
+          awayTeam: match.away_team,
+          score:
+            match.full_time_score ||
+            `${match.home_goals ?? '0'}-${match.away_goals ?? '0'}`,
           opposition: match.opposition || normalizedOpposition || 'Unknown',
           venue: match.venue || null,
-          attendance:
-            typeof match.attendance === 'number' ? match.attendance : null,
+          attendance: match.attendance,
           competition: match.competition || null,
-          penalties: match.pens || null,
+          penalties: match.penalties || null,
           referee: match.referee || null,
-          matchUrl: `https://www.tranmere-web.com/match/${matchSeason}/${match.date}`
+          matchUrl: `https://www.tranmere-web.com/match/${matchSeason}/${match.match_date}`
         };
       });
       const output = {

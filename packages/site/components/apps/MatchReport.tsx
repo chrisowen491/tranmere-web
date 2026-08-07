@@ -11,13 +11,14 @@ import { BreadcrumbLinks } from "@/components/fragments/BreadcrumbLinks";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import { replaceSeasonsKit } from "@tranmere-web/lib/src/apiFunctions";
 import { AttendanceCorrectionForm } from "./AttendanceCorrectionForm";
+import { FormationCorrectionForm } from "./FormationCorrectionForm";
 import type { MatchPageView } from "@/lib/matchPlayers";
 import type { ManagerRecord } from "@/lib/managers";
 import { arrangeMatchLineup, formationLabel } from "@/lib/matchLineup";
 import { ManagerFormation } from "@tranmere-web/lib/src/manager-constants";
 
-function playerAvatar(picLink: string, season: number) {
-  return replaceSeasonsKit(picLink, season.toString());
+function playerAvatar(picLink: string, season: number, kit?: string) {
+  return replaceSeasonsKit(picLink, kit || season.toString());
 }
 
 function penaltyOutcome(pens?: string, homeTeam?: string, awayTeam?: string) {
@@ -52,10 +53,10 @@ export default function MatchReport(props: {
   const { match } = props;
   const penalty = penaltyOutcome(match.pens, match.homeTeam, match.awayTeam);
   const players = match.apps ?? [];
-  let formation : ManagerFormation | undefined = "442";
-  if(match.formation && (match.formation as ManagerFormation) != null) {
+  let formation: ManagerFormation | undefined = "442";
+  if (match.formation && (match.formation as ManagerFormation) != null) {
     formation = match.formation as ManagerFormation;
-  } else if(props.manager?.favouriteFormation) {
+  } else if (props.manager?.favouriteFormation) {
     formation = props.manager?.favouriteFormation;
   }
 
@@ -220,6 +221,11 @@ export default function MatchReport(props: {
                 {formationLabel(lineup.formation)}
                 {props.manager ? ` · ${props.manager.name}` : ""}
               </p>
+              <FormationCorrectionForm
+                season={match.season.toString()}
+                matchDate={match.date}
+                currentFormation={match.formation}
+              />
             </div>
 
             <div className="fantasy-pitch relative min-h-[720px] overflow-hidden border border-[#071a2b]/25 bg-blue-900 px-3 py-8 text-white sm:px-8">
@@ -250,6 +256,7 @@ export default function MatchReport(props: {
                             src={playerAvatar(
                               player.profile.picLink,
                               parseInt(match.season),
+                              match.kit,
                             )}
                             className="h-full w-full object-cover"
                           />

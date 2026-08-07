@@ -3,19 +3,14 @@ import {
   GetAllCupCompetitions,
   GetYear,
 } from "@tranmere-web/lib/src/apiFunctions";
-import { GetBaseUrl } from "@/lib/apiFunctions";
 import { getClubs } from "@/lib/clubs";
 import { getManagers } from "@/lib/managers";
-import {
-  H2HResult,
-  H2HTotal,
-  Match,
-} from "@tranmere-web/lib/src/tranmere-web-types";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { breadcrumbJsonLd, JsonLd } from "@/components/seo/JsonLd";
 import { pageMetadata } from "@/lib/seo";
+import { searchGames } from "@/lib/games";
 
 export const metadata = pageMetadata({
   title: "Tranmere Rovers results",
@@ -25,7 +20,6 @@ export const metadata = pageMetadata({
 
 export default async function ResultsSearchPage() {
   const env = (await getCloudflareContext({ async: true })).env;
-  const base = GetBaseUrl(env) + "/result-search/";
 
   const theYear = GetYear();
   const [competitions, managers, teams] = await Promise.all([
@@ -34,12 +28,7 @@ export default async function ResultsSearchPage() {
     getClubs(env.DB),
   ]);
 
-  const latestSeasonRequest = await fetch(base + `?season=${theYear}`);
-  const results = (await latestSeasonRequest.json()) as {
-    results: Match[];
-    h2hresults: H2HResult[];
-    h2htotal: H2HTotal[];
-  };
+  const results = await searchGames(env.DB, { season: theYear });
 
   return (
     <main className="pb-24 text-[#071a2b]">

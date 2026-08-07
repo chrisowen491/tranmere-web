@@ -2,8 +2,10 @@ import {
   Competition,
   HatTrick,
   Match,
-  PlayerSeasonSummary,
+  PlayerSeasonSummary
 } from '@tranmere-web/lib/src/tranmere-web-types';
+import { MATCH_COMPETITIONS } from './competition-constants';
+import { queryOnThisDayGameRow, type D1DatabaseReader } from './d1-queries';
 
 const APP_SYNC_URL = 'https://api.tranmere-web.com';
 const APP_SYNC_OPTIONS = {
@@ -138,62 +140,42 @@ export async function GetTopScorersBySeason(): Promise<PlayerSeasonSummary[]> {
   return results;
 }
 
-export async function GetLastMatch(): Promise<Match> {
-  const dateobj = new Date();
-  const theYear =
-    dateobj.getUTCMonth() > 6
-      ? dateobj.getFullYear()
-      : dateobj.getFullYear() - 1;
+export async function GetOnThisDay(
+  db: D1DatabaseReader,
+  now = new Date()
+): Promise<Match | null> {
+  const parts = new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'Europe/London',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit'
+  }).formatToParts(now);
+  const part = (type: Intl.DateTimeFormatPartTypes) =>
+    parts.find((value) => value.type === type)?.value || '';
+  const date = `${part('year')}-${part('month')}-${part('day')}`;
+  const row = await queryOnThisDayGameRow(db, date.slice(5), date);
+  if (!row) return null;
 
-  const results = await fetch(
-    `https://api.tranmere-web.com/result-search/?season=${theYear}&competition=&opposition=&manager=&venue=&pens=&sort=Date&c=${dateobj.getDate()}`
-  );
-
-  const matches = (await results.json()) as { results: Match[] };
-
-  const idx = matches.results.length;
-  const match = matches.results[idx - 1];
-  return match;
-}
-
-export async function GetOnThisDay(): Promise<Match | null> {
-  const dateobj = new Date();
-  const day = dateobj.toISOString().slice(0, 10).substr(5);
-  const query = encodeURIComponent(
-    `{getTranmereWebOnThisDayById(day: "${day}"){opposition programme hgoal vgoal season date}}`
-  );
-
-  const response = await fetch(
-    `${APP_SYNC_URL}/graphql?query=${query}`,
-    APP_SYNC_OPTIONS
-  );
-
-  const onThisDay = (await response.json()) as {
-    data: { getTranmereWebOnThisDayById: Match };
+  const score = row.full_time_score.match(/(\d+)\D+(\d+)/);
+  return {
+    id: row.id,
+    date: row.match_date,
+    season: String(row.season),
+    opposition: row.opposition,
+    programme:
+      row.programme_path && row.programme_path !== '#N/A'
+        ? row.programme_path
+        : undefined,
+    hgoal: Number(row.home_goals ?? score?.[1] ?? 0),
+    vgoal: Number(row.away_goals ?? score?.[2] ?? 0),
+    tier: Number(row.tier) || 0
   };
-
-  if (onThisDay.data.getTranmereWebOnThisDayById === null) return null;
-
-  return onThisDay.data.getTranmereWebOnThisDayById;
 }
 
 export async function GetAllCupCompetitions(): Promise<Competition[]> {
-  return [
-    'Anglo Italian Cup',
-    'Associate Members Cup',
-    'FA Cup',
-    'FA Trophy',
-    'FL Trophy',
-    'Freight Rover Trophy',
-    'Friendly',
-    'Johnstones Paint Trophy',
-    'LDV Trophy',
-    'League Cup',
-    'Leyland Daf Trophy',
-    'Play Offs',
-    'Sherpa Van Trophy',
-    'Zenith Data Systems Trophy',
-  ].map((name) => ({ name }));
+  return MATCH_COMPETITIONS.filter(
+    (name) => name !== 'League' && name !== 'Conference'
+  ).map((name) => ({ name }));
 }
 
 export async function GetAllHatTricks(): Promise<HatTrick[]> {

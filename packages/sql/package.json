@@ -5,13 +5,15 @@
   "scripts": {
     "db": "npx wrangler d1 execute tranmere-web --local --file=./schema.sql --persist-to=../site/.wrangler/state",
     "generate:clubs": "node scripts/dynamodb-clubs-to-d1.mjs",
+    "generate:games": "node scripts/dynamodb-games-to-d1.mjs",
     "generate:managers": "node scripts/dynamodb-managers-to-d1.mjs",
+    "generate:match-reports": "node scripts/dynamodb-match-reports-to-d1.mjs",
     "generate:players": "node scripts/dynamodb-players-to-d1.mjs",
     "generate:transfers": "node scripts/dynamodb-transfers-to-d1.mjs",
     "migrations": "npx wrangler d1 migrations apply tranmere-web --local --persist-to=../site/.wrangler/state",
     "lint": "yarn",
     "format": "yarn",
-    "test": "yarn" 
+    "test": "yarn"
   },
   "author": "Chris Owen",
   "license": "GPL-3.0-only",

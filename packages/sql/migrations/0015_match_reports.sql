@@ -1,0 +1,4 @@
+CREATE TABLE IF NOT EXISTS MatchReports (
+  match_date TEXT NOT NULL PRIMARY KEY,
+  report TEXT NOT NULL
+);

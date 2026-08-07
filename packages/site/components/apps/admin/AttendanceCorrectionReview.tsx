@@ -134,7 +134,11 @@ export function AttendanceCorrectionReview({
                   <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#071a2b]/45">
                     Evidence
                   </p>
-                  {/https?:\/\/\S+/i.test(correction.source) ? (
+                  {!correction.source ? (
+                    <p className="mt-2 text-sm text-[#071a2b]/45">
+                      No source supplied.
+                    </p>
+                  ) : /https?:\/\/\S+/i.test(correction.source) ? (
                     <p className="mt-2 whitespace-pre-wrap break-words text-sm font-semibold text-[#071a2b]/75">
                       {correction.source
                         .split(/(https?:\/\/\S+)/i)

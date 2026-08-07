@@ -1,8 +1,8 @@
 import { getCloudflareContext } from "@opennextjs/cloudflare";
-import type { Match } from "@tranmere-web/lib/src/tranmere-web-types";
 import type { Metadata } from "next";
 import { ManagerFingerprints } from "@/components/apps/ManagerFingerprints";
 import { GetBaseUrl } from "@/lib/apiFunctions";
+import { searchGames } from "@/lib/games";
 import { getManagers } from "@/lib/managers";
 import { getManagerTrustedXi } from "@/lib/managerTrustedXi";
 
@@ -25,18 +25,14 @@ export default async function ManagerFingerprintsPage() {
   const dateLeft = initialManager.dateLeft.toLowerCase().startsWith("now")
     ? new Date().toISOString().slice(0, 10)
     : initialManager.dateLeft;
-  const [resultResponse, initialXi] = await Promise.all([
-    fetch(
-      `${GetBaseUrl(env)}/result-search/?manager=${encodeURIComponent(
-        `${initialManager.dateJoined},${dateLeft}`,
-      )}&sort=Date`,
-      { next: { revalidate: 7200 } },
-    ),
+  const [initialResults, initialXi] = await Promise.all([
+    searchGames(env.DB, {
+      dateFrom: initialManager.dateJoined,
+      dateTo: dateLeft,
+    }),
     getManagerTrustedXi(env.DB, GetBaseUrl(env), initialManager),
   ]);
-  const initialMatches = resultResponse.ok
-    ? ((await resultResponse.json()) as { results: Match[] }).results
-    : [];
+  const initialMatches = initialResults.results;
 
   return (
     <main className="min-h-screen bg-[#f4f0e8] text-[#071a2b]">

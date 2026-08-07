@@ -2,7 +2,7 @@ import { getCloudflareContext } from "@opennextjs/cloudflare";
 import type { Match } from "@tranmere-web/lib/src/tranmere-web-types";
 import type { Metadata } from "next";
 import { ManagerComparison } from "@/components/apps/ManagerComparison";
-import { GetBaseUrl } from "@/lib/apiFunctions";
+import { searchGames } from "@/lib/games";
 import { getManagers } from "@/lib/managers";
 
 export const revalidate = 7200;
@@ -24,14 +24,12 @@ export default async function ManagerComparisonPage() {
     const dateLeft = manager.dateLeft.toLowerCase().startsWith("now")
       ? new Date().toISOString().slice(0, 10)
       : manager.dateLeft;
-    const response = await fetch(
-      `${GetBaseUrl(env)}/result-search/?manager=${encodeURIComponent(
-        `${manager.dateJoined},${dateLeft}`,
-      )}&sort=Date`,
-      { next: { revalidate: 7200 } },
-    );
-    if (!response.ok) return [];
-    return ((await response.json()) as { results: Match[] }).results;
+    return (
+      await searchGames(env.DB, {
+        dateFrom: manager.dateJoined,
+        dateTo: dateLeft,
+      })
+    ).results;
   }
 
   const initialMatches = await Promise.all([

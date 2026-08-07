@@ -1,12 +1,12 @@
 import type {
   Appearance,
-  Match,
   PlayerSeasonSummary,
 } from "@tranmere-web/lib/src/tranmere-web-types";
 import type { ManagerRecord } from "@/lib/managers";
 import type { PlayerProfile } from "@/lib/types";
 import { getPlayersByNames, type PlayerRecord } from "@/lib/players";
 import { arrangeLineup, formationLabel } from "@/lib/matchLineup";
+import { searchGames } from "@/lib/games";
 
 export interface TrustedXiPlayer {
   name: string;
@@ -205,15 +205,10 @@ export async function getManagerTrustedXi(
   );
   const selectedPlayers = lineup.rows.flat();
 
-  const resultResponse = await fetch(
-    `${baseUrl}/result-search/?manager=${encodeURIComponent(
-      `${joined},${left}`,
-    )}&sort=Date`,
-    { next: { revalidate: 7200 } },
-  );
-  const matches = resultResponse.ok
-    ? ((await resultResponse.json()) as { results: Match[] }).results
-    : [];
+  const { results: matches } = await searchGames(db, {
+    dateFrom: joined,
+    dateTo: left,
+  });
   const outcomes = matches.map((match) => {
     const home = match.home === "Tranmere Rovers";
     const scored = home ? match.hgoal : match.vgoal;

@@ -4,6 +4,7 @@ import type {
 } from "@tranmere-web/lib/src/tranmere-web-types";
 import type { PlayerProfile } from "@/lib/types";
 import { getPlayersByNames } from "@/lib/players";
+import { searchGames } from "@/lib/games";
 
 export interface PartnershipMatch {
   date: string;
@@ -86,14 +87,10 @@ export async function getPlayerPartnership(
   ].sort((a, b) => Number(a) - Number(b));
 
   const seasonResults = await Promise.all(
-    sharedSeasons.map(async (season) => {
-      const response = await fetch(
-        `${baseUrl}/result-search/?season=${encodeURIComponent(season)}&sort=Date`,
-        { next: { revalidate: 7200 } },
-      );
-      if (!response.ok) return [];
-      return ((await response.json()) as { results: Match[] }).results;
-    }),
+    sharedSeasons.map(
+      async (season) =>
+        (await searchGames(db, { season: Number(season) })).results,
+    ),
   );
   const results = new Map(
     seasonResults.flat().map((match) => [matchKey(match), match]),

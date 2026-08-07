@@ -16,7 +16,7 @@ import type {
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { GetBaseUrl } from "@/lib/apiFunctions";
+import { searchGames } from "@/lib/games";
 import { getClubByName } from "@/lib/clubs";
 import { getManagers } from "@/lib/managers";
 import { getTransfers } from "@/lib/transfers";
@@ -79,13 +79,9 @@ export default async function RoversConnectionPage(props: {
 
   if (!club || club.name === "Tranmere Rovers") notFound();
 
-  const response = await fetch(
-    `${GetBaseUrl(env)}/result-search/?season=&venue=&pens=&sort=Date&opposition=${encodeURIComponent(club.name)}&competition=`,
-    { next: { revalidate: 7200 } },
-  );
-  const matchData: ResultsResponse = response.ok
-    ? await response.json()
-    : { results: [], h2hresults: [], h2htotal: [] };
+  const matchData: ResultsResponse = await searchGames(env.DB, {
+    opposition: club.name,
+  });
   const matches = [...matchData.results].sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
   );

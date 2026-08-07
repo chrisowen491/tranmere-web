@@ -1,20 +1,16 @@
 import { GetSeasons, GetYear } from "@tranmere-web/lib/src/apiFunctions";
-import {
-  H2HResult,
-  H2HTotal,
-  Match,
-} from "@tranmere-web/lib/src/tranmere-web-types";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import SeasonReview from "@/components/apps/SeasonReview";
 import { getAllArticlesForTag, getAllShirts } from "@/lib/api";
+import { GetBaseUrl } from "@/lib/apiFunctions";
 import { SlugParams } from "@/lib/types";
 import { notFound } from "next/navigation";
-import { GetBaseUrl } from "@/lib/apiFunctions";
 import { getManagers } from "@/lib/managers";
 import { getTransfers } from "@/lib/transfers";
 import { getPlayerStatistics } from "@/lib/playerStatistics";
 import { pageMetadata } from "@/lib/seo";
 import { breadcrumbJsonLd, JsonLd } from "@/components/seo/JsonLd";
+import { searchGames } from "@/lib/games";
 
 export async function generateMetadata(props: { params: SlugParams }) {
   const params = await props.params;
@@ -34,26 +30,13 @@ export default async function SeasonPage(props: { params: SlugParams }) {
   if (parseInt(season) < 1920 || parseInt(season) > GetYear()) notFound();
 
   const env = (await getCloudflareContext({ async: true })).env;
-  const baseUrl = GetBaseUrl(env);
-  const base = baseUrl + "/result-search/";
-  const sort = "Date";
-  const venue = "";
-  const pens = "";
-  const opposition = "";
-  const competition = "";
   const managers = await getManagers(env.DB);
 
-  const latestSeasonRequest = await fetch(
-    base +
-      `?season=${season}&venue=${venue}&pens=${encodeURI(pens)}&sort=${sort}&opposition=${opposition}&competition=${competition}`,
-  );
-  const results = (await latestSeasonRequest.json()) as {
-    results: Match[];
-    h2hresults: H2HResult[];
-    h2htotal: H2HTotal[];
-  };
+  const results = await searchGames(env.DB, { season: Number(season) });
 
-  const players = await getPlayerStatistics(env.DB, baseUrl, { season });
+  const players = await getPlayerStatistics(env.DB, GetBaseUrl(env), {
+    season,
+  });
 
   const transfers = await getTransfers(env.DB, { season });
 

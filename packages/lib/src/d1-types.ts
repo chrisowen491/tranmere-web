@@ -51,3 +51,36 @@ export interface ProgrammeRow {
   match_date: string;
   pages: number;
 }
+
+export interface GameRow {
+  id: string;
+  season: number;
+  match_date: string;
+  competition: string;
+  round: string | null;
+  home_team: string;
+  away_team: string;
+  opposition: string;
+  venue: string;
+  attendance: number | null;
+  full_time_score: string;
+  home_goals: string | null;
+  away_goals: string | null;
+  division: string | null;
+  tier: string | null;
+  leg: string | null;
+  tie: string | null;
+  neutral: string | null;
+  after_extra_time: string | null;
+  penalties: string | null;
+  programme_path: string | null;
+  formation: string | null;
+  kit?: string | null;
+  referee: string | null;
+  ticket: string | null;
+}
+
+export interface MatchReportRow {
+  match_date: string;
+  report: string;
+}

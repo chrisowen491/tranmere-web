@@ -131,13 +131,11 @@ export function AttendanceCorrectionForm({
                   htmlFor="source"
                   className="block text-[10px] font-bold uppercase tracking-[0.12em] text-[#071a2b]/55"
                 >
-                  Source
+                  Source <span className="font-normal">(optional)</span>
                 </label>
                 <textarea
                   id="source"
                   name="source"
-                  required
-                  minLength={3}
                   maxLength={1000}
                   rows={3}
                   placeholder="For example: match programme, page 12; newspaper report; or a web link"

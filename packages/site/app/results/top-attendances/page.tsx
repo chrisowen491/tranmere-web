@@ -10,7 +10,7 @@ import type { Match } from "@tranmere-web/lib/src/tranmere-web-types";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import Image from "next/image";
 import Link from "next/link";
-import { GetBaseUrl } from "@/lib/apiFunctions";
+import { searchGames } from "@/lib/games";
 import { absoluteUrl, breadcrumbJsonLd, JsonLd } from "@/components/seo/JsonLd";
 import { pageMetadata } from "@/lib/seo";
 
@@ -47,27 +47,22 @@ function scoreline(match: Match) {
 }
 
 function opposition(match: Match) {
-  return match.opposition || (match.home === TRANMERE ? match.visitor : match.home);
+  return (
+    match.opposition || (match.home === TRANMERE ? match.visitor : match.home)
+  );
 }
 
 function seasonLabel(season: string) {
   const year = Number(season);
-  return Number.isFinite(year) ? `${year}/${String(year + 1).slice(-2)}` : season;
+  return Number.isFinite(year)
+    ? `${year}/${String(year + 1).slice(-2)}`
+    : season;
 }
 
 export default async function TopAttendancesPage() {
   const env = (await getCloudflareContext({ async: true })).env;
-  const response = await fetch(
-    `${GetBaseUrl(env)}/result-search/?sort=Top%20Attendance`,
-    { next: { revalidate: 7200 } },
-  );
-
-  if (!response.ok) {
-    throw new Error("Unable to load the attendance archive.");
-  }
-
-  const payload = (await response.json()) as { results: Match[] };
-  const matches = payload.results
+  const { results } = await searchGames(env.DB, { sort: "attendance-desc" });
+  const matches = results
     .filter((match) => attendance(match) > 0)
     .toSorted(
       (left, right) =>

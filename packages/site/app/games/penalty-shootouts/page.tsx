@@ -4,7 +4,7 @@ import type { Match } from "@tranmere-web/lib/src/tranmere-web-types";
 import Image from "next/image";
 import Link from "next/link";
 import { breadcrumbJsonLd, JsonLd } from "@/components/seo/JsonLd";
-import { GetBaseUrl } from "@/lib/apiFunctions";
+import { searchGames } from "@/lib/games";
 import { pageMetadata } from "@/lib/seo";
 
 export const revalidate = 7200;
@@ -48,12 +48,11 @@ function shootoutTotal(match: Match) {
 
 export default async function PenaltyShootoutsPage() {
   const env = (await getCloudflareContext({ async: true })).env;
-  const response = await fetch(
-    `${GetBaseUrl(env)}/result-search/?pens=Penalty%20Shootout&sort=Date%20Descending`,
-    { next: { revalidate } },
-  );
-  const archive = (await response.json()) as { results: Match[] };
-  const matches = archive.results.sort((a, b) => b.date.localeCompare(a.date));
+  const { results } = await searchGames(env.DB, {
+    penalties: "Penalty Shootout",
+    sort: "date-desc",
+  });
+  const matches = results;
   const won = matches.filter((match) => shootoutOutcome(match) === "W").length;
   const lost = matches.filter((match) => shootoutOutcome(match) === "L").length;
   const winRate = matches.length ? Math.round((won / matches.length) * 100) : 0;

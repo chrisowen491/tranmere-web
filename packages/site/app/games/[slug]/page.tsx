@@ -1,14 +1,9 @@
 import { ResultsSearch } from "@/components/apps/Results";
 import { Title } from "@/components/fragments/Title";
 import { GetAllCupCompetitions } from "@tranmere-web/lib/src/apiFunctions";
-import { GetBaseUrl } from "@/lib/apiFunctions";
+import { searchGames } from "@/lib/games";
 import { getClubs } from "@/lib/clubs";
 import { getManagers } from "@/lib/managers";
-import {
-  H2HResult,
-  H2HTotal,
-  Match,
-} from "@tranmere-web/lib/src/tranmere-web-types";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { SlugParams } from "@/lib/types";
 import { pageMetadata } from "@/lib/seo";
@@ -50,7 +45,6 @@ export async function generateMetadata(props: { params: SlugParams }) {
 export default async function GamesPage(props: { params: SlugParams }) {
   const params = await props.params;
   const env = getCloudflareContext().env;
-  const base = GetBaseUrl(env) + "/result-search/";
 
   let title: string | null = null;
   let sort = "Date";
@@ -87,15 +81,13 @@ export default async function GamesPage(props: { params: SlugParams }) {
     opposition = decodeURI(params.slug);
   }
 
-  const latestSeasonRequest = await fetch(
-    base +
-      `?season=${season}&venue=${venue}&pens=${encodeURI(pens)}&sort=${sort}&opposition=${opposition}&competition=${competition}`,
-  );
-  const results = (await latestSeasonRequest.json()) as {
-    results: Match[];
-    h2hresults: H2HResult[];
-    h2htotal: H2HTotal[];
-  };
+  const results = await searchGames(env.DB, {
+    season: season ? Number(season) : undefined,
+    venue: venue || undefined,
+    opposition: opposition || undefined,
+    penalties: pens || undefined,
+    sort: sort === "Top Attendance" ? "attendance-desc" : "date-asc",
+  });
 
   return (
     <>

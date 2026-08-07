@@ -1,4 +1,8 @@
 import type { MatchPageData } from '@tranmere-web/lib/src/tranmere-web-types';
+import {
+  queryGameBySeasonAndDate,
+  queryMatchReportRow
+} from '@tranmere-web/lib/src/d1-queries';
 import { z } from 'zod';
 import { permissionDenied } from '../auth';
 import { MATCH_UI_URI, matchWidgetHtml } from '../match-widget';
@@ -75,7 +79,7 @@ export function registerGetMatchByDateTool({ server, env, auth }: ToolContext) {
     {
       title: 'Get a Tranmere match',
       description:
-        'Retrieve the full Tranmere Rovers match record for one calendar date (YYYY-MM-DD). Use this when the date is known and you need the score, competition, venue, attendance, goals, line-up, substitutions or match-report link. Returns an error when Tranmere did not play on that date.',
+        'Retrieve a Tranmere Rovers match by calendar date (YYYY-MM-DD). Match facts, including score, competition, venue, attendance, formation, programme and report, come from the TranmereWeb database; player goals, line-up and substitutions come from the match API. Use it when the date is known. Returns an error when Tranmere did not play on that date.',
       inputSchema: z.object({
         date: z
           .string()
@@ -118,55 +122,54 @@ export function registerGetMatchByDateTool({ server, env, auth }: ToolContext) {
         parsed.getUTCMonth() >= 6
           ? parsed.getUTCFullYear()
           : parsed.getUTCFullYear() - 1;
-      const response = await fetch(
-        `${env.API_BASE_URL}/match/${season}/${encodeURIComponent(date)}`
-      );
-      if (!response.ok)
+      const [game, report] = await Promise.all([
+        queryGameBySeasonAndDate(env.DB, season, date),
+        queryMatchReportRow(env.DB, date)
+      ]);
+      if (!game)
         return {
           content: [
             {
               type: 'text',
-              text:
-                response.status === 404
-                  ? `No Tranmere Rovers match was found on ${date}.`
-                  : `The match API returned HTTP ${response.status}.`
+              text: `No Tranmere Rovers match was found on ${date}.`
             }
           ],
           isError: true
         };
-      const apiMatch = await response.json<MatchPageData>();
-      const homeTeam = apiMatch.homeTeam || apiMatch.home || 'Unknown';
-      const awayTeam = apiMatch.awayTeam || apiMatch.visitor || 'Unknown';
-      const score =
-        apiMatch.score ||
-        apiMatch.ft ||
-        `${String(apiMatch.hgoal)}-${String(apiMatch.vgoal)}`;
-      const programmeUrl = apiMatch.programme
-        ? apiMatch.programme.startsWith('http')
-          ? apiMatch.programme
-          : `https://images.tranmere-web.com/${apiMatch.programme}`
+
+      const response = await fetch(
+        `${env.API_BASE_URL}/match/${season}/${encodeURIComponent(date)}`
+      );
+      const apiMatch = response.ok
+        ? await response.json<MatchPageData>()
         : null;
+      const programmePath = game.programme_path;
+      const programmeUrl =
+        programmePath && programmePath !== '#N/A'
+          ? programmePath.startsWith('http')
+            ? programmePath
+            : `https://images.tranmere-web.com/${programmePath}`
+          : null;
       const output = {
         match: {
-          date: apiMatch.date,
-          season: String(apiMatch.season),
-          homeTeam,
-          awayTeam,
-          score,
-          competition: apiMatch.competition || null,
-          venue: apiMatch.venue || null,
-          attendance:
-            typeof apiMatch.attendance === 'number'
-              ? apiMatch.attendance
-              : null,
-          referee: apiMatch.referee || null,
-          formation: apiMatch.formation || null,
-          goals: (apiMatch.goals ?? []).map((goal) => ({
+          date: game.match_date,
+          season: String(game.season),
+          homeTeam: game.home_team,
+          awayTeam: game.away_team,
+          score:
+            game.full_time_score ||
+            `${game.home_goals ?? '0'}-${game.away_goals ?? '0'}`,
+          competition: game.competition || null,
+          venue: game.venue || null,
+          attendance: game.attendance,
+          referee: game.referee || null,
+          formation: game.formation || null,
+          goals: (apiMatch?.goals ?? []).map((goal) => ({
             scorer: goal.Scorer,
             minute: goal.Minute || null,
             assist: goal.Assist || null
           })),
-          lineup: (apiMatch.apps ?? []).map((appearance) => ({
+          lineup: (apiMatch?.apps ?? []).map((appearance) => ({
             name: appearance.Name,
             number: appearance.Number ? String(appearance.Number) : null,
             substitutedBy: appearance.SubbedBy || null,
@@ -174,8 +177,8 @@ export function registerGetMatchByDateTool({ server, env, auth }: ToolContext) {
             yellowCard: Boolean(appearance.YellowCard),
             redCard: Boolean(appearance.RedCard)
           })),
-          substitutes: apiMatch.substitutes ?? [],
-          report: apiMatch.report?.report || null,
+          substitutes: apiMatch?.substitutes ?? [],
+          report: report?.report || null,
           programmeUrl,
           matchUrl: `https://www.tranmere-web.com/match/${season}/${date}`
         }

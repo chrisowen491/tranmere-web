@@ -1,15 +1,13 @@
 import { auth0 } from "@/lib/auth0";
 import { getAdminSession } from "@/lib/adminAuth";
-import { GetBaseUrl } from "@/lib/apiFunctions";
+import { getGameBySeasonAndDate } from "@/lib/games";
 import {
   ensureAttendanceCorrectionsTable,
-  getApprovedAttendance,
   type AttendanceCorrectionStatus,
 } from "@/lib/attendanceCorrections";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { revalidatePath } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
-import type { MatchPageData } from "@tranmere-web/lib/src/tranmere-web-types";
 
 interface CorrectionRequest {
   season?: string;
@@ -52,26 +50,19 @@ export async function POST(request: NextRequest) {
     return error("Please enter a valid attendance.", 400);
   }
 
-  const source = body.source?.trim().slice(0, 1000);
-  if (!source || source.length < 3) {
-    return error("Please describe where the attendance came from.", 400);
-  }
+  const source = body.source?.trim().slice(0, 1000) || "";
 
   const explanation = body.explanation?.trim().slice(0, 1000) || null;
   const env = getCloudflareContext().env;
-  const matchResponse = await fetch(
-    `${GetBaseUrl(env)}/match/${body.season}/${body.matchDate}`,
-  );
-  if (!matchResponse.ok) {
-    return error("That match could not be found.", 404);
-  }
-  const match = (await matchResponse.json()) as MatchPageData;
-  const approvedAttendance = await getApprovedAttendance(
+  const match = await getGameBySeasonAndDate(
     env.DB,
     body.season,
     body.matchDate,
   );
-  const currentAttendance = approvedAttendance ?? match.attendance ?? null;
+  if (!match) {
+    return error("That match could not be found.", 404);
+  }
+  const currentAttendance = match.attendance ?? null;
   if (currentAttendance === proposedAttendance) {
     return error("That attendance is already shown on the match page.", 409);
   }
@@ -105,8 +96,8 @@ export async function POST(request: NextRequest) {
       crypto.randomUUID(),
       body.season,
       body.matchDate,
-      (match.homeTeam || body.homeTeam || "Tranmere Rovers").slice(0, 100),
-      (match.awayTeam || body.awayTeam || match.opposition || "Unknown").slice(
+      (match.home || body.homeTeam || "Tranmere Rovers").slice(0, 100),
+      (match.visitor || body.awayTeam || match.opposition || "Unknown").slice(
         0,
         100,
       ),
@@ -142,15 +133,37 @@ export async function PATCH(request: NextRequest) {
   await ensureAttendanceCorrectionsTable(db);
   const correction = await db
     .prepare(
-      `SELECT season, match_date
+      `SELECT season, match_date, proposed_attendance
        FROM MatchAttendanceCorrections
        WHERE id = ? AND status = 'pending'`,
     )
     .bind(body.id)
-    .first<{ season: string; match_date: string }>();
+    .first<{
+      season: string;
+      match_date: string;
+      proposed_attendance: number;
+    }>();
 
   if (!correction) {
     return error("This correction has already been reviewed.", 409);
+  }
+
+  if (body.status === "approved") {
+    const gameUpdate = await db
+      .prepare(
+        `UPDATE Games
+         SET attendance = ?
+         WHERE season = ? AND match_date = ?`,
+      )
+      .bind(
+        correction.proposed_attendance,
+        Number(correction.season),
+        correction.match_date,
+      )
+      .run();
+    if (!gameUpdate.meta.changes) {
+      return error("The main match record could not be found.", 404);
+    }
   }
 
   await db
@@ -171,6 +184,7 @@ export async function PATCH(request: NextRequest) {
   revalidatePath(`/match/${correction.season}/${correction.match_date}`);
   revalidatePath(`/season/${correction.season}`);
   revalidatePath("/results");
+  revalidatePath("/results/top-attendances");
 
   return NextResponse.json({ message: `Correction ${body.status}.` });
 }

@@ -1,6 +1,7 @@
 import { getAttendanceCorrections } from "@/lib/attendanceCorrections";
 import { requireAdminPage } from "@/lib/adminAuth";
 import { getPlayerProfileCorrections } from "@/lib/playerProfileCorrections";
+import { getFormationCorrections } from "@/lib/formationCorrections";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import {
   ArrowRightIcon,
@@ -26,11 +27,16 @@ export const metadata: Metadata = {
 export default async function AdminPage() {
   const session = await requireAdminPage("/admin");
   const env = getCloudflareContext().env;
-  const [attendanceCorrections, profileCorrections] = await Promise.all([
-    getAttendanceCorrections(env.DB, "pending"),
-    getPlayerProfileCorrections(env.DB, "pending"),
-  ]);
-  const totalPending = attendanceCorrections.length + profileCorrections.length;
+  const [attendanceCorrections, profileCorrections, formationCorrections] =
+    await Promise.all([
+      getAttendanceCorrections(env.DB, "pending"),
+      getPlayerProfileCorrections(env.DB, "pending"),
+      getFormationCorrections(env.DB, "pending"),
+    ]);
+  const totalPending =
+    attendanceCorrections.length +
+    profileCorrections.length +
+    formationCorrections.length;
 
   const queues = [
     {
@@ -48,6 +54,14 @@ export default async function AdminPage() {
       href: "/admin/player-profile-corrections",
       count: profileCorrections.length,
       icon: UserCircleIcon,
+    },
+    {
+      title: "Match formations",
+      description:
+        "Review supporter-suggested formations before updating the match archive.",
+      href: "/admin/formation-corrections",
+      count: formationCorrections.length,
+      icon: UserGroupIcon,
     },
   ];
 
@@ -186,6 +200,14 @@ export default async function AdminPage() {
                 "Add digitised programme PDFs and keep their match details up to date.",
               action: "Manage programmes",
               icon: DocumentTextIcon,
+            },
+            {
+              href: "/admin/games",
+              title: "Games",
+              description:
+                "Filter a season and update published fixture, result and archive details.",
+              action: "Manage games",
+              icon: CalendarDaysIcon,
             },
           ].map((item) => {
             const Icon = item.icon;

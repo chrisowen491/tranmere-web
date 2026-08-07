@@ -136,6 +136,7 @@ export interface Match {
   attendance?: number | null;
   referee?: string;
   formation?: string;
+  kit?: string;
   largeProgramme?: string;
   largeTicket?: string;
   round?: number;

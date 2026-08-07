@@ -4,7 +4,7 @@ import type { Match } from "@tranmere-web/lib/src/tranmere-web-types";
 import Image from "next/image";
 import Link from "next/link";
 import { breadcrumbJsonLd, JsonLd } from "@/components/seo/JsonLd";
-import { GetBaseUrl } from "@/lib/apiFunctions";
+import { searchGames } from "@/lib/games";
 import { pageMetadata } from "@/lib/seo";
 
 export const revalidate = 7200;
@@ -55,12 +55,11 @@ function result(match: Match) {
 
 export default async function WembleyArchivePage() {
   const env = (await getCloudflareContext({ async: true })).env;
-  const response = await fetch(
-    `${GetBaseUrl(env)}/result-search/?venue=Wembley%20Stadium&sort=Date%20Descending`,
-    { next: { revalidate } },
-  );
-  const archive = (await response.json()) as { results: Match[] };
-  const matches = archive.results.sort((a, b) => b.date.localeCompare(a.date));
+  const { results } = await searchGames(env.DB, {
+    venue: "Wembley Stadium",
+    sort: "date-desc",
+  });
+  const matches = results;
   const wins = matches.filter((match) => result(match) === "W").length;
   const draws = matches.filter((match) => result(match) === "D").length;
   const losses = matches.filter((match) => result(match) === "L").length;

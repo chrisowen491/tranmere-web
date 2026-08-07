@@ -1,10 +1,10 @@
 import { ArrowRightIcon, TrophyIcon } from "@heroicons/react/24/outline";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
-import type { H2HTotal, Match } from "@tranmere-web/lib/src/tranmere-web-types";
+import type { Match } from "@tranmere-web/lib/src/tranmere-web-types";
 import Image from "next/image";
 import Link from "next/link";
 import { breadcrumbJsonLd, JsonLd } from "@/components/seo/JsonLd";
-import { GetBaseUrl } from "@/lib/apiFunctions";
+import { searchGames } from "@/lib/games";
 import { pageMetadata } from "@/lib/seo";
 
 export const revalidate = 7200;
@@ -163,14 +163,10 @@ export async function CupArchivePage({
   pathname,
 }: CupArchiveConfig) {
   const env = (await getCloudflareContext({ async: true })).env;
-  const response = await fetch(
-    `${GetBaseUrl(env)}/result-search/?competition=${encodeURIComponent(competition)}&sort=Date%20Descending`,
-    { next: { revalidate } },
-  );
-  const archive = (await response.json()) as {
-    results: Match[];
-    h2htotal: H2HTotal[];
-  };
+  const archive = await searchGames(env.DB, {
+    competition,
+    sort: "date-desc",
+  });
   const seasons = buildCupSeasons(archive.results);
   const record = archive.h2htotal[0];
   const biggestWin = archive.results

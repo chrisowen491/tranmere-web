@@ -33,11 +33,6 @@ export class TranmereWebStack extends cdk.Stack {
       DD_EXTENSION_VERSION: 'next'
     };
 
-    const TranmereWebPlayerTable = ddb.Table.fromTableAttributes(
-      this,
-      'TranmereWebPlayerTable',
-      { tableName: 'TranmereWebPlayerTable', grantIndexPermissions: true }
-    );
     const TranmereWebAppsTable = ddb.Table.fromTableAttributes(
       this,
       'TranmereWebAppsTable',
@@ -63,55 +58,10 @@ export class TranmereWebStack extends cdk.Stack {
       'TranmereWebMediaSyncTable',
       `arn:aws:dynamodb:${this.region}:${this.account}:table/TranmereWebMediaSyncTable`
     );
-    const TranmereWebGames = ddb.Table.fromTableAttributes(
-      this,
-      'TranmereWebGames',
-      { tableName: 'TranmereWebGames', grantIndexPermissions: true }
-    );
-    const TranmereWebClubs = ddb.Table.fromTableArn(
-      this,
-      'TranmereWebClubs',
-      `arn:aws:dynamodb:${this.region}:${this.account}:table/TranmereWebClubs`
-    );
-    const TranmereWebCompetitions = ddb.Table.fromTableArn(
-      this,
-      'TranmereWebCompetitions',
-      `arn:aws:dynamodb:${this.region}:${this.account}:table/TranmereWebCompetitions`
-    );
-    const TranmereWebManagers = ddb.Table.fromTableArn(
-      this,
-      'TranmereWebManagers',
-      `arn:aws:dynamodb:${this.region}:${this.account}:table/TranmereWebManagers`
-    );
-    const TranmereWebStarsTable = ddb.Table.fromTableArn(
-      this,
-      'TranmereWebStarsTable',
-      `arn:aws:dynamodb:${this.region}:${this.account}:table/TranmereWebStarsTable`
-    );
     const TranmereWebHatTricks = ddb.Table.fromTableAttributes(
       this,
       'TranmereWebHatTricks',
       { tableName: 'TranmereWebHatTricks', grantIndexPermissions: true }
-    );
-    const TranmereWebOnThisDay = ddb.Table.fromTableAttributes(
-      this,
-      'TranmereWebOnThisDay',
-      { tableName: 'TranmereWebOnThisDay', grantIndexPermissions: true }
-    );
-    const TranmereWebPlayerTransfers = ddb.Table.fromTableAttributes(
-      this,
-      'TranmereWebPlayerTransfers',
-      { tableName: 'TranmereWebPlayerTransfers', grantIndexPermissions: true }
-    );
-    const TranmereWebPlayerLinks = ddb.Table.fromTableAttributes(
-      this,
-      'TranmereWebPlayerLinks',
-      { tableName: 'TranmereWebPlayerLinks', grantIndexPermissions: true }
-    );
-    const TranmereWebMatchReport = ddb.Table.fromTableAttributes(
-      this,
-      'TranmereWebMatchReport',
-      { tableName: 'TranmereWebMatchReport', grantIndexPermissions: true }
     );
 
     /*
@@ -128,20 +78,6 @@ export class TranmereWebStack extends cdk.Stack {
       }
     );
 */
-    /*
-    const TranmereWebMatchReport = new ddb.Table(this, 'TranmereWebMatchReport', {
-      tableName: "TranmereWebMatchReport",
-      partitionKey: { name: 'day', type: ddb.AttributeType.STRING },
-      billingMode: ddb.BillingMode.PAY_PER_REQUEST,
-    });
-    */
-    /*
-    const TranmereWebOnThisDay = new ddb.Table(this, 'TranmereWebOnThisDay', {
-      tableName: "TranmereWebOnThisDay",
-      partitionKey: { name: 'day', type: ddb.AttributeType.STRING },
-      billingMode: ddb.BillingMode.PAY_PER_REQUEST,
-    });
-    */
 
     /*
     const TranmereWebPlayerTransfers = new ddb.Table(this, 'TranmereWebPlayerTransfers', {
@@ -212,26 +148,15 @@ export class TranmereWebStack extends cdk.Stack {
     });
 
     const contact_us = api.root.addResource('contact-us');
-    //const upload = api.root.addResource('upload');
     const media_sync = api.root.addResource('media-sync');
     const type = media_sync.addResource('{type}');
-
     const match = api.root.addResource('match');
-
     const season = match.addResource('{season}');
     const date = season.addResource('{date}');
-
-    const report = api.root.addResource('report');
-
-    //const profile = api.root.addResource('profile');
-    //const playerName = profile.addResource('{playerName}');
     const page = api.root.addResource('page');
     const pageName = page.addResource('{pageName}');
     const classifier = pageName.addResource('{classifier}');
     const player_search = api.root.addResource('player-search');
-    const result_search = api.root.addResource('result-search');
-    //const on = api.root.addResource('on');
-    //const upload = api.root.addResource('upload');
 
     new TranmereWebLambda(this, 'ContactUsFunction', {
       environment: env_variables,
@@ -283,18 +208,6 @@ export class TranmereWebStack extends cdk.Stack {
       }
     });
     */
-    new TranmereWebLambda(this, 'MatchReportFunction', {
-      environment: env_variables,
-      apiResource: report,
-      apiMethod: 'GET',
-      lambdaFile: './lambda/matchreportagent.ts',
-      readWriteTables: [
-        TranmereWebMatchReport,
-        TranmereWebGames,
-        TranmereWebAppsTable,
-        TranmereWebGoalsTable
-      ]
-    });
 
     new TranmereWebLambda(this, 'PlayerSearchFunction', {
       environment: env_variables,
@@ -304,31 +217,13 @@ export class TranmereWebStack extends cdk.Stack {
       readTables: [TranmereWebPlayerSeasonSummaryTable]
     });
 
-    new TranmereWebLambda(this, 'ResultsSearchFunction', {
-      environment: env_variables,
-      lambdaFile: './lambda/resultssearch.ts',
-      apiResource: result_search,
-      apiMethod: 'GET',
-      readTables: [TranmereWebGames]
-    });
-
-    new TranmereWebLambda(this, 'OnThisDayFunction', {
-      environment: env_variables,
-      lambdaFile: './lambda/onThisDayJob.ts',
-      schedule: { minute: '25', hour: '00' },
-      apiMethod: 'GET',
-      readWriteTables: [TranmereWebOnThisDay],
-      readTables: [TranmereWebGames]
-    });
-
     new TranmereWebLambda(this, 'MediaSyncFunction', {
       environment: env_variables,
       lambdaFile: './lambda/mediasync.ts',
       apiResource: type,
       apiMethod: 'POST',
       readWriteTables: [
-        TranmereWebMediaSyncTable,
-        TranmereWebPlayerTable
+        TranmereWebMediaSyncTable
       ]
     });
 
@@ -338,10 +233,8 @@ export class TranmereWebStack extends cdk.Stack {
       apiResource: date,
       apiMethod: 'GET',
       readTables: [
-        TranmereWebGames,
         TranmereWebGoalsTable,
-        TranmereWebAppsTable,
-        TranmereWebMatchReport
+        TranmereWebAppsTable
       ]
     });
 
@@ -354,7 +247,6 @@ export class TranmereWebStack extends cdk.Stack {
         TranmereWebAppsTable,
         TranmereWebGoalsTable,
         TranmereWebPlayerSeasonSummaryTable,
-        TranmereWebPlayerLinks
       ]
     });
 
@@ -363,47 +255,9 @@ export class TranmereWebStack extends cdk.Stack {
       api: api,
       tables: [
         {
-          table: TranmereWebClubs,
-          keyColumn: 'name'
-        },
-        {
-          table: TranmereWebCompetitions,
-          keyColumn: 'name'
-        },
-        {
-          table: TranmereWebManagers,
-          keyColumn: 'name'
-        },
-        {
-          table: TranmereWebPlayerTable,
-          keyColumn: 'id'
-        },
-        {
-          table: TranmereWebPlayerLinks,
-          keyColumn: 'id',
-          putSchema: 'putlink.json'
-        },
-        {
-          table: TranmereWebPlayerTransfers,
-          keyColumn: 'id',
-          putSchema: 'puttransfer.json'
-        },
-        {
-          table: TranmereWebStarsTable,
-          keyColumn: 'id'
-        },
-        {
           table: TranmereWebHatTricks,
           keyColumn: 'Season'
         },
-        {
-          table: TranmereWebOnThisDay,
-          keyColumn: 'day'
-        },
-        {
-          table: TranmereWebGames,
-          keyColumn: 'season'
-        }
       ]
     });
   }

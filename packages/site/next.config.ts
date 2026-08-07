@@ -37,10 +37,6 @@ const nextConfig: NextConfig = {
         destination: `https://api.tranmere-web.com/contact-us/`,
       },
       {
-        source: "/api/result-search",
-        destination: `https://api.tranmere-web.com/result-search/`,
-      },
-      {
         source: "/pdfs/:path*",
         destination: `https://programes.tranmere-web.com/:path*`,
       },

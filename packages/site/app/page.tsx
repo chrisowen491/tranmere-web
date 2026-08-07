@@ -13,8 +13,8 @@ import {
   QuestionMarkCircleIcon,
 } from "@heroicons/react/24/outline";
 import { GetOnThisDay, GetYear } from "@tranmere-web/lib/src/apiFunctions";
-import type { MatchPageData } from "@tranmere-web/lib/src/tranmere-web-types";
-import { GetBaseUrl } from "@/lib/apiFunctions";
+import type { Match } from "@tranmere-web/lib/src/tranmere-web-types";
+import { getGameBySeasonAndDate } from "@/lib/games";
 import { getAllArticles, getAllShirts } from "@/lib/api";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { getUniquePlayers, type PlayerRecord } from "@/lib/players";
@@ -147,7 +147,7 @@ export default async function Home() {
 
   const [players, onThisDay, shirts, articles] = await Promise.all([
     getUniquePlayers(env.DB),
-    GetOnThisDay(),
+    GetOnThisDay(env.DB),
     getAllShirts(),
     getAllArticles(4),
   ]);
@@ -166,15 +166,19 @@ export default async function Home() {
     ];
   });
 
-  let featuredMatch: MatchPageData | null = null;
+  let featuredMatch: Match | null = null;
   if (onThisDay) {
-    const matchRequest = await fetch(
-      `${GetBaseUrl(env)}/match/${onThisDay.season}/${onThisDay.date}`,
+    featuredMatch = await getGameBySeasonAndDate(
+      env.DB,
+      onThisDay.season,
+      onThisDay.date,
     );
-    if (matchRequest.ok) {
-      featuredMatch = (await matchRequest.json()) as MatchPageData;
-    }
   }
+  const featuredHomeTeam = featuredMatch?.home ?? "";
+  const featuredAwayTeam = featuredMatch?.visitor ?? "";
+  const featuredScore = featuredMatch
+    ? (featuredMatch.ft ?? `${featuredMatch.hgoal}-${featuredMatch.vgoal}`)
+    : "";
 
   const matchHref = onThisDay
     ? `/match/${onThisDay.season}/${onThisDay.date}`
@@ -194,7 +198,12 @@ export default async function Home() {
           <div className="flex flex-col justify-between px-6 py-12 sm:px-10 lg:px-12 lg:py-16">
             <div className="flex items-center gap-3 text-xs font-bold uppercase tracking-[0.22em] text-blue-300">
               <span className="h-px w-10 bg-blue-400" />
-              On this day · {dateLabel}
+              <span>
+                On this day · {dateLabel}
+                {featuredMatch
+                  ? ` · ${featuredHomeTeam} ${featuredScore} ${featuredAwayTeam}`
+                  : ""}
+              </span>
             </div>
 
             <div className="max-w-3xl py-16 lg:py-20">
@@ -206,11 +215,11 @@ export default async function Home() {
                     {featuredMatch.competition}
                   </p>
                   <h1 className="mt-6 font-display text-5xl font-semibold leading-[0.95] tracking-[-0.055em] sm:text-6xl lg:text-7xl">
-                    {featuredMatch.homeTeam}
+                    {featuredHomeTeam}
                     <span className="my-4 block font-mono text-blue-400">
-                      {featuredMatch.score}
+                      {featuredScore}
                     </span>
-                    {featuredMatch.awayTeam}
+                    {featuredAwayTeam}
                   </h1>
                   <p className="mt-7 max-w-xl text-lg leading-8 text-white/65">
                     A match from this date in Rovers history
@@ -296,7 +305,7 @@ export default async function Home() {
                 {matchProgramme ? (
                   <Image
                     src={matchProgramme}
-                    alt={`${featuredMatch?.homeTeam} v ${featuredMatch?.awayTeam} programme`}
+                    alt={`${featuredHomeTeam} v ${featuredAwayTeam} programme`}
                     width={640}
                     height={860}
                     priority
