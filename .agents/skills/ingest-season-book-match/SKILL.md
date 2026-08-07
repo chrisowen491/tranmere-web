@@ -1,12 +1,14 @@
 ---
 name: ingest-season-book-match
-description: Parse a photographed or scanned Tranmere Rovers season-book fixture row or complete season sheet and add its confirmed attendance, starting XI, substitutions and Rovers scorers to existing TranmereWeb DynamoDB data. Use when supplied a season-book/team-sheet image that lists player surnames and shirt numbers, especially to fill historic line-ups for already-recorded matches.
+description: Parse a photographed or scanned Tranmere Rovers season-book fixture row or complete season sheet and add its confirmed attendance to the Tranmere-Web D1 Games table, plus starting XI, substitutions and Rovers scorers to DynamoDB. Use when supplied a season-book/team-sheet image that lists player surnames and shirt numbers, especially to fill historic line-ups for already-recorded matches.
 ---
 
 # Season-book match ingestion
 
-Use this only for a match that already exists in DynamoDB. Never create or
-replace a result record from a season-book image.
+Use this only for a match that already exists in the Tranmere-Web D1 `Games`
+table. Never create or replace a game/result record from a season-book image.
+The image only supplies an attendance update to D1. Apps and goals remain in
+the DynamoDB `TranmereWebAppsTable` and `TranmereWebGoalsTable`.
 
 The source is an image of a season table where the row contains the fixture,
 result, attendance and scorer summary, and columns contain each player name.
@@ -39,31 +41,38 @@ Do not guess an unreadable value. Ask the user to provide it or attach a clearer
 crop. Treat blank cells as no appearance. Do not interpret a number in the
 scorer summary as a shirt number.
 
-For one fixture, preflight against the configured AWS account and region:
+Choose the intended D1 target before any read or write. For the production
+database use `--remote`; for local review use
+`--local --persist-to=packages/site/.wrangler/state`. Substitute that value as
+`<d1-target>` below. Run D1 commands from the repository root and use
+`packages/sql/wrangler.toml`.
+
+For one fixture, preflight the D1 game record:
 
 ```bash
-aws sts get-caller-identity --profile <profile> --region <region>
-aws dynamodb query --table-name TranmereWebGames --profile <profile> --region <region> \
-  --key-condition-expression 'season = :season AND #date = :date' \
-  --expression-attribute-names '{"#date":"date"}' \
-  --expression-attribute-values '{":season":{"S":"1967"},":date":{"S":"1967-08-19"}}'
+npx wrangler d1 execute tranmere-web --config packages/sql/wrangler.toml <d1-target> \
+  --command "SELECT id, season, match_date, competition, home_team, away_team, opposition, venue, full_time_score, home_goals, away_goals, attendance
+             FROM Games
+             WHERE season = 1967 AND match_date = '1967-08-19';"
 ```
 
 Require exactly one result and check its `opposition`, home/away arrangement and
 score agree with the image. If absent or inconsistent, stop; do not write.
-Use the existing result's `season`, `date`, `opposition` and `competition` in
+Use the existing D1 record's `season`, `match_date`, `opposition` and `competition` in
 all later records.
 
-For a season sheet, query all result records once and map them by `date`:
+For a season sheet, query all game records once and map them by `match_date`:
 
 ```bash
-aws dynamodb query --table-name TranmereWebGames --profile <profile> --region <region> \
-  --key-condition-expression 'season = :season' \
-  --expression-attribute-values '{":season":{"S":"1967"}}'
+npx wrangler d1 execute tranmere-web --config packages/sql/wrangler.toml <d1-target> \
+  --command "SELECT id, season, match_date, competition, home_team, away_team, opposition, venue, full_time_score, home_goals, away_goals, attendance
+             FROM Games
+             WHERE season = 1967
+             ORDER BY match_date, id;"
 ```
 
 Require every scanned date to exist exactly once and validate its opponent,
-home/away arrangement, competition and score. Use the result's canonical
+home/away arrangement, competition and score. Use the D1 game's canonical
 `opposition` and `competition` fields in later records.
 
 ## 2. Resolve every printed player name with the user
@@ -72,14 +81,11 @@ Never silently expand a surname or initial. For every distinct player printed
 in the row—starters, the number-12 replacement, and scorers—show the printed
 form and its context, then ask the user to confirm the canonical full name.
 
-Look for possible candidates in `TranmereWebPlayerTable`, for example:
+Look for possible candidates in the D1 `Players` table, for example:
 
 ```bash
-aws dynamodb scan --table-name TranmereWebPlayerTable --profile <profile> --region <region> \
-  --projection-expression 'id, #name' \
-  --filter-expression 'contains(#name, :surname)' \
-  --expression-attribute-names '{"#name":"name"}' \
-  --expression-attribute-values '{":surname":{"S":"King"}}'
+npx wrangler d1 execute tranmere-web --config packages/sql/wrangler.toml <d1-target> \
+  --command "SELECT id, name FROM Players WHERE name LIKE '%King%' ORDER BY name;"
 ```
 
 Present candidates as suggestions only. Ask separately for `King A` and
@@ -104,8 +110,10 @@ attendance, 11 starters, any number-12 substitution and scorer totals.
   Do not create a separate starter record for number 12.
 - The book does not provide substitution minutes, cards, assists or goal
   minutes. Leave those unknown; do not invent them.
-- Sum scorer counts and compare it with Tranmere's score from the existing
-  result (`hgoal` if Tranmere is home, otherwise `vgoal`). Stop on a mismatch.
+- Sum scorer counts and compare it with Tranmere's score from the existing D1
+  game (`home_goals` if `home_team` is Tranmere Rovers, otherwise
+  `away_goals`; fall back to `full_time_score` only when the individual score
+  columns are blank). Stop on a mismatch.
 - Query `TranmereWebAppsTable` and `TranmereWebGoalsTable` for the same season
   and date. If either has existing data, stop and ask whether the user wants a
   separate, explicitly authorised replacement operation. Do not create
@@ -136,25 +144,25 @@ every row:
 - a number-12 player for every asterisked starter, recorded as `SubbedBy`;
 - a confirmed full name for every printed label; and
 - the expanded scorer count to equal Tranmere's home or away score from the
-  existing match's `ft` value.
+  existing D1 game's score.
 
-Ask for one final confirmation immediately before modifying DynamoDB. In dry-run
-mode, print the number of fixtures, attendance updates, starter appearances,
-goal records and substitutions. Do not write in dry-run mode.
+Ask for one final confirmation immediately before modifying D1 or DynamoDB. In
+dry-run mode, print the number of fixtures, D1 attendance updates, starter
+appearances, goal records and substitutions. Do not write in dry-run mode.
 
 ## 4. Write the confirmed records
 
-Update attendance on the existing result only. Keep every other result field
-unchanged and protect against an unexpected missing record:
+Update attendance on the existing D1 game only. Keep every other result field
+unchanged. The preflight must already have established that the key is unique;
+after the update, require `changes()` to be exactly `1` or stop and report the
+problem. Never insert into `Games` from this skill.
 
 ```bash
-aws dynamodb update-item --table-name TranmereWebGames --profile <profile> --region <region> \
-  --key '{"season":{"S":"1967"},"date":{"S":"1967-08-19"}}' \
-  --update-expression 'SET attendance = :attendance' \
-  --condition-expression 'attribute_exists(season) AND attribute_exists(#date)' \
-  --expression-attribute-names '{"#date":"date"}' \
-  --expression-attribute-values '{":attendance":{"N":"9726"}}' \
-  --return-values UPDATED_NEW
+npx wrangler d1 execute tranmere-web --config packages/sql/wrangler.toml <d1-target> \
+  --command "UPDATE Games
+             SET attendance = 9726
+             WHERE season = 1967 AND match_date = '1967-08-19';
+             SELECT changes() AS affected_rows;"
 ```
 
 For each confirmed starter, generate a UUID. Use this AttributeValue shape,
@@ -209,11 +217,12 @@ aws dynamodb put-item --table-name TranmereWebGoalsTable --profile <profile> --r
 ```
 
 For a confirmed season import, use a small temporary orchestrator that invokes
-the AWS CLI and supports dry-run and apply modes. It must:
+the Wrangler D1 and AWS CLIs and supports dry-run and apply modes. It must:
 
 1. Run the season-level validations above before either mode reports a result.
-2. Run the conditional result `update-item` once per attendance; never bulk
-   write result records.
+2. Run one D1 `UPDATE Games ... WHERE season = ? AND match_date = ?` per
+   attendance and verify that each update affects exactly one row; never insert
+   or bulk-replace game records.
 3. Send appearance items to `TranmereWebAppsTable` through
    `aws dynamodb batch-write-item` in chunks of at most 25 `PutRequest`s.
 4. Send goal items to `TranmereWebGoalsTable` the same way, one item per goal.
@@ -222,11 +231,12 @@ the AWS CLI and supports dry-run and apply modes. It must:
 
 ## 5. Verify and report
 
-For one fixture, re-run the three date-specific reads. For a season sheet,
-query each table once by `Season` and verify every imported date: attendance
-matches the scan, exactly 11 appearances exist, each `SubbedBy` matches an
-asterisk, and the goal count matches the scorer summary. Report totals, the
-canonical player-name map and any source limitations.
+For one fixture, re-run the D1 game query and the two DynamoDB date-specific
+reads. For a season sheet, query D1 `Games` once by `season` and query each
+DynamoDB table once by `Season`; verify every imported date: attendance matches
+the scan, exactly 11 appearances exist, each `SubbedBy` matches an asterisk,
+and the goal count matches the scorer summary. Report totals, the canonical
+player-name map and any source limitations.
 
 Do not modify `TranmereWebPlayerSeasonSummaryTable`; it is derived from apps
 and goals by the existing update job.

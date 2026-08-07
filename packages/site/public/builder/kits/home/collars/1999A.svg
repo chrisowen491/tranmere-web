@@ -1,0 +1,12 @@
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+  
+  <g id="collar">
+    <path d="m256 359-30 30-31.996-70.056L212 307l44 52z" fill="#050532"/>
+    <path d="m256 359 30 30 31.996-70.056L300 307l-44 52z" fill="#050532"/>
+    <path d="M224 321l32 38v30h-32z" fill="url(#kit-2026-navy-texture)" />
+    <path d="M256 359l32-38v68h-32z" fill="url(#kit-2026-green-texture)"/>
+    <path d="m207 311 49 48 49-48" fill="none" stroke="#050532" stroke-linejoin="round" stroke-width="12"/>
+    <path d="m211 310 45 43 45-43" fill="none" stroke="#fff" stroke-linejoin="round" stroke-width="6"/>
+    <path d="m217 311 39 36 39-36" fill="none" stroke="#fff" stroke-linejoin="round" stroke-width="3"/>
+  </g>
+</svg>  
