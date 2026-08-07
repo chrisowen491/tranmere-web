@@ -52,7 +52,7 @@ export const HONOURS_SEASONS: readonly HonoursSeason[] = [
         detail: 'Crowned champions and promoted.',
         kind: 'Trophy',
         achievedOn: '1938-05-07',
-        href: '/seasons/1937'
+        href: '/season/1937'
       }
     ]
   },
@@ -64,7 +64,7 @@ export const HONOURS_SEASONS: readonly HonoursSeason[] = [
         detail: 'Finished fourth to secure promotion.',
         kind: 'Promotion',
         achievedOn: '1967-05-17',
-        href: '/seasons/1966'
+        href: '/season/1966'
       }
     ]
   },
@@ -76,7 +76,7 @@ export const HONOURS_SEASONS: readonly HonoursSeason[] = [
         detail: 'Finished fourth to return to Division Three.',
         kind: 'Promotion',
         achievedOn: '1976-04-26',
-        href: '/seasons/1975'
+        href: '/season/1975'
       }
     ]
   },
@@ -88,7 +88,7 @@ export const HONOURS_SEASONS: readonly HonoursSeason[] = [
         detail: 'Finished runners-up and won promotion.',
         kind: 'Promotion',
         achievedOn: '1989-05-13',
-        href: '/seasons/1988'
+        href: '/season/1988'
       }
     ]
   },
@@ -131,7 +131,7 @@ export const HONOURS_SEASONS: readonly HonoursSeason[] = [
         detail: 'Reached the final four of the League Cup.',
         kind: 'Cup run',
         achievedOn: '1994-02-27',
-        href: '/results/league-cup'
+        href: '/match/1993/1994-02-27'
       }
     ]
   },
