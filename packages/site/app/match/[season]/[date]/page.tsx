@@ -46,13 +46,15 @@ export default async function MatchPage(props: { params: MatchParams }) {
     : null;
   const matchData: MatchPageData = {
     ...game,
-    ...apiMatch,
-    ...game,
+    homeTeam: game.home,
+    awayTeam: game.visitor,
+    score: game.ft ?? `${game.hgoal}-${game.vgoal}`,
     report: reportRow
       ? { day: reportRow.match_date, report: reportRow.report }
-      : apiMatch?.report,
+      : null,
     apps: apiMatch?.apps,
     goals: apiMatch?.goals,
+    substitutes: apiMatch?.substitutes,
   };
   const [match, manager] = await Promise.all([
     enrichMatchPlayers(env.DB, matchData),
