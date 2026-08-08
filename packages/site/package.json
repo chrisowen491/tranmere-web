@@ -55,7 +55,7 @@
     "algoliasearch": "^5.25.0",
     "autoprefixer": "^10.5.4",
     "date-fns": "^4.0.0",
-    "dompurify": "^3.2.6",
+    "dompurify": "^3.4.13",
     "esbuild": "^0.28.1",
     "eslint": "^9.39.2",
     "eslint-config-next": "16.2.12",
