@@ -85,4 +85,29 @@ describe("formation and lineup assignment", () => {
     expect(arrangeLineup(players, undefined, positions).formation).toBe("442");
     expect(formationLabel("5-3-2")).toBe("5-3-2");
   });
+
+  it("uses secondary positions to avoid placing a centre-back on the wing", () => {
+    const lineup = arrangeLineup(
+      [
+        player("Ian Goodison", "Central Defender", "Left Back"),
+        player("Iain Hume", "Striker"),
+        player("Danny Harrison", "Central Midfielder"),
+        player("Alan Navarro", "Central Midfielder"),
+        player("Eugene Dadi", "Striker"),
+        player("Paul Linwood", "Central Defender"),
+        player("Gary Jones", "Central Midfielder", "Striker"),
+        player("John Achterberg", "Goalkeeper"),
+        player("Ryan Taylor", "Right Back"),
+        player("Gareth Roberts", "Left Back", "Left Midfield"),
+        player("Graham Allen", "Central Defender"),
+      ],
+      "4-4-2",
+      (player) => player,
+    );
+
+    expect(lineup.rows[1][0].name).toBe("Gareth Roberts");
+    expect(lineup.rows[2].map((player) => player.name)).toContain(
+      "Ian Goodison",
+    );
+  });
 });

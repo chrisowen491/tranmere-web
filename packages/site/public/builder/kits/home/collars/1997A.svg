@@ -1,0 +1,18 @@
+ <svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+   <g>
+   <line stroke="#f4f0e7" stroke-width="29" transform="rotate(-10.300434112548828 250.3818969726564,360.68164062500006) " y2="366.31927" x2="242.72309" y1="355.04398" x1="258.04071" fill="none"/>
+  
+  </g>
+  <g id="collar">
+ <g>
+    <path stroke="#681b29" d="m256,359l-30,30l-31.996,-70.056l17.996,-11.944l44,52z" fill="#681b29"/>
+   </g>
+   <g>
+    <path stroke="#681b29" d="m256,359l30,30l31.996,-70.056l-17.996,-11.944l-44,52z" fill="#681b29"/>
+   </g>
+  </g>
+  <g stroke="null" id="sub-collar">
+   <line transform="rotate(-0.913708 214.5 350.953)" stroke="#6fa6d9" id="svg_37" y2="382.45313" x2="227" y1="319.45313" x1="202" fill-opacity="null" stroke-width="4" fill="none"/>
+   <line transform="rotate(-2.92982 298 349.937)" stroke="#6fa6d9" id="svg_46" y2="380.42087" x2="280" y1="319.45313" x1="316" fill-opacity="null" stroke-width="4" fill="none"/>
+  </g>
+</svg>  

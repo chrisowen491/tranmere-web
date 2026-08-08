@@ -83,42 +83,44 @@ export default function SeasonsIndexPage() {
 
       <div className="mx-auto max-w-7xl px-6 py-14 sm:px-10 lg:px-12 lg:py-20">
         <div className="space-y-14">
-          {[...decades.entries()].map(([decade, seasons]) => (
-            <section key={decade}>
-              <div className="mb-5 flex items-end justify-between border-b border-[#071a2b]/15 pb-5">
-                <div>
-                  <p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-700">
-                    Decade
+          {[...decades.entries()]
+            .sort(([a], [b]) => b - a)
+            .map(([decade, decadeSeasons]) => (
+              <section key={decade}>
+                <div className="mb-5 flex items-end justify-between border-b border-[#071a2b]/15 pb-5">
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-700">
+                      Decade
+                    </p>
+                    <h2 className="mt-2 font-display text-4xl font-semibold tracking-[-0.04em]">
+                      {decade}s
+                    </h2>
+                  </div>
+                  <p className="font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-[#071a2b]/40">
+                    {decadeSeasons.length} seasons
                   </p>
-                  <h2 className="mt-2 font-display text-4xl font-semibold tracking-[-0.04em]">
-                    {decade}s
-                  </h2>
                 </div>
-                <p className="font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-[#071a2b]/40">
-                  {seasons.length} seasons
-                </p>
-              </div>
-              <div className="grid gap-px border border-[#071a2b]/15 bg-[#071a2b]/15 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
-                {seasons.map((season) => (
-                  <Link
-                    key={season}
-                    href={`/season/${season}`}
-                    className="group flex min-h-32 flex-col justify-between bg-[#fffdf8] p-5 transition hover:bg-blue-700 hover:text-white"
-                  >
-                    <span className="font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-[#071a2b]/40 group-hover:text-blue-100">
-                      Season review
-                    </span>
-                    <span className="flex items-end justify-between gap-3">
-                      <strong className="font-display text-2xl font-semibold tracking-[-0.04em]">
-                        {seasonLabel(season)}
-                      </strong>
-                      <ArrowUpRightIcon className="h-5 w-5 text-blue-700 transition group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-white" />
-                    </span>
-                  </Link>
-                ))}
-              </div>
-            </section>
-          ))}
+                <div className="grid gap-px border border-[#071a2b]/15 bg-[#071a2b]/15 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
+                  {decadeSeasons.map((season) => (
+                    <Link
+                      key={season}
+                      href={`/season/${season}`}
+                      className="group flex min-h-32 flex-col justify-between bg-[#fffdf8] p-5 transition hover:bg-blue-700 hover:text-white"
+                    >
+                      <span className="font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-[#071a2b]/40 group-hover:text-blue-100">
+                        Season review
+                      </span>
+                      <span className="flex items-end justify-between gap-3">
+                        <strong className="font-display text-2xl font-semibold tracking-[-0.04em]">
+                          {seasonLabel(season)}
+                        </strong>
+                        <ArrowUpRightIcon className="h-5 w-5 text-blue-700 transition group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-white" />
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              </section>
+            ))}
         </div>
       </div>
     </main>

@@ -147,28 +147,6 @@ CREATE TABLE IF NOT EXISTS Players (
     OR date_of_birth GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]'
   ),
   CHECK (foot IS NULL OR foot IN ('Left', 'Right')),
-  CHECK (
-    position IS NULL
-    OR position IN (
-      'Goalkeeper',
-      'Striker',
-      'Winger',
-      'Central Defender',
-      'Central Midfielder',
-      'Full Back'
-    )
-  ),
-  CHECK (
-    secondary_position IS NULL
-    OR secondary_position IN (
-      'Goalkeeper',
-      'Striker',
-      'Winger',
-      'Central Defender',
-      'Central Midfielder',
-      'Full Back'
-    )
-  ),
   CHECK (json_valid(links_json))
 );
 

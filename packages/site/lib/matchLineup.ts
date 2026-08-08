@@ -4,8 +4,14 @@ import type { MatchAppearanceView } from "@/lib/matchPlayers";
 type Position =
   | "Goalkeeper"
   | "Full Back"
+  | "Left Back"
+  | "Right Back"
   | "Central Defender"
   | "Central Midfielder"
+  | "Left Midfield"
+  | "Right Midfield"
+  | "Attacking Midfield"
+  | "Defensive Midfield"
   | "Winger"
   | "Striker";
 
@@ -21,16 +27,16 @@ const formations: Record<ManagerFormation, FormationSlot[][]> = {
       { id: "st-right", position: "Striker" },
     ],
     [
-      { id: "mid-left", position: "Winger" },
+      { id: "mid-left", position: "Left Midfield" },
       { id: "mid-centre-left", position: "Central Midfielder" },
       { id: "mid-centre-right", position: "Central Midfielder" },
-      { id: "mid-right", position: "Winger" },
+      { id: "mid-right", position: "Right Midfield" },
     ],
     [
-      { id: "def-left", position: "Full Back" },
+      { id: "def-left", position: "Left Back" },
       { id: "def-centre-left", position: "Central Defender" },
       { id: "def-centre-right", position: "Central Defender" },
-      { id: "def-right", position: "Full Back" },
+      { id: "def-right", position: "Right Back" },
     ],
     [{ id: "goalkeeper", position: "Goalkeeper" }],
   ],
@@ -40,35 +46,35 @@ const formations: Record<ManagerFormation, FormationSlot[][]> = {
       { id: "st-right", position: "Striker" },
     ],
     [
-      { id: "mid-left", position: "Winger" },
+      { id: "mid-left", position: "Left Midfield" },
       { id: "mid-centre-left", position: "Central Midfielder" },
       { id: "mid-centre-right", position: "Central Midfielder" },
-      { id: "mid-right", position: "Winger" },
+      { id: "mid-right", position: "Right Midfield" },
     ],
     [
-      { id: "def-left", position: "Full Back" },
+      { id: "def-left", position: "Left Back" },
       { id: "def-centre-left", position: "Central Defender" },
       { id: "def-centre-right", position: "Central Defender" },
-      { id: "def-right", position: "Full Back" },
+      { id: "def-right", position: "Right Back" },
     ],
     [{ id: "goalkeeper", position: "Goalkeeper" }],
   ],
   "4-3-3": [
     [
-      { id: "forward-left", position: "Winger" },
+      { id: "forward-left", position: "Left Midfield" },
       { id: "forward-centre", position: "Striker" },
-      { id: "forward-right", position: "Winger" },
+      { id: "forward-right", position: "Right Midfield" },
     ],
     [
-      { id: "mid-left", position: "Central Midfielder" },
+      { id: "mid-left", position: "Left Midfield" },
       { id: "mid-centre", position: "Central Midfielder" },
-      { id: "mid-right", position: "Central Midfielder" },
+      { id: "mid-right", position: "Right Midfield" },
     ],
     [
-      { id: "def-left", position: "Full Back" },
+      { id: "def-left", position: "Left Back" },
       { id: "def-centre-left", position: "Central Defender" },
       { id: "def-centre-right", position: "Central Defender" },
-      { id: "def-right", position: "Full Back" },
+      { id: "def-right", position: "Right Back" },
     ],
     [{ id: "goalkeeper", position: "Goalkeeper" }],
   ],
@@ -83,27 +89,25 @@ const formations: Record<ManagerFormation, FormationSlot[][]> = {
       { id: "mid-right", position: "Central Midfielder" },
     ],
     [
-      { id: "def-left", position: "Full Back" },
+      { id: "def-left", position: "Left Back" },
       { id: "def-centre-left", position: "Central Defender" },
       { id: "def-centre", position: "Central Defender" },
       { id: "def-centre-right", position: "Central Defender" },
-      { id: "def-right", position: "Full Back" },
+      { id: "def-right", position: "Right Back" },
     ],
     [{ id: "goalkeeper", position: "Goalkeeper" }],
   ],
   "3-4-2-1": [
+    [{ id: "st-centre", position: "Striker" }],
     [
-      { id: "st-centre", position: "Striker" },
+      { id: "att-left", position: "Attacking Midfield" },
+      { id: "att-right", position: "Attacking Midfield" },
     ],
     [
-      { id: "att-left", position: "Winger" },
-      { id: "att-right", position: "Winger" },
-    ],
-    [
-      { id: "mid-left", position: "Full Back" },
+      { id: "mid-left", position: "Left Back" },
       { id: "mid-centre", position: "Central Midfielder" },
       { id: "mid-centre", position: "Central Midfielder" },
-      { id: "mid-right", position: "Full Back" },
+      { id: "mid-right", position: "Right Back" },
     ],
     [
       { id: "def-centre-left", position: "Central Defender" },
@@ -117,14 +121,12 @@ const formations: Record<ManagerFormation, FormationSlot[][]> = {
       { id: "st-left", position: "Striker" },
       { id: "st-right", position: "Striker" },
     ],
+    [{ id: "att-centre", position: "Attacking Midfield" }],
     [
-      { id: "att-centre", position: "Winger" },
-    ],
-    [
-      { id: "mid-left", position: "Full Back" },
+      { id: "mid-left", position: "Left Back" },
       { id: "mid-centre", position: "Central Midfielder" },
       { id: "mid-centre", position: "Central Midfielder" },
-      { id: "mid-right", position: "Full Back" },
+      { id: "mid-right", position: "Right Back" },
     ],
     [
       { id: "def-centre-left", position: "Central Defender" },
@@ -132,7 +134,7 @@ const formations: Record<ManagerFormation, FormationSlot[][]> = {
       { id: "def-centre-right", position: "Central Defender" },
     ],
     [{ id: "goalkeeper", position: "Goalkeeper" }],
-  ], 
+  ],
   "3-4-3": [
     [
       { id: "forward-left", position: "Winger" },
@@ -140,10 +142,10 @@ const formations: Record<ManagerFormation, FormationSlot[][]> = {
       { id: "forward-right", position: "Winger" },
     ],
     [
-      { id: "mid-left", position: "Full Back" },
+      { id: "mid-left", position: "Left Back" },
       { id: "mid-centre", position: "Central Midfielder" },
       { id: "mid-centre", position: "Central Midfielder" },
-      { id: "mid-right", position: "Full Back" },
+      { id: "mid-right", position: "Right Back" },
     ],
     [
       { id: "def-centre-left", position: "Central Defender" },
@@ -153,18 +155,14 @@ const formations: Record<ManagerFormation, FormationSlot[][]> = {
     [{ id: "goalkeeper", position: "Goalkeeper" }],
   ],
   "3-5-1-1": [
+    [{ id: "st-centre", position: "Striker" }],
+    [{ id: "second-striker", position: "Attacking Midfield" }],
     [
-      { id: "st-centre", position: "Striker" },
-    ],
-    [
-      { id: "second-striker", position: "Winger" },
-    ],    
-    [
-      { id: "mid-left", position: "Full Back" },
+      { id: "mid-left", position: "Left Back" },
       { id: "mid-centre", position: "Central Midfielder" },
       { id: "mid-centre", position: "Central Midfielder" },
       { id: "mid-centre", position: "Central Midfielder" },
-      { id: "mid-right", position: "Full Back" },
+      { id: "mid-right", position: "Right Back" },
     ],
     [
       { id: "def-centre-left", position: "Central Defender" },
@@ -179,11 +177,11 @@ const formations: Record<ManagerFormation, FormationSlot[][]> = {
       { id: "st-right", position: "Striker" },
     ],
     [
-      { id: "mid-left", position: "Full Back" },
+      { id: "mid-left", position: "Left Back" },
       { id: "mid-centre", position: "Central Midfielder" },
       { id: "mid-centre", position: "Central Midfielder" },
       { id: "mid-centre", position: "Central Midfielder" },
-      { id: "mid-right", position: "Full Back" },
+      { id: "mid-right", position: "Right Back" },
     ],
     [
       { id: "def-centre-left", position: "Central Defender" },
@@ -193,111 +191,135 @@ const formations: Record<ManagerFormation, FormationSlot[][]> = {
     [{ id: "goalkeeper", position: "Goalkeeper" }],
   ],
   "4-2-3-1": [
+    [{ id: "forward-centre", position: "Striker" }],
     [
-      { id: "forward-centre", position: "Striker" },
+      { id: "forward-left", position: "Attacking Midfield" },
+      { id: "forward-centre", position: "Attacking Midfield" },
+      { id: "forward-right", position: "Attacking Midfield" },
     ],
     [
-      { id: "forward-left", position: "Winger" },
-      { id: "forward-centre", position: "Winger" },
-      { id: "forward-right", position: "Winger" },
+      { id: "mid-centre", position: "Defensive Midfield" },
+      { id: "mid-centre", position: "Defensive Midfield" },
     ],
     [
-      { id: "mid-centre", position: "Central Midfielder" },
-      { id: "mid-centre", position: "Central Midfielder" },
-    ],
-    [
-      { id: "def-left", position: "Full Back" },
+      { id: "def-left", position: "Left Back" },
       { id: "def-centre-left", position: "Central Defender" },
       { id: "def-centre-right", position: "Central Defender" },
-      { id: "def-right", position: "Full Back" },
+      { id: "def-right", position: "Right Back" },
     ],
     [{ id: "goalkeeper", position: "Goalkeeper" }],
   ],
   "4-1-4-1": [
+    [{ id: "forward-centre", position: "Striker" }],
     [
-      { id: "forward-centre", position: "Striker" },
-    ],
-    [
-      { id: "mid-left", position: "Winger" },
+      { id: "mid-left", position: "Left Midfield" },
       { id: "mid-centre-left", position: "Central Midfielder" },
       { id: "mid-centre-right", position: "Central Midfielder" },
-      { id: "mid-right", position: "Winger" },
+      { id: "mid-right", position: "Right Midfield" },
     ],
+    [{ id: "mid-centre", position: "Defensive Midfield" }],
     [
-      { id: "mid-centre", position: "Central Midfielder" },
-    ],    
-    [
-      { id: "def-left", position: "Full Back" },
+      { id: "def-left", position: "Left Back" },
       { id: "def-centre-left", position: "Central Defender" },
       { id: "def-centre-right", position: "Central Defender" },
-      { id: "def-right", position: "Full Back" },
+      { id: "def-right", position: "Right Back" },
     ],
     [{ id: "goalkeeper", position: "Goalkeeper" }],
   ],
   "4-4-1-1": [
+    [{ id: "forward-centre", position: "Striker" }],
+    [{ id: "att-midfield", position: "Attacking Midfield" }],
     [
-      { id: "forward-centre", position: "Striker" },
-    ],
-    [
-      { id: "forward-centre", position: "Winger" },
-    ],     
-    [
-      { id: "mid-left", position: "Winger" },
+      { id: "mid-left", position: "Left Midfield" },
       { id: "mid-centre-left", position: "Central Midfielder" },
       { id: "mid-centre-right", position: "Central Midfielder" },
-      { id: "mid-right", position: "Winger" },
-    ],   
+      { id: "mid-right", position: "Right Midfield" },
+    ],
     [
-      { id: "def-left", position: "Full Back" },
+      { id: "def-left", position: "Left Back" },
       { id: "def-centre-left", position: "Central Defender" },
       { id: "def-centre-right", position: "Central Defender" },
-      { id: "def-right", position: "Full Back" },
+      { id: "def-right", position: "Right Back" },
     ],
     [{ id: "goalkeeper", position: "Goalkeeper" }],
-  ],             
+  ],
 };
 
 const fallbackScores: Record<Position, Partial<Record<Position, number>>> = {
   Goalkeeper: {
     Goalkeeper: 100,
-    "Central Defender": 25,
-    "Full Back": 20,
   },
   "Full Back": {
     "Full Back": 100,
     Winger: 80,
     "Central Defender": 70,
     "Central Midfielder": 60,
-    Striker: 20,
+  },
+  "Left Back": {
+    "Left Back": 100,
+    "Full Back": 80,
+  },
+  "Right Back": {
+    "Right Back": 100,
+    "Full Back": 80,
   },
   "Central Defender": {
     "Central Defender": 100,
     "Full Back": 80,
     "Central Midfielder": 55,
-    Goalkeeper: 45,
-    Winger: 25,
-    Striker: 20,
   },
   "Central Midfielder": {
     "Central Midfielder": 100,
-    Winger: 75,
-    "Full Back": 50,
-    "Central Defender": 45,
+    "Defensive Midfield": 80,
+    "Attacking Midfield": 60,
+    Winger: 45,
+    "Full Back": 40,
+    "Central Defender": 30,
+    Striker: 30,
+  },
+  "Defensive Midfield": {
+    "Defensive Midfield": 100,
+    "Central Midfielder": 80,
+    "Central Defender": 65,
+    "Full Back": 40,
     Striker: 40,
+    Winger: 40,
+  },
+  "Left Midfield": {
+    "Left Midfield": 100,
+    Winger: 80,
+    Striker: 60,
+    "Left Back": 20,
+    "Full Back": 10,
+  },
+  "Right Midfield": {
+    "Right Midfield": 100,
+    Winger: 80,
+    Striker: 60,
+    "Right Back": 20,
+    "Full Back": 10,
   },
   Winger: {
     Winger: 100,
-    Striker: 80,
-    "Central Midfielder": 75,
-    "Full Back": 60,
-    "Central Defender": 25,
+    "Right Midfield": 80,
+    "Left Midfield": 80,
+    Striker: 70,
+    "Central Midfielder": 65,
+    "Full Back": 40,
+  },
+  "Attacking Midfield": {
+    "Attacking Midfield": 100,
+    Winger: 80,
+    "Right Midfield": 70,
+    "Left Midfield": 70,
+    Striker: 60,
+    "Central Midfielder": 60,
+    "Full Back": 40,
   },
   Striker: {
     Striker: 100,
     Winger: 85,
     "Central Midfielder": 55,
-    "Full Back": 25,
-    "Central Defender": 20,
   },
 };
 
@@ -306,11 +328,45 @@ interface PlayerPositions {
   secondaryPosition?: string | null;
 }
 
-function suitability(positions: PlayerPositions, slot: FormationSlot) {
-  if (positions.position === slot.position) return 1_000_000;
-  if (positions.secondaryPosition === slot.position) return 10_000;
+const widePositions = new Set<Position>([
+  "Left Midfield",
+  "Right Midfield",
+  "Winger",
+]);
+const defensivePositions = new Set<Position>([
+  "Central Defender",
+  "Left Back",
+  "Right Back",
+  "Full Back",
+]);
 
-  const knownPosition = positions.position || positions.secondaryPosition;
+function positionsMatch(positions: PlayerPositions, position: Position) {
+  return (
+    positions.position === position || positions.secondaryPosition === position
+  );
+}
+
+function suitability(positions: PlayerPositions, slot: FormationSlot) {
+  // Primary positions should lead the selection, but not at the expense of
+  // putting a defender on the wing when a team has a credible secondary fit.
+  // The optimiser scores the whole XI, so primary and secondary matches need
+  // to be comparable to the sensible fallback scores below.
+  if (positions.position === slot.position) return 100;
+  if (positions.secondaryPosition === slot.position) return 90;
+
+  // Only use a defender in a wide attacking or midfield slot as an absolute
+  // last resort. This allows a left back with a left-wing secondary position
+  // to move forward while the available centre-backs remain in defence.
+  if (
+    widePositions.has(slot.position) &&
+    [positions.position, positions.secondaryPosition].some((position) =>
+      defensivePositions.has(position as Position),
+    )
+  ) {
+    return -1_000;
+  }
+
+  const knownPosition = positions.position ?? positions.secondaryPosition;
   if (!knownPosition) return slot.position === "Goalkeeper" ? 1 : 30;
 
   return (
@@ -322,6 +378,52 @@ function suitability(positions: PlayerPositions, slot: FormationSlot) {
 interface Assignment<T> {
   score: number;
   playersBySlot: Array<T | undefined>;
+}
+
+function correctWideDefenderAssignments<T>(
+  playersBySlot: Array<T | undefined>,
+  slots: FormationSlot[],
+  getPositions: (player: T) => PlayerPositions,
+) {
+  const corrected = [...playersBySlot];
+
+  slots.forEach((wideSlot, wideSlotIndex) => {
+    if (!widePositions.has(wideSlot.position)) return;
+
+    const defender = corrected[wideSlotIndex];
+    if (!defender) return;
+
+    const defenderPositions = getPositions(defender);
+    const defenderIsOnlyDefensive =
+      [defenderPositions.position, defenderPositions.secondaryPosition].some(
+        (position) => defensivePositions.has(position as Position),
+      ) &&
+      ![defenderPositions.position, defenderPositions.secondaryPosition].some(
+        (position) => widePositions.has(position as Position),
+      );
+    if (!defenderIsOnlyDefensive) return;
+
+    const replacementIndex = corrected.findIndex(
+      (candidate, candidateIndex) => {
+        if (!candidate || candidateIndex === wideSlotIndex) return false;
+
+        const candidatePositions = getPositions(candidate);
+        return (
+          positionsMatch(candidatePositions, wideSlot.position) &&
+          positionsMatch(defenderPositions, slots[candidateIndex].position)
+        );
+      },
+    );
+
+    if (replacementIndex !== -1) {
+      [corrected[wideSlotIndex], corrected[replacementIndex]] = [
+        corrected[replacementIndex],
+        corrected[wideSlotIndex],
+      ];
+    }
+  });
+
+  return corrected;
 }
 
 function bestAssignment<T>(
@@ -384,6 +486,11 @@ export function arrangeLineup<T>(
   const slots = rows.flat();
   const playersBySlot =
     bestAssignment(players, slots, getPositions, getPriority) ?? [];
+  const correctedPlayersBySlot = correctWideDefenderAssignments(
+    playersBySlot,
+    slots,
+    getPositions,
+  );
   let slotIndex = 0;
 
   return {
@@ -391,7 +498,7 @@ export function arrangeLineup<T>(
     rows: rows
       .map((row) =>
         row
-          .map(() => playersBySlot[slotIndex++])
+          .map(() => correctedPlayersBySlot[slotIndex++])
           .filter((player): player is T => Boolean(player)),
       )
       .filter((row) => row.length > 0),

@@ -32,6 +32,10 @@ function parseDate(value?: string) {
   return Number.isNaN(date.getTime()) ? null : date;
 }
 
+function isLoanTransfer(transfer: Transfer) {
+  return transfer.value?.toLowerCase().includes("loan") ?? false;
+}
+
 function monthKey(date: Date) {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
 }
@@ -201,6 +205,12 @@ export function SeasonTimeline(props: {
   const undatedTransfers = transfers.filter(
     (transfer) => !parseDate(transfer.date),
   );
+  const undatedArrivals = undatedTransfers.filter(
+    (transfer) => transfer.type === "in",
+  );
+  const undatedDepartures = undatedTransfers.filter(
+    (transfer) => transfer.type === "out",
+  );
   const completedMatches = results.filter(
     (match) =>
       typeof match.hgoal === "number" && typeof match.vgoal === "number",
@@ -264,7 +274,7 @@ export function SeasonTimeline(props: {
                   May · Opening chapter
                 </p>
                 <h3 className="mt-2 font-display text-2xl font-semibold">
-                  Squad Changes
+                  Pre-season squad changes
                 </h3>
                 <details className="group mt-2">
                   <summary className="flex cursor-pointer list-none items-center justify-between border-b border-[#071a2b]/15 pb-4 text-sm text-[#071a2b]/55 [&::-webkit-details-marker]:hidden">
@@ -280,32 +290,57 @@ export function SeasonTimeline(props: {
                       Hide moves −
                     </span>
                   </summary>
-                  <div className="mt-5 grid gap-2 sm:grid-cols-2">
-                    {undatedTransfers.map((transfer) => (
-                      <Link
-                        href={`/page/player/${encodeURIComponent(transfer.name)}`}
-                        key={transfer.id}
-                        className="group border border-[#071a2b]/15 bg-[#f4f0e8] p-4 transition hover:border-blue-700"
+                  <div className="mt-5 grid gap-5 sm:grid-cols-2">
+                    {[
+                      {
+                        title: "Arrivals",
+                        transfers: undatedArrivals,
+                        accent: "border-emerald-600",
+                        label: "text-emerald-700",
+                        detail: (transfer: Transfer) =>
+                          `From ${transfer.from}`,
+                      },
+                      {
+                        title: "Departures",
+                        transfers: undatedDepartures,
+                        accent: "border-rose-600",
+                        label: "text-rose-700",
+                        detail: (transfer: Transfer) => `To ${transfer.to}`,
+                      },
+                    ].map((group) => (
+                      <div
+                        className={`border-t-4 ${group.accent} bg-[#f4f0e8] p-4`}
+                        key={group.title}
                       >
-                        <span
-                          className={`text-[0.62rem] font-bold uppercase tracking-[0.14em] ${
-                            transfer.type === "in"
-                              ? "text-emerald-700"
-                              : "text-red-700"
-                          }`}
+                        <p
+                          className={`font-mono text-[0.65rem] font-bold uppercase tracking-[0.14em] ${group.label}`}
                         >
-                          {transfer.type === "in" ? "Arrival" : "Departure"}
-                        </span>
-                        <span className="mt-1 block font-semibold group-hover:text-blue-700">
-                          {transfer.name}
-                        </span>
-                        <span className="mt-1 block text-xs text-[#071a2b]/50">
-                          {transfer.type === "in"
-                            ? `From ${transfer.from}`
-                            : `To ${transfer.to}`}
-                          {transfer.value ? ` · ${transfer.value}` : ""}
-                        </span>
-                      </Link>
+                          {group.title} · {group.transfers.length}
+                        </p>
+                        <div className="mt-3 space-y-2">
+                          {group.transfers.length > 0 ? (
+                            group.transfers.map((transfer) => (
+                              <Link
+                                href={`/page/player/${encodeURIComponent(transfer.name)}`}
+                                key={transfer.id}
+                                className="group block border border-[#071a2b]/10 bg-[#fffdf8] px-3 py-2.5 transition hover:border-blue-700"
+                              >
+                                <span className="block font-semibold group-hover:text-blue-700">
+                                  {transfer.name}
+                                </span>
+                                <span className="mt-1 block text-xs text-[#071a2b]/50">
+                                  {group.detail(transfer)}
+                                  {transfer.value ? ` · ${transfer.value}` : ""}
+                                </span>
+                              </Link>
+                            ))
+                          ) : (
+                            <p className="py-2 text-sm text-[#071a2b]/50">
+                              No recorded {group.title.toLowerCase()}.
+                            </p>
+                          )}
+                        </div>
+                      </div>
                     ))}
                   </div>
                 </details>
@@ -435,8 +470,12 @@ export function SeasonTimeline(props: {
                                 <span>
                                   <strong>{transfer.name}</strong>{" "}
                                   {transfer.type === "in"
-                                    ? `arrived from ${transfer.from}`
-                                    : `departed for ${transfer.to}`}
+                                    ? isLoanTransfer(transfer)
+                                      ? `loaned in from ${transfer.from}`
+                                      : `arrived from ${transfer.from}`
+                                    : isLoanTransfer(transfer)
+                                      ? `loaned out to ${transfer.to}`
+                                      : `departed for ${transfer.to}`}
                                 </span>
                                 <span className="shrink-0 font-mono text-xs text-[#071a2b]/45">
                                   {transfer.date}
