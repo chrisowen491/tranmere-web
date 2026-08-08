@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default async function Transfers() {
   const env = (await getCloudflareContext({ async: true })).env;
   const [transfers, teams] = await Promise.all([
-    getTransfers(env.DB),
+    getTransfers(env.DB, { limit: 50, sort: "fee-desc" }),
     getClubs(env.DB),
   ]);
 

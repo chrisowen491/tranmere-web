@@ -1,12 +1,10 @@
 import { PlayerSearch } from "@/components/apps/PlayerSearch";
-import { PlayerProfileSearch } from "@/components/apps/PlayerProfileSearch";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { GetBaseUrl } from "@/lib/apiFunctions";
 import Link from "next/link";
 import { getPlayerStatistics } from "@/lib/playerStatistics";
 import { breadcrumbJsonLd, JsonLd } from "@/components/seo/JsonLd";
 import { pageMetadata } from "@/lib/seo";
-import { getUniquePlayers } from "@/lib/players";
 
 export const revalidate = 7200;
 
@@ -18,10 +16,7 @@ export const metadata = pageMetadata({
 
 export default async function PlayerSearchPage() {
   const env = (await getCloudflareContext({ async: true })).env;
-  const [players, profiles] = await Promise.all([
-    getPlayerStatistics(env.DB, GetBaseUrl(env)),
-    getUniquePlayers(env.DB),
-  ]);
+  const players = await getPlayerStatistics(env.DB, GetBaseUrl(env));
 
   return (
     <main className="pb-24 text-[#071a2b]">
@@ -87,7 +82,6 @@ export default async function PlayerSearchPage() {
           </div>
         </div>
       </header>
-      <PlayerProfileSearch players={profiles} />
       <div className="mx-auto w-full max-w-7xl">
         <PlayerSearch default={players} />
       </div>

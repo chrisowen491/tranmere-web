@@ -1,0 +1,6 @@
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+  <g id="kitmaker" fill="#071a2b"  transform="translate(0 27)">
+    <path d="M167 379v-21l9 5 9-5v21l-5 3v-14l-4 2-4-2v14z"/>
+    <text x="176" y="393" font-family="Arial, sans-serif" font-size="8" font-weight="700" letter-spacing="1.5" text-anchor="middle">MILLS</text>
+  </g>
+</svg>

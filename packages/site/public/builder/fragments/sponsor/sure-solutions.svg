@@ -1,0 +1,6 @@
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+  <g id="sponsor" font-family="Arial, sans-serif" text-anchor="middle" transform="translate(0 40)">
+    <text x="256" y="425" fill="#087f79" stroke="#fff" stroke-width="3" paint-order="stroke" font-size="42" font-weight="800" letter-spacing="-3">SURE</text>
+    <text x="256" y="448" fill="#087f79" stroke="#fff" stroke-width="2" paint-order="stroke" font-size="18" font-weight="700" letter-spacing=".5">SOLUTIONS</text>
+  </g>
+</svg>

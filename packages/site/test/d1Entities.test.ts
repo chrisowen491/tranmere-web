@@ -1,5 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
-import { queryTransferRows } from "@tranmere-web/lib/src/d1-queries";
+import {
+  queryGameRows,
+  queryTransferRows,
+} from "@tranmere-web/lib/src/d1-queries";
 import type {
   ClubRow,
   ManagerRow,
@@ -185,5 +188,15 @@ describe("D1 queries", () => {
     expect(mock.boundValues).toEqual([
       ["%Test%", 2024, "Tranmere Rovers", "Example FC", 10],
     ]);
+  });
+
+  it("treats the penalty-shootout archive filter as any recorded shootout", async () => {
+    const mock = databaseReturning([]);
+
+    await queryGameRows(mock.db, { penalties: "Penalty Shootout" });
+
+    const sql = String(mock.prepare.mock.calls[0][0]);
+    expect(sql).toContain("penalties IS NOT NULL AND TRIM(penalties) <> ''");
+    expect(mock.boundValues).toEqual([]);
   });
 });

@@ -21,6 +21,12 @@ const breadcrumbs = [
   { id: 2, name: "Players", href: "/players" },
 ];
 
+function matchHref(appearance: { Season?: string; Date?: string }) {
+  if (!/^\d{4}$/.test(appearance.Season ?? "")) return null;
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(appearance.Date ?? "")) return null;
+  return `/match/${appearance.Season}/${appearance.Date}`;
+}
+
 function inlineMarkdown(value: string) {
   const parts = value.split(
     /(\[[^\]]+\]\(https?:\/\/[^)]+\)|\*\*[^*]+\*\*|\*[^*]+\*)/g,
@@ -112,6 +118,8 @@ export default function PlayerProfileView(props: {
         /^\d{4}-\d{2}-\d{2}$/.test(appearance.Date),
     )
     .sort((a, b) => b.Date.localeCompare(a.Date))[0];
+  const debutHref = profile.debut ? matchHref(profile.debut) : null;
+  const lastMatchHref = latestAppearance ? matchHref(latestAppearance) : null;
   const positionLabel =
     [player.position, player.secondaryPosition].filter(Boolean).join(" / ") ||
     "Tranmere Rovers";
@@ -351,10 +359,62 @@ export default function PlayerProfileView(props: {
                 {profile.debut ? (
                   <>
                     <dd className="mt-1 font-semibold">
-                      {profile.debut.Opposition}
+                      {debutHref ? (
+                        <Link
+                          href={debutHref}
+                          className="text-blue-700 underline underline-offset-4"
+                        >
+                          {profile.debut.Opposition}
+                        </Link>
+                      ) : (
+                        profile.debut.Opposition
+                      )}
                     </dd>
                     <dd className="mt-1 font-mono text-xs text-[#071a2b]/55">
-                      {profile.debut.Date}
+                      {debutHref ? (
+                        <Link href={debutHref} className="hover:text-blue-700">
+                          {profile.debut.Date}
+                        </Link>
+                      ) : (
+                        profile.debut.Date
+                      )}
+                    </dd>
+                  </>
+                ) : (
+                  <dd className="mt-1 text-sm text-[#071a2b]/55">
+                    No first-team appearance recorded
+                  </dd>
+                )}
+              </div>
+              <div className="py-4">
+                <dt className="text-xs font-bold uppercase tracking-[0.12em] text-[#071a2b]/50">
+                  Last match
+                </dt>
+                {latestAppearance ? (
+                  <>
+                    <dd className="mt-1 font-semibold">
+                      {lastMatchHref ? (
+                        <Link
+                          href={lastMatchHref}
+                          className="text-blue-700 underline underline-offset-4"
+                        >
+                          {latestAppearance.Opposition}
+                        </Link>
+                      ) : (
+                        latestAppearance.Opposition
+                      )}
+                    </dd>
+                    <dd className="mt-1 font-mono text-xs text-[#071a2b]/55">
+                      {lastMatchHref ? (
+                        <Link
+                          href={lastMatchHref}
+                          className="hover:text-blue-700"
+                        >
+                          {latestAppearance.Date}
+                        </Link>
+                      ) : (
+                        latestAppearance.Date
+                      )}
                     </dd>
                   </>
                 ) : (

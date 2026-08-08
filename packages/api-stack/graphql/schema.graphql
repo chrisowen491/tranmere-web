@@ -4,57 +4,8 @@ schema {
 }
 
 type Query {
-  listTranmereWebClubs(filter: TableSimpleFilterInput, limit: Int, nextToken: String): TranmereWebClubsConnection
-  getTranmereWebClubsById(name: String!): TranmereWebClubs
-  listTranmereWebCompetitions(filter: TableSimpleFilterInput, limit: Int, nextToken: String): TranmereWebCompetitionsConnection
-  getTranmereWebCompetitionsById(name: String!): TranmereWebCompetitions
-  listTranmereWebManagers(filter: TableSimpleFilterInput, limit: Int, nextToken: String): TranmereWebManagersConnection
-  getTranmereWebManagersById(name: String!): TranmereWebManagers
-  listTranmereWebPlayerTable(filter: TableSimpleFilterInput, limit: Int, nextToken: String): TranmereWebPlayerTableConnection
-  getTranmereWebPlayerTableById(id: String!): TranmereWebPlayerTable
-  listTranmereWebStarsTable(filter: TableSimpleFilterInput, limit: Int, nextToken: String): TranmereWebStarsTableConnection
-  getTranmereWebStarsTableById(name: String!): TranmereWebStarsTable
   listTranmereWebHatTricks(filter: TableSimpleFilterInput, limit: Int, nextToken: String): TranmereWebHatTricksConnection
   getTranmereWebHatTricksById(Season: String!): TranmereWebHatTricks
-  listTranmereWebOnThisDay(filter: TableSimpleFilterInput, limit: Int, nextToken: String): TranmereWebOnThisDayConnection
-  getTranmereWebOnThisDayById(day: String!): TranmereWebOnThisDay
-  listTranmereWebPlayerLinks(filter: TableSimpleFilterInput, limit: Int, nextToken: String): TranmereWebPlayerLinksConnection
-  getTranmereWebPlayerLinksById(id: String!): TranmereWebPlayerLinks
-  listTranmereWebPlayerTransfers(filter: TableSimpleFilterInput, limit: Int, nextToken: String): TranmereWebPlayerTransfersConnection
-  getTranmereWebPlayerTransfersById(id: String!): TranmereWebPlayerTransfers
-}
-
-type TranmereWebClubs {
-  id: String!
-  name: ID!
-}
-
-type TranmereWebOnThisDay {
-  id: ID!
-  date: String!
-  programme: String!
-  hgoal: String!
-  season: String!
-  tier: String!
-  vgoal: String!
-  division: String!
-  opposition: String!
-  competition: String!
-  visitor: String!
-  home: String!
-  pens: String!
-}
-
-type TranmereWebCompetitions {
-  id: String!
-  name: ID!
-}
-
-type TranmereWebPlayerTable {
-  id: ID!
-  name: String!
-  position: String!
-  picLink: String
 }
 
 type TranmereWebHatTricks {
@@ -66,104 +17,10 @@ type TranmereWebHatTricks {
   Goals: Int!    
 }
 
-type TranmereWebStarsTable {
-  id: ID!
-  name: String!
-  match: String!
-  date: String!
-  notes: String!
-  programme: String!
-  season: Int!
-}
-
-type TranmereWebManagers {
-  id: String!
-  name: ID!
-  dateJoined: String!
-  dateLeft: String!
-  programmePath: String
-}
-
-type TranmereWebPlayerLinks {
-  id: String!
-  name: ID!
-  link: String!
-  description: String!
-}
-
-type TranmereWebPlayerTransfers {
-  id: String!
-  name: ID!
-  cost: Int!
-  value: String!
-  to: String!
-  from: String!
-  season: Int!
-}
-
-type TranmereWebClubsConnection {
-  items: [TranmereWebClubs]
-  nextToken: String
-}
-
 type TranmereWebHatTricksConnection {
   items: [TranmereWebHatTricks]
   nextToken: String
 }
-
-type TranmereWebCompetitionsConnection {
-  items: [TranmereWebCompetitions]
-  nextToken: String
-}
-
-type TranmereWebManagersConnection {
-  items: [TranmereWebManagers]
-  nextToken: String
-}
-
-type TranmereWebPlayerLinksConnection {
-  items: [TranmereWebPlayerLinks]
-  nextToken: String
-}
-
-type TranmereWebPlayerTransfersConnection {
-  items: [TranmereWebPlayerTransfers]
-  nextToken: String
-}
-
-type TranmereWebStarsTableConnection {
-  items: [TranmereWebStarsTable]
-  nextToken: String
-}
-
-type TranmereWebPlayerTableConnection {
-  items: [TranmereWebPlayerTable]
-  nextToken: String
-}
-
-type TranmereWebOnThisDayConnection {
-  items: [TranmereWebOnThisDay]
-  nextToken: String
-}
-
-type Mutation {
-    addTranmereWebPlayerLinks(
-        id: ID!
-        name: String!
-        link: String!
-        description: String!
-    ): TranmereWebPlayerLinks!
-    addTranmereWebPlayerTransfers(
-        id: String!
-        name: ID!
-        cost: Int!
-        value: String!
-        to: String!
-        from: String!
-        season: Int!
-    ): TranmereWebPlayerTransfers!
-}
-
 
 input TableSimpleFilterInput {
   id: TableStringFilterInput

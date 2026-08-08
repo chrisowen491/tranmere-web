@@ -2,7 +2,6 @@
 
 import type { PlayerRecord } from "@/lib/players";
 import {
-  CheckCircleIcon,
   IdentificationIcon,
   PencilSquareIcon,
   PlusIcon,
@@ -423,7 +422,6 @@ export function PlayerAdmin({
               <tr>
                 <th className="px-5 py-4">Player</th>
                 <th className="px-4 py-4">Position</th>
-                <th className="px-4 py-4">Profile</th>
                 <th className="px-5 py-4 text-right">Action</th>
               </tr>
             </thead>
@@ -457,12 +455,6 @@ export function PlayerAdmin({
                         {player.secondaryPosition}
                       </span>
                     )}
-                  </td>
-                  <td className="whitespace-nowrap px-4 py-4">
-                    <span className="inline-flex items-center gap-1.5 text-xs">
-                      <CheckCircleIcon className="h-4 w-4 text-emerald-600" />
-                      {completeness(player)}/7
-                    </span>
                   </td>
                   <td className="px-5 py-4 text-right">
                     <button

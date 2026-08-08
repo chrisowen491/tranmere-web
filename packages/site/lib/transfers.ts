@@ -17,6 +17,8 @@ export interface TransferFilters {
   club?: string;
   filter?: string;
   playerName?: string;
+  sort?: "date-desc" | "fee-desc";
+  limit?: number;
 }
 
 export function mapTransfer(row: TransferRow): Transfer {
@@ -111,13 +113,15 @@ export async function getTransfers(
       : undefined;
   const rows = await queryTransferRows(db, {
     player: filters.playerName,
-    playerMatch: "exact",
+    playerMatch: "contains",
     season,
     club: filters.club,
     direction:
       filters.filter === "In" || filters.filter === "Out"
         ? filters.filter
         : undefined,
+    sort: filters.sort,
+    limit: filters.limit,
   });
 
   return rows.map(mapTransfer);

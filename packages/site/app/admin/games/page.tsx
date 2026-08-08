@@ -4,6 +4,7 @@ import { GetSeasons } from "@tranmere-web/lib/src/apiFunctions";
 import { queryGameRows } from "@tranmere-web/lib/src/d1-queries";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import type { Metadata } from "next";
+import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
@@ -34,9 +35,12 @@ export default async function GameAdminPage({
     <main className="min-h-screen bg-[#f4f0e8] pb-24 text-[#071a2b]">
       <header className="border-b border-white/10 bg-[#071a2b] text-white">
         <div className="mx-auto max-w-7xl px-6 py-14 sm:px-10 lg:px-12 lg:py-20">
-          <p className="text-xs font-bold uppercase tracking-[0.18em] text-blue-300">
-            Tranmere-Web · Admin
-          </p>
+          <div className="flex flex-wrap gap-5 text-xs font-bold uppercase tracking-[0.14em]">
+            <Link href="/admin" className="text-white/45 hover:text-white">
+              Admin overview
+            </Link>
+            <span className="text-blue-300">Games</span>
+          </div>
           <h1 className="mt-5 font-display text-5xl font-semibold tracking-[-0.04em] sm:text-6xl">
             Match archive
           </h1>

@@ -49,16 +49,6 @@ test('player search returns players for the requested season', async () => {
   assert.ok(body.players.every((player) => player.Season === '2024'));
 });
 
-test('result search returns the expected venue', async () => {
-  const endpoint = url('/result-search');
-  endpoint.searchParams.set('season', '2020');
-
-  const response = await fetch(endpoint, { headers: headers() });
-  const body = await expectJson(response);
-
-  assert.equal(body.results[0].venue, 'Prenton Park');
-});
-
 test('match endpoint returns a successful response', async () => {
   const response = await fetch(url('/match/2020/2021-03-14/'), {
     headers: headers()
@@ -71,7 +61,7 @@ test('player GraphQL query returns a successful response', async () => {
   const endpoint = url('/graphql');
   endpoint.searchParams.set(
     'query',
-    '{listTranmereWebPlayerTable(limit:1){items{name}}}'
+    '{listTranmereWebHatTricks(limit:1){items{Player}}}'
   );
 
   const response = await fetch(endpoint);

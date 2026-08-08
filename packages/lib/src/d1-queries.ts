@@ -35,6 +35,7 @@ export interface TransferQueryOptions {
   club?: string;
   season?: number;
   direction?: 'In' | 'Out';
+  sort?: 'date-desc' | 'fee-desc';
   limit?: number;
 }
 
@@ -149,12 +150,16 @@ export async function queryTransferRows(
   }
 
   const where = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
+  const orderBy =
+    options.sort === 'fee-desc'
+      ? 'cost DESC, season DESC, transfer_date DESC, player_name ASC'
+      : 'season DESC, transfer_date DESC, cost DESC, player_name ASC';
   const sql = withLimit(
     `SELECT id, player_name, season, from_club, to_club, fee_description, cost,
             transfer_date
      FROM Transfers
      ${where}
-     ORDER BY season DESC, transfer_date DESC, cost DESC, player_name ASC`,
+     ORDER BY ${orderBy}`,
     values,
     options.limit
   );
@@ -246,8 +251,15 @@ export async function queryGameRows(
     values.push(options.opposition);
   }
   if (options.penalties) {
-    conditions.push('penalties = ?');
-    values.push(options.penalties);
+    // The historic import stores the complete shootout outcome, for example
+    // "Tranmere Rovers win 4-2 on penalties", rather than a fixed label.
+    // "Penalty Shootout" is the UI's archive-filter value.
+    if (options.penalties === 'Penalty Shootout') {
+      conditions.push("penalties IS NOT NULL AND TRIM(penalties) <> ''");
+    } else {
+      conditions.push('penalties = ?');
+      values.push(options.penalties);
+    }
   }
   if (options.dateFrom) {
     conditions.push('match_date >= ?');

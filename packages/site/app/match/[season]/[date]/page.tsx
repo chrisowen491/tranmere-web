@@ -54,6 +54,7 @@ export default async function MatchPage(props: { params: MatchParams }) {
       : null,
     apps: apiMatch?.apps,
     goals: apiMatch?.goals,
+    formattedGoals: apiMatch?.formattedGoals,
     substitutes: apiMatch?.substitutes,
   };
   const [match, manager] = await Promise.all([

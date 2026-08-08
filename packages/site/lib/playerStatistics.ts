@@ -115,12 +115,18 @@ function filterPlayers(players: PlayerStatisticsView[], filter?: string) {
   if (!filter) return players;
   if (filter === "OnlyOneApp") {
     return players.filter(
-      (player) => (player.Apps || player.starts + player.subs) === 1,
+      (player) =>
+        (Number(player.Apps) || Number(player.starts) + Number(player.subs)) ===
+        1,
     );
   }
   const position = positionFilters[filter];
   if (!position) return players;
-  return players.filter((player) => player.profile.position === position);
+  return players.filter(
+    (player) =>
+      player.profile.position === position ||
+      player.profile.secondaryPosition === position,
+  );
 }
 
 export async function getPlayerStatistics(
@@ -131,9 +137,14 @@ export async function getPlayerStatistics(
   const search = new URLSearchParams({
     season: options.season ?? "",
     sort: options.sort ?? "",
-    filter: options.filter ?? "",
     limit: options.limit?.toString() ?? "",
   });
+  // This is a record-level statistic rather than a profile attribute. Applying
+  // it at the source means players with one appearance are selected before the
+  // API's default top-50 appearance limit is applied.
+  if (options.filter === "OnlyOneApp") {
+    search.set("filter", "OnlyOneApp");
+  }
   const response = await fetch(`${baseUrl}/player-search/?${search}`, {
     next: { revalidate: 7200 },
   });

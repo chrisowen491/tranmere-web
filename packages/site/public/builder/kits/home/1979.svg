@@ -29,8 +29,8 @@
     <line y2="81.45313" x2="110.5" y1="160.45313" x1="48.5" stroke-opacity="null" stroke-width="3" fill="none" stroke="null"/>
     <path transform="rotate(52.28608703613281 364.9164123535156,325.3844604492187) " d="m383.17558,339.74806l0,-28.72722l-36.51835,28.72722l36.51835,0z" stroke-opacity="null" stroke-width="0" fill="#0000ff" stroke="#0000ff"/>
 
-    <g id="sleeves" stroke="null">
-    <rect height="17.54386" width="65.25647" y="461.02906" x="65.82453" stroke-opacity="null" stroke-width="0" fill="#0000ff" id="svg_17" stroke="#0000ff"/>
-    <rect height="17.54386" width="65.25647" y="460.15187" x="379.76107" stroke-opacity="null" stroke-width="0" fill="#0000ff" id="svg_18" stroke="#0000ff"/>
-    </g>
+  <g id="sleeves">
+   <rect stroke="#0000ff" fill="#0000ff" stroke-width="0" stroke-opacity="null" x="63.82454" y="458.02906" width="68.08997" height="21.54386"/>
+   <rect stroke="#0000ff" fill="#0000ff" stroke-width="0" stroke-opacity="null" x="378.92495" y="458.15187" width="67.09259" height="21.54386"/>
+  </g>
 </svg>

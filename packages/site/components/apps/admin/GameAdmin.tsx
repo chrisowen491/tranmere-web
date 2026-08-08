@@ -401,14 +401,11 @@ export function GameAdmin({
           {selectedSeason}/{String(selectedSeason + 1).slice(-2)} match list
         </h2>
         <div className="mt-6 overflow-x-auto border border-[#071a2b]/15 bg-[#fffdf8]">
-          <table className="w-full min-w-[780px] text-left text-sm">
+          <table className="w-full min-w-[520px] text-left text-sm">
             <thead className="border-b border-[#071a2b]/15 bg-[#071a2b] text-xs font-bold uppercase tracking-[0.1em] text-white/65">
               <tr>
                 <th className="px-5 py-4">Date</th>
-                <th className="px-3 py-4">Match</th>
-                <th className="px-3 py-4">Competition</th>
-                <th className="px-3 py-4">Result</th>
-                <th className="px-3 py-4">Attendance</th>
+                <th className="px-3 py-4">Opposition</th>
                 <th className="px-4 py-4 text-right">Action</th>
               </tr>
             </thead>
@@ -419,17 +416,7 @@ export function GameAdmin({
                     {game.match_date}
                   </td>
                   <td className="px-3 py-4 font-semibold">
-                    {game.home_team} v {game.away_team}
-                  </td>
-                  <td className="px-3 py-4 text-[#071a2b]/65">
-                    {game.competition}
-                    {game.round ? ` · ${game.round}` : ""}
-                  </td>
-                  <td className="px-3 py-4 font-mono font-bold">
-                    {game.full_time_score}
-                  </td>
-                  <td className="px-3 py-4 font-mono text-xs">
-                    {game.attendance?.toLocaleString() ?? "—"}
+                    {game.opposition}
                   </td>
                   <td className="px-4 py-4 text-right">
                     <button

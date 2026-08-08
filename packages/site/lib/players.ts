@@ -80,8 +80,9 @@ function preferPlayer(
   return candidate.id.localeCompare(current.id) < 0 ? candidate : current;
 }
 
-export async function getUniquePlayers(db: D1Database) {
-  const players = await getPlayers(db);
+export async function getUniquePlayers(db: D1Database, query?: string) {
+  const rows = await queryPlayerRows(db, query ? { query, limit: 100 } : {});
+  const players = rows.map(mapPlayer);
   return [
     ...players
       .reduce((unique, player) => {

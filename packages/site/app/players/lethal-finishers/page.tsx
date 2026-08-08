@@ -136,7 +136,7 @@ export default async function LethalFinishersPage() {
           </p>
         </div>
 
-        <div className="grid gap-px border border-[#071a2b]/15 bg-[#071a2b]/15 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="grid gap-px border border-[#071a2b]/15 bg-[#071a2b]/15 sm:grid-cols-2">
           {displayedPlayers.map((player, index) => (
             <Link
               key={player.Player}
@@ -155,7 +155,7 @@ export default async function LethalFinishersPage() {
                 className="h-14 w-14 rounded-full border border-[#071a2b]/10 bg-[#071a2b] object-cover transition group-hover:scale-105"
               />
               <span className="min-w-0 flex-1">
-                <strong className="block truncate font-display text-lg font-semibold group-hover:text-blue-700">
+                <strong className="block font-display text-lg font-semibold leading-tight group-hover:text-blue-700">
                   {player.Player}
                 </strong>
                 <span className="mt-1 block text-sm text-[#071a2b]/55">

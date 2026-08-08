@@ -3,18 +3,15 @@ import {
   GetSeasonsForPlayers,
   replaceSeasonsKit,
 } from "@tranmere-web/lib/src/apiFunctions";
-import { useState } from "react";
-import { FilterBox } from "@/components/forms/FilterBox";
-import { SubmitButton } from "@/components/forms/SubmitButton";
+import { PLAYER_POSITIONS } from "@tranmere-web/lib/src/player-constants";
+import { useMemo, useRef, useState } from "react";
 import type { PlayerStatisticsView } from "@/lib/playerStatistics";
-import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import {
-  AdjustmentsHorizontalIcon,
   ArrowUpRightIcon,
   ChartBarIcon,
+  MagnifyingGlassIcon,
   TrophyIcon,
   UserGroupIcon,
-  XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { UserIcon } from "@heroicons/react/20/solid";
 import Image from "next/image";
@@ -29,181 +26,137 @@ export function PlayerSearch(props: {
   const seasons = GetSeasonsForPlayers();
   const base = "/api/player-search/";
 
-  const [open, setOpen] = useState(false);
   const [players, setPlayers] = useState(props.default);
   const [season, setSeason] = useState(props.season);
+  const [position, setPosition] = useState("");
+  const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(false);
+  const searchRequest = useRef(0);
+  const profileSearch = Boolean(query.trim());
+  const filteredPlayers = useMemo(() => {
+    const normalizedQuery = query.trim().toLowerCase();
+    return players.filter((player) => {
+      const matchesName =
+        !normalizedQuery || player.Player.toLowerCase().includes(normalizedQuery);
+      const matchesPosition =
+        !position ||
+        player.profile.position === position ||
+        player.profile.secondaryPosition === position;
+      return matchesName && matchesPosition;
+    });
+  }, [players, position, query]);
   const maxAppearances = Math.max(
-    ...players.map((player) => player.starts + player.subs),
+    ...filteredPlayers.map((player) => player.starts + player.subs),
     1,
   );
-  const appearanceLeader = [...players].sort(
+  const appearanceLeader = [...filteredPlayers].sort(
     (a, b) => b.starts + b.subs - (a.starts + a.subs),
   )[0];
-  const goalsLeader = [...players].sort(
+  const goalsLeader = [...filteredPlayers].sort(
     (a, b) => b.goals - a.goals || b.starts - a.starts,
   )[0];
-  const totalAppearances = players.reduce(
+  const totalAppearances = filteredPlayers.reduce(
     (total, player) => total + player.starts + player.subs,
     0,
   );
 
-  const filters = [
-    {
-      label: "One Game Only",
-      value: "OnlyOneApp",
-    },
-    {
-      label: "Goalkeepers",
-      value: "GK",
-    },
-    {
-      label: "Full Backs",
-      value: "FB",
-    },
-    {
-      label: "Central Defenders",
-      value: "CD",
-    },
-    {
-      label: "Central Midfielders",
-      value: "CM",
-    },
-    {
-      label: "Wingers",
-      value: "WIN",
-    },
-    {
-      label: "Strikers",
-      value: "STR",
-    },
-  ];
-
-  function showFilters(): void {
-    setOpen(true);
-  }
-  const onSubmit = async (formData: FormData) => {
-    setSeason(formData.get("season") as string);
+  const loadPlayers = async (nextSeason: string, nextQuery = "") => {
+    const request = ++searchRequest.current;
     setLoading(true);
+    try {
+      const search = new URLSearchParams(
+        nextQuery
+          ? { query: nextQuery }
+          : { season: nextSeason, sort: "Starts" },
+      );
+      const response = await fetch(`${base}?${search}`);
+      const playerResults = (await response.json()) as {
+        players: PlayerStatisticsView[];
+      };
+      if (request === searchRequest.current) {
+        setPlayers(playerResults.players);
+      }
+    } finally {
+      if (request === searchRequest.current) {
+        setLoading(false);
+      }
+    }
+  };
 
-    const latestSeasonRequest = await fetch(
-      base +
-        `?season=${formData.get("season")}&sort=${formData.get("sort")}&filter=${formData.get("filter")}`,
-    );
-    const playerResults = (await latestSeasonRequest.json()) as {
-      players: PlayerStatisticsView[];
-    };
+  const changeSeason = async (nextSeason: string) => {
+    setSeason(nextSeason || undefined);
+    await loadPlayers(nextSeason, query.trim());
+  };
 
-    setPlayers(playerResults.players);
-    setLoading(false);
+  const changeQuery = async (nextQuery: string) => {
+    setQuery(nextQuery);
+    await loadPlayers(season ?? "", nextQuery.trim());
   };
 
   return (
     <div className="mx-auto w-full px-6 pt-10 sm:px-10 lg:px-12">
-      <Dialog open={open} onClose={setOpen} className="relative z-[60]">
-        <div className="fixed inset-0 bg-[#071a2b]/45 backdrop-blur-sm" />
-
-        <div className="fixed inset-0 overflow-hidden">
-          <div className="absolute inset-0 overflow-hidden">
-            <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
-              <DialogPanel
-                transition
-                className="pointer-events-auto w-screen max-w-md transform transition duration-500 ease-in-out data-[closed]:translate-x-full sm:duration-700"
-              >
-                <div className="flex h-full flex-col overflow-y-scroll bg-[#fffdf8] shadow-2xl">
-                  <div className="bg-[#071a2b] px-5 py-6 sm:px-6">
-                    <div className="flex items-center justify-between">
-                      <DialogTitle className="font-display text-2xl font-semibold text-white">
-                        Filter players
-                      </DialogTitle>
-                      <div className="ml-3 flex h-7 items-center">
-                        <button
-                          type="button"
-                          onClick={() => setOpen(false)}
-                          className="relative text-white/60 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
-                        >
-                          <span className="absolute -inset-2.5" />
-                          <span className="sr-only">Close panel</span>
-                          <XMarkIcon aria-hidden="true" className="h-6 w-6" />
-                        </button>
-                      </div>
-                    </div>
-                    <div className="mt-1">
-                      <p className="text-sm text-white/60">
-                        Choose a season, position group and sort order.
-                      </p>
-                    </div>
-                  </div>
-                  <div className="relative flex-1 px-5 sm:px-6">
-                    <form
-                      onSubmit={(e) => {
-                        e.preventDefault();
-                        onSubmit(new FormData(e.currentTarget));
-                      }}
-                    >
-                      <div className="py-4">
-                        <div className="border-b border-[#071a2b]/10 pb-10">
-                          <div className="mt-10">
-                            <FilterBox
-                              title="Season"
-                              identifier={"season"}
-                              options={seasons.map((s) => ({
-                                label: `${s}`,
-                                value: `${s}`,
-                              }))}
-                              includeAll={true}
-                              default={season}
-                            ></FilterBox>
-                            <FilterBox
-                              title="Filter"
-                              identifier={"filter"}
-                              options={filters}
-                              includeAll={true}
-                            ></FilterBox>
-                            <FilterBox
-                              title="Sort"
-                              identifier={"sort"}
-                              options={[
-                                { label: "Starts", value: "Starts" },
-                                { label: "Goals", value: "Goals" },
-                              ]}
-                              includeAll={false}
-                            ></FilterBox>
-                          </div>
-                        </div>
-                        <div className="mt-6 flex items-center justify-end">
-                          <SubmitButton text={"Search"}></SubmitButton>
-                        </div>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              </DialogPanel>
-            </div>
-          </div>
-        </div>
-      </Dialog>
-
-      <div className="flex flex-wrap items-end justify-between gap-4 border-t border-[#071a2b]/15 pt-6">
+      <div className="flex flex-wrap items-end justify-between gap-6 border-t border-[#071a2b]/15 pt-6">
         <div>
           <p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-700">
             Archive results
           </p>
           <h2 className="mt-2 font-display text-3xl font-semibold">
-            {players.length.toLocaleString()} players
+            {filteredPlayers.length.toLocaleString()} players
           </h2>
           <p className="mt-1 text-sm text-[#071a2b]/55">
-            {season ? `Showing season ${season}` : "Showing all seasons"}
+            {profileSearch
+              ? "Searching every player profile"
+              : season
+                ? `Showing season ${season}`
+                : "Showing all seasons"}
           </p>
         </div>
-        <button
-          type="button"
-          onClick={showFilters}
-          className="inline-flex items-center gap-2 bg-blue-700 px-5 py-3 text-sm font-bold text-white transition hover:bg-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
-        >
-          <AdjustmentsHorizontalIcon className="h-5 w-5" />
-          Filter &amp; sort
-        </button>
+        <div className="grid w-full gap-3 sm:grid-cols-[minmax(0,1fr)_180px_190px] lg:max-w-3xl">
+          <label className="relative block">
+            <span className="sr-only">Search players by name</span>
+            <MagnifyingGlassIcon
+              aria-hidden="true"
+              className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[#071a2b]/35"
+            />
+            <input
+              type="search"
+              value={query}
+              onChange={(event) => changeQuery(event.target.value)}
+              placeholder="Search by player name…"
+              className="block w-full border border-[#071a2b]/20 bg-[#fffdf8] py-3 pl-12 pr-4 text-sm font-semibold outline-none transition placeholder:font-normal placeholder:text-[#071a2b]/35 focus:border-blue-700 focus:ring-2 focus:ring-blue-700/15"
+            />
+          </label>
+          <label>
+            <span className="sr-only">Filter by season</span>
+            <select
+              value={season ?? ""}
+              onChange={(event) => changeSeason(event.target.value)}
+              className="block w-full border border-[#071a2b]/20 bg-[#fffdf8] px-4 py-3 text-sm font-semibold outline-none transition focus:border-blue-700 focus:ring-2 focus:ring-blue-700/15"
+            >
+              <option value="">All seasons</option>
+              {seasons.map((value) => (
+                <option key={value} value={value}>
+                  {value}/{String(value + 1).slice(-2)}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label>
+            <span className="sr-only">Filter by position</span>
+            <select
+              value={position}
+              onChange={(event) => setPosition(event.target.value)}
+              className="block w-full border border-[#071a2b]/20 bg-[#fffdf8] px-4 py-3 text-sm font-semibold outline-none transition focus:border-blue-700 focus:ring-2 focus:ring-blue-700/15"
+            >
+              <option value="">All positions</option>
+              {PLAYER_POSITIONS.map((value) => (
+                <option key={value} value={value}>
+                  {value}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
       </div>
 
       {loading ? (
@@ -222,7 +175,7 @@ export function PlayerSearch(props: {
         ""
       )}
 
-      {players.length > 0 && (
+      {filteredPlayers.length > 0 && !profileSearch && (
         <div className="mt-7 grid border border-[#071a2b]/15 bg-[#fffdf8] sm:grid-cols-3">
           <div className="border-b border-[#071a2b]/15 p-5 sm:border-b-0 sm:border-r">
             <ChartBarIcon className="h-5 w-5 text-blue-700" />
@@ -270,7 +223,7 @@ export function PlayerSearch(props: {
               Player index
             </p>
             <h2 className="mt-1 font-display text-2xl font-semibold">
-              Archive rankings
+              {profileSearch ? "Player profiles" : "Archive rankings"}
             </h2>
           </div>
           <p className="hidden font-mono text-[10px] uppercase tracking-[0.14em] text-white/40 sm:block">
@@ -310,7 +263,7 @@ export function PlayerSearch(props: {
               </tr>
             </thead>
             <tbody className="divide-y divide-[#071a2b]/10 text-sm">
-              {players.map((player, idx) => {
+              {filteredPlayers.map((player, idx) => {
                 const apps = player.starts + player.subs;
                 return (
                   <tr
@@ -350,9 +303,12 @@ export function PlayerSearch(props: {
                             {player.Player}
                             <ArrowUpRightIcon className="h-3.5 w-3.5 opacity-25 transition group-hover:opacity-100" />
                           </Link>
-                          {player.profile.position && (
+                          {(player.profile.position ||
+                            player.profile.secondaryPosition) && (
                             <p className="mt-1 font-mono text-[9px] font-bold uppercase tracking-[0.1em] text-[#071a2b]/35">
-                              {player.profile.position}
+                              {[player.profile.position, player.profile.secondaryPosition]
+                                .filter(Boolean)
+                                .join(" / ")}
                             </p>
                           )}
                         </div>
@@ -361,20 +317,24 @@ export function PlayerSearch(props: {
                     <td className="px-4 py-4">
                       <div className="flex items-center justify-between gap-3">
                         <span className="font-mono text-sm font-bold">
-                          {apps}
+                          {profileSearch ? "—" : apps}
                         </span>
-                        <span className="text-xs text-[#071a2b]/45">
-                          {player.starts} + {player.subs}
-                        </span>
+                        {!profileSearch && (
+                          <span className="text-xs text-[#071a2b]/45">
+                            {player.starts} + {player.subs}
+                          </span>
+                        )}
                       </div>
-                      <div className="mt-2 h-1.5 bg-[#e8e2d6]">
-                        <div
-                          className="h-full bg-blue-700 transition group-hover:bg-blue-500"
-                          style={{
-                            width: `${(apps / maxAppearances) * 100}%`,
-                          }}
-                        />
-                      </div>
+                      {!profileSearch && (
+                        <div className="mt-2 h-1.5 bg-[#e8e2d6]">
+                          <div
+                            className="h-full bg-blue-700 transition group-hover:bg-blue-500"
+                            style={{
+                              width: `${(apps / maxAppearances) * 100}%`,
+                            }}
+                          />
+                        </div>
+                      )}
                     </td>
                     <td className="px-4 py-4 text-center">
                       <span
@@ -384,11 +344,11 @@ export function PlayerSearch(props: {
                             : "font-mono text-[#071a2b]/30"
                         }
                       >
-                        {player.goals}
+                        {profileSearch ? "—" : player.goals}
                       </span>
                     </td>
                     <td className="hidden px-4 py-4 text-center font-mono font-bold md:table-cell">
-                      {player.assists}
+                      {profileSearch ? "—" : player.assists}
                     </td>
                     <td className="hidden px-4 py-4 lg:table-cell">
                       <div className="flex gap-1">
@@ -401,7 +361,7 @@ export function PlayerSearch(props: {
                             key={statIndex}
                             className="inline-flex min-w-7 items-center justify-center bg-[#e8e2d6] px-2 py-1 font-mono text-[10px] font-bold text-[#071a2b]/65"
                           >
-                            {value}
+                          {profileSearch ? "—" : value}
                           </span>
                         ))}
                       </div>
@@ -412,10 +372,10 @@ export function PlayerSearch(props: {
                     <td className="hidden px-5 py-4 lg:table-cell">
                       <div className="flex gap-1">
                         <span className="inline-flex min-w-7 items-center justify-center bg-amber-100 px-2 py-1 font-mono text-[10px] font-bold text-amber-900">
-                          {player.yellow}
+                          {profileSearch ? "—" : player.yellow}
                         </span>
                         <span className="inline-flex min-w-7 items-center justify-center bg-red-100 px-2 py-1 font-mono text-[10px] font-bold text-red-800">
-                          {player.red}
+                          {profileSearch ? "—" : player.red}
                         </span>
                       </div>
                     </td>

@@ -6,7 +6,6 @@ import {
 import { getClubs } from "@/lib/clubs";
 import { getManagers } from "@/lib/managers";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
-import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { breadcrumbJsonLd, JsonLd } from "@/components/seo/JsonLd";
 import { pageMetadata } from "@/lib/seo";
@@ -63,39 +62,25 @@ export default async function ResultsSearchPage() {
               </p>
             </div>
             <nav
-              aria-label="Featured result collections"
-              className="rounded-sm border border-[#071a2b]/15 bg-[#fffdf8] p-2 shadow-[0_12px_28px_rgba(7,26,43,0.06)]"
+              aria-label="Explore the archive"
+              className="grid grid-cols-2 gap-px border border-[#071a2b]/15 bg-[#071a2b]/15"
             >
-              <p className="px-3 pt-2 text-xs font-bold uppercase tracking-[0.15em] text-[#071a2b]/45">
-                Explore the archive
-              </p>
-              <div className="mt-3 grid grid-cols-2 gap-2">
-                {[
-                  ["Wembley matches", "/games/at-wembley"],
-                  ["Penalty shootouts", "/games/penalty-shootouts"],
-                  ["FA Cup archive", "/results/fa-cup"],
-                  ["League Cup archive", "/results/league-cup"],
-                  ["Highest attendances", "/results/top-attendances"],
-                ].map(([label, href]) => (
-                  <Link
-                    key={href}
-                    href={href}
-                    className={`group flex min-h-20 flex-col justify-between rounded-sm bg-[#f4f0e8] px-4 py-3 text-sm font-bold transition hover:bg-[#071a2b] hover:text-white ${
-                      href === "/results/top-attendances" ? "col-span-2" : ""
-                    }`}
-                  >
-                    {label}
-                    <ArrowRightIcon className="mt-3 h-4 w-4 text-blue-700 transition-transform group-hover:translate-x-1 group-hover:text-white" />
-                  </Link>
-                ))}
+              {[
+                ["Wembley matches", "/games/at-wembley"],
+                ["Penalty shootouts", "/games/penalty-shootouts"],
+                ["FA Cup archive", "/results/fa-cup"],
+                ["League Cup archive", "/results/league-cup"],
+                ["Highest attendances", "/results/top-attendances"],
+                ["Head-to-head records", "/head-to-head"],
+              ].map(([label, href]) => (
                 <Link
-                  href="/head-to-head"
-                  className="group col-span-2 flex items-center justify-between rounded-sm bg-blue-700 px-4 py-3 text-sm font-bold text-white transition hover:bg-[#071a2b]"
+                  key={href}
+                  href={href}
+                  className="bg-[#fffdf8] px-4 py-4 text-sm font-bold transition hover:bg-[#e8e2d6] hover:text-blue-700"
                 >
-                  Head-to-head records
-                  <ArrowRightIcon className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  {label}
                 </Link>
-              </div>
+              ))}
             </nav>
           </div>
         </div>

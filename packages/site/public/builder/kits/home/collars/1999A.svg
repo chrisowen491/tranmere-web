@@ -1,12 +1,14 @@
 <svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
-  
-  <g id="collar">
-    <path d="m256 359-30 30-31.996-70.056L212 307l44 52z" fill="#050532"/>
-    <path d="m256 359 30 30 31.996-70.056L300 307l-44 52z" fill="#050532"/>
-    <path d="M224 321l32 38v30h-32z" fill="url(#kit-2026-navy-texture)" />
-    <path d="M256 359l32-38v68h-32z" fill="url(#kit-2026-green-texture)"/>
-    <path d="m207 311 49 48 49-48" fill="none" stroke="#050532" stroke-linejoin="round" stroke-width="12"/>
-    <path d="m211 310 45 43 45-43" fill="none" stroke="#fff" stroke-linejoin="round" stroke-width="6"/>
-    <path d="m217 311 39 36 39-36" fill="none" stroke="#fff" stroke-linejoin="round" stroke-width="3"/>
+    <g id="collar">
+   <g>
+    <path stroke="#8c1516" d="m256,359l-30,30l-31.996,-70.056l17.996,-11.944l44,52z" fill="#050532"/>
+   </g>
+   <g>
+    <path stroke="#8c1516" d="m256,359l30,30l31.996,-70.056l-17.996,-11.944l-44,52z" fill="#050532"/>
+   </g>
+  </g>
+  <g stroke="null" id="sub-collar">
+   <line transform="rotate(-0.913708 214.5 350.953)" stroke="#fff" id="svg_37" y2="382.45313" x2="227" y1="319.45313" x1="202" fill-opacity="null" stroke-width="4" fill="none"/>
+   <line transform="rotate(-2.92982 298 349.937)" stroke="#fff" id="svg_46" y2="380.42087" x2="280" y1="319.45313" x1="316" fill-opacity="null" stroke-width="4" fill="none"/>
   </g>
 </svg>  

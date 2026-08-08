@@ -23,10 +23,6 @@ function sortManagers(managers: ManagerRecord[]) {
   );
 }
 
-function displayDate(value: string) {
-  return value.toLowerCase().startsWith("now") ? "Present" : value;
-}
-
 export function ManagerAdmin({
   initialManagers,
 }: {
@@ -276,9 +272,6 @@ export function ManagerAdmin({
             <thead className="border-b border-[#071a2b]/15 bg-[#071a2b] text-xs font-bold uppercase tracking-[0.1em] text-white/65">
               <tr>
                 <th className="px-5 py-4">Manager</th>
-                <th className="px-4 py-4">Appointed</th>
-                <th className="px-4 py-4">Departed</th>
-                <th className="px-4 py-4">Formation</th>
                 <th className="px-5 py-4 text-right">Action</th>
               </tr>
             </thead>
@@ -292,15 +285,6 @@ export function ManagerAdmin({
                         Portrait
                       </span>
                     )}
-                  </td>
-                  <td className="whitespace-nowrap px-4 py-4 font-mono text-xs">
-                    {manager.dateJoined}
-                  </td>
-                  <td className="whitespace-nowrap px-4 py-4 font-mono text-xs">
-                    {displayDate(manager.dateLeft)}
-                  </td>
-                  <td className="whitespace-nowrap px-4 py-4 font-mono text-xs">
-                    {manager.favouriteFormation || "—"}
                   </td>
                   <td className="px-5 py-4 text-right">
                     <button

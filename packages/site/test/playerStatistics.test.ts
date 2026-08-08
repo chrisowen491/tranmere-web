@@ -83,7 +83,7 @@ describe("player statistics enrichment", () => {
     });
   });
 
-  it("filters and sorts the API statistics after D1 enrichment", async () => {
+  it("filters and sorts API statistics using D1 primary and secondary positions", async () => {
     const originalFetch = global.fetch;
     global.fetch = vi.fn(async () => {
       return new Response(
@@ -108,7 +108,8 @@ describe("player statistics enrichment", () => {
           playerRow({
             id: "striker",
             name: "Striker",
-            position: "Striker",
+            position: "Central Midfielder",
+            secondary_position: "Striker",
           }),
         ]),
         "https://api.example.test",
@@ -117,9 +118,42 @@ describe("player statistics enrichment", () => {
 
       expect(players.map((player) => player.Player)).toEqual(["Striker"]);
       expect(global.fetch).toHaveBeenCalledWith(
-        expect.stringContaining("filter=STR"),
+        expect.not.stringContaining("filter="),
         expect.objectContaining({ next: { revalidate: 7200 } }),
       );
+    } finally {
+      global.fetch = originalFetch;
+    }
+  });
+
+  it("recognises a single appearance when the API returns Apps as a string", async () => {
+    const originalFetch = global.fetch;
+    global.fetch = vi.fn(async () => {
+      return new Response(
+        JSON.stringify({
+          players: [
+            statistics("One Appearance", {
+              Apps: "1" as unknown as number,
+              starts: 1,
+              subs: 0,
+            }),
+            statistics("Two Appearances", { Apps: 2 }),
+          ],
+        }),
+        { status: 200 },
+      );
+    }) as typeof fetch;
+
+    try {
+      const players = await getPlayerStatistics(
+        playerDatabase([]),
+        "https://api.example.test",
+        { filter: "OnlyOneApp" },
+      );
+
+      expect(players.map((player) => player.Player)).toEqual([
+        "One Appearance",
+      ]);
     } finally {
       global.fetch = originalFetch;
     }
