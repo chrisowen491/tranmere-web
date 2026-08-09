@@ -12,8 +12,6 @@ import Link from "next/link";
 import { absoluteUrl, breadcrumbJsonLd, JsonLd } from "@/components/seo/JsonLd";
 import { pageMetadata } from "@/lib/seo";
 
-export const revalidate = 7200;
-
 export const metadata = pageMetadata({
   title: "Tranmere Rovers managers",
   description: "The complete record of Tranmere Rovers first-team managers.",

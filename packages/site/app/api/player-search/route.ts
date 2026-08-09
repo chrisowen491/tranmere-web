@@ -1,6 +1,5 @@
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { NextRequest, NextResponse } from "next/server";
-import { GetBaseUrl } from "@/lib/apiFunctions";
 import { getPlayerStatistics } from "@/lib/playerStatistics";
 import { getUniquePlayers } from "@/lib/players";
 
@@ -32,7 +31,7 @@ export async function GET(request: NextRequest) {
         })),
       });
     }
-    const players = await getPlayerStatistics(env.DB, GetBaseUrl(env), {
+    const players = await getPlayerStatistics(env.DB, {
       season: request.nextUrl.searchParams.get("season") ?? "",
       sort: request.nextUrl.searchParams.get("sort") ?? "",
       filter: request.nextUrl.searchParams.get("filter") ?? "",

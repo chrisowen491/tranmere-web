@@ -1,18 +1,9 @@
 import {
   Competition,
-  HatTrick,
   Match,
-  PlayerSeasonSummary
 } from '@tranmere-web/lib/src/tranmere-web-types';
 import { MATCH_COMPETITIONS } from './competition-constants';
 import { queryOnThisDayGameRow, type D1DatabaseReader } from './d1-queries';
-
-const APP_SYNC_URL = 'https://api.tranmere-web.com';
-const APP_SYNC_OPTIONS = {
-  headers: {
-    //'x-api-key': this.APP_SYNC_KEY
-  }
-};
 
 export const STANDARD_HEADERS = {
   headers: {
@@ -126,19 +117,6 @@ export function replaceSeasonsKit(input: string, season?: string): string {
   }
 }
 
-export async function GetTopScorersBySeason(): Promise<PlayerSeasonSummary[]> {
-  const results: PlayerSeasonSummary[] = [];
-
-  for (let i = 1960; i <= GetYear(); i++) {
-    const result = await fetch(
-      'https://api.tranmere-web.com/player-search/?season=' + i + '&sort=Goals'
-    );
-    const players = (await result.json()) as { players: PlayerSeasonSummary[] };
-    if (players.players && players.players.length > 0)
-      results.push(players.players[0]);
-  }
-  return results;
-}
 
 export async function GetOnThisDay(
   db: D1DatabaseReader,
@@ -176,29 +154,6 @@ export async function GetAllCupCompetitions(): Promise<Competition[]> {
   return MATCH_COMPETITIONS.filter(
     (name) => name !== 'League' && name !== 'Conference'
   ).map((name) => ({ name }));
-}
-
-export async function GetAllHatTricks(): Promise<HatTrick[]> {
-  const query = encodeURIComponent(
-    '{listTranmereWebHatTricks(limit:500){items{Date Player Opposition Goals Season}}}'
-  );
-  const result = await fetch(
-    `${APP_SYNC_URL}/graphql?query=${query}`,
-    APP_SYNC_OPTIONS
-  );
-
-  const list = (await result.json()) as {
-    data: { listTranmereWebHatTricks: { items: HatTrick[] } };
-  };
-
-  const results: HatTrick[] = list.data.listTranmereWebHatTricks.items;
-
-  results.sort(function (a, b) {
-    if (a.Date < b.Date) return -1;
-    if (a.Date > b.Date) return 1;
-    return 0;
-  });
-  return results;
 }
 
 export function ToTitleCase(input: string): string {

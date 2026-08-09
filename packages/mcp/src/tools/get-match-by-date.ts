@@ -1,6 +1,7 @@
-import type { MatchPageData } from '@tranmere-web/lib/src/tranmere-web-types';
 import {
+  queryAppRows,
   queryGameBySeasonAndDate,
+  queryGoalRows,
   queryMatchReportRow
 } from '@tranmere-web/lib/src/d1-queries';
 import { z } from 'zod';
@@ -79,7 +80,7 @@ export function registerGetMatchByDateTool({ server, env, auth }: ToolContext) {
     {
       title: 'Get a Tranmere match',
       description:
-        'Retrieve a Tranmere Rovers match by calendar date (YYYY-MM-DD). Match facts, including score, competition, venue, attendance, formation, programme and report, come from the TranmereWeb database; player goals, line-up and substitutions come from the match API. Use it when the date is known. Returns an error when Tranmere did not play on that date.',
+        'Retrieve a Tranmere Rovers match by calendar date (YYYY-MM-DD) from the TranmereWeb database. Includes score, competition, venue, attendance, formation, programme, report, scorers, starting XI and substitutions. Use it when the date is known. Returns an error when Tranmere did not play on that date.',
       inputSchema: z.object({
         date: z
           .string()
@@ -122,9 +123,11 @@ export function registerGetMatchByDateTool({ server, env, auth }: ToolContext) {
         parsed.getUTCMonth() >= 6
           ? parsed.getUTCFullYear()
           : parsed.getUTCFullYear() - 1;
-      const [game, report] = await Promise.all([
+      const [game, report, goals, appearances] = await Promise.all([
         queryGameBySeasonAndDate(env.DB, season, date),
-        queryMatchReportRow(env.DB, date)
+        queryMatchReportRow(env.DB, date),
+        queryGoalRows(env.DB, { matchDate: date }),
+        queryAppRows(env.DB, { matchDate: date })
       ]);
       if (!game)
         return {
@@ -136,13 +139,6 @@ export function registerGetMatchByDateTool({ server, env, auth }: ToolContext) {
           ],
           isError: true
         };
-
-      const response = await fetch(
-        `${env.API_BASE_URL}/match/${season}/${encodeURIComponent(date)}`
-      );
-      const apiMatch = response.ok
-        ? await response.json<MatchPageData>()
-        : null;
       const programmePath = game.programme_path;
       const programmeUrl =
         programmePath && programmePath !== '#N/A'
@@ -164,20 +160,33 @@ export function registerGetMatchByDateTool({ server, env, auth }: ToolContext) {
           attendance: game.attendance,
           referee: game.referee || null,
           formation: game.formation || null,
-          goals: (apiMatch?.goals ?? []).map((goal) => ({
-            scorer: goal.Scorer,
-            minute: goal.Minute || null,
-            assist: goal.Assist || null
+          goals: goals.map((goal) => ({
+            scorer: goal.scorer,
+            minute: goal.minute || null,
+            assist: goal.assist || null
           })),
-          lineup: (apiMatch?.apps ?? []).map((appearance) => ({
-            name: appearance.Name,
-            number: appearance.Number ? String(appearance.Number) : null,
-            substitutedBy: appearance.SubbedBy || null,
-            substitutionMinute: appearance.SubTime || null,
-            yellowCard: Boolean(appearance.YellowCard),
-            redCard: Boolean(appearance.RedCard)
+          lineup: appearances.map((appearance) => ({
+            name: appearance.player_name,
+            number:
+              appearance.shirt_number === null
+                ? null
+                : String(appearance.shirt_number),
+            substitutedBy: appearance.substituted_by || null,
+            substitutionMinute: appearance.substitute_time || null,
+            yellowCard: Boolean(
+              appearance.yellow_card || appearance.substitute_yellow_card
+            ),
+            redCard: Boolean(
+              appearance.red_card || appearance.substitute_red_card
+            )
           })),
-          substitutes: apiMatch?.substitutes ?? [],
+          substitutes: [
+            ...new Set(
+              appearances
+                .map((appearance) => appearance.substituted_by)
+                .filter((name): name is string => Boolean(name))
+            )
+          ],
           report: report?.report || null,
           programmeUrl,
           matchUrl: `https://www.tranmere-web.com/match/${season}/${date}`

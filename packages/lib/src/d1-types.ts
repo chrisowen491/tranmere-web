@@ -84,3 +84,62 @@ export interface MatchReportRow {
   match_date: string;
   report: string;
 }
+
+export interface HatTrickRow {
+  id: string;
+  season: number;
+  match_date: string;
+  opposition: string;
+  player_name: string;
+  goals: number;
+}
+
+export interface PlayerSeasonSummaryRow {
+  season: string;
+  player_name: string;
+  appearances: number;
+  starts: number;
+  substitute_appearances: number;
+  goals: number;
+  assists: number;
+  yellow_cards: number;
+  red_cards: number;
+  free_kicks: number;
+  penalties: number;
+  headers: number;
+}
+
+export interface AppRow {
+  id: string;
+  season: number;
+  match_date: string;
+  player_name: string;
+  competition: string | null;
+  opposition: string;
+  shirt_number: number | null;
+  yellow_card: number;
+  red_card: number;
+  substitute_yellow_card: number;
+  substitute_red_card: number;
+  substitute_time: string | null;
+  substituted_by: string | null;
+  substitute_substituted_by: string | null;
+}
+
+export interface GoalRow {
+  id: string;
+  season: number;
+  match_date: string;
+  scorer: string;
+  opposition: string;
+  competition: string | null;
+  minute: string | null;
+  goal_type: string | null;
+  assist: string | null;
+  assist_type: string | null;
+  foot: string | null;
+  six_yard_box: number;
+  eighteen_yard_box: number;
+  cross_side: string | null;
+  long_range: number;
+}

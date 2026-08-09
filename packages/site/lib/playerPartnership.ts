@@ -1,8 +1,6 @@
-import type {
-  Appearance,
-  Match,
-} from "@tranmere-web/lib/src/tranmere-web-types";
-import type { PlayerProfile } from "@/lib/types";
+import { queryAppRows, queryGoalRows } from "@tranmere-web/lib/src/d1-queries";
+import type { AppRow } from "@tranmere-web/lib/src/d1-types";
+import type { Match } from "@tranmere-web/lib/src/tranmere-web-types";
 import { getPlayersByNames } from "@/lib/players";
 import { searchGames } from "@/lib/games";
 
@@ -25,8 +23,37 @@ export interface PlayerPartnership {
   sharedSeasons: string[];
 }
 
-function appearanceKey(appearance: Appearance) {
-  return `${appearance.Season}|${appearance.Date.slice(0, 10)}`;
+interface PartnershipAppearance {
+  key: string;
+  date: string;
+  season: string;
+  opposition: string;
+  competition: string;
+  goals: number;
+}
+
+function appearanceKey(season: number, date: string) {
+  return `${season}|${date.slice(0, 10)}`;
+}
+
+function toAppearances(
+  starts: AppRow[],
+  substituteAppearances: AppRow[],
+  goalsByMatch: Map<string, number>,
+) {
+  const appearances = new Map<string, PartnershipAppearance>();
+  for (const app of [...substituteAppearances, ...starts]) {
+    const key = appearanceKey(app.season, app.match_date);
+    appearances.set(key, {
+      key,
+      date: app.match_date,
+      season: String(app.season),
+      opposition: app.opposition,
+      competition: app.competition ?? "",
+      goals: goalsByMatch.get(key) ?? 0,
+    });
+  }
+  return appearances;
 }
 
 function matchKey(match: Match) {
@@ -48,7 +75,6 @@ function matchResult(match?: Match) {
 
 export async function getPlayerPartnership(
   db: D1Database,
-  baseUrl: string,
   firstPlayer: string,
   secondPlayer: string,
 ): Promise<PlayerPartnership> {
@@ -57,33 +83,42 @@ export async function getPlayerPartnership(
     throw new Error("Player not found");
   }
 
-  const loadProfile = async (name: string) => {
-    const response = await fetch(
-      `${baseUrl}/page/player/${encodeURIComponent(name)}?json=true`,
-      { next: { revalidate: 7200 } },
-    );
-    if (!response.ok) throw new Error(`Unable to load ${name}`);
-    return (await response.json()) as PlayerProfile;
-  };
-
-  const [firstProfile, secondProfile] = await Promise.all([
-    loadProfile(firstPlayer),
-    loadProfile(secondPlayer),
+  const [
+    firstStarts,
+    firstSubstitutes,
+    firstGoals,
+    secondStarts,
+    secondSubstitutes,
+    secondGoals,
+  ] = await Promise.all([
+    queryAppRows(db, { player: firstPlayer, playerMatch: "exact" }),
+    queryAppRows(db, { substitutedBy: firstPlayer }),
+    queryGoalRows(db, { scorer: firstPlayer, scorerMatch: "exact" }),
+    queryAppRows(db, { player: secondPlayer, playerMatch: "exact" }),
+    queryAppRows(db, { substitutedBy: secondPlayer }),
+    queryGoalRows(db, { scorer: secondPlayer, scorerMatch: "exact" }),
   ]);
-  const firstAppearances = firstProfile.appearances || [];
-  const secondAppearances = new Map(
-    (secondProfile.appearances || []).map((appearance) => [
-      appearanceKey(appearance),
-      appearance,
-    ]),
+  const goalsByMatch = (goals: typeof firstGoals) =>
+    goals.reduce((totals, goal) => {
+      const key = appearanceKey(goal.season, goal.match_date);
+      totals.set(key, (totals.get(key) ?? 0) + 1);
+      return totals;
+    }, new Map<string, number>());
+  const firstAppearances = toAppearances(
+    firstStarts,
+    firstSubstitutes,
+    goalsByMatch(firstGoals),
   );
-  const sharedAppearances = firstAppearances
-    .filter((appearance) => secondAppearances.has(appearanceKey(appearance)))
-    .toSorted(
-      (a, b) => new Date(b.Date).getTime() - new Date(a.Date).getTime(),
-    );
+  const secondAppearances = toAppearances(
+    secondStarts,
+    secondSubstitutes,
+    goalsByMatch(secondGoals),
+  );
+  const sharedAppearances = [...firstAppearances.values()]
+    .filter((appearance) => secondAppearances.has(appearance.key))
+    .toSorted((a, b) => b.date.localeCompare(a.date));
   const sharedSeasons = [
-    ...new Set(sharedAppearances.map((appearance) => appearance.Season)),
+    ...new Set(sharedAppearances.map((appearance) => appearance.season)),
   ].sort((a, b) => Number(a) - Number(b));
 
   const seasonResults = await Promise.all(
@@ -101,26 +136,26 @@ export async function getPlayerPartnership(
     secondPlayer,
     sharedSeasons,
     matches: sharedAppearances.map((firstAppearance) => {
-      const key = appearanceKey(firstAppearance);
+      const key = firstAppearance.key;
       const secondAppearance = secondAppearances.get(key)!;
       const match = results.get(key);
       const outcome = matchResult(match);
       return {
-        date: firstAppearance.Date.slice(0, 10),
-        season: firstAppearance.Season,
+        date: firstAppearance.date.slice(0, 10),
+        season: firstAppearance.season,
         opposition:
           match?.opposition ||
-          firstAppearance.Opposition ||
-          secondAppearance.Opposition,
+          firstAppearance.opposition ||
+          secondAppearance.opposition,
         competition:
           match?.competition ||
-          firstAppearance.Competition ||
-          secondAppearance.Competition,
+          firstAppearance.competition ||
+          secondAppearance.competition,
         result: outcome?.result || null,
         scored: outcome?.scored ?? null,
         conceded: outcome?.conceded ?? null,
-        firstPlayerGoals: firstAppearance.Goals || 0,
-        secondPlayerGoals: secondAppearance.Goals || 0,
+        firstPlayerGoals: firstAppearance.goals,
+        secondPlayerGoals: secondAppearance.goals,
       };
     }),
   };

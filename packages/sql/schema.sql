@@ -211,6 +211,131 @@ CREATE INDEX IF NOT EXISTS Games_competition_date_idx
 CREATE INDEX IF NOT EXISTS Games_home_team_date_idx
   ON Games (home_team, match_date);
 
+CREATE TABLE IF NOT EXISTS HatTricks (
+  id TEXT NOT NULL PRIMARY KEY,
+  season INTEGER NOT NULL,
+  match_date TEXT NOT NULL,
+  opposition TEXT NOT NULL,
+  player_name TEXT NOT NULL,
+  goals INTEGER NOT NULL,
+  CHECK (season BETWEEN 1800 AND 2200),
+  CHECK (
+    match_date GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]'
+  ),
+  CHECK (goals >= 3)
+);
+
+CREATE INDEX IF NOT EXISTS HatTricks_date_idx
+  ON HatTricks (match_date DESC);
+
+CREATE INDEX IF NOT EXISTS HatTricks_player_idx
+  ON HatTricks (player_name, match_date DESC);
+
+CREATE INDEX IF NOT EXISTS HatTricks_season_idx
+  ON HatTricks (season, match_date DESC);
+
+CREATE TABLE IF NOT EXISTS PlayerSeasonSummaries (
+  season TEXT NOT NULL,
+  player_name TEXT NOT NULL,
+  appearances INTEGER NOT NULL,
+  starts INTEGER NOT NULL,
+  substitute_appearances INTEGER NOT NULL,
+  goals INTEGER NOT NULL,
+  assists INTEGER NOT NULL,
+  yellow_cards INTEGER NOT NULL,
+  red_cards INTEGER NOT NULL,
+  free_kicks INTEGER NOT NULL,
+  penalties INTEGER NOT NULL,
+  headers INTEGER NOT NULL,
+  PRIMARY KEY (season, player_name),
+  CHECK (season = 'TOTAL' OR season GLOB '[0-9][0-9][0-9][0-9]'),
+  CHECK (appearances >= 0),
+  CHECK (starts >= 0),
+  CHECK (substitute_appearances >= 0),
+  CHECK (goals >= 0),
+  CHECK (assists >= 0),
+  CHECK (yellow_cards >= 0),
+  CHECK (red_cards >= 0),
+  CHECK (free_kicks >= 0),
+  CHECK (penalties >= 0),
+  CHECK (headers >= 0)
+);
+
+CREATE INDEX IF NOT EXISTS PlayerSeasonSummaries_player_idx
+  ON PlayerSeasonSummaries (player_name, season DESC);
+
+CREATE INDEX IF NOT EXISTS PlayerSeasonSummaries_season_apps_idx
+  ON PlayerSeasonSummaries (season, appearances DESC, player_name ASC);
+
+CREATE TABLE IF NOT EXISTS Apps (
+  id TEXT NOT NULL PRIMARY KEY,
+  season INTEGER NOT NULL,
+  match_date TEXT NOT NULL,
+  player_name TEXT NOT NULL,
+  competition TEXT,
+  opposition TEXT NOT NULL,
+  shirt_number INTEGER,
+  yellow_card INTEGER NOT NULL DEFAULT 0,
+  red_card INTEGER NOT NULL DEFAULT 0,
+  substitute_yellow_card INTEGER NOT NULL DEFAULT 0,
+  substitute_red_card INTEGER NOT NULL DEFAULT 0,
+  substitute_time TEXT,
+  substituted_by TEXT,
+  substitute_substituted_by TEXT,
+  CHECK (season BETWEEN 1800 AND 2200),
+  CHECK (
+    match_date GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]'
+  ),
+  CHECK (shirt_number IS NULL OR shirt_number >= 0),
+  CHECK (yellow_card IN (0, 1)),
+  CHECK (red_card IN (0, 1)),
+  CHECK (substitute_yellow_card IN (0, 1)),
+  CHECK (substitute_red_card IN (0, 1))
+);
+
+CREATE INDEX IF NOT EXISTS Apps_player_date_idx
+  ON Apps (player_name, match_date DESC);
+
+CREATE INDEX IF NOT EXISTS Apps_season_player_idx
+  ON Apps (season, player_name, match_date);
+
+CREATE INDEX IF NOT EXISTS Apps_match_idx
+  ON Apps (season, match_date, player_name);
+
+CREATE TABLE IF NOT EXISTS Goals (
+  id TEXT NOT NULL PRIMARY KEY,
+  season INTEGER NOT NULL,
+  match_date TEXT NOT NULL,
+  scorer TEXT NOT NULL,
+  opposition TEXT NOT NULL,
+  competition TEXT,
+  minute TEXT,
+  goal_type TEXT,
+  assist TEXT,
+  assist_type TEXT,
+  foot TEXT,
+  six_yard_box INTEGER NOT NULL DEFAULT 0,
+  eighteen_yard_box INTEGER NOT NULL DEFAULT 0,
+  cross_side TEXT,
+  long_range INTEGER NOT NULL DEFAULT 0,
+  CHECK (season BETWEEN 1800 AND 2200),
+  CHECK (
+    match_date GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]'
+  ),
+  CHECK (six_yard_box IN (0, 1)),
+  CHECK (eighteen_yard_box IN (0, 1)),
+  CHECK (long_range IN (0, 1))
+);
+
+CREATE INDEX IF NOT EXISTS Goals_scorer_date_idx
+  ON Goals (scorer, match_date DESC);
+
+CREATE INDEX IF NOT EXISTS Goals_season_scorer_idx
+  ON Goals (season, scorer, match_date);
+
+CREATE INDEX IF NOT EXISTS Goals_match_idx
+  ON Goals (season, match_date, scorer);
+
 CREATE TABLE IF NOT EXISTS MatchReports (
   match_date TEXT NOT NULL PRIMARY KEY,
   report TEXT NOT NULL

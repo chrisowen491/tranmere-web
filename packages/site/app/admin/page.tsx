@@ -209,6 +209,30 @@ export default async function AdminPage() {
               action: "Manage games",
               icon: CalendarDaysIcon,
             },
+            {
+              href: "/admin/apps",
+              title: "Appearances",
+              description:
+                "Add, edit or remove player appearances, substitutions and discipline records.",
+              action: "Manage appearances",
+              icon: UserGroupIcon,
+            },
+            {
+              href: "/admin/goals",
+              title: "Goals",
+              description:
+                "Add, edit or remove scoring events, assists and goal details.",
+              action: "Manage goals",
+              icon: DocumentTextIcon,
+            },
+            {
+              href: "/admin/hat-tricks",
+              title: "Hat-tricks",
+              description:
+                "Maintain the archive of three-goal and four-goal performances.",
+              action: "Manage hat-tricks",
+              icon: DocumentTextIcon,
+            },
           ].map((item) => {
             const Icon = item.icon;
             return (

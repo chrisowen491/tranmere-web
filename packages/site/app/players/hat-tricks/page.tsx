@@ -3,8 +3,7 @@ import {
   CalendarDaysIcon,
   TrophyIcon,
 } from "@heroicons/react/24/outline";
-import { GetAllHatTricks } from "@tranmere-web/lib/src/apiFunctions";
-import type { HatTrick } from "@tranmere-web/lib/src/tranmere-web-types";
+import { queryHatTrickRows } from "@tranmere-web/lib/src/d1-queries";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import type { Metadata } from "next";
 import Image from "next/image";
@@ -14,14 +13,17 @@ import {
   type PlayerStatisticsProfile,
 } from "@/lib/playerStatistics";
 
-export const revalidate = 7200;
-
 export const metadata: Metadata = {
   title: "Tranmere Hat Tricks",
   description: "Tranmere Rovers hat-trick scorers since 1977",
 };
 
-interface HatTrickView extends Omit<HatTrick, "picLink"> {
+interface HatTrickView {
+  Date: string;
+  Player: string;
+  Opposition: string;
+  Goals: number;
+  Season: number;
   profile: PlayerStatisticsProfile;
 }
 
@@ -41,18 +43,18 @@ function formatDate(value: string) {
 
 export default async function HatTricks() {
   const env = (await getCloudflareContext({ async: true })).env;
-  const legacyRecords = await GetAllHatTricks();
+  const hatTricks = await queryHatTrickRows(env.DB);
   const profiles = await getPlayerStatisticsProfiles(
     env.DB,
-    legacyRecords.map((record) => record.Player),
+    hatTricks.map((record) => record.player_name),
   );
-  const records = legacyRecords.map<HatTrickView>((record) => ({
-    Date: record.Date,
-    Player: record.Player,
-    Opposition: record.Opposition,
-    Goals: record.Goals,
-    Season: record.Season,
-    profile: profiles.get(record.Player)!,
+  const records = hatTricks.map<HatTrickView>((record) => ({
+    Date: record.match_date,
+    Player: record.player_name,
+    Opposition: record.opposition,
+    Goals: record.goals,
+    Season: record.season,
+    profile: profiles.get(record.player_name)!,
   }));
   const playerTotals = records.reduce<Map<string, number>>((totals, record) => {
     totals.set(record.Player, (totals.get(record.Player) ?? 0) + 1);
@@ -64,7 +66,7 @@ export default async function HatTricks() {
   const uniqueScorers = playerTotals.size;
   const biggestHaul = Math.max(...records.map((record) => record.Goals));
   const fourOrMore = records.filter((record) => record.Goals >= 4).length;
-  const newestFirst = [...records].reverse();
+  const newestFirst = records;
 
   return (
     <main className="min-h-screen bg-[#f4f0e8] text-[#071a2b]">

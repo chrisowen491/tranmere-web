@@ -1,4 +1,6 @@
 import type { PlayerSeasonSummary } from "@tranmere-web/lib/src/tranmere-web-types";
+import { queryPlayerSeasonSummaryRows } from "@tranmere-web/lib/src/d1-queries";
+import type { PlayerSeasonSummaryRow } from "@tranmere-web/lib/src/d1-types";
 import { getPlayersByNames } from "@/lib/players";
 
 export const defaultPlayerAvatar =
@@ -22,6 +24,29 @@ export interface PlayerStatisticsOptions {
   sort?: string;
   filter?: string;
   limit?: number;
+}
+
+export function mapPlayerSeasonSummary(
+  row: PlayerSeasonSummaryRow,
+): PlayerSeasonSummary {
+  return {
+    Season: row.season,
+    Player: row.player_name,
+    Apps: row.appearances,
+    goals: row.goals,
+    assists: row.assists,
+    yellow: row.yellow_cards,
+    red: row.red_cards,
+    penalties: row.penalties,
+    headers: row.headers,
+    starts: row.starts,
+    subs: row.substitute_appearances,
+    freekicks: row.free_kicks,
+    goalsPerGame:
+      row.appearances > 0
+        ? Math.round((row.goals / row.appearances) * 100) / 100
+        : 0,
+  };
 }
 
 export async function getPlayerStatisticsProfiles(
@@ -131,31 +156,16 @@ function filterPlayers(players: PlayerStatisticsView[], filter?: string) {
 
 export async function getPlayerStatistics(
   db: D1Database,
-  baseUrl: string,
   options: PlayerStatisticsOptions = {},
 ) {
-  const search = new URLSearchParams({
-    season: options.season ?? "",
-    sort: options.sort ?? "",
-    limit: options.limit?.toString() ?? "",
+  const rows = await queryPlayerSeasonSummaryRows(db, {
+    season: options.season || "TOTAL",
+    limit: options.limit,
   });
-  // This is a record-level statistic rather than a profile attribute. Applying
-  // it at the source means players with one appearance are selected before the
-  // API's default top-50 appearance limit is applied.
-  if (options.filter === "OnlyOneApp") {
-    search.set("filter", "OnlyOneApp");
-  }
-  const response = await fetch(`${baseUrl}/player-search/?${search}`, {
-    next: { revalidate: 7200 },
-  });
-  if (!response.ok) {
-    throw new Error("Unable to load player statistics");
-  }
-
-  const result = (await response.json()) as {
-    players: PlayerSeasonSummary[];
-  };
-  const players = await enrichPlayerStatistics(db, result.players);
+  const players = await enrichPlayerStatistics(
+    db,
+    rows.map(mapPlayerSeasonSummary),
+  );
 
   return sortPlayers(filterPlayers(players, options.filter), options.sort);
 }

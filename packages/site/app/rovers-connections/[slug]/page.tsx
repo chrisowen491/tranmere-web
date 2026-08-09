@@ -23,8 +23,6 @@ import { getTransfers } from "@/lib/transfers";
 import type { SlugParams } from "@/lib/types";
 import { pageMetadata } from "@/lib/seo";
 
-export const revalidate = 7200;
-
 interface ResultsResponse {
   results: Match[];
   h2hresults: H2HResult[];

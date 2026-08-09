@@ -1,12 +1,9 @@
 import { PlayerSearch } from "@/components/apps/PlayerSearch";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
-import { GetBaseUrl } from "@/lib/apiFunctions";
 import Link from "next/link";
 import { getPlayerStatistics } from "@/lib/playerStatistics";
 import { breadcrumbJsonLd, JsonLd } from "@/components/seo/JsonLd";
 import { pageMetadata } from "@/lib/seo";
-
-export const revalidate = 7200;
 
 export const metadata = pageMetadata({
   title: "Tranmere Rovers players",
@@ -16,7 +13,7 @@ export const metadata = pageMetadata({
 
 export default async function PlayerSearchPage() {
   const env = (await getCloudflareContext({ async: true })).env;
-  const players = await getPlayerStatistics(env.DB, GetBaseUrl(env));
+  const players = await getPlayerStatistics(env.DB);
 
   return (
     <main className="pb-24 text-[#071a2b]">

@@ -3,15 +3,12 @@ import {
   ExclamationTriangleIcon,
 } from "@heroicons/react/24/outline";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
-import type { PlayerSeasonSummary } from "@tranmere-web/lib/src/tranmere-web-types";
+import { queryPlayerSeasonSummaryRows } from "@tranmere-web/lib/src/d1-queries";
 import Image from "next/image";
 import Link from "next/link";
-import { GetBaseUrl } from "@/lib/apiFunctions";
 import { breadcrumbJsonLd, JsonLd } from "@/components/seo/JsonLd";
 import { pageMetadata } from "@/lib/seo";
 import { getUniquePlayers } from "@/lib/players";
-
-export const revalidate = 7200;
 
 export const metadata = pageMetadata({
   title: "Tranmere Rovers misfiring strikers",
@@ -62,50 +59,25 @@ function calculateMisfireScore(player: MisfireInput) {
   };
 }
 
-async function getStrikerStatistics(baseUrl: string, names: string[]) {
-  const totals = new Map<string, PlayerSeasonSummary>();
-
-  for (let index = 0; index < names.length; index += 12) {
-    const records = await Promise.all(
-      names.slice(index, index + 12).map(async (name) => {
-        const response = await fetch(
-          `${baseUrl}/player-search/?player=${encodeURIComponent(name)}`,
-          { next: { revalidate } },
-        );
-        if (!response.ok) return [name, null] as const;
-        const data = (await response.json()) as {
-          players?: PlayerSeasonSummary[];
-        };
-        const total = data.players?.find((player) => player.Season === "TOTAL");
-        return [name, total ?? null] as const;
-      }),
-    );
-
-    records.forEach(([name, total]) => {
-      if (total) totals.set(name, total);
-    });
-  }
-
-  return totals;
-}
-
 export default async function MisfiringStrikersPage() {
   const env = (await getCloudflareContext({ async: true })).env;
-  const players = await getUniquePlayers(env.DB);
+  const [players, summaries] = await Promise.all([
+    getUniquePlayers(env.DB),
+    queryPlayerSeasonSummaryRows(env.DB, { season: "TOTAL" }),
+  ]);
   const strikers = players.filter((player) => player.position === "Striker");
-  const statisticsByName = await getStrikerStatistics(
-    GetBaseUrl(env),
-    strikers.map((player) => player.name),
+  const statisticsByName = new Map(
+    summaries.map((summary) => [summary.player_name, summary]),
   );
   const rankedStrikers = strikers
     .map<MisfiringStriker>((player) => {
       const statistics = statisticsByName.get(player.name);
       const input: MisfireInput = {
-        Apps: statistics?.Apps ?? 0,
+        Apps: statistics?.appearances ?? 0,
         starts: statistics?.starts ?? 0,
-        subs: statistics?.subs ?? 0,
+        subs: statistics?.substitute_appearances ?? 0,
         goals: statistics?.goals ?? 0,
-        red: statistics?.red ?? 0,
+        red: statistics?.red_cards ?? 0,
       };
 
       return {

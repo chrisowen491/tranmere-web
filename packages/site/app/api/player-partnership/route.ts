@@ -1,6 +1,5 @@
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { NextRequest, NextResponse } from "next/server";
-import { GetBaseUrl } from "@/lib/apiFunctions";
 import { getPlayerPartnership } from "@/lib/playerPartnership";
 
 export async function GET(request: NextRequest) {
@@ -18,7 +17,6 @@ export async function GET(request: NextRequest) {
     const env = (await getCloudflareContext({ async: true })).env;
     const partnership = await getPlayerPartnership(
       env.DB,
-      GetBaseUrl(env),
       firstPlayer,
       secondPlayer,
     );

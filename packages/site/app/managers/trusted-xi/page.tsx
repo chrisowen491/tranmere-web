@@ -1,11 +1,8 @@
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import type { Metadata } from "next";
 import { ManagerTrustedXi } from "@/components/apps/ManagerTrustedXi";
-import { GetBaseUrl } from "@/lib/apiFunctions";
 import { getManagers } from "@/lib/managers";
 import { getManagerTrustedXi } from "@/lib/managerTrustedXi";
-
-export const revalidate = 7200;
 
 export const metadata: Metadata = {
   title: "Manager's Trusted XI",
@@ -21,11 +18,7 @@ export default async function ManagerTrustedXiPage() {
     managers.find(
       (manager) => !manager.dateLeft.toLowerCase().startsWith("now"),
     )!;
-  const initialXi = await getManagerTrustedXi(
-    env.DB,
-    GetBaseUrl(env),
-    defaultManager,
-  );
+  const initialXi = await getManagerTrustedXi(env.DB, defaultManager);
 
   return (
     <main className="min-h-screen bg-[#f4f0e8] text-[#071a2b]">

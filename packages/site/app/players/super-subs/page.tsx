@@ -2,12 +2,9 @@ import { ArrowPathIcon, SparklesIcon } from "@heroicons/react/24/outline";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import Image from "next/image";
 import Link from "next/link";
-import { GetBaseUrl } from "@/lib/apiFunctions";
 import { breadcrumbJsonLd, JsonLd } from "@/components/seo/JsonLd";
 import { pageMetadata } from "@/lib/seo";
 import { getPlayerStatistics } from "@/lib/playerStatistics";
-
-export const revalidate = 7200;
 
 export const metadata = pageMetadata({
   title: "Tranmere Rovers super subs",
@@ -19,7 +16,7 @@ export const metadata = pageMetadata({
 export default async function SuperSubsPage() {
   const env = (await getCloudflareContext({ async: true })).env;
   const players = (
-    await getPlayerStatistics(env.DB, GetBaseUrl(env), {
+    await getPlayerStatistics(env.DB, {
       sort: "Subs",
       limit: 1000,
     })

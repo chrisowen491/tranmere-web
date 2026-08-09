@@ -14,8 +14,6 @@ import { searchGames } from "@/lib/games";
 import { absoluteUrl, breadcrumbJsonLd, JsonLd } from "@/components/seo/JsonLd";
 import { pageMetadata } from "@/lib/seo";
 
-export const revalidate = 7200;
-
 export const metadata = pageMetadata({
   title: "Tranmere Rovers highest attendances",
   description:

@@ -2,7 +2,6 @@ import { GetSeasons, GetYear } from "@tranmere-web/lib/src/apiFunctions";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import SeasonReview from "@/components/apps/SeasonReview";
 import { getAllArticlesForTag, getAllShirts } from "@/lib/api";
-import { GetBaseUrl } from "@/lib/apiFunctions";
 import { SlugParams } from "@/lib/types";
 import { notFound } from "next/navigation";
 import { getManagers } from "@/lib/managers";
@@ -34,7 +33,7 @@ export default async function SeasonPage(props: { params: SlugParams }) {
 
   const results = await searchGames(env.DB, { season: Number(season) });
 
-  const players = await getPlayerStatistics(env.DB, GetBaseUrl(env), {
+  const players = await getPlayerStatistics(env.DB, {
     season,
   });
 

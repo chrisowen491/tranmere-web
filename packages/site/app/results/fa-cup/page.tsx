@@ -7,8 +7,6 @@ import { breadcrumbJsonLd, JsonLd } from "@/components/seo/JsonLd";
 import { searchGames } from "@/lib/games";
 import { pageMetadata } from "@/lib/seo";
 
-export const revalidate = 7200;
-
 export const metadata = pageMetadata({
   title: "Tranmere Rovers FA Cup record",
   description:

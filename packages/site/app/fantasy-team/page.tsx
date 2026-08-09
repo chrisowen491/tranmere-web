@@ -3,8 +3,6 @@ import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { FantasyTeamBuilder } from "@/components/apps/FantasyTeamBuilder";
 import { getUniquePlayers } from "@/lib/players";
 
-export const revalidate = 7200;
-
 export const metadata: Metadata = {
   title: "Fantasy XI",
   description:

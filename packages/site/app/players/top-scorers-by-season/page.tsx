@@ -1,12 +1,13 @@
 import { ArrowRightIcon, ChartBarIcon } from "@heroicons/react/24/outline";
-import { GetTopScorersBySeason } from "@tranmere-web/lib/src/apiFunctions";
+import { queryPlayerSeasonSummaryRows } from "@tranmere-web/lib/src/d1-queries";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { enrichPlayerStatistics } from "@/lib/playerStatistics";
-
-export const revalidate = 7200;
+import {
+  enrichPlayerStatistics,
+  mapPlayerSeasonSummary,
+} from "@/lib/playerStatistics";
 
 export const metadata: Metadata = {
   title: "Top Scorers By Season",
@@ -22,9 +23,23 @@ function seasonLabel(season: string) {
 
 export default async function TopScorersBySeason() {
   const env = (await getCloudflareContext({ async: true })).env;
+  const summaries = await queryPlayerSeasonSummaryRows(env.DB);
   const topScorers = await enrichPlayerStatistics(
     env.DB,
-    await GetTopScorersBySeason(),
+    [...summaries]
+      .filter((summary) => /^\d{4}$/.test(summary.season))
+      .sort(
+        (a, b) =>
+          Number(a.season) - Number(b.season) ||
+          b.goals - a.goals ||
+          b.appearances - a.appearances ||
+          a.player_name.localeCompare(b.player_name),
+      )
+      .reduce<typeof summaries>((leaders, summary) => {
+        if (leaders.at(-1)?.season !== summary.season) leaders.push(summary);
+        return leaders;
+      }, [])
+      .map(mapPlayerSeasonSummary),
   );
   const newestFirst = [...topScorers].reverse();
   const highestTotal = Math.max(...topScorers.map((player) => player.goals));

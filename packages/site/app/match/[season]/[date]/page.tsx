@@ -1,7 +1,11 @@
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { MatchParams } from "@/lib/types";
-import { MatchPageData } from "@tranmere-web/lib/src/tranmere-web-types";
-import { GetBaseUrl } from "@/lib/apiFunctions";
+import type {
+  Appearance,
+  Goal,
+  MatchPageData,
+} from "@tranmere-web/lib/src/tranmere-web-types";
+import { queryAppRows, queryGoalRows } from "@tranmere-web/lib/src/d1-queries";
 import MatchReport from "@/components/apps/MatchReport";
 import { GetCommentsByUrl } from "@/lib/comments";
 import { notFound } from "next/navigation";
@@ -14,6 +18,73 @@ import {
   getMatchReport,
   searchGames,
 } from "@/lib/games";
+
+function mapAppearance(row: {
+  id: string;
+  season: number;
+  match_date: string;
+  player_name: string;
+  competition: string | null;
+  opposition: string;
+  shirt_number: number | null;
+  yellow_card: number;
+  red_card: number;
+  substitute_time: string | null;
+  substituted_by: string | null;
+  substitute_yellow_card: number;
+  substitute_red_card: number;
+}): Appearance {
+  return {
+    id: row.id,
+    Date: row.match_date,
+    Opposition: row.opposition,
+    Competition: row.competition ?? "",
+    Season: String(row.season),
+    Name: row.player_name,
+    Number: row.shirt_number?.toString(),
+    SubbedBy: row.substituted_by,
+    SubTime: row.substitute_time,
+    YellowCard: row.yellow_card ? "TRUE" : null,
+    RedCard: row.red_card ? "TRUE" : null,
+    SubYellow: row.substitute_yellow_card ? "TRUE" : null,
+    SubRed: row.substitute_red_card ? "TRUE" : null,
+    Type: "Start",
+  };
+}
+
+function mapGoal(row: {
+  id: string;
+  season: number;
+  match_date: string;
+  scorer: string;
+  opposition: string;
+  goal_type: string | null;
+  minute: string | null;
+  assist: string | null;
+  assist_type: string | null;
+}): Goal {
+  return {
+    id: row.id,
+    Date: row.match_date,
+    GoalType: row.goal_type ?? undefined,
+    Minute: row.minute ?? undefined,
+    Opposition: row.opposition,
+    Scorer: row.scorer,
+    Assist: row.assist ?? undefined,
+    AssistType: row.assist_type ?? undefined,
+    Season: String(row.season),
+  };
+}
+
+function formatGoals(goals: Goal[]) {
+  const scorers = new Map<string, number>();
+  for (const goal of goals) {
+    scorers.set(goal.Scorer, (scorers.get(goal.Scorer) ?? 0) + 1);
+  }
+  return [...scorers]
+    .map(([scorer, total]) => (total === 1 ? scorer : `${scorer} (${total})`))
+    .join(", ");
+}
 
 export async function generateMetadata(props: { params: MatchParams }) {
   const params = await props.params;
@@ -35,15 +106,21 @@ export default async function MatchPage(props: { params: MatchParams }) {
   const params = await props.params;
   const env = (await getCloudflareContext({ async: true })).env;
   const baseUrl = `/match/${params.season}/${params.date}`;
-  const [game, reportRow, matchRequest] = await Promise.all([
+  const [game, reportRow, appRows, goalRows] = await Promise.all([
     getGameBySeasonAndDate(env.DB, params.season, params.date),
     getMatchReport(env.DB, params.date),
-    fetch(`${GetBaseUrl(env)}${baseUrl}`),
+    queryAppRows(env.DB, {
+      season: Number(params.season),
+      matchDate: params.date,
+    }),
+    queryGoalRows(env.DB, {
+      season: Number(params.season),
+      matchDate: params.date,
+    }),
   ]);
   if (!game) notFound();
-  const apiMatch = matchRequest.ok
-    ? ((await matchRequest.json()) as MatchPageData)
-    : null;
+  const apps = appRows.map(mapAppearance);
+  const goals = goalRows.map(mapGoal);
   const matchData: MatchPageData = {
     ...game,
     homeTeam: game.home,
@@ -52,10 +129,12 @@ export default async function MatchPage(props: { params: MatchParams }) {
     report: reportRow
       ? { day: reportRow.match_date, report: reportRow.report }
       : null,
-    apps: apiMatch?.apps,
-    goals: apiMatch?.goals,
-    formattedGoals: apiMatch?.formattedGoals,
-    substitutes: apiMatch?.substitutes,
+    apps,
+    goals,
+    formattedGoals: formatGoals(goals),
+    substitutes: apps
+      .filter((appearance) => appearance.SubbedBy)
+      .map((appearance) => `${appearance.SubbedBy} for ${appearance.Name}`),
   };
   const [match, manager] = await Promise.all([
     enrichMatchPlayers(env.DB, matchData),

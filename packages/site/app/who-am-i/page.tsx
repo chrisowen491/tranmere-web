@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
-import { GetBaseUrl } from "@/lib/apiFunctions";
-import type { PlayerProfile } from "@/lib/types";
+import {
+  queryAppRows,
+  queryPlayerSeasonSummaryRows,
+} from "@tranmere-web/lib/src/d1-queries";
 import { WhoAmIGame } from "@/components/apps/WhoAmIGame";
 import { getUniquePlayers } from "@/lib/players";
-
-export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "Who Am I? — Daily Tranmere player",
@@ -49,20 +49,30 @@ export default async function WhoAmIPage() {
   );
   const date = dailyKey();
   const dailyPlayer = eligiblePlayers[hash(date) % eligiblePlayers.length];
-  const profileRequest = await fetch(
-    `${GetBaseUrl(context.env)}/page/player/${encodeURIComponent(dailyPlayer.name)}?json=true`,
-  );
-  const profile = profileRequest.ok
-    ? ((await profileRequest.json()) as PlayerProfile)
-    : null;
-  const seasons = (profile?.seasons ?? [])
-    .filter((season) => /^\d{4}$/.test(season.Season))
-    .sort((a, b) => Number(a.Season) - Number(b.Season));
+  const [summaryRows, starts, substituteAppearances] = await Promise.all([
+    queryPlayerSeasonSummaryRows(context.env.DB, {
+      player: dailyPlayer.name,
+      playerMatch: "exact",
+    }),
+    queryAppRows(context.env.DB, {
+      player: dailyPlayer.name,
+      playerMatch: "exact",
+    }),
+    queryAppRows(context.env.DB, { substitutedBy: dailyPlayer.name }),
+  ]);
+  const seasons = summaryRows
+    .filter((season) => /^\d{4}$/.test(season.season))
+    .sort((a, b) => Number(a.season) - Number(b.season));
   const totalAppearances = seasons.reduce(
-    (total, season) => total + (season.Apps || season.starts + season.subs),
+    (total, season) =>
+      total +
+      (season.appearances || season.starts + season.substitute_appearances),
     0,
   );
   const totalGoals = seasons.reduce((total, season) => total + season.goals, 0);
+  const debut = [...starts, ...substituteAppearances].sort((a, b) =>
+    a.match_date.localeCompare(b.match_date),
+  )[0];
   const gameNumber = Math.floor(
     (Date.parse(`${date}T00:00:00Z`) - Date.parse("2026-01-01T00:00:00Z")) /
       86400000,
@@ -79,13 +89,13 @@ export default async function WhoAmIPage() {
           position: dailyPlayer.position!,
           image: dailyPlayer.picLink!,
           firstSeason:
-            seasons.at(0)?.Season ?? avatarSeason(dailyPlayer.picLink),
+            seasons.at(0)?.season ?? avatarSeason(dailyPlayer.picLink),
           lastSeason:
-            seasons.at(-1)?.Season ?? avatarSeason(dailyPlayer.picLink),
+            seasons.at(-1)?.season ?? avatarSeason(dailyPlayer.picLink),
           appearances: totalAppearances,
           goals: totalGoals,
-          debutDate: profile?.debut?.Date,
-          debutOpposition: profile?.debut?.Opposition,
+          debutDate: debut?.match_date,
+          debutOpposition: debut?.opposition,
         }}
       />
     </main>

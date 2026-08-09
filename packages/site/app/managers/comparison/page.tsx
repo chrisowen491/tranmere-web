@@ -5,8 +5,6 @@ import { ManagerComparison } from "@/components/apps/ManagerComparison";
 import { searchGames } from "@/lib/games";
 import { getManagers } from "@/lib/managers";
 
-export const revalidate = 7200;
-
 export const metadata: Metadata = {
   title: "Compare Tranmere Rovers managers",
   description:

@@ -1,6 +1,5 @@
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { NextRequest, NextResponse } from "next/server";
-import { GetBaseUrl } from "@/lib/apiFunctions";
 import { getManagerById } from "@/lib/managers";
 import { getManagerTrustedXi } from "@/lib/managerTrustedXi";
 
@@ -19,9 +18,7 @@ export async function GET(request: NextRequest) {
         { status: 404 },
       );
     }
-    return NextResponse.json(
-      await getManagerTrustedXi(env.DB, GetBaseUrl(env), manager),
-    );
+    return NextResponse.json(await getManagerTrustedXi(env.DB, manager));
   } catch {
     return NextResponse.json(
       { error: "The trusted XI could not be calculated." },

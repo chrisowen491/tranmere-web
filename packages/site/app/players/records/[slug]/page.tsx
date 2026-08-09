@@ -1,7 +1,6 @@
 import { PlayerSearch } from "@/components/apps/PlayerSearch";
 import { Title } from "@/components/fragments/Title";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
-import { GetBaseUrl } from "@/lib/apiFunctions";
 import { SlugParams } from "@/lib/types";
 import { getPlayerStatistics } from "@/lib/playerStatistics";
 import { pageMetadata } from "@/lib/seo";
@@ -53,7 +52,7 @@ export default async function PlayerSearchPage(props: { params: SlugParams }) {
     title = "Player Stats - Season " + params.slug;
   }
 
-  const players = await getPlayerStatistics(env.DB, GetBaseUrl(env), {
+  const players = await getPlayerStatistics(env.DB, {
     season,
     sort,
     filter,

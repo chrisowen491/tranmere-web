@@ -4,8 +4,6 @@ import { getCloudflareContext } from "@opennextjs/cloudflare";
 import type { Metadata } from "next";
 import Link from "next/link";
 
-export const revalidate = 7200;
-
 export const metadata: Metadata = {
   title: "Head-to-head records",
   description:

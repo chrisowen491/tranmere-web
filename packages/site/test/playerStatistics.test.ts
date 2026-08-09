@@ -1,5 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
-import type { PlayerRow } from "@tranmere-web/lib/src/d1-types";
+import type {
+  PlayerRow,
+  PlayerSeasonSummaryRow,
+} from "@tranmere-web/lib/src/d1-types";
 import type { PlayerSeasonSummary } from "@tranmere-web/lib/src/tranmere-web-types";
 import {
   defaultPlayerAvatar,
@@ -46,13 +49,42 @@ function playerRow(overrides: Partial<PlayerRow> = {}): PlayerRow {
   };
 }
 
-function playerDatabase(rows: PlayerRow[]) {
-  const statement = {
-    bind: vi.fn(() => statement),
-    all: vi.fn(async () => ({ results: rows })),
-  };
+function summaryRow(
+  player: string,
+  overrides: Partial<PlayerSeasonSummaryRow> = {},
+): PlayerSeasonSummaryRow {
   return {
-    prepare: vi.fn(() => statement),
+    season: "TOTAL",
+    player_name: player,
+    appearances: 10,
+    starts: 8,
+    substitute_appearances: 2,
+    goals: 2,
+    assists: 1,
+    yellow_cards: 0,
+    red_cards: 0,
+    free_kicks: 0,
+    penalties: 0,
+    headers: 0,
+    ...overrides,
+  };
+}
+
+function playerDatabase(
+  playerRows: PlayerRow[],
+  summaryRows: PlayerSeasonSummaryRow[] = [],
+) {
+  return {
+    prepare: vi.fn((sql: string) => {
+      const rows = sql.includes("FROM PlayerSeasonSummaries")
+        ? summaryRows
+        : playerRows;
+      const statement = {
+        bind: vi.fn(() => statement),
+        all: vi.fn(async () => ({ results: rows })),
+      };
+      return statement;
+    }),
   } as unknown as D1Database;
 }
 
@@ -83,23 +115,10 @@ describe("player statistics enrichment", () => {
     });
   });
 
-  it("filters and sorts API statistics using D1 primary and secondary positions", async () => {
-    const originalFetch = global.fetch;
-    global.fetch = vi.fn(async () => {
-      return new Response(
-        JSON.stringify({
-          players: [
-            statistics("Midfielder", { goals: 8 }),
-            statistics("Striker", { goals: 5 }),
-          ],
-        }),
-        { status: 200 },
-      );
-    }) as typeof fetch;
-
-    try {
-      const players = await getPlayerStatistics(
-        playerDatabase([
+  it("filters and sorts D1 statistics using primary and secondary positions", async () => {
+    const players = await getPlayerStatistics(
+      playerDatabase(
+        [
           playerRow({
             id: "midfielder",
             name: "Midfielder",
@@ -111,51 +130,34 @@ describe("player statistics enrichment", () => {
             position: "Central Midfielder",
             secondary_position: "Striker",
           }),
-        ]),
-        "https://api.example.test",
-        { filter: "STR", sort: "Goals" },
-      );
+        ],
+        [
+          summaryRow("Midfielder", { goals: 8 }),
+          summaryRow("Striker", { goals: 5 }),
+        ],
+      ),
+      { filter: "STR", sort: "Goals" },
+    );
 
-      expect(players.map((player) => player.Player)).toEqual(["Striker"]);
-      expect(global.fetch).toHaveBeenCalledWith(
-        expect.not.stringContaining("filter="),
-        expect.objectContaining({ next: { revalidate: 7200 } }),
-      );
-    } finally {
-      global.fetch = originalFetch;
-    }
+    expect(players.map((player) => player.Player)).toEqual(["Striker"]);
   });
 
-  it("recognises a single appearance when the API returns Apps as a string", async () => {
-    const originalFetch = global.fetch;
-    global.fetch = vi.fn(async () => {
-      return new Response(
-        JSON.stringify({
-          players: [
-            statistics("One Appearance", {
-              Apps: "1" as unknown as number,
-              starts: 1,
-              subs: 0,
-            }),
-            statistics("Two Appearances", { Apps: 2 }),
-          ],
-        }),
-        { status: 200 },
-      );
-    }) as typeof fetch;
+  it("recognises a single appearance from D1 career totals", async () => {
+    const players = await getPlayerStatistics(
+      playerDatabase(
+        [],
+        [
+          summaryRow("One Appearance", {
+            appearances: 1,
+            starts: 1,
+            substitute_appearances: 0,
+          }),
+          summaryRow("Two Appearances", { appearances: 2 }),
+        ],
+      ),
+      { filter: "OnlyOneApp" },
+    );
 
-    try {
-      const players = await getPlayerStatistics(
-        playerDatabase([]),
-        "https://api.example.test",
-        { filter: "OnlyOneApp" },
-      );
-
-      expect(players.map((player) => player.Player)).toEqual([
-        "One Appearance",
-      ]);
-    } finally {
-      global.fetch = originalFetch;
-    }
+    expect(players.map((player) => player.Player)).toEqual(["One Appearance"]);
   });
 });

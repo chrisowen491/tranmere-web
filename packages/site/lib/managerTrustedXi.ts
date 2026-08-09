@@ -1,9 +1,9 @@
-import type {
-  Appearance,
-  PlayerSeasonSummary,
-} from "@tranmere-web/lib/src/tranmere-web-types";
+import {
+  queryAppRows,
+  queryGoalRows,
+  queryPlayerSeasonSummaryRows,
+} from "@tranmere-web/lib/src/d1-queries";
 import type { ManagerRecord } from "@/lib/managers";
-import type { PlayerProfile } from "@/lib/types";
 import { getPlayersByNames, type PlayerRecord } from "@/lib/players";
 import { arrangeLineup, formationLabel } from "@/lib/matchLineup";
 import { searchGames } from "@/lib/games";
@@ -57,72 +57,32 @@ function positionGroup(position?: string | null) {
   return "other";
 }
 
-function appearanceKey(appearance: Appearance) {
-  return `${appearance.Season}|${appearance.Date.slice(0, 10)}`;
-}
-
-function dedupeAppearances(appearances: Appearance[]) {
-  const records = new Map<string, Appearance>();
-  appearances.forEach((appearance) => {
-    const key = appearanceKey(appearance);
-    const current = records.get(key);
-    if (
-      !current ||
-      (current.Type?.toLowerCase().includes("sub") &&
-        !appearance.Type?.toLowerCase().includes("sub"))
-    ) {
-      records.set(key, appearance);
-    }
-  });
-  return [...records.values()];
-}
-
-async function inBatches<T, R>(
-  values: T[],
-  size: number,
-  callback: (value: T) => Promise<R>,
-) {
-  const output: R[] = [];
-  for (let index = 0; index < values.length; index += size) {
-    output.push(
-      ...(await Promise.all(values.slice(index, index + size).map(callback))),
-    );
-  }
-  return output;
-}
-
 export async function getManagerTrustedXi(
   db: D1Database,
-  baseUrl: string,
   manager: ManagerRecord,
 ): Promise<ManagerTrustedXi> {
   const seasons = seasonsForManager(manager);
-  const seasonSummaries = await Promise.all(
-    seasons.map(async (season) => {
-      const response = await fetch(
-        `${baseUrl}/player-search/?season=${season}&sort=Starts`,
-        { next: { revalidate: 7200 } },
-      );
-      if (!response.ok) return [];
-      return ((await response.json()) as { players: PlayerSeasonSummary[] })
-        .players;
-    }),
+  const seasonSummaries = (await queryPlayerSeasonSummaryRows(db)).filter(
+    (summary) => seasons.includes(Number(summary.season)),
   );
   const playerProfiles = await getPlayersByNames(
     db,
-    seasonSummaries.flat().map((summary) => summary.Player),
+    seasonSummaries.map((summary) => summary.player_name),
   );
   const candidates = new Map<
     string,
     { player: PlayerRecord; appearances: number }
   >();
-  seasonSummaries.flat().forEach((summary) => {
-    const existing = candidates.get(summary.Player);
-    const player = playerProfiles.get(summary.Player);
+  seasonSummaries.forEach((summary) => {
+    const existing = candidates.get(summary.player_name);
+    const player = playerProfiles.get(summary.player_name);
     if (!player) return;
-    candidates.set(summary.Player, {
+    candidates.set(summary.player_name, {
       player,
-      appearances: (existing?.appearances || 0) + summary.starts + summary.subs,
+      appearances:
+        (existing?.appearances || 0) +
+        summary.starts +
+        summary.substitute_appearances,
     });
   });
 
@@ -153,39 +113,42 @@ export async function getManagerTrustedXi(
   const left = manager.dateLeft.toLowerCase().startsWith("now")
     ? new Date().toISOString().slice(0, 10)
     : manager.dateLeft.slice(0, 10);
-  const exactRecords = await inBatches(candidatePool, 10, async (name) => {
-    const response = await fetch(
-      `${baseUrl}/page/player/${encodeURIComponent(name)}?json=true`,
-      { next: { revalidate: 7200 } },
-    );
-    if (!response.ok) return null;
-    const profile = (await response.json()) as PlayerProfile;
-    const appearances = dedupeAppearances(profile.appearances || []).filter(
-      (appearance) => {
-        const date = appearance.Date.slice(0, 10);
-        return date >= joined && date <= left;
-      },
-    );
-    if (!appearances.length) return null;
-    return {
-      name,
-      position: playerProfiles.get(name)?.position || "",
-      secondaryPosition: playerProfiles.get(name)?.secondaryPosition || "",
-      picLink: playerProfiles.get(name)?.picLink || "",
-      starts: appearances.filter(
-        (appearance) => !appearance.Type?.toLowerCase().includes("sub"),
-      ).length,
-      substituteAppearances: appearances.filter((appearance) =>
-        appearance.Type?.toLowerCase().includes("sub"),
-      ).length,
-      goals: appearances.reduce(
-        (total, appearance) => total + (appearance.Goals || 0),
-        0,
-      ),
-    } satisfies TrustedXiPlayer;
-  });
-  const ranked = exactRecords
-    .filter((player): player is TrustedXiPlayer => player !== null)
+  const [apps, goals] = await Promise.all([
+    queryAppRows(db, { dateFrom: joined, dateTo: left }),
+    queryGoalRows(db, { dateFrom: joined, dateTo: left }),
+  ]);
+  const starts = new Map<string, number>();
+  const substituteAppearances = new Map<string, number>();
+  const goalTotals = new Map<string, number>();
+  for (const app of apps) {
+    if (candidates.has(app.player_name)) {
+      starts.set(app.player_name, (starts.get(app.player_name) ?? 0) + 1);
+    }
+    if (app.substituted_by && candidates.has(app.substituted_by)) {
+      substituteAppearances.set(
+        app.substituted_by,
+        (substituteAppearances.get(app.substituted_by) ?? 0) + 1,
+      );
+    }
+  }
+  for (const goal of goals) {
+    if (candidates.has(goal.scorer)) {
+      goalTotals.set(goal.scorer, (goalTotals.get(goal.scorer) ?? 0) + 1);
+    }
+  }
+  const ranked = candidatePool
+    .map((name) => {
+      const player = playerProfiles.get(name)!;
+      return {
+        name,
+        position: player.position || "",
+        secondaryPosition: player.secondaryPosition || "",
+        picLink: player.picLink || "",
+        starts: starts.get(name) ?? 0,
+        substituteAppearances: substituteAppearances.get(name) ?? 0,
+        goals: goalTotals.get(name) ?? 0,
+      } satisfies TrustedXiPlayer;
+    })
     .filter((player) => player.starts > 0)
     .sort(
       (a, b) =>

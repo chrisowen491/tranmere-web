@@ -1,12 +1,9 @@
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import type { Metadata } from "next";
 import { ManagerFingerprints } from "@/components/apps/ManagerFingerprints";
-import { GetBaseUrl } from "@/lib/apiFunctions";
 import { searchGames } from "@/lib/games";
 import { getManagers } from "@/lib/managers";
 import { getManagerTrustedXi } from "@/lib/managerTrustedXi";
-
-export const revalidate = 7200;
 
 export const metadata: Metadata = {
   title: "Manager Fingerprints",
@@ -30,7 +27,7 @@ export default async function ManagerFingerprintsPage() {
       dateFrom: initialManager.dateJoined,
       dateTo: dateLeft,
     }),
-    getManagerTrustedXi(env.DB, GetBaseUrl(env), initialManager),
+    getManagerTrustedXi(env.DB, initialManager),
   ]);
   const initialMatches = initialResults.results;
 

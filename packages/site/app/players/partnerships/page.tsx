@@ -1,11 +1,8 @@
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import type { Metadata } from "next";
 import { PlayerPartnershipExplorer } from "@/components/apps/PlayerPartnershipExplorer";
-import { GetBaseUrl } from "@/lib/apiFunctions";
 import { getPlayerPartnership } from "@/lib/playerPartnership";
 import { getUniquePlayers } from "@/lib/players";
-
-export const revalidate = 7200;
 
 export const metadata: Metadata = {
   title: "Tranmere Rovers player partnership explorer",
@@ -33,7 +30,6 @@ export default async function PlayerPartnershipsPage(props: {
     : players.find((player) => player.name !== firstPlayer)!.name;
   const initialPartnership = await getPlayerPartnership(
     env.DB,
-    GetBaseUrl(env),
     firstPlayer,
     secondPlayer,
   );

@@ -1,6 +1,5 @@
 import PlayerProfileView from "@/components/apps/PlayerProfileView";
 import { getAllArticlesForTag } from "@/lib/api";
-import { GetBaseUrl } from "@/lib/apiFunctions";
 import { GetCommentsByUrl } from "@/lib/comments";
 import { PlayerProfile, SlugParams } from "@/lib/types";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
@@ -9,6 +8,42 @@ import { getTransfers } from "@/lib/transfers";
 import { getPlayerByName } from "@/lib/players";
 import { pageMetadata } from "@/lib/seo";
 import { absoluteUrl, breadcrumbJsonLd, JsonLd } from "@/components/seo/JsonLd";
+import {
+  queryAppRows,
+  queryGoalRows,
+  queryPlayerSeasonSummaryRows,
+} from "@tranmere-web/lib/src/d1-queries";
+import type { AppRow } from "@tranmere-web/lib/src/d1-types";
+import type { Appearance } from "@tranmere-web/lib/src/tranmere-web-types";
+import { mapPlayerSeasonSummary } from "@/lib/playerStatistics";
+
+function mapAppearance(
+  row: AppRow,
+  playerName: string,
+  type: "Start" | "Sub",
+  goals: number,
+): Appearance {
+  const isSubstitute = type === "Sub";
+  return {
+    id: `${row.id}-${type.toLowerCase()}`,
+    Date: row.match_date,
+    Opposition: row.opposition,
+    Competition: row.competition ?? "",
+    Season: String(row.season),
+    Name: playerName,
+    Number: row.shirt_number?.toString(),
+    SubbedBy: isSubstitute ? row.player_name : row.substituted_by,
+    SubTime: row.substitute_time,
+    YellowCard: (isSubstitute ? row.substitute_yellow_card : row.yellow_card)
+      ? "TRUE"
+      : null,
+    RedCard: (isSubstitute ? row.substitute_red_card : row.red_card)
+      ? "TRUE"
+      : null,
+    Type: type,
+    Goals: goals,
+  };
+}
 
 export async function generateMetadata(props: { params: SlugParams }) {
   const params = await props.params;
@@ -27,10 +62,7 @@ export default async function PlayerProfilePage(props: { params: SlugParams }) {
   const d1Player = await getPlayerByName(env.DB, requestedName);
   if (!d1Player) notFound();
 
-  const url =
-    GetBaseUrl(env) + `/page/player/${encodeURIComponent(requestedName)}`;
-
-  let profile: PlayerProfile = {
+  const profile: PlayerProfile = {
     seasons: [],
     transfers: [],
     links: [],
@@ -38,24 +70,39 @@ export default async function PlayerProfilePage(props: { params: SlugParams }) {
     player: { name: d1Player.name },
     appearances: [],
   };
-  try {
-    const playerRequest = await fetch(url);
-    if (playerRequest.ok) {
-      const careerProfile =
-        (await playerRequest.json()) as Partial<PlayerProfile>;
-      profile = {
-        ...profile,
-        ...careerProfile,
-        player: careerProfile.player ?? profile.player,
-        seasons: careerProfile.seasons ?? profile.seasons,
-        appearances: careerProfile.appearances ?? profile.appearances,
-        transfers: careerProfile.transfers ?? profile.transfers,
-        links: careerProfile.links ?? profile.links,
-      };
-    }
-  } catch {
-    // D1 owns the profile; career statistics are optional enrichment.
-  }
+  const [seasonRows, starts, substituteAppearances, goals] = await Promise.all([
+    queryPlayerSeasonSummaryRows(env.DB, {
+      player: d1Player.name,
+      playerMatch: "exact",
+    }),
+    queryAppRows(env.DB, { player: d1Player.name, playerMatch: "exact" }),
+    queryAppRows(env.DB, { substitutedBy: d1Player.name }),
+    queryGoalRows(env.DB, { scorer: d1Player.name, scorerMatch: "exact" }),
+  ]);
+  const goalsByDate = goals.reduce((counts, goal) => {
+    counts.set(goal.match_date, (counts.get(goal.match_date) ?? 0) + 1);
+    return counts;
+  }, new Map<string, number>());
+  profile.seasons = seasonRows.map(mapPlayerSeasonSummary);
+  profile.appearances = [
+    ...starts.map((row) =>
+      mapAppearance(
+        row,
+        d1Player.name,
+        "Start",
+        goalsByDate.get(row.match_date) ?? 0,
+      ),
+    ),
+    ...substituteAppearances.map((row) =>
+      mapAppearance(
+        row,
+        d1Player.name,
+        "Sub",
+        goalsByDate.get(row.match_date) ?? 0,
+      ),
+    ),
+  ].sort((a, b) => a.Date.localeCompare(b.Date));
+  profile.debut = profile.appearances[0];
 
   profile.player = {
     id: d1Player.id,

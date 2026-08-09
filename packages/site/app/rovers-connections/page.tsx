@@ -9,8 +9,6 @@ import Link from "next/link";
 import { getClubRecords } from "@/lib/clubs";
 import { getTransfers } from "@/lib/transfers";
 
-export const revalidate = 7200;
-
 export const metadata: Metadata = {
   title: "Rovers connections",
   description:

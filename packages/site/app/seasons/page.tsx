@@ -7,8 +7,6 @@ import { GetSeasons } from "@tranmere-web/lib/src/apiFunctions";
 import { breadcrumbJsonLd, JsonLd } from "@/components/seo/JsonLd";
 import { pageMetadata } from "@/lib/seo";
 
-export const revalidate = 7200;
-
 export const metadata = pageMetadata({
   title: "Tranmere Rovers seasons",
   description: "Browse every recorded Tranmere Rovers season by decade.",
