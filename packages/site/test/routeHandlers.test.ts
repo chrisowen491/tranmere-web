@@ -43,6 +43,7 @@ import {
 import {
   PATCH as reviewAttendanceCorrection,
 } from "@/app/api/attendance-corrections/route";
+import { POST as sendContactMessage } from "@/app/api/contact-us/route";
 
 type D1Result = { meta: { changes: number } };
 
@@ -265,5 +266,52 @@ describe("attendance-correction approval", () => {
       message: "The main match record could not be found.",
     });
     expect(mocks.revalidatePath).not.toHaveBeenCalled();
+  });
+});
+
+describe("contact form", () => {
+  it("sends a validated message through the Cloudflare email binding", async () => {
+    const send = vi.fn().mockResolvedValue({ messageId: "message-1" });
+    mocks.getCloudflareContext.mockReturnValue({
+      env: {
+        AUTH0_ADMIN_EMAIL: "admin@example.com",
+        CONTACT_EMAIL: { send },
+      },
+    });
+
+    const response = await sendContactMessage(
+      request("POST", {
+        name: "A Supporter",
+        email: "supporter@example.com",
+        desc: "I found a useful programme.",
+      }),
+    );
+
+    expect(response.status).toBe(201);
+    expect(send).toHaveBeenCalledWith(
+      expect.objectContaining({
+        to: "admin@example.com",
+        replyTo: { email: "supporter@example.com", name: "A Supporter" },
+        subject: "Website contact: A Supporter",
+        text: expect.stringContaining("I found a useful programme."),
+      }),
+    );
+  });
+
+  it("rejects malformed messages without attempting delivery", async () => {
+    const send = vi.fn();
+    mocks.getCloudflareContext.mockReturnValue({
+      env: {
+        AUTH0_ADMIN_EMAIL: "admin@example.com",
+        CONTACT_EMAIL: { send },
+      },
+    });
+
+    const response = await sendContactMessage(
+      request("POST", { name: "", email: "not-an-email", desc: "" }),
+    );
+
+    expect(response.status).toBe(400);
+    expect(send).not.toHaveBeenCalled();
   });
 });

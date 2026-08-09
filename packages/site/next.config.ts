@@ -33,10 +33,6 @@ const nextConfig: NextConfig = {
   rewrites: async () => {
     return [
       {
-        source: "/api/contact-us",
-        destination: `https://api.tranmere-web.com/contact-us/`,
-      },
-      {
         source: "/pdfs/:path*",
         destination: `https://programes.tranmere-web.com/:path*`,
       },
@@ -49,6 +45,32 @@ const nextConfig: NextConfig = {
         destination: "/page/player/Dickie%20Johnson",
         permanent: true,
       },
+      {
+        source: "/top-scorers-by-season",
+        destination: "/players/top-scorers-by-season",
+        permanent: true,
+      },
+      {
+        source: "/playersearch",
+        destination: "/players",
+        permanent: true,
+      },  
+      {
+        source: "/player-records/:path*",
+        destination: "/players/player-records/:path*",
+        permanent: true,
+      },  
+      {
+        source: "/player-builder",
+        destination: "/players/avatar-builder",
+        permanent: true,
+      },  
+      {
+        source: "/hat-tricks",
+        destination: "/players/hat-tricks",
+        permanent: true,
+      },        
+
     ];
   },
 };

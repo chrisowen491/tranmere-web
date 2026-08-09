@@ -44,6 +44,13 @@
       "binding": "AI",
       "remote": true
     },
+    "send_email": [
+      {
+        "name": "CONTACT_EMAIL",
+        "allowed_sender_addresses": ["admin@tranmere-web.com"],
+        "remote": true
+      }
+    ],
     "d1_databases": [
       {
         "binding": "DB", // i.e. available in your Worker on env.DB

@@ -29,8 +29,6 @@ jobs:
         run: yarn workspace @tranmere-web/api-stack test
         env:
           DD_KEY: ${{ secrets.DD_KEY }}
-          CF_SPACE: ${{ secrets.CF_SPACE }}
-          CF_KEY: ${{ secrets.CF_KEY }}
       - name: get-npm-version
         id: package-version
         uses: martinbeentjes/npm-get-version-action@3cf273023a0dda27efcd3164bdfb51908dd46a5b
@@ -54,9 +52,6 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           EMAIL_ADDRESS: ${{ secrets.EMAIL_ADDRESS }}
-          CF_SPACE: ${{ secrets.CF_SPACE }}
-          CF_KEY: ${{ secrets.CF_KEY }}
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           DD_TAGS: git.commit.sha:${{ github.sha }},git.repository_url:github.com/${{ github.repository }}
 
   data_dog:

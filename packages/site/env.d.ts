@@ -2,6 +2,7 @@ interface CloudflareEnv {
     VECTORIZE_INDEX: VectorizeIndex;
     AI: Fetcher;
     DB: D1Database;
+    CONTACT_EMAIL: SendEmail;
     CF_SPACE: string;
     CF_KEY: string;
     API_PORT: string;
