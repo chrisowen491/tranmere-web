@@ -19,6 +19,7 @@ data ownership and system boundaries.
 | ------------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Results archive     | `/results`                 | Searches and filters the D1-backed results archive by season, competition, opponent and manager, with a visual overall record summary.                        |
 | Match record        | `/match/[season]/[date]`   | Uses D1 match facts, report, player apps and goals to show score, programme, attendance, formation-aware team sheet, cards, comments and ratings.             |
+| Matchday milestones | `/match/[season]/[date]`   | Flags player debuts, final appearances, first goals, hat-tricks and managerial first or last matches.                                                        |
 | Season index        | `/seasons`                 | Lists recorded seasons by decade, highlights honours and relegations, and excludes wartime seasons without matches.                                           |
 | Season review       | `/season/[season]`         | Combines D1 results, squad statistics, most-used XI, manager, transfers, shirt and a month-by-month season timeline.                                         |
 | Honours archive     | `/honours`                 | Collects titles, promotions, play-off triumphs, landmark cup runs and relegations with links to the relevant season archive.                                  |
@@ -43,6 +44,7 @@ data ownership and system boundaries.
 | Super subs              | `/players/super-subs`            | Ranks players by substitute appearances.                                                                            |
 | Hat-trick archive       | `/players/hat-tricks`            | Lists recorded hat-tricks and links them to matches and players.                                                    |
 | Partnership explorer    | `/players/partnerships`          | Autocompletes two players and analyses matches and results when they played together.                               |
+| Cult hero index         | `/players/cult-heroes`            | Editorial-style player discovery for one-club spells, comebacks, substitute specialists, cup heroes and promotion contributors. |
 
 ## Managers, Clubs and Transfers
 
@@ -73,6 +75,8 @@ data ownership and system boundaries.
 ## Accounts, Contributions and Moderation
 
 - Auth0 login and logout are available from the footer.
+- The contact page sends enquiries through Cloudflare Email Sending to the
+  configured administrator email.
 - Visitors can post match comments and ratings.
 - Logged-in users can propose attendance corrections and player-profile changes.
 - Logged-in users can also propose a corrected match formation.
@@ -105,7 +109,10 @@ email before allowing mutations.
 
 - The site exposes internal API routes for search, corrections, comments,
   ratings, manager XIs and admin CRUD operations.
-- A GraphQL endpoint remains available at `/graphql`.
+- Cloudflare Email Sending delivers contact-form messages to the configured
+  Auth0 administrator email.
+- A legacy GraphQL endpoint remains available at `/graphql` for temporary
+  compatibility only; it is planned for removal.
 - The private authenticated MCP server offers player, club, transfer, manager,
   result and match lookup tools plus player-profile and transfer creation.
 - The public unauthenticated MCP deployment reuses the read-only lookup tools.

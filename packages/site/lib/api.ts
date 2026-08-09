@@ -148,8 +148,6 @@ export async function getAllArticles(limit = 3) {
       }`,
   );
 
-  //console.log(JSON.stringify(articles))
-
   return extractArticleEntries(articles as GraphQLBlogResponse);
 }
 
@@ -181,8 +179,6 @@ export async function getAllShirts(limit = 100) {
       }`,
   );
 
-  //console.log(JSON.stringify(articles))
-
   return extractShirtEntries(shirts as GraphQLShirtResponse);
 }
 
@@ -196,8 +192,6 @@ export async function getAllArticlesForTag(limit = 3, tag: string) {
         }
       }`,
   );
-
-  //console.log(JSON.stringify(articles))
 
   return extractArticleEntries(articles as GraphQLBlogResponse);
 }

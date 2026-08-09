@@ -1,106 +1,71 @@
-# Tranmere Web.com
+# Tranmere-Web
+
 [![CodeQL](https://github.com/chrisowen491/tranmere-web/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/chrisowen491/tranmere-web/actions/workflows/codeql-analysis.yml)
-[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/chrisowen491/tranmere-web/badge)](https://scorecard.dev/viewer/?uri=github.com/chrisowen491/tranmere-web)
 [![Web Deploy](https://github.com/chrisowen491/tranmere-web/actions/workflows/web.yml/badge.svg)](https://github.com/chrisowen491/tranmere-web/actions/workflows/web.yml)
-[![API Deploy](https://github.com/chrisowen491/tranmere-web/actions/workflows/api.yml/badge.svg)](https://github.com/chrisowen491/tranmere-web/actions/workflows/api.yml)
-[![PR Builder](https://github.com/chrisowen491/tranmere-web/actions/workflows/pullrequest.yml/badge.svg)](https://github.com/chrisowen491/tranmere-web/actions/workflows/pullrequest.yml)
 
+[Tranmere-Web](https://www.tranmere-web.com) is an independent, non-commercial
+archive of Tranmere Rovers history. It covers players, matches, results,
+seasons, managers, transfers, shirts, programmes and supporter-built archive
+features.
 
-This site is a demo site using Tranmere Rovers data to demonstrate all sorts of website functionality. It is not meant as a commercial entity, and is purely for fun. 
+## Architecture
 
-Most functionality is provided using free tools, but the the AWS Backend and [DataDog](https://www.datadoghq.com/) monitoring require paid for subscriptions.
+The website is a TypeScript Yarn Classic monorepo running on Cloudflare:
 
-## Frontend - NextJS, React, Tailwind, Contentful
-Source code for [Tranmere-Web.com](https://www.tranmere-web.com). 
+- `packages/site` is the Next.js site, deployed with OpenNext as a Cloudflare
+  Worker.
+- Cloudflare D1 is the primary application database for football data,
+  administration, corrections, comments, ratings and programme records.
+- Cloudflare Email Sending delivers contact-form messages to the configured
+  `AUTH0_ADMIN_EMAIL` recipient.
+- Contentful remains the editorial CMS and Algolia powers site search.
+- Cloudflare Workers host the MCP services and scheduled summary rebuilds.
 
-The site is a static site designed to be deployed via [cloudflare pages](https://pages.cloudflare.com/).
+The only remaining AWS-backed API capability is the legacy GraphQL endpoint.
+It is retained temporarily for compatibility and is planned for removal; new
+site and service work must use D1 rather than adding REST or Lambda API calls.
 
-Site search is powered by [algloia](https://www.algolia.com/) - with pages indexed at build time.
+Read [the architecture guide](docs/ARCHITECTURE.md) for system boundaries and
+data ownership, and [the feature catalogue](docs/FEATURES.md) for the current
+site capabilities.
 
-## Backend - AWS Serverless
+## Local development
 
-Dynamic elements are powered using a combination of AWS Lambda, AppSync, DynamoDb and [Contentful CMS](https://www.contentful.com/). Builds are executed using [GitHub Actions](https://github.com/features/actions).
+Prerequisites:
 
-### Prerequisites
+- Node.js 24
+- Yarn Classic
 
- * Scripts are designed for Linux/Mac
- * Node v20+, NPM
-
-### Install
-
-```bash
-$ yarn
-```
-
-### Local Testing/DEvelopment (Using CDK backend)
-
-
-In a terminal - set Key Env variables
-
-```bash
-export ENVIRONMENT=local
-export CF_SPACE=<<Contentful Space Id>>
-export CF_KEY=CF_SPACE=<<Contentful  API Key>>
-export AL_SPACE=<<Algolia Space Id>>
-export AL_KEY=<<Algolia API Key>>
-export AL_INDEX=<<Algolia Index Name>>
-```
-
+Install dependencies:
 
 ```bash
-$ yarn start
+yarn --frozen-lockfile
 ```
 
-In another terminal make sure AWS SAM is installed. You will need docker runing too.
+Run the site locally at <http://localhost:3001>:
 
 ```bash
-$ brew tap aws/tap
-$ brew install aws-sam-cli
-$ sam --version
+yarn site
 ```
-Set Key Env variables
+
+Useful validation commands:
 
 ```bash
-export ENVIRONMENT=local
-export EMAIL_ADDRESS=
-export CF_SPACE=
-export CF_KEY=
-export VERSION=1.0.0
+yarn lint
+yarn workspace @tranmere-web/site test
+yarn workspace @tranmere-web/site build
 ```
 
+## Repository guide
 
-```bash
-$ yarn local-api
-```
+| Workspace | Responsibility |
+| --- | --- |
+| `packages/site` | Public site, internal route handlers and admin UI |
+| `packages/lib` | Shared domain types, D1 types and reusable SQL reads |
+| `packages/sql` | D1 schema, migrations, imports and database commands |
+| `packages/mcp` | Public and Auth0-protected Cloudflare MCP servers and MCP Apps UI |
+| `packages/scheduled-task` | Daily D1 player-summary and hat-trick rebuild worker |
+| `packages/api-stack` | Temporary legacy GraphQL infrastructure pending removal |
 
-### Running Local Acceptance Tests 
-
-```bash
-$ yarn local-acceptance-test
-```
-
-### Deployment
-
-Set Key Env variables
-
-```bash
-export ENVIRONMENT=local
-export EMAIL_ADDRESS=
-export CF_SPACE=
-export CF_KEY=
-export DD_KEY=
-export VERSION=1.0.0
-```
-
-```bash
-$ cdk deploy
-```
-
-
-## Deploying Images
-
-```bash
-$ aws s3 sync ./images s3://trfc-programmes
-```
-
-#https://icomoon.io/#preview-free
+Do not run remote database or deployment commands unless the change has been
+explicitly approved. See [AGENTS.md](AGENTS.md) for contributor conventions.

@@ -10,7 +10,7 @@ export const metadata = pageMetadata({
 });
 
 export default async function ShirtHome() {
-  //const shirts = await getShirts();
+ 
   const shirts = await getAllShirts();
   shirts.sort((a, b) => (a.name > b.name ? 1 : b.name > a.name ? -1 : 0));
 

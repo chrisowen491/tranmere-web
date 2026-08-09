@@ -73,8 +73,9 @@ duplicate.
 ## Match UI
 
 `GetMatchByDate` accepts an exact date in `YYYY-MM-DD` format, derives the
-football season, and retrieves the match from `api.tranmere-web.com`. It returns
-the score, match details, goals, lineup, substitutes, and report excerpt as
+football season, and retrieves the match, report, goals, lineup and substitutes
+from the Tranmere-Web D1 database. It returns the score, match details, goals,
+lineup, substitutes, and report excerpt as
 structured data linked to `ui://tranmere-web/match-v5.html`. Compatible clients
 render that resource as a responsive match card with a link to the full match
 page and a programme cover when the archive has one. The server retains earlier
@@ -82,8 +83,8 @@ resource URIs as compatibility aliases for clients with cached tool metadata.
 
 ## Results search
 
-`SearchResults` is a data-only tool that searches the existing results API by
-season start year, exact opposition team name, or both. It returns up to 100
+`SearchResults` is a data-only tool that searches the Tranmere-Web D1 results
+archive by season start year, exact opposition team name, or both. It returns up to 100
 results by default in most-recent-first order and accepts an optional limit of
 up to 500. It uses the existing `read:matches` permission.
 
