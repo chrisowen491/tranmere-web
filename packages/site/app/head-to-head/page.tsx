@@ -98,7 +98,7 @@ export default async function HeadToHeadPage() {
                 .map((team) => (
                   <Link
                     key={team.name}
-                    href={`/games/${encodeURIComponent(team.name)}`}
+                    href={`/opponents/${encodeURIComponent(team.name)}`}
                     className={`${tagSize(team.name)} group inline-flex items-center gap-2 border border-[#071a2b]/15 bg-[#fffdf8] px-4 py-3 font-display font-semibold tracking-[-0.025em] transition hover:-translate-y-0.5 hover:border-blue-700 hover:bg-blue-700 hover:text-white hover:shadow-[5px_5px_0_#071a2b]`}
                   >
                     {team.name}

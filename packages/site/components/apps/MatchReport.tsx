@@ -15,6 +15,7 @@ import { FormationCorrectionForm } from "./FormationCorrectionForm";
 import type { MatchPageView } from "@/lib/matchPlayers";
 import type { ManagerRecord } from "@/lib/managers";
 import { arrangeMatchLineup, formationLabel } from "@/lib/matchLineup";
+import type { MatchMilestone } from "@/lib/matchMilestones";
 import { ManagerFormation } from "@tranmere-web/lib/src/manager-constants";
 
 function playerAvatar(picLink: string, season: number, kit?: string) {
@@ -49,6 +50,7 @@ export default function MatchReport(props: {
   url: string;
   avg: number;
   manager: ManagerRecord | null;
+  milestones: MatchMilestone[];
 }) {
   const { match } = props;
   const penalty = penaltyOutcome(match.pens, match.homeTeam, match.awayTeam);
@@ -203,6 +205,50 @@ export default function MatchReport(props: {
               className="prose prose-lg max-w-none text-[#071a2b]/70"
               dangerouslySetInnerHTML={{ __html: match.report.report }}
             />
+          </section>
+        )}
+
+        {props.milestones.length > 0 && (
+          <section className="mb-12 border-y border-[#071a2b]/15 bg-blue-50/45 py-8 sm:px-8">
+            <div className="flex flex-wrap items-end justify-between gap-4">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-700">
+                  Matchday milestones
+                </p>
+                <h2 className="mt-2 font-display text-3xl font-semibold">
+                  A day to remember
+                </h2>
+              </div>
+              <p className="font-mono text-xs uppercase tracking-[0.12em] text-[#071a2b]/45">
+                {props.milestones.length} recorded
+              </p>
+            </div>
+            <ul className="mt-6 grid gap-px border border-[#071a2b]/15 bg-[#071a2b]/15 sm:grid-cols-2">
+              {props.milestones.map((milestone) => (
+                <li key={`${milestone.kind}-${milestone.name}`}>
+                  <Link
+                    href={milestone.href}
+                    className="flex min-h-20 items-center gap-4 bg-[#fffdf8] px-5 py-4 transition hover:bg-white"
+                  >
+                    <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-blue-700 font-mono text-xs font-bold text-white">
+                      {milestone.kind === "debut"
+                        ? "D"
+                        : milestone.kind === "final-appearance"
+                          ? "F"
+                          : milestone.kind === "first-goal"
+                            ? "G"
+                            : milestone.kind === "hat-trick"
+                              ? "3"
+                              : "M"}
+                    </span>
+                    <span className="text-sm leading-5">
+                      <span className="font-semibold">{milestone.name}</span>{" "}
+                      <span className="text-[#071a2b]/65">{milestone.label}</span>
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </section>
         )}
 

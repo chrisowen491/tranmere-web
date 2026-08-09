@@ -85,6 +85,7 @@ export interface AppQueryOptions {
 export interface GoalQueryOptions {
   scorer?: string;
   scorerMatch?: 'exact' | 'contains';
+  opposition?: string;
   season?: number;
   matchDate?: string;
   dateFrom?: string;
@@ -355,6 +356,10 @@ export async function queryHatTrickRows(
     conditions.push('season = ?');
     values.push(options.season);
   }
+  if (options.matchDate) {
+    conditions.push('match_date = ?');
+    values.push(options.matchDate);
+  }
 
   const where = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
   return (
@@ -482,6 +487,10 @@ export async function queryGoalRows(
     values.push(
       options.scorerMatch === 'exact' ? options.scorer : `%${options.scorer}%`
     );
+  }
+  if (options.opposition) {
+    conditions.push('opposition = ?');
+    values.push(options.opposition);
   }
   if (options.season !== undefined) {
     conditions.push('season = ?');

@@ -74,6 +74,7 @@ export default async function PlayerSearchPage() {
                 ["Lethal finishers", "/players/lethal-finishers"],
                 ["Super subs", "/players/super-subs"],
                 ["Misfiring strikers", "/players/misfiring-strikers"],
+                ["Cult heroes", "/players/cult-heroes"],
               ].map(([label, href]) => (
                 <Link
                   key={href}

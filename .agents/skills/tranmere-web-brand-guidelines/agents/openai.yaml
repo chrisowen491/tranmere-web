@@ -1,0 +1,4 @@
+interface:
+  display_name: "Tranmere-Web Brand Guidelines"
+  short_description: "Apply the established Tranmere-Web UI language"
+  default_prompt: "Use $tranmere-web-brand-guidelines to design a new Tranmere-Web archive interface."

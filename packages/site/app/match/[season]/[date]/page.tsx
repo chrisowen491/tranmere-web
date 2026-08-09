@@ -13,6 +13,7 @@ import { enrichMatchPlayers } from "@/lib/matchPlayers";
 import { pageMetadata } from "@/lib/seo";
 import { absoluteUrl, breadcrumbJsonLd, JsonLd } from "@/components/seo/JsonLd";
 import { getManagerAtDate } from "@/lib/managers";
+import { getMatchMilestones } from "@/lib/matchMilestones";
 import {
   getGameBySeasonAndDate,
   getMatchReport,
@@ -141,7 +142,16 @@ export default async function MatchPage(props: { params: MatchParams }) {
     getManagerAtDate(env.DB, matchData.date),
   ]);
 
-  const matches = await searchGames(env.DB, { season: Number(match.season) });
+  const [matches, milestones] = await Promise.all([
+    searchGames(env.DB, { season: Number(match.season) }),
+    getMatchMilestones(env.DB, {
+      season: Number(match.season),
+      matchDate: match.date,
+      apps: appRows,
+      goals: goalRows,
+      manager,
+    }),
+  ]);
 
   const next = matches.results.filter((m) => m.date > match.date).slice(0, 5);
   const previousMatches = matches.results.filter((m) => m.date < match.date);
@@ -199,6 +209,7 @@ export default async function MatchPage(props: { params: MatchParams }) {
         url={baseUrl}
         avg={avg}
         manager={manager}
+        milestones={milestones}
       ></MatchReport>
     </>
   );
