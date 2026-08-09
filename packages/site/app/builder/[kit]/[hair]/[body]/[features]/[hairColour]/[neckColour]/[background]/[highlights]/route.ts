@@ -1,6 +1,8 @@
 import { GetSvg } from "@tranmere-web/lib/src/apiFunctions";
 import { NextResponse } from "next/server";
 
+export const revalidate = 7200;
+
 export async function GET(
   request: Request,
   {
