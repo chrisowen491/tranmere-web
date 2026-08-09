@@ -11,7 +11,7 @@
     "deploy:private": "vite build && wrangler deploy",
     "deploy:public": "CLOUDFLARE_VITE_WRANGLER_CONFIG_PATH=wrangler.public.jsonc vite build && wrangler deploy",
     "types": "wrangler types env.d.ts --include-runtime false",
-    "test": "yarn" 
+    "test": "yarn"
   },
   "dependencies": {
     "@cloudflare/kumo": "^2.6.0",

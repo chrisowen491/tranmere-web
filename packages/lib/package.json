@@ -6,7 +6,7 @@
     "build": "tsc -b",
     "lint": "eslint .",
     "format": "prettier --write \"src\"",
-    "test": "yarn" 
+    "test": "yarn"
   },
   "author": "Chris Owen",
   "license": "GPL-3.0-only",

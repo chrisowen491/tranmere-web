@@ -6,7 +6,7 @@
     "worker": "npx wrangler dev --remote",
     "lint": "yarn",
     "format": "prettier --write \"src\"",
-    "test": "yarn" 
+    "test": "yarn"
   },
   "author": "Chris Owen",
   "license": "GPL-3.0-only",
