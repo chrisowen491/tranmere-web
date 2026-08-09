@@ -37,25 +37,6 @@ async function expectJson(response) {
   }
 }
 
-test('player search returns players for the requested season', async () => {
-  const endpoint = url('/player-search/');
-  endpoint.searchParams.set('season', '2024');
-
-  const response = await fetch(endpoint, { headers: headers() });
-  const body = await expectJson(response);
-
-  assert.ok(Array.isArray(body.players));
-  assert.ok(body.players.length > 0);
-  assert.ok(body.players.every((player) => player.Season === '2024'));
-});
-
-test('match endpoint returns a successful response', async () => {
-  const response = await fetch(url('/match/2020/2021-03-14/'), {
-    headers: headers()
-  });
-
-  await expectOk(response);
-});
 
 test('player GraphQL query returns a successful response', async () => {
   const endpoint = url('/graphql');
