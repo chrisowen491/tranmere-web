@@ -47,7 +47,5 @@ export async function GET(
 
   const response = new NextResponse(svg);
   response.headers.set("Content-Type", "image/svg+xml");
-  response.headers.set("Access-Control-Allow-Origin", "*");
-  response.headers.set("Cache-Control", "public, max-age=2592000");
   return response;
 }
