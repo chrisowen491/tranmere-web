@@ -14,8 +14,9 @@ across two cloud platforms:
 - Cloudflare runs the public Next.js site and the optional Worker services.
 - Cloudflare D1 stores migrated football entities and site-owned operational
   data.
-- AWS runs the serverless API and stores match, appearance, and derived data
-  that has not moved to D1.
+- AWS runs legacy serverless APIs, editorial ingestion and supporting services.
+  Historic match, appearance, goal and derived-statistics records are now held
+  in D1.
 - Contentful supplies editorial content and media.
 
 ## System context
@@ -138,6 +139,8 @@ migrated out of DynamoDB:
 - `Games`, which hold canonical fixture, result, attendance, formation, kit,
   programme and match-metadata records;
 - `MatchReports`;
+- `Apps`, `Goals`, `PlayerSeasonSummaries` and `HatTricks`, which provide the
+  match-event and player-statistics archive;
 - `Programmes`, which catalogue digitised programme PDFs;
 - submitted attendance, formation and player-profile corrections;
 - comments and ratings.
@@ -161,9 +164,9 @@ The main REST capabilities are:
 
 | Route                               | Responsibility                                    |
 | ----------------------------------- | ------------------------------------------------- |
-| `GET /player-search`                | Search and sort player and season-summary data    |
-| `GET /result-search`                | Legacy search for match results                   |
-| `GET /match/{season}/{date}`        | Player events: apps, goals, cards and substitutes |
+| `GET /player-search`                | Legacy player-search endpoint                     |
+| `GET /result-search`                | Legacy result-search endpoint                     |
+| `GET /match/{season}/{date}`        | Legacy match-event endpoint                       |
 | `GET /page/{pageName}/{classifier}` | Assemble dynamic views such as player profiles    |
 | `GET /report`                       | Return or generate match-report data              |
 | `POST /media-sync/{type}`           | Synchronize media metadata                        |
@@ -175,17 +178,19 @@ Lambda permissions are granted per function by the shared
 access only to the DynamoDB tables it needs. API integrations and EventBridge
 schedules are also attached by this construct.
 
-Several EventBridge-triggered jobs maintain derived data:
+Several EventBridge-triggered jobs remain available for legacy or editorial
+workflows. The former player-summary and hat-trick jobs are retained for
+compatibility; the Cloudflare scheduled task is now the authoritative daily
+rebuild for their D1 data:
 
 - player season summaries;
 - hat-trick records;
 - AI-assisted match reports.
 
-AppSync and legacy Lambda paths still expose selected DynamoDB data. Migrated
-entities should be read from D1 by new site code; DynamoDB remains relevant for
-player appearances, goals, season summaries, competitions, and other unmigrated
-or legacy records. Match pages deliberately combine D1 match metadata with API
-player events while the appearance and goals migration is still pending.
+AppSync and legacy Lambda paths still expose selected DynamoDB data. New site
+code should read migrated football entities from D1. DynamoDB remains relevant
+to legacy APIs and historical ingestion compatibility, but the site now uses
+D1 for games, reports, appearances, goals, season summaries and hat-tricks.
 
 The CDK stack imports existing DynamoDB tables by name or ARN. It does not own
 the lifecycle of those tables, so deleting or replacing the stack does not
@@ -200,7 +205,7 @@ The system separates editorial content from structured football statistics:
 | Articles, shirt content, and editorial media                                          | Contentful                        | Next.js pages and some Lambda jobs     |
 | Players, biographies, clubs, managers, transfers, games, match reports and programmes | Cloudflare D1                     | Site pages, administration, and MCP    |
 | Comments, ratings, corrections, and Next.js cache tags                                | Cloudflare D1                     | Site routes, admin pages, and OpenNext |
-| Player appearances, goals and remaining derived data                                  | DynamoDB                          | Lambda, AppSync, tools, and site pages |
+| Appearances, goals, player-season summaries and hat-tricks                            | Cloudflare D1                     | Site pages, admin tools and scheduled task |
 | Incremental-render cache                                                              | Cloudflare R2 and Durable Objects | OpenNext runtime                       |
 | Player biography embeddings                                                           | Cloudflare Vectorize              | Experimental semantic search           |
 | Static images, fonts, charts, and builder assets                                      | `packages/site/public`            | Browser via the site Worker            |
@@ -216,11 +221,9 @@ domain and read-data layer; it should remain independent of UI concerns.
 ### Viewing a player profile
 
 1. A visitor requests `/page/player/{slug}` from the Cloudflare-hosted site.
-2. The Next.js server component reads the player profile and transfer history
-   from D1.
-3. The site calls the AWS API for appearance, goal, match and season-summary
-   data that still resides in DynamoDB.
-4. The site combines those records with related Contentful articles and renders
+2. The Next.js server component reads the player profile, transfer history,
+   appearances, goals and season summaries from D1.
+3. The site combines those records with related Contentful articles and renders
    the page.
 
 ### Viewing an article
@@ -235,10 +238,10 @@ domain and read-data layer; it should remain independent of UI concerns.
 1. A visitor requests `/match/{season}/{date}`.
 2. The site reads the fixture, score, attendance, formation, kit, programme
    metadata and stored report from D1.
-3. It calls the AWS match API only for player appearances, goals, cards and
-   substitutions.
-4. The combined record is rendered with the best available formation-aware
-   team sheet. An approved attendance or formation correction updates the D1
+3. It reads player appearances, goals, cards and substitutions from D1 and
+   renders the combined record with the best available formation-aware team
+   sheet.
+4. An approved attendance or formation correction updates the D1
    `Games` row.
 
 ### Using the MCP server
@@ -253,8 +256,8 @@ domain and read-data layer; it should remain independent of UI concerns.
 5. `GetPlayers`, `GetClubs`, `GetTransfers`, `GetManagers` and `SearchResults`
    use the shared `packages/lib` D1 queries and return structured data through
    MCP.
-6. `GetMatchByDate` reads its match metadata and report from D1, then requests
-   only player apps, goals and substitutions from the AWS API.
+6. `GetMatchByDate` reads match metadata, report, appearances, goals and
+   substitutions from D1.
 7. `GetPlayers` and `GetMatchByDate` link their results to versioned MCP Apps
    HTML resources, so compatible clients can render responsive player and match
    cards. The other tools remain data-only.
@@ -348,9 +351,9 @@ services.
 - Shared types are imported through workspace source paths in several places.
   Changes to `packages/lib` can therefore affect the site, Lambdas, and Workers
   at build time.
-- D1 migration is incremental, so some pages intentionally combine D1 entity
-  data with AWS match and appearance data. Avoid reintroducing API reads for an
-  entity already owned by D1.
+- D1 migration is incremental. Avoid reintroducing API reads for games,
+  reports, apps, goals, player-season summaries or hat-tricks, which are now
+  owned by D1.
 - `packages/vectorize` and `packages/mcp` are adjacent services with their own
   deployment lifecycles; they are not required for the core website to serve
   standard fan content.

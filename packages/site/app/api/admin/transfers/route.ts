@@ -1,4 +1,9 @@
-import { getAdminSession } from "@/lib/adminAuth";
+import {
+  adminError,
+  isIsoDate,
+  revalidateAdminPaths,
+  requireAdminApi,
+} from "@/lib/adminCrud";
 import {
   createTransfer,
   getTransferById,
@@ -6,7 +11,6 @@ import {
   type TransferInput,
 } from "@/lib/transfers";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
-import { revalidatePath } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
 interface TransferRequest {
@@ -20,10 +24,6 @@ interface TransferRequest {
   date?: string;
 }
 
-function error(message: string, status: number) {
-  return NextResponse.json({ message }, { status });
-}
-
 function validateTransfer(body: TransferRequest): TransferInput | null {
   const playerName = body.playerName?.trim().slice(0, 200);
   const fromClub = body.fromClub?.trim().slice(0, 200);
@@ -31,7 +31,6 @@ function validateTransfer(body: TransferRequest): TransferInput | null {
   const season = Number(body.season);
   const cost = Number(body.cost);
   const date = body.date?.trim() || null;
-  const parsedDate = date ? new Date(`${date}T00:00:00Z`) : null;
 
   if (
     !playerName ||
@@ -46,15 +45,7 @@ function validateTransfer(body: TransferRequest): TransferInput | null {
     return null;
   }
 
-  if (date && !/^\d{4}-\d{2}-\d{2}$/.test(date)) return null;
-  if (
-    date &&
-    (!parsedDate ||
-      Number.isNaN(parsedDate.getTime()) ||
-      parsedDate.toISOString().slice(0, 10) !== date)
-  ) {
-    return null;
-  }
+  if (date && !isIsoDate(date)) return null;
 
   const fromTranmere = fromClub === "Tranmere Rovers";
   const toTranmere = toClub === "Tranmere Rovers";
@@ -75,23 +66,24 @@ function revalidateTransfer(
   transfer: TransferInput,
   previous?: Awaited<ReturnType<typeof getTransferById>>,
 ) {
-  revalidatePath("/transfer-central");
-  revalidatePath(`/season/${transfer.season}`);
-  revalidatePath(`/page/player/${transfer.playerName}`);
+  const paths = [
+    "/transfer-central",
+    `/season/${transfer.season}`,
+    `/page/player/${transfer.playerName}`,
+  ];
   if (previous) {
-    revalidatePath(`/season/${previous.season}`);
-    revalidatePath(`/page/player/${previous.name}`);
+    paths.push(`/season/${previous.season}`, `/page/player/${previous.name}`);
   }
+  revalidateAdminPaths(paths);
 }
 
 export async function POST(request: NextRequest) {
-  if (!(await getAdminSession())) {
-    return error("You do not have permission to manage transfers.", 403);
-  }
+  const forbidden = await requireAdminApi("transfers");
+  if (forbidden) return forbidden;
 
   const transfer = validateTransfer((await request.json()) as TransferRequest);
   if (!transfer) {
-    return error(
+    return adminError(
       "Enter valid transfer details with Tranmere Rovers on exactly one side.",
       400,
     );
@@ -104,14 +96,13 @@ export async function POST(request: NextRequest) {
 }
 
 export async function PATCH(request: NextRequest) {
-  if (!(await getAdminSession())) {
-    return error("You do not have permission to manage transfers.", 403);
-  }
+  const forbidden = await requireAdminApi("transfers");
+  if (forbidden) return forbidden;
 
   const body = (await request.json()) as TransferRequest;
   const transfer = validateTransfer(body);
   if (!body.id || !transfer) {
-    return error(
+    return adminError(
       "Enter valid transfer details with Tranmere Rovers on exactly one side.",
       400,
     );
@@ -119,7 +110,7 @@ export async function PATCH(request: NextRequest) {
 
   const db = getCloudflareContext().env.DB;
   const previous = await getTransferById(db, body.id);
-  if (!previous) return error("That transfer could not be found.", 404);
+  if (!previous) return adminError("That transfer could not be found.", 404);
 
   const updated = await updateTransfer(db, body.id, transfer);
   revalidateTransfer(transfer, previous);

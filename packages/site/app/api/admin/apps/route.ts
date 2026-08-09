@@ -1,7 +1,14 @@
-import { getAdminSession } from "@/lib/adminAuth";
+import {
+  adminError,
+  booleanFlag,
+  isIsoDate,
+  optionalText,
+  requiredText,
+  revalidateAdminPaths,
+  requireAdminApi,
+} from "@/lib/adminCrud";
 import type { AppRow } from "@tranmere-web/lib/src/d1-types";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
-import { revalidatePath } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
 type AppInput = {
@@ -25,31 +32,6 @@ type AppRequest = Omit<Partial<AppInput>, "shirtNumber"> & {
   shirtNumber?: number | string | null;
 };
 
-function error(message: string, status: number) {
-  return NextResponse.json({ message }, { status });
-}
-
-function requiredText(value: unknown, limit = 200) {
-  return typeof value === "string" ? value.trim().slice(0, limit) : "";
-}
-
-function optionalText(value: unknown, limit = 200) {
-  return requiredText(value, limit) || null;
-}
-
-function isDate(value: string) {
-  const parsed = new Date(`${value}T00:00:00Z`);
-  return (
-    /^\d{4}-\d{2}-\d{2}$/.test(value) &&
-    !Number.isNaN(parsed.getTime()) &&
-    parsed.toISOString().slice(0, 10) === value
-  );
-}
-
-function cardValue(value: unknown) {
-  return value === true || value === 1 || value === "1" ? 1 : 0;
-}
-
 function validateApp(body: AppRequest): AppInput | null {
   const season = Number(body.season);
   const matchDate = requiredText(body.matchDate, 10);
@@ -67,7 +49,7 @@ function validateApp(body: AppRequest): AppInput | null {
     !Number.isSafeInteger(season) ||
     season < 1800 ||
     season > 2200 ||
-    !isDate(matchDate) ||
+    !isIsoDate(matchDate) ||
     !playerName ||
     !opposition ||
     (shirtNumber !== null &&
@@ -83,10 +65,10 @@ function validateApp(body: AppRequest): AppInput | null {
     competition: optionalText(body.competition),
     opposition,
     shirtNumber,
-    yellowCard: cardValue(body.yellowCard),
-    redCard: cardValue(body.redCard),
-    substituteYellowCard: cardValue(body.substituteYellowCard),
-    substituteRedCard: cardValue(body.substituteRedCard),
+    yellowCard: booleanFlag(body.yellowCard),
+    redCard: booleanFlag(body.redCard),
+    substituteYellowCard: booleanFlag(body.substituteYellowCard),
+    substituteRedCard: booleanFlag(body.substituteRedCard),
     substituteTime: optionalText(body.substituteTime, 40),
     substitutedBy: optionalText(body.substitutedBy),
     substituteSubstitutedBy: optionalText(body.substituteSubstitutedBy),
@@ -131,18 +113,20 @@ function responseApp(id: string, app: AppInput) {
 }
 
 function revalidateApps(season: number, date: string, playerName: string) {
-  revalidatePath("/admin/apps");
-  revalidatePath(`/match/${season}/${date}`);
-  revalidatePath(`/page/player/${encodeURIComponent(playerName)}`);
+  revalidateAdminPaths([
+    "/admin/apps",
+    `/match/${season}/${date}`,
+    `/page/player/${encodeURIComponent(playerName)}`,
+  ]);
 }
 
 export async function POST(request: NextRequest) {
-  if (!(await getAdminSession())) {
-    return error("You do not have permission to manage appearances.", 403);
-  }
+  const forbidden = await requireAdminApi("appearances");
+  if (forbidden) return forbidden;
 
   const app = validateApp((await request.json()) as AppRequest);
-  if (!app) return error("Enter valid appearance details before saving.", 400);
+  if (!app)
+    return adminError("Enter valid appearance details before saving.", 400);
 
   const id = crypto.randomUUID();
   await getCloudflareContext()
@@ -162,15 +146,14 @@ export async function POST(request: NextRequest) {
 }
 
 export async function PATCH(request: NextRequest) {
-  if (!(await getAdminSession())) {
-    return error("You do not have permission to manage appearances.", 403);
-  }
+  const forbidden = await requireAdminApi("appearances");
+  if (forbidden) return forbidden;
 
   const body = (await request.json()) as AppRequest;
   const id = requiredText(body.id, 100);
   const app = validateApp(body);
   if (!id || !app)
-    return error("Enter valid appearance details before saving.", 400);
+    return adminError("Enter valid appearance details before saving.", 400);
 
   const result = await getCloudflareContext()
     .env.DB.prepare(
@@ -185,19 +168,18 @@ export async function PATCH(request: NextRequest) {
     .run();
 
   if (!result.meta.changes)
-    return error("That appearance could not be found.", 404);
+    return adminError("That appearance could not be found.", 404);
 
   revalidateApps(app.season, app.matchDate, app.playerName);
   return NextResponse.json({ app: responseApp(id, app) });
 }
 
 export async function DELETE(request: NextRequest) {
-  if (!(await getAdminSession())) {
-    return error("You do not have permission to manage appearances.", 403);
-  }
+  const forbidden = await requireAdminApi("appearances");
+  if (forbidden) return forbidden;
 
   const id = requiredText(((await request.json()) as AppRequest).id, 100);
-  if (!id) return error("Choose an appearance to delete.", 400);
+  if (!id) return adminError("Choose an appearance to delete.", 400);
 
   const db = getCloudflareContext().env.DB;
   const existing = await db
@@ -210,7 +192,7 @@ export async function DELETE(request: NextRequest) {
     )
     .bind(id)
     .first<AppRow>();
-  if (!existing) return error("That appearance could not be found.", 404);
+  if (!existing) return adminError("That appearance could not be found.", 404);
 
   await db.prepare("DELETE FROM Apps WHERE id = ?").bind(id).run();
   revalidateApps(existing.season, existing.match_date, existing.player_name);

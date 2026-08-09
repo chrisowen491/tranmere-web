@@ -17,11 +17,11 @@ data ownership and system boundaries.
 
 | Feature             | Route                      | Summary                                                                                                                                                       |
 | ------------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Results archive     | `/results`                 | Searches and filters the D1-backed results archive by season, competition, opponent and manager.                                                              |
-| Match record        | `/match/[season]/[date]`   | Combines D1 match facts and reports with API player apps/goals to show score, programme, attendance, formation-aware team sheet, cards, comments and ratings. |
-| Season index        | `/seasons`                 | Lists recorded seasons by decade while excluding the wartime seasons without matches.                                                                         |
-| Season review       | `/season/[season]`         | Combines results, squad statistics, most-used XI, manager, transfers, shirt and a month-by-month season timeline.                                             |
-| Honours archive     | `/honours`                 | Collects every title, promotion, play-off triumph and landmark cup run with links to its season archive.                                                      |
+| Results archive     | `/results`                 | Searches and filters the D1-backed results archive by season, competition, opponent and manager, with a visual overall record summary.                        |
+| Match record        | `/match/[season]/[date]`   | Uses D1 match facts, report, player apps and goals to show score, programme, attendance, formation-aware team sheet, cards, comments and ratings.             |
+| Season index        | `/seasons`                 | Lists recorded seasons by decade, highlights honours and relegations, and excludes wartime seasons without matches.                                           |
+| Season review       | `/season/[season]`         | Combines D1 results, squad statistics, most-used XI, manager, transfers, shirt and a month-by-month season timeline.                                         |
+| Honours archive     | `/honours`                 | Collects titles, promotions, play-off triumphs, landmark cup runs and relegations with links to the relevant season archive.                                  |
 | Head-to-head index  | `/head-to-head`            | Provides an opponent tag cloud linking to complete club records.                                                                                              |
 | Opponent record     | `/games/[club]`            | Shows the full match history against a selected opponent.                                                                                                     |
 | FA Cup archive      | `/results/fa-cup`          | Summarises runs, rounds reached, notable matches, records and programme covers.                                                                               |
@@ -34,7 +34,7 @@ data ownership and system boundaries.
 
 | Feature                 | Route                            | Summary                                                                                                             |
 | ----------------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| Player index and search | `/players`                       | Searches player profiles and can filter the appearance archive by season.                                           |
+| Player index and search | `/players`                       | Shows the leading 50 players by default; searches every player and filters the archive by season, primary or secondary position.                              |
 | Player profile          | `/page/player/[name]`            | Shows biography, avatar, personal information, season statistics, appearances, transfers and related archive links. |
 | Player records          | `/players/records/[record]`      | Covers aggregate records such as appearances, goals and disciplinary statistics.                                    |
 | Top scorers by season   | `/players/top-scorers-by-season` | Lists each season's leading scorer.                                                                                 |
@@ -86,8 +86,10 @@ data ownership and system boundaries.
 The authenticated `/admin` hub links to:
 
 - attendance-correction review;
+- formation-correction review;
 - player-profile correction review;
 - player creation and editing;
+- appearance, goal and hat-trick creation and editing;
 - transfer creation and editing;
 - manager creation and editing;
 - club creation and editing;

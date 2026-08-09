@@ -14,8 +14,13 @@ import {
 import { BlogItem } from "@/lib/types";
 import Link from "next/link";
 import type { HonoursAchievement } from "@tranmere-web/lib/src/honours-constants";
-
-type Outcome = "W" | "D" | "L";
+import {
+  matchOutcome,
+  outcomeClass,
+  outcomeCounts,
+  parseArchiveDate,
+  resultLabel,
+} from "@/lib/seasonMatchUtils";
 
 interface MonthChapter {
   key: string;
@@ -27,12 +32,6 @@ interface MonthChapter {
   achievements: HonoursAchievement[];
 }
 
-function parseDate(value?: string) {
-  if (!value || value.toLowerCase().startsWith("now")) return null;
-  const date = new Date(value);
-  return Number.isNaN(date.getTime()) ? null : date;
-}
-
 function isLoanTransfer(transfer: Transfer) {
   return transfer.value?.toLowerCase().includes("loan") ?? false;
 }
@@ -41,57 +40,8 @@ function monthKey(date: Date) {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
 }
 
-function isTranmereHome(match: Match) {
-  return (
-    match.location === "H" ||
-    match.venue?.toLowerCase() === "home" ||
-    match.home?.toLowerCase().includes("tranmere")
-  );
-}
-
-function goalsFor(match: Match) {
-  return isTranmereHome(match) ? match.hgoal : match.vgoal;
-}
-
-function goalsAgainst(match: Match) {
-  return isTranmereHome(match) ? match.vgoal : match.hgoal;
-}
-
-function outcome(match: Match): Outcome {
-  const recorded = match.ft?.trim().charAt(0).toUpperCase();
-  if (recorded === "W" || recorded === "D" || recorded === "L") {
-    return recorded;
-  }
-  if (goalsFor(match) > goalsAgainst(match)) return "W";
-  if (goalsFor(match) < goalsAgainst(match)) return "L";
-  return "D";
-}
-
-function resultLabel(match: Match) {
-  if (match.ft?.trim()) return match.ft;
-  return `${goalsFor(match)}–${goalsAgainst(match)}`;
-}
-
-function outcomeClass(result: Outcome) {
-  return {
-    W: "bg-emerald-600",
-    D: "bg-slate-500",
-    L: "bg-red-600",
-  }[result];
-}
-
-function outcomeCounts(matches: Match[]) {
-  return matches.reduce(
-    (counts, match) => {
-      counts[outcome(match)] += 1;
-      return counts;
-    },
-    { W: 0, D: 0, L: 0 } satisfies Record<Outcome, number>,
-  );
-}
-
 function dayLabel(value: string) {
-  const date = parseDate(value);
+  const date = parseArchiveDate(value);
   if (!date) return value;
   return new Intl.DateTimeFormat("en-GB", {
     day: "numeric",
@@ -111,7 +61,7 @@ function managerDateInSeason(
   seasonStart: Date,
   seasonEnd: Date,
 ) {
-  const date = parseDate(value);
+  const date = parseArchiveDate(value);
   return date && date >= seasonStart && date <= seasonEnd ? date : null;
 }
 
@@ -145,7 +95,7 @@ function buildChapters(
   }
 
   results.forEach((match) => {
-    const date = parseDate(match.date);
+    const date = parseArchiveDate(match.date);
     if (date) ensureChapter(date).matches.push(match);
   });
 
@@ -161,14 +111,14 @@ function buildChapters(
   });
 
   transfers.forEach((transfer) => {
-    const date = parseDate(transfer.date);
+    const date = parseArchiveDate(transfer.date);
     if (date && date >= seasonStart && date <= seasonEnd) {
       ensureChapter(date).transfers.push(transfer);
     }
   });
 
   achievements.forEach((achievement) => {
-    const date = parseDate(achievement.achievedOn);
+    const date = parseArchiveDate(achievement.achievedOn);
     if (date && date >= seasonStart && date <= seasonEnd) {
       ensureChapter(date).achievements.push(achievement);
     }
@@ -180,8 +130,8 @@ function buildChapters(
       ...chapter,
       matches: chapter.matches.sort(
         (a, b) =>
-          (parseDate(a.date)?.getTime() ?? 0) -
-          (parseDate(b.date)?.getTime() ?? 0),
+          (parseArchiveDate(a.date)?.getTime() ?? 0) -
+          (parseArchiveDate(b.date)?.getTime() ?? 0),
       ),
     }));
 }
@@ -204,7 +154,7 @@ export function SeasonTimeline(props: {
     achievements,
   );
   const undatedTransfers = transfers.filter(
-    (transfer) => !parseDate(transfer.date),
+    (transfer) => !parseArchiveDate(transfer.date),
   );
   const undatedArrivals = undatedTransfers.filter(
     (transfer) => transfer.type === "in",
@@ -417,7 +367,7 @@ export function SeasonTimeline(props: {
                               aria-label="Monthly form"
                             >
                               {chapter.matches.map((match) => {
-                                const result = outcome(match);
+                                const result = matchOutcome(match);
                                 return (
                                   <span
                                     key={`${match.date}-${match.opposition}`}
@@ -571,7 +521,7 @@ export function SeasonTimeline(props: {
                       {chapter.matches.length > 0 && (
                         <div className="divide-y divide-[#071a2b]/10 border-b border-[#071a2b]/15">
                           {chapter.matches.map((match) => {
-                            const result = outcome(match);
+                            const result = matchOutcome(match);
                             return (
                               <Link
                                 href={`/match/${match.season}/${match.date}`}

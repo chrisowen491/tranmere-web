@@ -1,4 +1,8 @@
-import { getAdminSession } from "@/lib/adminAuth";
+import {
+  adminError,
+  revalidateAdminPaths,
+  requireAdminApi,
+} from "@/lib/adminCrud";
 import {
   createClub,
   getClubById,
@@ -6,7 +10,6 @@ import {
   type ClubInput,
 } from "@/lib/clubs";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
-import { revalidatePath } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
 interface ClubRequest {
@@ -20,10 +23,6 @@ interface ClubRequest {
   highestDivision?: number | string | null;
   latitude?: number | string | null;
   longitude?: number | string | null;
-}
-
-function error(message: string, status: number) {
-  return NextResponse.json({ message }, { status });
 }
 
 function optionalNumber(value: number | string | null | undefined) {
@@ -69,19 +68,21 @@ function validateClub(body: ClubRequest): ClubInput | null {
 function databaseError(cause: unknown) {
   const message = cause instanceof Error ? cause.message : "";
   if (message.includes("UNIQUE constraint failed")) {
-    return error("A club with that name already exists.", 409);
+    return adminError("A club with that name already exists.", 409);
   }
-  return error("The club could not be saved.", 500);
+  return adminError("The club could not be saved.", 500);
 }
 
 export async function POST(request: NextRequest) {
-  if (!(await getAdminSession())) {
-    return error("You do not have permission to manage clubs.", 403);
-  }
+  const forbidden = await requireAdminApi("clubs");
+  if (forbidden) return forbidden;
 
   const club = validateClub((await request.json()) as ClubRequest);
   if (!club) {
-    return error("Enter a valid club name, division and coordinates.", 400);
+    return adminError(
+      "Enter a valid club name, division and coordinates.",
+      400,
+    );
   }
 
   try {
@@ -90,9 +91,7 @@ export async function POST(request: NextRequest) {
       crypto.randomUUID(),
       club,
     );
-    revalidatePath("/head-to-head");
-    revalidatePath("/results");
-    revalidatePath("/transfer-central");
+    revalidateAdminPaths(["/head-to-head", "/results", "/transfer-central"]);
     return NextResponse.json({ club: created }, { status: 201 });
   } catch (cause) {
     return databaseError(cause);
@@ -100,26 +99,26 @@ export async function POST(request: NextRequest) {
 }
 
 export async function PATCH(request: NextRequest) {
-  if (!(await getAdminSession())) {
-    return error("You do not have permission to manage clubs.", 403);
-  }
+  const forbidden = await requireAdminApi("clubs");
+  if (forbidden) return forbidden;
 
   const body = (await request.json()) as ClubRequest;
   const club = validateClub(body);
   if (!body.id || !club) {
-    return error("Enter a valid club name, division and coordinates.", 400);
+    return adminError(
+      "Enter a valid club name, division and coordinates.",
+      400,
+    );
   }
 
   const db = getCloudflareContext().env.DB;
   if (!(await getClubById(db, body.id))) {
-    return error("That club could not be found.", 404);
+    return adminError("That club could not be found.", 404);
   }
 
   try {
     const updated = await updateClub(db, body.id, club);
-    revalidatePath("/head-to-head");
-    revalidatePath("/results");
-    revalidatePath("/transfer-central");
+    revalidateAdminPaths(["/head-to-head", "/results", "/transfer-central"]);
     return NextResponse.json({ club: updated });
   } catch (cause) {
     return databaseError(cause);

@@ -18,84 +18,21 @@ import Link from "next/link";
 import { JumpBox } from "../forms/JumpBox";
 import type { PlayerStatisticsView } from "@/lib/playerStatistics";
 import type { HonoursAchievement } from "@tranmere-web/lib/src/honours-constants";
-
-type Outcome = "W" | "D" | "L";
-
-const DIVISION_NAMES: Record<number, Record<number, string>> = {
-  0: { 2: "Division 2", 3: "Division 3", 4: "Division 4" },
-  1: { 2: "Division 1", 3: "Division 2", 4: "Division 3" },
-  2: { 2: "The Championship", 3: "League One", 4: "League Two" },
-};
-
-function isTranmereHome(match: Match) {
-  return (
-    match.location === "H" ||
-    match.venue?.toLowerCase() === "home" ||
-    match.home?.toLowerCase().includes("tranmere")
-  );
-}
-
-function goalsFor(match: Match) {
-  return isTranmereHome(match) ? match.hgoal : match.vgoal;
-}
-
-function goalsAgainst(match: Match) {
-  return isTranmereHome(match) ? match.vgoal : match.hgoal;
-}
-
-function outcome(match: Match): Outcome {
-  const recordedOutcome = match.ft?.trim().charAt(0).toUpperCase();
-  if (
-    recordedOutcome === "W" ||
-    recordedOutcome === "D" ||
-    recordedOutcome === "L"
-  ) {
-    return recordedOutcome;
-  }
-
-  const difference = goalsFor(match) - goalsAgainst(match);
-  if (difference > 0) return "W";
-  if (difference < 0) return "L";
-  return "D";
-}
-
-function seasonLabel(season: string) {
-  return `${season}–${String(Number(season) + 1).slice(-2)}`;
-}
-
-function shortDate(date: string) {
-  const parsed = new Date(date);
-  if (Number.isNaN(parsed.getTime())) return date;
-  return new Intl.DateTimeFormat("en-GB", {
-    day: "numeric",
-    month: "short",
-  }).format(parsed);
-}
-
-function divisionName(results: Match[], season: number) {
-  const tier = results.reduce<number | undefined>((currentTier, result) => {
-    const isLeague =
-      result.competition === "League" || result.competition === "Conference";
-    return isLeague && result.tier ? result.tier : currentTier;
-  }, undefined);
-
-  if (tier === 5) return "National League";
-  if (!tier) return "Season archive";
-
-  const era = season < 1992 ? 0 : season < 2004 ? 1 : 2;
-  return DIVISION_NAMES[era]?.[tier] ?? "Season archive";
-}
-
-function uniqueMatches(matches: Array<Match | undefined>) {
-  const seen = new Set<string>();
-  return matches.filter((match): match is Match => {
-    if (!match) return false;
-    const key = `${match.date}-${match.opposition}`;
-    if (seen.has(key)) return false;
-    seen.add(key);
-    return true;
-  });
-}
+import {
+  goalsAgainst,
+  goalsFor,
+  matchOutcome,
+  outcomeClass,
+} from "@/lib/seasonMatchUtils";
+import {
+  buildMostUsedXi,
+  divisionName,
+  maxBy,
+  seasonLabel,
+  shortDate,
+  summarizeResults,
+  uniqueMatches,
+} from "@/lib/seasonStoryData";
 
 function playerInitials(name: string) {
   return name
@@ -103,113 +40,6 @@ function playerInitials(name: string) {
     .map((part) => part.charAt(0))
     .join("")
     .slice(0, 2);
-}
-
-function positionGroup(position?: string | null) {
-  const normalized = position?.toLowerCase() ?? "";
-  if (normalized.includes("goalkeeper")) return "goalkeeper";
-  if (
-    normalized.includes("defender") ||
-    normalized.includes("full back") ||
-    normalized.includes("fullback")
-  ) {
-    return "defence";
-  }
-  if (normalized.includes("striker") || normalized.includes("forward")) {
-    return "attack";
-  }
-  if (
-    normalized.includes("midfielder") ||
-    normalized.includes("midfield") ||
-    normalized.includes("winger")
-  ) {
-    return "midfield";
-  }
-  return "other";
-}
-
-function arrangeWidePlayers<T>(widePlayers: T[], centralPlayers: T[]) {
-  if (widePlayers.length < 2) {
-    return [...widePlayers, ...centralPlayers];
-  }
-
-  return [widePlayers[0], ...centralPlayers, ...widePlayers.slice(1).reverse()];
-}
-
-function maxBy<T>(items: T[], score: (item: T) => number) {
-  return items.reduce<T | undefined>(
-    (best, item) => (!best || score(item) > score(best) ? item : best),
-    undefined,
-  );
-}
-
-function summarizeResults(results: Match[]) {
-  return results.reduce(
-    (summary, match) => {
-      const result = outcome(match);
-      summary[result] += 1;
-      summary.scored += goalsFor(match);
-      summary.conceded += goalsAgainst(match);
-      if (match.attendance && match.attendance > 0) {
-        summary.attendanceTotal += match.attendance;
-        summary.attendanceCount += 1;
-      }
-      return summary;
-    },
-    {
-      W: 0,
-      D: 0,
-      L: 0,
-      scored: 0,
-      conceded: 0,
-      attendanceTotal: 0,
-      attendanceCount: 0,
-    },
-  );
-}
-
-function outcomeClass(result: Outcome) {
-  return {
-    W: "bg-emerald-600",
-    D: "bg-[#64748b]",
-    L: "bg-red-600",
-  }[result];
-}
-
-function buildMostUsedXi(players: PlayerStatisticsView[]) {
-  const ranked = [...players].sort(
-    (a, b) => b.starts + b.subs - (a.starts + a.subs),
-  );
-  const selected = new Set<string>();
-
-  function select(group: string, count: number) {
-    const available = ranked.filter((player) => !selected.has(player.Player));
-    const positional = available.filter(
-      (player) => positionGroup(player.profile.position) === group,
-    );
-    const selection = [
-      ...positional,
-      ...available.filter((player) => !positional.includes(player)),
-    ].slice(0, count);
-    selection.forEach((player) => selected.add(player.Player));
-    return selection;
-  }
-
-  const goalkeeper = select("goalkeeper", 1);
-  const defence = select("defence", 4);
-  const midfield = select("midfield", 4);
-  const attack = select("attack", 2);
-
-  const orderedMidfield = arrangeWidePlayers(
-    midfield.filter((player) => player.profile.position === "Winger"),
-    midfield.filter((player) => player.profile.position !== "Winger"),
-  );
-  const orderedDefence = arrangeWidePlayers(
-    defence.filter((player) => player.profile.position === "Full Back"),
-    defence.filter((player) => player.profile.position !== "Full Back"),
-  );
-
-  return [attack, orderedMidfield, orderedDefence, goalkeeper];
 }
 
 export function SeasonStory(props: {
@@ -247,7 +77,7 @@ export function SeasonStory(props: {
   const topScorer = maxBy(players, (player) => player.goals);
   const mostUsedXi = buildMostUsedXi(players);
   const biggestWin = maxBy(
-    completedResults.filter((result) => outcome(result) === "W"),
+    completedResults.filter((result) => matchOutcome(result) === "W"),
     (result) => goalsFor(result) - goalsAgainst(result),
   );
   const highestAttendance = maxBy(
@@ -653,11 +483,11 @@ export function SeasonStory(props: {
               </p>
               <div className="mt-4 flex flex-wrap gap-1">
                 {completedResults.slice(-18).map((match) => {
-                  const result = outcome(match);
+                  const result = matchOutcome(match);
                   return (
                     <span
                       key={`${match.date}-${match.opposition}`}
-                      className={`grid h-6 w-6 place-items-center text-[0.6rem] font-bold text-white ${outcomeClass(result)}`}
+                      className={`grid h-6 w-6 place-items-center text-[0.6rem] font-bold text-white ${outcomeClass(result, "bg-[#64748b]")}`}
                     >
                       {result}
                     </span>

@@ -9,153 +9,22 @@ import {
   TrophyIcon,
   UserIcon,
 } from "@heroicons/react/24/outline";
-import { buildImagePath } from "@tranmere-web/lib/src/apiFunctions";
 import type { Manager, Match } from "@tranmere-web/lib/src/tranmere-web-types";
+import {
+  calculateManagerStats,
+  formatManagerDate,
+  getManagerSelections,
+  loadManagerMatches,
+  managerImageSource,
+  managerResult,
+  type ManagerSelection,
+  type ManagerStats,
+} from "@/lib/managerComparisonData";
 import Image from "next/image";
 import Link from "next/link";
 import { useRef, useState } from "react";
 
-interface ManagerSelection {
-  manager: Manager;
-  key: string;
-  label: string;
-}
-
-interface ManagerStats {
-  played: number;
-  won: number;
-  drawn: number;
-  lost: number;
-  goalsFor: number;
-  goalsAgainst: number;
-  winRate: number;
-  pointsPerGame: number;
-  bestWinningRun: number;
-  bestUnbeatenRun: number;
-  homeWinRate: number;
-  awayWinRate: number;
-}
-
-type Outcome = "W" | "D" | "L";
-
-function managerImageSource(imagePath: string, width: number, height: number) {
-  if (imagePath.startsWith("/") || /^https?:\/\//i.test(imagePath)) {
-    return imagePath;
-  }
-
-  return buildImagePath(imagePath, width, height);
-}
-
-function managerKey(manager: Manager) {
-  return `${manager.name}|${manager.dateJoined}|${manager.dateLeft}`;
-}
-
-function formatDate(value: string) {
-  if (value.toLowerCase().startsWith("now")) return "present";
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return value;
-  return new Intl.DateTimeFormat("en-GB", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-    timeZone: "UTC",
-  }).format(date);
-}
-
-function resultFor(match: Match) {
-  const home = match.home === "Tranmere Rovers";
-  const scored = home ? match.hgoal : match.vgoal;
-  const conceded = home ? match.vgoal : match.hgoal;
-  return {
-    label: (scored > conceded ? "W" : scored < conceded ? "L" : "D") as Outcome,
-    scored,
-    conceded,
-    home,
-  };
-}
-
-function percentage(value: number, total: number) {
-  return total ? (value / total) * 100 : 0;
-}
-
-function calculateStats(matches: Match[]): ManagerStats {
-  const chronological = [...matches].sort(
-    (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
-  );
-  let winningRun = 0;
-  let unbeatenRun = 0;
-  let bestWinningRun = 0;
-  let bestUnbeatenRun = 0;
-  let won = 0;
-  let drawn = 0;
-  let lost = 0;
-  let goalsFor = 0;
-  let goalsAgainst = 0;
-  let homeMatches = 0;
-  let homeWins = 0;
-  let awayMatches = 0;
-  let awayWins = 0;
-
-  chronological.forEach((match) => {
-    const result = resultFor(match);
-    goalsFor += result.scored;
-    goalsAgainst += result.conceded;
-    if (result.home) {
-      homeMatches += 1;
-      if (result.label === "W") homeWins += 1;
-    } else {
-      awayMatches += 1;
-      if (result.label === "W") awayWins += 1;
-    }
-
-    if (result.label === "W") {
-      won += 1;
-      winningRun += 1;
-      unbeatenRun += 1;
-    } else if (result.label === "D") {
-      drawn += 1;
-      winningRun = 0;
-      unbeatenRun += 1;
-    } else {
-      lost += 1;
-      winningRun = 0;
-      unbeatenRun = 0;
-    }
-
-    bestWinningRun = Math.max(bestWinningRun, winningRun);
-    bestUnbeatenRun = Math.max(bestUnbeatenRun, unbeatenRun);
-  });
-
-  return {
-    played: matches.length,
-    won,
-    drawn,
-    lost,
-    goalsFor,
-    goalsAgainst,
-    winRate: percentage(won, matches.length),
-    pointsPerGame: matches.length ? (won * 3 + drawn) / matches.length : 0,
-    bestWinningRun,
-    bestUnbeatenRun,
-    homeWinRate: percentage(homeWins, homeMatches),
-    awayWinRate: percentage(awayWins, awayMatches),
-  };
-}
-
-async function loadManagerMatches(selection: ManagerSelection) {
-  const { dateJoined, dateLeft } = selection.manager;
-  const endDate = dateLeft.toLowerCase().startsWith("now")
-    ? new Date().toISOString().slice(0, 10)
-    : dateLeft;
-  const managerRange = encodeURIComponent(`${dateJoined},${endDate}`);
-  const response = await fetch(
-    `/api/result-search?manager=${managerRange}&sort=Date`,
-  );
-  if (!response.ok) throw new Error("Unable to load manager results");
-  return ((await response.json()) as { results: Match[] }).results;
-}
-
-function outcomeClass(result: Outcome) {
+function outcomeClass(result: "W" | "D" | "L") {
   return {
     W: "bg-blue-700",
     D: "bg-slate-500",
@@ -316,7 +185,7 @@ function LatestMatches({
       </div>
       <div className="border-x border-[#071a2b]/15">
         {latestMatches.map((match) => {
-          const result = resultFor(match);
+          const result = managerResult(match);
           return (
             <Link
               key={`${match.season}-${match.date}`}
@@ -333,7 +202,7 @@ function LatestMatches({
                   {match.opposition}
                 </span>
                 <span className="font-mono text-[9px] uppercase tracking-[0.08em] text-[#071a2b]/40">
-                  {formatDate(match.date)}
+                  {formatManagerDate(match.date)}
                 </span>
               </span>
               <span className="flex items-center gap-2 font-mono text-xs font-bold">
@@ -357,13 +226,7 @@ export function ManagerComparison({
   initialMatches: [Match[], Match[]];
   initialManagerIndexes: [number, number];
 }) {
-  const selections: ManagerSelection[] = managers.map((manager) => ({
-    manager,
-    key: managerKey(manager),
-    label: `${manager.name} · ${formatDate(manager.dateJoined)}–${formatDate(
-      manager.dateLeft,
-    )}`,
-  }));
+  const selections = getManagerSelections(managers);
   const [leftKey, setLeftKey] = useState(
     selections[initialManagerIndexes[0]]?.key || "",
   );
@@ -377,8 +240,8 @@ export function ManagerComparison({
   const comparisonRequest = useRef(0);
   const leftManager = selections.find((item) => item.key === leftKey)!;
   const rightManager = selections.find((item) => item.key === rightKey)!;
-  const leftStats = calculateStats(leftMatches);
-  const rightStats = calculateStats(rightMatches);
+  const leftStats = calculateManagerStats(leftMatches);
+  const rightStats = calculateManagerStats(rightMatches);
 
   async function compare(nextLeftKey = leftKey, nextRightKey = rightKey) {
     const nextLeftManager = selections.find((item) => item.key === nextLeftKey);

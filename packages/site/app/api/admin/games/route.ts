@@ -1,4 +1,11 @@
-import { getAdminSession } from "@/lib/adminAuth";
+import {
+  adminError,
+  isIsoDate,
+  optionalText,
+  requiredText,
+  revalidateAdminPaths,
+  requireAdminApi,
+} from "@/lib/adminCrud";
 import {
   MATCH_COMPETITIONS,
   type MatchCompetition,
@@ -8,7 +15,6 @@ import {
   type ManagerFormation,
 } from "@tranmere-web/lib/src/manager-constants";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
-import { revalidatePath } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
 type GameInput = {
@@ -61,28 +67,6 @@ const optionalFields = [
   "ticket",
 ] as const;
 
-function error(message: string, status: number) {
-  return NextResponse.json({ message }, { status });
-}
-
-function requiredText(value: unknown, limit = 200) {
-  return typeof value === "string" ? value.trim().slice(0, limit) : "";
-}
-
-function optionalText(value: unknown, limit = 500) {
-  const text = requiredText(value, limit);
-  return text || null;
-}
-
-function isDate(value: string) {
-  const parsed = new Date(`${value}T00:00:00Z`);
-  return (
-    /^\d{4}-\d{2}-\d{2}$/.test(value) &&
-    !Number.isNaN(parsed.getTime()) &&
-    parsed.toISOString().slice(0, 10) === value
-  );
-}
-
 function validateGame(body: GameRequest): GameInput | null {
   const season = Number(body.season);
   const matchDate = requiredText(body.matchDate, 10);
@@ -94,7 +78,7 @@ function validateGame(body: GameRequest): GameInput | null {
       ? null
       : Number(attendanceValue);
   const optional = Object.fromEntries(
-    optionalFields.map((field) => [field, optionalText(body[field])]),
+    optionalFields.map((field) => [field, optionalText(body[field], 500)]),
   ) as Record<(typeof optionalFields)[number], string | null>;
   const competition = requiredText(body.competition);
 
@@ -102,7 +86,7 @@ function validateGame(body: GameRequest): GameInput | null {
     !Number.isSafeInteger(season) ||
     season < 1800 ||
     season > 2200 ||
-    !isDate(matchDate) ||
+    !isIsoDate(matchDate) ||
     !MATCH_COMPETITIONS.includes(competition as MatchCompetition) ||
     !requiredText(body.homeTeam) ||
     !requiredText(body.awayTeam) ||
@@ -175,19 +159,20 @@ function values(game: GameInput) {
 }
 
 function revalidateGames(season: number, date: string) {
-  revalidatePath("/admin/games");
-  revalidatePath("/results");
-  revalidatePath(`/season/${season}`);
-  revalidatePath(`/match/${season}/${date}`);
+  revalidateAdminPaths([
+    "/admin/games",
+    "/results",
+    `/season/${season}`,
+    `/match/${season}/${date}`,
+  ]);
 }
 
 export async function POST(request: NextRequest) {
-  if (!(await getAdminSession())) {
-    return error("You do not have permission to manage games.", 403);
-  }
+  const forbidden = await requireAdminApi("games");
+  if (forbidden) return forbidden;
 
   const game = validateGame((await request.json()) as GameRequest);
-  if (!game) return error("Enter valid match details before saving.", 400);
+  if (!game) return adminError("Enter valid match details before saving.", 400);
 
   const id = crypto.randomUUID();
   const db = getCloudflareContext().env.DB;
@@ -208,15 +193,14 @@ export async function POST(request: NextRequest) {
 }
 
 export async function PATCH(request: NextRequest) {
-  if (!(await getAdminSession())) {
-    return error("You do not have permission to manage games.", 403);
-  }
+  const forbidden = await requireAdminApi("games");
+  if (forbidden) return forbidden;
 
   const body = (await request.json()) as GameRequest;
   const id = requiredText(body.id, 100);
   const game = validateGame(body);
   if (!id || !game)
-    return error("Enter valid match details before saving.", 400);
+    return adminError("Enter valid match details before saving.", 400);
 
   const db = getCloudflareContext().env.DB;
   const result = await db
@@ -232,7 +216,8 @@ export async function PATCH(request: NextRequest) {
     .bind(...values(game), id)
     .run();
 
-  if (!result.meta.changes) return error("That game could not be found.", 404);
+  if (!result.meta.changes)
+    return adminError("That game could not be found.", 404);
 
   revalidateGames(game.season, game.matchDate);
   return NextResponse.json({ id, ...game });

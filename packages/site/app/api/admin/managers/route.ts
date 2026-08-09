@@ -1,4 +1,9 @@
-import { getAdminSession } from "@/lib/adminAuth";
+import {
+  adminError,
+  isIsoDate,
+  revalidateAdminPaths,
+  requireAdminApi,
+} from "@/lib/adminCrud";
 import {
   MANAGER_FORMATIONS,
   type ManagerFormation,
@@ -10,7 +15,6 @@ import {
   type ManagerInput,
 } from "@/lib/managers";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
-import { revalidatePath } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
 interface ManagerRequest {
@@ -20,17 +24,6 @@ interface ManagerRequest {
   dateLeft?: string;
   imagePath?: string;
   favouriteFormation?: string;
-}
-
-function error(message: string, status: number) {
-  return NextResponse.json({ message }, { status });
-}
-
-function isDate(value: string) {
-  return (
-    /^\d{4}-\d{2}-\d{2}$/.test(value) &&
-    !Number.isNaN(Date.parse(`${value}T00:00:00Z`))
-  );
 }
 
 function validateManager(body: ManagerRequest): ManagerInput | null {
@@ -46,13 +39,13 @@ function validateManager(body: ManagerRequest): ManagerInput | null {
     !name ||
     !dateJoined ||
     !dateLeft ||
-    !isDate(dateJoined) ||
-    (!isDate(dateLeft) && !/^(now|now\(\))$/i.test(dateLeft))
+    !isIsoDate(dateJoined) ||
+    (!isIsoDate(dateLeft) && !/^(now|now\(\))$/i.test(dateLeft))
   ) {
     return null;
   }
 
-  if (isDate(dateLeft) && dateLeft < dateJoined) return null;
+  if (isIsoDate(dateLeft) && dateLeft < dateJoined) return null;
 
   const requestedFormation = body.favouriteFormation?.trim() || "";
   if (
@@ -72,13 +65,12 @@ function validateManager(body: ManagerRequest): ManagerInput | null {
 }
 
 export async function POST(request: NextRequest) {
-  if (!(await getAdminSession())) {
-    return error("You do not have permission to manage managers.", 403);
-  }
+  const forbidden = await requireAdminApi("managers");
+  if (forbidden) return forbidden;
 
   const manager = validateManager((await request.json()) as ManagerRequest);
   if (!manager) {
-    return error(
+    return adminError(
       "Enter valid manager details, dates and favourite formation.",
       400,
     );
@@ -89,19 +81,18 @@ export async function POST(request: NextRequest) {
     crypto.randomUUID(),
     manager,
   );
-  revalidatePath("/managers");
+  revalidateAdminPaths(["/managers"]);
   return NextResponse.json({ manager: created }, { status: 201 });
 }
 
 export async function PATCH(request: NextRequest) {
-  if (!(await getAdminSession())) {
-    return error("You do not have permission to manage managers.", 403);
-  }
+  const forbidden = await requireAdminApi("managers");
+  if (forbidden) return forbidden;
 
   const body = (await request.json()) as ManagerRequest;
   const manager = validateManager(body);
   if (!body.id || !manager) {
-    return error(
+    return adminError(
       "Enter valid manager details, dates and favourite formation.",
       400,
     );
@@ -109,10 +100,10 @@ export async function PATCH(request: NextRequest) {
 
   const db = getCloudflareContext().env.DB;
   if (!(await getManagerById(db, body.id))) {
-    return error("That manager could not be found.", 404);
+    return adminError("That manager could not be found.", 404);
   }
 
   const updated = await updateManager(db, body.id, manager);
-  revalidatePath("/managers");
+  revalidateAdminPaths(["/managers"]);
   return NextResponse.json({ manager: updated });
 }

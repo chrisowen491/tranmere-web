@@ -1,4 +1,9 @@
-import { getAdminSession } from "@/lib/adminAuth";
+import {
+  adminError,
+  isIsoDate,
+  revalidateAdminPaths,
+  requireAdminApi,
+} from "@/lib/adminCrud";
 import {
   createProgramme,
   deleteProgramme,
@@ -7,7 +12,6 @@ import {
   type ProgrammeInput,
 } from "@/lib/programmes";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
-import { revalidatePath } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
 interface ProgrammeRequest {
@@ -18,26 +22,17 @@ interface ProgrammeRequest {
   pages?: number;
 }
 
-function error(message: string, status: number) {
-  return NextResponse.json({ message }, { status });
-}
-
 function validateProgramme(body: ProgrammeRequest): ProgrammeInput | null {
   const url = body.url?.trim().slice(0, 500);
   const name = body.name?.trim().slice(0, 200);
   const date = body.date?.trim();
   const pages = Number(body.pages);
-  const parsedDate = date ? new Date(`${date}T00:00:00Z`) : null;
-
   if (
     !url ||
     !name ||
     !date ||
     !/^(\/|https?:\/\/)/.test(url) ||
-    !/^\d{4}-\d{2}-\d{2}$/.test(date) ||
-    !parsedDate ||
-    Number.isNaN(parsedDate.getTime()) ||
-    parsedDate.toISOString().slice(0, 10) !== date ||
+    !isIsoDate(date) ||
     !Number.isSafeInteger(pages) ||
     pages < 1
   ) {
@@ -48,19 +43,18 @@ function validateProgramme(body: ProgrammeRequest): ProgrammeInput | null {
 }
 
 function revalidateProgrammes() {
-  revalidatePath("/programmes");
+  revalidateAdminPaths(["/programmes"]);
 }
 
 export async function POST(request: NextRequest) {
-  if (!(await getAdminSession())) {
-    return error("You do not have permission to manage programmes.", 403);
-  }
+  const forbidden = await requireAdminApi("programmes");
+  if (forbidden) return forbidden;
 
   const programme = validateProgramme(
     (await request.json()) as ProgrammeRequest,
   );
   if (!programme) {
-    return error(
+    return adminError(
       "Enter a valid PDF URL, match name, date and page count.",
       400,
     );
@@ -68,7 +62,7 @@ export async function POST(request: NextRequest) {
 
   const db = getCloudflareContext().env.DB;
   if (await getProgrammeByUrl(db, programme.url)) {
-    return error("A programme with that PDF URL already exists.", 409);
+    return adminError("A programme with that PDF URL already exists.", 409);
   }
 
   const created = await createProgramme(db, programme);
@@ -77,15 +71,14 @@ export async function POST(request: NextRequest) {
 }
 
 export async function PATCH(request: NextRequest) {
-  if (!(await getAdminSession())) {
-    return error("You do not have permission to manage programmes.", 403);
-  }
+  const forbidden = await requireAdminApi("programmes");
+  if (forbidden) return forbidden;
 
   const body = (await request.json()) as ProgrammeRequest;
   const programme = validateProgramme(body);
   const originalUrl = body.originalUrl?.trim();
   if (!originalUrl || !programme) {
-    return error(
+    return adminError(
       "Enter a valid PDF URL, match name, date and page count.",
       400,
     );
@@ -93,13 +86,13 @@ export async function PATCH(request: NextRequest) {
 
   const db = getCloudflareContext().env.DB;
   if (!(await getProgrammeByUrl(db, originalUrl))) {
-    return error("That programme could not be found.", 404);
+    return adminError("That programme could not be found.", 404);
   }
   if (
     originalUrl !== programme.url &&
     (await getProgrammeByUrl(db, programme.url))
   ) {
-    return error("A programme with that PDF URL already exists.", 409);
+    return adminError("A programme with that PDF URL already exists.", 409);
   }
 
   const updated = await updateProgramme(db, originalUrl, programme);
@@ -108,18 +101,17 @@ export async function PATCH(request: NextRequest) {
 }
 
 export async function DELETE(request: NextRequest) {
-  if (!(await getAdminSession())) {
-    return error("You do not have permission to manage programmes.", 403);
-  }
+  const forbidden = await requireAdminApi("programmes");
+  if (forbidden) return forbidden;
 
   const { url } = (await request.json()) as ProgrammeRequest;
-  if (!url?.trim()) return error("Choose a programme to delete.", 400);
+  if (!url?.trim()) return adminError("Choose a programme to delete.", 400);
 
   const deleted = await deleteProgramme(
     getCloudflareContext().env.DB,
     url.trim(),
   );
-  if (!deleted) return error("That programme could not be found.", 404);
+  if (!deleted) return adminError("That programme could not be found.", 404);
 
   revalidateProgrammes();
   return NextResponse.json({ deleted: true });
