@@ -19,4 +19,5 @@ interface CloudflareEnv {
     CLOUDFLARE_ZONE: string;
     CLOUDFLARE_API_KEY: string;
     NEXT_CACHE_DO_QUEUE: DurableObject;
+    Images: Ima
 }
