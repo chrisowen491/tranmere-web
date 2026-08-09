@@ -1,6 +1,7 @@
 "use client";
 
 import type { AppRow } from "@tranmere-web/lib/src/d1-types";
+import { MATCH_COMPETITIONS } from "@tranmere-web/lib/src/competition-constants";
 import {
   PencilSquareIcon,
   PlusIcon,
@@ -72,11 +73,13 @@ function filterUrl(season: number, date: string) {
 export function AppAdmin({
   initialApps,
   seasons,
+  clubs,
   selectedSeason,
   selectedDate,
 }: {
   initialApps: AppRow[];
   seasons: number[];
+  clubs: string[];
   selectedSeason: number;
   selectedDate?: string;
 }) {
@@ -308,22 +311,43 @@ export function AppAdmin({
                 />
               </Field>
               <Field label="Opposition">
-                <input
+                <select
                   value={editing.opposition}
                   onChange={(event) =>
                     changeField("opposition", event.target.value)
                   }
                   className={inputClass}
-                />
+                >
+                  <option value="">Select opposition</option>
+                  {[...new Set([...clubs, editing.opposition])]
+                    .filter(Boolean)
+                    .sort((a, b) => a.localeCompare(b))
+                    .map((club) => (
+                      <option key={club} value={club}>
+                        {club}
+                      </option>
+                    ))}
+                </select>
               </Field>
               <Field label="Competition">
-                <input
+                <select
                   value={editing.competition ?? ""}
                   onChange={(event) =>
                     changeField("competition", event.target.value)
                   }
                   className={inputClass}
-                />
+                >
+                  <option value="">Select competition</option>
+                  {[...new Set([...MATCH_COMPETITIONS, editing.competition])]
+                    .filter((competition): competition is string =>
+                      Boolean(competition),
+                    )
+                    .map((competition) => (
+                      <option key={competition} value={competition}>
+                        {competition}
+                      </option>
+                    ))}
+                </select>
               </Field>
               <Field label="Shirt number">
                 <input

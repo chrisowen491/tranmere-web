@@ -2,6 +2,13 @@
 
 import type { GoalRow } from "@tranmere-web/lib/src/d1-types";
 import {
+  ASSIST_TYPES,
+  CROSS_SIDES,
+  GOAL_FEET,
+  GOAL_TYPES,
+} from "@tranmere-web/lib/src/goal-constants";
+import { MATCH_COMPETITIONS } from "@tranmere-web/lib/src/competition-constants";
+import {
   PencilSquareIcon,
   PlusIcon,
   TrashIcon,
@@ -72,11 +79,13 @@ function payload(goal: GoalRow) {
 export function GoalAdmin({
   initialGoals,
   seasons,
+  clubs,
   selectedSeason,
   selectedDate,
 }: {
   initialGoals: GoalRow[];
   seasons: number[];
+  clubs: string[];
   selectedSeason: number;
   selectedDate?: string;
 }) {
@@ -289,22 +298,43 @@ export function GoalAdmin({
                 />
               </Field>
               <Field label="Opposition">
-                <input
+                <select
                   value={editing.opposition}
                   onChange={(event) =>
                     changeField("opposition", event.target.value)
                   }
                   className={inputClass}
-                />
+                >
+                  <option value="">Select opposition</option>
+                  {[...new Set([...clubs, editing.opposition])]
+                    .filter(Boolean)
+                    .sort((a, b) => a.localeCompare(b))
+                    .map((club) => (
+                      <option key={club} value={club}>
+                        {club}
+                      </option>
+                    ))}
+                </select>
               </Field>
               <Field label="Competition">
-                <input
+                <select
                   value={editing.competition ?? ""}
                   onChange={(event) =>
                     changeField("competition", event.target.value)
                   }
                   className={inputClass}
-                />
+                >
+                  <option value="">Select competition</option>
+                  {[...new Set([...MATCH_COMPETITIONS, editing.competition])]
+                    .filter((competition): competition is string =>
+                      Boolean(competition),
+                    )
+                    .map((competition) => (
+                      <option key={competition} value={competition}>
+                        {competition}
+                      </option>
+                    ))}
+                </select>
               </Field>
               <Field label="Minute">
                 <input
@@ -316,13 +346,19 @@ export function GoalAdmin({
                 />
               </Field>
               <Field label="Goal type">
-                <input
+                <select
                   value={editing.goal_type ?? ""}
                   onChange={(event) =>
                     changeField("goal_type", event.target.value)
                   }
                   className={inputClass}
-                />
+                >
+                  <OptionList
+                    options={GOAL_TYPES}
+                    value={editing.goal_type}
+                    placeholder="Select goal type"
+                  />
+                </select>
               </Field>
               <Field label="Assist">
                 <input
@@ -334,29 +370,47 @@ export function GoalAdmin({
                 />
               </Field>
               <Field label="Assist type">
-                <input
+                <select
                   value={editing.assist_type ?? ""}
                   onChange={(event) =>
                     changeField("assist_type", event.target.value)
                   }
                   className={inputClass}
-                />
+                >
+                  <OptionList
+                    options={ASSIST_TYPES}
+                    value={editing.assist_type}
+                    placeholder="Select assist type"
+                  />
+                </select>
               </Field>
               <Field label="Foot">
-                <input
+                <select
                   value={editing.foot ?? ""}
                   onChange={(event) => changeField("foot", event.target.value)}
                   className={inputClass}
-                />
+                >
+                  <OptionList
+                    options={GOAL_FEET}
+                    value={editing.foot}
+                    placeholder="Select foot"
+                  />
+                </select>
               </Field>
               <Field label="Cross side">
-                <input
+                <select
                   value={editing.cross_side ?? ""}
                   onChange={(event) =>
                     changeField("cross_side", event.target.value)
                   }
                   className={inputClass}
-                />
+                >
+                  <OptionList
+                    options={CROSS_SIDES}
+                    value={editing.cross_side}
+                    placeholder="Select cross side"
+                  />
+                </select>
               </Field>
               <div className="sm:col-span-2 lg:col-span-1 xl:col-span-2 grid grid-cols-3 gap-3 border border-[#071a2b]/10 p-3">
                 <Checkbox
@@ -473,6 +527,29 @@ function Field({ label, children }: { label: string; children: ReactNode }) {
       {label}
       {children}
     </label>
+  );
+}
+
+function OptionList({
+  options,
+  value,
+  placeholder,
+}: {
+  options: readonly string[];
+  value: string | null;
+  placeholder: string;
+}) {
+  return (
+    <>
+      <option value="">{placeholder}</option>
+      {[...new Set([...options, value])]
+        .filter((option): option is string => Boolean(option))
+        .map((option) => (
+          <option key={option} value={option}>
+            {option}
+          </option>
+        ))}
+    </>
   );
 }
 

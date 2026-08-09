@@ -3,6 +3,7 @@ import { requireAdminPage } from "@/lib/adminAuth";
 import { GetSeasons } from "@tranmere-web/lib/src/apiFunctions";
 import { queryAppRows } from "@tranmere-web/lib/src/d1-queries";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
+import { getClubs } from "@/lib/clubs";
 import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
@@ -32,10 +33,14 @@ export default async function AppAdminPage({
     ? requestedSeason
     : seasons[0];
   const selectedDate = validDate(params.date) ? params.date! : undefined;
-  const apps = await queryAppRows(getCloudflareContext().env.DB, {
-    season: selectedSeason,
-    matchDate: selectedDate,
-  });
+  const db = getCloudflareContext().env.DB;
+  const [apps, clubs] = await Promise.all([
+    queryAppRows(db, {
+      season: selectedSeason,
+      matchDate: selectedDate,
+    }),
+    getClubs(db),
+  ]);
 
   return (
     <main className="min-h-screen bg-[#f4f0e8] pb-24 text-[#071a2b]">
@@ -62,6 +67,7 @@ export default async function AppAdminPage({
           key={`${selectedSeason}-${selectedDate ?? "all"}`}
           initialApps={apps}
           seasons={seasons}
+          clubs={clubs.map((club) => club.name)}
           selectedSeason={selectedSeason}
           selectedDate={selectedDate}
         />

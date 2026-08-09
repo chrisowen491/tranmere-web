@@ -1,13 +1,11 @@
 import { PlayerBubble } from "@/components/chat/PlayerBubble";
 import Image from "next/image";
 import { MatchMessageBubble } from "./MatchMessageBubble";
-import { ResultsBubble } from "./ResultsBubble";
 import { UIMessage } from "ai";
 import {
   MatchPageData,
   PlayerView,
 } from "@tranmere-web/lib/src/tranmere-web-types";
-import { ResultsToolData } from "@tranmere-web/tools/src/ResultsTool";
 
 export function ChatMessageBubble(props: { message: UIMessage }) {
   const userAvatar =
@@ -69,22 +67,6 @@ export function ChatMessageBubble(props: { message: UIMessage }) {
                             JSON.parse(part.output as string) as MatchPageData
                           }
                         ></MatchMessageBubble>
-                      </div>
-                    );
-                  }
-                  break;
-                }
-
-                case "tool-ResultsTool": {
-                  if (part.output !== null && part.output !== undefined) {
-                    return (
-                      <div key={part.toolCallId}>
-                        <ResultsBubble
-                          key={props.message.id}
-                          matches={
-                            JSON.parse(part.output as string) as ResultsToolData
-                          }
-                        ></ResultsBubble>
                       </div>
                     );
                   }

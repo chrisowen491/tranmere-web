@@ -3,6 +3,7 @@ import { requireAdminPage } from "@/lib/adminAuth";
 import { GetSeasons } from "@tranmere-web/lib/src/apiFunctions";
 import { queryGoalRows } from "@tranmere-web/lib/src/d1-queries";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
+import { getClubs } from "@/lib/clubs";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -30,10 +31,14 @@ export default async function GoalAdminPage({
     ? requestedSeason
     : seasons[0];
   const selectedDate = validDate(params.date) ? params.date! : undefined;
-  const goals = await queryGoalRows(getCloudflareContext().env.DB, {
-    season: selectedSeason,
-    matchDate: selectedDate,
-  });
+  const db = getCloudflareContext().env.DB;
+  const [goals, clubs] = await Promise.all([
+    queryGoalRows(db, {
+      season: selectedSeason,
+      matchDate: selectedDate,
+    }),
+    getClubs(db),
+  ]);
 
   return (
     <main className="min-h-screen bg-[#f4f0e8] pb-24 text-[#071a2b]">
@@ -60,6 +65,7 @@ export default async function GoalAdminPage({
           key={`${selectedSeason}-${selectedDate ?? "all"}`}
           initialGoals={goals}
           seasons={seasons}
+          clubs={clubs.map((club) => club.name)}
           selectedSeason={selectedSeason}
           selectedDate={selectedDate}
         />
