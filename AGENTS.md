@@ -34,7 +34,7 @@
 
 - See `docs/ARCHITECTURE.md` for system boundaries and `docs/FEATURES.md` for the implemented feature catalogue.
 - `packages/site/`: Next.js site and Cloudflare deployment
-- `packages/api-stack/`: AWS CDK stack, Lambda handlers, and Jest tests
+- `packages/api-stack/`: AWS CDK stack, Lambda handlers, and Vitest tests
 - `packages/lib/`: shared AWS and Contentful library
 - `packages/tools/`: shared application tools
 - `packages/mcp/`: Cloudflare MCP server and React app

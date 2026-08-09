@@ -4,17 +4,11 @@ import { Construct } from 'constructs';
 import * as acm from 'aws-cdk-lib/aws-certificatemanager';
 import * as ddb from 'aws-cdk-lib/aws-dynamodb';
 import * as iam from 'aws-cdk-lib/aws-iam';
-//import * as cognito from 'aws-cdk-lib/aws-cognito';
 import { TranmereWebLambda } from './tranmere-web-lambda';
 import { TranmereWebGraphQL } from './tranmere-web-graphql';
 
-const CF_KEY = process.env.CF_KEY!;
-const CF_SPACE = process.env.CF_SPACE!;
-const CF_MANANGEMENT_KEY = process.env.CF_MANANGEMENT_KEY!;
 const EMAIL_ADDRESS = process.env.EMAIL_ADDRESS!;
 const DD_TAGS = process.env.DD_TAGS!;
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY!;
-const TAVILY_API_KEY = process.env.TAVILY_API_KEY!;
 
 export class TranmereWebStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -24,91 +18,15 @@ export class TranmereWebStack extends cdk.Stack {
 
     const env_variables = {
       EMAIL_ADDRESS: EMAIL_ADDRESS,
-      CF_SPACE: CF_SPACE,
-      CF_KEY: CF_KEY,
-      CF_MANANGEMENT_KEY: CF_MANANGEMENT_KEY,
       DD_TAGS: DD_TAGS,
-      OPENAI_API_KEY: OPENAI_API_KEY,
-      TAVILY_API_KEY: TAVILY_API_KEY,
       DD_EXTENSION_VERSION: 'next'
     };
 
-
-    //const TranmereWebGoalsTable = ddb.Table.fromTableArn(this, "TranmereWebGoalsTable", `arn:aws:dynamodb:${this.region}:${this.account}:table/TranmereWebGoalsTable`);
-
-    const TranmereWebMediaSyncTable = ddb.Table.fromTableArn(
-      this,
-      'TranmereWebMediaSyncTable',
-      `arn:aws:dynamodb:${this.region}:${this.account}:table/TranmereWebMediaSyncTable`
-    );
     const TranmereWebHatTricks = ddb.Table.fromTableAttributes(
       this,
       'TranmereWebHatTricks',
       { tableName: 'TranmereWebHatTricks', grantIndexPermissions: true }
     );
-
-    /*
-    const TranmereWebUserPool = cognito.UserPool.fromUserPoolArn(
-      this,
-      'TranmereWebUserPool',
-      `arn:aws:cognito-idp:${this.region}:${this.account}:userpool/eu-west-1_GAF4md6wn`
-    );
-    const cognitoAuthorizer = new apigw.CognitoUserPoolsAuthorizer(
-      this,
-      'TranmereWebAuthorizer',
-      {
-        cognitoUserPools: [TranmereWebUserPool]
-      }
-    );
-*/
-
-    /*
-    const TranmereWebPlayerTransfers = new ddb.Table(this, 'TranmereWebPlayerTransfers', {
-      tableName: "TranmereWebPlayerTransfers",
-      partitionKey: { name: 'id', type: ddb.AttributeType.STRING },
-      billingMode: ddb.BillingMode.PAY_PER_REQUEST,
-    });
-    TranmereWebPlayerTransfers.addGlobalSecondaryIndex({
-      indexName: 'ByNameIndex',
-      partitionKey: {
-        name: 'name',
-        type: ddb.AttributeType.STRING,
-      },
-      projectionType: ddb.ProjectionType.ALL,
-      sortKey: {
-        name: 'season',
-        type: ddb.AttributeType.NUMBER,
-      }
-    });
-    TranmereWebPlayerTransfers.addGlobalSecondaryIndex({
-      indexName: 'ByValueIndex',
-      partitionKey: {
-        name: 'season',
-        type: ddb.AttributeType.NUMBER,
-      },
-      projectionType: ddb.ProjectionType.ALL,
-      sortKey: {
-        name: 'cost',
-        type: ddb.AttributeType.NUMBER,
-      }
-    });
-    */
-
-    /*
-    const TranmereWebPlayerLinks = new ddb.Table(this, 'TranmereWebPlayerLinks', {
-      tableName: "TranmereWebPlayerLinks",
-      partitionKey: { name: 'id', type: ddb.AttributeType.STRING },
-      billingMode: ddb.BillingMode.PAY_PER_REQUEST,
-    });
-    TranmereWebPlayerLinks.addGlobalSecondaryIndex({
-      indexName: 'ByNameIndex',
-      partitionKey: {
-        name: 'name',
-        type: ddb.AttributeType.STRING,
-      },
-      projectionType: ddb.ProjectionType.ALL
-    });
-    */
 
     // Base API gateway
     const api = new apigw.RestApi(this, 'tranmere-web', {
@@ -131,15 +49,6 @@ export class TranmereWebStack extends cdk.Stack {
     });
 
     const contact_us = api.root.addResource('contact-us');
-    const media_sync = api.root.addResource('media-sync');
-    const type = media_sync.addResource('{type}');
-    const match = api.root.addResource('match');
-    const season = match.addResource('{season}');
-    const date = season.addResource('{date}');
-    const page = api.root.addResource('page');
-    const pageName = page.addResource('{pageName}');
-    const classifier = pageName.addResource('{classifier}');
-    const player_search = api.root.addResource('player-search');
 
     new TranmereWebLambda(this, 'ContactUsFunction', {
       environment: env_variables,
@@ -151,40 +60,6 @@ export class TranmereWebStack extends cdk.Stack {
         resources: ['*'],
         effect: iam.Effect.ALLOW
       })
-    });
-
-    /*
-    new TranmereWebLambda(this, 'UploadJobFunction', {
-      environment: env_variables,
-      lambdaFile: './lambda/upload2.ts',
-      readWriteTables: [TranmereWebPlayerTransfers],
-      apiResource: upload,
-      apiMethod: 'GET',
-      commandHooks: {
-        beforeBundling(): string[] {
-          return [];
-        },
-        afterBundling(inputDir: string, outputDir: string): string[] {
-          return [
-            `mkdir ${outputDir}/csv && cp -R ${inputDir}/csv/* ${outputDir}/csv`
-          ];
-        },
-        beforeInstall() {
-          return [];
-        }
-      }
-    });
-    */
-
-
-    new TranmereWebLambda(this, 'MediaSyncFunction', {
-      environment: env_variables,
-      lambdaFile: './lambda/mediasync.ts',
-      apiResource: type,
-      apiMethod: 'POST',
-      readWriteTables: [
-        TranmereWebMediaSyncTable
-      ]
     });
 
     new TranmereWebGraphQL(this, 'TranmereWebGraphQL', {

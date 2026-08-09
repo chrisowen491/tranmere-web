@@ -2,18 +2,28 @@ const RECEIVER = process.env.EMAIL_ADDRESS;
 const SENDER = 'admin@tranmere-web.com';
 
 import { APIGatewayEvent, APIGatewayProxyResult } from 'aws-lambda';
-import { TranmereWebUtils } from '@tranmere-web/lib/src/tranmere-web-utils';
 import { SES } from '@aws-sdk/client-ses';
 const ses = new SES();
-const utils = new TranmereWebUtils();
 
 exports.handler = async (
   event: APIGatewayEvent
 ): Promise<APIGatewayProxyResult> => {
   console.log('Received event:', event);
   if (event.body) await sendEmail(JSON.parse(event.body));
-  return utils.sendResponse(200, 'Success');
+  return sendResponse(200, 'Success');
 };
+
+function sendResponse(code: number, obj: any): APIGatewayProxyResult {
+  return {
+    isBase64Encoded: false,
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*'
+    },
+    statusCode: code,
+    body: JSON.stringify(obj)
+  };
+}
 
 async function sendEmail(event: { name: string; email: string; desc: string }) {
   const params = {

@@ -5,7 +5,6 @@ on:
     branches: [ master ]
     paths:
       - 'packages/api-stack/**'
-      - 'packages/lib/**'
       - 'packages/api-tests/**'
       - '.github/workflows/api.yml'   
 

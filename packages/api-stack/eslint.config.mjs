@@ -5,7 +5,6 @@ export default [
   {
     ignores: [
       '**/*.config.js',
-      '**/lambda/upload.js',
       '**/node_modules/**',
       '**/cdk.out/**',
     ],
