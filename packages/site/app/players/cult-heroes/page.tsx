@@ -1,10 +1,15 @@
 import { ArrowRightIcon, SparklesIcon } from "@heroicons/react/24/outline";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
+import { connection } from "next/server";
 import Image from "next/image";
 import Link from "next/link";
 import { breadcrumbJsonLd, JsonLd } from "@/components/seo/JsonLd";
 import { getCultHeroSections } from "@/lib/cultHeroes";
 import { pageMetadata } from "@/lib/seo";
+
+// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
+// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
+export const instant = false;
 
 export const metadata = pageMetadata({
   title: "Tranmere Rovers cult heroes",
@@ -14,6 +19,7 @@ export const metadata = pageMetadata({
 });
 
 export default async function CultHeroesPage() {
+  await connection();
   const env = (await getCloudflareContext({ async: true })).env;
   const sections = await getCultHeroSections(env.DB);
   const totalHeroes = new Set(

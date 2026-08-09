@@ -1,8 +1,13 @@
 import { TransferSearch } from "@/components/apps/TransferSearch";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
+import { connection } from "next/server";
 import { Metadata } from "next";
 import { getClubs } from "@/lib/clubs";
 import { getTransfers } from "@/lib/transfers";
+
+// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
+// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
+export const instant = false;
 
 export const metadata: Metadata = {
   title: "Transfers Home",
@@ -10,6 +15,7 @@ export const metadata: Metadata = {
 };
 
 export default async function Transfers() {
+  await connection();
   const env = (await getCloudflareContext({ async: true })).env;
   const [transfers, teams] = await Promise.all([
     getTransfers(env.DB, { limit: 50, sort: "fee-desc" }),

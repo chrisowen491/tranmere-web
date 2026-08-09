@@ -3,12 +3,15 @@ import { requireAdminPage } from "@/lib/adminAuth";
 import { GetSeasons } from "@tranmere-web/lib/src/apiFunctions";
 import { queryAppRows } from "@tranmere-web/lib/src/d1-queries";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
+import { connection } from "next/server";
 import { getClubs } from "@/lib/clubs";
 import type { Metadata } from "next";
 
-export const dynamic = "force-dynamic";
-
 import Link from "next/link";
+
+// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
+// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
+export const instant = false;
 
 export const metadata: Metadata = {
   title: "Manage appearances | Admin",
@@ -33,6 +36,7 @@ export default async function AppAdminPage({
     ? requestedSeason
     : seasons[0];
   const selectedDate = validDate(params.date) ? params.date! : undefined;
+  await connection();
   const db = getCloudflareContext().env.DB;
   const [apps, clubs] = await Promise.all([
     queryAppRows(db, {

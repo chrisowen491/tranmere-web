@@ -1,11 +1,16 @@
 import { ArrowRightIcon, StarIcon } from "@heroicons/react/24/outline";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
+import { connection } from "next/server";
 import type { Match } from "@tranmere-web/lib/src/tranmere-web-types";
 import Image from "next/image";
 import Link from "next/link";
 import { breadcrumbJsonLd, JsonLd } from "@/components/seo/JsonLd";
 import { searchGames } from "@/lib/games";
 import { pageMetadata } from "@/lib/seo";
+
+// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
+// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
+export const instant = false;
 
 export const metadata = pageMetadata({
   title: "Tranmere Rovers at Wembley",
@@ -52,6 +57,7 @@ function result(match: Match) {
 }
 
 export default async function WembleyArchivePage() {
+  await connection();
   const env = (await getCloudflareContext({ async: true })).env;
   const { results } = await searchGames(env.DB, {
     venue: "Wembley Stadium",

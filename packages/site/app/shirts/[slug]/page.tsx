@@ -3,12 +3,22 @@ import { SlugParams } from "@/lib/types";
 import { getAllShirts } from "@/lib/api";
 import { notFound } from "next/navigation";
 import { pageMetadata } from "@/lib/seo";
+import { cacheLife, cacheTag } from "next/cache";
 
-export const revalidate = 7200;
+// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
+// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
+export const instant = false;
+
+async function getCachedShirts() {
+  "use cache";
+  cacheLife("hours");
+  cacheTag("shirts");
+  return getAllShirts();
+}
 
 export async function generateMetadata(props: { params: SlugParams }) {
   const params = await props.params;
-  const shirts = await getAllShirts();
+  const shirts = await getCachedShirts();
 
   const shirt = shirts.find((s) => s.slug === params.slug);
   if (!shirt) return {};
@@ -20,7 +30,7 @@ export async function generateMetadata(props: { params: SlugParams }) {
   });
 }
 export default async function ShirtHome(props: { params: SlugParams }) {
-  const shirts = await getAllShirts();
+  const shirts = await getCachedShirts();
   const params = await props.params;
   const shirt = shirts.find((s) => s.slug === params.slug);
 

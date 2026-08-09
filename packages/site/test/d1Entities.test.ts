@@ -43,7 +43,7 @@ function databaseReturning<T>(rows: T[]) {
     all: vi.fn(async () => ({ results: rows })),
     first: vi.fn(async () => rows[0] ?? null),
   };
-  const prepare = vi.fn(() => statement);
+  const prepare = vi.fn<(sql: string) => typeof statement>(() => statement);
 
   return {
     boundValues,

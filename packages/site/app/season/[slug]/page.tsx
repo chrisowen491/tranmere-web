@@ -1,5 +1,6 @@
 import { GetSeasons, GetYear } from "@tranmere-web/lib/src/apiFunctions";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
+import { connection } from "next/server";
 import SeasonReview from "@/components/apps/SeasonReview";
 import { getAllArticlesForTag, getAllShirts } from "@/lib/api";
 import { SlugParams } from "@/lib/types";
@@ -10,6 +11,10 @@ import { getPlayerStatistics } from "@/lib/playerStatistics";
 import { pageMetadata } from "@/lib/seo";
 import { breadcrumbJsonLd, JsonLd } from "@/components/seo/JsonLd";
 import { searchGames } from "@/lib/games";
+
+// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
+// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
+export const instant = false;
 
 export async function generateMetadata(props: { params: SlugParams }) {
   const params = await props.params;
@@ -27,6 +32,8 @@ export default async function SeasonPage(props: { params: SlugParams }) {
   const season = decodeURI(params.slug);
 
   if (parseInt(season) < 1920 || parseInt(season) > GetYear()) notFound();
+
+  await connection();
 
   const env = (await getCloudflareContext({ async: true })).env;
   const managers = await getManagers(env.DB);

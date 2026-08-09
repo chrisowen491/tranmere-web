@@ -1,9 +1,14 @@
 import { PlayerSearch } from "@/components/apps/PlayerSearch";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
+import { connection } from "next/server";
 import Link from "next/link";
 import { getPlayerStatistics } from "@/lib/playerStatistics";
 import { breadcrumbJsonLd, JsonLd } from "@/components/seo/JsonLd";
 import { pageMetadata } from "@/lib/seo";
+
+// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
+// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
+export const instant = false;
 
 export const metadata = pageMetadata({
   title: "Tranmere Rovers players",
@@ -12,6 +17,7 @@ export const metadata = pageMetadata({
 });
 
 export default async function PlayerSearchPage() {
+  await connection();
   const env = (await getCloudflareContext({ async: true })).env;
   const allPlayers = await getPlayerStatistics(env.DB);
   const players = [...allPlayers]

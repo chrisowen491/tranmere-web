@@ -3,6 +3,7 @@ import { requireAdminPage } from "@/lib/adminAuth";
 import { getPlayerProfileCorrections } from "@/lib/playerProfileCorrections";
 import { getFormationCorrections } from "@/lib/formationCorrections";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
+import { connection } from "next/server";
 import {
   ArrowRightIcon,
   ArrowsRightLeftIcon,
@@ -17,7 +18,9 @@ import {
 import type { Metadata } from "next";
 import Link from "next/link";
 
-export const dynamic = "force-dynamic";
+// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
+// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
+export const instant = false;
 
 export const metadata: Metadata = {
   title: "Admin",
@@ -26,6 +29,7 @@ export const metadata: Metadata = {
 
 export default async function AdminPage() {
   const session = await requireAdminPage("/admin");
+  await connection();
   const env = getCloudflareContext().env;
   const [attendanceCorrections, profileCorrections, formationCorrections] =
     await Promise.all([

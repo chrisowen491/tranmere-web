@@ -1,9 +1,14 @@
 import { getCloudflareContext } from "@opennextjs/cloudflare";
+import { connection } from "next/server";
 import type { Match } from "@tranmere-web/lib/src/tranmere-web-types";
 import type { Metadata } from "next";
 import { ManagerComparison } from "@/components/apps/ManagerComparison";
 import { searchGames } from "@/lib/games";
 import { getManagers } from "@/lib/managers";
+
+// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
+// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
+export const instant = false;
 
 export const metadata: Metadata = {
   title: "Compare Tranmere Rovers managers",
@@ -12,6 +17,7 @@ export const metadata: Metadata = {
 };
 
 export default async function ManagerComparisonPage() {
+  await connection();
   const env = (await getCloudflareContext({ async: true })).env;
   const managers = await getManagers(env.DB);
   const initialManagerIndexes: [number, number] = [1, 2];

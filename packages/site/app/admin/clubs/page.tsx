@@ -2,10 +2,13 @@ import { ClubAdmin } from "@/components/apps/admin/ClubAdmin";
 import { requireAdminPage } from "@/lib/adminAuth";
 import { getClubRecords } from "@/lib/clubs";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
+import { connection } from "next/server";
 import type { Metadata } from "next";
 import Link from "next/link";
 
-export const dynamic = "force-dynamic";
+// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
+// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
+export const instant = false;
 
 export const metadata: Metadata = {
   title: "Manage clubs",
@@ -14,6 +17,7 @@ export const metadata: Metadata = {
 
 export default async function ClubAdminPage() {
   await requireAdminPage("/admin/clubs");
+  await connection();
   const env = getCloudflareContext().env;
   const clubs = await getClubRecords(env.DB);
 

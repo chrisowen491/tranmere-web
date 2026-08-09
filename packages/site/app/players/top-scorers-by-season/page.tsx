@@ -1,6 +1,7 @@
 import { ArrowRightIcon, ChartBarIcon } from "@heroicons/react/24/outline";
 import { queryPlayerSeasonSummaryRows } from "@tranmere-web/lib/src/d1-queries";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
+import { connection } from "next/server";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -8,6 +9,10 @@ import {
   enrichPlayerStatistics,
   mapPlayerSeasonSummary,
 } from "@/lib/playerStatistics";
+
+// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
+// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
+export const instant = false;
 
 export const metadata: Metadata = {
   title: "Top Scorers By Season",
@@ -22,6 +27,7 @@ function seasonLabel(season: string) {
 }
 
 export default async function TopScorersBySeason() {
+  await connection();
   const env = (await getCloudflareContext({ async: true })).env;
   const summaries = await queryPlayerSeasonSummaryRows(env.DB);
   const topScorers = await enrichPlayerStatistics(

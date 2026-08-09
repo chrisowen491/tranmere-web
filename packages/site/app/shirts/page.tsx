@@ -2,6 +2,11 @@ import { ShirtSearchApp } from "@/components/apps/ShirtSearch";
 import { getAllShirts } from "@/lib/api";
 import { breadcrumbJsonLd, JsonLd } from "@/components/seo/JsonLd";
 import { pageMetadata } from "@/lib/seo";
+import { cacheLife, cacheTag } from "next/cache";
+
+// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
+// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
+export const instant = false;
 
 export const metadata = pageMetadata({
   title: "Tranmere Rovers shirts",
@@ -9,9 +14,15 @@ export const metadata = pageMetadata({
   pathname: "/shirts",
 });
 
+async function getCachedShirts() {
+  "use cache";
+  cacheLife("hours");
+  cacheTag("shirts");
+  return getAllShirts();
+}
+
 export default async function ShirtHome() {
- 
-  const shirts = await getAllShirts();
+  const shirts = await getCachedShirts();
   shirts.sort((a, b) => (a.name > b.name ? 1 : b.name > a.name ? -1 : 0));
 
   return (

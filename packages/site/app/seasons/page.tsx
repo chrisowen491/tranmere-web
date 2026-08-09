@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { connection } from "next/server";
 import {
   ArrowUpRightIcon,
   CalendarDaysIcon,
@@ -9,6 +10,10 @@ import { GetSeasons } from "@tranmere-web/lib/src/apiFunctions";
 import { HONOURS_SEASONS } from "@tranmere-web/lib/src/honours-constants";
 import { breadcrumbJsonLd, JsonLd } from "@/components/seo/JsonLd";
 import { pageMetadata } from "@/lib/seo";
+
+// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
+// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
+export const instant = false;
 
 export const metadata = pageMetadata({
   title: "Tranmere Rovers seasons",
@@ -24,7 +29,8 @@ const honoursBySeason = new Map(
   HONOURS_SEASONS.map((honours) => [honours.season, honours.achievements]),
 );
 
-export default function SeasonsIndexPage() {
+export default async function SeasonsIndexPage() {
+  await connection();
   const seasons = GetSeasons().filter(
     (season) => season < 1939 || season > 1944,
   );
