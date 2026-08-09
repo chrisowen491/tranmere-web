@@ -1,54 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
-<<<<<<< HEAD
-<url><loc>https://www.tranmere-web.com</loc><lastmod>2026-08-09T19:49:09.813Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.tranmere-web.com/admin</loc><lastmod>2026-08-09T19:49:09.814Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.tranmere-web.com/admin/apps</loc><lastmod>2026-08-09T19:49:09.814Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.tranmere-web.com/admin/attendance-corrections</loc><lastmod>2026-08-09T19:49:09.814Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.tranmere-web.com/admin/clubs</loc><lastmod>2026-08-09T19:49:09.814Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.tranmere-web.com/admin/comments</loc><lastmod>2026-08-09T19:49:09.814Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.tranmere-web.com/admin/formation-corrections</loc><lastmod>2026-08-09T19:49:09.814Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.tranmere-web.com/admin/games</loc><lastmod>2026-08-09T19:49:09.814Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.tranmere-web.com/admin/goals</loc><lastmod>2026-08-09T19:49:09.814Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.tranmere-web.com/admin/hat-tricks</loc><lastmod>2026-08-09T19:49:09.814Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.tranmere-web.com/admin/managers</loc><lastmod>2026-08-09T19:49:09.814Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.tranmere-web.com/admin/player-profile-corrections</loc><lastmod>2026-08-09T19:49:09.814Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.tranmere-web.com/admin/players</loc><lastmod>2026-08-09T19:49:09.814Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.tranmere-web.com/admin/programmes</loc><lastmod>2026-08-09T19:49:09.814Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.tranmere-web.com/admin/transfers</loc><lastmod>2026-08-09T19:49:09.814Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.tranmere-web.com/ai</loc><lastmod>2026-08-09T19:49:09.814Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.tranmere-web.com/blog</loc><lastmod>2026-08-09T19:49:09.814Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.tranmere-web.com/contact</loc><lastmod>2026-08-09T19:49:09.814Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.tranmere-web.com/fantasy-team</loc><lastmod>2026-08-09T19:49:09.814Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.tranmere-web.com/games/at-wembley</loc><lastmod>2026-08-09T19:49:09.814Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.tranmere-web.com/games/penalty-shootouts</loc><lastmod>2026-08-09T19:49:09.814Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.tranmere-web.com/head-to-head</loc><lastmod>2026-08-09T19:49:09.814Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.tranmere-web.com/honours</loc><lastmod>2026-08-09T19:49:09.814Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.tranmere-web.com/managers</loc><lastmod>2026-08-09T19:49:09.814Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.tranmere-web.com/managers/comparison</loc><lastmod>2026-08-09T19:49:09.814Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.tranmere-web.com/managers/fingerprints</loc><lastmod>2026-08-09T19:49:09.814Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.tranmere-web.com/managers/trusted-xi</loc><lastmod>2026-08-09T19:49:09.814Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.tranmere-web.com/players</loc><lastmod>2026-08-09T19:49:09.814Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.tranmere-web.com/players/avatar-builder</loc><lastmod>2026-08-09T19:49:09.814Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.tranmere-web.com/players/cult-heroes</loc><lastmod>2026-08-09T19:49:09.814Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.tranmere-web.com/players/hat-tricks</loc><lastmod>2026-08-09T19:49:09.814Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.tranmere-web.com/players/lethal-finishers</loc><lastmod>2026-08-09T19:49:09.814Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.tranmere-web.com/players/misfiring-strikers</loc><lastmod>2026-08-09T19:49:09.814Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.tranmere-web.com/players/partnerships</loc><lastmod>2026-08-09T19:49:09.814Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.tranmere-web.com/players/super-subs</loc><lastmod>2026-08-09T19:49:09.814Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.tranmere-web.com/players/top-scorers-by-season</loc><lastmod>2026-08-09T19:49:09.814Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.tranmere-web.com/players/top-scorers-per-game</loc><lastmod>2026-08-09T19:49:09.814Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.tranmere-web.com/programmes</loc><lastmod>2026-08-09T19:49:09.814Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.tranmere-web.com/results</loc><lastmod>2026-08-09T19:49:09.814Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.tranmere-web.com/results/fa-cup</loc><lastmod>2026-08-09T19:49:09.814Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.tranmere-web.com/results/league-cup</loc><lastmod>2026-08-09T19:49:09.814Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.tranmere-web.com/results/top-attendances</loc><lastmod>2026-08-09T19:49:09.814Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.tranmere-web.com/rovers-connections</loc><lastmod>2026-08-09T19:49:09.814Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.tranmere-web.com/seasons</loc><lastmod>2026-08-09T19:49:09.814Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.tranmere-web.com/shirts</loc><lastmod>2026-08-09T19:49:09.814Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.tranmere-web.com/transfer-central</loc><lastmod>2026-08-09T19:49:09.814Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.tranmere-web.com/who-am-i</loc><lastmod>2026-08-09T19:49:09.814Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-=======
 <url><loc>https://www.tranmere-web.com</loc><lastmod>2026-08-09T20:13:59.644Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
 <url><loc>https://www.tranmere-web.com/ai</loc><lastmod>2026-08-09T20:13:59.644Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
 <url><loc>https://www.tranmere-web.com/blog</loc><lastmod>2026-08-09T20:13:59.644Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
@@ -82,5 +33,4 @@
 <url><loc>https://www.tranmere-web.com/shirts</loc><lastmod>2026-08-09T20:13:59.644Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
 <url><loc>https://www.tranmere-web.com/transfer-central</loc><lastmod>2026-08-09T20:13:59.644Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
 <url><loc>https://www.tranmere-web.com/who-am-i</loc><lastmod>2026-08-09T20:13:59.644Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
->>>>>>> ba475f1 (feat: switch to old caching)
 </urlset>
