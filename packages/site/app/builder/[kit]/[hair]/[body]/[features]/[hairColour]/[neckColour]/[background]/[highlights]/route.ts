@@ -47,5 +47,9 @@ export async function GET(
 
   const response = new NextResponse(svg);
   response.headers.set("Content-Type", "image/svg+xml");
+  response.headers.set(
+    "Cache-Control",
+    "public, max-age=2592000, s-maxage=2592000, immutable",
+  );
   return response;
 }

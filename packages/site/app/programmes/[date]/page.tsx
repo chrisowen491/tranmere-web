@@ -1,5 +1,4 @@
 import {
-  ArrowDownTrayIcon,
   ArrowLeftIcon,
   BookOpenIcon,
   CalendarDaysIcon,
