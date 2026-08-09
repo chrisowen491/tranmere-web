@@ -103,16 +103,17 @@ export function HatTrickAdmin({
       if (!response.ok || !result.hatTrick) {
         throw new Error(result.message || "The hat-trick could not be saved.");
       }
+      const savedHatTrick = result.hatTrick;
       setHatTricks((records) =>
         sortHatTricks(
           isNew
-            ? [...records, result.hatTrick]
+            ? [...records, savedHatTrick]
             : records.map((record) =>
-                record.id === result.hatTrick!.id ? result.hatTrick! : record,
+                record.id === savedHatTrick.id ? savedHatTrick : record,
               ),
         ),
       );
-      setEditing(result.hatTrick);
+      setEditing(savedHatTrick);
       setMessage(isNew ? "Hat-trick added." : "Hat-trick updated.");
     } catch (error) {
       setIsError(true);
