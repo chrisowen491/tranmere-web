@@ -5,7 +5,6 @@ import {
 } from "@heroicons/react/24/outline";
 import { queryHatTrickRows } from "@tranmere-web/lib/src/d1-queries";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
-import { connection } from "next/server";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -13,10 +12,6 @@ import {
   getPlayerStatisticsProfiles,
   type PlayerStatisticsProfile,
 } from "@/lib/playerStatistics";
-
-// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
-// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
-export const instant = false;
 
 export const metadata: Metadata = {
   title: "Tranmere Hat Tricks",
@@ -47,7 +42,6 @@ function formatDate(value: string) {
 }
 
 export default async function HatTricks() {
-  await connection();
   const env = (await getCloudflareContext({ async: true })).env;
   const hatTricks = await queryHatTrickRows(env.DB);
   const profiles = await getPlayerStatisticsProfiles(

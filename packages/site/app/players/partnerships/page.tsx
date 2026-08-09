@@ -1,13 +1,8 @@
 import { getCloudflareContext } from "@opennextjs/cloudflare";
-import { connection } from "next/server";
 import type { Metadata } from "next";
 import { PlayerPartnershipExplorer } from "@/components/apps/PlayerPartnershipExplorer";
 import { getPlayerPartnership } from "@/lib/playerPartnership";
 import { getUniquePlayers } from "@/lib/players";
-
-// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
-// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
-export const instant = false;
 
 export const metadata: Metadata = {
   title: "Tranmere Rovers player partnership explorer",
@@ -18,7 +13,6 @@ export const metadata: Metadata = {
 export default async function PlayerPartnershipsPage(props: {
   searchParams: Promise<{ player?: string }>;
 }) {
-  await connection();
   const env = (await getCloudflareContext({ async: true })).env;
   const searchParams = await props.searchParams;
   const players = await getUniquePlayers(env.DB);

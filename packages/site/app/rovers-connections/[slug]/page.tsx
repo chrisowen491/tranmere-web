@@ -8,7 +8,6 @@ import {
   UserGroupIcon,
 } from "@heroicons/react/24/outline";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
-import { connection } from "next/server";
 import type {
   H2HResult,
   H2HTotal,
@@ -23,10 +22,6 @@ import { getManagers } from "@/lib/managers";
 import { getTransfers } from "@/lib/transfers";
 import type { SlugParams } from "@/lib/types";
 import { pageMetadata } from "@/lib/seo";
-
-// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
-// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
-export const instant = false;
 
 interface ResultsResponse {
   results: Match[];
@@ -73,7 +68,6 @@ export default async function RoversConnectionPage(props: {
 }) {
   const { slug } = await props.params;
   const clubName = decodeURIComponent(slug);
-  await connection();
   const env = (await getCloudflareContext({ async: true })).env;
   const [club, transfers, managers] = await Promise.all([
     getClubByName(env.DB, clubName),

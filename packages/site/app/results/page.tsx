@@ -6,15 +6,10 @@ import {
 import { getClubs } from "@/lib/clubs";
 import { getManagers } from "@/lib/managers";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
-import { connection } from "next/server";
 import Link from "next/link";
 import { breadcrumbJsonLd, JsonLd } from "@/components/seo/JsonLd";
 import { pageMetadata } from "@/lib/seo";
 import { searchGames } from "@/lib/games";
-
-// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
-// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
-export const instant = false;
 
 export const metadata = pageMetadata({
   title: "Tranmere Rovers results",
@@ -23,7 +18,6 @@ export const metadata = pageMetadata({
 });
 
 export default async function ResultsSearchPage() {
-  await connection();
   const env = (await getCloudflareContext({ async: true })).env;
 
   const theYear = GetYear();

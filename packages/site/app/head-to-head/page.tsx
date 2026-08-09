@@ -1,13 +1,8 @@
 import { ArrowUpRightIcon } from "@heroicons/react/24/outline";
 import { getClubs } from "@/lib/clubs";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
-import { connection } from "next/server";
 import type { Metadata } from "next";
 import Link from "next/link";
-
-// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
-// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
-export const instant = false;
 
 export const metadata: Metadata = {
   title: "Head-to-head records",
@@ -33,7 +28,6 @@ function tagSize(name: string) {
 }
 
 export default async function HeadToHeadPage() {
-  await connection();
   const db = (await getCloudflareContext({ async: true })).env.DB;
   const teams = await getClubs(db);
   const letters = [...new Set(teams.map((team) => team.name[0].toUpperCase()))];

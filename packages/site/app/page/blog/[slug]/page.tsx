@@ -5,7 +5,6 @@ import { Kit } from "@/components/blogs/Kit";
 import { StarGrid } from "@/components/blogs/StarGrid";
 import { BLOCKS } from "@contentful/rich-text-types";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
-import { connection } from "next/server";
 import { GetCommentsByUrl } from "@/lib/comments";
 import { Reviews } from "@/components/comments/Reviews";
 import CommentPanel from "@/components/comments/CommentPanel";
@@ -15,10 +14,6 @@ import Link from "next/link";
 import { SlugParams } from "@/lib/types";
 import { pageMetadata } from "@/lib/seo";
 import { absoluteUrl, breadcrumbJsonLd, JsonLd } from "@/components/seo/JsonLd";
-
-// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
-// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
-export const instant = false;
 
 export async function generateMetadata(props: { params: SlugParams }) {
   const params = await props.params;
@@ -49,7 +44,6 @@ export default async function BlogPage(props: { params: SlugParams }) {
   const Text = ({ children }: any) => <p className="leading-8">{children}</p>;
 
   const url = `/page/blog/${params.slug}`;
-  await connection();
   const comments = await GetCommentsByUrl(getCloudflareContext().env, url);
 
   let score = 0;

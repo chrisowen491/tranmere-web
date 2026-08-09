@@ -12,14 +12,9 @@ import { matchOutcome, outcomeClass } from "@/lib/seasonMatchUtils";
 import { pageMetadata } from "@/lib/seo";
 import type { SlugParams } from "@/lib/types";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
-import { connection } from "next/server";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-
-// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
-// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
-export const instant = false;
 
 function seasonLabel(season: string) {
   const start = Number(season);
@@ -60,7 +55,6 @@ export default async function OpponentDossierPage(props: {
 }) {
   const { slug } = await props.params;
   const requestedName = decodeURIComponent(slug);
-  await connection();
   const db = (await getCloudflareContext({ async: true })).env.DB;
   const club = await getClubByName(db, requestedName);
   if (!club || club.name === "Tranmere Rovers") notFound();

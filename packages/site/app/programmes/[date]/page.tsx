@@ -1,10 +1,10 @@
 import {
+  ArrowDownTrayIcon,
   ArrowLeftIcon,
   BookOpenIcon,
   CalendarDaysIcon,
 } from "@heroicons/react/24/outline";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
-import { connection } from "next/server";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -13,9 +13,7 @@ import { breadcrumbJsonLd, JsonLd } from "@/components/seo/JsonLd";
 import { getProgrammeByDate, type ProgrammeRecord } from "@/lib/programmes";
 import { pageMetadata } from "@/lib/seo";
 
-// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
-// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
-export const instant = false;
+export const dynamic = "force-dynamic";
 
 interface ProgrammePageParams {
   date: string;
@@ -38,7 +36,6 @@ function absoluteProgrammeUrl(programme: ProgrammeRecord) {
 
 async function loadProgramme(date: string) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return null;
-  await connection();
   const env = (await getCloudflareContext({ async: true })).env;
   return getProgrammeByDate(env.DB, date);
 }

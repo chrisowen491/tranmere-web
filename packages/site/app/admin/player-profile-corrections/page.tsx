@@ -2,13 +2,10 @@ import { PlayerProfileCorrectionReview } from "@/components/apps/admin/PlayerPro
 import { requireAdminPage } from "@/lib/adminAuth";
 import { getPlayerProfileCorrections } from "@/lib/playerProfileCorrections";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
-import { connection } from "next/server";
 import type { Metadata } from "next";
 import Link from "next/link";
 
-// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
-// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
-export const instant = false;
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Player profile corrections",
@@ -17,7 +14,6 @@ export const metadata: Metadata = {
 
 export default async function PlayerProfileCorrectionsAdminPage() {
   await requireAdminPage("/admin/player-profile-corrections");
-  await connection();
   const env = getCloudflareContext().env;
   const corrections = await getPlayerProfileCorrections(env.DB, "pending");
 

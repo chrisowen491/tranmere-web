@@ -3,7 +3,6 @@ import { getAllArticlesForTag } from "@/lib/api";
 import { GetCommentsByUrl } from "@/lib/comments";
 import { PlayerProfile, SlugParams } from "@/lib/types";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
-import { connection } from "next/server";
 import { notFound } from "next/navigation";
 import { getTransfers } from "@/lib/transfers";
 import { getPlayerByName } from "@/lib/players";
@@ -17,10 +16,6 @@ import {
 import type { AppRow } from "@tranmere-web/lib/src/d1-types";
 import type { Appearance } from "@tranmere-web/lib/src/tranmere-web-types";
 import { mapPlayerSeasonSummary } from "@/lib/playerStatistics";
-
-// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
-// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
-export const instant = false;
 
 function mapAppearance(
   row: AppRow,
@@ -62,7 +57,6 @@ export async function generateMetadata(props: { params: SlugParams }) {
 
 export default async function PlayerProfilePage(props: { params: SlugParams }) {
   const params = await props.params;
-  await connection();
   const env = getCloudflareContext().env;
   const requestedName = decodeURI(params.slug);
   const d1Player = await getPlayerByName(env.DB, requestedName);

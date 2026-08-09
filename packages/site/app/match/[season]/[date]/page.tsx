@@ -1,5 +1,4 @@
 import { getCloudflareContext } from "@opennextjs/cloudflare";
-import { connection } from "next/server";
 import { MatchParams } from "@/lib/types";
 import type {
   Appearance,
@@ -20,10 +19,6 @@ import {
   getMatchReport,
   searchGames,
 } from "@/lib/games";
-
-// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
-// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
-export const instant = false;
 
 function mapAppearance(row: {
   id: string;
@@ -94,7 +89,6 @@ function formatGoals(goals: Goal[]) {
 
 export async function generateMetadata(props: { params: MatchParams }) {
   const params = await props.params;
-  await connection();
   const env = getCloudflareContext().env;
   const match = await getGameBySeasonAndDate(
     env.DB,
@@ -111,7 +105,6 @@ export async function generateMetadata(props: { params: MatchParams }) {
 
 export default async function MatchPage(props: { params: MatchParams }) {
   const params = await props.params;
-  await connection();
   const env = (await getCloudflareContext({ async: true })).env;
   const baseUrl = `/match/${params.season}/${params.date}`;
   const [game, reportRow, appRows, goalRows] = await Promise.all([

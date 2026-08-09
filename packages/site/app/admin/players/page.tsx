@@ -2,13 +2,10 @@ import { PlayerAdmin } from "@/components/apps/admin/PlayerAdmin";
 import { requireAdminPage } from "@/lib/adminAuth";
 import { getPlayers } from "@/lib/players";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
-import { connection } from "next/server";
 import type { Metadata } from "next";
 import Link from "next/link";
 
-// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
-// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
-export const instant = false;
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Manage players",
@@ -17,7 +14,6 @@ export const metadata: Metadata = {
 
 export default async function PlayerAdminPage() {
   await requireAdminPage("/admin/players");
-  await connection();
   const env = getCloudflareContext().env;
   const players = await getPlayers(env.DB);
   const completeProfiles = players.filter(

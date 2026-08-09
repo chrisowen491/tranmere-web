@@ -3,13 +3,10 @@ import { requireAdminPage } from "@/lib/adminAuth";
 import { GetSeasons } from "@tranmere-web/lib/src/apiFunctions";
 import { queryGameRows } from "@tranmere-web/lib/src/d1-queries";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
-import { connection } from "next/server";
 import type { Metadata } from "next";
 import Link from "next/link";
 
-// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
-// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
-export const instant = false;
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Manage games | Admin",
@@ -28,7 +25,6 @@ export default async function GameAdminPage({
   const selectedSeason = seasons.includes(requestedSeason)
     ? requestedSeason
     : seasons[0];
-  await connection();
   const games = await queryGameRows(getCloudflareContext().env.DB, {
     season: selectedSeason,
     sort: "date-asc",

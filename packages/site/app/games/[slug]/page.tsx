@@ -5,13 +5,8 @@ import { searchGames } from "@/lib/games";
 import { getClubs } from "@/lib/clubs";
 import { getManagers } from "@/lib/managers";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
-import { connection } from "next/server";
 import { SlugParams } from "@/lib/types";
 import { pageMetadata } from "@/lib/seo";
-
-// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
-// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
-export const instant = false;
 
 export async function generateMetadata(props: { params: SlugParams }) {
   const params = await props.params;
@@ -49,7 +44,6 @@ export async function generateMetadata(props: { params: SlugParams }) {
 
 export default async function GamesPage(props: { params: SlugParams }) {
   const params = await props.params;
-  await connection();
   const env = getCloudflareContext().env;
 
   let title: string | null = null;

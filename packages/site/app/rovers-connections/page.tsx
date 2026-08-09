@@ -4,15 +4,10 @@ import {
   UserGroupIcon,
 } from "@heroicons/react/24/outline";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
-import { connection } from "next/server";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getClubRecords } from "@/lib/clubs";
 import { getTransfers } from "@/lib/transfers";
-
-// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
-// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
-export const instant = false;
 
 export const metadata: Metadata = {
   title: "Rovers connections",
@@ -25,7 +20,6 @@ function connectionHref(club: string) {
 }
 
 export default async function RoversConnectionsPage() {
-  await connection();
   const db = (await getCloudflareContext({ async: true })).env.DB;
   const [clubs, transfers] = await Promise.all([
     getClubRecords(db),

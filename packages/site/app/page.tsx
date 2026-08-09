@@ -17,12 +17,9 @@ import type { Match } from "@tranmere-web/lib/src/tranmere-web-types";
 import { getGameBySeasonAndDate } from "@/lib/games";
 import { getAllArticles, getAllShirts } from "@/lib/api";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
-import { connection } from "next/server";
 import { getUniquePlayers, type PlayerRecord } from "@/lib/players";
 
-// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
-// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
-export const instant = false;
+export const revalidate = 7200;
 
 const defaultPlayerImageSignature =
   "simple/cccccc/none/cccccc/cccccc/none/cccccc";
@@ -135,7 +132,6 @@ function PromoPlayer({ player }: { player: PlayerRecord }) {
 }
 
 export default async function Home() {
-  await connection();
   const env = (await getCloudflareContext({ async: true })).env;
   const now = new Date();
   const dayOfYear = Math.floor(

@@ -1,16 +1,11 @@
 import type { Metadata } from "next";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
-import { connection } from "next/server";
 import {
   queryAppRows,
   queryPlayerSeasonSummaryRows,
 } from "@tranmere-web/lib/src/d1-queries";
 import { WhoAmIGame } from "@/components/apps/WhoAmIGame";
 import { getUniquePlayers } from "@/lib/players";
-
-// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
-// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
-export const instant = false;
 
 export const metadata: Metadata = {
   title: "Who Am I? — Daily Tranmere player",
@@ -44,7 +39,6 @@ function avatarSeason(picLink?: string | null) {
 }
 
 export default async function WhoAmIPage() {
-  await connection();
   const context = await getCloudflareContext({ async: true });
   const players = await getUniquePlayers(context.env.DB);
   const eligiblePlayers = players.filter(

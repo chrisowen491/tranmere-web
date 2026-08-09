@@ -8,16 +8,11 @@ import {
 } from "@heroicons/react/24/outline";
 import type { Match } from "@tranmere-web/lib/src/tranmere-web-types";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
-import { connection } from "next/server";
 import Image from "next/image";
 import Link from "next/link";
 import { searchGames } from "@/lib/games";
 import { absoluteUrl, breadcrumbJsonLd, JsonLd } from "@/components/seo/JsonLd";
 import { pageMetadata } from "@/lib/seo";
-
-// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
-// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
-export const instant = false;
 
 export const metadata = pageMetadata({
   title: "Tranmere Rovers highest attendances",
@@ -63,7 +58,6 @@ function seasonLabel(season: string) {
 }
 
 export default async function TopAttendancesPage() {
-  await connection();
   const env = (await getCloudflareContext({ async: true })).env;
   const { results } = await searchGames(env.DB, { sort: "attendance-desc" });
   const matches = results

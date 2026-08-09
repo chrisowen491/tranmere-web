@@ -3,17 +3,12 @@ import {
   ExclamationTriangleIcon,
 } from "@heroicons/react/24/outline";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
-import { connection } from "next/server";
 import { queryPlayerSeasonSummaryRows } from "@tranmere-web/lib/src/d1-queries";
 import Image from "next/image";
 import Link from "next/link";
 import { breadcrumbJsonLd, JsonLd } from "@/components/seo/JsonLd";
 import { pageMetadata } from "@/lib/seo";
 import { getUniquePlayers } from "@/lib/players";
-
-// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
-// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
-export const instant = false;
 
 export const metadata = pageMetadata({
   title: "Tranmere Rovers misfiring strikers",
@@ -65,7 +60,6 @@ function calculateMisfireScore(player: MisfireInput) {
 }
 
 export default async function MisfiringStrikersPage() {
-  await connection();
   const env = (await getCloudflareContext({ async: true })).env;
   const [players, summaries] = await Promise.all([
     getUniquePlayers(env.DB),

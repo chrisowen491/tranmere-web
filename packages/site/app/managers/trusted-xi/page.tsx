@@ -1,13 +1,8 @@
 import { getCloudflareContext } from "@opennextjs/cloudflare";
-import { connection } from "next/server";
 import type { Metadata } from "next";
 import { ManagerTrustedXi } from "@/components/apps/ManagerTrustedXi";
 import { getManagers } from "@/lib/managers";
 import { getManagerTrustedXi } from "@/lib/managerTrustedXi";
-
-// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
-// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
-export const instant = false;
 
 export const metadata: Metadata = {
   title: "Manager's Trusted XI",
@@ -16,7 +11,6 @@ export const metadata: Metadata = {
 };
 
 export default async function ManagerTrustedXiPage() {
-  await connection();
   const env = (await getCloudflareContext({ async: true })).env;
   const managers = await getManagers(env.DB);
   const defaultManager =

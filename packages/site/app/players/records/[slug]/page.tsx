@@ -1,14 +1,9 @@
 import { PlayerSearch } from "@/components/apps/PlayerSearch";
 import { Title } from "@/components/fragments/Title";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
-import { connection } from "next/server";
 import { SlugParams } from "@/lib/types";
 import { getPlayerStatistics } from "@/lib/playerStatistics";
 import { pageMetadata } from "@/lib/seo";
-
-// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
-// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
-export const instant = false;
 
 export async function generateMetadata(props: { params: SlugParams }) {
   const params = await props.params;
@@ -36,7 +31,6 @@ export async function generateMetadata(props: { params: SlugParams }) {
 
 export default async function PlayerSearchPage(props: { params: SlugParams }) {
   const params = await props.params;
-  await connection();
   const env = (await getCloudflareContext({ async: true })).env;
 
   let season: string = "";
