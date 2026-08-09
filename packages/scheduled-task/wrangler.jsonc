@@ -1,0 +1,18 @@
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "tranmere-web-scheduled-task",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-06-11",
+  "triggers": {
+    // Cloudflare Cron Triggers use UTC, which is GMT outside British Summer Time.
+    "crons": ["0 23 * * *"]
+  },
+  "d1_databases": [
+    {
+      "binding": "DB", // i.e. available in your Worker on env.DB
+      "database_name": "tranmere-web",
+      "database_id": "cb021697-9af3-4872-b8eb-ce49be71bb8c",
+      "remote": true
+    }
+  ]
+}

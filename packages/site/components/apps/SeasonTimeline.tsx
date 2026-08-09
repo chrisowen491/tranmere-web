@@ -1,6 +1,7 @@
 import {
   ArrowRightIcon,
   ArrowsRightLeftIcon,
+  ExclamationTriangleIcon,
   NewspaperIcon,
   TrophyIcon,
   UserIcon,
@@ -297,8 +298,7 @@ export function SeasonTimeline(props: {
                         transfers: undatedArrivals,
                         accent: "border-emerald-600",
                         label: "text-emerald-700",
-                        detail: (transfer: Transfer) =>
-                          `From ${transfer.from}`,
+                        detail: (transfer: Transfer) => `From ${transfer.from}`,
                       },
                       {
                         title: "Departures",
@@ -350,6 +350,9 @@ export function SeasonTimeline(props: {
             <ol>
               {chapters.map((chapter, chapterIndex) => {
                 const form = outcomeCounts(chapter.matches);
+                const hasRelegation = chapter.achievements.some(
+                  (achievement) => achievement.kind === "Relegation",
+                );
 
                 return (
                   <li
@@ -359,7 +362,9 @@ export function SeasonTimeline(props: {
                     <span
                       className={`absolute -left-2 top-1 h-4 w-4 rounded-full border-4 border-[#fffdf8] ring-1 ring-[#071a2b]/20 ${
                         chapter.achievements.length > 0
-                          ? "bg-amber-400"
+                          ? hasRelegation
+                            ? "bg-rose-500"
+                            : "bg-amber-400"
                           : "bg-emerald-500"
                       }`}
                     />
@@ -380,14 +385,29 @@ export function SeasonTimeline(props: {
                               {monthLabel(chapter.date)}
                             </h3>
                             {chapter.achievements.length > 0 && (
-                              <span className="mt-2 inline-flex items-center gap-1.5 bg-amber-100 px-2.5 py-1 text-[0.62rem] font-bold uppercase tracking-[0.14em] text-amber-900">
-                                <TrophyIcon
-                                  className="h-3.5 w-3.5"
-                                  aria-hidden="true"
-                                />
-                                {chapter.achievements.length === 1
-                                  ? "Honour achieved"
-                                  : `${chapter.achievements.length} honours achieved`}
+                              <span
+                                className={`mt-2 inline-flex items-center gap-1.5 px-2.5 py-1 text-[0.62rem] font-bold uppercase tracking-[0.14em] ${
+                                  hasRelegation
+                                    ? "bg-rose-100 text-rose-900"
+                                    : "bg-amber-100 text-amber-900"
+                                }`}
+                              >
+                                {hasRelegation ? (
+                                  <ExclamationTriangleIcon
+                                    className="h-3.5 w-3.5"
+                                    aria-hidden="true"
+                                  />
+                                ) : (
+                                  <TrophyIcon
+                                    className="h-3.5 w-3.5"
+                                    aria-hidden="true"
+                                  />
+                                )}
+                                {hasRelegation
+                                  ? "Relegation confirmed"
+                                  : chapter.achievements.length === 1
+                                    ? "Honour achieved"
+                                    : `${chapter.achievements.length} honours achieved`}
                               </span>
                             )}
                           </div>
@@ -487,13 +507,32 @@ export function SeasonTimeline(props: {
                       )}
 
                       {chapter.achievements.length > 0 && (
-                        <div className="mt-5 border-l-4 border-amber-500 bg-amber-50 p-4">
-                          <p className="flex items-center gap-2 text-[0.65rem] font-bold uppercase tracking-[0.14em] text-amber-800">
-                            <TrophyIcon
-                              className="h-4 w-4"
-                              aria-hidden="true"
-                            />
-                            Season achievement
+                        <div
+                          className={`mt-5 border-l-4 p-4 ${
+                            hasRelegation
+                              ? "border-rose-500 bg-rose-50"
+                              : "border-amber-500 bg-amber-50"
+                          }`}
+                        >
+                          <p
+                            className={`flex items-center gap-2 text-[0.65rem] font-bold uppercase tracking-[0.14em] ${
+                              hasRelegation ? "text-rose-800" : "text-amber-800"
+                            }`}
+                          >
+                            {hasRelegation ? (
+                              <ExclamationTriangleIcon
+                                className="h-4 w-4"
+                                aria-hidden="true"
+                              />
+                            ) : (
+                              <TrophyIcon
+                                className="h-4 w-4"
+                                aria-hidden="true"
+                              />
+                            )}
+                            {hasRelegation
+                              ? "Season relegation"
+                              : "Season achievement"}
                           </p>
                           <div className="mt-3 space-y-3">
                             {chapter.achievements.map((achievement) => (
@@ -512,7 +551,11 @@ export function SeasonTimeline(props: {
                                 </span>
                                 <time
                                   dateTime={achievement.achievedOn}
-                                  className="shrink-0 font-mono text-xs text-amber-900/65"
+                                  className={`shrink-0 font-mono text-xs ${
+                                    hasRelegation
+                                      ? "text-rose-900/65"
+                                      : "text-amber-900/65"
+                                  }`}
                                 >
                                   {new Intl.DateTimeFormat("en-GB", {
                                     day: "numeric",

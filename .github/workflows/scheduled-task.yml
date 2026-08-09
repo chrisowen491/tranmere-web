@@ -1,0 +1,35 @@
+name: Scheduled Task Deploy
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - 'packages/scheduled-task/**'
+      - '.github/workflows/mcp.yml'   
+
+permissions: read-all
+
+jobs:
+  publish_mcp:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    name: Publish to Cloudflare
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '24'
+      # Run a build step here if your project requires
+      - name: Install
+        run: yarn --frozen-lockfile 
+
+      - name: Scheduled Task Deploy
+        run: yarn deploy
+        working-directory: ./packages/scheduled-task
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_AUTH_KEY }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}    
+            

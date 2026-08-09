@@ -33,26 +33,9 @@ export class TranmereWebStack extends cdk.Stack {
       DD_EXTENSION_VERSION: 'next'
     };
 
-    const TranmereWebAppsTable = ddb.Table.fromTableAttributes(
-      this,
-      'TranmereWebAppsTable',
-      { tableName: 'TranmereWebAppsTable', grantIndexPermissions: true }
-    );
-    const TranmereWebGoalsTable = ddb.Table.fromTableAttributes(
-      this,
-      'TranmereWebGoalsTable',
-      { tableName: 'TranmereWebGoalsTable', grantIndexPermissions: true }
-    );
 
     //const TranmereWebGoalsTable = ddb.Table.fromTableArn(this, "TranmereWebGoalsTable", `arn:aws:dynamodb:${this.region}:${this.account}:table/TranmereWebGoalsTable`);
-    const TranmereWebPlayerSeasonSummaryTable = ddb.Table.fromTableAttributes(
-      this,
-      'TranmereWebPlayerSeasonSummaryTable',
-      {
-        tableName: 'TranmereWebPlayerSeasonSummaryTable',
-        grantIndexPermissions: true
-      }
-    );
+
     const TranmereWebMediaSyncTable = ddb.Table.fromTableArn(
       this,
       'TranmereWebMediaSyncTable',
@@ -170,22 +153,6 @@ export class TranmereWebStack extends cdk.Stack {
       })
     });
 
-    new TranmereWebLambda(this, 'UpdateJobFunction', {
-      environment: env_variables,
-      lambdaFile: './lambda/updateJob.ts',
-      schedule: { minute: '45', hour: '23' },
-      readTables: [TranmereWebGoalsTable, TranmereWebAppsTable],
-      readWriteTables: [TranmereWebPlayerSeasonSummaryTable]
-    });
-
-    new TranmereWebLambda(this, 'HatTrickJobFunction', {
-      environment: env_variables,
-      lambdaFile: './lambda/hatTrickJob.ts',
-      schedule: { minute: '45', hour: '23' },
-      readTables: [TranmereWebGoalsTable],
-      readWriteTables: [TranmereWebHatTricks]
-    });
-
     /*
     new TranmereWebLambda(this, 'UploadJobFunction', {
       environment: env_variables,
@@ -209,13 +176,6 @@ export class TranmereWebStack extends cdk.Stack {
     });
     */
 
-    new TranmereWebLambda(this, 'PlayerSearchFunction', {
-      environment: env_variables,
-      lambdaFile: './lambda/playersearch.ts',
-      apiResource: player_search,
-      apiMethod: 'GET',
-      readTables: [TranmereWebPlayerSeasonSummaryTable]
-    });
 
     new TranmereWebLambda(this, 'MediaSyncFunction', {
       environment: env_variables,
@@ -224,29 +184,6 @@ export class TranmereWebStack extends cdk.Stack {
       apiMethod: 'POST',
       readWriteTables: [
         TranmereWebMediaSyncTable
-      ]
-    });
-
-    new TranmereWebLambda(this, 'MatchPageFunction', {
-      environment: env_variables,
-      lambdaFile: './lambda/matchpage.ts',
-      apiResource: date,
-      apiMethod: 'GET',
-      readTables: [
-        TranmereWebGoalsTable,
-        TranmereWebAppsTable
-      ]
-    });
-
-    new TranmereWebLambda(this, 'DynamicPageFunction', {
-      environment: env_variables,
-      lambdaFile: './lambda/page.ts',
-      apiResource: classifier,
-      apiMethod: 'GET',
-      readTables: [
-        TranmereWebAppsTable,
-        TranmereWebGoalsTable,
-        TranmereWebPlayerSeasonSummaryTable,
       ]
     });
 

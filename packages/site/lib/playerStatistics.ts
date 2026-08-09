@@ -20,6 +20,7 @@ export interface PlayerStatisticsView extends Omit<
 }
 
 export interface PlayerStatisticsOptions {
+  player?: string;
   season?: string;
   sort?: string;
   filter?: string;
@@ -159,6 +160,8 @@ export async function getPlayerStatistics(
   options: PlayerStatisticsOptions = {},
 ) {
   const rows = await queryPlayerSeasonSummaryRows(db, {
+    player: options.player,
+    playerMatch: options.player ? "contains" : undefined,
     season: options.season || "TOTAL",
     limit: options.limit,
   });

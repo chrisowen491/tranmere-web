@@ -77,17 +77,18 @@ flowchart LR
 
 The root is a Yarn Classic workspace using Node.js 24.
 
-| Workspace            | Responsibility                                                                                |
-| -------------------- | --------------------------------------------------------------------------------------------- |
-| `packages/site`      | Public Next.js website, UI components, server routes, and Cloudflare deployment configuration |
-| `packages/api-stack` | AWS CDK infrastructure, API Gateway, Lambda handlers, AppSync, scheduled jobs, and unit tests |
-| `packages/lib`       | Shared football domain types, D1 entity types and read queries, mappings, and utilities       |
-| `packages/tools`     | Reusable AI tools for matches, players, teams, results, lineups, managers, and transfers      |
-| `packages/mcp`       | Auth0-protected Cloudflare MCP server exposing read-only D1 and match API tools               |
-| `packages/vectorize` | Worker for creating and querying player biography embeddings                                  |
-| `packages/tidy`      | Scheduled Worker that removes old Cloudflare deployments                                      |
-| `packages/sql`       | D1 schema, migrations, generated imports, and database commands                               |
-| `packages/api-tests` | Newman acceptance tests for deployed APIs                                                     |
+| Workspace                 | Responsibility                                                                                |
+| ------------------------- | --------------------------------------------------------------------------------------------- |
+| `packages/site`           | Public Next.js website, UI components, server routes, and Cloudflare deployment configuration |
+| `packages/api-stack`      | AWS CDK infrastructure, API Gateway, Lambda handlers, AppSync, scheduled jobs, and unit tests |
+| `packages/lib`            | Shared football domain types, D1 entity types and read queries, mappings, and utilities       |
+| `packages/tools`          | Reusable AI tools for matches, players, teams, results, lineups, managers, and transfers      |
+| `packages/mcp`            | Auth0-protected Cloudflare MCP server exposing read-only D1 and match API tools               |
+| `packages/vectorize`      | Worker for creating and querying player biography embeddings                                  |
+| `packages/tidy`           | Scheduled Worker that removes old Cloudflare deployments                                      |
+| `packages/scheduled-task` | Daily scheduled Worker that rebuilds player summaries and hat-tricks from D1 Apps and Goals   |
+| `packages/sql`            | D1 schema, migrations, generated imports, and database commands                               |
+| `packages/api-tests`      | Newman acceptance tests for deployed APIs                                                     |
 
 `packages/site` and `packages/api-stack` form the main user-facing system. The
 other workspaces provide shared code, administration, AI integrations,
@@ -295,6 +296,9 @@ GitHub Actions deploys the two main runtime areas independently:
   run AWS tests, deploy the CDK stack, add Datadog Lambda instrumentation, and
   run Newman acceptance tests.
 - Changes under `packages/tidy` deploy its maintenance Worker.
+- `packages/scheduled-task` runs at 23:00 UTC daily and rebuilds the D1
+  `PlayerSeasonSummaries` and `HatTricks` tables from the `Apps` and `Goals`
+  tables.
 - `packages/mcp` has its own Cloudflare Worker build and deployment lifecycle;
   it binds directly to the production D1 database and uses Auth0 environment
   configuration.

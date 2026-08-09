@@ -1,6 +1,7 @@
 import {
   ArrowRightIcon,
   CalendarDaysIcon,
+  ExclamationTriangleIcon,
   MapPinIcon,
   TrophyIcon,
   UserGroupIcon,
@@ -232,6 +233,9 @@ export function SeasonStory(props: {
     achievements,
   } = props;
   const season = Number(seasonValue);
+  const hasRelegation = achievements.some(
+    (achievement) => achievement.kind === "Relegation",
+  );
   const completedResults = results.filter(
     (result) =>
       typeof result.hgoal === "number" && typeof result.vgoal === "number",
@@ -320,14 +324,33 @@ export function SeasonStory(props: {
             {achievements.length > 0 && (
               <Link
                 href="/honours"
-                className="mt-7 flex max-w-2xl items-start gap-4 border border-amber-300/35 bg-amber-300/[0.08] p-4 transition hover:border-amber-300/70 hover:bg-amber-300/[0.12]"
+                className={`mt-7 flex max-w-2xl items-start gap-4 border p-4 transition ${
+                  hasRelegation
+                    ? "border-rose-300/35 bg-rose-300/[0.08] hover:border-rose-300/70 hover:bg-rose-300/[0.12]"
+                    : "border-amber-300/35 bg-amber-300/[0.08] hover:border-amber-300/70 hover:bg-amber-300/[0.12]"
+                }`}
               >
-                <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-amber-300 text-[#071a2b]">
-                  <TrophyIcon className="h-6 w-6" aria-hidden="true" />
+                <span
+                  className={`grid h-11 w-11 shrink-0 place-items-center rounded-full text-[#071a2b] ${
+                    hasRelegation ? "bg-rose-300" : "bg-amber-300"
+                  }`}
+                >
+                  {hasRelegation ? (
+                    <ExclamationTriangleIcon
+                      className="h-6 w-6"
+                      aria-hidden="true"
+                    />
+                  ) : (
+                    <TrophyIcon className="h-6 w-6" aria-hidden="true" />
+                  )}
                 </span>
                 <span>
-                  <span className="block text-[0.65rem] font-bold uppercase tracking-[0.17em] text-amber-300">
-                    Honours season
+                  <span
+                    className={`block text-[0.65rem] font-bold uppercase tracking-[0.17em] ${
+                      hasRelegation ? "text-rose-300" : "text-amber-300"
+                    }`}
+                  >
+                    {hasRelegation ? "Relegation season" : "Honours season"}
                   </span>
                   <span className="mt-1 block font-display text-xl font-semibold text-white">
                     {achievements
@@ -339,7 +362,9 @@ export function SeasonStory(props: {
                   </span>
                 </span>
                 <ArrowRightIcon
-                  className="ml-auto mt-3 h-4 w-4 shrink-0 text-amber-300"
+                  className={`ml-auto mt-3 h-4 w-4 shrink-0 ${
+                    hasRelegation ? "text-rose-300" : "text-amber-300"
+                  }`}
                   aria-hidden="true"
                 />
               </Link>

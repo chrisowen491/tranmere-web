@@ -2,7 +2,8 @@ export const HONOURS_ACHIEVEMENT_KINDS = [
   'Trophy',
   'Promotion',
   'Play-offs',
-  'Cup run'
+  'Cup run',
+  'Relegation'
 ] as const;
 
 export type HonoursAchievementKind = (typeof HONOURS_ACHIEVEMENT_KINDS)[number];
@@ -57,6 +58,18 @@ export const HONOURS_SEASONS: readonly HonoursSeason[] = [
     ]
   },
   {
+    season: 1938,
+    achievements: [
+      {
+        title: 'Relegated from Division Two',
+        detail: 'Relegated at the end of the season.',
+        kind: 'Relegation',
+        achievedOn: '1939-05-06',
+        href: '/season/1938'
+      }
+    ]
+  },
+  {
     season: 1966,
     achievements: [
       {
@@ -77,6 +90,30 @@ export const HONOURS_SEASONS: readonly HonoursSeason[] = [
         kind: 'Promotion',
         achievedOn: '1976-04-26',
         href: '/season/1975'
+      }
+    ]
+  },
+  {
+    season: 1974,
+    achievements: [
+      {
+        title: 'Relegated from Division Three',
+        detail: 'Relegated at the end of the season.',
+        kind: 'Relegation',
+        achievedOn: '1975-05-03',
+        href: '/season/1974'
+      }
+    ]
+  },
+  {
+    season: 1978,
+    achievements: [
+      {
+        title: 'Relegated from Division Three',
+        detail: 'Relegated at the end of the season.',
+        kind: 'Relegation',
+        achievedOn: '1979-05-05',
+        href: '/season/1978'
       }
     ]
   },
@@ -163,6 +200,13 @@ export const HONOURS_SEASONS: readonly HonoursSeason[] = [
         kind: 'Cup run',
         achievedOn: '2001-03-11',
         href: '/match/2000/2001-03-11'
+      },
+      {
+        title: 'Relegated from Division One',
+        detail: 'Relegated at the end of the season.',
+        kind: 'Relegation',
+        achievedOn: '2001-05-05',
+        href: '/season/2000'
       }
     ]
   },
@@ -191,6 +235,30 @@ export const HONOURS_SEASONS: readonly HonoursSeason[] = [
     ]
   },
   {
+    season: 2013,
+    achievements: [
+      {
+        title: 'Relegated from League One',
+        detail: 'Relegated at the end of the season.',
+        kind: 'Relegation',
+        achievedOn: '2014-05-03',
+        href: '/season/2013'
+      }
+    ]
+  },
+  {
+    season: 2014,
+    achievements: [
+      {
+        title: 'Relegated from League Two',
+        detail: 'Relegated at the end of the season.',
+        kind: 'Relegation',
+        achievedOn: '2015-05-02',
+        href: '/season/2014'
+      }
+    ]
+  },
+  {
     season: 2018,
     achievements: [
       {
@@ -211,6 +279,18 @@ export const HONOURS_SEASONS: readonly HonoursSeason[] = [
         kind: 'Cup run',
         achievedOn: '2021-03-14',
         href: '/match/2020/2021-03-14'
+      }
+    ]
+  },
+  {
+    season: 2019,
+    achievements: [
+      {
+        title: 'Relegated from League One',
+        detail: 'Relegated on points per game',
+        kind: 'Relegation',
+        achievedOn: '2020-06-09',
+        href: '/season/2019'
       }
     ]
   }

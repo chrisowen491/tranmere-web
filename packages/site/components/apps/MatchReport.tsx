@@ -267,14 +267,6 @@ export default function MatchReport(props: {
                         >
                           {player.Name}
                         </Link>
-                        <span className="mt-1 hidden font-mono text-[10px] uppercase text-white/55 sm:block">
-                          {[
-                            player.profile.position,
-                            player.profile.secondaryPosition,
-                          ]
-                            .filter(Boolean)
-                            .join(" / ") || "Position unknown"}
-                        </span>
                         <div className="mt-1 flex min-h-4 items-center justify-center gap-1">
                           {player.YellowCard && (
                             <span

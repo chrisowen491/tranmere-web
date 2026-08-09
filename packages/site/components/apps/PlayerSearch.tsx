@@ -37,7 +37,8 @@ export function PlayerSearch(props: {
     const normalizedQuery = query.trim().toLowerCase();
     return players.filter((player) => {
       const matchesName =
-        !normalizedQuery || player.Player.toLowerCase().includes(normalizedQuery);
+        !normalizedQuery ||
+        player.Player.toLowerCase().includes(normalizedQuery);
       const matchesPosition =
         !position ||
         player.profile.position === position ||
@@ -85,11 +86,19 @@ export function PlayerSearch(props: {
 
   const changeSeason = async (nextSeason: string) => {
     setSeason(nextSeason || undefined);
+    if (!nextSeason && !query.trim()) {
+      setPlayers(props.default);
+      return;
+    }
     await loadPlayers(nextSeason, query.trim());
   };
 
   const changeQuery = async (nextQuery: string) => {
     setQuery(nextQuery);
+    if (!nextQuery.trim() && !season) {
+      setPlayers(props.default);
+      return;
+    }
     await loadPlayers(season ?? "", nextQuery.trim());
   };
 
@@ -108,7 +117,7 @@ export function PlayerSearch(props: {
               ? "Searching every player profile"
               : season
                 ? `Showing season ${season}`
-                : "Showing all seasons"}
+                : "Top 50 by appearances"}
           </p>
         </div>
         <div className="grid w-full gap-3 sm:grid-cols-[minmax(0,1fr)_180px_190px] lg:max-w-3xl">
@@ -175,7 +184,7 @@ export function PlayerSearch(props: {
         ""
       )}
 
-      {filteredPlayers.length > 0 && !profileSearch && (
+      {filteredPlayers.length > 0 && (
         <div className="mt-7 grid border border-[#071a2b]/15 bg-[#fffdf8] sm:grid-cols-3">
           <div className="border-b border-[#071a2b]/15 p-5 sm:border-b-0 sm:border-r">
             <ChartBarIcon className="h-5 w-5 text-blue-700" />
@@ -223,7 +232,7 @@ export function PlayerSearch(props: {
               Player index
             </p>
             <h2 className="mt-1 font-display text-2xl font-semibold">
-              {profileSearch ? "Player profiles" : "Archive rankings"}
+              {profileSearch ? "Matching players" : "Archive rankings"}
             </h2>
           </div>
           <p className="hidden font-mono text-[10px] uppercase tracking-[0.14em] text-white/40 sm:block">
@@ -306,7 +315,10 @@ export function PlayerSearch(props: {
                           {(player.profile.position ||
                             player.profile.secondaryPosition) && (
                             <p className="mt-1 font-mono text-[9px] font-bold uppercase tracking-[0.1em] text-[#071a2b]/35">
-                              {[player.profile.position, player.profile.secondaryPosition]
+                              {[
+                                player.profile.position,
+                                player.profile.secondaryPosition,
+                              ]
                                 .filter(Boolean)
                                 .join(" / ")}
                             </p>
@@ -317,24 +329,20 @@ export function PlayerSearch(props: {
                     <td className="px-4 py-4">
                       <div className="flex items-center justify-between gap-3">
                         <span className="font-mono text-sm font-bold">
-                          {profileSearch ? "—" : apps}
+                          {apps}
                         </span>
-                        {!profileSearch && (
-                          <span className="text-xs text-[#071a2b]/45">
-                            {player.starts} + {player.subs}
-                          </span>
-                        )}
+                        <span className="text-xs text-[#071a2b]/45">
+                          {player.starts} + {player.subs}
+                        </span>
                       </div>
-                      {!profileSearch && (
-                        <div className="mt-2 h-1.5 bg-[#e8e2d6]">
-                          <div
-                            className="h-full bg-blue-700 transition group-hover:bg-blue-500"
-                            style={{
-                              width: `${(apps / maxAppearances) * 100}%`,
-                            }}
-                          />
-                        </div>
-                      )}
+                      <div className="mt-2 h-1.5 bg-[#e8e2d6]">
+                        <div
+                          className="h-full bg-blue-700 transition group-hover:bg-blue-500"
+                          style={{
+                            width: `${(apps / maxAppearances) * 100}%`,
+                          }}
+                        />
+                      </div>
                     </td>
                     <td className="px-4 py-4 text-center">
                       <span
@@ -344,11 +352,11 @@ export function PlayerSearch(props: {
                             : "font-mono text-[#071a2b]/30"
                         }
                       >
-                        {profileSearch ? "—" : player.goals}
+                        {player.goals}
                       </span>
                     </td>
                     <td className="hidden px-4 py-4 text-center font-mono font-bold md:table-cell">
-                      {profileSearch ? "—" : player.assists}
+                      {player.assists}
                     </td>
                     <td className="hidden px-4 py-4 lg:table-cell">
                       <div className="flex gap-1">
@@ -361,7 +369,7 @@ export function PlayerSearch(props: {
                             key={statIndex}
                             className="inline-flex min-w-7 items-center justify-center bg-[#e8e2d6] px-2 py-1 font-mono text-[10px] font-bold text-[#071a2b]/65"
                           >
-                          {profileSearch ? "—" : value}
+                            {value}
                           </span>
                         ))}
                       </div>
@@ -372,10 +380,10 @@ export function PlayerSearch(props: {
                     <td className="hidden px-5 py-4 lg:table-cell">
                       <div className="flex gap-1">
                         <span className="inline-flex min-w-7 items-center justify-center bg-amber-100 px-2 py-1 font-mono text-[10px] font-bold text-amber-900">
-                          {profileSearch ? "—" : player.yellow}
+                          {player.yellow}
                         </span>
                         <span className="inline-flex min-w-7 items-center justify-center bg-red-100 px-2 py-1 font-mono text-[10px] font-bold text-red-800">
-                          {profileSearch ? "—" : player.red}
+                          {player.red}
                         </span>
                       </div>
                     </td>

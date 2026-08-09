@@ -1,9 +1,5 @@
 import { openai } from "@ai-sdk/openai";
 import { streamText, stepCountIs, convertToModelMessages, UIMessage } from "ai";
-import { ResultsTool } from "@tranmere-web/tools/src/ResultsTool";
-import { MatchTool } from "@tranmere-web/tools/src/MatchTool";
-import { PlayerStatsTool } from "@tranmere-web/tools/src/PlayerStatsTool";
-import { PlayerProfileTool } from "@tranmere-web/tools/src/PlayerProfileTool";
 import { FixturesTool } from "@tranmere-web/tools/src/FixturesTool";
 import { LeagueTableTool } from "@tranmere-web/tools/src/LeagueTableTool";
 
@@ -18,10 +14,6 @@ export async function POST(req: Request) {
     messages: await convertToModelMessages(messages),
     stopWhen: stepCountIs(5),
     tools: {
-      PlayerProfileTool,
-      PlayerStatsTool,
-      MatchTool,
-      ResultsTool,
       FixturesTool,
       LeagueTableTool,
     },

@@ -1,0 +1,20 @@
+{
+  "name": "@tranmere-web/scheduled-task",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Daily scheduled Cloudflare Worker tasks for Tranmere-Web.",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "lint": "eslint src",
+    "type-check": "tsc --noEmit",
+    "test": "yarn type-check"
+  },
+  "license": "GPL-3.0-only",
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20260731.1",
+    "eslint": "^9.39.2",
+    "typescript-eslint": "^8.44.1",
+    "wrangler": "^4.118.0"
+  }
+}

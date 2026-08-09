@@ -2,8 +2,11 @@ import Link from "next/link";
 import {
   ArrowUpRightIcon,
   CalendarDaysIcon,
+  ExclamationTriangleIcon,
+  TrophyIcon,
 } from "@heroicons/react/24/outline";
 import { GetSeasons } from "@tranmere-web/lib/src/apiFunctions";
+import { HONOURS_SEASONS } from "@tranmere-web/lib/src/honours-constants";
 import { breadcrumbJsonLd, JsonLd } from "@/components/seo/JsonLd";
 import { pageMetadata } from "@/lib/seo";
 
@@ -16,6 +19,10 @@ export const metadata = pageMetadata({
 function seasonLabel(season: number) {
   return `${season}/${String(season + 1).slice(-2)}`;
 }
+
+const honoursBySeason = new Map(
+  HONOURS_SEASONS.map((honours) => [honours.season, honours.achievements]),
+);
 
 export default function SeasonsIndexPage() {
   const seasons = GetSeasons().filter(
@@ -99,23 +106,58 @@ export default function SeasonsIndexPage() {
                   </p>
                 </div>
                 <div className="grid gap-px border border-[#071a2b]/15 bg-[#071a2b]/15 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
-                  {decadeSeasons.map((season) => (
-                    <Link
-                      key={season}
-                      href={`/season/${season}`}
-                      className="group flex min-h-32 flex-col justify-between bg-[#fffdf8] p-5 transition hover:bg-blue-700 hover:text-white"
-                    >
-                      <span className="font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-[#071a2b]/40 group-hover:text-blue-100">
-                        Season review
-                      </span>
-                      <span className="flex items-end justify-between gap-3">
-                        <strong className="font-display text-2xl font-semibold tracking-[-0.04em]">
-                          {seasonLabel(season)}
-                        </strong>
-                        <ArrowUpRightIcon className="h-5 w-5 text-blue-700 transition group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-white" />
-                      </span>
-                    </Link>
-                  ))}
+                  {decadeSeasons.map((season) => {
+                    const achievements = honoursBySeason.get(season);
+                    const hasHonours = Boolean(achievements?.length);
+                    const hasRelegation = achievements?.some(
+                      (achievement) => achievement.kind === "Relegation",
+                    );
+
+                    return (
+                      <Link
+                        key={season}
+                        href={`/season/${season}`}
+                        className={`group flex min-h-32 flex-col justify-between p-5 transition hover:bg-blue-700 hover:text-white ${
+                          hasHonours
+                            ? hasRelegation
+                              ? "bg-rose-50 shadow-[inset_0_3px_0_#e11d48]"
+                              : "bg-[#fff8df] shadow-[inset_0_3px_0_#d9a300]"
+                            : "bg-[#fffdf8]"
+                        }`}
+                      >
+                        <span className="flex items-center gap-2 font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-[#071a2b]/40 group-hover:text-blue-100">
+                          {hasHonours &&
+                            (hasRelegation ? (
+                              <ExclamationTriangleIcon className="h-3.5 w-3.5 text-rose-700 group-hover:text-blue-100" />
+                            ) : (
+                              <TrophyIcon className="h-3.5 w-3.5 text-[#aa7600] group-hover:text-blue-100" />
+                            ))}
+                          {hasHonours
+                            ? hasRelegation
+                              ? "Relegation season"
+                              : "Honours season"
+                            : "Season review"}
+                        </span>
+                        {hasHonours && (
+                          <span
+                            className={`mt-3 text-xs font-semibold leading-5 group-hover:text-white/80 ${
+                              hasRelegation ? "text-rose-800" : "text-[#745000]"
+                            }`}
+                          >
+                            {achievements!
+                              .map((achievement) => achievement.title)
+                              .join(" · ")}
+                          </span>
+                        )}
+                        <span className="mt-4 flex items-end justify-between gap-3">
+                          <strong className="font-display text-2xl font-semibold tracking-[-0.04em]">
+                            {seasonLabel(season)}
+                          </strong>
+                          <ArrowUpRightIcon className="h-5 w-5 shrink-0 text-blue-700 transition group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-white" />
+                        </span>
+                      </Link>
+                    );
+                  })}
                 </div>
               </section>
             ))}

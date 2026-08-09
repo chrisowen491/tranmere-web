@@ -1,6 +1,7 @@
 import {
   ArrowUpRightIcon,
   CalendarDaysIcon,
+  ExclamationTriangleIcon,
   TrophyIcon,
 } from "@heroicons/react/24/outline";
 import {
@@ -14,7 +15,7 @@ import { pageMetadata } from "@/lib/seo";
 export const metadata = pageMetadata({
   title: "Tranmere Rovers honours and landmark seasons",
   description:
-    "Explore every season in which Tranmere Rovers won a trophy, earned promotion or reached a major cup milestone.",
+    "Explore Tranmere Rovers' honours, landmark cup runs, promotions and relegation seasons.",
   pathname: "/honours",
 });
 
@@ -44,13 +45,15 @@ function badgeClasses(kind: HonoursAchievementKind) {
       return "bg-emerald-100 text-emerald-900";
     case "Play-offs":
       return "bg-blue-100 text-blue-900";
+    case "Relegation":
+      return "bg-rose-100 text-rose-900";
     default:
       return "bg-slate-100 text-slate-700";
   }
 }
 
 export default function HonoursPage() {
-  const recentFirst = [...HONOURS_SEASONS].reverse();
+  const recentFirst = [...HONOURS_SEASONS].sort((a, b) => b.season - a.season);
 
   return (
     <main className="min-h-screen bg-[#f4f0e8] pb-24 text-[#071a2b]">
@@ -96,8 +99,9 @@ export default function HonoursPage() {
                 made history.
               </h1>
               <p className="mt-7 max-w-2xl text-lg leading-8 text-white/65">
-                Every recorded title, promotion, play-off triumph and landmark
-                cup run—collected into one journey through the Rovers archive.
+                Every recorded title, promotion, play-off triumph, landmark cup
+                run and relegation—collected into one journey through the Rovers
+                archive.
               </p>
             </div>
             <dl className="grid grid-cols-3 border border-white/15">
@@ -119,7 +123,7 @@ export default function HonoursPage() {
               </div>
               <div className="p-5">
                 <dt className="font-mono text-[9px] uppercase tracking-[0.15em] text-white/40">
-                  Honour wins
+                  Trophy wins
                 </dt>
                 <dd className="mt-3 font-display text-4xl font-semibold">
                   {winningHonourCount}
@@ -159,8 +163,12 @@ export default function HonoursPage() {
               >
                 <div className="relative z-10 hidden h-14 w-14 place-items-center rounded-full border border-[#071a2b]/15 bg-[#f4f0e8] sm:grid">
                   {achievements.some(
-                    (achievement) => achievement.kind === "Trophy",
+                    (achievement) => achievement.kind === "Relegation",
                   ) ? (
+                    <ExclamationTriangleIcon className="h-6 w-6 text-rose-700" />
+                  ) : achievements.some(
+                      (achievement) => achievement.kind === "Trophy",
+                    ) ? (
                     <TrophyIcon className="h-6 w-6 text-amber-700" />
                   ) : (
                     <CalendarDaysIcon className="h-6 w-6 text-blue-700" />
