@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
@@ -15,6 +15,7 @@ import { Reviews } from "@/components/comments/Reviews";
 import CommentPanel from "@/components/comments/CommentPanel";
 import { PlayerProfileCorrectionForm } from "./PlayerProfileCorrectionForm";
 import type { EditablePlayerProfile } from "@/lib/playerProfileCorrections";
+import type { Appearance } from "@tranmere-web/lib/src/tranmere-web-types";
 
 const breadcrumbs = [
   { id: 1, name: "Home", href: "/" },
@@ -91,6 +92,10 @@ export default function PlayerProfileView(props: {
   avg: number;
   biographyMarkdown: string | null;
   editableProfile: EditablePlayerProfile;
+  appearancePagination: {
+    total: number;
+    pageSize: number;
+  };
 }) {
   const profile = props.player;
   const { player } = profile;
@@ -103,6 +108,51 @@ export default function PlayerProfileView(props: {
   );
   const totalSubs = seasons.reduce((total, season) => total + season.subs, 0);
   const totalGoals = seasons.reduce((total, season) => total + season.goals, 0);
+  const [appearancePage, setAppearancePage] = useState(1);
+  const [appearanceRecords, setAppearanceRecords] = useState<Appearance[]>(
+    profile.appearances ?? [],
+  );
+  const [appearanceLoading, setAppearanceLoading] = useState(false);
+  const appearancePages = Math.max(
+    1,
+    Math.ceil(
+      props.appearancePagination.total / props.appearancePagination.pageSize,
+    ),
+  );
+
+  useEffect(() => {
+    setAppearancePage(1);
+    setAppearanceRecords(profile.appearances ?? []);
+  }, [player.name, profile.appearances]);
+
+  useEffect(() => {
+    if (appearancePage === 1) return;
+
+    const controller = new AbortController();
+    setAppearanceLoading(true);
+    void fetch(
+      `/api/player-appearances?${new URLSearchParams({
+        player: player.name,
+        page: String(appearancePage),
+      })}`,
+      { signal: controller.signal },
+    )
+      .then(async (response) => {
+        if (!response.ok) throw new Error("Unable to load appearances");
+        return response.json() as Promise<{ records: Appearance[] }>;
+      })
+      .then(({ records }) => setAppearanceRecords(records))
+      .catch((error: unknown) => {
+        if (error instanceof DOMException && error.name === "AbortError")
+          return;
+        setAppearanceRecords([]);
+      })
+      .finally(() => {
+        if (!controller.signal.aborted) setAppearanceLoading(false);
+      });
+
+    return () => controller.abort();
+  }, [appearancePage, player.name]);
   const firstSeason = seasons.at(0)?.Season;
   const lastSeason = seasons.at(-1)?.Season;
   const careerSpan =
@@ -259,8 +309,19 @@ export default function PlayerProfileView(props: {
               </TabPanel>
               <TabPanel>
                 <PlayerAppsTable
-                  records={profile.appearances ?? []}
+                  records={appearanceRecords}
                   title="Appearances"
+                  totalRecords={props.appearancePagination.total}
+                  summary={{
+                    starts: totalStarts,
+                    substituteAppearances: totalSubs,
+                    goals: totalGoals,
+                  }}
+                  page={appearancePage}
+                  totalPages={appearancePages}
+                  pageSize={props.appearancePagination.pageSize}
+                  loading={appearanceLoading}
+                  onPageChange={setAppearancePage}
                 />
               </TabPanel>
               <TabPanel>

@@ -18,21 +18,39 @@ function seasonLabel(season: string) {
 export function PlayerAppsTable({
   title,
   records,
+  totalRecords = records.length,
+  summary,
+  page = 1,
+  totalPages = 1,
+  pageSize = records.length,
+  loading = false,
+  onPageChange,
 }: {
   title: string;
   records: Appearance[];
+  totalRecords?: number;
+  summary?: {
+    starts: number;
+    substituteAppearances: number;
+    goals: number;
+  };
+  page?: number;
+  totalPages?: number;
+  pageSize?: number;
+  loading?: boolean;
+  onPageChange?: (page: number) => void;
 }) {
-  const starts = records.filter((record) => !isSubstitute(record)).length;
-  const substituteAppearances = records.length - starts;
-  const goals = records.reduce(
-    (total, record) => total + (record.Goals ?? 0),
-    0,
-  );
-  const competitions = new Set(
-    records.map((record) => record.Competition).filter(Boolean),
-  ).size;
+  const starts =
+    summary?.starts ?? records.filter((record) => !isSubstitute(record)).length;
+  const substituteAppearances =
+    summary?.substituteAppearances ?? records.length - starts;
+  const goals =
+    summary?.goals ??
+    records.reduce((total, record) => total + (record.Goals ?? 0), 0);
+  const firstRecord = totalRecords === 0 ? 0 : (page - 1) * pageSize + 1;
+  const lastRecord = Math.min(page * pageSize, totalRecords);
 
-  if (records.length === 0) {
+  if (records.length === 0 && !loading) {
     return (
       <div className="mt-6 border border-[#071a2b]/15 bg-[#fffdf8] p-6 text-sm text-[#071a2b]/55">
         No individual appearances are currently recorded.
@@ -49,7 +67,7 @@ export function PlayerAppsTable({
             Recorded appearances
           </p>
           <p className="mt-1 font-display text-3xl font-semibold">
-            {records.length}
+            {totalRecords}
           </p>
           <p className="mt-1 text-xs text-[#071a2b]/50">
             {starts} starts · {substituteAppearances} from the bench
@@ -68,13 +86,13 @@ export function PlayerAppsTable({
         <div className="p-5">
           <FlagIcon className="h-5 w-5 text-blue-700" />
           <p className="mt-4 font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-[#071a2b]/40">
-            Competitions
+            Viewing
           </p>
           <p className="mt-1 font-display text-3xl font-semibold">
-            {competitions}
+            {firstRecord}–{lastRecord}
           </p>
           <p className="mt-1 text-xs text-[#071a2b]/50">
-            Distinct competitions represented
+            of {totalRecords} recorded appearances
           </p>
         </div>
       </div>
@@ -90,7 +108,9 @@ export function PlayerAppsTable({
             </h2>
           </div>
           <p className="hidden font-mono text-[10px] uppercase tracking-[0.14em] text-white/40 sm:block">
-            Every recorded game
+            {totalPages > 1
+              ? `Page ${page} of ${totalPages}`
+              : "Every recorded game"}
           </p>
         </div>
 
@@ -230,6 +250,34 @@ export function PlayerAppsTable({
             </tbody>
           </table>
         </div>
+        {totalPages > 1 && onPageChange && (
+          <nav
+            aria-label="Appearance pages"
+            className="flex flex-wrap items-center justify-between gap-3 border-t border-[#071a2b]/15 px-5 py-4"
+          >
+            <button
+              type="button"
+              onClick={() => onPageChange(page - 1)}
+              disabled={page === 1 || loading}
+              className="border border-[#071a2b]/20 px-3 py-2 text-xs font-bold text-[#071a2b] transition hover:border-blue-700 hover:text-blue-700 disabled:cursor-not-allowed disabled:opacity-35"
+            >
+              Previous
+            </button>
+            <p className="font-mono text-[10px] font-bold uppercase tracking-[0.12em] text-[#071a2b]/55">
+              {loading
+                ? "Loading appearances…"
+                : `Page ${page} of ${totalPages}`}
+            </p>
+            <button
+              type="button"
+              onClick={() => onPageChange(page + 1)}
+              disabled={page === totalPages || loading}
+              className="border border-[#071a2b]/20 px-3 py-2 text-xs font-bold text-[#071a2b] transition hover:border-blue-700 hover:text-blue-700 disabled:cursor-not-allowed disabled:opacity-35"
+            >
+              Next
+            </button>
+          </nav>
+        )}
       </div>
     </section>
   );

@@ -9,41 +9,15 @@ import { getPlayerByName } from "@/lib/players";
 import { pageMetadata } from "@/lib/seo";
 import { absoluteUrl, breadcrumbJsonLd, JsonLd } from "@/components/seo/JsonLd";
 import {
-  queryAppRows,
+  countPlayerAppearanceRows,
   queryGoalRows,
+  queryPlayerAppearanceRows,
   queryPlayerSeasonSummaryRows,
 } from "@tranmere-web/lib/src/d1-queries";
-import type { AppRow } from "@tranmere-web/lib/src/d1-types";
-import type { Appearance } from "@tranmere-web/lib/src/tranmere-web-types";
 import { mapPlayerSeasonSummary } from "@/lib/playerStatistics";
+import { goalCountsByDate, mapPlayerAppearance } from "@/lib/playerAppearances";
 
-function mapAppearance(
-  row: AppRow,
-  playerName: string,
-  type: "Start" | "Sub",
-  goals: number,
-): Appearance {
-  const isSubstitute = type === "Sub";
-  return {
-    id: `${row.id}-${type.toLowerCase()}`,
-    Date: row.match_date,
-    Opposition: row.opposition,
-    Competition: row.competition ?? "",
-    Season: String(row.season),
-    Name: playerName,
-    Number: row.shirt_number?.toString(),
-    SubbedBy: isSubstitute ? row.player_name : row.substituted_by,
-    SubTime: row.substitute_time,
-    YellowCard: (isSubstitute ? row.substitute_yellow_card : row.yellow_card)
-      ? "TRUE"
-      : null,
-    RedCard: (isSubstitute ? row.substitute_red_card : row.red_card)
-      ? "TRUE"
-      : null,
-    Type: type,
-    Goals: goals,
-  };
-}
+const APPEARANCE_PAGE_SIZE = 25;
 
 export async function generateMetadata(props: { params: SlugParams }) {
   const params = await props.params;
@@ -70,39 +44,38 @@ export default async function PlayerProfilePage(props: { params: SlugParams }) {
     player: { name: d1Player.name },
     appearances: [],
   };
-  const [seasonRows, starts, substituteAppearances, goals] = await Promise.all([
-    queryPlayerSeasonSummaryRows(env.DB, {
-      player: d1Player.name,
-      playerMatch: "exact",
-    }),
-    queryAppRows(env.DB, { player: d1Player.name, playerMatch: "exact" }),
-    queryAppRows(env.DB, { substitutedBy: d1Player.name }),
-    queryGoalRows(env.DB, { scorer: d1Player.name, scorerMatch: "exact" }),
-  ]);
-  const goalsByDate = goals.reduce((counts, goal) => {
-    counts.set(goal.match_date, (counts.get(goal.match_date) ?? 0) + 1);
-    return counts;
-  }, new Map<string, number>());
+  const [seasonRows, appearanceRows, appearanceTotal, debutRows, goals] =
+    await Promise.all([
+      queryPlayerSeasonSummaryRows(env.DB, {
+        player: d1Player.name,
+        playerMatch: "exact",
+      }),
+      queryPlayerAppearanceRows(env.DB, d1Player.name, {
+        limit: APPEARANCE_PAGE_SIZE,
+      }),
+      countPlayerAppearanceRows(env.DB, d1Player.name),
+      queryPlayerAppearanceRows(env.DB, d1Player.name, {
+        limit: 1,
+        sort: "date-asc",
+      }),
+      queryGoalRows(env.DB, { scorer: d1Player.name, scorerMatch: "exact" }),
+    ]);
+  const goalsByDate = goalCountsByDate(goals);
   profile.seasons = seasonRows.map(mapPlayerSeasonSummary);
-  profile.appearances = [
-    ...starts.map((row) =>
-      mapAppearance(
-        row,
-        d1Player.name,
-        "Start",
-        goalsByDate.get(row.match_date) ?? 0,
-      ),
+  profile.appearances = appearanceRows.map((row) =>
+    mapPlayerAppearance(
+      row,
+      d1Player.name,
+      goalsByDate.get(row.match_date) ?? 0,
     ),
-    ...substituteAppearances.map((row) =>
-      mapAppearance(
-        row,
+  );
+  profile.debut = debutRows[0]
+    ? mapPlayerAppearance(
+        debutRows[0],
         d1Player.name,
-        "Sub",
-        goalsByDate.get(row.match_date) ?? 0,
-      ),
-    ),
-  ].sort((a, b) => a.Date.localeCompare(b.Date));
-  profile.debut = profile.appearances[0];
+        goalsByDate.get(debutRows[0].match_date) ?? 0,
+      )
+    : undefined;
 
   profile.player = {
     id: d1Player.id,
@@ -174,6 +147,10 @@ export default async function PlayerProfilePage(props: { params: SlugParams }) {
         articles={articles}
         comments={comments}
         avg={avg}
+        appearancePagination={{
+          total: appearanceTotal,
+          pageSize: APPEARANCE_PAGE_SIZE,
+        }}
         biographyMarkdown={d1Player.biographyMarkdown}
         editableProfile={{
           dateOfBirth: d1Player.dateOfBirth ?? "",

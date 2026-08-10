@@ -6,6 +6,7 @@ import type {
   HatTrickRow,
   ManagerRow,
   MatchReportRow,
+  PlayerAppearanceRow,
   PlayerRow,
   PlayerSeasonSummaryRow,
   ProgrammeRow,
@@ -86,6 +87,12 @@ export interface AppQueryOptions {
   dateFrom?: string;
   dateTo?: string;
   limit?: number;
+}
+
+export interface PlayerAppearanceQueryOptions {
+  limit?: number;
+  offset?: number;
+  sort?: 'date-asc' | 'date-desc';
 }
 
 export interface GoalQueryOptions {
@@ -505,6 +512,54 @@ export async function queryAppRows(
       values
     )
   ).results;
+}
+
+export async function queryPlayerAppearanceRows(
+  db: D1DatabaseReader,
+  playerName: string,
+  options: PlayerAppearanceQueryOptions = {}
+) {
+  const values: D1Value[] = [playerName, playerName, playerName];
+  const orderBy =
+    options.sort === 'date-asc'
+      ? 'match_date ASC, player_name ASC, id ASC'
+      : 'match_date DESC, player_name ASC, id ASC';
+
+  return (
+    await all<PlayerAppearanceRow>(
+      db,
+      withLimit(
+        `SELECT id, season, match_date, player_name, competition, opposition,
+                shirt_number, yellow_card, red_card, substitute_yellow_card,
+                substitute_red_card, substitute_time, substituted_by,
+                substitute_substituted_by,
+                CASE WHEN player_name = ? THEN 'Start' ELSE 'Sub' END AS appearance_type
+         FROM Apps
+         WHERE player_name = ? OR substituted_by = ?
+         ORDER BY ${orderBy}`,
+        values,
+        options.limit,
+        options.offset
+      ),
+      values
+    )
+  ).results;
+}
+
+export async function countPlayerAppearanceRows(
+  db: D1DatabaseReader,
+  playerName: string
+) {
+  const result = await db
+    .prepare(
+      `SELECT COUNT(*) AS total
+       FROM Apps
+       WHERE player_name = ? OR substituted_by = ?`
+    )
+    .bind(playerName, playerName)
+    .first<{ total: number }>();
+
+  return result?.total ?? 0;
 }
 
 export async function queryGoalRows(

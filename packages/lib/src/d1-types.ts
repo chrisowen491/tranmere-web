@@ -126,6 +126,10 @@ export interface AppRow {
   substitute_substituted_by: string | null;
 }
 
+export interface PlayerAppearanceRow extends AppRow {
+  appearance_type: 'Start' | 'Sub';
+}
+
 export interface GoalRow {
   id: string;
   season: number;
