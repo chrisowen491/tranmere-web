@@ -4,6 +4,7 @@ import type {
   GameRow,
   GoalRow,
   HatTrickRow,
+  LeagueSeasonSummaryRow,
   ManagerRow,
   MatchReportRow,
   PlayerAppearanceRow,
@@ -57,6 +58,10 @@ export interface GameQueryOptions {
   limit?: number;
   offset?: number;
   includeKit?: boolean;
+}
+
+export interface LeagueSeasonSummaryQueryOptions {
+  season?: number;
 }
 
 export interface HatTrickQueryOptions {
@@ -354,6 +359,27 @@ export async function queryGameRows(
         options.limit,
         options.offset
       ),
+      values
+    )
+  ).results;
+}
+
+export async function queryLeagueSeasonSummaryRows(
+  db: D1DatabaseReader,
+  options: LeagueSeasonSummaryQueryOptions = {}
+) {
+  const values: D1Value[] = [];
+  const where = options.season === undefined ? '' : 'WHERE season = ?';
+  if (options.season !== undefined) values.push(options.season);
+
+  return (
+    await all<LeagueSeasonSummaryRow>(
+      db,
+      `SELECT season, division, final_league_position, wins, draws, losses, goals_for,
+              goals_against, points
+       FROM LeagueSeasonSummaries
+       ${where}
+       ORDER BY season DESC`,
       values
     )
   ).results;

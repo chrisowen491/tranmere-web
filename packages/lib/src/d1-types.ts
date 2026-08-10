@@ -80,6 +80,18 @@ export interface GameRow {
   ticket: string | null;
 }
 
+export interface LeagueSeasonSummaryRow {
+  season: number;
+  division: string;
+  final_league_position: number;
+  wins: number;
+  draws: number;
+  losses: number;
+  goals_for: number;
+  goals_against: number;
+  points: number;
+}
+
 export interface MatchReportRow {
   match_date: string;
   report: string;

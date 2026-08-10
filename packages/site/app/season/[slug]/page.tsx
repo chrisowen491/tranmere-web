@@ -10,6 +10,7 @@ import { getPlayerStatistics } from "@/lib/playerStatistics";
 import { pageMetadata } from "@/lib/seo";
 import { breadcrumbJsonLd, JsonLd } from "@/components/seo/JsonLd";
 import { searchGames } from "@/lib/games";
+import { queryLeagueSeasonSummaryRows } from "@tranmere-web/lib/src/d1-queries";
 
 export async function generateMetadata(props: { params: SlugParams }) {
   const params = await props.params;
@@ -32,6 +33,10 @@ export default async function SeasonPage(props: { params: SlugParams }) {
   const managers = await getManagers(env.DB);
 
   const results = await searchGames(env.DB, { season: Number(season) });
+
+  const [leagueSummary] = await queryLeagueSeasonSummaryRows(env.DB, {
+    season: Number(season),
+  });
 
   const players = await getPlayerStatistics(env.DB, {
     season,
@@ -77,6 +82,7 @@ export default async function SeasonPage(props: { params: SlugParams }) {
         transfers={transfers}
         articles={articles}
         shirts={filteredShirts}
+        leagueSummary={leagueSummary}
       ></SeasonReview>
     </>
   );

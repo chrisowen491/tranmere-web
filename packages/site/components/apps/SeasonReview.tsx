@@ -28,6 +28,7 @@ import { SeasonStory } from "./SeasonStory";
 import { SeasonTimeline } from "./SeasonTimeline";
 import type { PlayerStatisticsView } from "@/lib/playerStatistics";
 import { HONOURS_SEASONS } from "@tranmere-web/lib/src/honours-constants";
+import type { LeagueSeasonSummaryRow } from "@tranmere-web/lib/src/d1-types";
 
 const DIVISION_NAMES: Record<number, Record<number, string>> = {
   0: { 2: "Division 2", 3: "Division 3", 4: "Division 4" },
@@ -93,6 +94,7 @@ export default function SeasonReview(props: {
   articles: BlogItem[];
   shirts: Shirt[];
   seasons: number[];
+  leagueSummary?: LeagueSeasonSummaryRow;
 }) {
   const {
     results,
@@ -104,6 +106,7 @@ export default function SeasonReview(props: {
     articles,
     shirts,
     seasons,
+    leagueSummary,
   } = props;
   const seasonInt = Number(season);
   const achievements =
@@ -128,6 +131,7 @@ export default function SeasonReview(props: {
         shirts={shirts}
         seasons={seasons}
         achievements={achievements}
+        leagueSummary={leagueSummary}
       />
       <SeasonTimeline
         season={season}

@@ -18,6 +18,7 @@ import Link from "next/link";
 import { JumpBox } from "../forms/JumpBox";
 import type { PlayerStatisticsView } from "@/lib/playerStatistics";
 import type { HonoursAchievement } from "@tranmere-web/lib/src/honours-constants";
+import type { LeagueSeasonSummaryRow } from "@tranmere-web/lib/src/d1-types";
 import {
   goalsAgainst,
   goalsFor,
@@ -42,6 +43,20 @@ function playerInitials(name: string) {
     .slice(0, 2);
 }
 
+function ordinal(value: number) {
+  const remainder = value % 100;
+  if (remainder >= 11 && remainder <= 13) return `${value}th`;
+  const suffix =
+    value % 10 === 1
+      ? "st"
+      : value % 10 === 2
+        ? "nd"
+        : value % 10 === 3
+          ? "rd"
+          : "th";
+  return `${value}${suffix}`;
+}
+
 export function SeasonStory(props: {
   season: string;
   results: Match[];
@@ -51,6 +66,7 @@ export function SeasonStory(props: {
   shirts: Shirt[];
   seasons: number[];
   achievements: readonly HonoursAchievement[];
+  leagueSummary?: LeagueSeasonSummaryRow;
 }) {
   const {
     season: seasonValue,
@@ -61,6 +77,7 @@ export function SeasonStory(props: {
     shirts,
     seasons,
     achievements,
+    leagueSummary,
   } = props;
   const season = Number(seasonValue);
   const hasRelegation = achievements.some(
@@ -70,9 +87,38 @@ export function SeasonStory(props: {
     (result) =>
       typeof result.hgoal === "number" && typeof result.vgoal === "number",
   );
-  const summary = summarizeResults(completedResults);
-  const averageAttendance = summary.attendanceCount
-    ? Math.round(summary.attendanceTotal / summary.attendanceCount)
+  const leagueResults = completedResults.filter(
+    (result) =>
+      result.competition === "League" || result.competition === "Conference",
+  );
+  const leagueResultSummary = summarizeResults(leagueResults);
+  const leagueSummaryStats = leagueSummary
+    ? {
+        matches:
+          leagueSummary.wins + leagueSummary.draws + leagueSummary.losses,
+        wins: leagueSummary.wins,
+        draws: leagueSummary.draws,
+        defeats: leagueSummary.losses,
+        goals: `${leagueSummary.goals_for}–${leagueSummary.goals_against}`,
+      }
+    : {
+        matches: leagueResults.length,
+        wins: leagueResultSummary.W,
+        draws: leagueResultSummary.D,
+        defeats: leagueResultSummary.L,
+        goals: `${leagueResultSummary.scored}–${leagueResultSummary.conceded}`,
+      };
+  const prentonLeagueResults = leagueResults.filter(
+    (result) =>
+      result.venue?.trim().toLowerCase() === "prenton park" &&
+      Boolean(result.attendance && result.attendance > 0),
+  );
+  const prentonLeagueAttendance = prentonLeagueResults.reduce(
+    (total, result) => total + (result.attendance ?? 0),
+    0,
+  );
+  const averagePrentonLeagueAttendance = prentonLeagueResults.length
+    ? Math.round(prentonLeagueAttendance / prentonLeagueResults.length)
     : 0;
   const topScorer = maxBy(players, (player) => player.goals);
   const mostUsedXi = buildMostUsedXi(players);
@@ -148,7 +194,7 @@ export function SeasonStory(props: {
             </h2>
             <p className="mt-5 max-w-2xl text-xl leading-8 text-white/65">
               {completedResults.length > 0
-                ? `${summary.W} wins, ${summary.scored} goals and a campaign told match by match.`
+                ? `${leagueSummaryStats.wins} league wins, ${leagueSummaryStats.goals} league goals and a campaign told match by match.`
                 : "The people, shirts and records that shaped the campaign."}
             </p>
             {achievements.length > 0 && (
@@ -254,17 +300,27 @@ export function SeasonStory(props: {
       </div>
 
       <div className="border-y border-white/15 bg-white/[0.035]">
-        <dl className="mx-auto grid max-w-7xl grid-cols-2 px-6 sm:grid-cols-3 lg:grid-cols-6 lg:px-8">
+        <dl className="mx-auto grid max-w-7xl grid-cols-2 px-6 sm:grid-cols-4 lg:grid-cols-8 lg:px-8">
           {[
-            ["Matches", completedResults.length],
-            ["Wins", summary.W],
-            ["Draws", summary.D],
-            ["Defeats", summary.L],
-            ["Goals", `${summary.scored}–${summary.conceded}`],
             [
-              "Average gate",
-              averageAttendance
-                ? averageAttendance.toLocaleString("en-GB")
+              "Division",
+              leagueSummary?.division ?? divisionName(completedResults, season),
+            ],
+            [
+              "Final league position",
+              leagueSummary
+                ? ordinal(leagueSummary.final_league_position)
+                : "—",
+            ],
+            ["League matches", leagueSummaryStats.matches],
+            ["League wins", leagueSummaryStats.wins],
+            ["League draws", leagueSummaryStats.draws],
+            ["League defeats", leagueSummaryStats.defeats],
+            ["League goals", leagueSummaryStats.goals],
+            [
+              "Average Prenton Park gate",
+              averagePrentonLeagueAttendance
+                ? averagePrentonLeagueAttendance.toLocaleString("en-GB")
                 : "—",
             ],
           ].map(([label, value]) => (
@@ -275,7 +331,11 @@ export function SeasonStory(props: {
               <dt className="text-[0.65rem] font-bold uppercase tracking-[0.13em] text-white/45">
                 {label}
               </dt>
-              <dd className="mt-2 font-display text-2xl font-semibold">
+              <dd
+                className={`mt-2 font-display font-semibold ${
+                  label === "Division" ? "text-base leading-tight" : "text-2xl"
+                }`}
+              >
                 {value}
               </dd>
             </div>
