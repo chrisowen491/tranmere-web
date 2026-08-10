@@ -142,7 +142,7 @@ export default async function MatchPage(props: { params: MatchParams }) {
     getManagerAtDate(env.DB, matchData.date),
   ]);
 
-  const [matches, milestones] = await Promise.all([
+  const [matches, milestones, opponentMatches] = await Promise.all([
     searchGames(env.DB, { season: Number(match.season) }),
     getMatchMilestones(env.DB, {
       season: Number(match.season),
@@ -151,12 +151,21 @@ export default async function MatchPage(props: { params: MatchParams }) {
       goals: goalRows,
       manager,
     }),
+    searchGames(env.DB, {
+      opposition: match.opposition,
+      dateTo: match.date,
+      sort: "date-desc",
+      limit: 2,
+    }),
   ]);
 
   const next = matches.results.filter((m) => m.date > match.date).slice(0, 5);
   const previousMatches = matches.results.filter((m) => m.date < match.date);
   const previous = previousMatches.slice(
     Math.max(previousMatches.length - 5, 0),
+  );
+  const lastMeeting = opponentMatches.results.find(
+    (opponentMatch) => opponentMatch.date < match.date,
   );
 
   const comments = await GetCommentsByUrl(env, baseUrl);
@@ -205,6 +214,7 @@ export default async function MatchPage(props: { params: MatchParams }) {
         match={match}
         next={next}
         previous={previous}
+        lastMeeting={lastMeeting}
         comments={comments}
         url={baseUrl}
         avg={avg}

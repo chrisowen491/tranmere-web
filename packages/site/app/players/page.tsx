@@ -70,6 +70,7 @@ export default async function PlayerSearchPage() {
                 ["Super subs", "/players/super-subs"],
                 ["Misfiring strikers", "/players/misfiring-strikers"],
                 ["Cult heroes", "/players/cult-heroes"],
+                ["Promotion squads", "/players/promotion-squads"],
               ].map(([label, href]) => (
                 <Link
                   key={href}

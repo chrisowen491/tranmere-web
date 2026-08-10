@@ -1,0 +1,13 @@
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+
+ <g>
+  <g stroke="null" id="collar">
+   <line stroke="#1653b3" id="svg_1" fill="none" stroke-width="19" x1="207.85756" y1="317.37835" x2="260.66027" y2="377.30569"/>
+   <line stroke="#1653b3" id="svg_2" fill="none" stroke-width="19" x1="307.28155" y1="317.7144" x2="248.27662" y2="376.5252"/>
+  </g>
+  <g id="collar2">
+   <path id="svg_3" fill="#1a1d4b" d="m256,356l-30,30l-31.996,-70.056l17.996,-11.944l44,52z" stroke="#b2b2b2"/>
+   <path id="svg_4" fill="#1a1d4b" d="m256,356l30,30l31.996,-70.056l-17.996,-11.944l-44,52z" stroke="#b2b2b2"/>
+  </g>
+ </g>
+</svg>

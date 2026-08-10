@@ -20,6 +20,7 @@ data ownership and system boundaries.
 | Results archive     | `/results`                 | Searches and filters the D1-backed results archive by season, competition, opponent and manager, with a visual overall record summary.                        |
 | Match record        | `/match/[season]/[date]`   | Uses D1 match facts, report, player apps and goals to show score, programme, attendance, formation-aware team sheet, cards, comments and ratings.             |
 | Matchday milestones | `/match/[season]/[date]`   | Flags player debuts, final appearances, first goals, hat-tricks and managerial first or last matches.                                                        |
+| Last time we met    | `/match/[season]/[date]`   | Links each match to the immediately preceding recorded meeting with the same opposition and its complete head-to-head archive.                                |
 | Season index        | `/seasons`                 | Lists recorded seasons by decade, highlights honours and relegations, and excludes wartime seasons without matches.                                           |
 | Season review       | `/season/[season]`         | Combines D1 results, squad statistics, most-used XI, manager, transfers, shirt and a month-by-month season timeline.                                         |
 | Honours archive     | `/honours`                 | Collects titles, promotions, play-off triumphs, landmark cup runs and relegations with links to the relevant season archive.                                  |
@@ -45,6 +46,7 @@ data ownership and system boundaries.
 | Hat-trick archive       | `/players/hat-tricks`            | Lists recorded hat-tricks and links them to matches and players.                                                    |
 | Partnership explorer    | `/players/partnerships`          | Autocompletes two players and analyses matches and results when they played together.                               |
 | Cult hero index         | `/players/cult-heroes`            | Editorial-style player discovery for one-club spells, comebacks, substitute specialists, cup heroes and promotion contributors. |
+| Promotion squads        | `/players/promotion-squads`      | Reintroduces the managers and most-used players behind promotion and play-off-winning campaigns.                    |
 
 ## Managers, Clubs and Transfers
 

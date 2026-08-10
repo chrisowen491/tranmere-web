@@ -199,4 +199,21 @@ describe("D1 queries", () => {
     expect(sql).toContain("penalties IS NOT NULL AND TRIM(penalties) <> ''");
     expect(mock.boundValues).toEqual([]);
   });
+
+  it("finds the most recent earlier meeting with an opponent", async () => {
+    const mock = databaseReturning([]);
+
+    await queryGameRows(mock.db, {
+      opposition: "Wrexham",
+      dateTo: "2026-08-01",
+      sort: "date-desc",
+      limit: 2,
+    });
+
+    const sql = String(mock.prepare.mock.calls[0][0]);
+    expect(sql).toContain("opposition = ?");
+    expect(sql).toContain("match_date <= ?");
+    expect(sql).toContain("ORDER BY match_date DESC");
+    expect(mock.boundValues).toEqual([["Wrexham", "2026-08-01", 2]]);
+  });
 });

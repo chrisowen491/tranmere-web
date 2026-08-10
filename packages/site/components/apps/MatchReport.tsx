@@ -8,7 +8,7 @@ import CommentPanel from "@/components/comments/CommentPanel";
 import type { Comment } from "@/lib/comments";
 import { Reviews } from "@/components/comments/Reviews";
 import { BreadcrumbLinks } from "@/components/fragments/BreadcrumbLinks";
-import { ArrowPathIcon } from "@heroicons/react/24/outline";
+import { ArrowPathIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
 import { replaceSeasonsKit } from "@tranmere-web/lib/src/apiFunctions";
 import { AttendanceCorrectionForm } from "./AttendanceCorrectionForm";
 import { FormationCorrectionForm } from "./FormationCorrectionForm";
@@ -17,6 +17,7 @@ import type { ManagerRecord } from "@/lib/managers";
 import { arrangeMatchLineup, formationLabel } from "@/lib/matchLineup";
 import type { MatchMilestone } from "@/lib/matchMilestones";
 import { ManagerFormation } from "@tranmere-web/lib/src/manager-constants";
+import { matchOutcome, outcomeClass } from "@/lib/seasonMatchUtils";
 
 function playerAvatar(picLink: string, season: number, kit?: string) {
   return replaceSeasonsKit(picLink, kit || season.toString());
@@ -46,6 +47,7 @@ export default function MatchReport(props: {
   match: MatchPageView;
   next: Match[];
   previous: Match[];
+  lastMeeting?: Match;
   comments: Comment[];
   url: string;
   avg: number;
@@ -243,7 +245,9 @@ export default function MatchReport(props: {
                     </span>
                     <span className="text-sm leading-5">
                       <span className="font-semibold">{milestone.name}</span>{" "}
-                      <span className="text-[#071a2b]/65">{milestone.label}</span>
+                      <span className="text-[#071a2b]/65">
+                        {milestone.label}
+                      </span>
                     </span>
                   </Link>
                 </li>
@@ -402,6 +406,67 @@ export default function MatchReport(props: {
             </aside>
           )}
         </section>
+
+        {props.lastMeeting &&
+          (() => {
+            const lastMeeting = props.lastMeeting;
+            const outcome = matchOutcome(lastMeeting);
+            const opposition = lastMeeting.opposition ?? "the opposition";
+            return (
+              <section className="mt-12 border-y border-[#071a2b]/15 py-8">
+                <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-700">
+                      Fixture history
+                    </p>
+                    <h2 className="mt-2 font-display text-3xl font-semibold">
+                      Last time we met
+                    </h2>
+                    <p className="mt-3 text-sm leading-6 text-[#071a2b]/60">
+                      The previous Rovers meeting with {opposition}.
+                    </p>
+                  </div>
+                  <Link
+                    href={`/games/${encodeURIComponent(opposition)}`}
+                    className="inline-flex w-fit items-center gap-2 border border-[#071a2b]/20 bg-[#fffdf8] px-4 py-3 text-sm font-bold transition hover:border-blue-700 hover:text-blue-700"
+                  >
+                    Complete head-to-head
+                    <ArrowRightIcon className="h-4 w-4" aria-hidden="true" />
+                  </Link>
+                </div>
+                <Link
+                  href={`/match/${lastMeeting.season}/${lastMeeting.date}`}
+                  className="group mt-7 grid gap-px border border-[#071a2b]/15 bg-[#071a2b]/15 sm:grid-cols-[auto_minmax(0,1fr)_auto]"
+                >
+                  <span
+                    className={`grid min-h-20 min-w-20 place-items-center px-5 font-mono text-xl font-bold text-white ${outcomeClass(outcome, "bg-amber-500")}`}
+                  >
+                    {outcome}
+                  </span>
+                  <span className="bg-[#fffdf8] px-5 py-4 transition group-hover:bg-blue-50/70">
+                    <span className="block font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-[#071a2b]/45">
+                      {lastMeeting.competition} · {lastMeeting.date} ·{" "}
+                      {lastMeeting.location === "H"
+                        ? "Prenton Park"
+                        : lastMeeting.location === "N"
+                          ? "Neutral venue"
+                          : "Away"}
+                    </span>
+                    <span className="mt-2 block font-display text-2xl font-semibold">
+                      {lastMeeting.home}{" "}
+                      <span className="font-mono text-blue-700">
+                        {lastMeeting.ft}
+                      </span>{" "}
+                      {lastMeeting.visitor}
+                    </span>
+                  </span>
+                  <span className="hidden bg-[#fffdf8] px-5 py-4 text-right text-sm font-bold text-blue-700 sm:flex sm:items-center">
+                    Open match report
+                  </span>
+                </Link>
+              </section>
+            );
+          })()}
 
         {props.previous.length > 0 && (
           <ResultTable title="Previous 5 Matches" results={props.previous} />
