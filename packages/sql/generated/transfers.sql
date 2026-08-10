@@ -1110,7 +1110,7 @@ INSERT INTO Transfers (
   ('29503af0-7417-4b2f-9b6d-2e96b8b02852', 'Connor Jennings', 2023, 'Hartlepool United', 'Tranmere Rovers', 'Free Transfer', 0),
   ('7c93e920-724a-11f0-9579-097b1b93e7cc', 'Ethan Bristow', 2023, 'Tranmere Rovers', 'Minnesota United', 'Free Transfer', 0),
   ('9674d1b0-724a-11f0-9579-097b1b93e7cc', 'Josh Dacres-Cogley', 2023, 'Tranmere Rovers', 'Bolton Wanderers', 'Free Transfer', 0),
-  ('c0abc865-3a7d-48f1-9cda-254886253539', 'Kane Hemmings', 2023, 'Tranmere Rovers', 'Stevege Borough', 'Undisclosed', 10000),
+  ('c0abc865-3a7d-48f1-9cda-254886253539', 'Kane Hemmings', 2023, 'Tranmere Rovers', 'Stevenage', 'Undisclosed', 10000),
   ('b1341dd7-7893-476b-98c1-8043f79716c8', 'Robert Apter', 2023, 'Blackpool', 'Tranmere Rovers', 'Loan', 0),
   ('fef2d3e3-acec-4147-a7be-b40c414dd962', 'Cameron Norman', 2024, 'Milton Keynes Dons', 'Tranmere Rovers', 'Free Transfer', 0),
   ('48e7c6d0-29a4-11f0-9cf7-637e5e4e1f85', 'Declan Drysdale', 2024, 'Newport County', 'Tranmere Rovers', 'Free Transfer', 0),

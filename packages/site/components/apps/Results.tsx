@@ -8,8 +8,12 @@ import {
   Match,
   Team,
 } from "@tranmere-web/lib/src/tranmere-web-types";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { ResultTable } from "@/components/apps/partials/ResultTable";
+import {
+  SearchPagination,
+  type SearchPaginationState,
+} from "@/components/apps/partials/SearchPagination";
 export function ResultsSearch(props: {
   results: Match[];
   h2hresults: H2HResult[];
@@ -40,6 +44,13 @@ export function ResultsSearch(props: {
   const [opposition, setOpposition] = useState(props.opposition);
   const [pens, setPens] = useState(props.pens);
   const [loading, setLoading] = useState(false);
+  const requestId = useRef(0);
+  const abortController = useRef<AbortController | null>(null);
+  const [pagination, setPagination] = useState<SearchPaginationState>({
+    cursor: 0,
+    limit: 50,
+    nextCursor: props.results.length === 50 ? 50 : null,
+  });
 
   const updateFilters = async (
     changes: Partial<{
@@ -50,8 +61,13 @@ export function ResultsSearch(props: {
       venue: string;
       opposition: string;
       pens: string;
+      cursor: number;
     }>,
   ) => {
+    const request = ++requestId.current;
+    abortController.current?.abort();
+    const controller = new AbortController();
+    abortController.current = controller;
     const next = {
       season: season ?? "",
       sort: sort ?? "",
@@ -60,6 +76,7 @@ export function ResultsSearch(props: {
       venue: venue ?? "",
       opposition: opposition ?? "",
       pens: pens ?? "",
+      cursor: 0,
       ...changes,
     };
     setSeason(next.season);
@@ -71,17 +88,33 @@ export function ResultsSearch(props: {
     setPens(next.pens);
     setLoading(true);
     try {
-      const response = await fetch(`${base}?${new URLSearchParams(next)}`);
+      const response = await fetch(
+        `${base}?${new URLSearchParams({
+          ...next,
+          cursor: String(next.cursor),
+          limit: "50",
+        })}`,
+        { signal: controller.signal },
+      );
+      if (!response.ok) throw new Error("Result search failed");
       const fullResults = (await response.json()) as {
         results: Match[];
         h2hresults: H2HResult[];
         h2htotal: H2HTotal[];
+        pagination: SearchPaginationState;
       };
-      setResults(fullResults.results);
-      setH2hresults(fullResults.h2hresults);
-      setH2htotal(fullResults.h2htotal);
+      if (request === requestId.current) {
+        setResults(fullResults.results);
+        setH2hresults(fullResults.h2hresults);
+        setH2htotal(fullResults.h2htotal);
+        setPagination(fullResults.pagination);
+      }
+    } catch (error) {
+      if (!(error instanceof DOMException && error.name === "AbortError")) {
+        throw error;
+      }
     } finally {
-      setLoading(false);
+      if (request === requestId.current) setLoading(false);
     }
   };
 
@@ -100,7 +133,7 @@ export function ResultsSearch(props: {
           <p className="mt-1 text-sm text-[#071a2b]/55">
             {results.length === 0
               ? "No recorded matches in this selection"
-              : `${results.length.toLocaleString()} matches found`}
+              : `${results.length.toLocaleString()} matches on this page`}
           </p>
         </div>
         <div className="grid w-full gap-3 sm:grid-cols-2 xl:grid-cols-4 lg:max-w-5xl">
@@ -108,7 +141,9 @@ export function ResultsSearch(props: {
             <span className="sr-only">Filter by season</span>
             <select
               value={season ?? ""}
-              onChange={(event) => updateFilters({ season: event.target.value })}
+              onChange={(event) =>
+                updateFilters({ season: event.target.value })
+              }
               className="block w-full border border-[#071a2b]/20 bg-[#fffdf8] px-4 py-3 text-sm font-semibold outline-none transition focus:border-blue-700 focus:ring-2 focus:ring-blue-700/15"
             >
               <option value="">All seasons</option>
@@ -157,7 +192,9 @@ export function ResultsSearch(props: {
             <span className="sr-only">Filter by manager</span>
             <select
               value={manager ?? ""}
-              onChange={(event) => updateFilters({ manager: event.target.value })}
+              onChange={(event) =>
+                updateFilters({ manager: event.target.value })
+              }
               className="block w-full border border-[#071a2b]/20 bg-[#fffdf8] px-4 py-3 text-sm font-semibold outline-none transition focus:border-blue-700 focus:ring-2 focus:ring-blue-700/15"
             >
               <option value="">All managers</option>
@@ -230,6 +267,20 @@ export function ResultsSearch(props: {
         h2htotal={h2htotal}
         fullDate={props.fullDate}
       ></ResultTable>
+      <SearchPagination
+        pagination={pagination}
+        count={results.length}
+        loading={loading}
+        onPrevious={() =>
+          void updateFilters({
+            cursor: Math.max(0, pagination.cursor - pagination.limit),
+          })
+        }
+        onNext={() =>
+          pagination.nextCursor !== null &&
+          void updateFilters({ cursor: pagination.nextCursor })
+        }
+      />
     </div>
   );
 }

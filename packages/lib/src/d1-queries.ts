@@ -41,6 +41,7 @@ export interface TransferQueryOptions {
   direction?: 'In' | 'Out';
   sort?: 'date-desc' | 'fee-desc';
   limit?: number;
+  offset?: number;
 }
 
 export interface GameQueryOptions {
@@ -53,6 +54,7 @@ export interface GameQueryOptions {
   dateTo?: string;
   sort?: 'date-asc' | 'date-desc' | 'attendance-desc';
   limit?: number;
+  offset?: number;
   includeKit?: boolean;
 }
 
@@ -68,7 +70,11 @@ export interface PlayerSeasonSummaryQueryOptions {
   player?: string;
   playerMatch?: 'exact' | 'contains';
   season?: string;
+  position?: string;
+  onlyOneAppearance?: boolean;
+  sort?: 'starts' | 'goals' | 'subs';
   limit?: number;
+  offset?: number;
 }
 
 export interface AppQueryOptions {
@@ -93,10 +99,17 @@ export interface GoalQueryOptions {
   limit?: number;
 }
 
-function withLimit(sql: string, values: D1Value[], limit?: number) {
+function withLimit(
+  sql: string,
+  values: D1Value[],
+  limit?: number,
+  offset?: number
+) {
   if (limit === undefined) return sql;
   values.push(limit);
-  return `${sql}\nLIMIT ?`;
+  if (offset === undefined) return `${sql}\nLIMIT ?`;
+  values.push(offset);
+  return `${sql}\nLIMIT ? OFFSET ?`;
 }
 
 async function all<T>(db: D1DatabaseReader, sql: string, values: D1Value[]) {
@@ -202,7 +215,8 @@ export async function queryTransferRows(
      ${where}
      ORDER BY ${orderBy}`,
     values,
-    options.limit
+    options.limit,
+    options.offset
   );
 
   return (await all<TransferRow>(db, sql, values)).results;
@@ -330,7 +344,8 @@ export async function queryGameRows(
        ${where}
        ORDER BY ${orderBy}, id ASC`,
         values,
-        options.limit
+        options.limit,
+        options.offset
       ),
       values
     )
@@ -360,7 +375,6 @@ export async function queryHatTrickRows(
     conditions.push('match_date = ?');
     values.push(options.matchDate);
   }
-
   const where = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
   return (
     await all<HatTrickRow>(
@@ -397,8 +411,27 @@ export async function queryPlayerSeasonSummaryRows(
     conditions.push('season = ?');
     values.push(options.season);
   }
+  if (options.position) {
+    conditions.push(
+      `EXISTS (
+        SELECT 1 FROM Players
+        WHERE Players.name = PlayerSeasonSummaries.player_name
+          AND (Players.position = ? OR Players.secondary_position = ?)
+      )`
+    );
+    values.push(options.position, options.position);
+  }
+  if (options.onlyOneAppearance) {
+    conditions.push('appearances = 1');
+  }
 
   const where = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
+  const orderBy =
+    options.sort === 'goals'
+      ? 'goals DESC, appearances DESC, player_name ASC'
+      : options.sort === 'subs'
+        ? 'substitute_appearances DESC, starts DESC, player_name ASC'
+        : 'starts DESC, appearances DESC, player_name ASC';
   return (
     await all<PlayerSeasonSummaryRow>(
       db,
@@ -408,9 +441,10 @@ export async function queryPlayerSeasonSummaryRows(
                 headers
          FROM PlayerSeasonSummaries
          ${where}
-         ORDER BY season = 'TOTAL' ASC, season DESC, appearances DESC, player_name ASC`,
+         ORDER BY ${orderBy}`,
         values,
-        options.limit
+        options.limit,
+        options.offset
       ),
       values
     )

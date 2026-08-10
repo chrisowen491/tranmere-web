@@ -1,6 +1,7 @@
 import { readFile, readdir, mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { canonicalizeClubName } from "./club-name-aliases.mjs";
 
 const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
 const sqlPackageDirectory = path.resolve(scriptDirectory, "..");
@@ -52,8 +53,8 @@ function parseTransfer(line, source) {
     id: readAttribute(item, "id", "S", source),
     playerName: readAttribute(item, "name", "S", source),
     season,
-    fromClub: readAttribute(item, "from", "S", source),
-    toClub: readAttribute(item, "to", "S", source),
+    fromClub: canonicalizeClubName(readAttribute(item, "from", "S", source)),
+    toClub: canonicalizeClubName(readAttribute(item, "to", "S", source)),
     feeDescription: readAttribute(item, "value", "S", source),
     cost,
   };
@@ -144,4 +145,3 @@ await writeFile(outputFile, sql, "utf8");
 console.log(
   `Generated ${transfers.length} transfers from ${files.length} files at ${outputFile}`,
 );
-

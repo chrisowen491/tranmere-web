@@ -169,7 +169,7 @@ INSERT INTO Clubs (
   ('6885596a-571b-4485-84df-958135ddbd59', 'Southend United', NULL, NULL, NULL, '#003366', '#FFFFFF', 2, 51.5490167, 0.7015583),
   ('f6fba40a-3e9a-4bed-8edf-7c269dc90d15', 'Southport', NULL, NULL, NULL, '#FFCC00', '#0000FF', 3, 53.6385056, -2.9791833),
   ('1c039cd0-2c1c-4a42-accd-16290f28134b', 'Stalybridge Celtic', NULL, NULL, NULL, '#0000FF', '#FFFFFF', 3, 53.475278, -2.043889),
-  ('a1e87162-c911-4336-830b-18af08f0f21f', 'Stevege Borough', NULL, NULL, NULL, '#FF0000', '#FFFFFF', 3, 51.889839, -0.193608),
+  ('a1e87162-c911-4336-830b-18af08f0f21f', 'Stevenage', NULL, NULL, NULL, '#FF0000', '#FFFFFF', 3, 51.889839, -0.193608),
   ('40e4a690-e8b9-4838-bed5-9cdbadd4f8b4', 'Stockport County', NULL, NULL, NULL, '#0000FF', '#FFFFFF', 2, 53.39972, -2.16639),
   ('e1c44d21-0cf4-4426-8442-fe1e8cfd57d6', 'Stoke City', 'Stoke', NULL, NULL, '#FF0000', '#FFFFFF', 1, 52.98833, -2.17556),
   ('b4d293b9-150c-4aa0-a1a8-e5aed5491000', 'Sunderland', 'Sunderland', NULL, NULL, '#FF0000', '#FFFFFF', 1, 54.9144, -1.3882),

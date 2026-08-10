@@ -19,6 +19,7 @@ export interface TransferFilters {
   playerName?: string;
   sort?: "date-desc" | "fee-desc";
   limit?: number;
+  offset?: number;
 }
 
 export function mapTransfer(row: TransferRow): Transfer {
@@ -122,6 +123,7 @@ export async function getTransfers(
         : undefined,
     sort: filters.sort,
     limit: filters.limit,
+    offset: filters.offset,
   });
 
   return rows.map(mapTransfer);

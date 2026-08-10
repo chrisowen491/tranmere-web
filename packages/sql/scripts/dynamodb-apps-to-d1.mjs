@@ -1,6 +1,7 @@
 import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { canonicalizeClubName } from './club-name-aliases.mjs';
 
 const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
 const sqlPackageDirectory = path.resolve(scriptDirectory, '..');
@@ -94,7 +95,7 @@ function parseApp(line, source) {
     matchDate,
     playerName: requiredString(item, 'Name', source),
     competition: optionalString(item, 'Competition', source),
-    opposition: requiredString(item, 'Opposition', source),
+    opposition: canonicalizeClubName(requiredString(item, 'Opposition', source)),
     shirtNumber: optionalInteger(item, 'Number', source),
     yellowCard: flag(item, 'YellowCard', source),
     redCard: flag(item, 'RedCard', source),

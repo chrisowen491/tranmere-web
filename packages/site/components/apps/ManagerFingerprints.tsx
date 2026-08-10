@@ -17,6 +17,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import type { ManagerRecord } from "@/lib/managers";
 import type { ManagerTrustedXi } from "@/lib/managerTrustedXi";
+import { loadAllResultPages } from "@/lib/managerComparisonData";
 
 interface FingerprintMetric {
   label: string;
@@ -215,20 +216,18 @@ export function ManagerFingerprints({
       : selected.dateLeft;
     try {
       const [matchesResponse, xiResponse] = await Promise.all([
-        fetch(
-          `/api/result-search?manager=${encodeURIComponent(
-            `${selected.dateJoined},${dateLeft}`,
-          )}&sort=Date`,
-        ),
+        loadAllResultPages({
+          manager: `${selected.dateJoined},${dateLeft}`,
+          sort: "Date",
+        }),
         fetch(
           `/api/manager-trusted-xi?manager=${encodeURIComponent(selected.id)}`,
         ),
       ]);
-      if (!matchesResponse.ok || !xiResponse.ok) {
+      if (!xiResponse.ok) {
         throw new Error("The archive could not build this fingerprint.");
       }
-      const matchData = (await matchesResponse.json()) as { results: Match[] };
-      setMatches(matchData.results);
+      setMatches(matchesResponse);
       setXi((await xiResponse.json()) as ManagerTrustedXi);
       setManager(selected);
     } catch (reason) {

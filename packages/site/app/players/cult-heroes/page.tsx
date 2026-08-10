@@ -118,9 +118,9 @@ export default async function CultHeroesPage() {
                     <li key={hero.name} className="bg-[#fffdf8]">
                       <Link
                         href={`/page/player/${encodeURIComponent(hero.name)}`}
-                        className="group flex min-h-full gap-5 p-5 transition hover:bg-white sm:p-6"
+                        className="group flex min-h-full gap-3 p-4 transition hover:bg-white sm:gap-5 sm:p-6"
                       >
-                        <span className="font-mono text-xs text-[#071a2b]/40">
+                        <span className="w-5 shrink-0 pt-1 text-center font-mono text-xs text-[#071a2b]/40">
                           {String(index + 1).padStart(2, "0")}
                         </span>
                         <Image
@@ -129,12 +129,12 @@ export default async function CultHeroesPage() {
                           width={96}
                           height={96}
                           unoptimized
-                          className="h-16 w-16 shrink-0 rounded-full border border-[#071a2b]/10 bg-[#071a2b] object-cover"
+                          className="h-14 w-14 shrink-0 rounded-full border border-[#071a2b]/10 bg-[#071a2b] object-cover sm:h-16 sm:w-16"
                         />
                         <div className="min-w-0 flex-1">
-                          <div className="flex items-start justify-between gap-4">
+                          <div className="flex items-start justify-between gap-2 sm:gap-4">
                             <div>
-                              <h3 className="font-display text-2xl font-semibold tracking-[-0.03em] transition group-hover:text-blue-700">
+                              <h3 className="font-display text-xl font-semibold leading-tight tracking-[-0.03em] transition group-hover:text-blue-700 sm:text-2xl">
                                 {hero.name}
                               </h3>
                               <p className="mt-1 text-sm font-semibold text-blue-700">
@@ -143,11 +143,11 @@ export default async function CultHeroesPage() {
                             </div>
                             <ArrowRightIcon className="mt-1 h-5 w-5 shrink-0 text-blue-700 transition group-hover:translate-x-1" />
                           </div>
-                          <div className="mt-4 flex items-end justify-between gap-3 border-t border-[#071a2b]/10 pt-3">
+                          <div className="mt-3 flex flex-col items-start gap-2 border-t border-[#071a2b]/10 pt-3 sm:mt-4 sm:flex-row sm:items-end sm:justify-between sm:gap-3">
                             <p className="text-xs leading-5 text-[#071a2b]/55">
                               {hero.detail}
                             </p>
-                            <span className="flex shrink-0 items-center gap-1.5 font-mono text-xs font-bold text-[#071a2b]">
+                            <span className="flex max-w-full flex-wrap items-center gap-x-1.5 font-mono text-xs font-bold text-[#071a2b] sm:shrink-0">
                               <SparklesIcon className="h-3.5 w-3.5 text-blue-700" />
                               {hero.value} {hero.valueLabel}
                             </span>

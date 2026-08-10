@@ -13,15 +13,10 @@ export const metadata = pageMetadata({
 
 export default async function PlayerSearchPage() {
   const env = (await getCloudflareContext({ async: true })).env;
-  const allPlayers = await getPlayerStatistics(env.DB);
-  const players = [...allPlayers]
-    .sort(
-      (a, b) =>
-        b.starts + b.subs - (a.starts + a.subs) ||
-        b.goals - a.goals ||
-        a.Player.localeCompare(b.Player),
-    )
-    .slice(0, 50);
+  const players = await getPlayerStatistics(env.DB, {
+    sort: "Starts",
+    limit: 50,
+  });
 
   return (
     <main className="pb-24 text-[#071a2b]">
@@ -35,7 +30,7 @@ export default async function PlayerSearchPage() {
           url: "https://www.tranmere-web.com/players",
           mainEntity: {
             "@type": "ItemList",
-            numberOfItems: allPlayers.length,
+            numberOfItems: players.length,
           },
         }}
       />

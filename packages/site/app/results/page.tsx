@@ -27,7 +27,7 @@ export default async function ResultsSearchPage() {
     getClubs(env.DB),
   ]);
 
-  const results = await searchGames(env.DB, { season: theYear });
+  const results = await searchGames(env.DB, { season: theYear, limit: 50 });
 
   return (
     <main className="pb-24 text-[#071a2b]">

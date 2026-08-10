@@ -149,9 +149,32 @@ export async function loadManagerMatches(selection: ManagerSelection) {
     ? new Date().toISOString().slice(0, 10)
     : dateLeft;
   const managerRange = encodeURIComponent(`${dateJoined},${endDate}`);
-  const response = await fetch(
-    `/api/result-search?manager=${managerRange}&sort=Date`,
-  );
-  if (!response.ok) throw new Error("Unable to load manager results");
-  return ((await response.json()) as { results: Match[] }).results;
+  return loadAllResultPages({ manager: managerRange, sort: "Date" });
+}
+
+export async function loadAllResultPages(
+  parameters: Record<string, string>,
+  signal?: AbortSignal,
+) {
+  const results: Match[] = [];
+  let cursor = 0;
+
+  for (let page = 0; page < 100; page += 1) {
+    const search = new URLSearchParams({
+      ...parameters,
+      cursor: String(cursor),
+      limit: "100",
+    });
+    const response = await fetch(`/api/result-search?${search}`, { signal });
+    if (!response.ok) throw new Error("Unable to load manager results");
+    const data = (await response.json()) as {
+      results: Match[];
+      pagination: { nextCursor: number | null };
+    };
+    results.push(...data.results);
+    if (data.pagination.nextCursor === null) return results;
+    cursor = data.pagination.nextCursor;
+  }
+
+  throw new Error("Too many manager results to load safely.");
 }

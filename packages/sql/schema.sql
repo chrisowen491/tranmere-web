@@ -130,6 +130,23 @@ CREATE UNIQUE INDEX IF NOT EXISTS Clubs_name_idx
 CREATE INDEX IF NOT EXISTS Clubs_short_name_idx
   ON Clubs (short_name);
 
+CREATE TABLE IF NOT EXISTS ClubVenues (
+  club_name TEXT NOT NULL,
+  venue TEXT NOT NULL,
+  start_date TEXT NOT NULL,
+  end_date TEXT,
+  PRIMARY KEY (club_name, start_date),
+  CHECK (start_date GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]'),
+  CHECK (
+    end_date IS NULL
+    OR end_date GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]'
+  ),
+  CHECK (end_date IS NULL OR end_date >= start_date)
+);
+
+CREATE INDEX IF NOT EXISTS ClubVenues_club_dates_idx
+  ON ClubVenues (club_name, start_date, end_date);
+
 CREATE TABLE IF NOT EXISTS Players (
   id TEXT NOT NULL PRIMARY KEY,
   name TEXT NOT NULL,
@@ -210,6 +227,9 @@ CREATE INDEX IF NOT EXISTS Games_competition_date_idx
 
 CREATE INDEX IF NOT EXISTS Games_home_team_date_idx
   ON Games (home_team, match_date);
+
+CREATE INDEX IF NOT EXISTS Games_match_date_id_idx
+  ON Games (match_date ASC, id ASC);
 
 CREATE TABLE IF NOT EXISTS HatTricks (
   id TEXT NOT NULL PRIMARY KEY,
@@ -302,6 +322,12 @@ CREATE INDEX IF NOT EXISTS Apps_season_player_idx
 CREATE INDEX IF NOT EXISTS Apps_match_idx
   ON Apps (season, match_date, player_name);
 
+CREATE INDEX IF NOT EXISTS Apps_match_date_player_id_idx
+  ON Apps (match_date DESC, player_name ASC, id ASC);
+
+CREATE INDEX IF NOT EXISTS Apps_substituted_by_idx
+  ON Apps (substituted_by, match_date DESC);
+
 CREATE TABLE IF NOT EXISTS Goals (
   id TEXT NOT NULL PRIMARY KEY,
   season INTEGER NOT NULL,
@@ -335,6 +361,11 @@ CREATE INDEX IF NOT EXISTS Goals_season_scorer_idx
 
 CREATE INDEX IF NOT EXISTS Goals_match_idx
   ON Goals (season, match_date, scorer);
+
+CREATE TABLE IF NOT EXISTS ClubAliases (
+  alias TEXT NOT NULL PRIMARY KEY,
+  canonical_name TEXT NOT NULL
+);
 
 CREATE TABLE IF NOT EXISTS MatchReports (
   match_date TEXT NOT NULL PRIMARY KEY,

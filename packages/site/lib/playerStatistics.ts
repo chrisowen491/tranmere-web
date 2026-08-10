@@ -25,6 +25,7 @@ export interface PlayerStatisticsOptions {
   sort?: string;
   filter?: string;
   limit?: number;
+  offset?: number;
 }
 
 export function mapPlayerSeasonSummary(
@@ -163,7 +164,16 @@ export async function getPlayerStatistics(
     player: options.player,
     playerMatch: options.player ? "contains" : undefined,
     season: options.season || "TOTAL",
+    position: positionFilters[options.filter ?? ""],
+    onlyOneAppearance: options.filter === "OnlyOneApp",
+    sort:
+      options.sort === "Goals"
+        ? "goals"
+        : options.sort === "Subs"
+          ? "subs"
+          : "starts",
     limit: options.limit,
+    offset: options.offset,
   });
   const players = await enrichPlayerStatistics(
     db,

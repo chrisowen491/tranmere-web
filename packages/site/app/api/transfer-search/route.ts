@@ -1,8 +1,10 @@
 import { getTransfers } from "@/lib/transfers";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { NextRequest, NextResponse } from "next/server";
+import { createSearchPage, readSearchPagination } from "@/lib/searchPagination";
 
 export async function GET(request: NextRequest) {
+  const pagination = readSearchPagination(request.nextUrl.searchParams);
   const filters = {
     season: request.nextUrl.searchParams.get("season") || undefined,
     club: request.nextUrl.searchParams.get("club") || undefined,
@@ -11,10 +13,13 @@ export async function GET(request: NextRequest) {
   };
   const transfers = await getTransfers(getCloudflareContext().env.DB, {
     ...filters,
-    ...(Object.values(filters).some(Boolean)
-      ? {}
-      : { limit: 50, sort: "fee-desc" as const }),
+    limit: pagination.limit + 1,
+    offset: pagination.cursor,
+    sort: Object.values(filters).some(Boolean) ? undefined : "fee-desc",
   });
-
-  return NextResponse.json({ transfers });
+  const page = createSearchPage(transfers, pagination);
+  return NextResponse.json({
+    transfers: page.rows,
+    pagination: page.pagination,
+  });
 }

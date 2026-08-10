@@ -4,7 +4,7 @@ import {
   replaceSeasonsKit,
 } from "@tranmere-web/lib/src/apiFunctions";
 import { PLAYER_POSITIONS } from "@tranmere-web/lib/src/player-constants";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { PlayerStatisticsView } from "@/lib/playerStatistics";
 import {
   ArrowUpRightIcon,
@@ -16,6 +16,10 @@ import {
 import { UserIcon } from "@heroicons/react/20/solid";
 import Image from "next/image";
 import Link from "next/link";
+import {
+  SearchPagination,
+  type SearchPaginationState,
+} from "./partials/SearchPagination";
 
 export function PlayerSearch(props: {
   default: PlayerStatisticsView[];
@@ -32,6 +36,13 @@ export function PlayerSearch(props: {
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(false);
   const searchRequest = useRef(0);
+  const abortController = useRef<AbortController | null>(null);
+  const queryDebounce = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [pagination, setPagination] = useState<SearchPaginationState>({
+    cursor: 0,
+    limit: 50,
+    nextCursor: props.default.length === 50 ? 50 : null,
+  });
   const profileSearch = Boolean(query.trim());
   const filteredPlayers = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
@@ -61,21 +72,41 @@ export function PlayerSearch(props: {
     0,
   );
 
-  const loadPlayers = async (nextSeason: string, nextQuery = "") => {
+  const loadPlayers = async (
+    nextSeason: string,
+    nextQuery = "",
+    nextPosition = position,
+    cursor = 0,
+  ) => {
     const request = ++searchRequest.current;
+    abortController.current?.abort();
+    const controller = new AbortController();
+    abortController.current = controller;
     setLoading(true);
     try {
-      const search = new URLSearchParams(
-        nextQuery
-          ? { query: nextQuery }
-          : { season: nextSeason, sort: "Starts" },
-      );
-      const response = await fetch(`${base}?${search}`);
+      const search = new URLSearchParams({
+        cursor: String(cursor),
+        limit: "50",
+        sort: "Starts",
+      });
+      if (nextQuery) search.set("query", nextQuery);
+      else if (nextSeason) search.set("season", nextSeason);
+      if (nextPosition) search.set("filter", nextPosition);
+      const response = await fetch(`${base}?${search}`, {
+        signal: controller.signal,
+      });
+      if (!response.ok) throw new Error("Player search failed");
       const playerResults = (await response.json()) as {
         players: PlayerStatisticsView[];
+        pagination: SearchPaginationState;
       };
       if (request === searchRequest.current) {
         setPlayers(playerResults.players);
+        setPagination(playerResults.pagination);
+      }
+    } catch (error) {
+      if (!(error instanceof DOMException && error.name === "AbortError")) {
+        throw error;
       }
     } finally {
       if (request === searchRequest.current) {
@@ -86,21 +117,48 @@ export function PlayerSearch(props: {
 
   const changeSeason = async (nextSeason: string) => {
     setSeason(nextSeason || undefined);
-    if (!nextSeason && !query.trim()) {
+    if (!nextSeason && !query.trim() && !position) {
       setPlayers(props.default);
+      setPagination({
+        cursor: 0,
+        limit: 50,
+        nextCursor: props.default.length === 50 ? 50 : null,
+      });
       return;
     }
-    await loadPlayers(nextSeason, query.trim());
+    await loadPlayers(nextSeason, query.trim(), position);
   };
 
-  const changeQuery = async (nextQuery: string) => {
+  const changeQuery = (nextQuery: string) => {
     setQuery(nextQuery);
-    if (!nextQuery.trim() && !season) {
+    if (queryDebounce.current) clearTimeout(queryDebounce.current);
+    if (!nextQuery.trim() && !season && !position) {
+      abortController.current?.abort();
       setPlayers(props.default);
+      setPagination({
+        cursor: 0,
+        limit: 50,
+        nextCursor: props.default.length === 50 ? 50 : null,
+      });
       return;
     }
-    await loadPlayers(season ?? "", nextQuery.trim());
+    queryDebounce.current = setTimeout(() => {
+      void loadPlayers(season ?? "", nextQuery.trim(), position);
+    }, 250);
   };
+
+  const changePosition = (nextPosition: string) => {
+    setPosition(nextPosition);
+    void loadPlayers(season ?? "", query.trim(), nextPosition);
+  };
+
+  useEffect(
+    () => () => {
+      abortController.current?.abort();
+      if (queryDebounce.current) clearTimeout(queryDebounce.current);
+    },
+    [],
+  );
 
   return (
     <div className="mx-auto w-full px-6 pt-10 sm:px-10 lg:px-12">
@@ -154,7 +212,7 @@ export function PlayerSearch(props: {
             <span className="sr-only">Filter by position</span>
             <select
               value={position}
-              onChange={(event) => setPosition(event.target.value)}
+              onChange={(event) => changePosition(event.target.value)}
               className="block w-full border border-[#071a2b]/20 bg-[#fffdf8] px-4 py-3 text-sm font-semibold outline-none transition focus:border-blue-700 focus:ring-2 focus:ring-blue-700/15"
             >
               <option value="">All positions</option>
@@ -167,6 +225,28 @@ export function PlayerSearch(props: {
           </label>
         </div>
       </div>
+      <SearchPagination
+        pagination={pagination}
+        count={filteredPlayers.length}
+        loading={loading}
+        onPrevious={() =>
+          void loadPlayers(
+            season ?? "",
+            query.trim(),
+            position,
+            Math.max(0, pagination.cursor - pagination.limit),
+          )
+        }
+        onNext={() =>
+          pagination.nextCursor !== null &&
+          void loadPlayers(
+            season ?? "",
+            query.trim(),
+            position,
+            pagination.nextCursor,
+          )
+        }
+      />
 
       {loading ? (
         <div

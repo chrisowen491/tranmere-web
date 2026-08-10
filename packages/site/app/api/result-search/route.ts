@@ -1,6 +1,11 @@
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { NextRequest, NextResponse } from "next/server";
-import { searchGames, type GameSearchOptions } from "@/lib/games";
+import {
+  getHeadToHead,
+  searchGames,
+  type GameSearchOptions,
+} from "@/lib/games";
+import { createSearchPage, readSearchPagination } from "@/lib/searchPagination";
 
 function text(value: string | null) {
   return value?.trim() || undefined;
@@ -14,6 +19,7 @@ function sort(value: string | null): GameSearchOptions["sort"] {
 
 export async function GET(request: NextRequest) {
   const params = request.nextUrl.searchParams;
+  const pagination = readSearchPagination(params);
   const manager = text(params.get("manager"));
   const [dateFrom, dateTo] = manager?.split(",") || [];
   const season = Number(text(params.get("season")));
@@ -28,7 +34,15 @@ export async function GET(request: NextRequest) {
       ? new Date().toISOString().slice(0, 10)
       : dateTo,
     sort: sort(params.get("sort")),
+    limit: pagination.limit + 1,
+    offset: pagination.cursor,
   };
   const env = (await getCloudflareContext({ async: true })).env;
-  return NextResponse.json(await searchGames(env.DB, options));
+  const search = await searchGames(env.DB, options);
+  const page = createSearchPage(search.results, pagination);
+  return NextResponse.json({
+    results: page.rows,
+    ...getHeadToHead(page.rows),
+    pagination: page.pagination,
+  });
 }

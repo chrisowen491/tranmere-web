@@ -1,6 +1,7 @@
 import { readFile, readdir, mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { canonicalizeClubName } from './club-name-aliases.mjs';
 
 const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
 const sqlPackageDirectory = path.resolve(scriptDirectory, '..');
@@ -80,7 +81,7 @@ function parseClub(line, source) {
 
   return {
     id: readString(item, 'id', source),
-    name: readString(item, 'name', source).trim(),
+    name: canonicalizeClubName(readString(item, 'name', source).trim()),
     shortName: normalizeOptional(readString(item, 'short_name', source, true)),
     threeLetterName: normalizeOptional(
       readString(item, 'three_letter_name', source, true)
