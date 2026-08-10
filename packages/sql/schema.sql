@@ -325,6 +325,9 @@ CREATE INDEX IF NOT EXISTS Apps_match_idx
 CREATE INDEX IF NOT EXISTS Apps_match_date_player_id_idx
   ON Apps (match_date DESC, player_name ASC, id ASC);
 
+CREATE INDEX IF NOT EXISTS Apps_player_date_id_idx
+  ON Apps (player_name, match_date DESC, id ASC);
+
 CREATE INDEX IF NOT EXISTS Apps_substituted_by_idx
   ON Apps (substituted_by, match_date DESC);
 
@@ -361,6 +364,9 @@ CREATE INDEX IF NOT EXISTS Goals_season_scorer_idx
 
 CREATE INDEX IF NOT EXISTS Goals_match_idx
   ON Goals (season, match_date, scorer);
+
+CREATE INDEX IF NOT EXISTS Goals_opposition_date_scorer_id_idx
+  ON Goals (opposition, match_date DESC, scorer ASC, id ASC);
 
 CREATE TABLE IF NOT EXISTS ClubAliases (
   alias TEXT NOT NULL PRIMARY KEY,
