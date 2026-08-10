@@ -44,6 +44,7 @@ export const AVATAR_KIT_OPTIONS = [
   { value: '2004', label: '2004-06 Home' },
   { value: '2004A', label: '2004-06 Away' },
   { value: '2002', label: '2002-04 Home' },
+  { value: '2002A', label: '2002-04 Away' },
   { value: '2002T', label: '2002-04 Third' },
   { value: '2000', label: '2000-02 Home' },
   { value: '2000A', label: '2000-02 Away' },
