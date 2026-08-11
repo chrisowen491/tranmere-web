@@ -5,7 +5,7 @@ import { permissionDenied } from '../auth';
 import type { ToolContext } from './context';
 
 const playerSchema = z.object({
-  id: z.string().uuid(),
+  id: z.string(),
   name: z.string(),
   dateOfBirth: z.string().nullable(),
   biographyMarkdown: z.string().nullable(),
