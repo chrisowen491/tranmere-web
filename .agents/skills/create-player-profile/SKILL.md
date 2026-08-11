@@ -10,6 +10,7 @@ Create verified, consistent TranmereWeb player profiles through the Tranmere-Web
 ## Target
 
 - MCP tool: `CreatePlayerProfile` (preferred for a new profile)
+- MCP tool: `UpdatePlayerProfile` (preferred for updating an exiting profile)
 - MCP read tool: `GetPlayers` (use for duplicate checks and confirmation)
 - MCP tool: `CreateTransfer` (preferred for a verified new-signing transfer)
 - MCP read tools: `GetTransfers` and `GetClubs` (use for transfer research and duplicate checks)
@@ -18,7 +19,7 @@ Create verified, consistent TranmereWeb player profiles through the Tranmere-Web
 - Default outfield `picLink`: `https://www.tranmere-web.com/builder/2026/simple/ffd3b3/none/000000/fcb98b/none/8e740c`
 - Default goalkeeper `picLink`: `https://www.tranmere-web.com/builder/2026gk/simple/ffd3b3/none/000000/fcb98b/none/8e740c`
 - Always use a transparent avatar background (`none`).
-- `CreatePlayerProfile` writes directly to D1. It requires the strict
+- `CreatePlayerProfile` and `UpdatePlayerProfile` both write directly to D1. It requires the strict
   `write:players` Auth0 permission. There is no draft or approval stage.
 
 ## Workflow

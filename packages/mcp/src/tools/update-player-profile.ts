@@ -21,8 +21,7 @@ const playerSchema = z.object({
 const inputSchema = z
   .object({
     id: z
-      .string()
-      .uuid()
+      .string()  
       .describe('The existing D1 player ID returned by GetPlayers'),
     dateOfBirth: z
       .string()
