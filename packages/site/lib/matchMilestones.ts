@@ -30,10 +30,7 @@ function distinct(values: string[]) {
   return [...new Set(values.filter(Boolean))];
 }
 
-function isFirstOrLastAppearance(
-  appearances: AppRow[],
-  matchDate: string,
-) {
+function isFirstOrLastAppearance(appearances: AppRow[], matchDate: string) {
   const dates = appearances.map((appearance) => appearance.match_date).sort();
   return {
     first: dates[0] === matchDate,
@@ -59,6 +56,7 @@ export async function getMatchMilestones(
     apps: AppRow[];
     goals: GoalRow[];
     manager: ManagerRecord | null;
+    includeFinalAppearances?: boolean;
   },
 ): Promise<MatchMilestone[]> {
   const playerNames = distinct([
@@ -100,12 +98,11 @@ export async function getMatchMilestones(
       input.manager
         ? searchGames(db, {
             dateFrom: input.manager.dateJoined,
-            dateTo:
-              ["now", "now()", "present"].includes(
-                input.manager.dateLeft.toLowerCase(),
-              )
-                ? new Date().toISOString().slice(0, 10)
-                : input.manager.dateLeft,
+            dateTo: ["now", "now()", "present"].includes(
+              input.manager.dateLeft.toLowerCase(),
+            )
+              ? new Date().toISOString().slice(0, 10)
+              : input.manager.dateLeft,
             sort: "date-asc",
           })
         : Promise.resolve(null),
@@ -122,7 +119,7 @@ export async function getMatchMilestones(
         label: "made his Tranmere debut",
       });
     }
-    if (last) {
+    if (last && input.includeFinalAppearances !== false) {
       milestones.push({
         kind: "final-appearance",
         name,

@@ -5,6 +5,7 @@ import type {
   Goal,
   MatchPageData,
 } from "@tranmere-web/lib/src/tranmere-web-types";
+import { GetYear } from "@tranmere-web/lib/src/apiFunctions";
 import { queryAppRows, queryGoalRows } from "@tranmere-web/lib/src/d1-queries";
 import MatchReport from "@/components/apps/MatchReport";
 import { GetCommentsByUrl } from "@/lib/comments";
@@ -150,6 +151,7 @@ export default async function MatchPage(props: { params: MatchParams }) {
       apps: appRows,
       goals: goalRows,
       manager,
+      includeFinalAppearances: Number(match.season) !== GetYear(),
     }),
     searchGames(env.DB, {
       opposition: match.opposition,
