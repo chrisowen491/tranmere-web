@@ -78,7 +78,7 @@ export function registerCreateTransferTool({ server, env, auth }: ToolContext) {
       }
     },
     async (input) => {
-      const denied = permissionDenied(auth, 'write:transfers');
+      const denied = permissionDenied(auth, 'write:transfers', true);
       if (denied) return denied;
       const { playerName, season, fromClub, toClub } = input;
       const feeDescription = input.feeDescription ?? '';

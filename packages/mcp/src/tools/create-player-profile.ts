@@ -63,7 +63,7 @@ export function registerCreatePlayerProfileTool({
       position,
       links
     }) => {
-      const denied = permissionDenied(auth, 'write:players');
+      const denied = permissionDenied(auth, 'write:players', true);
       if (denied) return denied;
       if (dateOfBirth) {
         const parsed = new Date(`${dateOfBirth}T00:00:00Z`);

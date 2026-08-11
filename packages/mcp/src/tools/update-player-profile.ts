@@ -142,7 +142,7 @@ export function registerUpdatePlayerProfileTool({
       }
     },
     async (input) => {
-      const denied = permissionDenied(auth, 'write:players');
+      const denied = permissionDenied(auth, 'write:players', true);
       if (denied) return denied;
 
       if (input.dateOfBirth && !validDate(input.dateOfBirth)) {
