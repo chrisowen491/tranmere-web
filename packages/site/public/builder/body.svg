@@ -18,10 +18,10 @@
             <path d="m360.25968,185.84762l-14,0l0,-50l14,0c5.523,0 10,4.477 10,10l0,30c0,5.523 -4.477,10 -10,10z" fill="#SKIN"/>
         </g>
         <g>
-            <path d="m131.25968,511.84762l-66,0l0,-33l66,0l0,33z" fill="#SKIN"/>
+            <path d="m131.25968,511.84762l-66,0l0,-33l66,0l0,33z" fill="#SKIN" fill-opacity="#ARMOPACITY"/>
         </g>
         <g>
-            <path d="m379.25968,478.84762l66,0l0,33l-66,0l0,-33z" fill="#SKIN"/>
+            <path d="m379.25968,478.84762l66,0l0,33l-66,0l0,-33z" fill="#SKIN" fill-opacity="#ARMOPACITY"/>
         </g>
     </g>
 </svg>

@@ -1,6 +1,8 @@
 import { ShirtApp } from "@/components/apps/Shirt";
 import { SlugParams } from "@/lib/types";
 import { getAllShirts } from "@/lib/api";
+import { GetCommentsByUrl } from "@/lib/comments";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { notFound } from "next/navigation";
 import { pageMetadata } from "@/lib/seo";
 
@@ -26,5 +28,22 @@ export default async function ShirtHome(props: { params: SlugParams }) {
 
   if (!shirt) notFound();
 
-  return <ShirtApp shirt={shirt} />;
+  const comments = await GetCommentsByUrl(
+    getCloudflareContext().env,
+    `/shirts/${shirt.slug}`,
+  );
+  const averageRating = comments.length
+    ? Math.round(
+        comments.reduce((total, comment) => total + comment.rating, 0) /
+          comments.length,
+      )
+    : 0;
+
+  return (
+    <ShirtApp
+      shirt={shirt}
+      comments={comments}
+      averageRating={averageRating}
+    />
+  );
 }

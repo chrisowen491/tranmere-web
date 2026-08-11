@@ -60,4 +60,10 @@
         <path d="M167 379v-21l9 5 9-5v21l-5 3v-14l-4 2-4-2v14z"/>
         <text x="176" y="393" font-family="Arial, sans-serif" font-size="8" font-weight="700" letter-spacing="1.5" text-anchor="middle">MILLS</text>
     </g>
+    <g>
+        <path d="m131.25968,511.84762l-66,0l0,-33l66,0l0,33z" fill="#SKIN" />
+    </g>
+    <g>
+        <path d="m379.25968,478.84762l66,0l0,33l-66,0l0,-33z" fill="#SKIN" />
+    </g>
 </svg>

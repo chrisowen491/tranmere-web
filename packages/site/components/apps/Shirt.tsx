@@ -1,6 +1,9 @@
 "use client";
 
 import { Shirt } from "@/lib/types";
+import type { Comment } from "@/lib/comments";
+import CommentPanel from "@/components/comments/CommentPanel";
+import { Reviews } from "@/components/comments/Reviews";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import {
   ArrowLeftIcon,
@@ -17,7 +20,15 @@ function factValue(value: string | undefined) {
   return value && value !== "Other" ? value : "Not recorded";
 }
 
-export function ShirtApp({ shirt }: { shirt: Shirt }) {
+export function ShirtApp({
+  shirt,
+  comments,
+  averageRating,
+}: {
+  shirt: Shirt;
+  comments: Comment[];
+  averageRating: number;
+}) {
   const images = shirt.imagesCollection.items;
   const primaryImage = images[0];
   const firstSeason = shirt.seasons[0];
@@ -198,6 +209,18 @@ export function ShirtApp({ shirt }: { shirt: Shirt }) {
 
           <section className="mt-5 border border-[#071a2b]/15 bg-[#fffdf8] p-6 sm:p-8">
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-blue-700">
+              Supporter verdict
+            </p>
+            <Reviews
+              text="Supporter rating"
+              avg={averageRating}
+              count={comments.length}
+              className="mt-3"
+            />
+          </section>
+
+          <section className="mt-5 border border-[#071a2b]/15 bg-[#fffdf8] p-6 sm:p-8">
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-blue-700">
               Known variants
             </p>
             {variants.length > 0 ? (
@@ -227,6 +250,23 @@ export function ShirtApp({ shirt }: { shirt: Shirt }) {
             </p>
           </section>
         </aside>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-6 pb-12 sm:px-10 lg:px-12">
+        <div className="grid gap-8 border-y border-[#071a2b]/15 py-10 lg:grid-cols-[240px_minmax(0,1fr)]">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-700">
+              Supporter verdict
+            </p>
+            <h2 className="mt-2 font-display text-3xl font-semibold tracking-[-0.035em]">
+              Comments &amp; ratings
+            </h2>
+            <p className="mt-3 text-sm leading-6 text-[#071a2b]/60">
+              Share your memories and rate this shirt from the Rovers archive.
+            </p>
+          </div>
+          <CommentPanel comments={comments} url={`/shirts/${shirt.slug}`} />
+        </div>
       </section>
 
       <section className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-12">

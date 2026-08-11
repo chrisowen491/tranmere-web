@@ -72,4 +72,11 @@
     <text x="256" y="425" fill="#087f79" stroke="#fff" stroke-width="3" paint-order="stroke" font-size="42" font-weight="800" letter-spacing="-3">SURE</text>
     <text x="256" y="448" fill="#087f79" stroke="#fff" stroke-width="2" paint-order="stroke" font-size="18" font-weight="700" letter-spacing=".5">SOLUTIONS</text>
   </g>
+
+  <g>
+      <path d="m131.25968,511.84762l-66,0l0,-33l66,0l0,33z" fill="#SKIN" />
+  </g>
+  <g>
+      <path d="m379.25968,478.84762l66,0l0,33l-66,0l0,-33z" fill="#SKIN" />
+  </g>
 </svg>

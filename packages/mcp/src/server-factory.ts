@@ -8,6 +8,7 @@ import { registerGetMatchByDateTool } from './tools/get-match-by-date';
 import { registerGetPlayersTool } from './tools/get-players';
 import { registerGetTransfersTool } from './tools/get-transfers';
 import { registerSearchResultsTool } from './tools/search-results';
+import { registerUpdatePlayerProfileTool } from './tools/update-player-profile';
 
 export type ServerAccess = McpAuthContext;
 
@@ -37,6 +38,7 @@ function registerWriteTools(context: {
   auth: ServerAccess;
 }) {
   registerCreatePlayerProfileTool(context);
+  registerUpdatePlayerProfileTool(context);
   registerCreateTransferTool(context);
 }
 

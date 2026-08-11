@@ -1,8 +1,0 @@
-<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
-
-  <g id="tracksuit-sleeves">
-    <path fill="#123f70" d="M65 476h67v36H65zM380 476h67v36h-67z"/>
-    <path fill="#123f70" d="M65 476h67v5H65zM380 476h67v5h-67z"/>
-    <path fill="#123f70" d="M65 481h67v2H65zM380 481h67v2h-67z"/>
-  </g>
-</svg>

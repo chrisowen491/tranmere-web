@@ -145,60 +145,58 @@ export default function CommentPanel(props: {
               user && user.email === process.env.NEXT_PUBLIC_AUTH0_ADMIN_EMAIL;
 
             return (
-              <>
-                <div key={idx} className="flex space-x-4 text-sm">
-                  <div className="flex-none py-10">
-                    <img
-                      alt="User avatar"
-                      src={comment.user.picture}
-                      className="h-10 w-10 rounded-full bg-gray-100"
-                    />
-                  </div>
-                  <div
-                    className={classNames(
-                      idx === 0 ? "" : "border-t border-gray-200",
-                      "flex-1 py-10",
-                    )}
-                  >
-                    <h3 className="font-medium">{comment.user.name}</h3>
-                    <p>
-                      <time dateTime={comment.created_at.toString()}>
-                        {comment.created_at}
-                      </time>
-                    </p>
-
-                    <div className="mt-4 flex items-center">
-                      {[0, 1, 2, 3, 4].map((rating) => (
-                        <StarIcon
-                          key={rating}
-                          aria-hidden="true"
-                          className={classNames(
-                            comment.rating > rating
-                              ? "text-yellow-400"
-                              : "text-gray-300",
-                            "h-5 w-5 flex-shrink-0",
-                          )}
-                        />
-                      ))}
-                    </div>
-                    <p className="sr-only">{comment.rating} out of 5 stars</p>
-
-                    <div
-                      dangerouslySetInnerHTML={{ __html: comment.text }}
-                      className="prose prose-sm mt-4 max-w-none dark:text-gray-50"
-                    />
-                    {(isAdmin || isAuthor) && (
-                      <button
-                        className="text-gray-400 hover:text-red-500"
-                        onClick={() => onDelete(comment)}
-                        aria-label="Close"
-                      >
-                        Delete
-                      </button>
-                    )}
-                  </div>
+              <div key={idx} className="flex space-x-4 text-sm">
+                <div className="flex-none py-10">
+                  <img
+                    alt="User avatar"
+                    src={comment.user.picture}
+                    className="h-10 w-10 rounded-full bg-gray-100"
+                  />
                 </div>
-              </>
+                <div
+                  className={classNames(
+                    idx === 0 ? "" : "border-t border-gray-200",
+                    "flex-1 py-10",
+                  )}
+                >
+                  <h3 className="font-medium">{comment.user.name}</h3>
+                  <p>
+                    <time dateTime={comment.created_at.toString()}>
+                      {comment.created_at}
+                    </time>
+                  </p>
+
+                  <div className="mt-4 flex items-center">
+                    {[0, 1, 2, 3, 4].map((rating) => (
+                      <StarIcon
+                        key={rating}
+                        aria-hidden="true"
+                        className={classNames(
+                          comment.rating > rating
+                            ? "text-yellow-400"
+                            : "text-gray-300",
+                          "h-5 w-5 flex-shrink-0",
+                        )}
+                      />
+                    ))}
+                  </div>
+                  <p className="sr-only">{comment.rating} out of 5 stars</p>
+
+                  <div
+                    dangerouslySetInnerHTML={{ __html: comment.text }}
+                    className="prose prose-sm mt-4 max-w-none dark:text-gray-50"
+                  />
+                  {(isAdmin || isAuthor) && (
+                    <button
+                      className="text-gray-400 hover:text-red-500"
+                      onClick={() => onDelete(comment)}
+                      aria-label="Close"
+                    >
+                      Delete
+                    </button>
+                  )}
+                </div>
+              </div>
             );
           })}
       </div>

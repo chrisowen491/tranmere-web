@@ -31,6 +31,7 @@ export async function GET(
     siteOrigin = null
   }
 
+
   const [body, hair, hairBg, features, kit, collar] = await Promise.all([
     GetSvg("body.svg", siteOrigin!),
     GetSvg(`hair/${data.hair}.svg`, siteOrigin!),
@@ -40,12 +41,15 @@ export async function GET(
     GetSvg(`kits/home/collars/${data.kit}.svg`, siteOrigin!),
   ]);
 
+  const armOpacity = data.kit.includes('gk') || data.kit.includes('suit') ? "0.0" : "1.0"
+
   let svg = `${start}${background}${hairBg}${kit}${body}${hair}${features}${collar}${end}`;
 
   svg = svg.replace(/#SKIN/g, `#${data.body}`);
   svg = svg.replace(/#HAIR/g, `#${data.hairColour}`);
   svg = svg.replace(/#NECK/g, `#${data.neckColour}`);
   svg = svg.replace(/#HIGHLIGHTS/g, `#${data.highlights}`);
+  svg = svg.replace(/#ARMOPACITY/g, armOpacity);
 
   const response = new NextResponse(svg);
   response.headers.set("Content-Type", "image/svg+xml");
