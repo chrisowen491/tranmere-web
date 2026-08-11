@@ -44,22 +44,35 @@ export default async function PlayerProfilePage(props: { params: SlugParams }) {
     player: { name: d1Player.name },
     appearances: [],
   };
-  const [seasonRows, appearanceRows, appearanceTotal, debutRows, goals] =
-    await Promise.all([
-      queryPlayerSeasonSummaryRows(env.DB, {
-        player: d1Player.name,
-        playerMatch: "exact",
-      }),
+  const [seasonRows] = await Promise.all([
+    queryPlayerSeasonSummaryRows(env.DB, {
+      player: d1Player.name,
+      playerMatch: "exact",
+    }),
+  ]);
+  const appearanceSeasons = seasonRows
+    .filter((row) => /^\d{4}$/.test(row.season) && row.appearances > 0)
+    .map((row) => Number(row.season))
+    .sort((a, b) => b - a);
+  const latestAppearanceSeason = appearanceSeasons[0];
+  const [appearanceRows, appearanceTotal, debutRows, goals] = await Promise.all(
+    [
       queryPlayerAppearanceRows(env.DB, d1Player.name, {
+        season: latestAppearanceSeason,
         limit: APPEARANCE_PAGE_SIZE,
       }),
-      countPlayerAppearanceRows(env.DB, d1Player.name),
+      countPlayerAppearanceRows(env.DB, d1Player.name, latestAppearanceSeason),
       queryPlayerAppearanceRows(env.DB, d1Player.name, {
         limit: 1,
         sort: "date-asc",
       }),
-      queryGoalRows(env.DB, { scorer: d1Player.name, scorerMatch: "exact" }),
-    ]);
+      queryGoalRows(env.DB, {
+        scorer: d1Player.name,
+        scorerMatch: "exact",
+        season: latestAppearanceSeason,
+      }),
+    ],
+  );
   const goalsByDate = goalCountsByDate(goals);
   profile.seasons = seasonRows.map(mapPlayerSeasonSummary);
   profile.appearances = appearanceRows.map((row) =>
@@ -150,6 +163,8 @@ export default async function PlayerProfilePage(props: { params: SlugParams }) {
         appearancePagination={{
           total: appearanceTotal,
           pageSize: APPEARANCE_PAGE_SIZE,
+          season: latestAppearanceSeason?.toString() ?? "",
+          seasons: appearanceSeasons.map(String),
         }}
         biographyMarkdown={d1Player.biographyMarkdown}
         editableProfile={{

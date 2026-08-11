@@ -95,6 +95,8 @@ export default function PlayerProfileView(props: {
   appearancePagination: {
     total: number;
     pageSize: number;
+    season: string;
+    seasons: string[];
   };
 }) {
   const profile = props.player;
@@ -112,21 +114,38 @@ export default function PlayerProfileView(props: {
   const [appearanceRecords, setAppearanceRecords] = useState<Appearance[]>(
     profile.appearances ?? [],
   );
+  const [appearanceTotal, setAppearanceTotal] = useState(
+    props.appearancePagination.total,
+  );
   const [appearanceLoading, setAppearanceLoading] = useState(false);
+  const [appearanceSeason, setAppearanceSeason] = useState(
+    props.appearancePagination.season,
+  );
   const appearancePages = Math.max(
     1,
-    Math.ceil(
-      props.appearancePagination.total / props.appearancePagination.pageSize,
-    ),
+    Math.ceil(appearanceTotal / props.appearancePagination.pageSize),
   );
 
   useEffect(() => {
     setAppearancePage(1);
     setAppearanceRecords(profile.appearances ?? []);
-  }, [player.name, profile.appearances]);
+    setAppearanceTotal(props.appearancePagination.total);
+    setAppearanceSeason(props.appearancePagination.season);
+  }, [
+    player.name,
+    profile.appearances,
+    props.appearancePagination.season,
+    props.appearancePagination.total,
+  ]);
 
   useEffect(() => {
-    if (appearancePage === 1) return;
+    if (
+      !appearanceSeason ||
+      (appearancePage === 1 &&
+        appearanceSeason === props.appearancePagination.season)
+    ) {
+      return;
+    }
 
     const controller = new AbortController();
     setAppearanceLoading(true);
@@ -134,25 +153,38 @@ export default function PlayerProfileView(props: {
       `/api/player-appearances?${new URLSearchParams({
         player: player.name,
         page: String(appearancePage),
+        season: appearanceSeason,
       })}`,
       { signal: controller.signal },
     )
       .then(async (response) => {
         if (!response.ok) throw new Error("Unable to load appearances");
-        return response.json() as Promise<{ records: Appearance[] }>;
+        return response.json() as Promise<{
+          records: Appearance[];
+          total: number;
+        }>;
       })
-      .then(({ records }) => setAppearanceRecords(records))
+      .then(({ records, total }) => {
+        setAppearanceRecords(records);
+        setAppearanceTotal(total);
+      })
       .catch((error: unknown) => {
         if (error instanceof DOMException && error.name === "AbortError")
           return;
         setAppearanceRecords([]);
+        setAppearanceTotal(0);
       })
       .finally(() => {
         if (!controller.signal.aborted) setAppearanceLoading(false);
       });
 
     return () => controller.abort();
-  }, [appearancePage, player.name]);
+  }, [
+    appearancePage,
+    appearanceSeason,
+    player.name,
+    props.appearancePagination.season,
+  ]);
   const firstSeason = seasons.at(0)?.Season;
   const lastSeason = seasons.at(-1)?.Season;
   const careerSpan =
@@ -173,6 +205,9 @@ export default function PlayerProfileView(props: {
   const positionLabel =
     [player.position, player.secondaryPosition].filter(Boolean).join(" / ") ||
     "Tranmere Rovers";
+  const selectedSeasonSummary = seasons.find(
+    (season) => season.Season === appearanceSeason,
+  );
 
   const profileLinks = [
     {
@@ -308,14 +343,39 @@ export default function PlayerProfileView(props: {
                 />
               </TabPanel>
               <TabPanel>
+                {props.appearancePagination.seasons.length > 0 && (
+                  <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border border-[#071a2b]/15 bg-[#fffdf8] p-4">
+                    <label
+                      htmlFor="appearance-season"
+                      className="font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-[#071a2b]/55"
+                    >
+                      Season
+                    </label>
+                    <select
+                      id="appearance-season"
+                      value={appearanceSeason}
+                      onChange={(event) => {
+                        setAppearanceSeason(event.target.value);
+                        setAppearancePage(1);
+                      }}
+                      className="border border-[#071a2b]/20 bg-[#fffdf8] px-3 py-2 text-sm font-semibold text-[#071a2b] outline-none transition focus:border-blue-700"
+                    >
+                      {props.appearancePagination.seasons.map((season) => (
+                        <option key={season} value={season}>
+                          {season}/{String(Number(season) + 1).slice(-2)}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
                 <PlayerAppsTable
                   records={appearanceRecords}
                   title="Appearances"
-                  totalRecords={props.appearancePagination.total}
+                  totalRecords={appearanceTotal}
                   summary={{
-                    starts: totalStarts,
-                    substituteAppearances: totalSubs,
-                    goals: totalGoals,
+                    starts: selectedSeasonSummary?.starts ?? 0,
+                    substituteAppearances: selectedSeasonSummary?.subs ?? 0,
+                    goals: selectedSeasonSummary?.goals ?? 0,
                   }}
                   page={appearancePage}
                   totalPages={appearancePages}

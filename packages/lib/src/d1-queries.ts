@@ -95,6 +95,7 @@ export interface AppQueryOptions {
 }
 
 export interface PlayerAppearanceQueryOptions {
+  season?: number;
   limit?: number;
   offset?: number;
   sort?: 'date-asc' | 'date-desc';
@@ -546,6 +547,8 @@ export async function queryPlayerAppearanceRows(
   options: PlayerAppearanceQueryOptions = {}
 ) {
   const values: D1Value[] = [playerName, playerName, playerName];
+  const seasonClause = options.season === undefined ? '' : ' AND season = ?';
+  if (options.season !== undefined) values.push(options.season);
   const orderBy =
     options.sort === 'date-asc'
       ? 'match_date ASC, player_name ASC, id ASC'
@@ -561,7 +564,7 @@ export async function queryPlayerAppearanceRows(
                 substitute_substituted_by,
                 CASE WHEN player_name = ? THEN 'Start' ELSE 'Sub' END AS appearance_type
          FROM Apps
-         WHERE player_name = ? OR substituted_by = ?
+         WHERE (player_name = ? OR substituted_by = ?)${seasonClause}
          ORDER BY ${orderBy}`,
         values,
         options.limit,
@@ -574,15 +577,19 @@ export async function queryPlayerAppearanceRows(
 
 export async function countPlayerAppearanceRows(
   db: D1DatabaseReader,
-  playerName: string
+  playerName: string,
+  season?: number
 ) {
+  const seasonClause = season === undefined ? '' : ' AND season = ?';
+  const values: D1Value[] = [playerName, playerName];
+  if (season !== undefined) values.push(season);
   const result = await db
     .prepare(
       `SELECT COUNT(*) AS total
        FROM Apps
-       WHERE player_name = ? OR substituted_by = ?`
+       WHERE (player_name = ? OR substituted_by = ?)${seasonClause}`
     )
-    .bind(playerName, playerName)
+    .bind(...values)
     .first<{ total: number }>();
 
   return result?.total ?? 0;
