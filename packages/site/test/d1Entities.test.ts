@@ -1,6 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
 import {
+  countPlayerRows,
   queryGameRows,
+  queryPlayerRows,
   queryTransferRows,
 } from "@tranmere-web/lib/src/d1-queries";
 import type {
@@ -29,6 +31,7 @@ function playerRow(overrides: Partial<PlayerRow> = {}): PlayerRow {
     position: null,
     secondary_position: null,
     links_json: "[]",
+    updated_at: null,
     ...overrides,
   };
 }
@@ -188,6 +191,34 @@ describe("D1 queries", () => {
     expect(mock.boundValues).toEqual([
       ["%Test%", 2024, "Tranmere Rovers", "Example FC", 10],
     ]);
+  });
+
+  it("paginates player queries and counts the complete filtered result set", async () => {
+    const playerQuery = databaseReturning<PlayerRow>([playerRow()]);
+
+    await queryPlayerRows(playerQuery.db, {
+      query: "Alex",
+      sort: "oldest-updated",
+      limit: 30,
+      offset: 30,
+    });
+
+    expect(playerQuery.prepare.mock.calls[0][0]).toContain("WHERE name LIKE ?");
+    expect(playerQuery.prepare.mock.calls[0][0]).toContain("LIMIT ? OFFSET ?");
+    expect(playerQuery.prepare.mock.calls[0][0]).toContain(
+      "ORDER BY updated_at ASC, name ASC, id ASC",
+    );
+    expect(playerQuery.boundValues).toEqual([["%Alex%", 30, 30]]);
+
+    const playerCount = databaseReturning([{ count: 1 }]);
+
+    const count = await countPlayerRows(playerCount.db, { query: "Alex" });
+
+    expect(count).toBe(1);
+    expect(playerCount.prepare.mock.calls[0][0]).toContain(
+      "SELECT COUNT(*) AS count",
+    );
+    expect(playerCount.boundValues).toEqual([["%Alex%"]]);
   });
 
   it("treats the penalty-shootout archive filter as any recorded shootout", async () => {

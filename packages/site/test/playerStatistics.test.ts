@@ -45,6 +45,7 @@ function playerRow(overrides: Partial<PlayerRow> = {}): PlayerRow {
     position: "Central Midfielder",
     secondary_position: "Winger",
     links_json: "[]",
+    updated_at: null,
     ...overrides,
   };
 }

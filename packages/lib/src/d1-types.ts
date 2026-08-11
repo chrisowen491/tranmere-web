@@ -10,6 +10,7 @@ export interface PlayerRow {
   position: string | null;
   secondary_position: string | null;
   links_json: string;
+  updated_at: string | null;
 }
 
 export interface ClubRow {

@@ -45,7 +45,7 @@ export function mapPlayer(row: PlayerRow): PlayerRecord {
 }
 
 const playerColumns = `id, name, date_of_birth, biography_markdown, pic_link,
-  foot, height, place_of_birth, position, secondary_position, links_json`;
+  foot, height, place_of_birth, position, secondary_position, links_json, updated_at`;
 
 export async function getPlayers(db: D1Database) {
   const rows = await queryPlayerRows(db);
@@ -167,9 +167,9 @@ export async function createPlayer(db: D1Database, player: PlayerInput) {
     .prepare(
       `INSERT INTO Players (
          id, name, date_of_birth, biography_markdown, pic_link, foot, height,
-         place_of_birth, position, secondary_position, links_json
+         place_of_birth, position, secondary_position, links_json, updated_at
        )
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)`,
     )
     .bind(
       id,
@@ -198,7 +198,7 @@ export async function updatePlayer(
       `UPDATE Players
        SET name = ?, date_of_birth = ?, biography_markdown = ?, pic_link = ?,
            foot = ?, height = ?, place_of_birth = ?, position = ?,
-           secondary_position = ?, links_json = ?
+           secondary_position = ?, links_json = ?, updated_at = CURRENT_TIMESTAMP
        WHERE id = ?`,
     )
     .bind(

@@ -32,7 +32,9 @@ export interface D1DatabaseReader {
 
 export interface QueryOptions {
   query?: string;
+  sort?: 'name' | 'oldest-updated';
   limit?: number;
+  offset?: number;
 }
 
 export interface TransferQueryOptions {
@@ -137,18 +139,39 @@ export async function queryPlayerRows(
   const values: D1Value[] = [];
   const where = options.query ? 'WHERE name LIKE ?' : '';
   if (options.query) values.push(`%${options.query}%`);
+  const orderBy =
+    options.sort === 'oldest-updated'
+      ? 'updated_at ASC, name ASC, id ASC'
+      : 'name ASC, id ASC';
 
   const sql = withLimit(
     `SELECT id, name, date_of_birth, biography_markdown, pic_link, foot, height,
-            place_of_birth, position, secondary_position, links_json
+            place_of_birth, position, secondary_position, links_json, updated_at
      FROM Players
      ${where}
-     ORDER BY name ASC, id ASC`,
+     ORDER BY ${orderBy}`,
     values,
-    options.limit
+    options.limit,
+    options.offset
   );
 
   return (await all<PlayerRow>(db, sql, values)).results;
+}
+
+export async function countPlayerRows(
+  db: D1DatabaseReader,
+  options: Pick<QueryOptions, 'query'> = {}
+) {
+  const values: D1Value[] = [];
+  const where = options.query ? 'WHERE name LIKE ?' : '';
+  if (options.query) values.push('%' + options.query + '%');
+
+  const result = await all<{ count: number }>(
+    db,
+    'SELECT COUNT(*) AS count FROM Players ' + where,
+    values
+  );
+  return result.results[0]?.count ?? 0;
 }
 
 export async function queryClubRows(

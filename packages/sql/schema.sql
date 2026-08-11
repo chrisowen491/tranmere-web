@@ -159,6 +159,7 @@ CREATE TABLE IF NOT EXISTS Players (
   position TEXT,
   secondary_position TEXT,
   links_json TEXT NOT NULL DEFAULT '[]',
+  updated_at TEXT,
   CHECK (
     date_of_birth IS NULL
     OR date_of_birth GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]'

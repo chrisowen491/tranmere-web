@@ -231,7 +231,7 @@ export async function approvePlayerProfileCorrection(
       .prepare(
         `UPDATE Players
          SET date_of_birth = ?, biography_markdown = ?, pic_link = ?, foot = ?,
-             height = ?, place_of_birth = ?, position = ?
+             height = ?, place_of_birth = ?, position = ?, updated_at = CURRENT_TIMESTAMP
          WHERE id = ?
            AND EXISTS (
              SELECT 1 FROM PlayerProfileCorrections

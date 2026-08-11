@@ -110,7 +110,7 @@ export function registerCreatePlayerProfileTool({
         links: links ?? []
       };
       await env.DB.prepare(
-        `INSERT INTO Players (id, name, date_of_birth, biography_markdown, pic_link, foot, height, place_of_birth, position, links_json) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+        `INSERT INTO Players (id, name, date_of_birth, biography_markdown, pic_link, foot, height, place_of_birth, position, links_json, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)`
       )
         .bind(
           player.id,

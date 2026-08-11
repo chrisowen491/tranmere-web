@@ -20,9 +20,7 @@ const playerSchema = z.object({
 
 const inputSchema = z
   .object({
-    id: z
-      .string()  
-      .describe('The existing D1 player ID returned by GetPlayers'),
+    id: z.string().describe('The existing D1 player ID returned by GetPlayers'),
     dateOfBirth: z
       .string()
       .regex(/^\d{4}-\d{2}-\d{2}$/)
@@ -158,7 +156,7 @@ export function registerUpdatePlayerProfileTool({
 
       const existing = await env.DB.prepare(
         'SELECT id, name, date_of_birth, biography_markdown, pic_link, foot, ' +
-          'height, place_of_birth, position, secondary_position, links_json ' +
+          'height, place_of_birth, position, secondary_position, links_json, updated_at ' +
           'FROM Players WHERE id = ? LIMIT 1'
       )
         .bind(input.id)
@@ -227,7 +225,7 @@ export function registerUpdatePlayerProfileTool({
       await env.DB.prepare(
         'UPDATE Players SET date_of_birth = ?, biography_markdown = ?, ' +
           'pic_link = ?, foot = ?, height = ?, place_of_birth = ?, position = ?, ' +
-          'secondary_position = ?, links_json = ? WHERE id = ?'
+          'secondary_position = ?, links_json = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?'
       )
         .bind(
           player.dateOfBirth,
