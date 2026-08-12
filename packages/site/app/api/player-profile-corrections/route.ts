@@ -122,6 +122,7 @@ async function submitCorrection(request: NextRequest) {
         ![
           "images.ctfassets.net",
           "images.tranmere-web.com",
+          "img.tranmere-web.com",
           "www.tranmere-web.com",
         ].includes(pictureHost)
       ) {

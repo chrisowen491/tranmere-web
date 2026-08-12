@@ -18,7 +18,6 @@ import { ResultTable } from "./partials/ResultTable";
 import { LinkButton } from "../forms/LinkButton";
 import { BlogItem, Shirt } from "@/lib/types";
 import {
-  buildImagePath,
   replaceSeasonsKit,
 } from "@tranmere-web/lib/src/apiFunctions";
 import { areIntervalsOverlapping } from "date-fns";
@@ -36,13 +35,6 @@ const DIVISION_NAMES: Record<number, Record<number, string>> = {
   2: { 2: "The Championship", 3: "League 1", 4: "League 2" },
 };
 
-function managerImageSource(imagePath: string, width: number, height: number) {
-  if (imagePath.startsWith("/") || /^https?:\/\//i.test(imagePath)) {
-    return imagePath;
-  }
-
-  return buildImagePath(imagePath, width, height);
-}
 
 function getSeasonManagers(managers: Manager[], season: number): Manager[] {
   const seasonInterval = {
@@ -302,11 +294,7 @@ export default function SeasonReview(props: {
                                       alt={manager.name}
                                       height={200}
                                       width={200}
-                                      src={managerImageSource(
-                                        manager.imagePath,
-                                        200,
-                                        200,
-                                      )}
+                                      src={manager.imagePath}
                                       unoptimized
                                       className="h-11 w-11 object-cover object-top"
                                     />

@@ -9,7 +9,6 @@ import {
   TrophyIcon,
   UserIcon,
 } from "@heroicons/react/24/outline";
-import { buildImagePath } from "@tranmere-web/lib/src/apiFunctions";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -18,14 +17,6 @@ import type {
   ManagerTrustedXi as ManagerTrustedXiData,
   TrustedXiPlayer,
 } from "@/lib/managerTrustedXi";
-
-function managerImageSource(imagePath: string, width: number, height: number) {
-  if (imagePath.startsWith("/") || /^https?:\/\//i.test(imagePath)) {
-    return imagePath;
-  }
-
-  return buildImagePath(imagePath, width, height);
-}
 
 function formatDate(value: string) {
   if (value.toLowerCase().startsWith("now")) return "present";
@@ -221,7 +212,7 @@ export function ManagerTrustedXi({
                 <div className="h-24 w-20 flex-none overflow-hidden border border-white/20 bg-white/5">
                   {xi.manager.imagePath ? (
                     <Image
-                      src={managerImageSource(xi.manager.imagePath, 240, 288)}
+                      src={xi.manager.imagePath}
                       alt={`${xi.manager.name}, Tranmere Rovers manager`}
                       width={240}
                       height={288}

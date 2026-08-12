@@ -18,6 +18,12 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
+        hostname: "img.tranmere-web.com",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
         hostname: "www.tranmere-web.com",
         port: "",
         pathname: "/**",

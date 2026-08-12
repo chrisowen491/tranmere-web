@@ -1,4 +1,3 @@
-import { buildImagePath } from "@tranmere-web/lib/src/apiFunctions";
 import type { Manager, Match } from "@tranmere-web/lib/src/tranmere-web-types";
 
 export interface ManagerSelection {
@@ -23,16 +22,6 @@ export interface ManagerStats {
 }
 
 export type ManagerOutcome = "W" | "D" | "L";
-
-export function managerImageSource(
-  imagePath: string,
-  width: number,
-  height: number,
-) {
-  return imagePath.startsWith("/") || /^https?:\/\//i.test(imagePath)
-    ? imagePath
-    : buildImagePath(imagePath, width, height);
-}
 
 export function formatManagerDate(value: string) {
   if (value.toLowerCase().startsWith("now")) return "present";

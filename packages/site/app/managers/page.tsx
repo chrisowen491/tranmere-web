@@ -3,7 +3,6 @@ import {
   CalendarDaysIcon,
   UserIcon,
 } from "@heroicons/react/24/outline";
-import { buildImagePath } from "@tranmere-web/lib/src/apiFunctions";
 import type { Manager } from "@tranmere-web/lib/src/tranmere-web-types";
 import { getManagers } from "@/lib/managers";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
@@ -43,19 +42,6 @@ function isCurrentManager(manager: Manager) {
   );
 }
 
-function managerImageSource(imagePath: string, width: number, height: number) {
-  if (imagePath.startsWith("/") || /^https?:\/\//i.test(imagePath)) {
-    return imagePath;
-  }
-
-  return buildImagePath(imagePath, width, height);
-}
-
-function managerStructuredImage(imagePath: string) {
-  const source = managerImageSource(imagePath, 640, 480);
-  return source.startsWith("/") ? absoluteUrl(source) : source;
-}
-
 export default async function ManagerRecords() {
   const managers = await getManagers(
     (await getCloudflareContext({ async: true })).env.DB,
@@ -83,8 +69,6 @@ export default async function ManagerRecords() {
                 jobTitle: "Football manager",
                 memberOf: { "@id": "https://www.tranmere-web.com/#team" },
                 image: manager.imagePath
-                  ? managerStructuredImage(manager.imagePath)
-                  : undefined,
               },
             })),
           },
@@ -144,11 +128,7 @@ export default async function ManagerRecords() {
                   alt={currentManager.name}
                   height={300}
                   width={400}
-                  src={managerImageSource(
-                    currentManager.imagePath,
-                    400,
-                    300,
-                  )}
+                  src={currentManager.imagePath}
                   unoptimized
                   className="h-full w-full object-cover object-top"
                 />
@@ -232,7 +212,7 @@ export default async function ManagerRecords() {
                       alt={manager.name}
                       height={480}
                       width={640}
-                      src={managerImageSource(manager.imagePath, 640, 480)}
+                      src={manager.imagePath}
                       unoptimized
                       className="h-full w-full object-cover object-top transition duration-500 group-hover:scale-[1.025]"
                     />

@@ -10,7 +10,6 @@ import {
   TrophyIcon,
   UserIcon,
 } from "@heroicons/react/24/outline";
-import { buildImagePath } from "@tranmere-web/lib/src/apiFunctions";
 import type { Match } from "@tranmere-web/lib/src/tranmere-web-types";
 import Image from "next/image";
 import Link from "next/link";
@@ -24,14 +23,6 @@ interface FingerprintMetric {
   value: number;
   display: string;
   detail: string;
-}
-
-function managerImageSource(imagePath: string, width: number, height: number) {
-  if (imagePath.startsWith("/") || /^https?:\/\//i.test(imagePath)) {
-    return imagePath;
-  }
-
-  return buildImagePath(imagePath, width, height);
 }
 
 function formatDate(value: string) {
@@ -310,7 +301,7 @@ export function ManagerFingerprints({
                 <div className="mx-auto aspect-[4/5] w-36 overflow-hidden border border-white/20 bg-white/5 sm:w-40">
                   {manager.imagePath ? (
                     <Image
-                      src={managerImageSource(manager.imagePath, 400, 500)}
+                      src={manager.imagePath}
                       alt={`${manager.name}, Tranmere Rovers manager`}
                       width={400}
                       height={500}

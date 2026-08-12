@@ -153,7 +153,7 @@ export default async function PenaltyShootoutsPage() {
                     <Image
                       width={144}
                       height={200}
-                      src={`https://images.tranmere-web.com/${match.programme}`}
+                      src={`https://img.tranmere-web.com/${match.programme}`}
                       alt={`${match.home} v ${match.visitor} programme cover`}
                       className="h-32 w-24 shrink-0 border border-[#071a2b]/15 object-cover shadow-sm"
                     />

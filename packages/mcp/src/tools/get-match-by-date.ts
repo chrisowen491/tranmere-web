@@ -66,7 +66,7 @@ export function registerGetMatchByDateTool({ server, env, auth }: ToolContext) {
               domain: env.MCP_WIDGET_DOMAIN,
               csp: {
                 connectDomains: [],
-                resourceDomains: ['https://images.tranmere-web.com']
+                resourceDomains: ['https://images.tranmere-web.com', 'https://img.tranmere-web.com']
               }
             }
           }
@@ -144,7 +144,7 @@ export function registerGetMatchByDateTool({ server, env, auth }: ToolContext) {
         programmePath && programmePath !== '#N/A'
           ? programmePath.startsWith('http')
             ? programmePath
-            : `https://images.tranmere-web.com/${programmePath}`
+            : `https://img.tranmere-web.com/${programmePath}`
           : null;
       const output = {
         match: {

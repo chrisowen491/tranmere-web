@@ -313,7 +313,7 @@ export async function CupArchivePage({
                     <Image
                       width={144}
                       height={200}
-                      src={`https://images.tranmere-web.com/${finalTie.programme}`}
+                      src={`https://img.tranmere-web.com/${finalTie.programme}`}
                       alt={`${finalTie.home} v ${finalTie.visitor} programme cover`}
                       className="h-32 w-24 shrink-0 border border-[#071a2b]/15 object-cover shadow-sm"
                     />

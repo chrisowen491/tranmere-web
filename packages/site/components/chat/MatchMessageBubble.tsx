@@ -14,7 +14,7 @@ export function MatchMessageBubble(props: { match: MatchPageData }) {
           <Image
             width={100}
             height={200}
-            src={`https://images.tranmere-web.com/${match.programme}`}
+            src={`https://img.tranmere-web.com/${match.programme}`}
             alt={`${match.homeTeam} v ${match.awayTeam} Match Programme ${match.date}`}
             className="mx-auto"
           />

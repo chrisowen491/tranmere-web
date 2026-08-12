@@ -84,17 +84,6 @@ export class TranmereWebUtils {
     };
   }
 
-  buildImagePath(image: string, width: number, height: number): string {
-    const programme = new ProgrammeImage(image, {
-      resize: {
-        width: width,
-        height: height,
-        fit: 'fill'
-      }
-    });
-    return 'https://images.tranmere-web.com/' + programme.imagestring();
-  }
-
   async getResultForDate(season: number, date: string): Promise<Match | null> {
     const params = {
       TableName: DataTables.RESULTS_TABLE,

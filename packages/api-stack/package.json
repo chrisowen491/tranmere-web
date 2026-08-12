@@ -19,7 +19,6 @@
     "constructs": "^10.7.2"
   },
   "devDependencies": {
-    "@aws-cdk/aws-appsync-alpha": "^2.59.0-alpha.0",
     "@eslint/js": "^10.0.1",
     "@types/node": "^26.1.2",
     "aws-cdk": "^2.1134.0",

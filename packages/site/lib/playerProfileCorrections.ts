@@ -188,6 +188,7 @@ function validateApprovedChanges(changes: EditablePlayerProfile) {
         ![
           "images.ctfassets.net",
           "images.tranmere-web.com",
+          "img.tranmere-web.com",
           "www.tranmere-web.com",
         ].includes(url.hostname)
       ) {

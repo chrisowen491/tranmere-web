@@ -197,7 +197,7 @@ export default async function TopAttendancesPage() {
                   <div className="h-40 w-28 overflow-hidden border border-[#071a2b]/15 bg-[#e8e2d6] shadow-sm">
                     {match.programme ? (
                       <Image
-                        src={`https://images.tranmere-web.com/${
+                        src={`https://img.tranmere-web.com/${
                           match.largeProgramme ?? match.programme
                         }`}
                         alt={`${match.home} v ${match.visitor} programme cover`}
@@ -308,7 +308,7 @@ export default async function TopAttendancesPage() {
                       <div className="mx-auto h-20 w-14 overflow-hidden border border-[#071a2b]/15 bg-[#e8e2d6]">
                         {match.programme ? (
                           <Image
-                            src={`https://images.tranmere-web.com/${match.programme}`}
+                            src={`https://img.tranmere-web.com/${match.programme}`}
                             alt={`${match.home} v ${match.visitor} programme cover`}
                             width={112}
                             height={160}

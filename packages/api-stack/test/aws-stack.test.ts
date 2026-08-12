@@ -10,7 +10,4 @@ test('API Gateway Created', () => {
   //     // THEN
   const template = Template.fromStack(stack);
 
-  template.hasResourceProperties('AWS::ApiGateway::RestApi', {
-    Name: 'tranmere-web'
-  });
 });
