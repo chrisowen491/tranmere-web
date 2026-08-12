@@ -162,7 +162,7 @@ export async function getMatchMilestones(
   ]);
 
   const milestones: MatchMilestone[] = storedPlayerMilestones
-    ? storedPlayerMilestones.flatMap((milestone) => {
+    ? storedPlayerMilestones.flatMap((milestone): MatchMilestone[] => {
         if (milestone.milestone_type === "debut") {
           return [
             {
