@@ -14,8 +14,6 @@ Cloudflare-first:
 - Cloudflare runs the public Next.js site and the optional Worker services.
 - Cloudflare D1 stores migrated football entities and site-owned operational
   data.
-- AWS retains only the temporary legacy GraphQL endpoint. It is scheduled for
-  removal and must not be used for new site features.
 - Contentful supplies editorial content and media.
 
 ## System context
@@ -67,15 +65,12 @@ The root is a Yarn Classic workspace using Node.js 24.
 | Workspace                 | Responsibility                                                                                |
 | ------------------------- | --------------------------------------------------------------------------------------------- |
 | `packages/site`           | Public Next.js website, UI components, server routes, and Cloudflare deployment configuration |
-| `packages/api-stack`      | Temporary AWS CDK infrastructure for the legacy GraphQL endpoint, pending removal               |
 | `packages/lib`            | Shared football domain types, D1 entity types and read queries, mappings, and utilities       |
 | `packages/tools`          | Reusable AI tools for matches, players, teams, results, lineups, managers, and transfers      |
 | `packages/mcp`            | Auth0-protected Cloudflare MCP server exposing read-only D1 and match API tools               |
 | `packages/vectorize`      | Worker for creating and querying player biography embeddings                                  |
-| `packages/tidy`           | Scheduled Worker that removes old Cloudflare deployments                                      |
 | `packages/scheduled-task` | Daily Worker that rebuilds D1 summaries/milestones and refreshes Algolia search records       |
 | `packages/sql`            | D1 schema, migrations, generated imports, and database commands                               |
-| `packages/api-tests`      | Newman acceptance tests for deployed APIs                                                     |
 
 `packages/site` is the main user-facing system. The other workspaces provide
 shared code, administration, AI integrations, maintenance, compatibility, or
@@ -111,8 +106,7 @@ configuration provides:
 - the custom domain `www.tranmere-web.com`.
 
 Contentful and YouTube are called directly from server-side site code for
-editorial content, images, shirts, and video playlists. The site does not
-depend on the legacy AWS REST API.
+editorial content, images, shirts, and video playlists. 
 
 ## D1 data services
 
@@ -141,23 +135,6 @@ Reusable D1 row contracts live in `packages/lib/src/d1-types.ts`. Shared,
 read-only query builders live in `packages/lib/src/d1-queries.ts` and are used
 by both the site and MCP Worker. Route-specific composition and administrative
 write operations remain in `packages/site`.
-
-## Legacy GraphQL compatibility
-
-`packages/api-stack` is now retained only for the legacy GraphQL endpoint and
-its supporting AWS infrastructure. The endpoint remains available temporarily
-for compatibility, but it is not part of the active site data path and is
-planned for removal.
-
-The retired REST and Lambda functions—including the former contact form—must
-not be used by new functionality. Contact messages are sent directly from the
-Cloudflare site Worker using Cloudflare Email Sending. New reads and writes use
-D1, while editorial content continues to come from Contentful.
-
-Legacy DynamoDB data is retained only for the GraphQL compatibility endpoint
-and historical migration reference. The CDK stack imports those tables rather
-than owning their lifecycle, so retiring the endpoint is a separate,
-deliberate migration operation.
 
 ## Content and data ownership
 
@@ -257,8 +234,6 @@ GitHub Actions deploys the Cloudflare runtime and its supporting services:
 
 - Changes under `packages/site` build the OpenNext bundle and deploy it to
   Cloudflare.
-- Changes under `packages/api-stack` maintain the temporary legacy GraphQL
-  compatibility endpoint. No new site capability should depend on it.
 - Changes under `packages/tidy` deploy its maintenance Worker.
 - `packages/scheduled-task` runs at 23:00 UTC daily, rebuilds the D1
   `PlayerSeasonSummaries`, `HatTricks`, and `PlayerMilestones` tables, then
@@ -281,8 +256,6 @@ services.
 ## Architectural boundaries and conventions
 
 - Keep presentation and route composition in `packages/site`.
-- Treat `packages/api-stack` as legacy GraphQL compatibility infrastructure;
-  do not add REST routes or Lambda-backed site features.
 - Put shared domain types, reusable D1 entity types, shared SQL reads, and
   platform-neutral football logic in `packages/lib`.
 - Keep D1 schema and ordered migrations in `packages/sql`.

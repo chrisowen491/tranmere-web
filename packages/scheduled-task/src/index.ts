@@ -1,4 +1,5 @@
 import { updateAlgoliaSearchIndex } from './updateAlgoliaSearchIndex';
+import { runSettledJobs, type ScheduledJob } from './runSettledJobs';
 import { rebuildHatTricks } from './updateHatTricks';
 import { rebuildPlayerMilestones } from './updatePlayerMilestones';
 import { rebuildPlayerSeasonSummaries } from './updatePlayerSeasonSummaries';
@@ -15,31 +16,47 @@ export interface Env {
  * easy to test and lets it use `ctx.waitUntil` without delaying the trigger.
  */
 export async function runDailyTask(env: Env): Promise<void> {
-  const summaryCount = await rebuildPlayerSeasonSummaries(env.DB);
-  const hatTrickCount = await rebuildHatTricks(env.DB);
-  const milestoneCount = await rebuildPlayerMilestones(env.DB);
-  console.log(
-    `Rebuilt ${summaryCount} Tranmere-Web player season summary records.`
-  );
-  console.log(`Rebuilt ${hatTrickCount} Tranmere-Web hat-trick records.`);
-  console.log(
-    `Rebuilt ${milestoneCount} Tranmere-Web player milestone records.`
-  );
+  const jobs: ScheduledJob[] = [
+    {
+      name: 'player-season-summaries',
+      run: async () => {
+        const count = await rebuildPlayerSeasonSummaries(env.DB);
+        return `Rebuilt ${count} Tranmere-Web player season summary records.`;
+      }
+    },
+    {
+      name: 'hat-tricks',
+      run: async () => {
+        const count = await rebuildHatTricks(env.DB);
+        return `Rebuilt ${count} Tranmere-Web hat-trick records.`;
+      }
+    },
+    {
+      name: 'player-milestones',
+      run: async () => {
+        const count = await rebuildPlayerMilestones(env.DB);
+        return `Rebuilt ${count} Tranmere-Web player milestone records.`;
+      }
+    },
+    {
+      name: 'algolia-search-index',
+      run: async () => {
+        if (!env.ALGOLIA_API_KEY) {
+          throw new Error(
+            'ALGOLIA_API_KEY is not configured for the scheduled task Worker.'
+          );
+        }
+        const result = await updateAlgoliaSearchIndex(env.DB, {
+          applicationId: env.ALGOLIA_APPLICATION_ID,
+          apiKey: env.ALGOLIA_API_KEY,
+          indexName: env.ALGOLIA_INDEX_NAME
+        });
+        return `Uploaded ${result.uploaded} Algolia records (${result.players} players, ${result.clubs} clubs and ${result.seasons} seasons).`;
+      }
+    }
+  ];
 
-  if (!env.ALGOLIA_API_KEY) {
-    throw new Error(
-      'ALGOLIA_API_KEY is not configured for the scheduled task Worker.'
-    );
-  }
-
-  const algoliaResult = await updateAlgoliaSearchIndex(env.DB, {
-    applicationId: env.ALGOLIA_APPLICATION_ID,
-    apiKey: env.ALGOLIA_API_KEY,
-    indexName: env.ALGOLIA_INDEX_NAME
-  });
-  console.log(
-    `Uploaded ${algoliaResult.uploaded} Algolia records (${algoliaResult.players} players, ${algoliaResult.clubs} clubs and ${algoliaResult.seasons} seasons).`
-  );
+  await runSettledJobs(jobs);
 }
 
 export default {

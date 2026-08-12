@@ -113,8 +113,6 @@ email before allowing mutations.
   ratings, manager XIs and admin CRUD operations.
 - Cloudflare Email Sending delivers contact-form messages to the configured
   Auth0 administrator email.
-- A legacy GraphQL endpoint remains available at `/graphql` for temporary
-  compatibility only; it is planned for removal.
 - The private authenticated MCP server offers player, club, transfer, manager,
   result and match lookup tools plus player-profile and transfer creation.
 - The public unauthenticated MCP deployment reuses the read-only lookup tools.
