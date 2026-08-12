@@ -1,4 +1,5 @@
 import { rebuildHatTricks } from './updateHatTricks';
+import { rebuildPlayerMilestones } from './updatePlayerMilestones';
 import { rebuildPlayerSeasonSummaries } from './updatePlayerSeasonSummaries';
 
 export interface Env {
@@ -12,10 +13,14 @@ export interface Env {
 export async function runDailyTask(env: Env): Promise<void> {
   const summaryCount = await rebuildPlayerSeasonSummaries(env.DB);
   const hatTrickCount = await rebuildHatTricks(env.DB);
+  const milestoneCount = await rebuildPlayerMilestones(env.DB);
   console.log(
     `Rebuilt ${summaryCount} Tranmere-Web player season summary records.`
   );
   console.log(`Rebuilt ${hatTrickCount} Tranmere-Web hat-trick records.`);
+  console.log(
+    `Rebuilt ${milestoneCount} Tranmere-Web player milestone records.`
+  );
 }
 
 export default {

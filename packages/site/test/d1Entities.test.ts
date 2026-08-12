@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 import {
   countPlayerRows,
   queryGameRows,
+  queryPlayerMilestoneRows,
   queryPlayerRows,
   queryTransferRows,
 } from "@tranmere-web/lib/src/d1-queries";
@@ -246,5 +247,19 @@ describe("D1 queries", () => {
     expect(sql).toContain("match_date <= ?");
     expect(sql).toContain("ORDER BY match_date DESC");
     expect(mock.boundValues).toEqual([["Wrexham", "2026-08-01", 2]]);
+  });
+
+  it("uses a compact match-date lookup for derived player milestones", async () => {
+    const mock = databaseReturning([]);
+
+    await queryPlayerMilestoneRows(mock.db, { matchDate: "2026-08-01" });
+
+    const sql = String(mock.prepare.mock.calls[0][0]);
+    expect(sql).toContain("FROM PlayerMilestones");
+    expect(sql).toContain("match_date = ?");
+    expect(sql).toContain(
+      "ORDER BY match_date ASC, player_name ASC, milestone_type ASC",
+    );
+    expect(mock.boundValues).toEqual([["2026-08-01"]]);
   });
 });

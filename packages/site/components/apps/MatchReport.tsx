@@ -239,9 +239,11 @@ export default function MatchReport(props: {
                           ? "F"
                           : milestone.kind === "first-goal"
                             ? "G"
-                            : milestone.kind === "hat-trick"
-                              ? "3"
-                              : "M"}
+                            : milestone.kind === "appearance-landmark"
+                              ? (milestone.label.match(/\d+/)?.[0] ?? "A")
+                              : milestone.kind === "hat-trick"
+                                ? "3"
+                                : "M"}
                     </span>
                     <span className="text-sm leading-5">
                       <span className="font-semibold">{milestone.name}</span>{" "}

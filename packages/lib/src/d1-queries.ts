@@ -8,6 +8,7 @@ import type {
   ManagerRow,
   MatchReportRow,
   PlayerAppearanceRow,
+  PlayerMilestoneRow,
   PlayerRow,
   PlayerSeasonSummaryRow,
   ProgrammeRow,
@@ -72,6 +73,12 @@ export interface HatTrickQueryOptions {
   season?: number;
   matchDate?: string;
   limit?: number;
+}
+
+export interface PlayerMilestoneQueryOptions {
+  player?: string;
+  matchDate?: string;
+  milestoneType?: PlayerMilestoneRow['milestone_type'];
 }
 
 export interface PlayerSeasonSummaryQueryOptions {
@@ -444,6 +451,40 @@ export async function queryHatTrickRows(
         values,
         options.limit
       ),
+      values
+    )
+  ).results;
+}
+
+export async function queryPlayerMilestoneRows(
+  db: D1DatabaseReader,
+  options: PlayerMilestoneQueryOptions = {}
+) {
+  const conditions: string[] = [];
+  const values: D1Value[] = [];
+
+  if (options.player) {
+    conditions.push('player_name = ?');
+    values.push(options.player);
+  }
+  if (options.matchDate) {
+    conditions.push('match_date = ?');
+    values.push(options.matchDate);
+  }
+  if (options.milestoneType) {
+    conditions.push('milestone_type = ?');
+    values.push(options.milestoneType);
+  }
+
+  const where = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
+  return (
+    await all<PlayerMilestoneRow>(
+      db,
+      `SELECT id, player_name, milestone_type, match_date, season, opposition,
+              milestone_value
+       FROM PlayerMilestones
+       ${where}
+       ORDER BY match_date ASC, player_name ASC, milestone_type ASC`,
       values
     )
   ).results;

@@ -1,6 +1,8 @@
 import {
   ArrowLeftIcon,
   ArrowRightIcon,
+  ArrowUpRightIcon,
+  ArrowsRightLeftIcon,
   ChartBarIcon,
   FireIcon,
   TrophyIcon,
@@ -8,6 +10,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { getClubByName } from "@/lib/clubs";
 import { getOpponentDossier } from "@/lib/opponentDossier";
+import { getTransfers } from "@/lib/transfers";
 import { matchOutcome, outcomeClass } from "@/lib/seasonMatchUtils";
 import { pageMetadata } from "@/lib/seo";
 import type { SlugParams } from "@/lib/types";
@@ -59,8 +62,15 @@ export default async function OpponentDossierPage(props: {
   const club = await getClubByName(db, requestedName);
   if (!club || club.name === "Tranmere Rovers") notFound();
 
-  const dossier = await getOpponentDossier(db, club.name);
+  const [dossier, transfers] = await Promise.all([
+    getOpponentDossier(db, club.name),
+    getTransfers(db, { club: club.name }),
+  ]);
   if (!dossier.matches.length) notFound();
+
+  const linkedPlayers = [
+    ...new Map(transfers.map((transfer) => [transfer.name, transfer])).values(),
+  ];
 
   const total = dossier.record.h2htotal[0]!;
   const primary = club.primaryColour || "#1d4ed8";
@@ -114,7 +124,7 @@ export default async function OpponentDossierPage(props: {
             ["Meetings", total.pld, ChartBarIcon],
             ["Rovers wins", total.wins, TrophyIcon],
             ["Goals scored", total.for, FireIcon],
-            ["Leading scorers", dossier.scorers.length, UserGroupIcon],
+            ["Shared players", linkedPlayers.length, UserGroupIcon],
           ].map(([label, value, Icon]) => {
             const StatIcon = Icon as typeof ChartBarIcon;
             return (
@@ -332,6 +342,62 @@ export default async function OpponentDossierPage(props: {
             </Link>
           </section>
         </div>
+
+        <section className="mt-16 border-t border-[#071a2b]/15 pt-14">
+          <div className="flex flex-wrap items-end justify-between gap-5 border-b border-[#071a2b]/15 pb-8">
+            <div>
+              <p className="section-kicker">Rovers connections</p>
+              <h2 className="mt-4 font-display text-4xl font-semibold tracking-[-0.04em]">
+                Players who crossed the divide
+              </h2>
+            </div>
+            <p className="max-w-md text-sm leading-6 text-[#071a2b]/55">
+              Recorded arrivals and departures linking Tranmere and {club.name}.
+            </p>
+          </div>
+
+          {linkedPlayers.length ? (
+            <div className="mt-8 grid border-l border-t border-[#071a2b]/15 sm:grid-cols-2 lg:grid-cols-3">
+              {linkedPlayers.map((player) => {
+                const playerTransfers = transfers.filter(
+                  (transfer) => transfer.name === player.name,
+                );
+
+                return (
+                  <Link
+                    key={player.name}
+                    href={`/page/player/${encodeURIComponent(player.name)}`}
+                    className="group min-h-48 border-b border-r border-[#071a2b]/15 bg-[#fffdf8] p-5 transition hover:bg-[#071a2b] hover:text-white"
+                  >
+                    <div className="flex items-start justify-between">
+                      <ArrowsRightLeftIcon className="h-5 w-5 text-blue-700 group-hover:text-blue-300" />
+                      <ArrowUpRightIcon className="h-4 w-4 opacity-35 group-hover:opacity-100" />
+                    </div>
+                    <h3 className="mt-12 font-display text-2xl font-semibold">
+                      {player.name}
+                    </h3>
+                    <p className="mt-2 text-xs text-[#071a2b]/50 group-hover:text-white/55">
+                      {playerTransfers
+                        .map(
+                          (transfer) =>
+                            `${seasonLabel(String(transfer.season))} · ${
+                              transfer.type === "in"
+                                ? `Joined from ${club.name}`
+                                : `Left for ${club.name}`
+                            }`,
+                        )
+                        .join(" · ")}
+                    </p>
+                  </Link>
+                );
+              })}
+            </div>
+          ) : (
+            <p className="mt-8 border border-[#071a2b]/15 bg-[#fffdf8] p-7 text-sm text-[#071a2b]/55">
+              No player movements between these clubs are currently recorded.
+            </p>
+          )}
+        </section>
       </section>
     </main>
   );

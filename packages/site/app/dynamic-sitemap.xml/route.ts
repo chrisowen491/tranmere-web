@@ -39,7 +39,7 @@ export async function GET() {
       lastmod: new Date().toISOString(),
     });
     pages.push({
-      loc: `https://www.tranmere-web.com/rovers-connections/${encodeURIComponent(t.name)}`,
+      loc: `https://www.tranmere-web.com/opponents/${encodeURIComponent(t.name)}`,
       lastmod: new Date().toISOString(),
     });
   });

@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 };
 
 function connectionHref(club: string) {
-  return `/rovers-connections/${encodeURIComponent(club)}`;
+  return `/opponents/${encodeURIComponent(club)}`;
 }
 
 export default async function RoversConnectionsPage() {

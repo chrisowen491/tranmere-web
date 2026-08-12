@@ -107,6 +107,19 @@ export interface HatTrickRow {
   goals: number;
 }
 
+export type PlayerMilestoneType =
+  'debut' | 'latest-appearance' | 'first-goal' | 'appearance-landmark';
+
+export interface PlayerMilestoneRow {
+  id: string;
+  player_name: string;
+  milestone_type: PlayerMilestoneType;
+  match_date: string;
+  season: number;
+  opposition: string;
+  milestone_value: number | null;
+}
+
 export interface PlayerSeasonSummaryRow {
   season: string;
   player_name: string;
