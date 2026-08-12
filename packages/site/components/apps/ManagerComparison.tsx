@@ -15,7 +15,6 @@ import {
   formatManagerDate,
   getManagerSelections,
   loadManagerMatches,
-  managerImageSource,
   managerResult,
   type ManagerSelection,
   type ManagerStats,
@@ -126,7 +125,7 @@ function ManagerSummary({
         <div className="h-28 w-24 flex-none overflow-hidden border border-[#071a2b]/15 bg-[#e8e2d6]">
           {manager.imagePath ? (
             <Image
-              src={managerImageSource(manager.imagePath, 240, 280)}
+              src={manager.imagePath}
               alt={`${manager.name}, Tranmere Rovers manager`}
               width={240}
               height={280}

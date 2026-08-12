@@ -9,7 +9,6 @@
     "node": ">=24"
   },
   "scripts": {
-    "api": "yarn workspace @tranmere-web/api-stack local-api",
     "cloudflare-build": "yarn workspace @tranmere-web/site cloudflare-build",
     "cloudflare-deploy": "yarn workspace @tranmere-web/site cloudflare-deploy",
     "cloudflare-preview": "yarn workspace @tranmere-web/site cloudflare-preview",
