@@ -64,7 +64,7 @@ yarn workspace @tranmere-web/site build
 | `packages/lib` | Shared domain types, D1 types and reusable SQL reads |
 | `packages/sql` | D1 schema, migrations, imports and database commands |
 | `packages/mcp` | Public and Auth0-protected Cloudflare MCP servers and MCP Apps UI |
-| `packages/scheduled-task` | Daily D1 player-summary and hat-trick rebuild worker |
+| `packages/scheduled-task` | Daily D1 summary/milestone rebuild and Algolia search-index worker |
 | `packages/api-stack` | Temporary legacy GraphQL infrastructure pending removal |
 
 Do not run remote database or deployment commands unless the change has been

@@ -73,7 +73,7 @@ The root is a Yarn Classic workspace using Node.js 24.
 | `packages/mcp`            | Auth0-protected Cloudflare MCP server exposing read-only D1 and match API tools               |
 | `packages/vectorize`      | Worker for creating and querying player biography embeddings                                  |
 | `packages/tidy`           | Scheduled Worker that removes old Cloudflare deployments                                      |
-| `packages/scheduled-task` | Daily scheduled Worker that rebuilds player summaries and hat-tricks from D1 Apps and Goals   |
+| `packages/scheduled-task` | Daily Worker that rebuilds D1 summaries/milestones and refreshes Algolia search records       |
 | `packages/sql`            | D1 schema, migrations, generated imports, and database commands                               |
 | `packages/api-tests`      | Newman acceptance tests for deployed APIs                                                     |
 
@@ -260,9 +260,11 @@ GitHub Actions deploys the Cloudflare runtime and its supporting services:
 - Changes under `packages/api-stack` maintain the temporary legacy GraphQL
   compatibility endpoint. No new site capability should depend on it.
 - Changes under `packages/tidy` deploy its maintenance Worker.
-- `packages/scheduled-task` runs at 23:00 UTC daily and rebuilds the D1
-  `PlayerSeasonSummaries` and `HatTricks` tables from the `Apps` and `Goals`
-  tables.
+- `packages/scheduled-task` runs at 23:00 UTC daily, rebuilds the D1
+  `PlayerSeasonSummaries`, `HatTricks`, and `PlayerMilestones` tables, then
+  updates Algolia records for every D1 player, club, and recorded season. Its
+  Algolia write key is stored as the `ALGOLIA_API_KEY` Worker secret (set with
+  `yarn workspace @tranmere-web/scheduled-task wrangler secret put ALGOLIA_API_KEY`).
 - `packages/mcp` has its own Cloudflare Worker build and deployment lifecycle;
   it binds directly to the production D1 database and uses Auth0 environment
   configuration.

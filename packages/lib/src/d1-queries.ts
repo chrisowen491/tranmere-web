@@ -12,6 +12,9 @@ import type {
   PlayerRow,
   PlayerSeasonSummaryRow,
   ProgrammeRow,
+  SearchIndexClubRow,
+  SearchIndexPlayerRow,
+  SearchIndexSeasonRow,
   TransferRow
 } from './d1-types';
 
@@ -206,6 +209,42 @@ export async function queryClubRows(
   );
 
   return (await all<ClubRow>(db, sql, values)).results;
+}
+
+export async function querySearchIndexPlayerRows(db: D1DatabaseReader) {
+  return (
+    await all<SearchIndexPlayerRow>(
+      db,
+      `SELECT id, name, pic_link
+       FROM Players
+       ORDER BY name ASC, id ASC`,
+      []
+    )
+  ).results;
+}
+
+export async function querySearchIndexClubRows(db: D1DatabaseReader) {
+  return (
+    await all<SearchIndexClubRow>(
+      db,
+      `SELECT id, name
+       FROM Clubs
+       ORDER BY name ASC, id ASC`,
+      []
+    )
+  ).results;
+}
+
+export async function querySearchIndexSeasonRows(db: D1DatabaseReader) {
+  return (
+    await all<SearchIndexSeasonRow>(
+      db,
+      `SELECT DISTINCT season
+       FROM Games
+       ORDER BY season ASC`,
+      []
+    )
+  ).results;
 }
 
 export async function queryTransferRows(

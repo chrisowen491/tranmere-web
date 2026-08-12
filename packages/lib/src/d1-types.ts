@@ -26,6 +26,21 @@ export interface ClubRow {
   longitude: number | null;
 }
 
+export interface SearchIndexPlayerRow {
+  id: string;
+  name: string;
+  pic_link: string | null;
+}
+
+export interface SearchIndexClubRow {
+  id: string;
+  name: string;
+}
+
+export interface SearchIndexSeasonRow {
+  season: number;
+}
+
 export interface TransferRow {
   id: string;
   player_name: string;

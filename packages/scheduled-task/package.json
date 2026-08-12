@@ -11,6 +11,9 @@
     "test": "yarn type-check"
   },
   "license": "GPL-3.0-only",
+  "dependencies": {
+    "@tranmere-web/lib": "*"
+  },
   "devDependencies": {
     "@cloudflare/workers-types": "^5.20260731.1",
     "eslint": "^9.39.2",
