@@ -210,10 +210,6 @@ export default function PlayerProfileView(props: {
   );
 
   const profileLinks = [
-    {
-      description: "Transfermarkt",
-      link: `https://www.transfermarkt.co.uk/schnellsuche/ergebnis/schnellsuche?query=${player.name}`,
-    },
     ...profile.links,
   ];
 
