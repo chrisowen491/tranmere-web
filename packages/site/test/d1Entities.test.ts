@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import {
   countPlayerRows,
+  queryGameDateRangeBounds,
   queryGameRows,
   queryPlayerMilestoneRows,
   queryPlayerRows,
@@ -247,6 +248,33 @@ describe("D1 queries", () => {
     expect(sql).toContain("match_date <= ?");
     expect(sql).toContain("ORDER BY match_date DESC");
     expect(mock.boundValues).toEqual([["Wrexham", "2026-08-01", 2]]);
+  });
+
+  it("loads only the first and last match dates for a managerial tenure", async () => {
+    const mock = databaseReturning([
+      {
+        first_match_date: "2024-01-01",
+        last_match_date: "2025-06-30",
+      },
+    ]);
+
+    const bounds = await queryGameDateRangeBounds(
+      mock.db,
+      "2024-01-01",
+      "2025-06-30",
+    );
+
+    const sql = String(mock.prepare.mock.calls[0][0]);
+    expect(sql).toContain("MIN(match_date) AS first_match_date");
+    expect(sql).toContain("MAX(match_date) AS last_match_date");
+    expect(sql).toContain("match_date >= ?");
+    expect(sql).toContain("match_date <= ?");
+    expect(sql).not.toContain("home_team");
+    expect(mock.boundValues).toEqual([["2024-01-01", "2025-06-30"]]);
+    expect(bounds).toEqual({
+      first_match_date: "2024-01-01",
+      last_match_date: "2025-06-30",
+    });
   });
 
   it("uses a compact match-date lookup for derived player milestones", async () => {

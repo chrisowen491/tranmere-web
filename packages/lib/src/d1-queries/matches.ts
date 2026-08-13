@@ -19,6 +19,11 @@ export interface GameQueryOptions {
   includeKit?: boolean;
 }
 
+export interface GameDateRangeBounds {
+  first_match_date: string | null;
+  last_match_date: string | null;
+}
+
 const gameColumns = `id, season, match_date, competition, round, home_team, away_team,
   opposition, venue, attendance, full_time_score, home_goals, away_goals,
   division, tier, leg, tie, neutral, after_extra_time, penalties,
@@ -110,6 +115,23 @@ export async function queryGameBySeasonAndDate(
     )
     .bind(season, matchDate)
     .first<GameRow>();
+}
+
+export async function queryGameDateRangeBounds(
+  db: D1DatabaseReader,
+  dateFrom: string,
+  dateTo: string
+) {
+  return db
+    .prepare(
+      `SELECT MIN(match_date) AS first_match_date,
+              MAX(match_date) AS last_match_date
+       FROM Games
+       WHERE match_date >= ?
+         AND match_date <= ?`
+    )
+    .bind(dateFrom, dateTo)
+    .first<GameDateRangeBounds>();
 }
 
 export async function queryOnThisDayGameRow(

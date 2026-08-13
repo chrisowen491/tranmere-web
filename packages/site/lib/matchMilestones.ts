@@ -1,12 +1,12 @@
 import {
   queryAppRows,
   queryGoalRows,
+  queryGameDateRangeBounds,
   queryHatTrickRows,
   queryPlayerMilestoneRows,
 } from "@tranmere-web/lib/src/d1-queries";
 import type { AppRow, GoalRow } from "@tranmere-web/lib/src/d1-types";
 import type { ManagerRecord } from "@/lib/managers";
-import { searchGames } from "@/lib/games";
 
 export type MatchMilestoneKind =
   | "debut"
@@ -137,29 +137,30 @@ export async function getMatchMilestones(
     includeFinalAppearances?: boolean;
   },
 ): Promise<MatchMilestone[]> {
-  const [storedPlayerMilestones, hatTricks, managerGames] = await Promise.all([
-    queryPlayerMilestoneRows(db, { matchDate: input.matchDate }).catch(
-      (error) => {
-        if (isMissingMilestonesTable(error)) return null;
-        throw error;
-      },
-    ),
-    queryHatTrickRows(db, {
-      season: input.season,
-      matchDate: input.matchDate,
-    }),
-    input.manager
-      ? searchGames(db, {
-          dateFrom: input.manager.dateJoined,
-          dateTo: ["now", "now()", "present"].includes(
-            input.manager.dateLeft.toLowerCase(),
+  const [storedPlayerMilestones, hatTricks, managerGameBounds] =
+    await Promise.all([
+      queryPlayerMilestoneRows(db, { matchDate: input.matchDate }).catch(
+        (error) => {
+          if (isMissingMilestonesTable(error)) return null;
+          throw error;
+        },
+      ),
+      queryHatTrickRows(db, {
+        season: input.season,
+        matchDate: input.matchDate,
+      }),
+      input.manager
+        ? queryGameDateRangeBounds(
+            db,
+            input.manager.dateJoined,
+            ["now", "now()", "present"].includes(
+              input.manager.dateLeft.toLowerCase(),
+            )
+              ? new Date().toISOString().slice(0, 10)
+              : input.manager.dateLeft,
           )
-            ? new Date().toISOString().slice(0, 10)
-            : input.manager.dateLeft,
-          sort: "date-asc",
-        })
-      : Promise.resolve(null),
-  ]);
+        : Promise.resolve(null),
+    ]);
 
   const milestones: MatchMilestone[] = storedPlayerMilestones
     ? storedPlayerMilestones.flatMap((milestone): MatchMilestone[] => {
@@ -221,9 +222,8 @@ export async function getMatchMilestones(
     });
   }
 
-  if (input.manager && managerGames?.results.length) {
-    const managerGamesOnDates = managerGames.results.map((game) => game.date);
-    if (managerGamesOnDates[0] === input.matchDate) {
+  if (input.manager && managerGameBounds?.first_match_date) {
+    if (managerGameBounds.first_match_date === input.matchDate) {
       milestones.push({
         kind: "manager-first-game",
         name: input.manager.name,
@@ -231,7 +231,7 @@ export async function getMatchMilestones(
         label: "took charge for the first time",
       });
     }
-    if (managerGamesOnDates.at(-1) === input.matchDate) {
+    if (managerGameBounds.last_match_date === input.matchDate) {
       milestones.push({
         kind: "manager-last-game",
         name: input.manager.name,
