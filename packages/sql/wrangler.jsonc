@@ -1,0 +1,12 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "tranmere-web-sql",
+  "compatibility_date": "2026-08-01",
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "tranmere-web",
+      "database_id": "cb021697-9af3-4872-b8eb-ce49be71bb8c"
+    }
+  ]
+}

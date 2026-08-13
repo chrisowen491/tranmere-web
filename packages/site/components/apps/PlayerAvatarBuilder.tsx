@@ -181,7 +181,6 @@ export function PlayerAvatarBuilder() {
                     <option>receeding</option>
                     <option>receding-comb-over</option>
                     <option>side-parting-curl</option>
-                    <option>vintage-side-wave</option>
                     <option>droopy-fringe</option>
                     <option>curtains</option>
                     <option>feathered</option>

@@ -95,6 +95,14 @@ CREATE INDEX IF NOT EXISTS Transfers_to_club_idx
 CREATE INDEX IF NOT EXISTS Transfers_date_idx
   ON Transfers (transfer_date);
 
+CREATE INDEX IF NOT EXISTS Transfers_player_sort_idx
+  ON Transfers (
+    player_name,
+    season DESC,
+    transfer_date DESC,
+    cost DESC
+  );
+
 CREATE TABLE IF NOT EXISTS Managers (
   id TEXT NOT NULL PRIMARY KEY,
   name TEXT NOT NULL,

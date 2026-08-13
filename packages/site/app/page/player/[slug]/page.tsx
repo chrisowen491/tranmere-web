@@ -113,7 +113,10 @@ export default async function PlayerProfilePage(props: { params: SlugParams }) {
 
   const [articles, transfers] = await Promise.all([
     getAllArticlesForTag(100, d1Player.name),
-    getTransfers(env.DB, { playerName: d1Player.name }),
+    getTransfers(env.DB, {
+      playerName: d1Player.name,
+      playerMatch: "exact",
+    }),
   ]);
   profile.transfers = transfers;
 

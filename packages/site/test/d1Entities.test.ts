@@ -195,6 +195,23 @@ describe("D1 queries", () => {
     ]);
   });
 
+  it("uses an exact indexed lookup for a canonical player name", async () => {
+    const mock = databaseReturning<TransferRow>([]);
+
+    await queryTransferRows(mock.db, {
+      player: "Steve Mungall",
+      playerMatch: "exact",
+    });
+
+    const sql = String(mock.prepare.mock.calls[0][0]);
+    expect(sql).toContain("WHERE player_name = ?");
+    expect(sql).not.toContain("player_name LIKE ?");
+    expect(sql).toContain(
+      "ORDER BY season DESC, transfer_date DESC, cost DESC, player_name ASC",
+    );
+    expect(mock.boundValues).toEqual([["Steve Mungall"]]);
+  });
+
   it("paginates player queries and counts the complete filtered result set", async () => {
     const playerQuery = databaseReturning<PlayerRow>([playerRow()]);
 

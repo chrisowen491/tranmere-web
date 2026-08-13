@@ -17,6 +17,7 @@ export interface TransferFilters {
   club?: string;
   filter?: string;
   playerName?: string;
+  playerMatch?: "exact" | "contains";
   sort?: "date-desc" | "fee-desc";
   limit?: number;
   offset?: number;
@@ -114,7 +115,7 @@ export async function getTransfers(
       : undefined;
   const rows = await queryTransferRows(db, {
     player: filters.playerName,
-    playerMatch: "contains",
+    playerMatch: filters.playerMatch ?? "contains",
     season,
     club: filters.club,
     direction:
