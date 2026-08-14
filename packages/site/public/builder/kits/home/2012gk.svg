@@ -46,4 +46,7 @@
     <path fill="#e51937" fill-rule="nonzero" d="m-355.61302,-329.71817l10.861,0c1.28,0 2.321,-0.999 2.321,-2.278l0,-0.144c0,-1.285 -1.041,-2.323 -2.321,-2.323l-10.861,0c-1.281,0 -2.32,1.038 -2.32,2.323l0,0.159c0,1.282 1.039,2.263 2.32,2.263" id="path10118"/>
    </g>
   </g>
+    <line stroke-linecap="null" stroke-linejoin="null" id="svg_29" y2="518.5" x2="372.5" y1="452.5" x1="371.5" opacity="undefined" fill-opacity="null" stroke-dasharray="null" stroke-width="null" stroke="#000000" fill="none"/>
+  <line stroke-linecap="null" stroke-linejoin="null" id="svg_37" y2="520.5" x2="140.5" y1="454.5" x1="139.5" opacity="undefined" fill-opacity="null" stroke-dasharray="null" stroke-width="null" stroke="#000000" fill="none"/>
+
 </svg>
