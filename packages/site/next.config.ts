@@ -52,6 +52,11 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        source: "/page/player/Chris%20Edwards",
+        destination: "/page/player/Christian%20Edwards",
+        permanent: true,
+      },
+      {
         source: "/top-scorers-by-season",
         destination: "/players/top-scorers-by-season",
         permanent: true,
@@ -60,23 +65,22 @@ const nextConfig: NextConfig = {
         source: "/playersearch",
         destination: "/players",
         permanent: true,
-      },  
+      },
       {
         source: "/player-records/:path*",
         destination: "/players/player-records/:path*",
         permanent: true,
-      },  
+      },
       {
         source: "/player-builder",
         destination: "/players/avatar-builder",
         permanent: true,
-      },  
+      },
       {
         source: "/hat-tricks",
         destination: "/players/hat-tricks",
         permanent: true,
-      },        
-
+      },
     ];
   },
 };
