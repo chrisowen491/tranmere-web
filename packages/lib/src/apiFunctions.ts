@@ -81,7 +81,20 @@ export function GetSeasonsForPlayers(): number[] {
 
 export function replaceSeasonsKit(input: string, season?: string): string {
   const seasonMapping = new Map<number, number>([
+    [1931, 1930],
+    [1932, 1930],
+    [1933, 1930],
+    [1934, 1930],    
+    [1935, 1930],
+    [1936, 1930],
+    [1937, 1930],
+    [1938, 1930], 
     [1961, 1960],
+    [1961, 1960],
+    [1961, 1960],
+    [1961, 1960],         
+    [1961, 1960],
+    [1963, 1963],
     [1967, 1966],
     [1968, 1970],
     [1969, 1970],

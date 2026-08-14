@@ -1,0 +1,49 @@
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="kit-1930-blue" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1765bd"/>
+      <stop offset="1" stop-color="#0d4f9f"/>
+    </linearGradient>
+    <linearGradient id="kit-1930-collar-blue" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1c6ac1"/>
+      <stop offset="1" stop-color="#0b4b99"/>
+    </linearGradient>
+    <pattern id="kit-1930-wool" width="8" height="8" patternUnits="userSpaceOnUse">
+      <path d="M0 2h8M0 6h8" stroke="#fff" stroke-width="0.7" opacity="0.08"/>
+      <path d="M2 0v8M6 0v8" stroke="#052e6f" stroke-width="0.55" opacity="0.08"/>
+    </pattern>
+    <clipPath id="kit-1930-shirt-clip">
+      <path d="m255.74181,313.00899l44,0l98.846,21.665c27.533,6.035 47.154,30.421 47.154,58.609l0,85.726l-66,0l0,33l-124,0l-124,0l0,-33l-66,0l0,-85.726c0,-28.187 19.621,-52.574 47.154,-58.609l98.846,-21.665l44,0z"/>
+    </clipPath>
+  </defs>
+
+  <g id="shirt">
+    <path fill="url(#kit-1930-blue)" d="m255.74181,313.00899l44,0l98.846,21.665c27.533,6.035 47.154,30.421 47.154,58.609l0,85.726l-66,0l0,33l-124,0l-124,0l0,-33l-66,0l0,-85.726c0,-28.187 19.621,-52.574 47.154,-58.609l98.846,-21.665l44,0z"/>
+    <g id="kit-1930-fabric" clip-path="url(#kit-1930-shirt-clip)">
+      <rect x="60" y="307" width="392" height="205" fill="url(#kit-1930-wool)"/>
+      <path d="M113 335q27 16 48 43M399 335q-27 16-48 43" fill="none" stroke="#063d83" stroke-width="2" opacity="0.22"/>
+    </g>
+  </g>
+    
+  <g id="collar">
+   <path id="svg_7" fill="#0c4b99" d="m205,314q51,-18 102,0l-7,24q-44,-20 -88,0l-7,-24z"/>
+   <path id="svg_8" fill="#06366f" d="m236,325q20,-8 40,0l-20,43l-20,-43z"/>
+   <path id="svg_9" stroke-width="2" stroke-linejoin="round" stroke="#084388" fill="url(#kit-1930-collar-blue)" d="m205,314q23,4 42,14l9,19l-33,29l-18,-39l0,-23z"/>
+   <path id="svg_10" stroke-width="2" stroke-linejoin="round" stroke="#084388" fill="url(#kit-1930-collar-blue)" d="m307,314q-23,4 -42,14l-9,19l33,29l18,-39l0,-23z"/>
+   <path id="svg_11" opacity="0.65" stroke-width="2" stroke-linecap="round" stroke="#3380ce" fill="none" d="m212,324q22,5 38,15m50,-15q-22,5 -38,15"/>
+   <g stroke-linejoin="round" stroke-linecap="round" stroke="#eee2c5" fill="none" id="kit-1930-lacing">
+    <path id="svg_12" stroke-width="3.5" d="m245,338l22,8l-20,8l18,9l-15,7"/>
+    <path id="svg_13" stroke-width="3.5" d="m267,338l-22,8l20,8l-18,9l15,7"/>
+    <path id="svg_14" stroke-width="4" d="m251,369c-15,-8 -24,-4 -21,4c3,7 14,4 21,-4m10,0c15,-8 24,-4 21,4c-3,7 -14,4 -21,-4"/>
+    <path id="svg_15" stroke-width="4" d="m253,368q3,5 6,0m-6,3l-6,28m12,-28l7,29"/>
+   </g>
+   <g id="svg_16" stroke="#b9ab90" fill="#eee2c5">
+    <circle id="svg_17" r="2.4" cy="338" cx="245"/>
+    <circle id="svg_18" r="2.4" cy="353" cx="247"/>
+    <circle id="svg_19" r="2.4" cy="367" cx="250"/>
+    <circle id="svg_20" r="2.4" cy="338" cx="267"/>
+    <circle id="svg_21" r="2.4" cy="353" cx="265"/>
+    <circle id="svg_22" r="2.4" cy="367" cx="262"/>
+   </g>
+  </g>
+</svg>
