@@ -1,9 +1,11 @@
 import type {
   SearchDocument,
+  SearchIndexBlogRow,
   SearchIndexClubRow,
   SearchIndexPlayerRow,
   SearchIndexSeasonRow
 } from './d1-types';
+import type { StaticSearchPage } from './search-pages';
 
 const DEFAULT_IMAGE = '/assets/images/square_v1.png';
 
@@ -68,6 +70,38 @@ export function seasonSearchDocument(
     href: `/season/${id}`,
     imageUrl: DEFAULT_IMAGE,
     rankingWeight: 10
+  };
+}
+
+export function blogSearchDocument(blog: SearchIndexBlogRow): SearchDocument {
+  return {
+    objectId: `blog:${blog.id}`,
+    entityType: 'blog',
+    entityId: blog.id,
+    title: blog.title,
+    normalizedTitle: normalizeSearchTitle(blog.title),
+    aliases: blog.description ?? '',
+    description: 'Archive Article',
+    href: `/page/blog/${encodeURIComponent(blog.slug)}`,
+    imageUrl: blog.image_url ?? DEFAULT_IMAGE,
+    rankingWeight: 15
+  };
+}
+
+export function staticPageSearchDocument(
+  page: StaticSearchPage
+): SearchDocument {
+  return {
+    objectId: `page:${page.id}`,
+    entityType: 'page',
+    entityId: page.id,
+    title: page.title,
+    normalizedTitle: normalizeSearchTitle(page.title),
+    aliases: page.aliases ?? '',
+    description: page.description,
+    href: page.href,
+    imageUrl: DEFAULT_IMAGE,
+    rankingWeight: 25
   };
 }
 

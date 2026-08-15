@@ -4,7 +4,7 @@
   "private": true,
   "description": "Daily scheduled Cloudflare Worker tasks for Tranmere-Web.",
   "scripts": {
-    "dev": "wrangler dev",
+    "dev": "wrangler dev --env-file ../site/.env.local",
     "deploy": "wrangler deploy",
     "lint": "eslint src",
     "type-check": "tsc --noEmit",

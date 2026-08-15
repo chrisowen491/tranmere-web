@@ -1,8 +1,10 @@
 import {
+  blogSearchDocument,
   clubSearchDocument,
   playerSearchDocument,
   searchDocumentValues,
   seasonSearchDocument,
+  staticPageSearchDocument,
   upsertSearchDocumentSql
 } from '@tranmere-web/lib/src/search-index';
 import {
@@ -10,19 +12,30 @@ import {
   querySearchIndexPlayerRows,
   querySearchIndexSeasonRows
 } from '@tranmere-web/lib/src/d1-queries';
+import { STATIC_SEARCH_PAGES } from '@tranmere-web/lib/src/search-pages';
+import {
+  fetchContentfulBlogPosts,
+  type ContentfulSearchConfig
+} from './contentfulBlogPosts';
 
 const BATCH_SIZE = 100;
 
-export async function rebuildSearchIndex(db: D1Database) {
-  const [players, clubs, seasons] = await Promise.all([
+export async function rebuildSearchIndex(
+  db: D1Database,
+  contentful: ContentfulSearchConfig
+) {
+  const [players, clubs, seasons, blogs] = await Promise.all([
     querySearchIndexPlayerRows(db),
     querySearchIndexClubRows(db),
-    querySearchIndexSeasonRows(db)
+    querySearchIndexSeasonRows(db),
+    fetchContentfulBlogPosts(contentful)
   ]);
   const documents = [
     ...players.map(playerSearchDocument),
     ...clubs.map(clubSearchDocument),
-    ...seasons.map(seasonSearchDocument)
+    ...seasons.map(seasonSearchDocument),
+    ...blogs.map(blogSearchDocument),
+    ...STATIC_SEARCH_PAGES.map(staticPageSearchDocument)
   ];
   const syncToken = crypto.randomUUID();
 
@@ -46,6 +59,8 @@ export async function rebuildSearchIndex(db: D1Database) {
     indexed: documents.length,
     players: players.length,
     clubs: clubs.length,
-    seasons: seasons.length
+    seasons: seasons.length,
+    blogs: blogs.length,
+    pages: STATIC_SEARCH_PAGES.length
   };
 }

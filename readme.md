@@ -19,7 +19,8 @@ The website is a TypeScript Yarn Classic monorepo running on Cloudflare:
 - Cloudflare Email Sending delivers contact-form messages to the configured
   `AUTH0_ADMIN_EMAIL` recipient.
 - Contentful remains the editorial CMS. Site search uses a materialized D1
-  index with SQLite FTS5 across players, clubs and seasons.
+  index with SQLite FTS5 across players, clubs, seasons, published articles and
+  key static archive pages.
 - Cloudflare Workers host the MCP services and scheduled summary rebuilds.
 
 The only remaining AWS-backed API capability is the legacy GraphQL endpoint.

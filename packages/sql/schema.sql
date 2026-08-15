@@ -450,7 +450,7 @@ CREATE TABLE IF NOT EXISTS SearchDocuments (
   ranking_weight INTEGER NOT NULL DEFAULT 0,
   sync_token TEXT NOT NULL,
   updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  CHECK (entity_type IN ('player', 'club', 'season'))
+  CHECK (entity_type IN ('player', 'club', 'season', 'blog', 'page'))
 );
 
 CREATE INDEX IF NOT EXISTS SearchDocuments_type_idx

@@ -6,6 +6,8 @@ import { rebuildSearchIndex } from './updateSearchIndex';
 
 export interface Env {
   DB: D1Database;
+  CF_SPACE: string;
+  CF_KEY: string;
 }
 
 /**
@@ -38,8 +40,11 @@ export async function runDailyTask(env: Env): Promise<void> {
     {
       name: 'search-index',
       run: async () => {
-        const result = await rebuildSearchIndex(env.DB);
-        return `Rebuilt ${result.indexed} search records (${result.players} players, ${result.clubs} clubs and ${result.seasons} seasons).`;
+        const result = await rebuildSearchIndex(env.DB, {
+          space: env.CF_SPACE,
+          accessToken: env.CF_KEY
+        });
+        return `Rebuilt ${result.indexed} search records (${result.players} players, ${result.clubs} clubs, ${result.seasons} seasons, ${result.blogs} articles and ${result.pages} static pages).`;
       }
     }
   ];

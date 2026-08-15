@@ -1,8 +1,10 @@
 import {
+  blogSearchDocument,
   clubSearchDocument,
   normalizeSearchTitle,
   playerSearchDocument,
   seasonSearchDocument,
+  staticPageSearchDocument,
 } from "@tranmere-web/lib/src/search-index";
 import { querySearchDocuments } from "@tranmere-web/lib/src/d1-queries";
 import { describe, expect, it, vi } from "vitest";
@@ -12,7 +14,7 @@ describe("D1 search index", () => {
     expect(normalizeSearchTitle("  Tranmère—Rovers  ")).toBe("tranmere rovers");
   });
 
-  it("maps players, clubs and seasons to local archive links", () => {
+  it("maps all indexed entities to local archive links", () => {
     expect(
       playerSearchDocument({
         id: "player-1",
@@ -41,6 +43,29 @@ describe("D1 search index", () => {
       objectId: "season:1996",
       title: "1996-97 Season",
       href: "/season/1996",
+    });
+    expect(
+      blogSearchDocument({
+        id: "article-1",
+        title: "A night at Wembley",
+        slug: "a-night-at-wembley",
+        description: "Remembering a famous Rovers final",
+      }),
+    ).toMatchObject({
+      objectId: "blog:article-1",
+      href: "/page/blog/a-night-at-wembley",
+      description: "Archive Article",
+    });
+    expect(
+      staticPageSearchDocument({
+        id: "managers",
+        title: "Managers",
+        description: "Explore every Tranmere Rovers manager",
+        href: "/managers",
+      }),
+    ).toMatchObject({
+      objectId: "page:managers",
+      href: "/managers",
     });
   });
 

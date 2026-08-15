@@ -3,12 +3,6 @@
         <g id="chest">
             <path fill="#ffffff" d="m255.74181,313.00899l44,0l98.846,21.665c27.533,6.035 47.154,30.421 47.154,58.609l0,85.726l-66,0l0,33l-124,0l-124,0l0,-33l-66,0l0,-85.726c0,-28.187 19.621,-52.574 47.154,-58.609l98.846,-21.665l44,0z"/>
         </g>
-        <g id="left-sleeve">
-            <path d="m131.9286,479.52537l-66,0l0,-20l66,0l0,20z" fill="#ffffff"/>
-        </g>
-        <g id="right-sleeve">
-            <path fill="#ffffff" d="m379.92691,458.49199l66,0l0,20l-66,0l0,-20z"/>
-        </g>
     </g>
     <g id="crest">
         <g transform="translate(0,769) scale(0.10000000149011612,-0.10000000149011612) " fill="#000000" id="svg_1">
@@ -42,12 +36,14 @@
         </g>
     </g>
     <g id="sleeves">
-    <line fill="none" stroke-width="4" fill-opacity="null" x1="84.96226" y1="438.04443" x2="109.03774" y2="492.86182" id="svg_47" stroke-dasharray="5,5" transform="rotate(113.0205307006836 96.99999999999999,465.453125) " stroke="#0000ff"/>
-    <line fill="none" stroke-width="4" fill-opacity="null" x1="399.0314" y1="433.42855" x2="422.96864" y2="490.47772" id="svg_48" stroke-dasharray="5,5" transform="rotate(113.0205307006836 411.00000000000006,461.95312499999994) " stroke="#0000ff"/>
+        <line fill="none" stroke-width="4" fill-opacity="null" x1="84.96226" y1="438.04443" x2="109.03774" y2="492.86182" id="svg_47" stroke-dasharray="5,5" transform="rotate(113.0205307006836 96.99999999999999,465.453125) " stroke="#0000ff"/>
+        <line fill="none" stroke-width="4" fill-opacity="null" x1="399.0314" y1="433.42855" x2="422.96864" y2="490.47772" id="svg_48" stroke-dasharray="5,5" transform="rotate(113.0205307006836 411.00000000000006,461.95312499999994) " stroke="#0000ff"/>
     </g>
-    <g id="logo">
-        <text fill="#000000" stroke-width="0" stroke-opacity="null" fill-opacity="null" x="222.29078" y="498.8315" id="svg_44" font-size="24" font-family="Helvetica, Arial, sans-serif" text-anchor="start" xml:space="preserve" transform="matrix(0.6878048777580261,0,0,0.6727272868156433,23.107317094691098,70.67556513939053) " stroke="#0000ff">E</text>
-        <line fill="none" x1="177.10824" y1="391.1681" x2="187.30759" y2="391.1681" id="svg_45" transform="rotate(1.0488654375076294 182.2079162597741,391.1681213378911) " stroke="#ff0000"/>
+    <g id="kitmaker">
+        <text fill="#070753" stroke-width="0" stroke-opacity="null" x="222.29078" y="514.68735" font-size="48" font-family="Helvetica, Arial, sans-serif" xml:space="preserve" transform="matrix(0.687805 0 0 0.672727 23.1073 70.6756)" stroke="#0000ff" id="svg_8">E</text>
+        <g stroke="null" stroke-width="4" id="svg_9">
+            <line id="svg_10" y2="388.53055" x2="196.05672" y1="388.34385" x1="178.69242" fill="#ff0000" stroke="#ff0000"/>
+        </g>
     </g>
     <g id="wirral">
         <text font-weight="bold" xml:space="preserve" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="39" id="svg_31" y="462.20997" x="201.76177" fill="#00bf00" transform="matrix(0.801245885957119,0,0,0.9254378315184513,52.182838277747734,44.16824071473468) " stroke="#00bf00">WIRRAL</text>

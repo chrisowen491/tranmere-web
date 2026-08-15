@@ -6,7 +6,7 @@ import * as React from "react";
 
 type SearchResult = {
   objectId: string;
-  type: "player" | "club" | "season";
+  type: "player" | "club" | "season" | "blog" | "page";
   title: string;
   description: string;
   href: string;

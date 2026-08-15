@@ -44,7 +44,15 @@ export interface SearchIndexSeasonRow {
   season: number;
 }
 
-export type SearchEntityType = 'player' | 'club' | 'season';
+export type SearchEntityType = 'player' | 'club' | 'season' | 'blog' | 'page';
+
+export interface SearchIndexBlogRow {
+  id: string;
+  title: string;
+  slug: string;
+  description?: string | null;
+  image_url?: string | null;
+}
 
 export interface SearchDocument {
   objectId: string;

@@ -6,12 +6,12 @@ data ownership and system boundaries.
 
 ## Home and Discovery
 
-| Feature              | Route                  | Summary                                                                                     |
-| -------------------- | ---------------------- | ------------------------------------------------------------------------------------------- |
-| Archive landing page | `/`                    | Promotes the match, player, shirt, season, manager, transfer and editorial archives.        |
-| On this day          | `/`                    | Shows a historic same-date fixture with teams, score and a programme where one is recorded. |
-| Site search          | Header search          | D1/FTS5 autocomplete across players, clubs and seasons, with exact and prefix ranking.      |
-| Dynamic sitemap      | `/dynamic-sitemap.xml` | Adds database-backed archive pages to the generated XML sitemaps.                           |
+| Feature              | Route                  | Summary                                                                                                                        |
+| -------------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| Archive landing page | `/`                    | Promotes the match, player, shirt, season, manager, transfer and editorial archives.                                           |
+| On this day          | `/`                    | Shows a historic same-date fixture with teams, score and a programme where one is recorded.                                    |
+| Site search          | Header search          | D1/FTS5 autocomplete across players, clubs, seasons, Contentful articles and key archive pages, with exact and prefix ranking. |
+| Dynamic sitemap      | `/dynamic-sitemap.xml` | Adds database-backed archive pages to the generated XML sitemaps.                                                              |
 
 ## Matches, Results and Seasons
 

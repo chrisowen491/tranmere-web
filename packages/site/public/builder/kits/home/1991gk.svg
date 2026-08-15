@@ -46,9 +46,11 @@
             <path id="svg_28" d="m3584.30613,3727.29364c0,-3.57647 0.18657,-4.22674 1.8035,-5.65733c0.99503,-0.9754 2.23883,-3.18631 2.86072,-5.26717c1.11941,-3.51145 1.11941,-3.51145 1.92788,-1.9508c0.49752,0.91038 0.93284,3.96664 1.05722,6.82781c0.18657,4.68193 0.12438,5.00706 -0.6219,3.12129c-0.93284,-2.60107 -1.67912,-3.38139 -1.67912,-1.75572c-0.06219,2.6661 -3.48262,8.71359 -4.91298,8.71359c-0.24876,0 -0.49752,-1.82075 -0.43533,-4.03166l0.00001,-0.00001z" stroke="null"/>
         </g>
     </g>
-    <g id="logo">
-        <text fill="#000000" stroke-width="0" stroke-opacity="null" fill-opacity="null" x="222.29078" y="498.8315" id="svg_44" font-size="24" font-family="Helvetica, Arial, sans-serif" text-anchor="start" xml:space="preserve" transform="matrix(0.6878048777580261,0,0,0.6727272868156433,23.107317094691098,70.67556513939053) " stroke="#0000ff">E</text>
-        <line fill="none" x1="177.10824" y1="391.1681" x2="187.30759" y2="391.1681" id="svg_45" transform="rotate(1.0488654375076294 182.2079162597741,391.1681213378911) " stroke="#ffffff"/>
+    <g id="kitmaker">
+        <text fill="#000" stroke-width="0" stroke-opacity="null" x="222.29078" y="514.68735" font-size="48" font-family="Helvetica, Arial, sans-serif" xml:space="preserve" transform="matrix(0.687805 0 0 0.672727 23.1073 70.6756)" stroke="#000" id="svg_8">E</text>
+        <g stroke="null" stroke-width="4" id="svg_9">
+            <line id="svg_10" y2="388.53055" x2="196.05672" y1="388.34385" x1="178.69242" fill="#000" stroke="#000"/>
+        </g>
     </g>
     <g id="wirral">
         <text font-weight="bold" xml:space="preserve" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="39" id="svg_31" y="462.20997" x="201.76177" fill="#ffffff" transform="matrix(0.801245885957119,0,0,0.9254378315184513,52.182838277747734,44.16824071473468) " stroke="#ffffff">WIRRAL</text>

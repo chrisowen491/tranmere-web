@@ -237,8 +237,13 @@ GitHub Actions deploys the Cloudflare runtime and its supporting services:
 - Changes under `packages/tidy` deploy its maintenance Worker.
 - `packages/scheduled-task` runs at 23:00 UTC daily, rebuilds the D1
   `PlayerSeasonSummaries`, `HatTricks`, and `PlayerMilestones` tables, then
-  rebuilds the D1 FTS5 search index for every player, club and recorded season.
+  rebuilds the D1 FTS5 search index for every player, club, recorded season,
+  published Contentful article and centrally defined static archive page.
   Player and club admin mutations also update their search documents immediately.
+  Its `CF_SPACE` and `CF_KEY` Worker secrets provide read-only access to the
+  published Contentful catalogue during this reconciliation. Local `dev` runs
+  load those same variable names from `packages/site/.env.local`; deployed runs
+  still require them to be configured as Cloudflare Worker secrets.
 - `packages/mcp` has its own Cloudflare Worker build and deployment lifecycle;
   it binds directly to the production D1 database and uses Auth0 environment
   configuration.
