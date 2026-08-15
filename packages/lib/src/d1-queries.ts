@@ -7,4 +7,5 @@
 export * from './d1-queries/catalogue';
 export * from './d1-queries/matches';
 export * from './d1-queries/player-statistics';
+export * from './d1-queries/search';
 export type { D1DatabaseReader } from './d1-queries/shared';

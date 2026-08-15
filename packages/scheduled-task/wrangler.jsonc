@@ -7,10 +7,6 @@
     // Cloudflare Cron Triggers use UTC, which is GMT outside British Summer Time.
     "crons": ["0 23 * * *"]
   },
-  "vars": {
-    "ALGOLIA_APPLICATION_ID": "DZJXSVOWI3",
-    "ALGOLIA_INDEX_NAME": "TranmereWeb"
-  },
   "d1_databases": [
     {
       "binding": "DB", // i.e. available in your Worker on env.DB

@@ -110,7 +110,8 @@ export async function querySearchIndexClubRows(db: D1DatabaseReader) {
   return (
     await all<SearchIndexClubRow>(
       db,
-      `SELECT id, name FROM Clubs ORDER BY name ASC, id ASC`,
+      `SELECT id, name, short_name, three_letter_name, nicknames
+       FROM Clubs ORDER BY name ASC, id ASC`,
       []
     )
   ).results;

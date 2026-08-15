@@ -11,6 +11,7 @@ import {
 } from "@/lib/clubs";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { NextRequest, NextResponse } from "next/server";
+import { upsertClubSearchEntry } from "@/lib/searchIndex";
 
 interface ClubRequest {
   id?: string;
@@ -91,6 +92,8 @@ export async function POST(request: NextRequest) {
       crypto.randomUUID(),
       club,
     );
+    if (!created) return adminError("The club could not be created.", 500);
+    await upsertClubSearchEntry(getCloudflareContext().env.DB, created);
     revalidateAdminPaths(["/head-to-head", "/results", "/transfer-central"]);
     return NextResponse.json({ club: created }, { status: 201 });
   } catch (cause) {
@@ -118,6 +121,8 @@ export async function PATCH(request: NextRequest) {
 
   try {
     const updated = await updateClub(db, body.id, club);
+    if (!updated) return adminError("The club could not be updated.", 500);
+    await upsertClubSearchEntry(db, updated);
     revalidateAdminPaths(["/head-to-head", "/results", "/transfer-central"]);
     return NextResponse.json({ club: updated });
   } catch (cause) {

@@ -10,6 +10,7 @@ import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { PLAYER_POSITIONS } from "@tranmere-web/lib/src/player-constants";
 import { revalidatePath } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
+import { upsertPlayerSearchEntry } from "@/lib/searchIndex";
 
 const positions = new Set<string>(PLAYER_POSITIONS);
 const feet = new Set(["Left", "Right"]);
@@ -118,6 +119,8 @@ export async function POST(request: NextRequest) {
   const created = await createPlayer(db, player);
   if (!created) return error("The player could not be created.", 500);
 
+  await upsertPlayerSearchEntry(db, created);
+
   revalidatePlayerPages(created.name);
   return NextResponse.json({ player: created }, { status: 201 });
 }
@@ -138,6 +141,8 @@ export async function PATCH(request: NextRequest) {
   if (!existing) return error("That player could not be found.", 404);
 
   const updated = await updatePlayer(db, body.id, player);
+  if (!updated) return error("The player could not be updated.", 500);
+  await upsertPlayerSearchEntry(db, updated);
   revalidatePlayerPages(existing.name);
   if (existing.name !== player.name) {
     revalidatePlayerPages(player.name);

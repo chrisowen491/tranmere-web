@@ -10,43 +10,43 @@ data ownership and system boundaries.
 | -------------------- | ---------------------- | ------------------------------------------------------------------------------------------- |
 | Archive landing page | `/`                    | Promotes the match, player, shirt, season, manager, transfer and editorial archives.        |
 | On this day          | `/`                    | Shows a historic same-date fixture with teams, score and a programme where one is recorded. |
-| Site search          | Header search          | Algolia-backed search across indexed archive content.                                       |
+| Site search          | Header search          | D1/FTS5 autocomplete across players, clubs and seasons, with exact and prefix ranking.      |
 | Dynamic sitemap      | `/dynamic-sitemap.xml` | Adds database-backed archive pages to the generated XML sitemaps.                           |
 
 ## Matches, Results and Seasons
 
-| Feature             | Route                      | Summary                                                                                                                                                       |
-| ------------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Results archive     | `/results`                 | Searches and filters the D1-backed results archive by season, competition, opponent and manager, with a visual overall record summary.                        |
-| Match record        | `/match/[season]/[date]`   | Uses D1 match facts, report, player apps and goals to show score, programme, attendance, formation-aware team sheet, cards, comments and ratings.             |
-| Matchday milestones | `/match/[season]/[date]`   | Flags player debuts, final appearances, first goals, hat-tricks and managerial first or last matches.                                                        |
-| Last time we met    | `/match/[season]/[date]`   | Links each match to the immediately preceding recorded meeting with the same opposition and its complete head-to-head archive.                                |
-| Season index        | `/seasons`                 | Lists recorded seasons by decade, highlights honours and relegations, and excludes wartime seasons without matches.                                           |
-| Season review       | `/season/[season]`         | Combines D1 results, squad statistics, most-used XI, manager, transfers, shirt and a month-by-month season timeline.                                         |
-| Honours archive     | `/honours`                 | Collects titles, promotions, play-off triumphs, landmark cup runs and relegations with links to the relevant season archive.                                  |
-| Head-to-head index  | `/head-to-head`            | Provides an opponent tag cloud linking to complete club records.                                                                                              |
-| Opponent record     | `/games/[club]`            | Shows the full match history against a selected opponent.                                                                                                     |
-| FA Cup archive      | `/results/fa-cup`          | Summarises runs, rounds reached, notable matches, records and programme covers.                                                                               |
-| League Cup archive  | `/results/league-cup`      | Summarises League Cup progress, notable runs, records and programme covers.                                                                                   |
-| Penalty shootouts   | `/games/penalty-shootouts` | Presents every recorded shootout with match links and outcomes.                                                                                               |
-| Wembley archive     | `/games/at-wembley`        | Presents every recorded Tranmere match at Wembley.                                                                                                            |
-| Highest attendances | `/results/top-attendances` | Ranks the top 50 crowds and includes programme covers where available.                                                                                        |
+| Feature             | Route                      | Summary                                                                                                                                           |
+| ------------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Results archive     | `/results`                 | Searches and filters the D1-backed results archive by season, competition, opponent and manager, with a visual overall record summary.            |
+| Match record        | `/match/[season]/[date]`   | Uses D1 match facts, report, player apps and goals to show score, programme, attendance, formation-aware team sheet, cards, comments and ratings. |
+| Matchday milestones | `/match/[season]/[date]`   | Flags player debuts, final appearances, first goals, hat-tricks and managerial first or last matches.                                             |
+| Last time we met    | `/match/[season]/[date]`   | Links each match to the immediately preceding recorded meeting with the same opposition and its complete head-to-head archive.                    |
+| Season index        | `/seasons`                 | Lists recorded seasons by decade, highlights honours and relegations, and excludes wartime seasons without matches.                               |
+| Season review       | `/season/[season]`         | Combines D1 results, squad statistics, most-used XI, manager, transfers, shirt and a month-by-month season timeline.                              |
+| Honours archive     | `/honours`                 | Collects titles, promotions, play-off triumphs, landmark cup runs and relegations with links to the relevant season archive.                      |
+| Head-to-head index  | `/head-to-head`            | Provides an opponent tag cloud linking to complete club records.                                                                                  |
+| Opponent record     | `/games/[club]`            | Shows the full match history against a selected opponent.                                                                                         |
+| FA Cup archive      | `/results/fa-cup`          | Summarises runs, rounds reached, notable matches, records and programme covers.                                                                   |
+| League Cup archive  | `/results/league-cup`      | Summarises League Cup progress, notable runs, records and programme covers.                                                                       |
+| Penalty shootouts   | `/games/penalty-shootouts` | Presents every recorded shootout with match links and outcomes.                                                                                   |
+| Wembley archive     | `/games/at-wembley`        | Presents every recorded Tranmere match at Wembley.                                                                                                |
+| Highest attendances | `/results/top-attendances` | Ranks the top 50 crowds and includes programme covers where available.                                                                            |
 
 ## Players
 
-| Feature                 | Route                            | Summary                                                                                                             |
-| ----------------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| Player index and search | `/players`                       | Shows the leading 50 players by default; searches every player and filters the archive by season, primary or secondary position.                              |
-| Player profile          | `/page/player/[name]`            | Shows biography, avatar, personal information, season statistics, appearances, transfers and related archive links. |
-| Player records          | `/players/records/[record]`      | Covers aggregate records such as appearances, goals and disciplinary statistics.                                    |
-| Top scorers by season   | `/players/top-scorers-by-season` | Lists each season's leading scorer.                                                                                 |
-| Lethal finishers        | `/players/lethal-finishers`      | Ranks players by goals per appearance.                                                                              |
-| Misfiring strikers      | `/players/misfiring-strikers`    | Ranks eligible strikers using appearances, substitute appearances, goals and red cards.                             |
-| Super subs              | `/players/super-subs`            | Ranks players by substitute appearances.                                                                            |
-| Hat-trick archive       | `/players/hat-tricks`            | Lists recorded hat-tricks and links them to matches and players.                                                    |
-| Partnership explorer    | `/players/partnerships`          | Autocompletes two players and analyses matches and results when they played together.                               |
-| Cult hero index         | `/players/cult-heroes`            | Editorial-style player discovery for one-club spells, comebacks, substitute specialists, cup heroes and promotion contributors. |
-| Promotion squads        | `/players/promotion-squads`      | Reintroduces the managers and most-used players behind promotion and play-off-winning campaigns.                    |
+| Feature                 | Route                            | Summary                                                                                                                          |
+| ----------------------- | -------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| Player index and search | `/players`                       | Shows the leading 50 players by default; searches every player and filters the archive by season, primary or secondary position. |
+| Player profile          | `/page/player/[name]`            | Shows biography, avatar, personal information, season statistics, appearances, transfers and related archive links.              |
+| Player records          | `/players/records/[record]`      | Covers aggregate records such as appearances, goals and disciplinary statistics.                                                 |
+| Top scorers by season   | `/players/top-scorers-by-season` | Lists each season's leading scorer.                                                                                              |
+| Lethal finishers        | `/players/lethal-finishers`      | Ranks players by goals per appearance.                                                                                           |
+| Misfiring strikers      | `/players/misfiring-strikers`    | Ranks eligible strikers using appearances, substitute appearances, goals and red cards.                                          |
+| Super subs              | `/players/super-subs`            | Ranks players by substitute appearances.                                                                                         |
+| Hat-trick archive       | `/players/hat-tricks`            | Lists recorded hat-tricks and links them to matches and players.                                                                 |
+| Partnership explorer    | `/players/partnerships`          | Autocompletes two players and analyses matches and results when they played together.                                            |
+| Cult hero index         | `/players/cult-heroes`           | Editorial-style player discovery for one-club spells, comebacks, substitute specialists, cup heroes and promotion contributors.  |
+| Promotion squads        | `/players/promotion-squads`      | Reintroduces the managers and most-used players behind promotion and play-off-winning campaigns.                                 |
 
 ## Managers, Clubs and Transfers
 

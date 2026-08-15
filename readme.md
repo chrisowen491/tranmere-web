@@ -18,7 +18,8 @@ The website is a TypeScript Yarn Classic monorepo running on Cloudflare:
   administration, corrections, comments, ratings and programme records.
 - Cloudflare Email Sending delivers contact-form messages to the configured
   `AUTH0_ADMIN_EMAIL` recipient.
-- Contentful remains the editorial CMS and Algolia powers site search.
+- Contentful remains the editorial CMS. Site search uses a materialized D1
+  index with SQLite FTS5 across players, clubs and seasons.
 - Cloudflare Workers host the MCP services and scheduled summary rebuilds.
 
 The only remaining AWS-backed API capability is the legacy GraphQL endpoint.
@@ -58,14 +59,14 @@ yarn workspace @tranmere-web/site build
 
 ## Repository guide
 
-| Workspace | Responsibility |
-| --- | --- |
-| `packages/site` | Public site, internal route handlers and admin UI |
-| `packages/lib` | Shared domain types, D1 types and reusable SQL reads |
-| `packages/sql` | D1 schema, migrations, imports and database commands |
-| `packages/mcp` | Public and Auth0-protected Cloudflare MCP servers and MCP Apps UI |
-| `packages/scheduled-task` | Daily D1 summary/milestone rebuild and Algolia search-index worker |
-| `packages/api-stack` | Temporary legacy GraphQL infrastructure pending removal |
+| Workspace                 | Responsibility                                                    |
+| ------------------------- | ----------------------------------------------------------------- |
+| `packages/site`           | Public site, internal route handlers and admin UI                 |
+| `packages/lib`            | Shared domain types, D1 types and reusable SQL reads              |
+| `packages/sql`            | D1 schema, migrations, imports and database commands              |
+| `packages/mcp`            | Public and Auth0-protected Cloudflare MCP servers and MCP Apps UI |
+| `packages/scheduled-task` | Daily D1 summary, milestone and site-search index worker          |
+| `packages/api-stack`      | Temporary legacy GraphQL infrastructure pending removal           |
 
 Do not run remote database or deployment commands unless the change has been
 explicitly approved. See [AGENTS.md](AGENTS.md) for contributor conventions.

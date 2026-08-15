@@ -1,14 +1,11 @@
-import { updateAlgoliaSearchIndex } from './updateAlgoliaSearchIndex';
 import { runSettledJobs, type ScheduledJob } from './runSettledJobs';
 import { rebuildHatTricks } from './updateHatTricks';
 import { rebuildPlayerMilestones } from './updatePlayerMilestones';
 import { rebuildPlayerSeasonSummaries } from './updatePlayerSeasonSummaries';
+import { rebuildSearchIndex } from './updateSearchIndex';
 
 export interface Env {
   DB: D1Database;
-  ALGOLIA_API_KEY?: string;
-  ALGOLIA_APPLICATION_ID: string;
-  ALGOLIA_INDEX_NAME: string;
 }
 
 /**
@@ -39,19 +36,10 @@ export async function runDailyTask(env: Env): Promise<void> {
       }
     },
     {
-      name: 'algolia-search-index',
+      name: 'search-index',
       run: async () => {
-        if (!env.ALGOLIA_API_KEY) {
-          throw new Error(
-            'ALGOLIA_API_KEY is not configured for the scheduled task Worker.'
-          );
-        }
-        const result = await updateAlgoliaSearchIndex(env.DB, {
-          applicationId: env.ALGOLIA_APPLICATION_ID,
-          apiKey: env.ALGOLIA_API_KEY,
-          indexName: env.ALGOLIA_INDEX_NAME
-        });
-        return `Uploaded ${result.uploaded} Algolia records (${result.players} players, ${result.clubs} clubs and ${result.seasons} seasons).`;
+        const result = await rebuildSearchIndex(env.DB);
+        return `Rebuilt ${result.indexed} search records (${result.players} players, ${result.clubs} clubs and ${result.seasons} seasons).`;
       }
     }
   ];

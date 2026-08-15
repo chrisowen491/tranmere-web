@@ -1,28 +1,7 @@
 <svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
-  <g id="collar">
-    <path
-      d="M225 307 L255.5 372 L286 307"
-      fill="none"
-      stroke="#0000ff"
-      stroke-width="12"
-      stroke-linecap="butt"
-      stroke-linejoin="miter"
-    />
-    <path
-      d="M225 307 L255.5 372 L286 307"
-      fill="none"
-      stroke="#ffffff"
-      stroke-width="6"
-      stroke-linecap="butt"
-      stroke-linejoin="miter"
-    />
-    <path
-      d="M225 307 L255.5 372 L286 307"
-      fill="none"
-      stroke="#0000ff"
-      stroke-width="2"
-      stroke-linecap="butt"
-      stroke-linejoin="miter"
-    />
+  <g stroke="null" id="collar">
+   <path stroke="#0000ff" id="svg_22" stroke-width="12" fill="none" d="m202,317l53,46l53,-46"/>
+   <path stroke="#ffffff" id="svg_23" stroke-width="6" fill="none" d="m202,317l53,46l53,-46"/>
+   <path stroke="#0000ff" id="svg_24" stroke-width="2" fill="none" d="m202,317l53,46l53,-46"/>
   </g>
 </svg>

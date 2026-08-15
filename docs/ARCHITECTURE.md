@@ -69,7 +69,7 @@ The root is a Yarn Classic workspace using Node.js 24.
 | `packages/tools`          | Reusable AI tools for matches, players, teams, results, lineups, managers, and transfers      |
 | `packages/mcp`            | Auth0-protected Cloudflare MCP server exposing read-only D1 and match API tools               |
 | `packages/vectorize`      | Worker for creating and querying player biography embeddings                                  |
-| `packages/scheduled-task` | Daily Worker that rebuilds D1 summaries/milestones and refreshes Algolia search records       |
+| `packages/scheduled-task` | Daily Worker that rebuilds D1 summaries, milestones and the materialized site-search index    |
 | `packages/sql`            | D1 schema, migrations, generated imports, and database commands                               |
 
 `packages/site` is the main user-facing system. The other workspaces provide
@@ -106,7 +106,7 @@ configuration provides:
 - the custom domain `www.tranmere-web.com`.
 
 Contentful and YouTube are called directly from server-side site code for
-editorial content, images, shirts, and video playlists. 
+editorial content, images, shirts, and video playlists.
 
 ## D1 data services
 
@@ -140,15 +140,15 @@ write operations remain in `packages/site`.
 
 The system separates editorial content from structured football statistics:
 
-| Data                                                                                  | System of record                  | Typical consumers                      |
-| ------------------------------------------------------------------------------------- | --------------------------------- | -------------------------------------- |
-| Articles, shirt content, and editorial media                                          | Contentful                        | Next.js pages                          |
-| Players, biographies, clubs, managers, transfers, games, match reports and programmes | Cloudflare D1                     | Site pages, administration, and MCP    |
-| Comments, ratings, corrections, and Next.js cache tags                                | Cloudflare D1                     | Site routes, admin pages, and OpenNext |
+| Data                                                                                  | System of record                  | Typical consumers                          |
+| ------------------------------------------------------------------------------------- | --------------------------------- | ------------------------------------------ |
+| Articles, shirt content, and editorial media                                          | Contentful                        | Next.js pages                              |
+| Players, biographies, clubs, managers, transfers, games, match reports and programmes | Cloudflare D1                     | Site pages, administration, and MCP        |
+| Comments, ratings, corrections, and Next.js cache tags                                | Cloudflare D1                     | Site routes, admin pages, and OpenNext     |
 | Appearances, goals, player-season summaries and hat-tricks                            | Cloudflare D1                     | Site pages, admin tools and scheduled task |
-| Incremental-render cache                                                              | Cloudflare R2 and Durable Objects | OpenNext runtime                       |
-| Player biography embeddings                                                           | Cloudflare Vectorize              | Experimental semantic search           |
-| Static images, fonts, charts, and builder assets                                      | `packages/site/public`            | Browser via the site Worker            |
+| Incremental-render cache                                                              | Cloudflare R2 and Durable Objects | OpenNext runtime                           |
+| Player biography embeddings                                                           | Cloudflare Vectorize              | Experimental semantic search               |
+| Static images, fonts, charts, and builder assets                                      | `packages/site/public`            | Browser via the site Worker                |
 
 Shared interfaces in `packages/lib/src/tranmere-web-types.ts` describe the
 football domain across packages. D1 row types and reusable SQL reads are also
@@ -237,9 +237,8 @@ GitHub Actions deploys the Cloudflare runtime and its supporting services:
 - Changes under `packages/tidy` deploy its maintenance Worker.
 - `packages/scheduled-task` runs at 23:00 UTC daily, rebuilds the D1
   `PlayerSeasonSummaries`, `HatTricks`, and `PlayerMilestones` tables, then
-  updates Algolia records for every D1 player, club, and recorded season. Its
-  Algolia write key is stored as the `ALGOLIA_API_KEY` Worker secret (set with
-  `yarn workspace @tranmere-web/scheduled-task wrangler secret put ALGOLIA_API_KEY`).
+  rebuilds the D1 FTS5 search index for every player, club and recorded season.
+  Player and club admin mutations also update their search documents immediately.
 - `packages/mcp` has its own Cloudflare Worker build and deployment lifecycle;
   it binds directly to the production D1 database and uses Auth0 environment
   configuration.

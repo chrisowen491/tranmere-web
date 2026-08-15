@@ -35,10 +35,38 @@ export interface SearchIndexPlayerRow {
 export interface SearchIndexClubRow {
   id: string;
   name: string;
+  short_name: string | null;
+  three_letter_name: string | null;
+  nicknames: string | null;
 }
 
 export interface SearchIndexSeasonRow {
   season: number;
+}
+
+export type SearchEntityType = 'player' | 'club' | 'season';
+
+export interface SearchDocument {
+  objectId: string;
+  entityType: SearchEntityType;
+  entityId: string;
+  title: string;
+  normalizedTitle: string;
+  aliases: string;
+  description: string;
+  href: string;
+  imageUrl: string | null;
+  rankingWeight: number;
+}
+
+export interface SearchResultRow {
+  object_id: string;
+  entity_type: SearchEntityType;
+  entity_id: string;
+  title: string;
+  description: string;
+  href: string;
+  image_url: string | null;
 }
 
 export interface TransferRow {
