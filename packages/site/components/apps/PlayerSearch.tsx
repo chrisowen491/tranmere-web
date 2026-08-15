@@ -87,7 +87,7 @@ export function PlayerSearch(props: {
       const search = new URLSearchParams({
         cursor: String(cursor),
         limit: "50",
-        sort: "Starts",
+        sort: props.sort || "Starts",
       });
       if (nextQuery) search.set("query", nextQuery);
       else if (nextSeason) search.set("season", nextSeason);

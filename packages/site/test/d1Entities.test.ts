@@ -267,6 +267,25 @@ describe("D1 queries", () => {
     expect(mock.boundValues).toEqual([["Wrexham", "2026-08-01", 2]]);
   });
 
+  it("finds the latest completed game without selecting an unplayed fixture", async () => {
+    const mock = databaseReturning([]);
+
+    await queryGameRows(mock.db, {
+      dateTo: "2026-08-15",
+      playedOnly: true,
+      sort: "date-desc",
+      limit: 1,
+    });
+
+    const sql = String(mock.prepare.mock.calls[0][0]);
+    expect(sql).toContain("match_date <= ?");
+    expect(sql).toContain(
+      "full_time_score IS NOT NULL AND TRIM(full_time_score) <> ''",
+    );
+    expect(sql).toContain("ORDER BY match_date DESC");
+    expect(mock.boundValues).toEqual([["2026-08-15", 1]]);
+  });
+
   it("loads only the first and last match dates for a managerial tenure", async () => {
     const mock = databaseReturning([
       {

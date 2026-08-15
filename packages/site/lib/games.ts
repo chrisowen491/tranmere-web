@@ -131,6 +131,16 @@ export async function getGameBySeasonAndDate(
   return row ? mapGame(row) : null;
 }
 
+export async function getLatestPlayedGame(db: D1Database, dateTo: string) {
+  const [row] = await queryGameRows(db, {
+    dateTo,
+    playedOnly: true,
+    sort: "date-desc",
+    limit: 1,
+  });
+  return row ? mapGame(row) : null;
+}
+
 export async function getMatchReport(db: D1Database, date: string) {
   return queryMatchReportRow(db, date);
 }

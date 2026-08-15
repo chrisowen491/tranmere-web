@@ -14,7 +14,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { GetOnThisDay, GetYear } from "@tranmere-web/lib/src/apiFunctions";
 import type { Match } from "@tranmere-web/lib/src/tranmere-web-types";
-import { getGameBySeasonAndDate } from "@/lib/games";
+import { getGameBySeasonAndDate, getLatestPlayedGame } from "@/lib/games";
 import { getAllArticles, getAllShirts } from "@/lib/api";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { getUniquePlayers, type PlayerRecord } from "@/lib/players";
@@ -131,6 +131,24 @@ function PromoPlayer({ player }: { player: PlayerRecord }) {
   );
 }
 
+function matchOutcome(match: Match) {
+  const roversGoals = match.location === "H" ? match.hgoal : match.vgoal;
+  const oppositionGoals = match.location === "H" ? match.vgoal : match.hgoal;
+  return roversGoals > oppositionGoals
+    ? "W"
+    : roversGoals < oppositionGoals
+      ? "L"
+      : "D";
+}
+
+function matchVenueLabel(match: Match) {
+  return match.location === "H"
+    ? "Home"
+    : match.location === "N"
+      ? "Neutral"
+      : "Away";
+}
+
 export default async function Home() {
   const env = (await getCloudflareContext({ async: true })).env;
   const now = new Date();
@@ -144,13 +162,17 @@ export default async function Home() {
     month: "long",
     timeZone: "Europe/London",
   }).format(now);
+  const today = now.toISOString().slice(0, 10);
 
-  const [players, onThisDay, shirts, articles] = await Promise.all([
-    getUniquePlayers(env.DB),
-    GetOnThisDay(env.DB),
-    getAllShirts(),
-    getAllArticles(4),
-  ]);
+  const [players, onThisDay, shirts, articles, latestMatch] = await Promise.all(
+    [
+      getUniquePlayers(env.DB),
+      GetOnThisDay(env.DB),
+      getAllShirts(),
+      getAllArticles(4),
+      getLatestPlayedGame(env.DB, today),
+    ],
+  );
 
   const playersWithImages = players.filter(
     (player) =>
@@ -189,6 +211,16 @@ export default async function Home() {
   const matchProgramme = onThisDay?.programme
     ? `https://img.tranmere-web.com/${onThisDay.programme}`
     : null;
+  const latestMatchHref = latestMatch
+    ? `/match/${latestMatch.season}/${latestMatch.date}`
+    : "/results";
+  const latestOutcome = latestMatch ? matchOutcome(latestMatch) : null;
+  const latestOutcomeClasses =
+    latestOutcome === "W"
+      ? "border-l-emerald-500 bg-emerald-600 hover:bg-emerald-700"
+      : latestOutcome === "L"
+        ? "border-l-rose-500 bg-rose-600 hover:bg-rose-700"
+        : "border-l-amber-400 bg-amber-500 hover:bg-amber-600";
 
   return (
     <main className="bg-[#f4f0e8] text-[#071a2b]">
@@ -327,6 +359,58 @@ export default async function Home() {
           </div>
         </div>
       </section>
+
+      {latestMatch && (
+        <section className="border-b border-[#071a2b]/15 bg-[#fffdf8]">
+          <div className="mx-auto max-w-7xl px-6 py-8 sm:px-10 lg:px-12 lg:py-10">
+            <div className="grid overflow-hidden border border-[#071a2b]/15 bg-[#e8e2d6] shadow-[5px_5px_0_rgba(7,26,43,0.08)] lg:grid-cols-[0.72fr_1.28fr_auto]">
+              <div className="border-b border-[#071a2b]/15 p-5 lg:border-b-0 lg:border-r lg:p-6">
+                <p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-700">
+                  Latest result
+                </p>
+                <p className="mt-3 font-mono text-xs uppercase tracking-[0.12em] text-[#071a2b]/50">
+                  {new Date(`${latestMatch.date}T12:00:00Z`).toLocaleDateString(
+                    "en-GB",
+                    { day: "numeric", month: "long", year: "numeric" },
+                  )}
+                </p>
+                <div className="mt-4 flex flex-wrap gap-2 font-mono text-[10px] font-bold uppercase tracking-[0.12em]">
+                  <span className="bg-[#fffdf8] px-2 py-1">
+                    {matchVenueLabel(latestMatch)}
+                  </span>
+                  <span className="border border-[#071a2b]/15 px-2 py-1 text-[#071a2b]/55">
+                    {latestMatch.competition}
+                  </span>
+                </div>
+              </div>
+
+              <div className="grid items-center gap-4 p-5 sm:grid-cols-[1fr_auto_1fr] lg:p-6">
+                <p className="font-display text-2xl font-semibold tracking-[-0.025em] sm:text-right sm:text-3xl">
+                  {latestMatch.home}
+                </p>
+                <Link
+                  href={latestMatchHref}
+                  aria-label={`Open match report for ${latestMatch.home} ${latestMatch.ft} ${latestMatch.visitor}`}
+                  className={`inline-flex min-w-28 items-center justify-center border-l-4 px-5 py-3 font-mono text-2xl font-bold text-white transition ${latestOutcomeClasses}`}
+                >
+                  {latestMatch.ft}
+                </Link>
+                <p className="font-display text-2xl font-semibold tracking-[-0.025em] sm:text-3xl">
+                  {latestMatch.visitor}
+                </p>
+              </div>
+
+              <Link
+                href={latestMatchHref}
+                className="group flex items-center justify-between gap-5 border-t border-[#071a2b]/15 bg-[#071a2b] px-5 py-4 text-sm font-bold text-white transition hover:bg-blue-700 lg:min-w-56 lg:border-l lg:border-t-0 lg:px-6"
+              >
+                Read match report
+                <ArrowRightIcon className="h-4 w-4 transition group-hover:translate-x-1" />
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
 
       <section className="border-b border-[#071a2b]/15">
         <div className="mx-auto max-w-7xl px-6 py-16 sm:px-10 lg:px-12 lg:py-24">

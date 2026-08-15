@@ -5,6 +5,8 @@ import { SlugParams } from "@/lib/types";
 import { getPlayerStatistics } from "@/lib/playerStatistics";
 import { pageMetadata } from "@/lib/seo";
 
+const PLAYER_RECORD_PAGE_SIZE = 50;
+
 export async function generateMetadata(props: { params: SlugParams }) {
   const params = await props.params;
   let description: string | null = null;
@@ -52,10 +54,13 @@ export default async function PlayerSearchPage(props: { params: SlugParams }) {
     title = "Player Stats - Season " + params.slug;
   }
 
+  const shouldPaginate =
+    params.slug === "most-appearances" || params.slug === "top-scorers";
   const players = await getPlayerStatistics(env.DB, {
     season,
     sort,
     filter,
+    limit: shouldPaginate ? PLAYER_RECORD_PAGE_SIZE : undefined,
   });
 
   return (

@@ -17,6 +17,7 @@ export interface GameQueryOptions {
   limit?: number;
   offset?: number;
   includeKit?: boolean;
+  playedOnly?: boolean;
 }
 
 export interface GameDateRangeBounds {
@@ -74,6 +75,11 @@ export async function queryGameRows(
   if (options.dateTo) {
     conditions.push('match_date <= ?');
     values.push(options.dateTo);
+  }
+  if (options.playedOnly) {
+    conditions.push(
+      "full_time_score IS NOT NULL AND TRIM(full_time_score) <> ''"
+    );
   }
   const orderBy =
     options.sort === 'attendance-desc'
