@@ -1,17 +1,27 @@
 <svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
-
+ <defs>
+  <pattern id="navy-checker-cuff" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="matrix(1,0,0,1,0.6666644215583801,9.583359777927399)">
+   <rect width="4" height="4" fill="#123f69" id="svg_1"/>
+   <rect x="4" y="4" width="4" height="4" fill="#123f69" id="svg_3"/>
+  </pattern>
+ </defs>
 
   <g id="shirt">
-    <g id="Chest">
-     <path fill="#ffffff" d="m255.74181,315.69455l44,0l98.846,21.37263c27.533,5.95356 47.154,30.01046 47.154,57.81806l0,84.5691l-66,0l0,32.55466l-124,0l-124,0l0,-32.55466l-66,0l0,-84.5691c0,-27.80661 19.621,-51.8645 47.154,-57.81806l98.846,-21.37263l44,0z" id="svg_2"/>
-    </g>
-
+   <g id="Chest">
+    <path fill="#ffffff" d="m255.74181,315.69455l44,0l98.846,21.37263c27.533,5.95356 47.154,30.01046 47.154,57.81806l0,84.5691l-66,0l0,32.55466l-124,0l-124,0l0,-32.55466l-66,0l0,-84.5691c0,-27.80661 19.621,-51.8645 47.154,-57.81806l98.846,-21.37263l44,0z" id="svg_2"/>
+   </g>
+  </g>
+  <g id="sleeve-cuffs">
+   <path d="m65.75,469.25l66,0" fill="none" stroke="#d4d8d8" id="svg_46"/>
+   <path d="m379.75,469.25l66,0" fill="none" stroke="#d4d8d8" id="svg_47"/>
+   <path d="m68.5,470.79168l62,0l0,8l-62,0l0,-8z" fill="url(#navy-checker-cuff)" id="svg_6"/>
+   <path d="m382.16667,470.79168l62,0l0,8l-62,0l0,-8z" fill="url(#navy-checker-cuff)" id="svg_7"/>
   </g>
   <g id="kitmaker">
-    <text fill="#070753" stroke-width="0" stroke-opacity="null" x="222.29078" y="514.68735" font-size="48" font-family="Helvetica, Arial, sans-serif" xml:space="preserve" transform="matrix(0.687805 0 0 0.672727 23.1073 70.6756)" stroke="#0000ff" id="svg_8">E</text>
-    <g stroke="null" stroke-width="4" id="svg_9">
-        <line id="svg_10" y2="388.53055" x2="196.05672" y1="388.34385" x1="178.69242" fill="#ff0000" stroke="#ff0000"/>
-    </g>
+   <text fill="#070753" stroke-width="0" stroke-opacity="null" x="222.29078" y="514.68735" font-size="48" font-family="Helvetica, Arial, sans-serif" xml:space="preserve" transform="matrix(0.687805 0 0 0.672727 23.1073 70.6756)" stroke="#0000ff" id="svg_8">E</text>
+   <g stroke="null" stroke-width="4" id="svg_9">
+    <line id="svg_10" y2="388.53055" x2="196.05672" y1="388.34385" x1="178.69242" fill="#ff0000" stroke="#ff0000"/>
+   </g>
   </g>
   <g id="crest">
    <g fill="#000000" transform="translate(0,700) scale(0.10000000149011612,-0.10000000149011612) " stroke="null" id="svg_11">

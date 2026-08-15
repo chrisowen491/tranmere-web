@@ -1,4 +1,10 @@
 <svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+    <pattern id="navy-checker-cuff" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="matrix(1,0,0,1,0.6666644215583801,9.583359777927399)">
+    <rect width="4" height="4" fill="#4169E1" id="svg_1"/>
+    <rect x="4" y="4" width="4" height="4" fill="#4169E1" id="svg_3"/>
+    </pattern>
+    </defs>
     <g id="shirt">
         <g id="chest">
             <path fill="#ffffff" d="m255.74181,313.00899l44,0l98.846,21.665c27.533,6.035 47.154,30.421 47.154,58.609l0,85.726l-66,0l0,33l-124,0l-124,0l0,-33l-66,0l0,-85.726c0,-28.187 19.621,-52.574 47.154,-58.609l98.846,-21.665l44,0z"/>
@@ -35,14 +41,14 @@
             <path d="m3584.30613,3727.29364c0,-3.57647 0.18657,-4.22674 1.8035,-5.65733c0.99503,-0.9754 2.23883,-3.18631 2.86072,-5.26717c1.11941,-3.51145 1.11941,-3.51145 1.92788,-1.9508c0.49752,0.91038 0.93284,3.96664 1.05722,6.82781c0.18657,4.68193 0.12438,5.00706 -0.6219,3.12129c-0.93284,-2.60107 -1.67912,-3.38139 -1.67912,-1.75572c-0.06219,2.6661 -3.48262,8.71359 -4.91298,8.71359c-0.24876,0 -0.49752,-1.82075 -0.43533,-4.03166l0.00001,-0.00001z" id="svg_28"/>
         </g>
     </g>
-    <g id="sleeves">
-        <line fill="none" stroke-width="4" fill-opacity="null" x1="84.96226" y1="438.04443" x2="109.03774" y2="492.86182" id="svg_47" stroke-dasharray="5,5" transform="rotate(113.0205307006836 96.99999999999999,465.453125) " stroke="#0000ff"/>
-        <line fill="none" stroke-width="4" fill-opacity="null" x1="399.0314" y1="433.42855" x2="422.96864" y2="490.47772" id="svg_48" stroke-dasharray="5,5" transform="rotate(113.0205307006836 411.00000000000006,461.95312499999994) " stroke="#0000ff"/>
+    <g id="sleeve-cuffs">
+        <path d="m68.5,470.79168l62,0l0,8l-62,0l0,-8z" fill="url(#navy-checker-cuff)" id="svg_6"/>
+        <path d="m382.16667,470.79168l62,0l0,8l-62,0l0,-8z" fill="url(#navy-checker-cuff)" id="svg_7"/>
     </g>
     <g id="kitmaker">
         <text fill="#070753" stroke-width="0" stroke-opacity="null" x="222.29078" y="514.68735" font-size="48" font-family="Helvetica, Arial, sans-serif" xml:space="preserve" transform="matrix(0.687805 0 0 0.672727 23.1073 70.6756)" stroke="#0000ff" id="svg_8">E</text>
         <g stroke="null" stroke-width="4" id="svg_9">
-            <line id="svg_10" y2="388.53055" x2="196.05672" y1="388.34385" x1="178.69242" fill="#ff0000" stroke="#ff0000"/>
+            <line id="svg_10" y2="388.53055" x2="198.05672" y1="388.34385" x1="177.69242" fill="#ff0000" stroke="#ff0000"/>
         </g>
     </g>
     <g id="wirral">

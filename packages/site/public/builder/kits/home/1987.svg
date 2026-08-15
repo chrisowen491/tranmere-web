@@ -4,13 +4,18 @@
     <g id="chest">
      <path fill="#ffffff" d="m255.74181,313.00899l44,0l98.846,21.665c27.533,6.035 47.154,30.421 47.154,58.609l0,85.726l-66,0l0,33l-124,0l-124,0l0,-33l-66,0l0,-85.726c0,-28.187 19.621,-52.574 47.154,-58.609l98.846,-21.665l44,0z"/>
     </g>
-    <line fill="none" stroke-width="1.5" x1="69" y1="468.45313" x2="128" y2="468.45313" stroke-dasharray="5,5" stroke="#0000ff"/>
-    <line fill="none" stroke-width="1.5" x1="383" y1="466.45313" x2="442" y2="466.45313" stroke-dasharray="5,5" stroke="#0000ff"/>
+
+    <g id="sleeves">
+        <line fill="none" stroke-width="10" x1="65" y1="475.45313" x2="131" y2="475.45313"  stroke="#123f69"/>
+        <line fill="none" stroke-width="10" x1="380" y1="475.45313" x2="446" y2="475.45313"  stroke="#123f69"/>
+        <line fill="none" stroke-width="2" x1="65" y1="475.45313" x2="131" y2="475.45313"  stroke="#fff"/>
+        <line fill="none" stroke-width="2" x1="380" y1="475.45313" x2="446" y2="475.45313"  stroke="#fff"/>
+    </g>
   </g>
    <g id="kitmaker">
     <text fill="#070753" stroke-width="0" stroke-opacity="null" x="222.29078" y="514.68735" font-size="48" font-family="Helvetica, Arial, sans-serif" xml:space="preserve" transform="matrix(0.687805 0 0 0.672727 23.1073 70.6756)" stroke="#0000ff" id="svg_8">E</text>
     <g stroke="null" stroke-width="4" id="svg_9">
-        <line id="svg_10" y2="388.53055" x2="196.05672" y1="388.34385" x1="178.69242" fill="#ff0000" stroke="#ff0000"/>
+        <line id="svg_10" y2="388.53055" x2="198.05672" y1="388.34385" x1="177.69242" fill="#ff0000" stroke="#ff0000"/>
     </g>
   </g>
   <g id="crest">
