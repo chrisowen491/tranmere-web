@@ -39,6 +39,12 @@ function isMissingMilestonesTable(error: unknown) {
   );
 }
 
+export function isCurrentManager(manager: ManagerRecord) {
+  return ["now", "now()", "present"].includes(
+    manager.dateLeft.trim().toLowerCase(),
+  );
+}
+
 async function getLegacyPlayerMilestones(
   db: D1Database,
   input: {
@@ -153,9 +159,7 @@ export async function getMatchMilestones(
         ? queryGameDateRangeBounds(
             db,
             input.manager.dateJoined,
-            ["now", "now()", "present"].includes(
-              input.manager.dateLeft.toLowerCase(),
-            )
+            isCurrentManager(input.manager)
               ? new Date().toISOString().slice(0, 10)
               : input.manager.dateLeft,
           )
@@ -231,7 +235,10 @@ export async function getMatchMilestones(
         label: "took charge for the first time",
       });
     }
-    if (managerGameBounds.last_match_date === input.matchDate) {
+    if (
+      !isCurrentManager(input.manager) &&
+      managerGameBounds.last_match_date === input.matchDate
+    ) {
       milestones.push({
         kind: "manager-last-game",
         name: input.manager.name,
