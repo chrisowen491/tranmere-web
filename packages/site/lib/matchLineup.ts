@@ -137,15 +137,15 @@ const formations: Record<ManagerFormation, FormationSlot[][]> = {
   ],
   "3-4-3": [
     [
-      { id: "forward-left", position: "Winger" },
+      { id: "forward-left", position: "Striker" },
       { id: "forward-centre", position: "Striker" },
-      { id: "forward-right", position: "Winger" },
+      { id: "forward-right", position: "Striker" },
     ],
     [
-      { id: "mid-left", position: "Left Back" },
+      { id: "mid-left", position: "Left Midfield" },
       { id: "mid-centre", position: "Central Midfielder" },
       { id: "mid-centre", position: "Central Midfielder" },
-      { id: "mid-right", position: "Right Back" },
+      { id: "mid-right", position: "Right Midfield" },
     ],
     [
       { id: "def-centre-left", position: "Central Defender" },
@@ -265,7 +265,9 @@ const fallbackScores: Record<Position, Partial<Record<Position, number>>> = {
   },
   "Central Defender": {
     "Central Defender": 100,
-    "Full Back": 80,
+    "Full Back": 70,
+    "Left Back": 70,
+    "Right Back": 70,
     "Central Midfielder": 55,
   },
   "Central Midfielder": {
