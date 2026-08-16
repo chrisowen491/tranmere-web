@@ -1,6 +1,4 @@
 <svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
-  <g id="collar">
-    <path stroke="#b2b2b2" d="m256,356l-30,30l-31.996,-70.056l17.996,-11.944l44,52z" fill="#008500"/>
-    <path stroke="#b2b2b2" d="m256,356l30,30l31.996,-70.056l-17.996,-11.944l-44,52z" fill="#008500"/>
-  </g>
-  </svg>  
+  <use href="#full-collar" style="--collar: #008500;--collar-base: #008500;" />
+</svg>  
+

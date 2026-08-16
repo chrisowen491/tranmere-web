@@ -15,8 +15,7 @@
     </g>
     <use href="#puma" fill="#000" /> 
     <use href="#simple-crest" y="15" />
-    <use href="#bandm" fill="#000" stroke="#000" />
-
+    <use href="#bandm" style="--logo-dark: #000; --logo-darker: #ffff00; --logo-light: #000; --logo-middle: #000"/> 
     <g>
         <path d="m131.25968,511.84762l-66,0l0,-33l66,0l0,33z" fill="#SKIN" />
     </g>

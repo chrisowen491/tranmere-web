@@ -17,6 +17,6 @@
     </g>
     
     <use href="#xara" fill="#0000bf" />
-    <use x="5" y="0"  href="#simple-crest"/>
+    <use x="5" y="0"  href="#simple-crest" style="--crest-light: #fff; --crest-dark: #0000bf;"/>
     <use href="#wirral" fill="#0000bf" />
 </svg>  

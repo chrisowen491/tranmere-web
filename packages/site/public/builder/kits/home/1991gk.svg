@@ -11,12 +11,7 @@
 
     <use href="#full-crest" />
     
-    <g id="kitmaker">
-        <text fill="#000" stroke-width="0" stroke-opacity="null" x="222.29078" y="514.68735" font-size="48" font-family="Helvetica, Arial, sans-serif" xml:space="preserve" transform="matrix(0.687805 0 0 0.672727 23.1073 70.6756)" stroke="#000" id="svg_8">E</text>
-        <g stroke="null" stroke-width="4" id="svg_9">
-            <line id="svg_10" y2="388.53055" x2="198.05672" y1="388.34385" x1="177.69242" fill="#000" stroke="#000"/>
-        </g>
-    </g>
+    <use href="#enkay" style="--line: #000;"/>
     <use href="#wirral" fill="#fff" />
 
     <g>

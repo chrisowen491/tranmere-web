@@ -13,5 +13,6 @@
 
     <use href="#puma" fill="#C26E14" /> 
     <use href="#crest-letters" fill="#C26E14" />
-    <use href="#bandm" fill="#C26E14" stroke="#C26E14" /> 
+    <use href="#bandm" style="--logo-dark: #C26E14; --logo-darker: #7A0E1F; --logo-light: #C26E14; --logo-middle: #C26E14"/> 
+    
    </svg>

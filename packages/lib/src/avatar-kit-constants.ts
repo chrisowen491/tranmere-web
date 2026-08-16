@@ -1,6 +1,7 @@
 export const AVATAR_KIT_OPTIONS = [
   { value: '2026', label: '2026-27 Home' },
   { value: '2026A', label: '2026-27 Away' },
+  { value: '2026T', label: '2026-27 Third' },
   { value: '2026gk', label: '2026-27 GK' },
   { value: '2025', label: '2025-26 Home' },
   { value: '2025A', label: '2025-26 Away' },
