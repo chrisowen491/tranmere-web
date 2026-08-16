@@ -303,6 +303,7 @@ const fallbackScores: Record<Position, Partial<Record<Position, number>>> = {
     Winger: 100,
     "Right Midfield": 80,
     "Left Midfield": 80,
+    Striker: 65,
     "Central Midfielder": 65,
     "Full Back": 40,
   },
