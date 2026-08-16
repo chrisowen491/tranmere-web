@@ -10,7 +10,7 @@
     <rect height="19" width="242" y="466.85313" x="137.2" stroke-width="20.5" fill="#007f00"/>
   </g>
 
-  <use href="#wirral" fill="#007f00" />
-  <use href="#full-crest" y="-12" /> 
+  <use href="#wirral" fill="#007f00" y="-20"/>
+  <use href="#full-crest" y="-18" /> 
   <use href="#mizuno" fill="#0000ff" />
 </svg>

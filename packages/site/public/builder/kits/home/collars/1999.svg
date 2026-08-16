@@ -1,7 +1,20 @@
 <svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
-  
-  <g id="collar">
-    <path d="m255,358l-30,30l-31.996,-70.056l17.996,-11.944l44,52z" fill="#00007f"/>
-    <path d="m255,358l30,30l31.996,-70.056l-17.996,-11.944l-44,52z" fill="#00007f"/>
+ <g>
+  <title>Layer 1</title>
+  <g stroke="null" id="svg_14">
+   <line stroke="#050532" fill="none" stroke-width="15" x1="231.94428" y1="342.74482" x2="256.27224" y2="355.40043" id="svg_3" stroke-linecap="round"/>
+   <line stroke="#050532" fill="none" stroke-width="15" x1="257.33662" y1="355.18244" x2="278.76106" y2="342.36254" id="svg_2" stroke-linecap="round"/>
+   <line stroke="#ff0000" fill="none" stroke-width="2.25" x1="279.37005" y1="337.71259" x2="249.35252" y2="356.03403" id="svg_4" stroke-linecap="round"/>
+   <line stroke="#fff" fill="none" stroke-width="1.75" x1="283.29069" y1="339.23079" x2="253.20061" y2="358.22051" id="svg_5" stroke-linecap="round"/>
+   <line stroke="#ff0000" fill="none" stroke-width="2.25" x1="233.34538" y1="339.50376" x2="253.59744" y2="350.53883" id="svg_6" stroke-linecap="round"/>
+   <line stroke="#fff" fill="none" stroke-width="1.75" x1="224.04726" y1="338.4234" x2="249.52156" y2="353.08539" id="svg_7" stroke-linecap="round"/>
+   <path stroke="null" fill="var(--collar, #050532)" d="m252.07207,344.4379l-31.58813,18.52042l-31.58813,-43.21429l19.36046,-7.40816l43.8158,32.10206l0.00001,-0.00001l0,-0.00001z" id="svg_1"/>
+   <path stroke="null" fill="var(--collar, #050532)" d="m260.34453,344.18539l31.58813,18.52042l31.58813,-43.21429l-19.36046,-7.40816l-43.8158,32.10206l-0.00001,-0.00001l0,-0.00001z" id="svg_8"/>
+   <line stroke="var(--stripe1, #ff0000)" stroke-linejoin="round" y2="359.83653" x2="225.90327" y1="317.16458" x1="193.99969" stroke-width="3" fill="none" id="svg_9"/>
+   <line stroke="var(--stripe1, #ff0000)" stroke-linejoin="round" y2="316.79054" x2="318.64182" y1="359.59326" x1="286.71403" stroke-width="3" fill="none" id="svg_10"/>
+   <line stroke="var(--stripe2, #ffffff)" stroke-linejoin="round" y2="357.43254" x2="229.31195" y1="315.86449" x1="198.2333" stroke-width="3" fill="none" id="svg_11"/>
+   <line stroke="var(--stripe2, #ffffff)" stroke-linejoin="round" y2="315.55582" x2="314.73576" y1="356.91809" x1="282.29849" stroke-width="3" fill="none" id="svg_12"/>
   </g>
-</svg>  
+ </g>
+
+</svg>

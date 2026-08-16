@@ -1,10 +1,10 @@
 <svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
 
-  <g id="chest">
-   <path id="svg_1" d="m255.74181,313.00899l44,0l98.846,21.665c27.533,6.035 47.154,30.421 47.154,58.609l0,85.726l-66,0l0,33l-124,0l-124,0l0,-33l-66,0l0,-85.726c0,-28.187 19.621,-52.574 47.154,-58.609l98.846,-21.665l44,0z" fill="#ffffff"/>
-  </g>
+    <g id="chest">
+      <path fill="#ffffff" d="m255.74181,313.00899l44,0l98.846,21.665c27.533,6.035 47.154,30.421 47.154,58.609l0,85.726l-66,0l0,33l-124,0l-124,0l0,-33l-66,0l0,-85.726c0,-28.187 19.621,-52.574 47.154,-58.609l98.846,-21.665l44,0z"/>
+    </g>
 
-    <use href="#mizuno" fill="#0000ff" />
-    <use href="#wirral" fill="#0000ff" />
-    <use href="#full-crest" y="-10"/> 
+    <use href="#mizuno" fill="#1c6ac1" />
+    <use href="#wirral" fill="#1c6ac1" />
+    <use id="svg_10" href="#simple-crest" style="--crest-dark: #1c6ac1;"/>
 </svg>

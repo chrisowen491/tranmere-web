@@ -1,34 +1,31 @@
 <svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
  <defs>
-  <pattern patternTransform="matrix(1,0,0,1,0.6666644215583801,9.583359777927399)" patternUnits="userSpaceOnUse" height="8" width="8" id="navy-checker-cuff">
-   <rect id="svg_1" fill="#662028" height="4" width="4"/>
-   <rect id="svg_3" fill="#662028" height="4" width="4" y="4" x="4"/>
+  <pattern id="navy-checker-cuff" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="matrix(1,0,0,1,0.6666644215583801,9.583359777927399)">
+   <rect width="4" height="4" fill="#662028" id="svg_1"/>
+   <rect x="4" y="4" width="4" height="4" fill="#662028" id="svg_3"/>
   </pattern>
  </defs>
   <g id="shirt">
    <g id="Chest">
-    <path fill="#588CD8" d="m255.74181,315.69455l44,0l98.846,21.37263c27.533,5.95356 47.154,30.01046 47.154,57.81806l0,84.5691l-66,0l0,32.55466l-124,0l-124,0l0,-32.55466l-66,0l0,-84.5691c0,-27.80661 19.621,-51.8645 47.154,-57.81806l98.846,-21.37263l44,0z" id="svg_3"/>
+    <path id="svg_3" d="m255.74181,315.69455l44,0l98.846,21.37263c27.533,5.95356 47.154,30.01046 47.154,57.81806l0,84.5691l-66,0l0,32.55466l-124,0l-124,0l0,-32.55466l-66,0l0,-84.5691c0,-27.80661 19.621,-51.8645 47.154,-57.81806l98.846,-21.37263l44,0z" fill="#588CD8"/>
    </g>
    <g id="LeftSleeve">
-    <path d="m131.9286,479.96374l-66,0l0,-19.73009l66,0l0,19.73009z" fill="#588CD8" id="svg_5"/>
+    <path id="svg_5" fill="#588CD8" d="m131.9286,479.96374l-66,0l0,-19.73009l66,0l0,19.73009z"/>
    </g>
    <g id="RightSleeve">
-    <path fill="#588CD8" d="m379.92691,459.21421l66,0l0,19.73009l-66,0l0,-19.73009z" id="svg_6"/>
+    <path id="svg_6" d="m379.92691,459.21421l66,0l0,19.73009l-66,0l0,-19.73009z" fill="#588CD8"/>
    </g>
   </g>
-
-    <use href="#full-crest" />
-  
-  <path fill="#662028" stroke-width="null" stroke-dasharray="null" stroke-opacity="null" opacity="undefined" d="m131.34499,534.14248l0,-82.00001l272,82.00001l-272,0z" id="svg_77" stroke="null"/>
-  <g stroke="null" id="right-sleeve">
-   <path stroke="null" fill="#662028" d="m380.30297,391.67353l65.40171,0l0,86.68575l-65.40171,0l0,-86.68575z" id="svg_39"/>
+  <use id="svg_2" href="#full-crest"/>
+  <path stroke="null" id="svg_77" d="m132.34499,534.14247l0,-58.00001l271,58.00001l-271,0z" opacity="undefined" stroke-opacity="null" stroke-dasharray="null" stroke-width="null" fill="#662028"/>
+  <g id="right-sleeve" stroke="null">
+   <path id="svg_39" d="m380.30297,391.67353l65.40171,0l0,86.68575l-65.40171,0l0,-86.68575z" fill="#662028" stroke="null"/>
   </g>
-  <path stroke="null" fill="#588CD8" d="m379.92691,467.492l66,0l0,11l-66,0l0,-11z" id="svg_40"/>
+  <path id="svg_40" d="m379.92691,467.492l66,0l0,11l-66,0l0,-11z" fill="#588CD8" stroke="null"/>
   <g id="sleeve-cuffs">
-   <path id="svg_6" fill="url(#navy-checker-cuff)" d="m68.5,470.79168l62,0l0,8l-62,0l0,-8z"/>
-   <path id="svg_7" fill="url(#navy-checker-cuff)" d="m382.16667,470.79168l62,0l0,8l-62,0l0,-8z"/>
+   <path d="m68.5,470.79168l62,0l0,8l-62,0l0,-8z" fill="url(#navy-checker-cuff)" id="svg_6"/>
+   <path d="m382.16667,470.79168l62,0l0,8l-62,0l0,-8z" fill="url(#navy-checker-cuff)" id="svg_7"/>
   </g>
-
-    <use href="#wirral" fill="#fff" />
-    <use href="#enkay"/>
+  <use id="svg_4" fill="#fff" href="#wirral"/>
+  <use id="svg_8" href="#enkay"/>
 </svg>
