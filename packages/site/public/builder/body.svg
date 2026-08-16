@@ -1,6 +1,5 @@
 <svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
-
-   <g id="skin">
+    <g id="skin">
         <ellipse ry="55.5" rx="91" cy="94.95313" cx="254.5" stroke-width="null" fill="#SKIN" stroke="null"/>
         <g>
             <path d="m211.25968,276.84762l0,36c0,24.301 19.699,44 44,44s44,-19.699 44,-44l0,-36l-88,0z" fill="#SKIN"/>
@@ -24,4 +23,8 @@
             <path d="m379.25968,478.84762l66,0l0,33l-66,0l0,-33z" fill="#SKIN" fill-opacity="#ARMOPACITY"/>
         </g>
     </g>
+    <line y2="518.5" x2="372.5" y1="452.5" x1="371.5" stroke="#cccccc" opacity="0.22" />
+    <line y2="520.5" x2="140.5" y1="454.5" x1="139.5" stroke="#cccccc" opacity="0.22" />
+    <path d="M113 335q27 16 48 43M399 335q-27 16-48 43" stroke="#cccccc" fill="none" opacity="0.40"/>
+
 </svg>

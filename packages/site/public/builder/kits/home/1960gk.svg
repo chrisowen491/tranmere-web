@@ -2,13 +2,10 @@
     <g id="shirt">
         <g id="chest">
             <path fill="#008500" d="M 255.742 313.009 L 299.742 313.009 L 398.588 334.674 C 426.121 340.709 445.742 365.095 445.742 393.283 L 445.742 479.009 L 444.612 510.582 L 379.742 512.009 L 255.742 512.009 L 131.742 512.009 L 65.784 511.981 L 65.742 479.009 L 65.742 393.283 C 65.742 365.096 85.363 340.709 112.896 334.674 L 211.742 313.009 L 255.742 313.009 Z"/>
-            <path d="M113 335q27 16 48 43M399 335q-27 16-48 43" fill="none" stroke="#063d83" stroke-width="2" opacity="0.22"/>
         </g>
     </g>
     <g id="collar">
         <path  d="m289.98107,310.12734l-68.32193,0l-18.46245,4.04303c2.07528,27.20205 0.03106,48.70569 52.62342,48.70569s50.54813,-21.50364 52.62342,-48.70569l-18.46245,-4.04303l-0.00001,0z" fill="#0000ff"/>
     </g>
-     <line stroke-linecap="null" stroke-linejoin="null" id="svg_29" y2="518.5" x2="372.5" y1="452.5" x1="371.5" opacity="undefined" fill-opacity="null" stroke-dasharray="null" stroke-width="null" stroke="#000000" fill="none"/>
-  <line stroke-linecap="null" stroke-linejoin="null" id="svg_37" y2="520.5" x2="140.5" y1="454.5" x1="139.5" opacity="undefined" fill-opacity="null" stroke-dasharray="null" stroke-width="null" stroke="#000000" fill="none"/>
 
 </svg>

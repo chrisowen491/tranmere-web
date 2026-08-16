@@ -2,14 +2,8 @@
     <g id="shirt">
         <g id="chest">
             <path fill="#ffffff" d="m255.74181,313.00899l44,0l98.846,21.665c27.533,6.035 47.154,30.421 47.154,58.609l0,85.726l-66,0l0,33l-124,0l-124,0l0,-33l-66,0l0,-85.726c0,-28.187 19.621,-52.574 47.154,-58.609l98.846,-21.665l44,0z"/>
-            <path d="M113 335q27 16 48 43M399 335q-27 16-48 43" fill="none" stroke="#cccccc" stroke-width="2" opacity="0.22"/>
         </g>
     </g>
 
-    <text fill="#000000" stroke="#0000ff" stroke-width="0" stroke-opacity="null" fill-opacity="null" x="54.5" y="232.45313" font-size="24" font-family="Helvetica, Arial, sans-serif" text-anchor="start" xml:space="preserve" transform="rotate(34.41077423095703 61.179687499999986,224.203125) "/>
-    <text fill="#0000ff" stroke="#0000ff" stroke-width="0" x="324.5" y="398.45313" font-size="17" font-family="'Palatino Linotype', 'Book Antiqua', Palatino, serif" text-anchor="start" xml:space="preserve" font-style="italic">T</text>
-    <text fill="#0000ff" stroke="#0000ff" stroke-width="0" x="332.5" y="408.45313" font-size="17" font-family="'Simonetta', serif" text-anchor="start" xml:space="preserve" font-style="italic">R</text>
-    <text fill="#0000ff" stroke="#0000ff" stroke-width="0" x="340.5" y="418.45313" font-size="17" font-family="'Simonetta', serif" text-anchor="start" xml:space="preserve" font-style="italic">F</text>
-    <text fill="#0000ff" stroke="#0000ff" stroke-width="0" x="349.5" y="427.45313" font-size="17" font-family="'Simonetta', serif" text-anchor="start" xml:space="preserve" font-style="italic">C</text>
-
+    <use href="#letters" x="180" fill="#0000ff" />
 </svg>

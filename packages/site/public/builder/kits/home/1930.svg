@@ -1,26 +1,27 @@
 <svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <linearGradient id="kit-1930-blue" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#1765bd"/>
-      <stop offset="1" stop-color="#0d4f9f"/>
-    </linearGradient>
-    <linearGradient id="kit-1930-collar-blue" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#1c6ac1"/>
-      <stop offset="1" stop-color="#0b4b99"/>
-    </linearGradient>
-    <pattern id="kit-1930-wool" width="8" height="8" patternUnits="userSpaceOnUse">
-      <path d="M0 2h8M0 6h8" stroke="#fff" stroke-width="0.7" opacity="0.08"/>
-      <path d="M2 0v8M6 0v8" stroke="#052e6f" stroke-width="0.55" opacity="0.08"/>
-    </pattern>
-    <clipPath id="kit-1930-shirt-clip">
-      <path d="m255.74181,313.00899l44,0l98.846,21.665c27.533,6.035 47.154,30.421 47.154,58.609l0,85.726l-66,0l0,33l-124,0l-124,0l0,-33l-66,0l0,-85.726c0,-28.187 19.621,-52.574 47.154,-58.609l98.846,-21.665l44,0z"/>
-    </clipPath>
-  </defs>
-
+      <defs>
+        <linearGradient id="kit-1930-blue" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#1765bd"/>
+            <stop offset="1" stop-color="#0d4f9f"/>
+        </linearGradient>
+        <linearGradient id="kit-1930-collar-blue" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#1c6ac1"/>
+            <stop offset="1" stop-color="#0b4b99"/>
+        </linearGradient>
+        <pattern id="kit-1930-wool" width="8" height="8" patternUnits="userSpaceOnUse">
+            <path d="M0 2h8M0 6h8" stroke="#fff" stroke-width="0.7" opacity="0.08"/>
+            <path d="M2 0v8M6 0v8" stroke="#052e6f" stroke-width="0.55" opacity="0.08"/>
+        </pattern>
+        <clipPath id="kit-1930-shirt-clip">
+            <path d="m255.74181,313.00899l44,0l98.846,21.665c27.533,6.035 47.154,30.421 47.154,58.609l0,85.726l-66,0l0,33l-124,0l-124,0l0,-33l-66,0l0,-85.726c0,-28.187 19.621,-52.574 47.154,-58.609l98.846,-21.665l44,0z"/>
+        </clipPath>   
+    </defs>
+  
   <g id="shirt">
     <path fill="url(#kit-1930-blue)" d="m255.74181,313.00899l44,0l98.846,21.665c27.533,6.035 47.154,30.421 47.154,58.609l0,85.726l-66,0l0,33l-124,0l-124,0l0,-33l-66,0l0,-85.726c0,-28.187 19.621,-52.574 47.154,-58.609l98.846,-21.665l44,0z"/>
     <g id="kit-1930-fabric" clip-path="url(#kit-1930-shirt-clip)">
       <rect x="60" y="307" width="392" height="205" fill="url(#kit-1930-wool)"/>
+      <use href="#arm-curves"/>
       <path d="M113 335q27 16 48 43M399 335q-27 16-48 43" fill="none" stroke="#063d83" stroke-width="2" opacity="0.22"/>
     </g>
   </g>
