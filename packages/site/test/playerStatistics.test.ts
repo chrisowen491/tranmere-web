@@ -100,6 +100,7 @@ describe("player statistics enrichment", () => {
       picLink: "/known-avatar.svg",
       position: "Central Midfielder",
       secondaryPosition: "Winger",
+      exists: true,
     });
     expect(enriched[0]).not.toHaveProperty("bio");
   });
@@ -113,6 +114,7 @@ describe("player statistics enrichment", () => {
       picLink: defaultPlayerAvatar,
       position: null,
       secondaryPosition: null,
+      exists: false,
     });
   });
 

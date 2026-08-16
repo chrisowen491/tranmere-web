@@ -10,6 +10,7 @@ export interface PlayerStatisticsProfile {
   picLink: string;
   position: string | null;
   secondaryPosition: string | null;
+  exists: boolean;
 }
 
 export interface PlayerStatisticsView extends Omit<
@@ -65,6 +66,7 @@ export async function getPlayerStatisticsProfiles(
           picLink: profile?.picLink || defaultPlayerAvatar,
           position: profile?.position || null,
           secondaryPosition: profile?.secondaryPosition || null,
+          exists: Boolean(profile),
         },
       ];
     }),
@@ -97,6 +99,7 @@ export async function enrichPlayerStatistics(
       picLink: defaultPlayerAvatar,
       position: null,
       secondaryPosition: null,
+      exists: false,
     },
   }));
 }

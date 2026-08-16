@@ -17,9 +17,7 @@ import {
 import { ResultTable } from "./partials/ResultTable";
 import { LinkButton } from "../forms/LinkButton";
 import { BlogItem, Shirt } from "@/lib/types";
-import {
-  replaceSeasonsKit,
-} from "@tranmere-web/lib/src/apiFunctions";
+import { replaceSeasonsKit } from "@tranmere-web/lib/src/apiFunctions";
 import { areIntervalsOverlapping } from "date-fns";
 import Link from "next/link";
 import Image from "next/image";
@@ -34,7 +32,6 @@ const DIVISION_NAMES: Record<number, Record<number, string>> = {
   1: { 2: "Division 1", 3: "Division 2", 4: "Division 3" },
   2: { 2: "The Championship", 3: "League 1", 4: "League 2" },
 };
-
 
 function getSeasonManagers(managers: Manager[], season: number): Manager[] {
   const seasonInterval = {
@@ -446,10 +443,16 @@ export default function SeasonReview(props: {
                               )}
                             </div>
                             <div className="ml-4">
-                              <LinkButton
-                                text={player.Player}
-                                href={`/page/player/${player.Player}`}
-                              ></LinkButton>
+                              {player.profile.exists ? (
+                                <LinkButton
+                                  text={player.Player}
+                                  href={`/page/player/${player.Player}`}
+                                ></LinkButton>
+                              ) : (
+                                <span className="font-medium leading-6 text-[#071a2b]">
+                                  {player.Player}
+                                </span>
+                              )}
                             </div>
                           </div>
                         </td>

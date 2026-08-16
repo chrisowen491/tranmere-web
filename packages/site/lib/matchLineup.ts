@@ -274,9 +274,9 @@ const fallbackScores: Record<Position, Partial<Record<Position, number>>> = {
   },
   "Full Back": {
     "Full Back": 100,
-    Winger: 60,
     "Central Defender": 60,
     "Central Midfielder": 50,
+    Winger: 40,
   },
   "Wing Half": {
     "Wing Half": 100,
@@ -325,7 +325,7 @@ const fallbackScores: Record<Position, Partial<Record<Position, number>>> = {
   "Outside Left": {
     "Outside Left": 100,
     "Left Midfield": 85,
-    Winger: 80,
+    Winger: 85,
     Striker: 60,
   },  
   "Right Midfield": {
@@ -338,7 +338,7 @@ const fallbackScores: Record<Position, Partial<Record<Position, number>>> = {
   "Outside Right": {
     "Outside Right": 100,
     "Right Midfield": 85,
-    Winger: 80,
+    Winger: 85,
     Striker: 60,
   },    
   Winger: {

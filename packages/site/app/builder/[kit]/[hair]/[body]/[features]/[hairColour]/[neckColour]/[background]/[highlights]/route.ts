@@ -31,7 +31,6 @@ export async function GET(
     siteOrigin = null
   }
 
-
   const [body, hair, hairBg, features, kit, collar] = await Promise.all([
     GetSvg("body.svg", siteOrigin!),
     GetSvg(`hair/${data.hair}.svg`, siteOrigin!),
@@ -40,6 +39,7 @@ export async function GET(
     GetSvg(`kits/home/${data.kit}.svg`, siteOrigin!),
     GetSvg(`kits/home/collars/${data.kit}.svg`, siteOrigin!),
   ]);
+
 
   const armOpacity = data.kit.includes('gk') || data.kit.includes('suit') ? "0.0" : "1.0"
 

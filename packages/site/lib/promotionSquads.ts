@@ -72,6 +72,7 @@ export async function getPromotionSquads(db: D1Database) {
             picLink: defaultPlayerAvatar,
             position: null,
             secondaryPosition: null,
+            exists: false,
           },
         })),
       } satisfies PromotionSquad;

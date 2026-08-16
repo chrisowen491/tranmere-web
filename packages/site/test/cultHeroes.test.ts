@@ -10,6 +10,7 @@ const profile = {
   picLink: "/avatar.svg",
   position: null,
   secondaryPosition: null,
+  exists: true,
 };
 
 function summary(
@@ -80,13 +81,20 @@ describe("cult hero index", () => {
         summary("Long Spell", String(season)),
       ),
       summary("Own Goal", "TOTAL", { substitute_appearances: 99 }),
-      summary("Bench Icon", "TOTAL", { substitute_appearances: 34, starts: 12 }),
+      summary("Bench Icon", "TOTAL", {
+        substitute_appearances: 34,
+        starts: 12,
+      }),
       summary("Promotion Player", "1988", { appearances: 31 }),
     ];
     const profiles = new Map(
-      ["Long Spell", "Bench Icon", "Promotion Player", "Returnee", "Cup Hero"].map(
-        (name) => [name, profile],
-      ),
+      [
+        "Long Spell",
+        "Bench Icon",
+        "Promotion Player",
+        "Returnee",
+        "Cup Hero",
+      ].map((name) => [name, profile]),
     );
     const sections = buildCultHeroSections(
       rows,
@@ -95,17 +103,21 @@ describe("cult hero index", () => {
       profiles,
     );
 
-    expect(sections.find((section) => section.id === "long-spells")?.heroes[0])
-      .toMatchObject({ name: "Long Spell", value: 5 });
-    expect(sections.find((section) => section.id === "comebacks")?.heroes[0])
-      .toMatchObject({ name: "Returnee", value: 2 });
-    expect(sections.find((section) => section.id === "super-subs")?.heroes[0])
-      .toMatchObject({ name: "Bench Icon", value: 34 });
-    expect(sections.flatMap((section) => section.heroes).map((hero) => hero.name)).not.toContain(
-      "Own Goal",
-    );
-    expect(sections.find((section) => section.id === "cup-heroes")?.heroes[0])
-      .toMatchObject({ name: "Cup Hero", value: 2 });
+    expect(
+      sections.find((section) => section.id === "long-spells")?.heroes[0],
+    ).toMatchObject({ name: "Long Spell", value: 5 });
+    expect(
+      sections.find((section) => section.id === "comebacks")?.heroes[0],
+    ).toMatchObject({ name: "Returnee", value: 2 });
+    expect(
+      sections.find((section) => section.id === "super-subs")?.heroes[0],
+    ).toMatchObject({ name: "Bench Icon", value: 34 });
+    expect(
+      sections.flatMap((section) => section.heroes).map((hero) => hero.name),
+    ).not.toContain("Own Goal");
+    expect(
+      sections.find((section) => section.id === "cup-heroes")?.heroes[0],
+    ).toMatchObject({ name: "Cup Hero", value: 2 });
     expect(
       sections
         .find((section) => section.id === "promotion-contributors")
