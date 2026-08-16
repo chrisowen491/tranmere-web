@@ -13,7 +13,7 @@
         <rect transform="rotate(15.429646492004395 393.20211791992165,371.11270141601557) " stroke="#0000ff" fill="none" stroke-width="20" x="391.70213" y="347.11271" width="3" height="47.99999"/>
     </g>
    
-    <use x="-78" y="21"  href="#full-crest" />
+    <use x="-92" y="21"  href="#full-crest" />
 
     <use href="#wirral" fill="#00bf00" />
 </svg>
