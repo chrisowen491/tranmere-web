@@ -4,6 +4,7 @@ import type { MatchAppearanceView } from "@/lib/matchPlayers";
 type Position =
   | "Goalkeeper"
   | "Full Back"
+  | "Wing Half"  
   | "Left Back"
   | "Right Back"
   | "Central Defender"
@@ -11,6 +12,9 @@ type Position =
   | "Left Midfield"
   | "Right Midfield"
   | "Attacking Midfield"
+  | "Inside Forward"  
+  | "Outside Left"  
+  | "Outside Right"      
   | "Defensive Midfield"
   | "Winger"
   | "Striker";
@@ -243,6 +247,25 @@ const formations: Record<ManagerFormation, FormationSlot[][]> = {
     ],
     [{ id: "goalkeeper", position: "Goalkeeper" }],
   ],
+  "2-3-4-1": [
+    [{ id: "forward-centre", position: "Striker" }],
+    [
+      { id: "mid-left", position: "Outside Left" },
+      { id: "mid-centre-left", position: "Inside Forward" },
+      { id: "mid-centre-right", position: "Inside Forward" },
+      { id: "mid-right", position: "Outside Right" },
+    ],
+    [
+      { id: "def-left", position: "Wing Half" },
+      { id: "def-centre-right", position: "Central Defender" },
+      { id: "def-right", position: "Wing Half" },
+    ],
+    [
+      { id: "full-left", position: "Full Back" },
+      { id: "full-right", position: "Full Back" },
+    ],    
+    [{ id: "goalkeeper", position: "Goalkeeper" }],
+  ],  
 };
 
 const fallbackScores: Record<Position, Partial<Record<Position, number>>> = {
@@ -251,10 +274,15 @@ const fallbackScores: Record<Position, Partial<Record<Position, number>>> = {
   },
   "Full Back": {
     "Full Back": 100,
-    Winger: 80,
-    "Central Defender": 70,
-    "Central Midfielder": 60,
+    Winger: 60,
+    "Central Defender": 60,
+    "Central Midfielder": 50,
   },
+  "Wing Half": {
+    "Wing Half": 100,
+    "Full Back": 80,
+    "Central Defender": 60
+  },  
   "Left Back": {
     "Left Back": 100,
     "Full Back": 80,
@@ -294,6 +322,12 @@ const fallbackScores: Record<Position, Partial<Record<Position, number>>> = {
     "Left Back": 20,
     "Full Back": 10,
   },
+  "Outside Left": {
+    "Outside Left": 100,
+    "Left Midfield": 85,
+    Winger: 80,
+    Striker: 60,
+  },  
   "Right Midfield": {
     "Right Midfield": 100,
     Winger: 80,
@@ -301,6 +335,12 @@ const fallbackScores: Record<Position, Partial<Record<Position, number>>> = {
     "Right Back": 20,
     "Full Back": 10,
   },
+  "Outside Right": {
+    "Outside Right": 100,
+    "Right Midfield": 85,
+    Winger: 80,
+    Striker: 60,
+  },    
   Winger: {
     Winger: 100,
     "Right Midfield": 80,
@@ -318,10 +358,21 @@ const fallbackScores: Record<Position, Partial<Record<Position, number>>> = {
     "Central Midfielder": 60,
     "Full Back": 40,
   },
+  "Inside Forward": {
+    "Inside Forward": 100,
+    "Striker": 80,
+    "Central Midfielder": 70,
+    "Defensive Midfield": 70,
+    "Attacking Midfield": 70,
+    Winger: 45,
+  },  
   Striker: {
     Striker: 100,
+    "Inside Forward": 75,
     Winger: 65,
-    "Central Midfielder": 25,
+    "Outside Right": 65,
+    "Outside Left": 65,
+    "Attacking Midfield": 25,
   },
 };
 

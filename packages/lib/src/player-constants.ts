@@ -9,6 +9,10 @@ export const PLAYER_POSITIONS = [
   'Attacking Midfield',
   'Defensive Midfield',
   'Full Back',
+  'Wing Half',  
+  'Outside Left',
+  'Outside Right',  
+  'Inside Forward',        
   'Left Back',
   'Right Back'
 ] as const;
