@@ -115,13 +115,19 @@ export async function POST(req: NextRequest) {
       }
     });
 
+    const username =
+      typeof session!.user.username === "string" &&
+      session!.user.username.trim()
+        ? session!.user.username.trim()
+        : session!.user.name || session!.user.email || "Supporter";
+
     const comment: Comment = {
       created_at: new Date().toISOString(),
       url: body.url,
       text: flagged ? "Flagged By Auto Moderation" : body.text,
       rating: body.rating,
       user: {
-        name: session!.user.name!,
+        name: username,
         picture: session!.user.picture!,
         sub: session!.user.sub,
         email: session!.user.email,
