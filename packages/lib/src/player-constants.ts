@@ -5,6 +5,7 @@ export const PLAYER_POSITIONS = [
   'Left Midfield',
   'Right Midfield',      
   'Central Defender',
+  'Sweeper',
   'Central Midfielder',
   'Attacking Midfield',
   'Defensive Midfield',

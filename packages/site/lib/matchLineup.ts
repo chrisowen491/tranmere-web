@@ -8,6 +8,7 @@ type Position =
   | "Left Back"
   | "Right Back"
   | "Central Defender"
+  | "Sweeper"  
   | "Central Midfielder"
   | "Left Midfield"
   | "Right Midfield"
@@ -95,9 +96,32 @@ const formations: Record<ManagerFormation, FormationSlot[][]> = {
     [
       { id: "def-left", position: "Left Back" },
       { id: "def-centre-left", position: "Central Defender" },
-      { id: "def-centre", position: "Central Defender" },
+      { id: "def-centre", position: "Sweeper" },
       { id: "def-centre-right", position: "Central Defender" },
       { id: "def-right", position: "Right Back" },
+    ],
+    [{ id: "goalkeeper", position: "Goalkeeper" }],
+  ],
+  "1-4-2-1-2": [
+    [
+      { id: "st-left", position: "Striker" },
+      { id: "st-right", position: "Striker" },
+    ],
+    [
+        { id: "att-centre", position: "Attacking Midfield" },
+    ],
+    [
+      { id: "mid-left", position: "Central Midfielder" },
+      { id: "mid-right", position: "Central Midfielder" },
+    ],
+    [
+      { id: "def-left", position: "Left Back" },
+      { id: "def-centre-left", position: "Central Defender" },
+      { id: "def-centre-right", position: "Central Defender" },
+      { id: "def-right", position: "Right Back" },
+    ],
+    [
+      { id: "def-centre", position: "Sweeper" },
     ],
     [{ id: "goalkeeper", position: "Goalkeeper" }],
   ],
@@ -115,7 +139,7 @@ const formations: Record<ManagerFormation, FormationSlot[][]> = {
     ],
     [
       { id: "def-centre-left", position: "Central Defender" },
-      { id: "def-centre", position: "Central Defender" },
+      { id: "def-centre", position: "Sweeper" },
       { id: "def-centre-right", position: "Central Defender" },
     ],
     [{ id: "goalkeeper", position: "Goalkeeper" }],
@@ -134,7 +158,7 @@ const formations: Record<ManagerFormation, FormationSlot[][]> = {
     ],
     [
       { id: "def-centre-left", position: "Central Defender" },
-      { id: "def-centre", position: "Central Defender" },
+      { id: "def-centre", position: "Sweeper" },
       { id: "def-centre-right", position: "Central Defender" },
     ],
     [{ id: "goalkeeper", position: "Goalkeeper" }],
@@ -153,7 +177,7 @@ const formations: Record<ManagerFormation, FormationSlot[][]> = {
     ],
     [
       { id: "def-centre-left", position: "Central Defender" },
-      { id: "def-centre", position: "Central Defender" },
+      { id: "def-centre", position: "Sweeper" },
       { id: "def-centre-right", position: "Central Defender" },
     ],
     [{ id: "goalkeeper", position: "Goalkeeper" }],
@@ -170,7 +194,7 @@ const formations: Record<ManagerFormation, FormationSlot[][]> = {
     ],
     [
       { id: "def-centre-left", position: "Central Defender" },
-      { id: "def-centre", position: "Central Defender" },
+      { id: "def-centre", position: "Sweeper" },
       { id: "def-centre-right", position: "Central Defender" },
     ],
     [{ id: "goalkeeper", position: "Goalkeeper" }],
@@ -189,7 +213,7 @@ const formations: Record<ManagerFormation, FormationSlot[][]> = {
     ],
     [
       { id: "def-centre-left", position: "Central Defender" },
-      { id: "def-centre", position: "Central Defender" },
+      { id: "def-centre", position: "Sweeper" },
       { id: "def-centre-right", position: "Central Defender" },
     ],
     [{ id: "goalkeeper", position: "Goalkeeper" }],
@@ -293,6 +317,15 @@ const fallbackScores: Record<Position, Partial<Record<Position, number>>> = {
   },
   "Central Defender": {
     "Central Defender": 100,
+    "Sweeper": 90,
+    "Full Back": 70,
+    "Left Back": 70,
+    "Right Back": 70,
+    "Central Midfielder": 55,
+  },
+  "Sweeper": {
+    "Sweeper": 100,
+    "Central Defender": 90,
     "Full Back": 70,
     "Left Back": 70,
     "Right Back": 70,
