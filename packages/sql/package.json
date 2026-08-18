@@ -15,6 +15,7 @@
     "generate:player-season-summaries": "node scripts/dynamodb-player-season-summaries-to-d1.mjs",
     "generate:transfers": "node scripts/dynamodb-transfers-to-d1.mjs",
     "migrations": "npx wrangler d1 migrations apply tranmere-web --local --persist-to=../site/.wrangler/state",
+    "migrations:remote": "npx wrangler d1 migrations apply tranmere-web --remote",
     "lint": "yarn",
     "format": "yarn",
     "test": "yarn"

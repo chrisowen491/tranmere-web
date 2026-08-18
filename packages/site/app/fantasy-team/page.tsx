@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { FantasyTeamBuilder } from "@/components/apps/FantasyTeamBuilder";
 import { getUniquePlayers } from "@/lib/players";
+import { auth0 } from "@/lib/auth0";
+import { getOwnedFantasyTeam } from "@/lib/fantasyTeams";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Fantasy XI",
@@ -9,22 +12,28 @@ export const metadata: Metadata = {
     "Build and share your all-time Tranmere Rovers fantasy football team.",
 };
 
-const defaultPlayerImageSignature =
-  "simple/cccccc/none/cccccc/cccccc/none/cccccc";
+const defaultPlayerImage =
+  "https://www.tranmere-web.com/builder/2026/none/cccccc/none/000000/cccccc/none/cccccc";
 
-export default async function FantasyTeamPage() {
+export default async function FantasyTeamPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ edit?: string; duplicate?: string }>;
+}) {
   const env = (await getCloudflareContext({ async: true })).env;
+  const session = await auth0.getSession();
+  const params = await searchParams;
+  const requestedId = params.edit ?? params.duplicate;
+  const initialTeam =
+    session && requestedId
+      ? await getOwnedFantasyTeam(env.DB, requestedId, session.user.sub)
+      : null;
   const players = await getUniquePlayers(env.DB);
-  const availablePlayers = players
-    .filter(
-      (player) =>
-        player.picLink &&
-        !player.picLink.toLowerCase().includes(defaultPlayerImageSignature),
-    )
-    .map((player) => ({
-      name: player.name,
-      picLink: player.picLink!,
-    }));
+  const availablePlayers = players.map((player) => ({
+    id: player.id,
+    name: player.name,
+    picLink: player.picLink ?? defaultPlayerImage,
+  }));
 
   return (
     <main className="min-h-screen bg-[#f4f0e8] text-[#071a2b]">
@@ -34,12 +43,25 @@ export default async function FantasyTeamPage() {
           Pick your all-time Rovers team.
         </h1>
         <p className="mt-6 max-w-2xl text-lg leading-8 text-[#071a2b]/60">
-          Choose a formation, fill every position from the player archive and
-          name your captain. Your selection is saved on this device and can be
-          shared as a link.
+          Choose a formation, kit and captain from the player archive. Logged-in
+          supporters can save themed teams privately, revisit them and decide
+          exactly which XIs to share.
         </p>
+        {session && (
+          <Link
+            href="/profile/fantasy-teams"
+            className="mt-7 inline-flex border border-[#071a2b] px-5 py-3 text-sm font-bold transition hover:bg-[#071a2b] hover:text-white"
+          >
+            View your saved XIs →
+          </Link>
+        )}
       </div>
-      <FantasyTeamBuilder players={availablePlayers} />
+      <FantasyTeamBuilder
+        players={availablePlayers}
+        canSave={Boolean(session)}
+        initialTeam={initialTeam}
+        duplicate={Boolean(params.duplicate)}
+      />
     </main>
   );
 }

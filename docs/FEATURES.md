@@ -62,26 +62,30 @@ data ownership and system boundaries.
 
 ## Shirts, Stories and Interactive Features
 
-| Feature            | Route                                   | Summary                                                                                                                     |
-| ------------------ | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| Shirt archive      | `/shirts`                               | Catalogues historic home, away and goalkeeper shirts.                                                                       |
-| Shirt detail       | `/shirts/[shirt]`                       | Presents an individual shirt with its rendered SVG and recorded details.                                                    |
-| Programme archive  | `/programmes`                           | Lists every digitised match programme stored in the Tranmere-Web database.                                                  |
-| Programme reader   | `/programmes/[date]`                    | Opens an individual programme in an interactive page-turning reader.                                                        |
-| Blog               | `/blog`                                 | Lists Contentful news, history and archive articles with fallback imagery.                                                  |
-| Blog and tag pages | `/page/blog/[slug]`, `/page/tag/[slug]` | Renders rich editorial blocks, related content and tag archives.                                                            |
-| Avatar builder     | `/players/avatar-builder`               | Builds shareable SVG player avatars from season kits, hair, skin, features and colours.                                     |
-| Fantasy XI         | `/fantasy-team`                         | Lets supporters select and arrange an XI from available player profiles.                                                    |
-| Who Am I?          | `/who-am-i`                             | Runs a daily player-identification game from archive clues.                                                                 |
-| Rovers passport    | `/profile/passport`                     | Gives a logged-in supporter a private match-attendance log with season, venue, competition, result and milestone summaries. |
+| Feature            | Route                                   | Summary                                                                                                                        |
+| ------------------ | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| Shirt archive      | `/shirts`                               | Catalogues historic home, away and goalkeeper shirts.                                                                          |
+| Shirt detail       | `/shirts/[shirt]`                       | Presents an individual shirt with its rendered SVG and recorded details.                                                       |
+| Programme archive  | `/programmes`                           | Lists every digitised match programme stored in the Tranmere-Web database.                                                     |
+| Programme reader   | `/programmes/[date]`                    | Opens an individual programme in an interactive page-turning reader.                                                           |
+| Blog               | `/blog`                                 | Lists Contentful news, history and archive articles with fallback imagery.                                                     |
+| Blog and tag pages | `/page/blog/[slug]`, `/page/tag/[slug]` | Renders rich editorial blocks, related content and tag archives.                                                               |
+| Avatar builder     | `/players/avatar-builder`               | Builds shareable SVG player avatars from season kits, hair, skin, features and colours.                                        |
+| Fantasy XI         | `/fantasy-team`                         | Lets supporters select a formation, kit, positional XI and captain; logged-in users can name, explain and save multiple teams. |
+| Saved Fantasy XIs  | `/profile/fantasy-teams`                | Privately manages saved teams with edit, duplicate, explicit sharing and permanent share-link revocation controls.             |
+| Shared Fantasy XI  | `/fantasy-team/shared/[id]`             | Presents an explicitly shared, read-only team with graceful handling of renamed or missing players and a branded image.        |
+| Who Am I?          | `/who-am-i`                             | Runs a daily player-identification game from archive clues.                                                                    |
+| Rovers passport    | `/profile/passport`                     | Gives a logged-in supporter a private match-attendance log with season, venue, competition, result and milestone summaries.    |
 
 ## Accounts, Contributions and Moderation
 
 - Auth0 login and logout are available from the footer.
 - Logged-in supporters can privately mark archived matches as attended from a
   match page and review their personal Rovers passport.
+- Logged-in supporters can keep multiple Fantasy XIs private, duplicate and
+  edit them, and explicitly create or permanently revoke public share links.
 - Removing a supporter profile deletes its passport and programme-collection
-  records from D1.
+  records and saved Fantasy XIs from D1.
 - The contact page sends enquiries through Cloudflare Email Sending to the
   configured administrator email.
 - Visitors can post match comments and ratings.

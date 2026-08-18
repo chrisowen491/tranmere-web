@@ -13,6 +13,7 @@ export async function DELETE() {
   const db = getCloudflareContext().env.DB;
   const authSub = session.user.sub;
   await db.batch([
+    db.prepare("DELETE FROM FantasyTeams WHERE auth_sub = ?").bind(authSub),
     db.prepare("DELETE FROM MatchAttendances WHERE auth_sub = ?").bind(authSub),
     db
       .prepare("DELETE FROM ProgrammeCollections WHERE auth_sub = ?")

@@ -13,6 +13,21 @@ export interface PlayerRow {
   updated_at: string | null;
 }
 
+export interface FantasyTeamRow {
+  id: string;
+  auth_sub: string;
+  name: string;
+  rationale: string | null;
+  formation: '442' | '433';
+  kit: string;
+  captain_player_id: string | null;
+  assignments_json: string;
+  share_id: string | null;
+  is_shared: number;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface ClubRow {
   id: string;
   name: string;
