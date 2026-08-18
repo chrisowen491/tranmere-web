@@ -17,6 +17,3 @@
 
 /api/comment*
   cache-control: no-store
-
-/api/chat/agents*
-  cache-control: no-store

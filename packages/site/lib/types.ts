@@ -225,14 +225,6 @@ export interface Active {
   title: string;
 }
 
-export interface YouTubeResponse {
-  kind: string;
-  etag: string;
-  nextPageToken: string;
-  items: Item[];
-  pageInfo: PageInfo;
-}
-
 export interface Item {
   kind: string;
   etag: string;

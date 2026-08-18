@@ -66,9 +66,7 @@ The root is a Yarn Classic workspace using Node.js 24.
 | ------------------------- | --------------------------------------------------------------------------------------------- |
 | `packages/site`           | Public Next.js website, UI components, server routes, and Cloudflare deployment configuration |
 | `packages/lib`            | Shared football domain types, D1 entity types and read queries, mappings, and utilities       |
-| `packages/tools`          | Reusable AI tools for matches, players, teams, results, lineups, managers, and transfers      |
 | `packages/mcp`            | Auth0-protected Cloudflare MCP server exposing read-only D1 and match API tools               |
-| `packages/vectorize`      | Worker for creating and querying player biography embeddings                                  |
 | `packages/scheduled-task` | Daily Worker that rebuilds D1 summaries, milestones and the materialized site-search index    |
 | `packages/sql`            | D1 schema, migrations, generated imports, and database commands                               |
 
@@ -85,7 +83,7 @@ Routes are organized by the information supporters are looking for, including:
 - player profiles, player records, and player search;
 - match pages, results, seasons, and scoring records;
 - managers, transfers, hat-tricks, and historical shirts;
-- interactive features such as the player builder, comments, and AI chat.
+- interactive features such as the player builder, comments.
 
 Pages use React Server Components by default and fetch data on the server. Some
 interactive components run in the browser where client-side state or user input
@@ -218,11 +216,7 @@ signature, and exact audience have been verified.
 
 AI is an enhancement rather than the primary source of football facts.
 
-- The site exposes an AI chat route and moderates submitted comments.
-- `packages/tools` defines typed tools that retrieve factual match and player
-  data for model-driven workflows.
-- Cloudflare Workers AI and Vectorize support experimental semantic search over
-  player biographies.
+- The site moderates submitted comments.
 
 Generated output should remain distinguishable from sourced statistical and
 editorial content. Secrets for model providers belong in deployment

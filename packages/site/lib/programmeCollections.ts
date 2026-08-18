@@ -170,15 +170,17 @@ export async function getPublicProgrammeCollectors(db: D1Database) {
   const result = await db
     .prepare(
       `SELECT up.public_collection_id AS public_id,
-              SUM(CASE WHEN pc.status = 'wanted' THEN 1 ELSE 0 END) AS wanted_count,
-              SUM(CASE WHEN pc.status = 'trade' THEN 1 ELSE 0 END) AS trade_count
+              SUM(CASE WHEN pc.status = 'wanted' AND g.id IS NOT NULL THEN 1 ELSE 0 END) AS wanted_count,
+              SUM(CASE WHEN pc.status = 'trade' AND g.id IS NOT NULL THEN 1 ELSE 0 END) AS trade_count
        FROM UserProfiles up
-       JOIN ProgrammeCollections pc ON pc.auth_sub = up.auth_sub
-       JOIN Games g ON g.id = pc.game_id
+       LEFT JOIN ProgrammeCollections pc
+         ON pc.auth_sub = up.auth_sub
+        AND pc.status IN ('wanted', 'trade')
+       LEFT JOIN Games g
+         ON g.id = pc.game_id
+        AND g.no_programme_issued = 0
        WHERE up.public_collection_visible = 1
          AND up.public_collection_id IS NOT NULL
-         AND pc.status IN ('wanted', 'trade')
-         AND g.no_programme_issued = 0
        GROUP BY up.auth_sub, up.public_collection_id
        ORDER BY trade_count DESC, wanted_count DESC, up.public_collection_id ASC`,
     )

@@ -42,41 +42,58 @@ export default async function PublicProgrammeCollectionPage({
             ← Browse all collectors
           </Link>
         </nav>
-        <section className="grid gap-px border border-[#071a2b]/15 bg-[#071a2b]/15 sm:grid-cols-2 lg:grid-cols-3">
-          {collection.entries.map((entry) => (
-            <Link
-              key={entry.game_id}
-              href={`/match/${entry.season}/${entry.match_date}`}
-              className="group bg-[#fffdf8] transition hover:bg-[#e8e2d6]"
-            >
-              <div className="relative aspect-[4/3] overflow-hidden bg-[#071a2b] p-5">
-                {entry.programme_url ? (
-                  <Image
-                    src={`https://img.tranmere-web.com/${entry.programme_url}`}
-                    alt={`${entry.match_name} match programme`}
-                    fill
-                    className="object-contain p-5 transition duration-300 group-hover:scale-[1.03]"
-                  />
-                ) : (
-                  <div className="flex h-full items-center justify-center px-6 text-center font-mono text-xs uppercase tracking-[0.14em] text-white/55">
-                    Programme cover not recorded
-                  </div>
-                )}
-              </div>
-              <div className="p-6">
-                <span className="font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-blue-700">
-                  {entry.status === "wanted" ? "Wanted" : "Available to trade"}
-                </span>
-                <h2 className="mt-4 font-display text-2xl font-semibold tracking-[-0.03em]">
-                  {entry.match_name}
-                </h2>
-                <p className="mt-3 text-sm text-[#071a2b]/55">
-                  {entry.match_date} · {entry.competition}
-                </p>
-              </div>
-            </Link>
-          ))}
-        </section>
+        {collection.entries.length ? (
+          <section className="grid gap-px border border-[#071a2b]/15 bg-[#071a2b]/15 sm:grid-cols-2 lg:grid-cols-3">
+            {collection.entries.map((entry) => (
+              <Link
+                key={entry.game_id}
+                href={`/match/${entry.season}/${entry.match_date}`}
+                className="group bg-[#fffdf8] transition hover:bg-[#e8e2d6]"
+              >
+                <div className="relative aspect-[4/3] overflow-hidden bg-[#071a2b] p-5">
+                  {entry.programme_url ? (
+                    <Image
+                      src={`https://img.tranmere-web.com/${entry.programme_url}`}
+                      alt={`${entry.match_name} match programme`}
+                      fill
+                      className="object-contain p-5 transition duration-300 group-hover:scale-[1.03]"
+                    />
+                  ) : (
+                    <div className="flex h-full items-center justify-center px-6 text-center font-mono text-xs uppercase tracking-[0.14em] text-white/55">
+                      Programme cover not recorded
+                    </div>
+                  )}
+                </div>
+                <div className="p-6">
+                  <span className="font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-blue-700">
+                    {entry.status === "wanted"
+                      ? "Wanted"
+                      : "Available to trade"}
+                  </span>
+                  <h2 className="mt-4 font-display text-2xl font-semibold tracking-[-0.03em]">
+                    {entry.match_name}
+                  </h2>
+                  <p className="mt-3 text-sm text-[#071a2b]/55">
+                    {entry.match_date} · {entry.competition}
+                  </p>
+                </div>
+              </Link>
+            ))}
+          </section>
+        ) : (
+          <section className="border border-[#071a2b]/15 bg-[#fffdf8] p-8 sm:p-12">
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-700">
+              Shared collector
+            </p>
+            <h2 className="mt-3 font-display text-4xl font-semibold tracking-[-0.04em]">
+              No wanted or trade items yet
+            </h2>
+            <p className="mt-4 max-w-2xl text-base leading-7 text-[#071a2b]/60">
+              This collector has made their list discoverable, but has not
+              published any programmes as wanted or available to trade.
+            </p>
+          </section>
+        )}
       </div>
     </main>
   );

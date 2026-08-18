@@ -35,15 +35,6 @@
           "new_sqlite_classes": ["DOQueueHandler"]
         }
     ],
-    "vectorize": [{
-      "binding": "VECTORIZE_INDEX",
-      "index_name": "tranmere-web",
-      "remote": true
-    }],
-    "ai": {
-      "binding": "AI",
-      "remote": true
-    },
     "images": {
   		"binding": "IMAGES"
 	  },

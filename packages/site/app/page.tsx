@@ -9,6 +9,7 @@ import {
   ChartBarSquareIcon,
   ClipboardDocumentCheckIcon,
   MagnifyingGlassIcon,
+  TicketIcon,
   TrophyIcon,
   UserGroupIcon,
   QuestionMarkCircleIcon,
@@ -657,21 +658,23 @@ export default async function Home() {
               <div className="relative flex h-full flex-col justify-between">
                 <ClipboardDocumentCheckIcon className="h-20 w-20 text-blue-200 transition duration-300 group-hover:scale-105" />
                 <div className="mt-12 grid gap-px border border-white/20 bg-white/20">
-                  {["In the collection", "Still wanted", "Available to trade"].map(
-                    (label, index) => (
-                      <div
-                        key={label}
-                        className="flex items-center justify-between bg-[#071a2b] px-4 py-3"
-                      >
-                        <span className="font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-white/65">
-                          {label}
-                        </span>
-                        <span className="font-mono text-sm font-bold text-blue-200">
-                          {index === 0 ? "✓" : "○"}
-                        </span>
-                      </div>
-                    ),
-                  )}
+                  {[
+                    "In the collection",
+                    "Still wanted",
+                    "Available to trade",
+                  ].map((label, index) => (
+                    <div
+                      key={label}
+                      className="flex items-center justify-between bg-[#071a2b] px-4 py-3"
+                    >
+                      <span className="font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-white/65">
+                        {label}
+                      </span>
+                      <span className="font-mono text-sm font-bold text-blue-200">
+                        {index === 0 ? "✓" : "○"}
+                      </span>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -693,6 +696,53 @@ export default async function Home() {
                 Open your programme checklist
                 <ArrowRightIcon className="h-4 w-4 transition group-hover:translate-x-1" />
               </span>
+            </div>
+          </Link>
+
+          <Link
+            href="/profile/passport"
+            className="group mt-6 grid overflow-hidden border border-[#071a2b]/15 bg-[#fffdf8] md:grid-cols-[1.28fr_0.72fr]"
+          >
+            <div className="flex flex-col justify-between p-7 sm:p-9 lg:p-12">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-700">
+                  Your Rovers passport
+                </p>
+                <h3 className="mt-4 max-w-xl font-display text-4xl font-semibold leading-[1.02] tracking-[-0.035em] sm:text-5xl">
+                  Turn the matches you attended into your own archive.
+                </h3>
+                <p className="mt-5 max-w-2xl leading-7 text-[#071a2b]/60">
+                  Mark any Rovers match you witnessed and build a private record
+                  of your seasons, grounds and results. Unlock your first match,
+                  50th game and most-visited away ground.
+                </p>
+              </div>
+              <span className="mt-9 inline-flex items-center gap-3 text-sm font-bold text-blue-700">
+                Open your Rovers passport
+                <ArrowRightIcon className="h-4 w-4 transition group-hover:translate-x-1" />
+              </span>
+            </div>
+            <div className="relative min-h-72 overflow-hidden bg-[#071a2b] p-7 text-white sm:p-9">
+              <div className="archive-grid absolute inset-0 opacity-30" />
+              <div className="relative flex h-full flex-col justify-between">
+                <TicketIcon className="h-20 w-20 text-blue-200 transition duration-300 group-hover:-rotate-3 group-hover:scale-105" />
+                <div className="mt-12 grid grid-cols-3 gap-px border border-white/20 bg-white/20">
+                  {[
+                    ["First match", "01"],
+                    ["Matches", "50"],
+                    ["Away days", "12"],
+                  ].map(([label, value]) => (
+                    <div key={label} className="bg-[#071a2b] px-3 py-4">
+                      <span className="block font-mono text-[9px] font-bold uppercase tracking-[0.12em] text-white/50">
+                        {label}
+                      </span>
+                      <span className="mt-2 block font-mono text-xl font-bold text-blue-200">
+                        {value}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </Link>
         </div>
