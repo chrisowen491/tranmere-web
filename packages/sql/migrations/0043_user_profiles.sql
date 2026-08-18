@@ -1,0 +1,3 @@
+CREATE TABLE IF NOT EXISTS UserProfiles (
+  auth_sub TEXT NOT NULL PRIMARY KEY
+);

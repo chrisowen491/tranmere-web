@@ -3,6 +3,7 @@
 import {
   ArrowLeftEndOnRectangleIcon,
   ArrowRightStartOnRectangleIcon,
+  UserCircleIcon,
 } from "@heroicons/react/24/outline";
 import { useUser } from "@auth0/nextjs-auth0";
 import Link from "next/link";
@@ -34,6 +35,7 @@ const linkGroups = [
       { label: "Fantasy XI", href: "/fantasy-team" },
       { label: "Who am I?", href: "/who-am-i" },
       { label: "Player builder", href: "/players/avatar-builder" },
+      { label: "Programme checklist", href: "/programme-collections" },
     ],
   },
   {
@@ -94,20 +96,35 @@ export default function Footer() {
         </div>
         <div className="flex flex-col gap-4 pt-7 font-mono text-[10px] uppercase tracking-[0.18em] text-white/35 sm:flex-row sm:items-center sm:justify-between">
           <p>Made in Chester · Archive online since 2020</p>
-          <a
-            href={user ? "/auth/logout" : "/auth/login"}
-            className={`inline-flex w-fit items-center gap-2 border border-white/15 px-3 py-2 font-bold text-white/65 transition hover:border-blue-300/60 hover:text-white ${
-              isLoading ? "pointer-events-none opacity-50" : ""
-            }`}
-            aria-disabled={isLoading}
-          >
-            {user ? (
-              <ArrowRightStartOnRectangleIcon className="h-4 w-4" />
-            ) : (
-              <ArrowLeftEndOnRectangleIcon className="h-4 w-4" />
+          <div className="flex flex-wrap items-center gap-2">
+            {user && (
+              <Link
+                href="/profile"
+                className="inline-flex w-fit items-center gap-2 border border-white/15 px-3 py-2 font-bold text-white/65 transition hover:border-blue-300/60 hover:text-white"
+              >
+                <UserCircleIcon className="h-4 w-4" />
+                Your profile
+              </Link>
             )}
-            {isLoading ? "Checking account…" : user ? "Log out" : "Log in"}
-          </a>
+            <a
+              href={user ? "/auth/logout" : "/auth/login"}
+              className={`inline-flex w-fit items-center gap-2 border border-white/15 px-3 py-2 font-bold text-white/65 transition hover:border-blue-300/60 hover:text-white ${
+                isLoading ? "pointer-events-none opacity-50" : ""
+              }`}
+              aria-disabled={isLoading}
+            >
+              {user ? (
+                <ArrowRightStartOnRectangleIcon className="h-4 w-4" />
+              ) : (
+                <ArrowLeftEndOnRectangleIcon className="h-4 w-4" />
+              )}
+              {isLoading
+                ? "Checking account…"
+                : user
+                  ? "Log out"
+                  : "Log in"}
+            </a>
+          </div>
           <p>© 2026 Tranmere-Web</p>
         </div>
       </div>

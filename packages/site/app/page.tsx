@@ -7,6 +7,7 @@ import {
   ArrowsRightLeftIcon,
   CalendarDaysIcon,
   ChartBarSquareIcon,
+  ClipboardDocumentCheckIcon,
   MagnifyingGlassIcon,
   TrophyIcon,
   UserGroupIcon,
@@ -646,6 +647,54 @@ export default async function Home() {
               </div>
             </Link>
           </div>
+
+          <Link
+            href="/profile/programmes"
+            className="group mt-6 grid overflow-hidden border border-[#071a2b]/15 bg-[#fffdf8] md:grid-cols-[0.72fr_1.28fr]"
+          >
+            <div className="relative min-h-72 overflow-hidden bg-[#132c82] p-7 text-white sm:p-9">
+              <div className="archive-grid absolute inset-0 opacity-30" />
+              <div className="relative flex h-full flex-col justify-between">
+                <ClipboardDocumentCheckIcon className="h-20 w-20 text-blue-200 transition duration-300 group-hover:scale-105" />
+                <div className="mt-12 grid gap-px border border-white/20 bg-white/20">
+                  {["In the collection", "Still wanted", "Available to trade"].map(
+                    (label, index) => (
+                      <div
+                        key={label}
+                        className="flex items-center justify-between bg-[#071a2b] px-4 py-3"
+                      >
+                        <span className="font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-white/65">
+                          {label}
+                        </span>
+                        <span className="font-mono text-sm font-bold text-blue-200">
+                          {index === 0 ? "✓" : "○"}
+                        </span>
+                      </div>
+                    ),
+                  )}
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-col justify-between p-7 sm:p-9 lg:p-12">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-700">
+                  Programme checklist
+                </p>
+                <h3 className="mt-4 max-w-xl font-display text-4xl font-semibold leading-[1.02] tracking-[-0.035em] sm:text-5xl">
+                  Keep track of your Rovers programme collection.
+                </h3>
+                <p className="mt-5 max-w-2xl leading-7 text-[#071a2b]/60">
+                  Mark programmes you own, build a wanted list and record the
+                  editions you have available to trade. You can keep it private
+                  or share an anonymous public checklist with other collectors.
+                </p>
+              </div>
+              <span className="mt-9 inline-flex items-center gap-3 text-sm font-bold text-blue-700">
+                Open your programme checklist
+                <ArrowRightIcon className="h-4 w-4 transition group-hover:translate-x-1" />
+              </span>
+            </div>
+          </Link>
         </div>
       </section>
 

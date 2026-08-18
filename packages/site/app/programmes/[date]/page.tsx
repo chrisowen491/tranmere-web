@@ -8,7 +8,13 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { FlipBook } from "@/components/apps/partials/FlipBook";
+import { ProgrammeCollectionControl } from "@/components/apps/ProgrammeCollectionControl";
 import { breadcrumbJsonLd, JsonLd } from "@/components/seo/JsonLd";
+import { auth0 } from "@/lib/auth0";
+import {
+  getCollectionEntry,
+  getProgrammeGame,
+} from "@/lib/programmeCollections";
 import { getProgrammeByDate, type ProgrammeRecord } from "@/lib/programmes";
 import { pageMetadata } from "@/lib/seo";
 
@@ -66,6 +72,13 @@ export default async function ProgrammePage(props: {
   const { date } = await props.params;
   const programme = await loadProgramme(date);
   if (!programme) notFound();
+  const env = (await getCloudflareContext({ async: true })).env;
+  const session = await auth0.getSession();
+  const game = await getProgrammeGame(env.DB, programme.date);
+  const collectionEntry =
+    session && game
+      ? await getCollectionEntry(env.DB, session.user.sub, game.id)
+      : null;
 
   return (
     <main className="min-h-screen bg-[#f4f0e8] pb-24 text-[#071a2b]">
@@ -166,6 +179,28 @@ export default async function ProgrammePage(props: {
               className="h-[34rem] sm:h-[44rem] lg:h-[54rem]"
             />
           </div>
+        </div>
+        <div className="mt-8">
+          {session && game ? (
+            <ProgrammeCollectionControl
+              gameId={game.id}
+              initialEntry={collectionEntry}
+            />
+          ) : session ? (
+            <div className="border border-[#071a2b]/15 bg-[#fffdf8] p-6 text-sm font-semibold">
+              This programme is not yet linked to its canonical match record.
+            </div>
+          ) : (
+            <div className="border border-[#071a2b]/15 bg-[#fffdf8] p-6 text-sm font-semibold">
+              <a
+                href={`/auth/login?returnTo=${encodeURIComponent(`/programmes/${programme.date}`)}`}
+                className="text-blue-700"
+              >
+                Log in
+              </a>{" "}
+              to add this programme to your collection.
+            </div>
+          )}
         </div>
       </section>
     </main>

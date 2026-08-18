@@ -120,6 +120,7 @@ export interface Match {
   division?: string;
   competition?: string;
   programme?: string;
+  noProgrammeIssued?: boolean;
   ticket?: string;
   youtube?: string;
   pens?: string;

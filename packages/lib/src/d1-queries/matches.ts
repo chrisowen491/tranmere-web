@@ -28,7 +28,7 @@ export interface GameDateRangeBounds {
 const gameColumns = `id, season, match_date, competition, round, home_team, away_team,
   opposition, venue, attendance, full_time_score, home_goals, away_goals,
   division, tier, leg, tie, neutral, after_extra_time, penalties,
-  programme_path, formation`;
+  programme_path, no_programme_issued, formation`;
 
 export async function querySearchIndexSeasonRows(db: D1DatabaseReader) {
   return (
@@ -151,9 +151,7 @@ export async function queryOnThisDayGameRow(
        FROM Games
        WHERE substr(match_date, 6, 5) = ?
          AND match_date < ?
-         AND programme_path IS NOT NULL
-         AND trim(programme_path) <> ''
-         AND programme_path <> '#N/A'
+         AND no_programme_issued = 0
        ORDER BY match_date DESC, id ASC
        LIMIT 1`
     )

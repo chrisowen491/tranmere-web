@@ -1,4 +1,9 @@
 import { getCloudflareContext } from "@opennextjs/cloudflare";
+import { ProgrammeCollectionControl } from "@/components/apps/ProgrammeCollectionControl";
+import { MatchAttendanceControl } from "@/components/apps/MatchAttendanceControl";
+import { auth0 } from "@/lib/auth0";
+import { getCollectionEntry } from "@/lib/programmeCollections";
+import { getMatchAttendance } from "@/lib/matchAttendance";
 import { MatchParams } from "@/lib/types";
 import type {
   Appearance,
@@ -108,7 +113,7 @@ export default async function MatchPage(props: { params: MatchParams }) {
   const params = await props.params;
   const env = (await getCloudflareContext({ async: true })).env;
   const baseUrl = `/match/${params.season}/${params.date}`;
-  const [game, reportRow, appRows, goalRows] = await Promise.all([
+  const [game, reportRow, appRows, goalRows, session] = await Promise.all([
     getGameBySeasonAndDate(env.DB, params.season, params.date),
     getMatchReport(env.DB, params.date),
     queryAppRows(env.DB, {
@@ -119,8 +124,11 @@ export default async function MatchPage(props: { params: MatchParams }) {
       season: Number(params.season),
       matchDate: params.date,
     }),
+    auth0.getSession(),
   ]);
   if (!game) notFound();
+  const gameId = game.id;
+  if (!gameId) notFound();
   const apps = appRows.map(mapAppearance);
   const goals = goalRows.map(mapGoal);
   const matchData: MatchPageData = {
@@ -171,6 +179,14 @@ export default async function MatchPage(props: { params: MatchParams }) {
   );
 
   const comments = await GetCommentsByUrl(env, baseUrl);
+  const [collectionEntry, attendanceEntry] = session
+    ? await Promise.all([
+        game.noProgrammeIssued
+          ? Promise.resolve(null)
+          : getCollectionEntry(env.DB, session.user.sub, gameId),
+        getMatchAttendance(env.DB, session.user.sub, gameId),
+      ])
+    : [null, null];
   let score = 0;
   comments.forEach((c) => {
     score = score + c.rating;
@@ -223,6 +239,44 @@ export default async function MatchPage(props: { params: MatchParams }) {
         manager={manager}
         milestones={milestones}
       ></MatchReport>
+      <section className="mx-auto max-w-7xl px-6 pb-8 sm:px-10 lg:px-12">
+        {session ? (
+          <MatchAttendanceControl
+            gameId={gameId}
+            initialAttended={Boolean(attendanceEntry)}
+          />
+        ) : (
+          <div className="border border-[#071a2b]/15 bg-[#fffdf8] p-6 text-sm font-semibold text-[#071a2b]">
+            <a
+              href={`/auth/login?returnTo=${encodeURIComponent(baseUrl)}`}
+              className="text-blue-700"
+            >
+              Log in
+            </a>{" "}
+            to record this match in your private Rovers passport.
+          </div>
+        )}
+      </section>
+      {!game.noProgrammeIssued && (
+        <section className="mx-auto max-w-7xl px-6 pb-24 sm:px-10 lg:px-12">
+          {session ? (
+            <ProgrammeCollectionControl
+              gameId={gameId}
+              initialEntry={collectionEntry}
+            />
+          ) : (
+            <div className="border border-[#071a2b]/15 bg-[#fffdf8] p-6 text-sm font-semibold text-[#071a2b]">
+              <a
+                href={`/auth/login?returnTo=${encodeURIComponent(baseUrl)}`}
+                className="text-blue-700"
+              >
+                Log in
+              </a>{" "}
+              to add this programme to your collection.
+            </div>
+          )}
+        </section>
+      )}
     </>
   );
 }

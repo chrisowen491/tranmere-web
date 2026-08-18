@@ -115,11 +115,19 @@ export async function POST(req: NextRequest) {
       }
     });
 
-    const username =
-      typeof session!.user.username === "string" &&
-      session!.user.username.trim()
-        ? session!.user.username.trim()
-        : session!.user.name || session!.user.email || "Supporter";
+    const usernameClaim =
+      session!.user["https://www.tranmere-web.com/username"];
+
+    const username = [
+      usernameClaim,
+      session!.user.username,
+      session!.user.preferred_username,
+      session!.user.nickname,
+      session!.user.name,
+      session!.user.email,
+    ].find((value): value is string =>
+      Boolean(typeof value === "string" && value.trim()),
+    );
 
     const comment: Comment = {
       created_at: new Date().toISOString(),
@@ -127,7 +135,7 @@ export async function POST(req: NextRequest) {
       text: flagged ? "Flagged By Auto Moderation" : body.text,
       rating: body.rating,
       user: {
-        name: username,
+        name: username?.trim() || "Supporter",
         picture: session!.user.picture!,
         sub: session!.user.sub,
         email: session!.user.email,

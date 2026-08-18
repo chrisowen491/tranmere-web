@@ -1,7 +1,4 @@
-import {
-  Competition,
-  Match,
-} from '@tranmere-web/lib/src/tranmere-web-types';
+import { Competition, Match } from '@tranmere-web/lib/src/tranmere-web-types';
 import { MATCH_COMPETITIONS } from './competition-constants';
 import { queryOnThisDayGameRow, type D1DatabaseReader } from './d1-queries';
 
@@ -84,11 +81,11 @@ export function replaceSeasonsKit(input: string, season?: string): string {
     [1931, 1930],
     [1932, 1930],
     [1933, 1930],
-    [1934, 1930],    
+    [1934, 1930],
     [1935, 1930],
     [1936, 1930],
     [1937, 1930],
-    [1938, 1930], 
+    [1938, 1930],
     [1961, 1960],
     [1963, 1962],
     [1967, 1966],
@@ -126,7 +123,6 @@ export function replaceSeasonsKit(input: string, season?: string): string {
   }
 }
 
-
 export async function GetOnThisDay(
   db: D1DatabaseReader,
   now = new Date()
@@ -153,6 +149,7 @@ export async function GetOnThisDay(
       row.programme_path && row.programme_path !== '#N/A'
         ? row.programme_path
         : undefined,
+    noProgrammeIssued: row.no_programme_issued === 1,
     hgoal: Number(row.home_goals ?? score?.[1] ?? 0),
     vgoal: Number(row.away_goals ?? score?.[2] ?? 0),
     tier: Number(row.tier) || 0

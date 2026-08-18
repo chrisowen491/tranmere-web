@@ -126,6 +126,7 @@ export interface GameRow {
   after_extra_time: string | null;
   penalties: string | null;
   programme_path: string | null;
+  no_programme_issued: number;
   formation: string | null;
   kit?: string | null;
   referee: string | null;
@@ -223,4 +224,41 @@ export interface GoalRow {
   eighteen_yard_box: number;
   cross_side: string | null;
   long_range: number;
+}
+
+export interface UserProfileRow {
+  auth_sub: string;
+  public_collection_id: string | null;
+  public_collection_visible: number;
+  contact_opt_in: number;
+}
+
+export type ProgrammeCollectionStatus = 'owned' | 'wanted' | 'trade';
+
+export interface ProgrammeCollectionRow {
+  auth_sub: string;
+  game_id: string;
+  status: ProgrammeCollectionStatus;
+  condition_notes: string | null;
+  purchase_notes: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface MatchAttendanceRow {
+  auth_sub: string;
+  game_id: string;
+  created_at: string;
+}
+
+export interface AttendedMatchRow extends MatchAttendanceRow {
+  season: number;
+  match_date: string;
+  competition: string;
+  home_team: string;
+  away_team: string;
+  opposition: string;
+  venue: string;
+  full_time_score: string;
+  neutral: string | null;
 }

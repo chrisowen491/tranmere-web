@@ -38,6 +38,7 @@ type GameInput = {
   afterExtraTime: string | null;
   penalties: string | null;
   programmePath: string | null;
+  noProgrammeIssued: boolean;
   formation: string | null;
   kit: string | null;
   referee: string | null;
@@ -122,6 +123,7 @@ function validateGame(body: GameRequest): GameInput | null {
     afterExtraTime: optional.afterExtraTime,
     penalties: optional.penalties,
     programmePath: optional.programmePath,
+    noProgrammeIssued: body.noProgrammeIssued === true,
     formation: optional.formation,
     kit: optional.kit,
     referee: optional.referee,
@@ -151,6 +153,7 @@ function values(game: GameInput) {
     game.afterExtraTime,
     game.penalties,
     game.programmePath,
+    game.noProgrammeIssued ? 1 : 0,
     game.formation,
     game.kit,
     game.referee,
@@ -182,8 +185,8 @@ export async function POST(request: NextRequest) {
         id, season, match_date, competition, round, home_team, away_team,
         opposition, venue, attendance, full_time_score, home_goals, away_goals,
         division, tier, leg, tie, neutral, after_extra_time, penalties,
-        programme_path, formation, kit, referee, ticket
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        programme_path, no_programme_issued, formation, kit, referee, ticket
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     )
     .bind(id, ...values(game))
     .run();
@@ -209,7 +212,7 @@ export async function PATCH(request: NextRequest) {
         season = ?, match_date = ?, competition = ?, round = ?, home_team = ?,
         away_team = ?, opposition = ?, venue = ?, attendance = ?, full_time_score = ?,
         home_goals = ?, away_goals = ?, division = ?, tier = ?, leg = ?, tie = ?,
-        neutral = ?, after_extra_time = ?, penalties = ?, programme_path = ?,
+        neutral = ?, after_extra_time = ?, penalties = ?, programme_path = ?, no_programme_issued = ?,
         formation = ?, kit = ?, referee = ?, ticket = ?
        WHERE id = ?`,
     )

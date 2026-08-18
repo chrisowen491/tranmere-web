@@ -39,6 +39,7 @@ const blankGame = (season: number): GameForm => ({
   after_extra_time: null,
   penalties: null,
   programme_path: null,
+  no_programme_issued: 0,
   formation: null,
   kit: null,
   referee: null,
@@ -83,6 +84,7 @@ function payload(game: GameForm) {
     afterExtraTime: game.after_extra_time,
     penalties: game.penalties,
     programmePath: game.programme_path,
+    noProgrammeIssued: game.no_programme_issued === 1,
     formation: game.formation,
     kit: game.kit,
     referee: game.referee,
@@ -115,6 +117,12 @@ export function GameAdmin({
       }
       return { ...game, [key]: value || null } as GameForm;
     });
+  }
+
+  function changeNoProgrammeIssued(value: boolean) {
+    setEditing((game) =>
+      game ? { ...game, no_programme_issued: value ? 1 : 0 } : game,
+    );
   }
 
   function closeEditor() {
@@ -366,6 +374,17 @@ export function GameAdmin({
                   ))}
                 </select>
               </Field>
+              <label className={`${labelClass} flex items-center gap-3 pt-7`}>
+                <input
+                  type="checkbox"
+                  checked={editing.no_programme_issued === 1}
+                  onChange={(event) =>
+                    changeNoProgrammeIssued(event.target.checked)
+                  }
+                  className="h-4 w-4 border-[#071a2b]/25 text-blue-700"
+                />
+                No programme issued
+              </label>
               {optionalFields.map(({ key, label }) => (
                 <Field key={key} label={label}>
                   <input
@@ -415,9 +434,7 @@ export function GameAdmin({
                   <td className="whitespace-nowrap px-5 py-4 font-mono text-xs">
                     {game.match_date}
                   </td>
-                  <td className="px-3 py-4 font-semibold">
-                    {game.opposition}
-                  </td>
+                  <td className="px-3 py-4 font-semibold">{game.opposition}</td>
                   <td className="px-4 py-4 text-right">
                     <button
                       type="button"

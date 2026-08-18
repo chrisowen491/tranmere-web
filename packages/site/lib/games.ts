@@ -41,6 +41,7 @@ export function mapGame(row: GameRow): Match {
       row.programme_path && row.programme_path !== "#N/A"
         ? row.programme_path
         : undefined,
+    noProgrammeIssued: row.no_programme_issued === 1,
     ticket: row.ticket && row.ticket !== "#N/A" ? row.ticket : undefined,
     pens: row.penalties || undefined,
     home: row.home_team,

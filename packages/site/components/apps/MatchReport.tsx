@@ -102,7 +102,9 @@ export default function MatchReport(props: {
             ) : (
               <div className="relative z-10 grid h-full place-items-center text-center text-white/60">
                 <p className="font-mono text-xs uppercase tracking-[0.16em]">
-                  No programme image
+                  {match.noProgrammeIssued
+                    ? "No programme issued"
+                    : "Programme cover not recorded"}
                 </p>
               </div>
             )}
