@@ -35,10 +35,6 @@ export async function GET() {
 
   teams.forEach((t) => {
     pages.push({
-      loc: `https://www.tranmere-web.com/games/${encodeURI(t.name.replace(/&/g, ""))}`,
-      lastmod: new Date().toISOString(),
-    });
-    pages.push({
       loc: `https://www.tranmere-web.com/opponents/${encodeURIComponent(t.name)}`,
       lastmod: new Date().toISOString(),
     });
