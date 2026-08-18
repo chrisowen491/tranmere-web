@@ -187,6 +187,32 @@ export interface PlayerMilestoneRow {
   milestone_value: number | null;
 }
 
+export type ArchiveCompletenessCategory =
+  | 'lineups'
+  | 'goals'
+  | 'goal-details'
+  | 'attendances'
+  | 'formations'
+  | 'programmes'
+  | 'player-profiles'
+  | 'kits'
+  | 'match-reports';
+
+export interface ArchiveCompletenessRow {
+  season: number;
+  category: ArchiveCompletenessCategory;
+  complete_count: number;
+  total_count: number;
+  updated_at: string;
+}
+
+export interface ArchiveCompletenessGapRow {
+  entity_id: string;
+  entity_name: string;
+  match_date: string | null;
+  opposition: string | null;
+}
+
 export interface PlayerSeasonSummaryRow {
   season: string;
   player_name: string;

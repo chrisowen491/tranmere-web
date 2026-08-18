@@ -27,6 +27,7 @@ const linkGroups = [
       { label: "Head-to-head", href: "/head-to-head" },
       { label: "Rovers connections", href: "/rovers-connections" },
       { label: "Player partnerships", href: "/players/partnerships" },
+      { label: "Archive completeness", href: "/archive-completeness" },
     ],
   },
   {
@@ -118,11 +119,7 @@ export default function Footer() {
               ) : (
                 <ArrowLeftEndOnRectangleIcon className="h-4 w-4" />
               )}
-              {isLoading
-                ? "Checking account…"
-                : user
-                  ? "Log out"
-                  : "Log in"}
+              {isLoading ? "Checking account…" : user ? "Log out" : "Log in"}
             </a>
           </div>
           <p>© 2026 Tranmere-Web</p>

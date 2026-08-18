@@ -1,4 +1,5 @@
 import { runSettledJobs, type ScheduledJob } from './runSettledJobs';
+import { rebuildArchiveCompleteness } from './updateArchiveCompleteness';
 import { rebuildHatTricks } from './updateHatTricks';
 import { rebuildPlayerMilestones } from './updatePlayerMilestones';
 import { rebuildPlayerSeasonSummaries } from './updatePlayerSeasonSummaries';
@@ -16,6 +17,13 @@ export interface Env {
  */
 export async function runDailyTask(env: Env): Promise<void> {
   const jobs: ScheduledJob[] = [
+    {
+      name: 'archive-completeness',
+      run: async () => {
+        const count = await rebuildArchiveCompleteness(env.DB);
+        return `Rebuilt ${count} archive completeness records.`;
+      }
+    },
     {
       name: 'player-season-summaries',
       run: async () => {
