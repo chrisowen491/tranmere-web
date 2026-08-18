@@ -22,7 +22,6 @@ jobs:
       - name: Web Build
         run: yarn cloudflare-build
         env:
-          API_KEY: ${{ secrets.API_KEY }}
           CF_SPACE: ${{ secrets.CF_SPACE }}
           CF_KEY: ${{ secrets.CF_KEY }}
           AUTH0_CLIENT_SECRET: "dummy_value"
@@ -30,57 +29,7 @@ jobs:
           AUTH0_CLIENT_ID: "dummy_value"
           AUTH0_ADMIN_EMAIL: "dummy_value"
           AUTH0_SECRET: "dummy_value"
-          APP_BASE_URL: "http://localhost:3001"
-          API_PORT: "443"
-          API_PROTOCOL: "https" 
-          API_DOMAIN: "api.tranmere-web.com"
           NEXTJS_ENV: "production"
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_AUTH_KEY }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-
-      - uses: chrnorm/deployment-action@500aa6a23c81ffa1acf71072aee3cfa2cc2e556a
-        name: Create GitHub deployment
-        id: deployment
-        with:
-          token: '${{ secrets.GITHUB_TOKEN }}'
-          environment-url: https://www.tranmere-web.com
-          environment: pr
-          description: "Pages Deployment"   
-  
-      - name: Web Deploy
-        run: yarn cloudflare-deploy
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_AUTH_KEY }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-
-
-      - name: Run Binoculars
-        uses: foo-software/binoculars-action@40b0a9d3f6242214723446d3835e203271ade291
-        with:
-          accessToken: ${{ secrets.BINOCULARS_GITHUB_ACCESS_TOKEN }}
-          author: ${{ github.actor }}
-          branch: ${{ github.ref }}
-          enableComments: true
-          minScore: 80
-          urls: https://www.tranmere-web.com
-          sha: ${{ github.sha }}        
-
-      - name: Update deployment status (success)
-        if: success()
-        uses: chrnorm/deployment-status@6df8d036fd2fee9eb82936733953da1f8382b41e
-        with:
-          token: '${{ github.token }}'
-          environment-url: https://www.tranmere-web.com
-          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
-          state: 'success'          
-  
-      - name: Update deployment status (failure)
-        if: failure()
-        uses: chrnorm/deployment-status@6df8d036fd2fee9eb82936733953da1f8382b41e
-        with:
-          token: '${{ github.token }}'
-          environment-url: https://www.tranmere-web.com
-          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
-          state: 'failure'          
-  
