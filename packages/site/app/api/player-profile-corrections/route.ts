@@ -34,6 +34,7 @@ const editableFields: (keyof EditablePlayerProfile)[] = [
   "height",
   "placeOfBirth",
   "position",
+  "secondaryPosition",
 ];
 
 const maxLengths: Record<keyof EditablePlayerProfile, number> = {
@@ -44,6 +45,7 @@ const maxLengths: Record<keyof EditablePlayerProfile, number> = {
   height: 50,
   placeOfBirth: 200,
   position: 100,
+  secondaryPosition: 100,
 };
 
 function error(message: string, status: number) {
@@ -59,6 +61,7 @@ function profileSnapshot(player: PlayerRecord): EditablePlayerProfile {
     height: player.height ?? "",
     placeOfBirth: player.placeOfBirth ?? "",
     position: player.position ?? "",
+    secondaryPosition: player.secondaryPosition ?? "",
   };
 }
 
@@ -142,6 +145,15 @@ async function submitCorrection(request: NextRequest) {
     )
   ) {
     return error("Choose a valid primary position.", 400);
+  }
+  if (
+    changes.secondaryPosition !== undefined &&
+    changes.secondaryPosition !== "" &&
+    !PLAYER_POSITIONS.includes(
+      changes.secondaryPosition as (typeof PLAYER_POSITIONS)[number],
+    )
+  ) {
+    return error("Choose a valid secondary position.", 400);
   }
 
   const env = getCloudflareContext().env;

@@ -1,8 +1,6 @@
 "use client";
 
-import {
-  type EditablePlayerProfile,
-} from "@/lib/playerProfileCorrections";
+import { type EditablePlayerProfile } from "@/lib/playerProfileCorrections";
 import { useUser } from "@auth0/nextjs-auth0";
 import { PLAYER_POSITIONS } from "@tranmere-web/lib/src/player-constants";
 import { useState } from "react";
@@ -40,17 +38,24 @@ export function PlayerProfileCorrectionForm({
         "height",
         "placeOfBirth",
         "position",
+        "secondaryPosition",
       ];
       const changes = Object.fromEntries(
         fields
           .map((field) => [field, String(formData.get(field) || "").trim()])
           .filter(
             ([field, value]) =>
-              !(field === "position" && value === "") &&
+              !(
+                (field === "position" || field === "secondaryPosition") &&
+                value === ""
+              ) &&
               value !==
                 String(current[field as keyof EditablePlayerProfile] || ""),
           ),
       );
+      if (changes.secondaryPosition === "__remove__") {
+        changes.secondaryPosition = "";
+      }
 
       const response = await fetch("/api/player-profile-corrections", {
         method: "POST",
@@ -220,6 +225,35 @@ export function PlayerProfileCorrectionForm({
                   className={inputClass}
                 >
                   <option value="">Leave unchanged</option>
+                  {PLAYER_POSITIONS.map((position) => (
+                    <option key={position} value={position}>
+                      {position}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label htmlFor="secondaryPosition" className={labelClass}>
+                  Secondary position
+                </label>
+                <select
+                  id="secondaryPosition"
+                  name="secondaryPosition"
+                  defaultValue={
+                    PLAYER_POSITIONS.includes(
+                      current.secondaryPosition as (typeof PLAYER_POSITIONS)[number],
+                    )
+                      ? current.secondaryPosition
+                      : ""
+                  }
+                  className={inputClass}
+                >
+                  <option value="">Leave unchanged</option>
+                  {current.secondaryPosition && (
+                    <option value="__remove__">
+                      Remove secondary position
+                    </option>
+                  )}
                   {PLAYER_POSITIONS.map((position) => (
                     <option key={position} value={position}>
                       {position}

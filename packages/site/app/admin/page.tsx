@@ -2,6 +2,7 @@ import { getAttendanceCorrections } from "@/lib/attendanceCorrections";
 import { requireAdminPage } from "@/lib/adminAuth";
 import { getPlayerProfileCorrections } from "@/lib/playerProfileCorrections";
 import { getFormationCorrections } from "@/lib/formationCorrections";
+import { getKitCorrections } from "@/lib/kitCorrections";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import {
   ArrowRightIcon,
@@ -13,6 +14,7 @@ import {
   IdentificationIcon,
   UserCircleIcon,
   UserGroupIcon,
+  SwatchIcon,
 } from "@heroicons/react/24/outline";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -27,16 +29,22 @@ export const metadata: Metadata = {
 export default async function AdminPage() {
   const session = await requireAdminPage("/admin");
   const env = getCloudflareContext().env;
-  const [attendanceCorrections, profileCorrections, formationCorrections] =
-    await Promise.all([
-      getAttendanceCorrections(env.DB, "pending"),
-      getPlayerProfileCorrections(env.DB, "pending"),
-      getFormationCorrections(env.DB, "pending"),
-    ]);
+  const [
+    attendanceCorrections,
+    profileCorrections,
+    formationCorrections,
+    kitCorrections,
+  ] = await Promise.all([
+    getAttendanceCorrections(env.DB, "pending"),
+    getPlayerProfileCorrections(env.DB, "pending"),
+    getFormationCorrections(env.DB, "pending"),
+    getKitCorrections(env.DB, "pending"),
+  ]);
   const totalPending =
     attendanceCorrections.length +
     profileCorrections.length +
-    formationCorrections.length;
+    formationCorrections.length +
+    kitCorrections.length;
 
   const queues = [
     {
@@ -62,6 +70,14 @@ export default async function AdminPage() {
       href: "/admin/formation-corrections",
       count: formationCorrections.length,
       icon: UserGroupIcon,
+    },
+    {
+      title: "Match kits",
+      description:
+        "Review supporter-suggested kits before updating player imagery on match pages.",
+      href: "/admin/kit-corrections",
+      count: kitCorrections.length,
+      icon: SwatchIcon,
     },
   ];
 

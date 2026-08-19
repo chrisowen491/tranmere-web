@@ -178,6 +178,7 @@ export default async function PlayerProfilePage(props: { params: SlugParams }) {
           height: d1Player.height ?? "",
           placeOfBirth: d1Player.placeOfBirth ?? "",
           position: d1Player.position ?? "",
+          secondaryPosition: d1Player.secondaryPosition ?? "",
         }}
       ></PlayerProfileView>
     </>

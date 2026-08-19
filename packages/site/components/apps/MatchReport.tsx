@@ -12,6 +12,8 @@ import { ArrowPathIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
 import { replaceSeasonsKit } from "@tranmere-web/lib/src/apiFunctions";
 import { AttendanceCorrectionForm } from "./AttendanceCorrectionForm";
 import { FormationCorrectionForm } from "./FormationCorrectionForm";
+import { KitCorrectionForm } from "./KitCorrectionForm";
+import { kitLabel } from "@/lib/kitCorrections";
 import type { MatchPageView } from "@/lib/matchPlayers";
 import type { ManagerRecord } from "@/lib/managers";
 import { arrangeMatchLineup, formationLabel } from "@/lib/matchLineup";
@@ -171,6 +173,17 @@ export default function MatchReport(props: {
                   <dd className="mt-2 font-semibold">{match.referee}</dd>
                 </div>
               )}
+              <div className="col-span-2 border-t border-[#071a2b]/15 py-5">
+                <dt className="text-xs font-bold uppercase tracking-[0.12em] text-[#071a2b]/50">
+                  Rovers kit
+                </dt>
+                <dd className="mt-2 font-semibold">{kitLabel(match.kit)}</dd>
+                <KitCorrectionForm
+                  season={match.season.toString()}
+                  matchDate={match.date}
+                  currentKit={match.kit}
+                />
+              </div>
             </dl>
 
             {match.formattedGoals && (
@@ -270,6 +283,11 @@ export default function MatchReport(props: {
                 <h2 className="mt-2 font-display text-4xl font-semibold">
                   Rovers XI
                 </h2>
+                <p className="mt-2 max-w-xl text-sm leading-6 text-[#071a2b]/60">
+                  Player positions are assigned using a best-guess algorithm
+                  based on the formation and each player&apos;s preferred
+                  position.
+                </p>
               </div>
               <p className="font-mono text-xs text-[#071a2b]/45">
                 {formationLabel(lineup.formation)}

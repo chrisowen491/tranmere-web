@@ -12,6 +12,7 @@ export interface EditablePlayerProfile {
   height?: string;
   placeOfBirth?: string;
   position?: string;
+  secondaryPosition?: string;
 }
 
 export interface PlayerProfileCorrection {
@@ -59,6 +60,7 @@ export const editablePlayerProfileLabels: Record<
   height: "Height",
   placeOfBirth: "Place of birth",
   position: "Position",
+  secondaryPosition: "Secondary position",
 };
 
 export async function ensurePlayerProfileCorrectionsTable(db: D1Database) {
@@ -170,6 +172,7 @@ function validateApprovedChanges(changes: EditablePlayerProfile) {
   }
   const foot = nullable(changes.foot);
   const position = nullable(changes.position);
+  const secondaryPosition = nullable(changes.secondaryPosition);
   const picLink = nullable(changes.picLink);
   if (foot && foot !== "Left" && foot !== "Right") {
     throw new Error("The proposed preferred foot is invalid.");
@@ -179,6 +182,14 @@ function validateApprovedChanges(changes: EditablePlayerProfile) {
     !PLAYER_POSITIONS.includes(position as (typeof PLAYER_POSITIONS)[number])
   ) {
     throw new Error("The proposed player position is invalid.");
+  }
+  if (
+    secondaryPosition &&
+    !PLAYER_POSITIONS.includes(
+      secondaryPosition as (typeof PLAYER_POSITIONS)[number],
+    )
+  ) {
+    throw new Error("The proposed secondary position is invalid.");
   }
   if (picLink) {
     try {
@@ -232,7 +243,8 @@ export async function approvePlayerProfileCorrection(
       .prepare(
         `UPDATE Players
          SET date_of_birth = ?, biography_markdown = ?, pic_link = ?, foot = ?,
-             height = ?, place_of_birth = ?, position = ?, updated_at = CURRENT_TIMESTAMP
+             height = ?, place_of_birth = ?, position = ?, secondary_position = ?,
+             updated_at = CURRENT_TIMESTAMP
          WHERE id = ?
            AND EXISTS (
              SELECT 1 FROM PlayerProfileCorrections
@@ -257,6 +269,9 @@ export async function approvePlayerProfileCorrection(
         changes.position !== undefined
           ? nullable(changes.position)
           : player.position,
+        changes.secondaryPosition !== undefined
+          ? nullable(changes.secondaryPosition)
+          : player.secondaryPosition,
         player.id,
         id,
       ),
