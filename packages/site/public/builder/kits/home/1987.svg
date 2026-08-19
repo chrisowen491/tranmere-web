@@ -13,6 +13,6 @@
     </g>
   </g>
 
-  <use href="#enkay"/>
+  <use href="#enkay" y="-5"/>
   <use href="#full-crest" />
 </svg>

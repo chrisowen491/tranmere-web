@@ -76,6 +76,8 @@ export const AVATAR_KIT_OPTIONS = [
   { value: '1989A', label: '1989-91 Away' },
   { value: '1988', label: '1988-89 Home' },
   { value: '1987', label: '1987-88 Home' },
+  { value: '1987A', label: '1987-89 Away' },  
+  { value: '1987T', label: '1987-88 Third' }, 
   { value: '1986', label: '1986-87 Home' },
   { value: '1985', label: '1985-86 Home' },
   { value: '1983', label: '1983-85 Home' },

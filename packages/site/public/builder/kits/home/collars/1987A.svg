@@ -1,0 +1,10 @@
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+      <g id="collar">
+        <path d="m207.5,321.5c12,19 30,36 53,50" fill="none" stroke="#662028" stroke-linecap="round" stroke-width="15" id="svg_53"/>
+        <path d="m204,317c12,18 29,33 51,47" fill="none" stroke="#588CD8" stroke-linecap="round" stroke-width="2.25" id="svg_54"/>
+        <path d="m209,315c11,16 27,31 49,44" fill="none" stroke="#588CD8" stroke-linecap="round" stroke-width="1.75" id="svg_55"/>
+        <path d="m298.5,321.5c-12,20 -30,39 -53,55" fill="none" stroke="#662028" stroke-linecap="round" stroke-width="15" id="svg_56"/>
+        <path d="m302,317c-11,19 -28,36 -50,52" fill="none" stroke="#588CD8" stroke-linecap="round" stroke-width="2.25" id="svg_57"/>
+        <path d="m297,315c-10,17 -26,34 -48,49" fill="none" stroke="#588CD8" stroke-linecap="round" stroke-width="1.75" id="svg_58"/>
+    </g>
+</svg>  
