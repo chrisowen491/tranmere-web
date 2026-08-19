@@ -1,0 +1,10 @@
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+ <g stroke="null" id="1989-stand-collar">
+   <path stroke="#588CD8" id="svg_56" stroke-width="17" stroke-linecap="round" fill="none" d="m202,324c10.63158,22 28.35088,36 50.5,40c22.14912,-4 39.86842,-18 50.5,-40"/>
+   <path stroke="#662028" id="svg_57" stroke-width="4" stroke-dasharray="4 3" fill="none" d="m202,324c10.63158,22 28.35088,36 50.5,40c22.14912,-4 39.86842,-18 50.5,-40"/>
+  </g>
+  <g id="buttons">
+   <path d="m247.29824,356l12.40351,0l0,34l-12.40351,0l0,-34z" fill="#588CD8" id="svg_58" stroke="#d3d3d3"/>
+   <circle cx="253.5" cy="375" r="3.10088" fill="#f8f8f5" id="svg_59" stroke="#c5c5c5"/>
+  </g>
+</svg>
