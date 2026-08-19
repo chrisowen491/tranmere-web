@@ -3,6 +3,8 @@ import { getAllArticlesForTag } from "@/lib/api";
 import { SlugParams } from "@/lib/types";
 import { pageMetadata } from "@/lib/seo";
 
+export const revalidate = 7200;
+
 export async function generateMetadata(props: { params: SlugParams }) {
   const params = await props.params;
   const tag = decodeURI(params.slug);

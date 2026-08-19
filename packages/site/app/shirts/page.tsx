@@ -3,6 +3,8 @@ import { getAllShirts } from "@/lib/api";
 import { breadcrumbJsonLd, JsonLd } from "@/components/seo/JsonLd";
 import { pageMetadata } from "@/lib/seo";
 
+export const revalidate = 7200;
+
 export const metadata = pageMetadata({
   title: "Tranmere Rovers shirts",
   description: "A catalogue of historic Tranmere Rovers football shirts.",

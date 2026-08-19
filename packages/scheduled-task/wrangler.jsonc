@@ -5,7 +5,7 @@
   "compatibility_date": "2026-06-11",
   "triggers": {
     // Cloudflare Cron Triggers use UTC, which is GMT outside British Summer Time.
-    "crons": ["0 23 * * 0"]
+    "crons": ["0 23 * * SUN"]
   },
   "d1_databases": [
     {
