@@ -17,3 +17,6 @@
 
 /api/comment*
   cache-control: no-store
+
+/_next/static/*
+  Cache-Control: public,max-age=31536000,immutable
