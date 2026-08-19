@@ -2,7 +2,7 @@
   "name": "@tranmere-web/scheduled-task",
   "version": "1.0.0",
   "private": true,
-  "description": "Daily scheduled Cloudflare Worker tasks for Tranmere-Web.",
+  "description": "Weekly scheduled Cloudflare Worker tasks for Tranmere-Web.",
   "scripts": {
     "dev": "wrangler dev --env-file ../site/.env.local",
     "deploy": "wrangler deploy",

@@ -12,7 +12,7 @@ export interface Env {
 }
 
 /**
- * Add the daily work here. Keeping it separate makes the scheduled handler
+ * Add the weekly work here. Keeping it separate makes the scheduled handler
  * easy to test and lets it use `ctx.waitUntil` without delaying the trigger.
  */
 export async function runDailyTask(env: Env): Promise<void> {
@@ -67,7 +67,7 @@ export default {
     ctx: ExecutionContext
   ): Promise<void> {
     console.log(
-      `Starting daily task triggered at ${new Date(controller.scheduledTime).toISOString()}.`
+      `Starting weekly task triggered at ${new Date(controller.scheduledTime).toISOString()}.`
     );
     ctx.waitUntil(runDailyTask(env));
   }
