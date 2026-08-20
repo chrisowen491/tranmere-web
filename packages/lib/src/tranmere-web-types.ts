@@ -173,6 +173,7 @@ export interface Goal {
   id?: string;
   Date: string;
   GoalType?: string;
+  Foot?: string;
   Minute?: string;
   Opposition: string;
   Scorer: string;

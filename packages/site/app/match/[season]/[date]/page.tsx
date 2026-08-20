@@ -66,6 +66,7 @@ function mapGoal(row: {
   scorer: string;
   opposition: string;
   goal_type: string | null;
+  foot: string | null;
   minute: string | null;
   assist: string | null;
   assist_type: string | null;
@@ -74,6 +75,7 @@ function mapGoal(row: {
     id: row.id,
     Date: row.match_date,
     GoalType: row.goal_type ?? undefined,
+    Foot: row.foot ?? undefined,
     Minute: row.minute ?? undefined,
     Opposition: row.opposition,
     Scorer: row.scorer,

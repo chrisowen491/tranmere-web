@@ -3,6 +3,7 @@ import { requireAdminPage } from "@/lib/adminAuth";
 import { getPlayerProfileCorrections } from "@/lib/playerProfileCorrections";
 import { getFormationCorrections } from "@/lib/formationCorrections";
 import { getKitCorrections } from "@/lib/kitCorrections";
+import { getGoalCorrections } from "@/lib/goalCorrections";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import {
   ArrowRightIcon,
@@ -15,6 +16,7 @@ import {
   UserCircleIcon,
   UserGroupIcon,
   SwatchIcon,
+  FlagIcon,
 } from "@heroicons/react/24/outline";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -34,17 +36,20 @@ export default async function AdminPage() {
     profileCorrections,
     formationCorrections,
     kitCorrections,
+    goalCorrections,
   ] = await Promise.all([
     getAttendanceCorrections(env.DB, "pending"),
     getPlayerProfileCorrections(env.DB, "pending"),
     getFormationCorrections(env.DB, "pending"),
     getKitCorrections(env.DB, "pending"),
+    getGoalCorrections(env.DB, "pending"),
   ]);
   const totalPending =
     attendanceCorrections.length +
     profileCorrections.length +
     formationCorrections.length +
-    kitCorrections.length;
+    kitCorrections.length +
+    goalCorrections.length;
 
   const queues = [
     {
@@ -78,6 +83,14 @@ export default async function AdminPage() {
       href: "/admin/kit-corrections",
       count: kitCorrections.length,
       icon: SwatchIcon,
+    },
+    {
+      title: "Goal details",
+      description:
+        "Review suggested scorer, minute, assist and goal-type corrections.",
+      href: "/admin/goal-corrections",
+      count: goalCorrections.length,
+      icon: FlagIcon,
     },
   ];
 

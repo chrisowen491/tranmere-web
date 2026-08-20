@@ -13,6 +13,7 @@ import { replaceSeasonsKit } from "@tranmere-web/lib/src/apiFunctions";
 import { AttendanceCorrectionForm } from "./AttendanceCorrectionForm";
 import { FormationCorrectionForm } from "./FormationCorrectionForm";
 import { KitCorrectionForm } from "./KitCorrectionForm";
+import { GoalCorrectionForm } from "./GoalCorrectionForm";
 import { kitLabel } from "@/lib/kitCorrections";
 import type { MatchPageView } from "@/lib/matchPlayers";
 import type { ManagerRecord } from "@/lib/managers";
@@ -23,6 +24,16 @@ import { matchOutcome, outcomeClass } from "@/lib/seasonMatchUtils";
 
 function playerAvatar(picLink: string, season: number, kit?: string) {
   return replaceSeasonsKit(picLink, kit || season.toString());
+}
+
+function goalMinuteValue(minute?: string) {
+  const value = Number.parseInt(minute ?? "", 10);
+  return Number.isFinite(value) ? value : Number.MAX_SAFE_INTEGER;
+}
+
+function goalMinuteLabel(minute?: string) {
+  if (!minute) return "—";
+  return minute.endsWith("'") ? minute : `${minute}'`;
 }
 
 function penaltyOutcome(pens?: string, homeTeam?: string, awayTeam?: string) {
@@ -67,6 +78,17 @@ export default function MatchReport(props: {
   }
 
   const lineup = arrangeMatchLineup(players, formation);
+  const goals = [...(match.goals ?? [])].sort(
+    (left, right) =>
+      goalMinuteValue(left.Minute) - goalMinuteValue(right.Minute),
+  );
+  const matchPlayerNames = [
+    ...new Set(
+      players
+        .flatMap((player) => [player.Name, player.SubbedBy])
+        .filter(Boolean),
+    ),
+  ] as string[];
 
   const breadcrumbs = [
     { id: 1, name: "Home", href: "/" },
@@ -222,6 +244,104 @@ export default function MatchReport(props: {
               className="prose prose-lg max-w-none text-[#071a2b]/70"
               dangerouslySetInnerHTML={{ __html: match.report.report }}
             />
+          </section>
+        )}
+
+        {goals.length > 0 && (
+          <section className="mb-12 border-y border-[#071a2b]/15 py-8">
+            <div className="flex flex-wrap items-end justify-between gap-4">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-700">
+                  Rovers goals
+                </p>
+                <h2 className="mt-2 font-display text-3xl font-semibold">
+                  How the goals were made
+                </h2>
+              </div>
+              <p className="font-mono text-xs uppercase tracking-[0.12em] text-[#071a2b]/45">
+                {goals.length} {goals.length === 1 ? "goal" : "goals"} recorded
+              </p>
+            </div>
+
+            <ol className="mt-6 border border-[#071a2b]/15 bg-[#071a2b]/15">
+              {goals.map((goal, index) => (
+                <li
+                  key={goal.id ?? `${goal.Scorer}-${goal.Minute}-${index}`}
+                  className="grid gap-px border-b border-[#071a2b]/15 bg-[#071a2b]/15 last:border-b-0 sm:grid-cols-[112px_minmax(0,1fr)]"
+                >
+                  <div className="flex items-center justify-between bg-[#071a2b] px-5 py-4 text-white sm:block sm:px-6 sm:py-6">
+                    <span className="block text-[10px] font-bold uppercase tracking-[0.16em] text-blue-300">
+                      Goal {index + 1}
+                    </span>
+                    <time className="font-mono text-3xl font-bold sm:mt-2 sm:block">
+                      {goalMinuteLabel(goal.Minute)}
+                    </time>
+                  </div>
+
+                  <div className="bg-[#fffdf8] px-5 py-5 sm:px-7 sm:py-6">
+                    <Link
+                      href={`/page/player/${goal.Scorer}`}
+                      className="font-display text-2xl font-semibold hover:text-blue-700"
+                    >
+                      {goal.Scorer}
+                    </Link>
+
+                    {goal.Assist && (
+                      <p className="mt-2 text-sm text-[#071a2b]/65">
+                        Assisted by{" "}
+                        <Link
+                          href={`/page/player/${goal.Assist}`}
+                          className="font-semibold text-blue-700 underline decoration-blue-700/25 underline-offset-4"
+                        >
+                          {goal.Assist}
+                        </Link>
+                      </p>
+                    )}
+
+                    {(goal.GoalType || goal.Foot || goal.AssistType) && (
+                      <dl className="mt-5 grid gap-px border border-[#071a2b]/10 bg-[#071a2b]/10 sm:grid-cols-3">
+                        {goal.GoalType && (
+                          <div className="bg-[#f4f0e8] px-4 py-3">
+                            <dt className="font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-[#071a2b]/45">
+                              Goal type
+                            </dt>
+                            <dd className="mt-1 text-sm font-semibold">
+                              {goal.GoalType}
+                            </dd>
+                          </div>
+                        )}
+                        {goal.Foot && (
+                          <div className="bg-[#f4f0e8] px-4 py-3">
+                            <dt className="font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-[#071a2b]/45">
+                              Foot
+                            </dt>
+                            <dd className="mt-1 text-sm font-semibold">
+                              {goal.Foot}
+                            </dd>
+                          </div>
+                        )}
+                        {goal.AssistType && (
+                          <div className="bg-[#f4f0e8] px-4 py-3">
+                            <dt className="font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-[#071a2b]/45">
+                              Assist type
+                            </dt>
+                            <dd className="mt-1 text-sm font-semibold">
+                              {goal.AssistType}
+                            </dd>
+                          </div>
+                        )}
+                      </dl>
+                    )}
+                    <GoalCorrectionForm
+                      goal={goal}
+                      season={match.season.toString()}
+                      matchDate={match.date}
+                      playerNames={matchPlayerNames}
+                    />
+                  </div>
+                </li>
+              ))}
+            </ol>
           </section>
         )}
 
