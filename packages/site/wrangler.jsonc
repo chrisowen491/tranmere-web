@@ -51,6 +51,7 @@
       "database_name": "tranmere-web",
       "database_id": "cb021697-9af3-4872-b8eb-ce49be71bb8c",
       "migrations_dir": "../sql/migrations",
+      "remote": true
     },
     {
       "binding": "NEXT_TAG_CACHE_D1",
@@ -70,8 +71,6 @@
   "env": {
     "staging": {
       "name": "tranmere-web-staging",
-      "workers_dev": true,
-      "routes": [],
       "services": [
         {
           "binding": "WORKER_SELF_REFERENCE",
