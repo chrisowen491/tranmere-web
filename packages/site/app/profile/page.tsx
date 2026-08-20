@@ -97,7 +97,7 @@ export default async function ProfilePage() {
             </dl>
           </div>
         </div>
-        <div className="mt-8 grid gap-3 md:grid-cols-3">
+        <div className="mt-8 grid gap-3 md:grid-cols-2 lg:grid-cols-4">
           <Link
             href="/profile/passport"
             className="flex items-center justify-between border border-[#071a2b]/15 bg-[#fffdf8] px-6 py-5 text-sm font-bold transition hover:bg-[#e8e2d6] hover:text-blue-700"
@@ -115,6 +115,12 @@ export default async function ProfilePage() {
             className="flex items-center justify-between border border-[#071a2b]/15 bg-[#fffdf8] px-6 py-5 text-sm font-bold transition hover:bg-[#e8e2d6] hover:text-blue-700"
           >
             Saved Fantasy XIs <span aria-hidden="true">→</span>
+          </Link>
+          <Link
+            href="/profile/corrections"
+            className="flex items-center justify-between border border-[#071a2b]/15 bg-[#fffdf8] px-6 py-5 text-sm font-bold transition hover:bg-[#e8e2d6] hover:text-blue-700"
+          >
+            Your archive corrections <span aria-hidden="true">→</span>
           </Link>
         </div>
         <DeleteSupporterDataControl />

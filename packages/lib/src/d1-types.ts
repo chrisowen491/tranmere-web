@@ -272,6 +272,8 @@ export interface UserProfileRow {
   public_collection_id: string | null;
   public_collection_visible: number;
   contact_opt_in: number;
+  correction_recognition_visible: number;
+  correction_username: string | null;
 }
 
 export type ProgrammeCollectionStatus = 'owned' | 'wanted' | 'trade';

@@ -28,6 +28,7 @@ const linkGroups = [
       { label: "Rovers connections", href: "/rovers-connections" },
       { label: "Player partnerships", href: "/players/partnerships" },
       { label: "Archive completeness", href: "/archive-completeness" },
+      { label: "Contributors", href: "/contributors" },
     ],
   },
   {
