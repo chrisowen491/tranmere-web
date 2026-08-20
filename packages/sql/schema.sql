@@ -696,6 +696,7 @@ CREATE TABLE IF NOT EXISTS UserProfiles (
   correction_recognition_visible INTEGER NOT NULL DEFAULT 0
     CHECK (correction_recognition_visible IN (0, 1)),
   correction_username TEXT,
+  avatar_url TEXT,
   FOREIGN KEY (account_id) REFERENCES Accounts(id) ON DELETE CASCADE
 );
 

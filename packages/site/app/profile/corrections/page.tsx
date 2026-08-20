@@ -6,6 +6,7 @@ import { ensureUserProfile } from "@/lib/userProfiles";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
+import { SupporterAvatar } from "@/components/apps/SupporterAvatar";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
@@ -32,9 +33,16 @@ export default async function CorrectionsPage() {
     <main className="min-h-screen bg-[#f4f0e8] pb-24 text-[#071a2b]">
       <header className="border-b border-white/10 bg-[#071a2b] text-white">
         <div className="mx-auto max-w-7xl px-6 py-14 sm:px-10 lg:px-12 lg:py-20">
-          <p className="text-xs font-bold uppercase tracking-[0.18em] text-blue-300">
-            Supporter profile · Archive activity
-          </p>
+          <div className="flex items-center gap-4">
+            <SupporterAvatar
+              avatarUrl={profile?.avatar_url}
+              label="Your supporter avatar"
+              className="h-16 w-16 border-white/20"
+            />
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-blue-300">
+              Supporter profile · Archive activity
+            </p>
+          </div>
           <h1 className="mt-5 font-display text-5xl font-semibold tracking-[-0.04em] sm:text-6xl">
             Your corrections
           </h1>

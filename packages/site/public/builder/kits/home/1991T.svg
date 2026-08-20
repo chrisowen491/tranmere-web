@@ -1,0 +1,26 @@
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+ <defs>
+  <pattern patternTransform="matrix(1,0,0,1,0.6666644215583801,9.583359777927399)" patternUnits="userSpaceOnUse" height="8" width="8" id="navy-checker-cuff">
+   <rect id="svg_1" fill="#0000ff" height="4" width="4"/>
+   <rect id="svg_3" fill="#0000ff" height="4" width="4" y="4" x="4"/>
+  </pattern>
+ </defs>
+  <g id="shirt">
+   <g id="Chest">
+    <path id="svg_2" d="m255.74181,315.69455l44,0l98.846,21.37263c27.533,5.95356 47.154,30.01046 47.154,57.81806l0,84.5691l-66,0l0,32.55466l-124,0l-124,0l0,-32.55466l-66,0l0,-84.5691c0,-27.80661 19.621,-51.8645 47.154,-57.81806l98.846,-21.37263l44,0z" fill="#0000ff"/>
+   </g>
+  </g>
+  <g stroke="null" id="sleeves">
+   <rect stroke="#0000ff" id="svg_4" height="11.10337" width="68.08997" y="468.52906" x="63.82454" stroke-opacity="null" stroke-width="0" fill="#ffffff"/>
+   <rect stroke="#0000ff" id="svg_5" height="11.10337" width="67.09259" y="468.59235" x="378.92495" stroke-opacity="null" stroke-width="0" fill="#ffffff"/>
+  </g>
+  <g id="sleeve-cuffs">
+   <path id="svg_46" stroke="#d4d8d8" fill="none" d="m65.75,469.25l66,0"/>
+   <path id="svg_47" stroke="#d4d8d8" fill="none" d="m379.75,469.25l66,0"/>
+   <path id="svg_6" fill="url(#navy-checker-cuff)" d="m68.5,470.79168l62,0l0,8l-62,0l0,-8z"/>
+   <path id="svg_7" fill="url(#navy-checker-cuff)" d="m382.16667,470.79168l62,0l0,8l-62,0l0,-8z"/>
+  </g>
+  <use id="svg_8" href="#enkay" style="--symbol: #fff;"/>
+  <use id="svg_9" href="#full-crest"/>
+  <use id="svg_10" fill="#fff" href="#wirral"/>
+</svg>

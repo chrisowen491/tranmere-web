@@ -131,25 +131,25 @@ const activityQueries = [
 ] as const;
 
 const publicContributionQueries = [
-  `SELECT c.submitted_by_account_id AS account_id, up.correction_username AS display_name,
+  `SELECT c.submitted_by_account_id AS account_id, up.correction_username AS display_name, up.avatar_url,
           'attendance:' || c.season || ':' || c.match_date || ':' || c.proposed_attendance AS contribution_key
    FROM MatchAttendanceCorrections c`,
-  `SELECT c.submitted_by_account_id AS account_id, up.correction_username AS display_name,
+  `SELECT c.submitted_by_account_id AS account_id, up.correction_username AS display_name, up.avatar_url,
           'formation:' || c.season || ':' || c.match_date || ':' || c.proposed_formation AS contribution_key
    FROM MatchFormationCorrections c`,
-  `SELECT c.submitted_by_account_id AS account_id, up.correction_username AS display_name,
+  `SELECT c.submitted_by_account_id AS account_id, up.correction_username AS display_name, up.avatar_url,
           'player-profile:' || c.player_name || ':' || c.changes_json AS contribution_key
    FROM PlayerProfileCorrections c`,
-  `SELECT c.submitted_by_account_id AS account_id, up.correction_username AS display_name,
+  `SELECT c.submitted_by_account_id AS account_id, up.correction_username AS display_name, up.avatar_url,
           'kit:' || c.season || ':' || c.match_date || ':' || c.proposed_kit AS contribution_key
    FROM MatchKitCorrections c`,
-  `SELECT c.submitted_by_account_id AS account_id, up.correction_username AS display_name,
+  `SELECT c.submitted_by_account_id AS account_id, up.correction_username AS display_name, up.avatar_url,
           'goal:' || c.goal_id || ':' || c.changes_json AS contribution_key
    FROM GoalCorrections c`,
-  `SELECT c.submitted_by_account_id AS account_id, up.correction_username AS display_name,
+  `SELECT c.submitted_by_account_id AS account_id, up.correction_username AS display_name, up.avatar_url,
           'appearance:' || c.appearance_id || ':' || c.changes_json AS contribution_key
    FROM AppearanceCorrections c`,
-  `SELECT c.submitted_by_account_id AS account_id, up.correction_username AS display_name,
+  `SELECT c.submitted_by_account_id AS account_id, up.correction_username AS display_name, up.avatar_url,
           'goal-submission:' || c.season || ':' || c.match_date || ':' || c.goal_json AS contribution_key
    FROM GoalSubmissions c`,
 ] as const;
@@ -236,26 +236,35 @@ export async function getPublicContributors(db: D1Database) {
       (result.results ?? []) as unknown as Array<{
         account_id: string;
         display_name: string;
+        avatar_url: string | null;
         contribution_key: string;
       }>,
   );
   const contributors = new Map<
     string,
-    { account_id: string; display_name: string; keys: Set<string> }
+    {
+      account_id: string;
+      display_name: string;
+      avatar_url: string | null;
+      keys: Set<string>;
+    }
   >();
   for (const row of rows) {
     const contributor = contributors.get(row.account_id) ?? {
       account_id: row.account_id,
       display_name: row.display_name,
+      avatar_url: row.avatar_url,
       keys: new Set<string>(),
     };
     contributor.display_name = row.display_name;
+    contributor.avatar_url = row.avatar_url;
     contributor.keys.add(row.contribution_key);
     contributors.set(row.account_id, contributor);
   }
   return Array.from(contributors.values(), (contributor) => ({
     account_id: contributor.account_id,
     display_name: contributor.display_name,
+    avatar_url: contributor.avatar_url,
     approved_count: contributor.keys.size,
   })).sort((left, right) =>
     left.display_name.localeCompare(right.display_name, "en-GB", {

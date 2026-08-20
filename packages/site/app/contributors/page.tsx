@@ -2,6 +2,7 @@ import { getPublicContributors } from "@/lib/correctionActivity";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { SupporterAvatar } from "@/components/apps/SupporterAvatar";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
@@ -59,12 +60,21 @@ export default async function ContributorsPage() {
                 key={contributor.account_id}
                 className="bg-[#fffdf8] p-6 sm:p-8"
               >
-                <p className="font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-blue-700">
-                  Archive contributor
-                </p>
-                <h2 className="mt-3 font-display text-3xl font-semibold">
-                  @{contributor.display_name}
-                </h2>
+                <div className="flex items-center gap-4">
+                  <SupporterAvatar
+                    avatarUrl={contributor.avatar_url}
+                    label={`${contributor.display_name}'s supporter avatar`}
+                    className="h-14 w-14"
+                  />
+                  <div>
+                    <p className="font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-blue-700">
+                      Archive contributor
+                    </p>
+                    <h2 className="mt-2 font-display text-3xl font-semibold">
+                      @{contributor.display_name}
+                    </h2>
+                  </div>
+                </div>
                 <p className="mt-6 border-t border-[#071a2b]/10 pt-5 text-sm">
                   <span className="font-mono text-2xl font-bold">
                     {contributor.approved_count}

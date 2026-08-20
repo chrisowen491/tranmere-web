@@ -1,0 +1,9 @@
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+  <g id="kit-1992a-collar">
+    <path d="m256 356-30 30-31.996-70.056L212 304l44 52z" fill="#f8f5e9" stroke="#d5d0c3"/>
+    <path d="m256 356 30 30 31.996-70.056L300 304l-44 52z" fill="#f8f5e9" stroke="#d5d0c3"/>
+    <path d="M199 313.5 229 377M313 313.5 282 377" fill="none" stroke="#17388c" stroke-width="4" stroke-dasharray="5 5"/>
+    <path d="m248 357 8-4 8 4v28h-16z" fill="#f8f5e9" stroke="#d5d0c3"/>
+    <circle cx="256" cy="367" r="3.5" fill="#f8f5e9" stroke="#17388c" stroke-width="1.5"/>
+  </g>
+</svg>

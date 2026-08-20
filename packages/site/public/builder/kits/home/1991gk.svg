@@ -11,7 +11,8 @@
 
     <use href="#full-crest" />
     
-    <use href="#enkay" style="--line: #000;"/>
+    <use href="#enkay" style="--line: #000;" y="-5"/>
+     <use href="#ens" y="-5"/>
     <use href="#wirral" fill="#fff" />
 
     <g>

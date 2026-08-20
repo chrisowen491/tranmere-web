@@ -274,6 +274,7 @@ export interface UserProfileRow {
   contact_opt_in: number;
   correction_recognition_visible: number;
   correction_username: string | null;
+  avatar_url: string | null;
 }
 
 export type ProgrammeCollectionStatus = 'owned' | 'wanted' | 'trade';

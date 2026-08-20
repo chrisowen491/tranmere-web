@@ -10,6 +10,8 @@ import type { AttendedMatchRow } from "@tranmere-web/lib/src/d1-types";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { ensureUserProfile } from "@/lib/userProfiles";
+import { SupporterAvatar } from "@/components/apps/SupporterAvatar";
 
 export const dynamic = "force-dynamic";
 
@@ -55,7 +57,10 @@ export default async function PassportPage(props: {
   if (!session) redirect("/auth/login?returnTo=%2Fprofile%2Fpassport");
   const db = getCloudflareContext().env.DB;
   const account = await resolveAccount(db, session.user.sub);
-  const matches = await getAttendedMatches(db, account.id);
+  const [matches, profile] = await Promise.all([
+    getAttendedMatches(db, account.id),
+    ensureUserProfile(db, account.id),
+  ]);
   const searchParams = await props.searchParams;
   const seasons = [...new Set(matches.map((match) => match.season))].sort(
     (a, b) => b - a,
@@ -87,9 +92,16 @@ export default async function PassportPage(props: {
     <main className="min-h-screen bg-[#f4f0e8] pb-24 text-[#071a2b]">
       <header className="border-b border-white/10 bg-[#071a2b] text-white">
         <div className="mx-auto max-w-7xl px-6 py-14 sm:px-10 lg:px-12 lg:py-20">
-          <p className="font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-blue-300">
-            Supporter archive · Private to you
-          </p>
+          <div className="flex items-center gap-4">
+            <SupporterAvatar
+              avatarUrl={profile?.avatar_url}
+              label="Your supporter avatar"
+              className="h-16 w-16 border-white/20"
+            />
+            <p className="font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-blue-300">
+              Supporter archive · Private to you
+            </p>
+          </div>
           <h1 className="mt-5 font-display text-5xl font-semibold tracking-[-0.04em] sm:text-6xl">
             Your Rovers passport
           </h1>

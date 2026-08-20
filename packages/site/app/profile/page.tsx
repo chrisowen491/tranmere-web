@@ -5,9 +5,11 @@ import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { CheckBadgeIcon, UserCircleIcon } from "@heroicons/react/24/outline";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
+import Image from "next/image";
 import Link from "next/link";
 import { DeleteSupporterDataControl } from "@/components/apps/DeleteSupporterDataControl";
 import { SignInMethods } from "@/components/apps/SignInMethods";
+import { SupporterAvatarEditor } from "@/components/apps/SupporterAvatarEditor";
 import { listAccountIdentities } from "@/lib/accountLinking";
 
 export const dynamic = "force-dynamic";
@@ -82,7 +84,20 @@ export default async function ProfilePage(props: {
       <section className="mx-auto max-w-7xl px-6 py-12 sm:px-10 lg:px-12">
         <div className="grid border border-[#071a2b]/15 bg-[#fffdf8] shadow-[5px_5px_0_rgba(7,26,43,0.08)] md:grid-cols-[220px_1fr]">
           <div className="flex items-center justify-center border-b border-[#071a2b]/15 bg-[#e8e2d6] p-10 md:border-r md:border-b-0">
-            <UserCircleIcon className="h-28 w-28 text-blue-700" aria-hidden />
+            {profile?.avatar_url ? (
+              <div className="h-36 w-36 overflow-hidden border border-[#071a2b]/20 bg-white">
+                <Image
+                  src={profile.avatar_url}
+                  alt={`${displayName}'s supporter avatar`}
+                  width={320}
+                  height={320}
+                  unoptimized
+                  className="h-full w-full object-cover"
+                />
+              </div>
+            ) : (
+              <UserCircleIcon className="h-28 w-28 text-blue-700" aria-hidden />
+            )}
           </div>
           <div className="p-7 sm:p-10">
             <p className="font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-blue-700">
@@ -118,6 +133,7 @@ export default async function ProfilePage(props: {
             </dl>
           </div>
         </div>
+        <SupporterAvatarEditor initialAvatarUrl={profile?.avatar_url || null} />
         <div className="mt-8 grid gap-3 md:grid-cols-2 lg:grid-cols-4">
           <Link
             href="/profile/passport"

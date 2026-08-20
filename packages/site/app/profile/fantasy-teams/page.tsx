@@ -5,6 +5,8 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { listFantasyTeams } from "@/lib/fantasyTeams";
 import { FantasyTeamManager } from "@/components/apps/FantasyTeamManager";
+import { SupporterAvatar } from "@/components/apps/SupporterAvatar";
+import { ensureUserProfile } from "@/lib/userProfiles";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Your saved Fantasy XIs" };
@@ -14,14 +16,24 @@ export default async function SavedFantasyTeamsPage() {
   if (!session) redirect("/auth/login?returnTo=%2Fprofile%2Ffantasy-teams");
   const db = getCloudflareContext().env.DB;
   const account = await resolveAccount(db, session.user.sub);
-  const teams = await listFantasyTeams(db, account.id);
+  const [teams, profile] = await Promise.all([
+    listFantasyTeams(db, account.id),
+    ensureUserProfile(db, account.id),
+  ]);
   return (
     <main className="min-h-screen bg-[#f4f0e8] pb-24 text-[#071a2b]">
       <header className="bg-[#071a2b] text-white">
         <div className="mx-auto max-w-7xl px-6 py-16 sm:px-10 lg:px-12">
-          <p className="section-kicker text-blue-300">
-            Supporter account · Fantasy XI
-          </p>
+          <div className="flex items-center gap-4">
+            <SupporterAvatar
+              avatarUrl={profile?.avatar_url}
+              label="Your supporter avatar"
+              className="h-16 w-16 border-white/20"
+            />
+            <p className="section-kicker text-blue-300">
+              Supporter account · Fantasy XI
+            </p>
+          </div>
           <h1 className="mt-5 font-display text-5xl font-semibold tracking-[-0.04em]">
             Your saved XIs
           </h1>

@@ -21,6 +21,7 @@ export interface ProgrammeTotal {
 
 export interface PublicProgrammeCollector {
   public_id: string;
+  avatar_url: string | null;
   wanted_count: number;
   trade_count: number;
 }
@@ -169,7 +170,7 @@ export async function getPublicCollection(db: D1Database, publicId: string) {
 export async function getPublicProgrammeCollectors(db: D1Database) {
   const result = await db
     .prepare(
-      `SELECT up.public_collection_id AS public_id,
+      `SELECT up.public_collection_id AS public_id, up.avatar_url,
               SUM(CASE WHEN pc.status = 'wanted' AND g.id IS NOT NULL THEN 1 ELSE 0 END) AS wanted_count,
               SUM(CASE WHEN pc.status = 'trade' AND g.id IS NOT NULL THEN 1 ELSE 0 END) AS trade_count
        FROM UserProfiles up
@@ -181,11 +182,12 @@ export async function getPublicProgrammeCollectors(db: D1Database) {
         AND g.no_programme_issued = 0
        WHERE up.public_collection_visible = 1
          AND up.public_collection_id IS NOT NULL
-       GROUP BY up.account_id, up.public_collection_id
+       GROUP BY up.account_id, up.public_collection_id, up.avatar_url
        ORDER BY trade_count DESC, wanted_count DESC, up.public_collection_id ASC`,
     )
     .all<{
       public_id: string;
+      avatar_url: string | null;
       wanted_count: number;
       trade_count: number;
     }>();

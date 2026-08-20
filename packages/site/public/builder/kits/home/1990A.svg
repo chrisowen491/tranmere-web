@@ -26,6 +26,6 @@
    <path d="m68.5,470.79168l62,0l0,8l-62,0l0,-8z" fill="url(#navy-checker-cuff)" id="svg_6"/>
    <path d="m382.16667,470.79168l62,0l0,8l-62,0l0,-8z" fill="url(#navy-checker-cuff)" id="svg_7"/>
   </g>
-  <use href="#wirral" fill="#0a9388" />
+  <use id="svg_4" fill="#fff" href="#wirral"/>
   <use id="svg_8" href="#enkay"/>
 </svg>

@@ -1,6 +1,7 @@
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import Link from "next/link";
 import { getPublicProgrammeCollectors } from "@/lib/programmeCollections";
+import { SupporterAvatar } from "@/components/apps/SupporterAvatar";
 
 export const dynamic = "force-dynamic";
 
@@ -46,9 +47,16 @@ export default async function ProgrammeCollectorsPage() {
                 href={`/programme-collections/${collector.public_id}`}
                 className="group bg-[#fffdf8] p-6 transition hover:bg-[#e8e2d6] sm:p-8"
               >
-                <p className="font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-blue-700">
-                  Anonymous collector {String(index + 1).padStart(2, "0")}
-                </p>
+                <div className="flex items-center gap-4">
+                  <SupporterAvatar
+                    avatarUrl={collector.avatar_url}
+                    label={`Anonymous collector ${index + 1} avatar`}
+                    className="h-14 w-14"
+                  />
+                  <p className="font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-blue-700">
+                    Anonymous collector {String(index + 1).padStart(2, "0")}
+                  </p>
+                </div>
                 <h2 className="mt-4 font-display text-3xl font-semibold tracking-[-0.03em] group-hover:text-blue-700">
                   Wanted and trade list
                 </h2>

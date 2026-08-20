@@ -1,0 +1,32 @@
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <clipPath id="kit-1992a-shirt-clip">
+      <path d="m255.742 313.009h44l98.846 21.665c27.533 6.035 47.154 30.421 47.154 58.609v85.726h-66v33h-248v-33h-66v-85.726c0-28.188 19.621-52.574 47.154-58.609l98.846-21.665h44z"/>
+    </clipPath>
+    <pattern id="kit-1992a-shattered-print" width="112" height="96" patternUnits="userSpaceOnUse" patternTransform="rotate(-4)">
+      <rect width="112" height="96" fill="#416dcc"/>
+      <path d="M-9 16 24 2l21 18-17 13 31 9-12 21L8 47zm72-21 29 13-7 22 35 16-22 18-31-20 11-16zM4 79l31-18 18 11-10 24H8zm54-8 22-18 36 19-16 24-24-9z" fill="#17388c" opacity=".82"/>
+      <path d="m-5 31 28-17 31 19-20 15 29 20M45-4l33 25-16 25 34 24M2 86l38-22 27 24M76 4l24 19-19 17 35 14" fill="none" stroke="#142f79" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity=".95"/>
+      <path d="m11 10 18 6m-8 40 25-8m34 24 20 7M64 13l17 10M4 72l20-5m72-57 18 10" fill="none" stroke="#79a0ec" stroke-width="5" stroke-linecap="round" opacity=".42"/>
+      <path d="M35 3 21 27m55 18L58 64m49-4L88 91M10 50l-15 17" fill="none" stroke="#0d286c" stroke-width="2" opacity=".85"/>
+    </pattern>
+  </defs>
+
+  <g id="shirt">
+    <path d="m255.742 313.009h44l98.846 21.665c27.533 6.035 47.154 30.421 47.154 58.609v85.726h-66v33h-248v-33h-66v-85.726c0-28.188 19.621-52.574 47.154-58.609l98.846-21.665h44z" fill="url(#kit-1992a-shattered-print)"/>
+    <g clip-path="url(#kit-1992a-shirt-clip)" opacity=".55">
+      <path d="M61 401c47-20 73-14 111 9s74 16 118-10 88-21 161 7M80 475c49-29 87-24 126 1s79 17 116-6 77-22 119 0" fill="none" stroke="#6f94e2" stroke-width="4"/>
+    </g>
+  </g>
+
+  <g id="kitmaker" transform="translate(0 2)">
+    <use href="#enkay" style="--symbol:#aff8f1;" y="-5"/>
+  </g>
+  <use href="#ens" style="--line:#aff8f1;" y="-5"/>
+  <g id="tranmere-crest">
+    <use href="#full-crest"/>
+  </g>
+  <g id="sponsor">
+    <use href="#wirral" fill="#f8f2df"/>
+  </g>
+</svg>

@@ -1,0 +1,14 @@
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <pattern id="kit-1991a-collar-studs" width="8" height="8" patternUnits="userSpaceOnUse">
+      <circle cx="4" cy="4" r="1.6" fill="#f2e632"/>
+    </pattern>
+  </defs>
+  <g id="kit-1991a-collar">
+    <path d="m256 358-29 28-32-70 18-12 43 54z" fill="#079b69" stroke="#087c58"/>
+    <path d="m256 358 29 28 32-70-18-12-43 54z" fill="#079b69" stroke="#087c58"/>
+    <path d="M202 314.5 229 377M310 314.5 283 377" fill="none" stroke="url(#kit-1991a-collar-studs)" stroke-width="8"/>
+    <path d="m249 358 7-4 7 4v27h-14z" fill="#f4edc9" stroke="#d8d0a7"/>
+    <circle cx="256" cy="367" r="3.5" fill="#f4edc9" stroke="#087c58" stroke-width="1.5"/>
+  </g>
+</svg>
