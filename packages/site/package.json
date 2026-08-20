@@ -14,6 +14,7 @@
     "cloudflare-deploy": "npx opennextjs-cloudflare deploy",
     "cloudflare-deploy:staging": "npx opennextjs-cloudflare deploy --env staging",
     "db:migrate:staging": "npx wrangler d1 migrations apply DB --env staging --remote",
+    "db:migrate:production": "npx wrangler d1 migrations apply DB --remote",
     "cloudflare-preview": "npx opennextjs-cloudflare build && npx opennextjs-cloudflare preview",
     "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
     "db": "npx wrangler d1 execute tranmere-web --local --file=../sql/schema.sql ",

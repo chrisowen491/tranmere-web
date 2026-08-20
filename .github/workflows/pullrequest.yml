@@ -25,6 +25,12 @@ jobs:
           node-version: '24'
       - name: Install
         run: yarn --frozen-lockfile
+      - name: Test
+        run: yarn workspace @tranmere-web/site test
+      - name: Lint
+        run: yarn workspace @tranmere-web/site lint
+      - name: Validate D1 migrations
+        run: yarn workspace @tranmere-web/sql migrations
       - name: Web Build
         run: yarn cloudflare-build
         env:

@@ -2,7 +2,6 @@ import { auth0 } from "@/lib/auth0";
 import { resolveAccount } from "@/lib/accounts";
 import { getAdminSession } from "@/lib/adminAuth";
 import {
-  ensureFormationCorrectionsTable,
   isFormation,
   type FormationCorrectionStatus,
 } from "@/lib/formationCorrections";
@@ -42,7 +41,6 @@ export async function POST(request: NextRequest) {
     body.matchDate,
   );
   if (!match) return error("That match could not be found.", 404);
-  await ensureFormationCorrectionsTable(env.DB);
   const account = await resolveAccount(env.DB, session.user.sub);
   const duplicate = await env.DB.prepare(
     `SELECT id FROM MatchFormationCorrections
@@ -93,7 +91,6 @@ export async function PATCH(request: NextRequest) {
     return error("Choose whether to approve or reject this correction.", 400);
   }
   const db = getCloudflareContext().env.DB;
-  await ensureFormationCorrectionsTable(db);
   const correction = await db
     .prepare(
       `SELECT season, match_date, proposed_formation FROM MatchFormationCorrections

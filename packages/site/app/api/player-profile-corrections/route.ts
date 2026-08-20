@@ -3,7 +3,6 @@ import { resolveAccount } from "@/lib/accounts";
 import { getAdminSession } from "@/lib/adminAuth";
 import {
   approvePlayerProfileCorrection,
-  ensurePlayerProfileCorrectionsTable,
   normalizeDateOfBirth,
   type EditablePlayerProfile,
   type PlayerProfileCorrectionStatus,
@@ -174,7 +173,6 @@ async function submitCorrection(request: NextRequest) {
     return error("Those details already appear on the player profile.", 409);
   }
 
-  await withD1ResetRetry(() => ensurePlayerProfileCorrectionsTable(env.DB));
   const changesJson = JSON.stringify(actualChanges);
   const duplicate = await withD1ResetRetry(() =>
     env.DB.prepare(
@@ -252,7 +250,7 @@ export async function PATCH(request: NextRequest) {
       const player = await approvePlayerProfileCorrection(
         db,
         body.id,
-        session.user.email,
+        session.user.email || session.user.sub,
         reviewNote,
       );
       if (!player) {
@@ -284,7 +282,6 @@ export async function PATCH(request: NextRequest) {
     }
   }
 
-  await ensurePlayerProfileCorrectionsTable(db);
   const correction = await db
     .prepare(
       `SELECT player_name FROM PlayerProfileCorrections

@@ -2,7 +2,6 @@ import { auth0 } from "@/lib/auth0";
 import { resolveAccount } from "@/lib/accounts";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { NextResponse } from "next/server";
-import { ensureCorrectionActivityTables } from "@/lib/correctionActivity";
 
 export async function DELETE() {
   const session = await auth0.getSession();
@@ -14,7 +13,6 @@ export async function DELETE() {
   }
   const db = getCloudflareContext().env.DB;
   const account = await resolveAccount(db, session.user.sub);
-  await ensureCorrectionActivityTables(db);
   await db.batch([
     db
       .prepare(

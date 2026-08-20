@@ -2,7 +2,6 @@ import { getAdminSession } from "@/lib/adminAuth";
 import { auth0 } from "@/lib/auth0";
 import { resolveAccount } from "@/lib/accounts";
 import {
-  ensureAppearanceCorrectionsTable,
   isNewAppearanceCorrection,
   parseEditableAppearance,
   type AppearanceCorrectionStatus,
@@ -188,7 +187,6 @@ export async function POST(request: NextRequest) {
         );
     }
 
-    await ensureAppearanceCorrectionsTable(db);
     const pending = await db
       .prepare(
         `SELECT changes_json FROM AppearanceCorrections
@@ -270,7 +268,6 @@ export async function POST(request: NextRequest) {
       return error(`${name} could not be matched to a player profile.`, 400);
   }
 
-  await ensureAppearanceCorrectionsTable(db);
   const changesJson = JSON.stringify(changes);
   const duplicate = await db
     .prepare(
@@ -321,7 +318,6 @@ export async function PATCH(request: NextRequest) {
   if (!body.id || (body.status !== "approved" && body.status !== "rejected"))
     return error("Choose whether to approve or reject this correction.", 400);
   const db = getCloudflareContext().env.DB;
-  await ensureAppearanceCorrectionsTable(db);
   const correction = await db
     .prepare(
       `SELECT appearance_id, season, match_date, opposition, changes_json

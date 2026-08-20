@@ -81,7 +81,7 @@
       "r2_buckets": [
         {
           "binding": "NEXT_INC_CACHE_R2_BUCKET",
-          "bucket_name": "tranmere-web-stgaing"
+          "bucket_name": "tranmere-web-staging"
         }
       ],
       "durable_objects": {

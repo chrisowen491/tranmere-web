@@ -141,9 +141,6 @@ export default function CommentPanel(props: {
         {thecomments &&
           thecomments.map((comment, idx) => {
             const isAuthor = comment.isAuthor;
-            const isAdmin =
-              user && user.email === process.env.NEXT_PUBLIC_AUTH0_ADMIN_EMAIL;
-
             return (
               <div key={idx} className="flex space-x-4 text-sm">
                 <div className="flex-none py-10">
@@ -186,7 +183,7 @@ export default function CommentPanel(props: {
                     dangerouslySetInnerHTML={{ __html: comment.text }}
                     className="prose prose-sm mt-4 max-w-none dark:text-gray-50"
                   />
-                  {(isAdmin || isAuthor) && (
+                  {isAuthor && (
                     <button
                       className="text-gray-400 hover:text-red-500"
                       onClick={() => onDelete(comment)}

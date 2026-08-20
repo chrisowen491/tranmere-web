@@ -65,38 +65,10 @@ export function parseEditableAppearance(value: string): EditableAppearance {
   }
 }
 
-export async function ensureAppearanceCorrectionsTable(db: D1Database) {
-  await db.batch([
-    db.prepare(`CREATE TABLE IF NOT EXISTS AppearanceCorrections (
-      id TEXT NOT NULL PRIMARY KEY,
-      appearance_id TEXT NOT NULL,
-      season TEXT NOT NULL,
-      match_date TEXT NOT NULL,
-      opposition TEXT NOT NULL,
-      current_json TEXT NOT NULL,
-      changes_json TEXT NOT NULL,
-      source TEXT,
-      explanation TEXT,
-      submitted_by_account_id TEXT NOT NULL,
-      submitted_by_name TEXT NOT NULL,
-      submitted_at TEXT NOT NULL,
-      status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'rejected')),
-      reviewed_by TEXT,
-      reviewed_at TEXT,
-      review_note TEXT
-    )`),
-    db.prepare(`CREATE INDEX IF NOT EXISTS AppearanceCorrections_status_idx
-      ON AppearanceCorrections (status, submitted_at)`),
-    db.prepare(`CREATE INDEX IF NOT EXISTS AppearanceCorrections_appearance_idx
-      ON AppearanceCorrections (appearance_id, status)`),
-  ]);
-}
-
 export async function getAppearanceCorrections(
   db: D1Database,
   status?: AppearanceCorrectionStatus,
 ) {
-  await ensureAppearanceCorrectionsTable(db);
   const statement = status
     ? db
         .prepare(

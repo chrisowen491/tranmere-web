@@ -2,10 +2,7 @@ import { auth0 } from "@/lib/auth0";
 import { resolveAccount } from "@/lib/accounts";
 import { getAdminSession } from "@/lib/adminAuth";
 import { getGameBySeasonAndDate } from "@/lib/games";
-import {
-  ensureAttendanceCorrectionsTable,
-  type AttendanceCorrectionStatus,
-} from "@/lib/attendanceCorrections";
+import { type AttendanceCorrectionStatus } from "@/lib/attendanceCorrections";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { revalidatePath } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
@@ -69,7 +66,6 @@ export async function POST(request: NextRequest) {
   }
 
   const db = env.DB;
-  await ensureAttendanceCorrectionsTable(db);
   const account = await resolveAccount(db, session.user.sub);
 
   const duplicate = await db
@@ -132,7 +128,6 @@ export async function PATCH(request: NextRequest) {
   }
 
   const db = getCloudflareContext().env.DB;
-  await ensureAttendanceCorrectionsTable(db);
   const correction = await db
     .prepare(
       `SELECT season, match_date, proposed_attendance

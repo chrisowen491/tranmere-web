@@ -1,10 +1,7 @@
 import { getAdminSession } from "@/lib/adminAuth";
 import { auth0 } from "@/lib/auth0";
 import { resolveAccount } from "@/lib/accounts";
-import {
-  ensureGoalSubmissionsTable,
-  parseSubmittedGoal,
-} from "@/lib/goalSubmissions";
+import { parseSubmittedGoal } from "@/lib/goalSubmissions";
 import type { EditableGoal } from "@/lib/goalCorrections";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { GOAL_FEET } from "@tranmere-web/lib/src/goal-constants";
@@ -83,7 +80,6 @@ export async function POST(request: NextRequest) {
   for (const name of [goal.scorer, goal.assist])
     if (name && !(await playerExists(db, name)))
       return error(`${name} could not be matched to a player profile.`, 400);
-  await ensureGoalSubmissionsTable(db);
   const account = await resolveAccount(db, session.user.sub);
   const goalJson = JSON.stringify(goal);
   const duplicate = await db
@@ -130,7 +126,6 @@ export async function PATCH(request: NextRequest) {
   if (!body.id || !["approved", "rejected"].includes(body.status ?? ""))
     return error("Choose whether to approve or reject this goal.", 400);
   const db = getCloudflareContext().env.DB;
-  await ensureGoalSubmissionsTable(db);
   const submission = await db
     .prepare(
       "SELECT season, match_date, opposition, competition, goal_json FROM GoalSubmissions WHERE id = ? AND status = 'pending'",

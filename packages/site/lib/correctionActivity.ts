@@ -1,11 +1,3 @@
-import { ensureAppearanceCorrectionsTable } from "@/lib/appearanceCorrections";
-import { ensureAttendanceCorrectionsTable } from "@/lib/attendanceCorrections";
-import { ensureFormationCorrectionsTable } from "@/lib/formationCorrections";
-import { ensureGoalCorrectionsTable } from "@/lib/goalCorrections";
-import { ensureGoalSubmissionsTable } from "@/lib/goalSubmissions";
-import { ensureKitCorrectionsTable } from "@/lib/kitCorrections";
-import { ensurePlayerProfileCorrectionsTable } from "@/lib/playerProfileCorrections";
-
 export type CorrectionKind =
   | "attendance"
   | "formation"
@@ -78,16 +70,6 @@ function parseJson(value: string | null) {
   } catch {
     return {};
   }
-}
-
-export async function ensureCorrectionActivityTables(db: D1Database) {
-  await ensureAttendanceCorrectionsTable(db);
-  await ensureFormationCorrectionsTable(db);
-  await ensurePlayerProfileCorrectionsTable(db);
-  await ensureKitCorrectionsTable(db);
-  await ensureGoalCorrectionsTable(db);
-  await ensureGoalSubmissionsTable(db);
-  await ensureAppearanceCorrectionsTable(db);
 }
 
 const activityQueries = [
@@ -173,7 +155,6 @@ const publicContributionQueries = [
 ] as const;
 
 export async function getCorrectionActivity(db: D1Database, accountId: string) {
-  await ensureCorrectionActivityTables(db);
   const queryResults = await db.batch(
     activityQueries.map((query) => db.prepare(query).bind(accountId)),
   );
@@ -228,7 +209,6 @@ export async function withdrawCorrection(
 ) {
   const table = correctionTables[kind];
   if (!table) return false;
-  await ensureCorrectionActivityTables(db);
   const result = await db
     .prepare(
       `DELETE FROM ${table}
@@ -240,7 +220,6 @@ export async function withdrawCorrection(
 }
 
 export async function getPublicContributors(db: D1Database) {
-  await ensureCorrectionActivityTables(db);
   const queryResults = await db.batch(
     publicContributionQueries.map((query) =>
       db.prepare(
