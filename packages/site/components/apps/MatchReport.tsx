@@ -14,6 +14,7 @@ import { AttendanceCorrectionForm } from "./AttendanceCorrectionForm";
 import { FormationCorrectionForm } from "./FormationCorrectionForm";
 import { KitCorrectionForm } from "./KitCorrectionForm";
 import { GoalCorrectionForm } from "./GoalCorrectionForm";
+import { AppearanceCorrectionForm } from "./AppearanceCorrectionForm";
 import { kitLabel } from "@/lib/kitCorrections";
 import type { MatchPageView } from "@/lib/matchPlayers";
 import type { ManagerRecord } from "@/lib/managers";
@@ -520,6 +521,57 @@ export default function MatchReport(props: {
                 </div>
               </div>
             )}
+
+            <details className="group mt-4 border border-[#071a2b]/15 bg-[#fffdf8]">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-5 marker:hidden sm:p-6">
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-[0.14em] text-blue-700">
+                    Community archive
+                  </p>
+                  <h3 className="mt-1 font-display text-2xl font-semibold">
+                    Correct the team sheet
+                  </h3>
+                </div>
+                <span
+                  aria-hidden="true"
+                  className="grid h-9 w-9 shrink-0 place-items-center border border-[#071a2b]/20 font-mono text-xl text-blue-700 transition group-open:rotate-45"
+                >
+                  +
+                </span>
+              </summary>
+              <div className="border-t border-[#071a2b]/10 px-5 pb-5 sm:px-6 sm:pb-6">
+                <p className="max-w-2xl pt-5 text-sm leading-6 text-[#071a2b]/60">
+                  Suggest a correction to a player, shirt number, card or
+                  substitution. Every change is checked by an administrator
+                  before it is published.
+                </p>
+                <div className="mt-5 divide-y divide-[#071a2b]/10 border-t border-[#071a2b]/10">
+                  {players.map((player) => (
+                    <div key={player.id} className="py-4">
+                      <div className="flex flex-wrap items-center justify-between gap-3">
+                        <div>
+                          <p className="font-semibold">{player.Name}</p>
+                          <p className="mt-1 font-mono text-[11px] text-[#071a2b]/45">
+                            {player.Number
+                              ? `No. ${player.Number}`
+                              : "No shirt number"}
+                            {player.SubbedBy
+                              ? ` · replaced by ${player.SubbedBy}${player.SubTime ? ` (${player.SubTime})` : ""}`
+                              : ""}
+                          </p>
+                        </div>
+                        <AppearanceCorrectionForm
+                          appearance={player}
+                          season={match.season.toString()}
+                          matchDate={match.date}
+                          playerNames={matchPlayerNames}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </details>
           </section>
         )}
 

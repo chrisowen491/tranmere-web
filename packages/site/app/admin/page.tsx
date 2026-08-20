@@ -4,6 +4,7 @@ import { getPlayerProfileCorrections } from "@/lib/playerProfileCorrections";
 import { getFormationCorrections } from "@/lib/formationCorrections";
 import { getKitCorrections } from "@/lib/kitCorrections";
 import { getGoalCorrections } from "@/lib/goalCorrections";
+import { getAppearanceCorrections } from "@/lib/appearanceCorrections";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import {
   ArrowRightIcon,
@@ -37,19 +38,22 @@ export default async function AdminPage() {
     formationCorrections,
     kitCorrections,
     goalCorrections,
+    appearanceCorrections,
   ] = await Promise.all([
     getAttendanceCorrections(env.DB, "pending"),
     getPlayerProfileCorrections(env.DB, "pending"),
     getFormationCorrections(env.DB, "pending"),
     getKitCorrections(env.DB, "pending"),
     getGoalCorrections(env.DB, "pending"),
+    getAppearanceCorrections(env.DB, "pending"),
   ]);
   const totalPending =
     attendanceCorrections.length +
     profileCorrections.length +
     formationCorrections.length +
     kitCorrections.length +
-    goalCorrections.length;
+    goalCorrections.length +
+    appearanceCorrections.length;
 
   const queues = [
     {
@@ -91,6 +95,14 @@ export default async function AdminPage() {
       href: "/admin/goal-corrections",
       count: goalCorrections.length,
       icon: FlagIcon,
+    },
+    {
+      title: "Match appearances",
+      description:
+        "Review suggested team-sheet, shirt-number, card and substitution corrections.",
+      href: "/admin/appearance-corrections",
+      count: appearanceCorrections.length,
+      icon: UserGroupIcon,
     },
   ];
 
