@@ -1,72 +1,118 @@
 {
-    "$schema": "node_modules/wrangler/config-schema.json",
-    "main": ".open-next/worker.js",
-    "name": "tranmere-web",
-    "compatibility_date": "2026-08-08",
-    "compatibility_flags": ["nodejs_compat"],
-    "logpush": true,
-    "assets": {
-      "directory": ".open-next/assets",
-      "binding": "ASSETS",
-    },
-    "services": [
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "main": ".open-next/worker.js",
+  "name": "tranmere-web",
+  "compatibility_date": "2026-08-08",
+  "compatibility_flags": ["nodejs_compat"],
+  "logpush": true,
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "services": [
+    {
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "tranmere-web"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "NEXT_INC_CACHE_R2_BUCKET",
+      "bucket_name": "tranmere-web"
+    }
+  ],
+  "durable_objects": {
+    "bindings": [
       {
-        "binding": "WORKER_SELF_REFERENCE",
-        "service": "tranmere-web",
-      },
-    ],
-    "r2_buckets": [
-      {
-        "binding": "NEXT_INC_CACHE_R2_BUCKET",
-        "bucket_name": "tranmere-web"
+        "name": "NEXT_CACHE_DO_QUEUE",
+        "class_name": "DOQueueHandler"
       }
-    ],
-    "durable_objects": {
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": ["DOQueueHandler"]
+    }
+  ],
+  "images": {
+    "binding": "IMAGES"
+  },
+  "send_email": [
+    {
+      "name": "CONTACT_EMAIL",
+      "allowed_sender_addresses": ["admin@tranmere-web.com"],
+      "remote": true
+    }
+  ],
+  "d1_databases": [
+    {
+      "binding": "DB", // i.e. available in your Worker on env.DB
+      "database_name": "tranmere-web",
+      "database_id": "cb021697-9af3-4872-b8eb-ce49be71bb8c",
+      "remote": true
+    },
+    {
+      "binding": "NEXT_TAG_CACHE_D1",
+      "database_name": "tranmere-web",
+      "database_id": "cb021697-9af3-4872-b8eb-ce49be71bb8c"
+    }
+  ],
+  "routes": [
+    {
+      "pattern": "www.tranmere-web.com",
+      "custom_domain": true
+    }
+  ],
+  "observability": {
+    "enabled": true
+  },
+  "env": {
+    "staging": {
+      "name": "tranmere-web-staging",
+      "workers_dev": true,
+      "routes": [],
+      "services": [
+        {
+          "binding": "WORKER_SELF_REFERENCE",
+          "service": "tranmere-web-staging"
+        }
+      ],
+      "r2_buckets": [
+        {
+          "binding": "NEXT_INC_CACHE_R2_BUCKET",
+          "bucket_name": "tranmere-web-stgaing"
+        }
+      ],
+      "durable_objects": {
         "bindings": [
           {
             "name": "NEXT_CACHE_DO_QUEUE",
-            "class_name": "DOQueueHandler",
-          },
+            "class_name": "DOQueueHandler"
+          }
         ]
-    },
-    "migrations": [
-        {
-          "tag": "v1",
-          "new_sqlite_classes": ["DOQueueHandler"]
-        }
-    ],
-    "images": {
-  		"binding": "IMAGES"
-	  },
-    "send_email": [
-      {
-        "name": "CONTACT_EMAIL",
-        "allowed_sender_addresses": ["admin@tranmere-web.com"],
-        "remote": true
-      }
-    ],
-    "d1_databases": [
-      {
-        "binding": "DB", // i.e. available in your Worker on env.DB
-        "database_name": "tranmere-web",
-        "database_id": "cb021697-9af3-4872-b8eb-ce49be71bb8c",
-        "remote": true
       },
-      {
-          "binding": "NEXT_TAG_CACHE_D1",
-          "database_name": "tranmere-web",
-          "database_id": "cb021697-9af3-4872-b8eb-ce49be71bb8c"
-      }
-    ],
-    "routes": [
+      "images": {
+        "binding": "IMAGES"
+      },
+      "send_email": [
         {
-          "pattern": "www.tranmere-web.com",
-          "custom_domain": true
+          "name": "CONTACT_EMAIL",
+          "allowed_sender_addresses": ["admin@tranmere-web.com"],
+          "remote": true
         }
-    ],
-    "observability": {
-        "enabled": true
-    },
-    "vars": {
+      ],
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "migrations_dir": "../sql/migrations",
+          "database_id": "01678e9c-9359-4c1a-b744-52700ba4a11d"
+        },
+        {
+          "binding": "NEXT_TAG_CACHE_D1",
+          "database_id": "01678e9c-9359-4c1a-b744-52700ba4a11d"
+        }
+      ]
     }
+  }
 }
