@@ -29,7 +29,7 @@ const defaultArticleImage =
   "https://images.ctfassets.net/pz711f8blqyy/4xiJsea65ajh0swqmdEbOF/a2fc207703c03245cd64a8c01b857e28/2021.svg";
 
 export const metadata: Metadata = {
-  title: "The independent Tranmere Rovers archive",
+  title: "The independent Tranmere Rovers archive.",
   description:
     "Explore a century of Tranmere Rovers results, players, shirts, stories and statistics.",
   alternates: { canonical: "/" },
