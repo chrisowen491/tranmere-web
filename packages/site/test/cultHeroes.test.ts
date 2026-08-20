@@ -82,12 +82,37 @@ describe("cult hero index", () => {
         substitute_appearances: 34,
         starts: 12,
       }),
+      summary("Dead Ball Expert", "TOTAL", {
+        goals: 18,
+        free_kicks: 7,
+      }),
+      summary("Header King", "TOTAL", {
+        goals: 21,
+        headers: 9,
+      }),
+      summary("Creator", "TOTAL", {
+        appearances: 120,
+        assists: 28,
+      }),
+      summary("Red Card Record", "TOTAL", {
+        appearances: 80,
+        red_cards: 6,
+      }),
+      summary("Yellow Card Record", "TOTAL", {
+        appearances: 140,
+        yellow_cards: 42,
+      }),
       summary("Promotion Player", "1988", { appearances: 31 }),
     ];
     const profiles = new Map(
       [
         "Long Spell",
         "Bench Icon",
+        "Dead Ball Expert",
+        "Header King",
+        "Creator",
+        "Red Card Record",
+        "Yellow Card Record",
         "Promotion Player",
         "Returnee",
         "Cup Hero",
@@ -115,6 +140,22 @@ describe("cult hero index", () => {
     expect(
       sections.find((section) => section.id === "cup-heroes")?.heroes[0],
     ).toMatchObject({ name: "Cup Hero", value: 2 });
+    expect(
+      sections.find((section) => section.id === "free-kick-specialists")
+        ?.heroes[0],
+    ).toMatchObject({ name: "Dead Ball Expert", value: 7 });
+    expect(
+      sections.find((section) => section.id === "header-kings")?.heroes[0],
+    ).toMatchObject({ name: "Header King", value: 9 });
+    expect(
+      sections.find((section) => section.id === "top-assisters")?.heroes[0],
+    ).toMatchObject({ name: "Creator", value: 28 });
+    expect(
+      sections.find((section) => section.id === "most-red-cards")?.heroes[0],
+    ).toMatchObject({ name: "Red Card Record", value: 6 });
+    expect(
+      sections.find((section) => section.id === "most-yellow-cards")?.heroes[0],
+    ).toMatchObject({ name: "Yellow Card Record", value: 42 });
     expect(
       sections
         .find((section) => section.id === "promotion-contributors")

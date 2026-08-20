@@ -9,7 +9,7 @@ import { pageMetadata } from "@/lib/seo";
 export const metadata = pageMetadata({
   title: "Tranmere Rovers cult heroes",
   description:
-    "Discover Tranmere Rovers cult heroes through long spells, comebacks, cup goals, promotion campaigns and appearances from the bench.",
+    "Discover Tranmere Rovers cult heroes through long spells, comebacks, cup goals, free kicks, headers, assists, cards, promotion campaigns and appearances from the bench.",
   pathname: "/players/cult-heroes",
 });
 
@@ -46,7 +46,8 @@ export default async function CultHeroesPage() {
               <p className="mt-7 max-w-2xl text-lg leading-8 text-white/65">
                 The archive has its own way of identifying the players fans
                 remember: lengthy Rovers spells, unexpected returns, cup
-                moments, promotion runs and the trusted names from the bench.
+                moments, promotion runs, set-piece specialists, creators and the
+                trusted names from the bench.
               </p>
             </div>
             <dl className="grid grid-cols-2 border border-white/15">
@@ -75,23 +76,44 @@ export default async function CultHeroesPage() {
         aria-label="Cult hero categories"
         className="border-b border-[#071a2b]/15 bg-[#e8e2d6]"
       >
-        <div className="mx-auto flex max-w-7xl gap-px overflow-x-auto px-6 sm:px-10 lg:px-12">
-          {sections.map((section) => (
-            <a
-              key={section.id}
-              href={`#${section.id}`}
-              className="shrink-0 border-x border-[#071a2b]/10 bg-[#fffdf8] px-4 py-4 text-sm font-bold transition hover:bg-[#071a2b] hover:text-white"
-            >
-              {section.title}
-            </a>
-          ))}
+        <div className="mx-auto max-w-7xl px-6 py-7 sm:px-10 lg:px-12 lg:py-9">
+          <div className="mb-4 flex items-end justify-between gap-6">
+            <div>
+              <p className="font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-blue-700">
+                Explore the index
+              </p>
+              <p className="mt-1 text-sm text-[#071a2b]/60">
+                Jump to a route through the Rovers archive.
+              </p>
+            </div>
+            <span className="hidden font-mono text-[10px] uppercase tracking-[0.14em] text-[#071a2b]/45 sm:block">
+              {sections.length} categories
+            </span>
+          </div>
+          <div className="grid grid-cols-2 gap-px border border-[#071a2b]/15 bg-[#071a2b]/15 md:grid-cols-3 lg:grid-cols-5">
+            {sections.map((section, index) => (
+              <a
+                key={section.id}
+                href={`#${section.id}`}
+                className="group flex min-h-24 flex-col justify-between bg-[#fffdf8] p-4 transition hover:bg-[#071a2b] hover:text-white focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
+              >
+                <span className="flex items-center justify-between font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-blue-700 group-hover:text-blue-300">
+                  {String(index + 1).padStart(2, "0")}
+                  <ArrowRightIcon className="h-4 w-4 transition group-hover:translate-x-1" />
+                </span>
+                <span className="mt-5 font-display text-base font-semibold leading-tight tracking-[-0.02em] sm:text-lg">
+                  {section.title}
+                </span>
+              </a>
+            ))}
+          </div>
         </div>
       </nav>
 
       <div className="mx-auto max-w-7xl px-6 py-14 sm:px-10 lg:px-12 lg:py-20">
         <div className="mb-12 max-w-3xl border-l-2 border-blue-700 pl-5 text-sm leading-6 text-[#071a2b]/65">
-          This is a discovery index rather than a definitive ranking. Each
-          route surfaces a different kind of Rovers story from the recorded
+          This is a discovery index rather than a definitive ranking. Each route
+          surfaces a different kind of Rovers story from the recorded
           appearances, goals and season summaries in the Tranmere-Web database.
         </div>
 

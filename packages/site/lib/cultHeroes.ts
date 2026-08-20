@@ -19,6 +19,11 @@ export type CultHeroCategory =
   | "comebacks"
   | "super-subs"
   | "cup-heroes"
+  | "free-kick-specialists"
+  | "header-kings"
+  | "top-assisters"
+  | "most-red-cards"
+  | "most-yellow-cards"
   | "promotion-contributors";
 
 export interface CultHero {
@@ -163,6 +168,66 @@ export function buildCultHeroSections(
     .sort((a, b) => b.value - a.value || a.name.localeCompare(b.name))
     .slice(0, 8);
 
+  const freeKickSpecialists = totalSummaries
+    .filter((row) => row.free_kicks > 0)
+    .map((row) => ({
+      name: row.player_name,
+      headline: `${row.free_kicks} direct free-kick goal${row.free_kicks === 1 ? "" : "s"}`,
+      detail: `${row.goals} total goal${row.goals === 1 ? "" : "s"} recorded across the archive.`,
+      value: row.free_kicks,
+      valueLabel: "free-kick goals",
+    }))
+    .sort((a, b) => b.value - a.value || a.name.localeCompare(b.name))
+    .slice(0, 8);
+
+  const headerKings = totalSummaries
+    .filter((row) => row.headers > 0)
+    .map((row) => ({
+      name: row.player_name,
+      headline: `${row.headers} headed goal${row.headers === 1 ? "" : "s"}`,
+      detail: `${row.goals} total goal${row.goals === 1 ? "" : "s"} recorded across the archive.`,
+      value: row.headers,
+      valueLabel: "headed goals",
+    }))
+    .sort((a, b) => b.value - a.value || a.name.localeCompare(b.name))
+    .slice(0, 8);
+
+  const topAssisters = totalSummaries
+    .filter((row) => row.assists > 0)
+    .map((row) => ({
+      name: row.player_name,
+      headline: `${row.assists} recorded assist${row.assists === 1 ? "" : "s"}`,
+      detail: `${row.appearances} appearance${row.appearances === 1 ? "" : "s"} in the Tranmere-Web database.`,
+      value: row.assists,
+      valueLabel: "assists",
+    }))
+    .sort((a, b) => b.value - a.value || a.name.localeCompare(b.name))
+    .slice(0, 8);
+
+  const mostRedCards = totalSummaries
+    .filter((row) => row.red_cards > 0)
+    .map((row) => ({
+      name: row.player_name,
+      headline: `${row.red_cards} red card${row.red_cards === 1 ? "" : "s"}`,
+      detail: `${row.appearances} recorded Rovers appearance${row.appearances === 1 ? "" : "s"}.`,
+      value: row.red_cards,
+      valueLabel: "red cards",
+    }))
+    .sort((a, b) => b.value - a.value || a.name.localeCompare(b.name))
+    .slice(0, 8);
+
+  const mostYellowCards = totalSummaries
+    .filter((row) => row.yellow_cards > 0)
+    .map((row) => ({
+      name: row.player_name,
+      headline: `${row.yellow_cards} yellow card${row.yellow_cards === 1 ? "" : "s"}`,
+      detail: `${row.appearances} recorded Rovers appearance${row.appearances === 1 ? "" : "s"}.`,
+      value: row.yellow_cards,
+      valueLabel: "yellow cards",
+    }))
+    .sort((a, b) => b.value - a.value || a.name.localeCompare(b.name))
+    .slice(0, 8);
+
   const cupGoals = new Map<string, number>();
   for (const goal of goals) {
     if (isPlayerName(goal.scorer) && isCupCompetition(goal.competition)) {
@@ -250,6 +315,46 @@ export function buildCultHeroSections(
       description:
         "The archive's leading scorers in cup, trophy and play-off football.",
       heroes: addProfiles(cupHeroes, profiles),
+    },
+    {
+      id: "free-kick-specialists",
+      eyebrow: "Dead-ball craft",
+      title: "Free-kick specialists",
+      description:
+        "The players with the most direct free-kick goals recorded in the archive.",
+      heroes: addProfiles(freeKickSpecialists, profiles),
+    },
+    {
+      id: "header-kings",
+      eyebrow: "In the air",
+      title: "Header kings",
+      description:
+        "The leading scorers of headed goals in the Tranmere-Web database.",
+      heroes: addProfiles(headerKings, profiles),
+    },
+    {
+      id: "top-assisters",
+      eyebrow: "Made for a team-mate",
+      title: "Top assisters",
+      description:
+        "The players credited with creating the most Rovers goals in the archive.",
+      heroes: addProfiles(topAssisters, profiles),
+    },
+    {
+      id: "most-red-cards",
+      eyebrow: "Early baths",
+      title: "Most red cards",
+      description:
+        "The players shown the most red cards in the recorded Rovers archive.",
+      heroes: addProfiles(mostRedCards, profiles),
+    },
+    {
+      id: "most-yellow-cards",
+      eyebrow: "In the referee's notebook",
+      title: "Most yellow cards",
+      description:
+        "The players shown the most yellow cards in the recorded Rovers archive.",
+      heroes: addProfiles(mostYellowCards, profiles),
     },
     {
       id: "promotion-contributors",
