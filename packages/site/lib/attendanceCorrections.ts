@@ -10,7 +10,7 @@ export interface AttendanceCorrection {
   proposedAttendance: number;
   source: string;
   explanation: string | null;
-  submittedBySub: string;
+  submittedByAccountId: string;
   submittedByName: string;
   submittedByEmail: string | null;
   submittedAt: string;
@@ -30,7 +30,7 @@ interface DBAttendanceCorrection {
   proposed_attendance: number;
   source: string;
   explanation: string | null;
-  submitted_by_sub: string;
+  submitted_by_account_id: string;
   submitted_by_name: string;
   submitted_by_email: string | null;
   submitted_at: string;
@@ -53,7 +53,7 @@ export async function ensureAttendanceCorrectionsTable(db: D1Database) {
         proposed_attendance INTEGER NOT NULL,
         source TEXT NOT NULL,
         explanation TEXT,
-        submitted_by_sub TEXT NOT NULL,
+        submitted_by_account_id TEXT NOT NULL,
         submitted_by_name TEXT NOT NULL,
         submitted_by_email TEXT,
         submitted_at TEXT NOT NULL,
@@ -86,7 +86,7 @@ function mapCorrection(row: DBAttendanceCorrection): AttendanceCorrection {
     proposedAttendance: row.proposed_attendance,
     source: row.source,
     explanation: row.explanation,
-    submittedBySub: row.submitted_by_sub,
+    submittedByAccountId: row.submitted_by_account_id,
     submittedByName: row.submitted_by_name,
     submittedByEmail: row.submitted_by_email,
     submittedAt: row.submitted_at,

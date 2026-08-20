@@ -1,5 +1,6 @@
 import { getAdminSession } from "@/lib/adminAuth";
 import { auth0 } from "@/lib/auth0";
+import { resolveAccount } from "@/lib/accounts";
 import {
   ensureGoalCorrectionsTable,
   parseEditableGoal,
@@ -126,14 +127,15 @@ export async function POST(request: NextRequest) {
   }
 
   await ensureGoalCorrectionsTable(db);
+  const account = await resolveAccount(db, session.user.sub);
   const changesJson = JSON.stringify(changes);
   const duplicate = await db
     .prepare(
       `SELECT id FROM GoalCorrections
-       WHERE goal_id = ? AND submitted_by_sub = ? AND changes_json = ?
+       WHERE goal_id = ? AND submitted_by_account_id = ? AND changes_json = ?
          AND status = 'pending'`,
     )
-    .bind(goal.id, session.user.sub, changesJson)
+    .bind(goal.id, account.id, changesJson)
     .first();
   if (duplicate)
     return error("You have already submitted these goal changes.", 409);
@@ -142,7 +144,7 @@ export async function POST(request: NextRequest) {
     .prepare(
       `INSERT INTO GoalCorrections (
         id, goal_id, season, match_date, opposition, current_json, changes_json,
-        source, explanation, submitted_by_sub, submitted_by_name, submitted_at,
+        source, explanation, submitted_by_account_id, submitted_by_name, submitted_at,
         status
       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending')`,
     )
@@ -156,7 +158,7 @@ export async function POST(request: NextRequest) {
       changesJson,
       body.source?.trim().slice(0, 1000) || null,
       body.explanation?.trim().slice(0, 1000) || null,
-      session.user.sub,
+      account.id,
       session.user.name || session.user.email || "Supporter",
       new Date().toISOString(),
     )

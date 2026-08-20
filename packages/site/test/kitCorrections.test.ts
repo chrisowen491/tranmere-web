@@ -7,6 +7,7 @@ const mocks = vi.hoisted(() => ({
   getCloudflareContext: vi.fn(),
   getGameBySeasonAndDate: vi.fn(),
   getSession: vi.fn(),
+  resolveAccount: vi.fn(),
   revalidatePath: vi.fn(),
 }));
 
@@ -19,6 +20,7 @@ vi.mock("@/lib/adminAuth", () => ({
 vi.mock("@/lib/auth0", () => ({
   auth0: { getSession: mocks.getSession },
 }));
+vi.mock("@/lib/accounts", () => ({ resolveAccount: mocks.resolveAccount }));
 vi.mock("@/lib/games", () => ({
   getGameBySeasonAndDate: mocks.getGameBySeasonAndDate,
 }));
@@ -79,6 +81,10 @@ describe("kit correction workflow", () => {
     mocks.getAdminSession.mockResolvedValue({
       user: { email: "admin@example.com" },
     });
+    mocks.resolveAccount.mockResolvedValue({
+      id: "acct_supporter",
+      authSub: "auth0|supporter",
+    });
   });
 
   it("rejects kit values outside the avatar kit allow-list", async () => {
@@ -122,12 +128,7 @@ describe("kit correction workflow", () => {
       ),
     ).toBe(true);
     expect(statements.at(-1)?.values).toEqual(
-      expect.arrayContaining([
-        "1993",
-        "1993-08-14",
-        "1993A",
-        "auth0|supporter",
-      ]),
+      expect.arrayContaining(["1993", "1993-08-14", "1993A", "acct_supporter"]),
     );
   });
 

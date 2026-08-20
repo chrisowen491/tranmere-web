@@ -37,7 +37,7 @@ export async function ensureGoalSubmissionsTable(db: D1Database) {
       goal_json TEXT NOT NULL,
       source TEXT,
       explanation TEXT,
-      submitted_by_sub TEXT NOT NULL,
+      submitted_by_account_id TEXT NOT NULL,
       submitted_by_name TEXT NOT NULL,
       submitted_at TEXT NOT NULL,
       status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'rejected')),
@@ -48,7 +48,7 @@ export async function ensureGoalSubmissionsTable(db: D1Database) {
     db.prepare(`CREATE INDEX IF NOT EXISTS GoalSubmissions_status_idx
       ON GoalSubmissions (status, submitted_at)`),
     db.prepare(`CREATE INDEX IF NOT EXISTS GoalSubmissions_submitter_idx
-      ON GoalSubmissions (submitted_by_sub, submitted_at DESC)`),
+      ON GoalSubmissions (submitted_by_account_id, submitted_at DESC)`),
   ]);
 }
 

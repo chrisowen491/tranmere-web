@@ -1,5 +1,6 @@
 import { CorrectionActivityDashboard } from "@/components/apps/CorrectionActivityDashboard";
 import { auth0 } from "@/lib/auth0";
+import { resolveAccount } from "@/lib/accounts";
 import { getCorrectionActivity } from "@/lib/correctionActivity";
 import { ensureUserProfile } from "@/lib/userProfiles";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
@@ -16,9 +17,10 @@ export default async function CorrectionsPage() {
   const session = await auth0.getSession();
   if (!session) redirect("/auth/login?returnTo=%2Fprofile%2Fcorrections");
   const db = getCloudflareContext().env.DB;
+  const account = await resolveAccount(db, session.user.sub);
   const [profile, activity] = await Promise.all([
-    ensureUserProfile(db, session.user.sub),
-    getCorrectionActivity(db, session.user.sub),
+    ensureUserProfile(db, account.id),
+    getCorrectionActivity(db, account.id),
   ]);
   const pending = activity.filter((item) => item.status === "pending").length;
   const approved = new Set(

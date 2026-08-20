@@ -1,4 +1,5 @@
 import { auth0 } from "@/lib/auth0";
+import { resolveAccount } from "@/lib/accounts";
 import { getAdminSession } from "@/lib/adminAuth";
 import { getGameBySeasonAndDate } from "@/lib/games";
 import {
@@ -69,15 +70,16 @@ export async function POST(request: NextRequest) {
 
   const db = env.DB;
   await ensureAttendanceCorrectionsTable(db);
+  const account = await resolveAccount(db, session.user.sub);
 
   const duplicate = await db
     .prepare(
       `SELECT id FROM MatchAttendanceCorrections
-       WHERE season = ? AND match_date = ? AND submitted_by_sub = ?
+       WHERE season = ? AND match_date = ? AND submitted_by_account_id = ?
          AND proposed_attendance = ? AND status = 'pending'
        LIMIT 1`,
     )
-    .bind(body.season, body.matchDate, session.user.sub, proposedAttendance)
+    .bind(body.season, body.matchDate, account.id, proposedAttendance)
     .first();
 
   if (duplicate) {
@@ -88,7 +90,7 @@ export async function POST(request: NextRequest) {
     .prepare(
       `INSERT INTO MatchAttendanceCorrections (
         id, season, match_date, home_team, away_team, current_attendance,
-        proposed_attendance, source, explanation, submitted_by_sub,
+        proposed_attendance, source, explanation, submitted_by_account_id,
         submitted_by_name, submitted_by_email, submitted_at, status
       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending')`,
     )
@@ -105,7 +107,7 @@ export async function POST(request: NextRequest) {
       proposedAttendance,
       source,
       explanation,
-      session.user.sub,
+      account.id,
       session.user.name || session.user.email || "Supporter",
       session.user.email || null,
       new Date().toISOString(),

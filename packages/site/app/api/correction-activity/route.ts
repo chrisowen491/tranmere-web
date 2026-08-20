@@ -1,4 +1,5 @@
 import { auth0 } from "@/lib/auth0";
+import { resolveAccount } from "@/lib/accounts";
 import {
   withdrawCorrection,
   type CorrectionKind,
@@ -30,9 +31,11 @@ export async function DELETE(request: NextRequest) {
       { message: "Choose a correction to withdraw." },
       { status: 400 },
     );
+  const db = getCloudflareContext().env.DB;
+  const account = await resolveAccount(db, session.user.sub);
   const withdrawn = await withdrawCorrection(
-    getCloudflareContext().env.DB,
-    session.user.sub,
+    db,
+    account.id,
     body.kind,
     body.id,
   );
@@ -53,7 +56,8 @@ export async function PUT(request: NextRequest) {
     );
   const body = (await request.json()) as { visible?: boolean };
   const db = getCloudflareContext().env.DB;
-  await ensureUserProfile(db, session.user.sub);
+  const account = await resolveAccount(db, session.user.sub);
+  await ensureUserProfile(db, account.id);
   const username = supporterUsername(session.user);
   if (body.visible === true && !username)
     return NextResponse.json(
@@ -66,9 +70,9 @@ export async function PUT(request: NextRequest) {
     .prepare(
       `UPDATE UserProfiles
        SET correction_recognition_visible = ?, correction_username = ?
-       WHERE auth_sub = ?`,
+       WHERE account_id = ?`,
     )
-    .bind(body.visible === true ? 1 : 0, username ?? null, session.user.sub)
+    .bind(body.visible === true ? 1 : 0, username ?? null, account.id)
     .run();
   return NextResponse.json({ visible: body.visible === true });
 }

@@ -1,4 +1,5 @@
 import { auth0 } from "@/lib/auth0";
+import { resolveAccount } from "@/lib/accounts";
 import { ensureUserProfile } from "@/lib/userProfiles";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { CheckBadgeIcon, UserCircleIcon } from "@heroicons/react/24/outline";
@@ -6,6 +7,8 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { DeleteSupporterDataControl } from "@/components/apps/DeleteSupporterDataControl";
+import { SignInMethods } from "@/components/apps/SignInMethods";
+import { listAccountIdentities } from "@/lib/accountLinking";
 
 export const dynamic = "force-dynamic";
 
@@ -23,15 +26,33 @@ function firstText(values: unknown[]) {
   );
 }
 
-export default async function ProfilePage() {
+function linkConnections(value: string | undefined) {
+  return (value || "")
+    .split(",")
+    .map((entry) => entry.trim())
+    .filter(Boolean)
+    .map((entry) => {
+      const [connection, ...label] = entry.split(":");
+      return { connection, label: label.join(":") || connection };
+    });
+}
+
+export default async function ProfilePage(props: {
+  searchParams: Promise<{ link?: string }>;
+}) {
   const session = await auth0.getSession();
   if (!session) {
     redirect("/auth/login?returnTo=%2Fprofile");
   }
 
-  const profile = await ensureUserProfile(
-    getCloudflareContext().env.DB,
-    session.user.sub,
+  const env = (await getCloudflareContext({ async: true })).env;
+  const db = env.DB;
+  const account = await resolveAccount(db, session.user.sub);
+  const profile = await ensureUserProfile(db, account.id);
+  const identities = await listAccountIdentities(db, account.id);
+  const { link } = await props.searchParams;
+  const connections = linkConnections(
+    env.AUTH0_LINK_CONNECTIONS || process.env.AUTH0_LINK_CONNECTIONS,
   );
   const username = firstText([
     session.user[usernameClaim],
@@ -123,6 +144,11 @@ export default async function ProfilePage() {
             Your archive corrections <span aria-hidden="true">→</span>
           </Link>
         </div>
+        <SignInMethods
+          identities={identities}
+          connections={connections}
+          result={link}
+        />
         <DeleteSupporterDataControl />
       </section>
     </main>

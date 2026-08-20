@@ -1,6 +1,7 @@
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { NextRequest, NextResponse } from "next/server";
 import { auth0 } from "@/lib/auth0";
+import { resolveAccount } from "@/lib/accounts";
 import {
   getMatchAttendance,
   removeMatchAttendance,
@@ -29,8 +30,9 @@ export async function PUT(request: NextRequest) {
     .bind(gameId)
     .first();
   if (!game) return error("That match could not be found.", 404);
-  await ensureUserProfile(db, session.user.sub);
-  const attendance = await saveMatchAttendance(db, session.user.sub, gameId);
+  const { id: accountId } = await resolveAccount(db, session.user.sub);
+  await ensureUserProfile(db, accountId);
+  const attendance = await saveMatchAttendance(db, accountId, gameId);
   return NextResponse.json({ attendance });
 }
 
@@ -41,10 +43,11 @@ export async function DELETE(request: NextRequest) {
   const gameId = await gameIdFrom(request);
   if (!gameId) return error("Choose a match to remove.", 400);
   const db = getCloudflareContext().env.DB;
-  if (!(await getMatchAttendance(db, session.user.sub, gameId))) {
+  const { id: accountId } = await resolveAccount(db, session.user.sub);
+  if (!(await getMatchAttendance(db, accountId, gameId))) {
     return error("That match is not in your Rovers passport.", 404);
   }
-  await removeMatchAttendance(db, session.user.sub, gameId);
+  await removeMatchAttendance(db, accountId, gameId);
   return NextResponse.json({
     message: "Match removed from your Rovers passport.",
   });

@@ -56,7 +56,7 @@ export default async function ContributorsPage() {
           <section className="grid gap-px border border-[#071a2b]/15 bg-[#071a2b]/15 sm:grid-cols-2 lg:grid-cols-3">
             {contributors.map((contributor) => (
               <article
-                key={contributor.auth_sub}
+                key={contributor.account_id}
                 className="bg-[#fffdf8] p-6 sm:p-8"
               >
                 <p className="font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-blue-700">

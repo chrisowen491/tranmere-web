@@ -1,4 +1,5 @@
 import { auth0 } from "@/lib/auth0";
+import { resolveAccount } from "@/lib/accounts";
 import {
   attendanceResult,
   getAttendedMatches,
@@ -52,10 +53,9 @@ export default async function PassportPage(props: {
 }) {
   const session = await auth0.getSession();
   if (!session) redirect("/auth/login?returnTo=%2Fprofile%2Fpassport");
-  const matches = await getAttendedMatches(
-    getCloudflareContext().env.DB,
-    session.user.sub,
-  );
+  const db = getCloudflareContext().env.DB;
+  const account = await resolveAccount(db, session.user.sub);
+  const matches = await getAttendedMatches(db, account.id);
   const searchParams = await props.searchParams;
   const seasons = [...new Set(matches.map((match) => match.season))].sort(
     (a, b) => b - a,

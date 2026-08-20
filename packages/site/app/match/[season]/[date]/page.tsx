@@ -2,6 +2,7 @@ import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { ProgrammeCollectionControl } from "@/components/apps/ProgrammeCollectionControl";
 import { MatchAttendanceControl } from "@/components/apps/MatchAttendanceControl";
 import { auth0 } from "@/lib/auth0";
+import { resolveAccount } from "@/lib/accounts";
 import { getCollectionEntry } from "@/lib/programmeCollections";
 import { getMatchAttendance } from "@/lib/matchAttendance";
 import { MatchParams } from "@/lib/types";
@@ -180,13 +181,16 @@ export default async function MatchPage(props: { params: MatchParams }) {
     (opponentMatch) => opponentMatch.date < match.date,
   );
 
-  const comments = await GetCommentsByUrl(env, baseUrl);
-  const [collectionEntry, attendanceEntry] = session
+  const account = session
+    ? await resolveAccount(env.DB, session.user.sub)
+    : null;
+  const comments = await GetCommentsByUrl(env, baseUrl, account?.id);
+  const [collectionEntry, attendanceEntry] = account
     ? await Promise.all([
         game.noProgrammeIssued
           ? Promise.resolve(null)
-          : getCollectionEntry(env.DB, session.user.sub, gameId),
-        getMatchAttendance(env.DB, session.user.sub, gameId),
+          : getCollectionEntry(env.DB, account.id, gameId),
+        getMatchAttendance(env.DB, account.id, gameId),
       ])
     : [null, null];
   let score = 0;

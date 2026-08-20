@@ -14,18 +14,18 @@ export function supporterUsername(user: Record<string, unknown>) {
   );
 }
 
-export async function ensureUserProfile(db: D1Database, authSub: string) {
+export async function ensureUserProfile(db: D1Database, accountId: string) {
   await db
-    .prepare("INSERT OR IGNORE INTO UserProfiles (auth_sub) VALUES (?)")
-    .bind(authSub)
+    .prepare("INSERT OR IGNORE INTO UserProfiles (account_id) VALUES (?)")
+    .bind(accountId)
     .run();
 
   return db
     .prepare(
-      `SELECT auth_sub, public_collection_id, public_collection_visible, contact_opt_in,
+      `SELECT account_id, public_collection_id, public_collection_visible, contact_opt_in,
               correction_recognition_visible, correction_username
-       FROM UserProfiles WHERE auth_sub = ?`,
+       FROM UserProfiles WHERE account_id = ?`,
     )
-    .bind(authSub)
+    .bind(accountId)
     .first<UserProfileRow>();
 }

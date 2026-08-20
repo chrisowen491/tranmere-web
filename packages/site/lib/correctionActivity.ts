@@ -99,7 +99,7 @@ const activityQueries = [
          json_object('attendance', proposed_attendance) AS changes_json,
          source, explanation, submitted_at, status, review_note, reviewed_at
   FROM MatchAttendanceCorrections
-  WHERE submitted_by_sub = ?`,
+  WHERE submitted_by_account_id = ?`,
   `SELECT id, 'formation' AS kind,
          'formation:' || season || ':' || match_date || ':' || proposed_formation AS contribution_key,
          season, match_date,
@@ -108,14 +108,14 @@ const activityQueries = [
          json_object('formation', proposed_formation) AS changes_json,
          NULL AS source, explanation, submitted_at, status, review_note, reviewed_at
   FROM MatchFormationCorrections
-  WHERE submitted_by_sub = ?`,
+  WHERE submitted_by_account_id = ?`,
   `SELECT id, 'player-profile' AS kind,
          'player-profile:' || player_name || ':' || changes_json AS contribution_key,
          NULL AS season, NULL AS match_date, player_name AS subject,
          current_json, changes_json, source, explanation, submitted_at, status,
          review_note, reviewed_at
   FROM PlayerProfileCorrections
-  WHERE submitted_by_sub = ?`,
+  WHERE submitted_by_account_id = ?`,
   `SELECT id, 'kit' AS kind,
          'kit:' || season || ':' || match_date || ':' || proposed_kit AS contribution_key,
          season, match_date,
@@ -124,58 +124,58 @@ const activityQueries = [
          json_object('kit', proposed_kit) AS changes_json,
          NULL AS source, explanation, submitted_at, status, review_note, reviewed_at
   FROM MatchKitCorrections
-  WHERE submitted_by_sub = ?`,
+  WHERE submitted_by_account_id = ?`,
   `SELECT id, 'goal' AS kind,
          'goal:' || goal_id || ':' || changes_json AS contribution_key,
          season, match_date, opposition AS subject,
          current_json, changes_json, source, explanation, submitted_at, status,
          review_note, reviewed_at
   FROM GoalCorrections
-  WHERE submitted_by_sub = ?`,
+  WHERE submitted_by_account_id = ?`,
   `SELECT id, 'appearance' AS kind,
          'appearance:' || appearance_id || ':' || changes_json AS contribution_key,
          season, match_date, opposition AS subject,
          current_json, changes_json, source, explanation, submitted_at, status,
          review_note, reviewed_at
   FROM AppearanceCorrections
-  WHERE submitted_by_sub = ?`,
+  WHERE submitted_by_account_id = ?`,
   `SELECT id, 'goal-submission' AS kind,
          'goal-submission:' || season || ':' || match_date || ':' || goal_json AS contribution_key,
          season, match_date, opposition AS subject,
          '{}' AS current_json, goal_json AS changes_json, source, explanation,
          submitted_at, status, review_note, reviewed_at
    FROM GoalSubmissions
-   WHERE submitted_by_sub = ?`,
+   WHERE submitted_by_account_id = ?`,
 ] as const;
 
 const publicContributionQueries = [
-  `SELECT c.submitted_by_sub AS auth_sub, up.correction_username AS display_name,
+  `SELECT c.submitted_by_account_id AS account_id, up.correction_username AS display_name,
           'attendance:' || c.season || ':' || c.match_date || ':' || c.proposed_attendance AS contribution_key
    FROM MatchAttendanceCorrections c`,
-  `SELECT c.submitted_by_sub AS auth_sub, up.correction_username AS display_name,
+  `SELECT c.submitted_by_account_id AS account_id, up.correction_username AS display_name,
           'formation:' || c.season || ':' || c.match_date || ':' || c.proposed_formation AS contribution_key
    FROM MatchFormationCorrections c`,
-  `SELECT c.submitted_by_sub AS auth_sub, up.correction_username AS display_name,
+  `SELECT c.submitted_by_account_id AS account_id, up.correction_username AS display_name,
           'player-profile:' || c.player_name || ':' || c.changes_json AS contribution_key
    FROM PlayerProfileCorrections c`,
-  `SELECT c.submitted_by_sub AS auth_sub, up.correction_username AS display_name,
+  `SELECT c.submitted_by_account_id AS account_id, up.correction_username AS display_name,
           'kit:' || c.season || ':' || c.match_date || ':' || c.proposed_kit AS contribution_key
    FROM MatchKitCorrections c`,
-  `SELECT c.submitted_by_sub AS auth_sub, up.correction_username AS display_name,
+  `SELECT c.submitted_by_account_id AS account_id, up.correction_username AS display_name,
           'goal:' || c.goal_id || ':' || c.changes_json AS contribution_key
    FROM GoalCorrections c`,
-  `SELECT c.submitted_by_sub AS auth_sub, up.correction_username AS display_name,
+  `SELECT c.submitted_by_account_id AS account_id, up.correction_username AS display_name,
           'appearance:' || c.appearance_id || ':' || c.changes_json AS contribution_key
    FROM AppearanceCorrections c`,
-  `SELECT c.submitted_by_sub AS auth_sub, up.correction_username AS display_name,
+  `SELECT c.submitted_by_account_id AS account_id, up.correction_username AS display_name,
           'goal-submission:' || c.season || ':' || c.match_date || ':' || c.goal_json AS contribution_key
    FROM GoalSubmissions c`,
 ] as const;
 
-export async function getCorrectionActivity(db: D1Database, authSub: string) {
+export async function getCorrectionActivity(db: D1Database, accountId: string) {
   await ensureCorrectionActivityTables(db);
   const queryResults = await db.batch(
-    activityQueries.map((query) => db.prepare(query).bind(authSub)),
+    activityQueries.map((query) => db.prepare(query).bind(accountId)),
   );
   const results = queryResults
     .flatMap(
@@ -222,7 +222,7 @@ export async function getCorrectionActivity(db: D1Database, authSub: string) {
 
 export async function withdrawCorrection(
   db: D1Database,
-  authSub: string,
+  accountId: string,
   kind: CorrectionKind,
   id: string,
 ) {
@@ -232,9 +232,9 @@ export async function withdrawCorrection(
   const result = await db
     .prepare(
       `DELETE FROM ${table}
-       WHERE id = ? AND submitted_by_sub = ? AND status = 'pending'`,
+       WHERE id = ? AND submitted_by_account_id = ? AND status = 'pending'`,
     )
-    .bind(id, authSub)
+    .bind(id, accountId)
     .run();
   return Boolean(result.meta.changes);
 }
@@ -245,7 +245,7 @@ export async function getPublicContributors(db: D1Database) {
     publicContributionQueries.map((query) =>
       db.prepare(
         `${query}
-         INNER JOIN UserProfiles up ON up.auth_sub = c.submitted_by_sub
+         INNER JOIN UserProfiles up ON up.account_id = c.submitted_by_account_id
          WHERE c.status = 'approved'
            AND up.correction_recognition_visible = 1
            AND up.correction_username IS NOT NULL`,
@@ -255,27 +255,27 @@ export async function getPublicContributors(db: D1Database) {
   const rows = queryResults.flatMap(
     (result) =>
       (result.results ?? []) as unknown as Array<{
-        auth_sub: string;
+        account_id: string;
         display_name: string;
         contribution_key: string;
       }>,
   );
   const contributors = new Map<
     string,
-    { auth_sub: string; display_name: string; keys: Set<string> }
+    { account_id: string; display_name: string; keys: Set<string> }
   >();
   for (const row of rows) {
-    const contributor = contributors.get(row.auth_sub) ?? {
-      auth_sub: row.auth_sub,
+    const contributor = contributors.get(row.account_id) ?? {
+      account_id: row.account_id,
       display_name: row.display_name,
       keys: new Set<string>(),
     };
     contributor.display_name = row.display_name;
     contributor.keys.add(row.contribution_key);
-    contributors.set(row.auth_sub, contributor);
+    contributors.set(row.account_id, contributor);
   }
   return Array.from(contributors.values(), (contributor) => ({
-    auth_sub: contributor.auth_sub,
+    account_id: contributor.account_id,
     display_name: contributor.display_name,
     approved_count: contributor.keys.size,
   })).sort((left, right) =>

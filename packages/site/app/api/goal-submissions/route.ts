@@ -1,5 +1,6 @@
 import { getAdminSession } from "@/lib/adminAuth";
 import { auth0 } from "@/lib/auth0";
+import { resolveAccount } from "@/lib/accounts";
 import {
   ensureGoalSubmissionsTable,
   parseSubmittedGoal,
@@ -83,6 +84,7 @@ export async function POST(request: NextRequest) {
     if (name && !(await playerExists(db, name)))
       return error(`${name} could not be matched to a player profile.`, 400);
   await ensureGoalSubmissionsTable(db);
+  const account = await resolveAccount(db, session.user.sub);
   const goalJson = JSON.stringify(goal);
   const duplicate = await db
     .prepare(
@@ -94,7 +96,7 @@ export async function POST(request: NextRequest) {
     return error("That missing goal is already awaiting review.", 409);
   await db
     .prepare(
-      `INSERT INTO GoalSubmissions (id, season, match_date, opposition, competition, goal_json, source, explanation, submitted_by_sub, submitted_by_name, submitted_at, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending')`,
+      `INSERT INTO GoalSubmissions (id, season, match_date, opposition, competition, goal_json, source, explanation, submitted_by_account_id, submitted_by_name, submitted_at, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending')`,
     )
     .bind(
       crypto.randomUUID(),
@@ -105,7 +107,7 @@ export async function POST(request: NextRequest) {
       goalJson,
       body.source?.trim().slice(0, 1000) || null,
       body.explanation?.trim().slice(0, 1000) || null,
-      session.user.sub,
+      account.id,
       session.user.name || session.user.email || "Supporter",
       new Date().toISOString(),
     )

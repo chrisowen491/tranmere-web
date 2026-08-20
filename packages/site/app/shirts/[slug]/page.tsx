@@ -5,6 +5,8 @@ import { GetCommentsByUrl } from "@/lib/comments";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { notFound } from "next/navigation";
 import { pageMetadata } from "@/lib/seo";
+import { auth0 } from "@/lib/auth0";
+import { resolveAccount } from "@/lib/accounts";
 
 export const revalidate = 7200;
 
@@ -28,9 +30,15 @@ export default async function ShirtHome(props: { params: SlugParams }) {
 
   if (!shirt) notFound();
 
+  const env = (await getCloudflareContext({ async: true })).env;
+  const session = await auth0.getSession();
+  const account = session
+    ? await resolveAccount(env.DB, session.user.sub)
+    : null;
   const comments = await GetCommentsByUrl(
-    getCloudflareContext().env,
+    env,
     `/shirts/${shirt.slug}`,
+    account?.id,
   );
   const averageRating = comments.length
     ? Math.round(
@@ -40,10 +48,6 @@ export default async function ShirtHome(props: { params: SlugParams }) {
     : 0;
 
   return (
-    <ShirtApp
-      shirt={shirt}
-      comments={comments}
-      averageRating={averageRating}
-    />
+    <ShirtApp shirt={shirt} comments={comments} averageRating={averageRating} />
   );
 }

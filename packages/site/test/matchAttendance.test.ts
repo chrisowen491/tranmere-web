@@ -8,7 +8,7 @@ function match(
   score: string,
 ): AttendedMatchRow {
   return {
-    auth_sub: "auth0|supporter",
+    account_id: "acct_supporter",
     game_id: "game-1",
     created_at: "2026-08-18T12:00:00.000Z",
     season: 2026,

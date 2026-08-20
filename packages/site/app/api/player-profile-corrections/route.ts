@@ -1,4 +1,5 @@
 import { auth0 } from "@/lib/auth0";
+import { resolveAccount } from "@/lib/accounts";
 import { getAdminSession } from "@/lib/adminAuth";
 import {
   approvePlayerProfileCorrection,
@@ -157,6 +158,7 @@ async function submitCorrection(request: NextRequest) {
   }
 
   const env = getCloudflareContext().env;
+  const account = await resolveAccount(env.DB, session.user.sub);
   const player = await getPlayerByName(env.DB, requestedName);
   if (!player) return error("That player could not be found.", 404);
 
@@ -177,11 +179,11 @@ async function submitCorrection(request: NextRequest) {
   const duplicate = await withD1ResetRetry(() =>
     env.DB.prepare(
       `SELECT id FROM PlayerProfileCorrections
-       WHERE player_name = ? AND submitted_by_sub = ? AND changes_json = ?
+       WHERE player_name = ? AND submitted_by_account_id = ? AND changes_json = ?
          AND status = 'pending'
        LIMIT 1`,
     )
-      .bind(player.name, session.user.sub, changesJson)
+      .bind(player.name, account.id, changesJson)
       .first(),
   );
   if (duplicate) {
@@ -193,7 +195,7 @@ async function submitCorrection(request: NextRequest) {
     env.DB.prepare(
       `INSERT INTO PlayerProfileCorrections (
         id, player_name, current_json, changes_json, source, explanation,
-        submitted_by_sub, submitted_by_name, submitted_by_email, submitted_at,
+        submitted_by_account_id, submitted_by_name, submitted_by_email, submitted_at,
         status
       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending')
       ON CONFLICT(id) DO NOTHING`,
@@ -205,7 +207,7 @@ async function submitCorrection(request: NextRequest) {
         changesJson,
         source,
         body.explanation?.trim().slice(0, 1000) || null,
-        session.user.sub,
+        account.id,
         session.user.name || session.user.email || "Supporter",
         session.user.email || null,
         new Date().toISOString(),

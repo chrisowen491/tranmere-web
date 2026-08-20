@@ -1,7 +1,6 @@
 export type User = {
   name: string;
   picture: string;
-  sub: string;
   email?: string;
 };
 
@@ -12,6 +11,7 @@ export type Comment = {
   text: string;
   rating: number;
   user: User;
+  isAuthor: boolean;
 };
 
 export interface DBComment {
@@ -19,7 +19,7 @@ export interface DBComment {
   page_url: string;
   image_url: string;
   created: string;
-  sub: string;
+  account_id: string;
   user_name: string;
   email: string;
   rating: number;
@@ -30,7 +30,11 @@ export interface AdminComment extends Comment {
   id: number;
 }
 
-function mapComment(row: DBComment): AdminComment {
+export interface OwnedComment extends AdminComment {
+  accountId: string;
+}
+
+function mapComment(row: DBComment, currentAccountId?: string): AdminComment {
   return {
     id: row.id,
     created_at: row.created,
@@ -40,19 +44,20 @@ function mapComment(row: DBComment): AdminComment {
     user: {
       name: row.user_name,
       picture: row.image_url,
-      sub: row.sub,
       email: row.email,
     },
+    isAuthor: Boolean(currentAccountId && row.account_id === currentAccountId),
   };
 }
 
 export async function GetCommentsByUrl(
   env: CloudflareEnv,
   url: string,
+  currentAccountId?: string,
 ): Promise<Comment[]> {
   try {
     const commentsQuery = await env.DB.prepare(
-      `SELECT id, page_url, image_url, created, sub, user_name, email, rating,
+      `SELECT id, page_url, image_url, created, account_id, user_name, email, rating,
               comment
        FROM Ratings
        WHERE page_url = ?
@@ -61,7 +66,9 @@ export async function GetCommentsByUrl(
       .bind(url)
       .all<DBComment>();
 
-    const comments: Comment[] = commentsQuery.results.map(mapComment);
+    const comments: Comment[] = commentsQuery.results.map((row) =>
+      mapComment(row, currentAccountId),
+    );
     return comments;
   } catch {
     return [];
@@ -71,26 +78,29 @@ export async function GetCommentsByUrl(
 export async function getAllComments(db: D1Database) {
   const result = await db
     .prepare(
-      `SELECT id, page_url, image_url, created, sub, user_name, email, rating,
+      `SELECT id, page_url, image_url, created, account_id, user_name, email, rating,
               comment
        FROM Ratings
        ORDER BY created DESC, id DESC`,
     )
     .all<DBComment>();
-  return result.results.map(mapComment);
+  return result.results.map((row) => mapComment(row));
 }
 
-export async function getCommentById(db: D1Database, id: number) {
+export async function getCommentById(
+  db: D1Database,
+  id: number,
+): Promise<OwnedComment | null> {
   const row = await db
     .prepare(
-      `SELECT id, page_url, image_url, created, sub, user_name, email, rating,
+      `SELECT id, page_url, image_url, created, account_id, user_name, email, rating,
               comment
        FROM Ratings
        WHERE id = ?`,
     )
     .bind(id)
     .first<DBComment>();
-  return row ? mapComment(row) : null;
+  return row ? { ...mapComment(row), accountId: row.account_id } : null;
 }
 
 export async function updateComment(

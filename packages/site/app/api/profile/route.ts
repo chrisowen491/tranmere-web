@@ -1,4 +1,5 @@
 import { auth0 } from "@/lib/auth0";
+import { resolveAccount } from "@/lib/accounts";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { NextResponse } from "next/server";
 import { ensureCorrectionActivityTables } from "@/lib/correctionActivity";
@@ -12,47 +13,47 @@ export async function DELETE() {
     );
   }
   const db = getCloudflareContext().env.DB;
-  const authSub = session.user.sub;
+  const account = await resolveAccount(db, session.user.sub);
   await ensureCorrectionActivityTables(db);
   await db.batch([
-    db.prepare("DELETE FROM FantasyTeams WHERE auth_sub = ?").bind(authSub),
-    db.prepare("DELETE FROM MatchAttendances WHERE auth_sub = ?").bind(authSub),
-    db
-      .prepare("DELETE FROM ProgrammeCollections WHERE auth_sub = ?")
-      .bind(authSub),
     db
       .prepare(
-        "DELETE FROM ProgrammeContactRequests WHERE sender_sub = ? OR recipient_sub = ?",
+        "DELETE FROM ProgrammeContactRequests WHERE sender_account_id = ? OR recipient_account_id = ?",
       )
-      .bind(authSub, authSub),
+      .bind(account.id, account.id),
     db
       .prepare(
-        "DELETE FROM MatchAttendanceCorrections WHERE submitted_by_sub = ?",
+        "DELETE FROM MatchAttendanceCorrections WHERE submitted_by_account_id = ?",
       )
-      .bind(authSub),
+      .bind(account.id),
     db
       .prepare(
-        "DELETE FROM MatchFormationCorrections WHERE submitted_by_sub = ?",
+        "DELETE FROM MatchFormationCorrections WHERE submitted_by_account_id = ?",
       )
-      .bind(authSub),
+      .bind(account.id),
     db
       .prepare(
-        "DELETE FROM PlayerProfileCorrections WHERE submitted_by_sub = ?",
+        "DELETE FROM PlayerProfileCorrections WHERE submitted_by_account_id = ?",
       )
-      .bind(authSub),
+      .bind(account.id),
     db
-      .prepare("DELETE FROM MatchKitCorrections WHERE submitted_by_sub = ?")
-      .bind(authSub),
+      .prepare(
+        "DELETE FROM MatchKitCorrections WHERE submitted_by_account_id = ?",
+      )
+      .bind(account.id),
     db
-      .prepare("DELETE FROM GoalCorrections WHERE submitted_by_sub = ?")
-      .bind(authSub),
+      .prepare("DELETE FROM GoalCorrections WHERE submitted_by_account_id = ?")
+      .bind(account.id),
     db
-      .prepare("DELETE FROM GoalSubmissions WHERE submitted_by_sub = ?")
-      .bind(authSub),
+      .prepare("DELETE FROM GoalSubmissions WHERE submitted_by_account_id = ?")
+      .bind(account.id),
     db
-      .prepare("DELETE FROM AppearanceCorrections WHERE submitted_by_sub = ?")
-      .bind(authSub),
-    db.prepare("DELETE FROM UserProfiles WHERE auth_sub = ?").bind(authSub),
+      .prepare(
+        "DELETE FROM AppearanceCorrections WHERE submitted_by_account_id = ?",
+      )
+      .bind(account.id),
+    db.prepare("DELETE FROM Ratings WHERE account_id = ?").bind(account.id),
+    db.prepare("DELETE FROM Accounts WHERE id = ?").bind(account.id),
   ]);
   return NextResponse.json({
     message: "Your supporter data has been removed.",

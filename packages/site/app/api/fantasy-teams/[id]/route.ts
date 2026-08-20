@@ -1,4 +1,5 @@
 import { auth0 } from "@/lib/auth0";
+import { resolveAccount } from "@/lib/accounts";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { NextResponse } from "next/server";
 import {
@@ -17,7 +18,8 @@ export async function PUT(request: Request, context: Context) {
     );
   const { id } = await context.params;
   const db = getCloudflareContext().env.DB;
-  const existing = await getOwnedFantasyTeam(db, id, session.user.sub);
+  const { id: accountId } = await resolveAccount(db, session.user.sub);
+  const existing = await getOwnedFantasyTeam(db, id, accountId);
   if (!existing)
     return NextResponse.json(
       { message: "Fantasy XI not found." },
@@ -29,18 +31,18 @@ export async function PUT(request: Request, context: Context) {
       const shareId = existing.shareId ?? crypto.randomUUID();
       await db
         .prepare(
-          "UPDATE FantasyTeams SET share_id = ?, is_shared = 1, updated_at = ? WHERE id = ? AND auth_sub = ?",
+          "UPDATE FantasyTeams SET share_id = ?, is_shared = 1, updated_at = ? WHERE id = ? AND account_id = ?",
         )
-        .bind(shareId, new Date().toISOString(), id, session.user.sub)
+        .bind(shareId, new Date().toISOString(), id, accountId)
         .run();
       return NextResponse.json({ shareId, message: "Public sharing enabled." });
     }
     if (body.action === "revoke") {
       await db
         .prepare(
-          "UPDATE FantasyTeams SET share_id = NULL, is_shared = 0, updated_at = ? WHERE id = ? AND auth_sub = ?",
+          "UPDATE FantasyTeams SET share_id = NULL, is_shared = 0, updated_at = ? WHERE id = ? AND account_id = ?",
         )
-        .bind(new Date().toISOString(), id, session.user.sub)
+        .bind(new Date().toISOString(), id, accountId)
         .run();
       return NextResponse.json({ message: "Public sharing revoked." });
     }
@@ -48,7 +50,7 @@ export async function PUT(request: Request, context: Context) {
     await db
       .prepare(
         `UPDATE FantasyTeams SET name = ?, rationale = ?, formation = ?, kit = ?,
-      captain_player_id = ?, assignments_json = ?, updated_at = ? WHERE id = ? AND auth_sub = ?`,
+      captain_player_id = ?, assignments_json = ?, updated_at = ? WHERE id = ? AND account_id = ?`,
       )
       .bind(
         input.name,
@@ -59,7 +61,7 @@ export async function PUT(request: Request, context: Context) {
         JSON.stringify(input.assignments),
         new Date().toISOString(),
         id,
-        session.user.sub,
+        accountId,
       )
       .run();
     return NextResponse.json({ id, message: "Fantasy XI updated." });
@@ -82,9 +84,11 @@ export async function DELETE(_request: Request, context: Context) {
       { status: 401 },
     );
   const { id } = await context.params;
-  const result = await getCloudflareContext()
-    .env.DB.prepare("DELETE FROM FantasyTeams WHERE id = ? AND auth_sub = ?")
-    .bind(id, session.user.sub)
+  const db = getCloudflareContext().env.DB;
+  const { id: accountId } = await resolveAccount(db, session.user.sub);
+  const result = await db
+    .prepare("DELETE FROM FantasyTeams WHERE id = ? AND account_id = ?")
+    .bind(id, accountId)
     .run();
   if (!result.meta.changes)
     return NextResponse.json(

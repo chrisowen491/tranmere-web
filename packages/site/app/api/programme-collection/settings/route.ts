@@ -1,6 +1,7 @@
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { NextRequest, NextResponse } from "next/server";
 import { auth0 } from "@/lib/auth0";
+import { resolveAccount } from "@/lib/accounts";
 import { updateCollectionVisibility } from "@/lib/programmeCollections";
 import { ensureUserProfile } from "@/lib/userProfiles";
 
@@ -14,10 +15,11 @@ export async function PUT(request: NextRequest) {
   }
   const body = (await request.json()) as { visible?: boolean };
   const db = getCloudflareContext().env.DB;
-  await ensureUserProfile(db, session.user.sub);
+  const { id: accountId } = await resolveAccount(db, session.user.sub);
+  await ensureUserProfile(db, accountId);
   const publicId = await updateCollectionVisibility(
     db,
-    session.user.sub,
+    accountId,
     body.visible === true,
   );
   return NextResponse.json({ publicId });

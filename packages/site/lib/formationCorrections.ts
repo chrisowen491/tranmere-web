@@ -52,7 +52,7 @@ export async function ensureFormationCorrectionsTable(db: D1Database) {
       current_formation TEXT,
       proposed_formation TEXT NOT NULL,
       explanation TEXT,
-      submitted_by_sub TEXT NOT NULL,
+      submitted_by_account_id TEXT NOT NULL,
       submitted_by_name TEXT NOT NULL,
       submitted_at TEXT NOT NULL,
       status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'rejected')),

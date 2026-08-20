@@ -77,7 +77,7 @@ export async function ensureAppearanceCorrectionsTable(db: D1Database) {
       changes_json TEXT NOT NULL,
       source TEXT,
       explanation TEXT,
-      submitted_by_sub TEXT NOT NULL,
+      submitted_by_account_id TEXT NOT NULL,
       submitted_by_name TEXT NOT NULL,
       submitted_at TEXT NOT NULL,
       status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'rejected')),

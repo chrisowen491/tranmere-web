@@ -5,10 +5,12 @@ const mocks = vi.hoisted(() => ({
   ensureUserProfile: vi.fn(),
   getCloudflareContext: vi.fn(),
   getSession: vi.fn(),
+  resolveAccount: vi.fn(),
   withdrawCorrection: vi.fn(),
 }));
 
 vi.mock("@/lib/auth0", () => ({ auth0: { getSession: mocks.getSession } }));
+vi.mock("@/lib/accounts", () => ({ resolveAccount: mocks.resolveAccount }));
 vi.mock("@opennextjs/cloudflare", () => ({
   getCloudflareContext: mocks.getCloudflareContext,
 }));
@@ -40,6 +42,10 @@ describe("correction activity API", () => {
       user: { sub: "auth0|supporter", username: "roversfan" },
     });
     mocks.getCloudflareContext.mockReturnValue({ env: { DB: "db" } });
+    mocks.resolveAccount.mockResolvedValue({
+      id: "acct_supporter",
+      authSub: "auth0|supporter",
+    });
     mocks.withdrawCorrection.mockResolvedValue(true);
   });
 
@@ -59,7 +65,7 @@ describe("correction activity API", () => {
     expect(response.status).toBe(200);
     expect(mocks.withdrawCorrection).toHaveBeenCalledWith(
       "db",
-      "auth0|supporter",
+      "acct_supporter",
       "appearance",
       "correction-1",
     );
@@ -72,6 +78,6 @@ describe("correction activity API", () => {
     mocks.getCloudflareContext.mockReturnValue({ env: { DB: { prepare } } });
     const response = await updateRecognition(request("PUT", { visible: true }));
     expect(response.status).toBe(200);
-    expect(bind).toHaveBeenCalledWith(1, "roversfan", "auth0|supporter");
+    expect(bind).toHaveBeenCalledWith(1, "roversfan", "acct_supporter");
   });
 });

@@ -105,15 +105,15 @@ export function mapFantasyTeam(row: FantasyTeamRow): FantasyTeam {
   };
 }
 
-const columns = `id, auth_sub, name, rationale, formation, kit,
+const columns = `id, account_id, name, rationale, formation, kit,
   captain_player_id, assignments_json, share_id, is_shared, created_at, updated_at`;
 
-export async function listFantasyTeams(db: D1Database, authSub: string) {
+export async function listFantasyTeams(db: D1Database, accountId: string) {
   const result = await db
     .prepare(
-      `SELECT ${columns} FROM FantasyTeams WHERE auth_sub = ? ORDER BY updated_at DESC`,
+      `SELECT ${columns} FROM FantasyTeams WHERE account_id = ? ORDER BY updated_at DESC`,
     )
-    .bind(authSub)
+    .bind(accountId)
     .all<FantasyTeamRow>();
   return result.results.map(mapFantasyTeam);
 }
@@ -121,13 +121,13 @@ export async function listFantasyTeams(db: D1Database, authSub: string) {
 export async function getOwnedFantasyTeam(
   db: D1Database,
   id: string,
-  authSub: string,
+  accountId: string,
 ) {
   const row = await db
     .prepare(
-      `SELECT ${columns} FROM FantasyTeams WHERE id = ? AND auth_sub = ?`,
+      `SELECT ${columns} FROM FantasyTeams WHERE id = ? AND account_id = ?`,
     )
-    .bind(id, authSub)
+    .bind(id, accountId)
     .first<FantasyTeamRow>();
   return row ? mapFantasyTeam(row) : null;
 }

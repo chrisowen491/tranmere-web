@@ -1,4 +1,5 @@
 import { auth0 } from "@/lib/auth0";
+import { resolveAccount } from "@/lib/accounts";
 import { getAdminSession } from "@/lib/adminAuth";
 import {
   ensureFormationCorrectionsTable,
@@ -42,19 +43,20 @@ export async function POST(request: NextRequest) {
   );
   if (!match) return error("That match could not be found.", 404);
   await ensureFormationCorrectionsTable(env.DB);
+  const account = await resolveAccount(env.DB, session.user.sub);
   const duplicate = await env.DB.prepare(
     `SELECT id FROM MatchFormationCorrections
-     WHERE season = ? AND match_date = ? AND submitted_by_sub = ?
+     WHERE season = ? AND match_date = ? AND submitted_by_account_id = ?
        AND proposed_formation = ? AND status = 'pending'`,
   )
-    .bind(body.season, body.matchDate, session.user.sub, body.proposedFormation)
+    .bind(body.season, body.matchDate, account.id, body.proposedFormation)
     .first();
   if (duplicate)
     return error("That formation is already awaiting review.", 409);
   await env.DB.prepare(
     `INSERT INTO MatchFormationCorrections (
        id, season, match_date, home_team, away_team, current_formation,
-       proposed_formation, explanation, submitted_by_sub, submitted_by_name,
+       proposed_formation, explanation, submitted_by_account_id, submitted_by_name,
        submitted_at, status
      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending')`,
   )
@@ -67,7 +69,7 @@ export async function POST(request: NextRequest) {
       match.formation || null,
       body.proposedFormation,
       body.explanation?.trim().slice(0, 1000) || null,
-      session.user.sub,
+      account.id,
       session.user.name || session.user.email || "Supporter",
       new Date().toISOString(),
     )

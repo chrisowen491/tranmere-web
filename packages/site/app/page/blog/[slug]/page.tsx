@@ -14,6 +14,8 @@ import Link from "next/link";
 import { SlugParams } from "@/lib/types";
 import { pageMetadata } from "@/lib/seo";
 import { absoluteUrl, breadcrumbJsonLd, JsonLd } from "@/components/seo/JsonLd";
+import { auth0 } from "@/lib/auth0";
+import { resolveAccount } from "@/lib/accounts";
 
 export const revalidate = 7200;
 
@@ -46,7 +48,12 @@ export default async function BlogPage(props: { params: SlugParams }) {
   const Text = ({ children }: any) => <p className="leading-8">{children}</p>;
 
   const url = `/page/blog/${params.slug}`;
-  const comments = await GetCommentsByUrl(getCloudflareContext().env, url);
+  const env = (await getCloudflareContext({ async: true })).env;
+  const session = await auth0.getSession();
+  const account = session
+    ? await resolveAccount(env.DB, session.user.sub)
+    : null;
+  const comments = await GetCommentsByUrl(env, url, account?.id);
 
   let score = 0;
   comments.forEach((c) => {

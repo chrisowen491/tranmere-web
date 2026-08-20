@@ -1,4 +1,5 @@
 import { auth0 } from "@/lib/auth0";
+import { resolveAccount } from "@/lib/accounts";
 import { getAdminSession } from "@/lib/adminAuth";
 import { getGameBySeasonAndDate } from "@/lib/games";
 import {
@@ -43,18 +44,19 @@ export async function POST(request: NextRequest) {
   if (match.kit === body.proposedKit)
     return error("That kit is already shown on the match page.", 409);
   await ensureKitCorrectionsTable(env.DB);
+  const account = await resolveAccount(env.DB, session.user.sub);
   const duplicate = await env.DB.prepare(
     `SELECT id FROM MatchKitCorrections
-     WHERE season = ? AND match_date = ? AND submitted_by_sub = ?
+     WHERE season = ? AND match_date = ? AND submitted_by_account_id = ?
        AND proposed_kit = ? AND status = 'pending'`,
   )
-    .bind(body.season, body.matchDate, session.user.sub, body.proposedKit)
+    .bind(body.season, body.matchDate, account.id, body.proposedKit)
     .first();
   if (duplicate) return error("That kit is already awaiting review.", 409);
   await env.DB.prepare(
     `INSERT INTO MatchKitCorrections (
        id, season, match_date, home_team, away_team, current_kit,
-       proposed_kit, explanation, submitted_by_sub, submitted_by_name,
+       proposed_kit, explanation, submitted_by_account_id, submitted_by_name,
        submitted_at, status
      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending')`,
   )
@@ -67,7 +69,7 @@ export async function POST(request: NextRequest) {
       match.kit || null,
       body.proposedKit,
       body.explanation?.trim().slice(0, 1000) || null,
-      session.user.sub,
+      account.id,
       session.user.name || session.user.email || "Supporter",
       new Date().toISOString(),
     )

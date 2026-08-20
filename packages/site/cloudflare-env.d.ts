@@ -15,6 +15,10 @@ interface __BaseEnv_CloudflareEnv {
 	AUTH0_CLIENT_ID: string;
 	AUTH0_ADMIN_EMAIL: string;
 	AUTH0_CLIENT_SECRET: string;
+	AUTH0_MANAGEMENT_CLIENT_ID: string;
+	AUTH0_MANAGEMENT_CLIENT_SECRET: string;
+	AUTH0_MANAGEMENT_DOMAIN: string;
+	AUTH0_LINK_CONNECTIONS: string;
 	AUTH0_SECRET: string;
 	CLOUDFLARE_ZONE: string;
 	CLOUDFLARE_API_KEY: string;
@@ -30,7 +34,7 @@ type StringifyValues<EnvType extends Record<string, unknown>> = {
 	[Binding in keyof EnvType]: EnvType[Binding] extends string ? EnvType[Binding] : string;
 };
 declare namespace NodeJS {
-	interface ProcessEnv extends StringifyValues<Pick<Cloudflare.Env, "OPENAI_API_KEY" | "CF_SPACE" | "CF_KEY" | "AUTH0_DOMAIN" | "AUTH0_CLIENT_ID" | "AUTH0_ADMIN_EMAIL" | "AUTH0_CLIENT_SECRET" | "AUTH0_SECRET" | "CLOUDFLARE_ZONE" | "CLOUDFLARE_API_KEY" | "NEXTJS_ENV">> {}
+interface ProcessEnv extends StringifyValues<Pick<Cloudflare.Env, "OPENAI_API_KEY" | "CF_SPACE" | "CF_KEY" | "AUTH0_DOMAIN" | "AUTH0_CLIENT_ID" | "AUTH0_ADMIN_EMAIL" | "AUTH0_CLIENT_SECRET" | "AUTH0_MANAGEMENT_CLIENT_ID" | "AUTH0_MANAGEMENT_CLIENT_SECRET" | "AUTH0_MANAGEMENT_DOMAIN" | "AUTH0_LINK_CONNECTIONS" | "AUTH0_SECRET" | "CLOUDFLARE_ZONE" | "CLOUDFLARE_API_KEY" | "NEXTJS_ENV">> {}
 }
 
 // Begin runtime types

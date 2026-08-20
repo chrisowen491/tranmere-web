@@ -16,6 +16,8 @@ import {
 } from "@tranmere-web/lib/src/d1-queries";
 import { mapPlayerSeasonSummary } from "@/lib/playerStatistics";
 import { goalCountsByDate, mapPlayerAppearance } from "@/lib/playerAppearances";
+import { auth0 } from "@/lib/auth0";
+import { resolveAccount } from "@/lib/accounts";
 
 const APPEARANCE_PAGE_SIZE = 25;
 
@@ -31,7 +33,7 @@ export async function generateMetadata(props: { params: SlugParams }) {
 
 export default async function PlayerProfilePage(props: { params: SlugParams }) {
   const params = await props.params;
-  const env = getCloudflareContext().env;
+  const env = (await getCloudflareContext({ async: true })).env;
   const requestedName = decodeURI(params.slug);
   const d1Player = await getPlayerByName(env.DB, requestedName);
   if (!d1Player) notFound();
@@ -120,7 +122,15 @@ export default async function PlayerProfilePage(props: { params: SlugParams }) {
   ]);
   profile.transfers = transfers;
 
-  const comments = await GetCommentsByUrl(env, `/page/player/${requestedName}`);
+  const session = await auth0.getSession();
+  const account = session
+    ? await resolveAccount(env.DB, session.user.sub)
+    : null;
+  const comments = await GetCommentsByUrl(
+    env,
+    `/page/player/${requestedName}`,
+    account?.id,
+  );
 
   let score = 0;
   comments.forEach((c) => {

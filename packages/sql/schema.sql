@@ -5,11 +5,12 @@ CREATE TABLE Ratings (
   page_url TEXT NOT NULL,
   image_url TEXT NOT NULL,
   created TEXT NOT NULL,
-  sub TEXT NOT NULL,
+  account_id TEXT NOT NULL,
   user_name TEXT NOT NULL,
   email TEXT NOT NULL,
   rating INTEGER int NOT NULL,
-  comment  TEXT NULL
+  comment TEXT NULL,
+  FOREIGN KEY (account_id) REFERENCES Accounts(id) ON DELETE CASCADE
 );
 
 CREATE INDEX IF NOT EXISTS Ratings_page_url_created_idx
@@ -25,7 +26,7 @@ CREATE TABLE IF NOT EXISTS MatchAttendanceCorrections (
   proposed_attendance INTEGER NOT NULL,
   source TEXT NOT NULL,
   explanation TEXT,
-  submitted_by_sub TEXT NOT NULL,
+  submitted_by_account_id TEXT NOT NULL,
   submitted_by_name TEXT NOT NULL,
   submitted_by_email TEXT,
   submitted_at TEXT NOT NULL,
@@ -33,7 +34,8 @@ CREATE TABLE IF NOT EXISTS MatchAttendanceCorrections (
     CHECK (status IN ('pending', 'approved', 'rejected')),
   reviewed_by TEXT,
   reviewed_at TEXT,
-  review_note TEXT
+  review_note TEXT,
+  FOREIGN KEY (submitted_by_account_id) REFERENCES Accounts(id) ON DELETE CASCADE
 );
 
 CREATE INDEX IF NOT EXISTS MatchAttendanceCorrections_status_idx
@@ -49,7 +51,7 @@ CREATE TABLE IF NOT EXISTS PlayerProfileCorrections (
   changes_json TEXT NOT NULL,
   source TEXT NOT NULL,
   explanation TEXT,
-  submitted_by_sub TEXT NOT NULL,
+  submitted_by_account_id TEXT NOT NULL,
   submitted_by_name TEXT NOT NULL,
   submitted_by_email TEXT,
   submitted_at TEXT NOT NULL,
@@ -57,7 +59,8 @@ CREATE TABLE IF NOT EXISTS PlayerProfileCorrections (
     CHECK (status IN ('pending', 'approved', 'rejected')),
   reviewed_by TEXT,
   reviewed_at TEXT,
-  review_note TEXT
+  review_note TEXT,
+  FOREIGN KEY (submitted_by_account_id) REFERENCES Accounts(id) ON DELETE CASCADE
 );
 
 CREATE INDEX IF NOT EXISTS PlayerProfileCorrections_status_idx
@@ -76,14 +79,15 @@ CREATE TABLE IF NOT EXISTS GoalCorrections (
   changes_json TEXT NOT NULL,
   source TEXT,
   explanation TEXT,
-  submitted_by_sub TEXT NOT NULL,
+  submitted_by_account_id TEXT NOT NULL,
   submitted_by_name TEXT NOT NULL,
   submitted_at TEXT NOT NULL,
   status TEXT NOT NULL DEFAULT 'pending'
     CHECK (status IN ('pending', 'approved', 'rejected')),
   reviewed_by TEXT,
   reviewed_at TEXT,
-  review_note TEXT
+  review_note TEXT,
+  FOREIGN KEY (submitted_by_account_id) REFERENCES Accounts(id) ON DELETE CASCADE
 );
 
 CREATE INDEX IF NOT EXISTS GoalCorrections_status_idx
@@ -101,21 +105,22 @@ CREATE TABLE IF NOT EXISTS GoalSubmissions (
   goal_json TEXT NOT NULL,
   source TEXT,
   explanation TEXT,
-  submitted_by_sub TEXT NOT NULL,
+  submitted_by_account_id TEXT NOT NULL,
   submitted_by_name TEXT NOT NULL,
   submitted_at TEXT NOT NULL,
   status TEXT NOT NULL DEFAULT 'pending'
     CHECK (status IN ('pending', 'approved', 'rejected')),
   reviewed_by TEXT,
   reviewed_at TEXT,
-  review_note TEXT
+  review_note TEXT,
+  FOREIGN KEY (submitted_by_account_id) REFERENCES Accounts(id) ON DELETE CASCADE
 );
 
 CREATE INDEX IF NOT EXISTS GoalSubmissions_status_idx
   ON GoalSubmissions (status, submitted_at);
 
 CREATE INDEX IF NOT EXISTS GoalSubmissions_submitter_idx
-  ON GoalSubmissions (submitted_by_sub, submitted_at DESC);
+  ON GoalSubmissions (submitted_by_account_id, submitted_at DESC);
 
 CREATE TABLE IF NOT EXISTS AppearanceCorrections (
   id TEXT NOT NULL PRIMARY KEY,
@@ -127,14 +132,15 @@ CREATE TABLE IF NOT EXISTS AppearanceCorrections (
   changes_json TEXT NOT NULL,
   source TEXT,
   explanation TEXT,
-  submitted_by_sub TEXT NOT NULL,
+  submitted_by_account_id TEXT NOT NULL,
   submitted_by_name TEXT NOT NULL,
   submitted_at TEXT NOT NULL,
   status TEXT NOT NULL DEFAULT 'pending'
     CHECK (status IN ('pending', 'approved', 'rejected')),
   reviewed_by TEXT,
   reviewed_at TEXT,
-  review_note TEXT
+  review_note TEXT,
+  FOREIGN KEY (submitted_by_account_id) REFERENCES Accounts(id) ON DELETE CASCADE
 );
 
 CREATE INDEX IF NOT EXISTS AppearanceCorrections_status_idx
@@ -152,14 +158,15 @@ CREATE TABLE IF NOT EXISTS MatchFormationCorrections (
   current_formation TEXT,
   proposed_formation TEXT NOT NULL,
   explanation TEXT,
-  submitted_by_sub TEXT NOT NULL,
+  submitted_by_account_id TEXT NOT NULL,
   submitted_by_name TEXT NOT NULL,
   submitted_at TEXT NOT NULL,
   status TEXT NOT NULL DEFAULT 'pending'
     CHECK (status IN ('pending', 'approved', 'rejected')),
   reviewed_by TEXT,
   reviewed_at TEXT,
-  review_note TEXT
+  review_note TEXT,
+  FOREIGN KEY (submitted_by_account_id) REFERENCES Accounts(id) ON DELETE CASCADE
 );
 
 CREATE INDEX IF NOT EXISTS MatchFormationCorrections_status_idx
@@ -174,36 +181,37 @@ CREATE TABLE IF NOT EXISTS MatchKitCorrections (
   current_kit TEXT,
   proposed_kit TEXT NOT NULL,
   explanation TEXT,
-  submitted_by_sub TEXT NOT NULL,
+  submitted_by_account_id TEXT NOT NULL,
   submitted_by_name TEXT NOT NULL,
   submitted_at TEXT NOT NULL,
   status TEXT NOT NULL DEFAULT 'pending'
     CHECK (status IN ('pending', 'approved', 'rejected')),
   reviewed_by TEXT,
   reviewed_at TEXT,
-  review_note TEXT
+  review_note TEXT,
+  FOREIGN KEY (submitted_by_account_id) REFERENCES Accounts(id) ON DELETE CASCADE
 );
 
 CREATE INDEX IF NOT EXISTS MatchKitCorrections_status_idx
   ON MatchKitCorrections (status, submitted_at);
 
 CREATE INDEX IF NOT EXISTS MatchAttendanceCorrections_submitter_idx
-  ON MatchAttendanceCorrections (submitted_by_sub, submitted_at DESC);
+  ON MatchAttendanceCorrections (submitted_by_account_id, submitted_at DESC);
 
 CREATE INDEX IF NOT EXISTS PlayerProfileCorrections_submitter_idx
-  ON PlayerProfileCorrections (submitted_by_sub, submitted_at DESC);
+  ON PlayerProfileCorrections (submitted_by_account_id, submitted_at DESC);
 
 CREATE INDEX IF NOT EXISTS GoalCorrections_submitter_idx
-  ON GoalCorrections (submitted_by_sub, submitted_at DESC);
+  ON GoalCorrections (submitted_by_account_id, submitted_at DESC);
 
 CREATE INDEX IF NOT EXISTS AppearanceCorrections_submitter_idx
-  ON AppearanceCorrections (submitted_by_sub, submitted_at DESC);
+  ON AppearanceCorrections (submitted_by_account_id, submitted_at DESC);
 
 CREATE INDEX IF NOT EXISTS MatchFormationCorrections_submitter_idx
-  ON MatchFormationCorrections (submitted_by_sub, submitted_at DESC);
+  ON MatchFormationCorrections (submitted_by_account_id, submitted_at DESC);
 
 CREATE INDEX IF NOT EXISTS MatchKitCorrections_submitter_idx
-  ON MatchKitCorrections (submitted_by_sub, submitted_at DESC);
+  ON MatchKitCorrections (submitted_by_account_id, submitted_at DESC);
 
 CREATE TABLE IF NOT EXISTS Transfers (
   id TEXT NOT NULL PRIMARY KEY,
@@ -661,14 +669,34 @@ AFTER UPDATE ON SearchDocuments BEGIN
   VALUES (new.object_id, new.title, new.aliases, new.description);
 END;
 
+CREATE TABLE IF NOT EXISTS Accounts (
+  id TEXT NOT NULL PRIMARY KEY,
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS AccountIdentities (
+  provider_sub TEXT NOT NULL PRIMARY KEY,
+  account_id TEXT NOT NULL,
+  provider TEXT NOT NULL,
+  is_primary INTEGER NOT NULL DEFAULT 0 CHECK (is_primary IN (0, 1)),
+  created_at TEXT NOT NULL,
+  last_authenticated_at TEXT NOT NULL,
+  FOREIGN KEY (account_id) REFERENCES Accounts(id) ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_account_identities_account
+  ON AccountIdentities(account_id);
+
 CREATE TABLE IF NOT EXISTS UserProfiles (
-  auth_sub TEXT NOT NULL PRIMARY KEY,
+  account_id TEXT NOT NULL PRIMARY KEY,
   public_collection_id TEXT,
   public_collection_visible INTEGER NOT NULL DEFAULT 0,
   contact_opt_in INTEGER NOT NULL DEFAULT 0,
   correction_recognition_visible INTEGER NOT NULL DEFAULT 0
     CHECK (correction_recognition_visible IN (0, 1)),
-  correction_username TEXT
+  correction_username TEXT,
+  FOREIGN KEY (account_id) REFERENCES Accounts(id) ON DELETE CASCADE
 );
 
 CREATE UNIQUE INDEX IF NOT EXISTS idx_user_profiles_public_collection_id
@@ -676,42 +704,42 @@ CREATE UNIQUE INDEX IF NOT EXISTS idx_user_profiles_public_collection_id
   WHERE public_collection_id IS NOT NULL;
 
 CREATE TABLE IF NOT EXISTS ProgrammeCollections (
-  auth_sub TEXT NOT NULL,
+  account_id TEXT NOT NULL,
   game_id TEXT NOT NULL,
   status TEXT NOT NULL CHECK (status IN ('owned', 'wanted', 'trade')),
   condition_notes TEXT,
   purchase_notes TEXT,
   created_at TEXT NOT NULL,
   updated_at TEXT NOT NULL,
-  PRIMARY KEY (auth_sub, game_id),
-  FOREIGN KEY (auth_sub) REFERENCES UserProfiles(auth_sub) ON DELETE CASCADE,
+  PRIMARY KEY (account_id, game_id),
+  FOREIGN KEY (account_id) REFERENCES Accounts(id) ON DELETE CASCADE,
   FOREIGN KEY (game_id) REFERENCES Games(id) ON DELETE CASCADE
 );
 
 CREATE INDEX IF NOT EXISTS idx_programme_collections_game_status
   ON ProgrammeCollections(game_id, status);
 
-CREATE INDEX IF NOT EXISTS idx_programme_collections_user_status
-  ON ProgrammeCollections(auth_sub, status, updated_at DESC);
+CREATE INDEX IF NOT EXISTS idx_programme_collections_account_status
+  ON ProgrammeCollections(account_id, status, updated_at DESC);
 
 CREATE TABLE IF NOT EXISTS MatchAttendances (
-  auth_sub TEXT NOT NULL,
+  account_id TEXT NOT NULL,
   game_id TEXT NOT NULL,
   created_at TEXT NOT NULL,
-  PRIMARY KEY (auth_sub, game_id),
-  FOREIGN KEY (auth_sub) REFERENCES UserProfiles(auth_sub) ON DELETE CASCADE,
+  PRIMARY KEY (account_id, game_id),
+  FOREIGN KEY (account_id) REFERENCES Accounts(id) ON DELETE CASCADE,
   FOREIGN KEY (game_id) REFERENCES Games(id) ON DELETE CASCADE
 );
 
 CREATE INDEX IF NOT EXISTS idx_match_attendances_game
   ON MatchAttendances(game_id);
 
-CREATE INDEX IF NOT EXISTS idx_match_attendances_user_created
-  ON MatchAttendances(auth_sub, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_match_attendances_account_created
+  ON MatchAttendances(account_id, created_at DESC);
 
 CREATE TABLE IF NOT EXISTS FantasyTeams (
   id TEXT NOT NULL PRIMARY KEY,
-  auth_sub TEXT NOT NULL,
+  account_id TEXT NOT NULL,
   name TEXT NOT NULL,
   rationale TEXT,
   formation TEXT NOT NULL CHECK (formation IN ('442', '433')),
@@ -722,11 +750,11 @@ CREATE TABLE IF NOT EXISTS FantasyTeams (
   is_shared INTEGER NOT NULL DEFAULT 0,
   created_at TEXT NOT NULL,
   updated_at TEXT NOT NULL,
-  FOREIGN KEY (auth_sub) REFERENCES UserProfiles(auth_sub) ON DELETE CASCADE
+  FOREIGN KEY (account_id) REFERENCES Accounts(id) ON DELETE CASCADE
 );
 
 CREATE INDEX IF NOT EXISTS idx_fantasy_teams_owner_updated
-  ON FantasyTeams(auth_sub, updated_at DESC);
+  ON FantasyTeams(account_id, updated_at DESC);
 
 CREATE UNIQUE INDEX IF NOT EXISTS idx_fantasy_teams_public_share
   ON FantasyTeams(share_id)
@@ -734,11 +762,13 @@ CREATE UNIQUE INDEX IF NOT EXISTS idx_fantasy_teams_public_share
 
 CREATE TABLE IF NOT EXISTS ProgrammeContactRequests (
   id TEXT NOT NULL PRIMARY KEY,
-  sender_sub TEXT NOT NULL,
-  recipient_sub TEXT NOT NULL,
+  sender_account_id TEXT NOT NULL,
+  recipient_account_id TEXT NOT NULL,
   message TEXT NOT NULL,
-  created_at TEXT NOT NULL
+  created_at TEXT NOT NULL,
+  FOREIGN KEY (sender_account_id) REFERENCES Accounts(id) ON DELETE CASCADE,
+  FOREIGN KEY (recipient_account_id) REFERENCES Accounts(id) ON DELETE CASCADE
 );
 
 CREATE INDEX IF NOT EXISTS idx_programme_contact_requests_rate_limit
-  ON ProgrammeContactRequests(sender_sub, recipient_sub, created_at DESC);
+  ON ProgrammeContactRequests(sender_account_id, recipient_account_id, created_at DESC);

@@ -1,5 +1,6 @@
 import { getAdminSession } from "@/lib/adminAuth";
 import { auth0 } from "@/lib/auth0";
+import { resolveAccount } from "@/lib/accounts";
 import {
   ensureAppearanceCorrectionsTable,
   isNewAppearanceCorrection,
@@ -152,6 +153,8 @@ export async function POST(request: NextRequest) {
     source?: string;
     explanation?: string;
   };
+  const db = getCloudflareContext().env.DB;
+  const account = await resolveAccount(db, session.user.sub);
   if (Array.isArray(body.newAppearances)) {
     if (!body.season || !body.matchDate || !body.newAppearances.length)
       return error("Add at least one missing player.", 400);
@@ -161,7 +164,6 @@ export async function POST(request: NextRequest) {
         400,
       );
 
-    const db = getCloudflareContext().env.DB;
     const match = await getMatch(db, body.season, body.matchDate);
     if (!match) return error("That match could not be found.", 404);
     const proposed = body.newAppearances.map(completeNewAppearance);
@@ -218,7 +220,7 @@ export async function POST(request: NextRequest) {
           .prepare(
             `INSERT INTO AppearanceCorrections (
               id, appearance_id, season, match_date, opposition, current_json, changes_json,
-              source, explanation, submitted_by_sub, submitted_by_name, submitted_at, status
+              source, explanation, submitted_by_account_id, submitted_by_name, submitted_at, status
             ) VALUES (?, ?, ?, ?, ?, '{}', ?, ?, ?, ?, ?, ?, 'pending')`,
           )
           .bind(
@@ -230,7 +232,7 @@ export async function POST(request: NextRequest) {
             JSON.stringify(appearance),
             body.source?.trim().slice(0, 1000) || null,
             body.explanation?.trim().slice(0, 1000) || null,
-            session.user.sub,
+            account.id,
             session.user.name || session.user.email || "Supporter",
             submittedAt,
           );
@@ -247,7 +249,6 @@ export async function POST(request: NextRequest) {
   if (!body.appearanceId || !body.changes || typeof body.changes !== "object")
     return error("Change at least one appearance detail.", 400);
 
-  const db = getCloudflareContext().env.DB;
   const appearance = await getAppearance(db, body.appearanceId);
   if (!appearance) return error("That appearance could not be found.", 404);
   const current = snapshot(appearance);
@@ -274,9 +275,9 @@ export async function POST(request: NextRequest) {
   const duplicate = await db
     .prepare(
       `SELECT id FROM AppearanceCorrections
-    WHERE appearance_id = ? AND submitted_by_sub = ? AND changes_json = ? AND status = 'pending'`,
+    WHERE appearance_id = ? AND submitted_by_account_id = ? AND changes_json = ? AND status = 'pending'`,
     )
-    .bind(appearance.id, session.user.sub, changesJson)
+    .bind(appearance.id, account.id, changesJson)
     .first();
   if (duplicate)
     return error("You have already submitted these appearance changes.", 409);
@@ -284,7 +285,7 @@ export async function POST(request: NextRequest) {
     .prepare(
       `INSERT INTO AppearanceCorrections (
     id, appearance_id, season, match_date, opposition, current_json, changes_json,
-    source, explanation, submitted_by_sub, submitted_by_name, submitted_at, status
+    source, explanation, submitted_by_account_id, submitted_by_name, submitted_at, status
   ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending')`,
     )
     .bind(
@@ -297,7 +298,7 @@ export async function POST(request: NextRequest) {
       changesJson,
       body.source?.trim().slice(0, 1000) || null,
       body.explanation?.trim().slice(0, 1000) || null,
-      session.user.sub,
+      account.id,
       session.user.name || session.user.email || "Supporter",
       new Date().toISOString(),
     )

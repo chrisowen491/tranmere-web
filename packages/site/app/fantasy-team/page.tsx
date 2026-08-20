@@ -3,6 +3,7 @@ import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { FantasyTeamBuilder } from "@/components/apps/FantasyTeamBuilder";
 import { getPlayerCardOptions } from "@/lib/players";
 import { auth0 } from "@/lib/auth0";
+import { resolveAccount } from "@/lib/accounts";
 import { getOwnedFantasyTeam } from "@/lib/fantasyTeams";
 import Link from "next/link";
 
@@ -24,9 +25,12 @@ export default async function FantasyTeamPage({
   const session = await auth0.getSession();
   const params = await searchParams;
   const requestedId = params.edit ?? params.duplicate;
+  const account = session
+    ? await resolveAccount(env.DB, session.user.sub)
+    : null;
   const initialTeam =
-    session && requestedId
-      ? await getOwnedFantasyTeam(env.DB, requestedId, session.user.sub)
+    account && requestedId
+      ? await getOwnedFantasyTeam(env.DB, requestedId, account.id)
       : null;
   const players = await getPlayerCardOptions(env.DB);
   const availablePlayers = players.map((player) => ({

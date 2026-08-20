@@ -21,26 +21,28 @@ export function attendanceResult(match: AttendedMatchRow): AttendanceResult {
 
 export async function saveMatchAttendance(
   db: D1Database,
-  authSub: string,
+  accountId: string,
   gameId: string,
 ) {
   await db
     .prepare(
-      `INSERT OR IGNORE INTO MatchAttendances (auth_sub, game_id, created_at)
+      `INSERT OR IGNORE INTO MatchAttendances (account_id, game_id, created_at)
        VALUES (?, ?, ?)`,
     )
-    .bind(authSub, gameId, new Date().toISOString())
+    .bind(accountId, gameId, new Date().toISOString())
     .run();
-  return queryMatchAttendance(db, authSub, gameId);
+  return queryMatchAttendance(db, accountId, gameId);
 }
 
 export async function removeMatchAttendance(
   db: D1Database,
-  authSub: string,
+  accountId: string,
   gameId: string,
 ) {
   await db
-    .prepare("DELETE FROM MatchAttendances WHERE auth_sub = ? AND game_id = ?")
-    .bind(authSub, gameId)
+    .prepare(
+      "DELETE FROM MatchAttendances WHERE account_id = ? AND game_id = ?",
+    )
+    .bind(accountId, gameId)
     .run();
 }

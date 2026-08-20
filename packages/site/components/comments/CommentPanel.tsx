@@ -140,7 +140,7 @@ export default function CommentPanel(props: {
       <div className="space-y-6 mt-10">
         {thecomments &&
           thecomments.map((comment, idx) => {
-            const isAuthor = user && user.sub === comment.user.sub;
+            const isAuthor = comment.isAuthor;
             const isAdmin =
               user && user.email === process.env.NEXT_PUBLIC_AUTH0_ADMIN_EMAIL;
 

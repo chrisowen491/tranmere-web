@@ -4,6 +4,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ProgrammeCollectionSettings } from "@/components/apps/ProgrammeCollectionSettings";
 import { auth0 } from "@/lib/auth0";
+import { resolveAccount } from "@/lib/accounts";
 import {
   getProgrammeTotals,
   getUserCollection,
@@ -22,9 +23,10 @@ export default async function ProgrammeCollectionPage() {
   const session = await auth0.getSession();
   if (!session) redirect("/auth/login?returnTo=%2Fprofile%2Fprogrammes");
   const db = getCloudflareContext().env.DB;
-  const profile = await ensureUserProfile(db, session.user.sub);
+  const account = await resolveAccount(db, session.user.sub);
+  const profile = await ensureUserProfile(db, account.id);
   const [entries, totals] = await Promise.all([
-    getUserCollection(db, session.user.sub),
+    getUserCollection(db, account.id),
     getProgrammeTotals(db),
   ]);
   const owned = entries.filter((entry) => entry.status === "owned");

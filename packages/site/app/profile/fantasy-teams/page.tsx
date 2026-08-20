@@ -1,4 +1,5 @@
 import { auth0 } from "@/lib/auth0";
+import { resolveAccount } from "@/lib/accounts";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { redirect } from "next/navigation";
 import Link from "next/link";
@@ -11,10 +12,9 @@ export const metadata = { title: "Your saved Fantasy XIs" };
 export default async function SavedFantasyTeamsPage() {
   const session = await auth0.getSession();
   if (!session) redirect("/auth/login?returnTo=%2Fprofile%2Ffantasy-teams");
-  const teams = await listFantasyTeams(
-    getCloudflareContext().env.DB,
-    session.user.sub,
-  );
+  const db = getCloudflareContext().env.DB;
+  const account = await resolveAccount(db, session.user.sub);
+  const teams = await listFantasyTeams(db, account.id);
   return (
     <main className="min-h-screen bg-[#f4f0e8] pb-24 text-[#071a2b]">
       <header className="bg-[#071a2b] text-white">

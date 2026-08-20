@@ -6,6 +6,7 @@ const mocks = vi.hoisted(() => ({
   getAdminSession: vi.fn(),
   getCloudflareContext: vi.fn(),
   getSession: vi.fn(),
+  resolveAccount: vi.fn(),
   revalidatePath: vi.fn(),
 }));
 
@@ -14,6 +15,7 @@ vi.mock("@opennextjs/cloudflare", () => ({
 }));
 vi.mock("@/lib/adminAuth", () => ({ getAdminSession: mocks.getAdminSession }));
 vi.mock("@/lib/auth0", () => ({ auth0: { getSession: mocks.getSession } }));
+vi.mock("@/lib/accounts", () => ({ resolveAccount: mocks.resolveAccount }));
 vi.mock("@/lib/appearanceCorrections", async (importOriginal) => {
   const original =
     await importOriginal<typeof import("@/lib/appearanceCorrections")>();
@@ -87,6 +89,10 @@ describe("appearance correction workflow", () => {
     });
     mocks.getAdminSession.mockResolvedValue({
       user: { email: "admin@example.com" },
+    });
+    mocks.resolveAccount.mockResolvedValue({
+      id: "acct_supporter",
+      authSub: "auth0|supporter",
     });
   });
 

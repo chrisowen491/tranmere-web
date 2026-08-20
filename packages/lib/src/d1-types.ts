@@ -15,7 +15,7 @@ export interface PlayerRow {
 
 export interface FantasyTeamRow {
   id: string;
-  auth_sub: string;
+  account_id: string;
   name: string;
   rationale: string | null;
   formation: '442' | '433';
@@ -268,7 +268,7 @@ export interface GoalRow {
 }
 
 export interface UserProfileRow {
-  auth_sub: string;
+  account_id: string;
   public_collection_id: string | null;
   public_collection_visible: number;
   contact_opt_in: number;
@@ -279,7 +279,7 @@ export interface UserProfileRow {
 export type ProgrammeCollectionStatus = 'owned' | 'wanted' | 'trade';
 
 export interface ProgrammeCollectionRow {
-  auth_sub: string;
+  account_id: string;
   game_id: string;
   status: ProgrammeCollectionStatus;
   condition_notes: string | null;
@@ -289,7 +289,7 @@ export interface ProgrammeCollectionRow {
 }
 
 export interface MatchAttendanceRow {
-  auth_sub: string;
+  account_id: string;
   game_id: string;
   created_at: string;
 }

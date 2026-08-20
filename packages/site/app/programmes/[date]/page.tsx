@@ -11,6 +11,7 @@ import { FlipBook } from "@/components/apps/partials/FlipBook";
 import { ProgrammeCollectionControl } from "@/components/apps/ProgrammeCollectionControl";
 import { breadcrumbJsonLd, JsonLd } from "@/components/seo/JsonLd";
 import { auth0 } from "@/lib/auth0";
+import { resolveAccount } from "@/lib/accounts";
 import {
   getCollectionEntry,
   getProgrammeGame,
@@ -75,9 +76,12 @@ export default async function ProgrammePage(props: {
   const env = (await getCloudflareContext({ async: true })).env;
   const session = await auth0.getSession();
   const game = await getProgrammeGame(env.DB, programme.date);
+  const account = session
+    ? await resolveAccount(env.DB, session.user.sub)
+    : null;
   const collectionEntry =
-    session && game
-      ? await getCollectionEntry(env.DB, session.user.sub, game.id)
+    account && game
+      ? await getCollectionEntry(env.DB, account.id, game.id)
       : null;
 
   return (

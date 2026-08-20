@@ -9,6 +9,7 @@ import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { auth0 } from "@/lib/auth0";
 import { getAdminSession } from "@/lib/adminAuth";
 import { revalidatePath } from "next/cache";
+import { resolveAccount } from "@/lib/accounts";
 
 export interface ModerationResult {
   id: string;
@@ -61,7 +62,10 @@ export async function DELETE(req: NextRequest) {
   }
 
   const session = await auth0.getSession();
-  const env = getCloudflareContext().env;
+  const env = (await getCloudflareContext({ async: true })).env;
+  const account = session
+    ? await resolveAccount(env.DB, session.user.sub)
+    : null;
   const existing = await getCommentById(env.DB, id);
   if (!existing) {
     return NextResponse.json(
@@ -70,7 +74,7 @@ export async function DELETE(req: NextRequest) {
     );
   }
 
-  const isAuthor = session?.user.sub === existing.user.sub;
+  const isAuthor = account?.id === existing.accountId;
   const isAdmin = Boolean(await getAdminSession());
   if (!isAuthor && !isAdmin) {
     return NextResponse.json(
@@ -82,13 +86,21 @@ export async function DELETE(req: NextRequest) {
   await deleteComment(env.DB, id);
   revalidatePath(existing.url);
 
-  const comments = await GetCommentsByUrl(env, existing.url);
+  const comments = await GetCommentsByUrl(env, existing.url, account?.id);
   return NextResponse.json(comments, { status: 200 });
 }
 
 export async function POST(req: NextRequest) {
   try {
     const session = await auth0.getSession();
+    if (!session) {
+      return NextResponse.json(
+        { message: "Please log in first." },
+        { status: 401 },
+      );
+    }
+    const env = (await getCloudflareContext({ async: true })).env;
+    const account = await resolveAccount(env.DB, session.user.sub);
     const body = (await req.json()) as Comment;
 
     // Check Comment Moderation
@@ -102,7 +114,7 @@ export async function POST(req: NextRequest) {
         }),
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${getCloudflareContext().env.OPENAI_API_KEY ? getCloudflareContext().env.OPENAI_API_KEY : process.env.OPENAI_API_KEY}`,
+          Authorization: `Bearer ${env.OPENAI_API_KEY || process.env.OPENAI_API_KEY}`,
         },
       },
     );
@@ -115,16 +127,15 @@ export async function POST(req: NextRequest) {
       }
     });
 
-    const usernameClaim =
-      session!.user["https://www.tranmere-web.com/username"];
+    const usernameClaim = session.user["https://www.tranmere-web.com/username"];
 
     const username = [
       usernameClaim,
-      session!.user.username,
-      session!.user.preferred_username,
-      session!.user.nickname,
-      session!.user.name,
-      session!.user.email,
+      session.user.username,
+      session.user.preferred_username,
+      session.user.nickname,
+      session.user.name,
+      session.user.email,
     ].find((value): value is string =>
       Boolean(typeof value === "string" && value.trim()),
     );
@@ -136,21 +147,20 @@ export async function POST(req: NextRequest) {
       rating: body.rating,
       user: {
         name: username?.trim() || "Supporter",
-        picture: session!.user.picture!,
-        sub: session!.user.sub,
-        email: session!.user.email,
+        picture: session.user.picture!,
+        email: session.user.email,
       },
+      isAuthor: true,
     };
 
-    await getCloudflareContext()
-      .env.DB.prepare(
-        "INSERT INTO Ratings (page_url, image_url, created, sub, user_name, email, rating, comment) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-      )
+    await env.DB.prepare(
+      "INSERT INTO Ratings (page_url, image_url, created, account_id, user_name, email, rating, comment) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+    )
       .bind(
         comment.url,
         comment.user.picture,
         comment.created_at,
-        comment.user.sub,
+        account.id,
         comment.user.name,
         comment.user.email,
         comment.rating,
@@ -158,17 +168,10 @@ export async function POST(req: NextRequest) {
       )
       .run();
 
-    const comments = await GetCommentsByUrl(
-      getCloudflareContext().env,
-      body.url,
-    );
+    const comments = await GetCommentsByUrl(env, body.url, account.id);
 
-    const zone = getCloudflareContext().env.CLOUDFLARE_ZONE
-      ? getCloudflareContext().env.CLOUDFLARE_ZONE
-      : process.env.CLOUDFLARE_ZONE;
-    const key = getCloudflareContext().env.CLOUDFLARE_API_KEY
-      ? getCloudflareContext().env.CLOUDFLARE_API_KEY
-      : process.env.CLOUDFLARE_API_KEY;
+    const zone = env.CLOUDFLARE_ZONE || process.env.CLOUDFLARE_ZONE;
+    const key = env.CLOUDFLARE_API_KEY || process.env.CLOUDFLARE_API_KEY;
     await fetch(
       `https://api.cloudflare.com/client/v4/zones/${zone}/purge_cache`,
       {
