@@ -604,16 +604,18 @@ export default function MatchReport(props: {
                     </div>
                   ))}
                 </div>
-                <div className="mt-5 border-t border-[#071a2b]/10 pt-5">
-                  <p className="mb-4 max-w-2xl text-sm leading-6 text-[#071a2b]/60">
-                    Is somebody missing from the XI? Add one player or propose
-                    the remaining lineup in a single submission.
-                  </p>
-                  <MissingAppearanceCorrectionForm
-                    season={match.season.toString()}
-                    matchDate={match.date}
-                  />
-                </div>
+                {players.length < 11 && (
+                  <div className="mt-5 border-t border-[#071a2b]/10 pt-5">
+                    <p className="mb-4 max-w-2xl text-sm leading-6 text-[#071a2b]/60">
+                      Is somebody missing from the XI? Add one player or propose
+                      the remaining lineup in a single submission.
+                    </p>
+                    <MissingAppearanceCorrectionForm
+                      season={match.season.toString()}
+                      matchDate={match.date}
+                    />
+                  </div>
+                )}
               </div>
             </details>
           </section>
