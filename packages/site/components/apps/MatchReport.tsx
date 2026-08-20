@@ -15,6 +15,8 @@ import { FormationCorrectionForm } from "./FormationCorrectionForm";
 import { KitCorrectionForm } from "./KitCorrectionForm";
 import { GoalCorrectionForm } from "./GoalCorrectionForm";
 import { AppearanceCorrectionForm } from "./AppearanceCorrectionForm";
+import { GoalSubmissionForm } from "./GoalSubmissionForm";
+import { MissingAppearanceCorrectionForm } from "./MissingAppearanceCorrectionForm";
 import { kitLabel } from "@/lib/kitCorrections";
 import type { MatchPageView } from "@/lib/matchPlayers";
 import type { ManagerRecord } from "@/lib/managers";
@@ -35,6 +37,18 @@ function goalMinuteValue(minute?: string) {
 function goalMinuteLabel(minute?: string) {
   if (!minute) return "—";
   return minute.endsWith("'") ? minute : `${minute}'`;
+}
+
+function expectedRoversGoals(
+  score?: string,
+  homeTeam?: string,
+  awayTeam?: string,
+) {
+  const goals = score?.match(/(\d+)\s*-\s*(\d+)/);
+  if (!goals) return null;
+  if (homeTeam === "Tranmere Rovers") return Number(goals[1]);
+  if (awayTeam === "Tranmere Rovers") return Number(goals[2]);
+  return null;
 }
 
 function penaltyOutcome(pens?: string, homeTeam?: string, awayTeam?: string) {
@@ -82,6 +96,11 @@ export default function MatchReport(props: {
   const goals = [...(match.goals ?? [])].sort(
     (left, right) =>
       goalMinuteValue(left.Minute) - goalMinuteValue(right.Minute),
+  );
+  const expectedGoalTotal = expectedRoversGoals(
+    match.score,
+    match.homeTeam,
+    match.awayTeam,
   );
   const matchPlayerNames = [
     ...new Set(
@@ -248,22 +267,22 @@ export default function MatchReport(props: {
           </section>
         )}
 
-        {goals.length > 0 && (
-          <section className="mb-12 border-y border-[#071a2b]/15 py-8">
-            <div className="flex flex-wrap items-end justify-between gap-4">
-              <div>
-                <p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-700">
-                  Rovers goals
-                </p>
-                <h2 className="mt-2 font-display text-3xl font-semibold">
-                  How the goals were made
-                </h2>
-              </div>
-              <p className="font-mono text-xs uppercase tracking-[0.12em] text-[#071a2b]/45">
-                {goals.length} {goals.length === 1 ? "goal" : "goals"} recorded
+        <section className="mb-12 border-y border-[#071a2b]/15 py-8">
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-700">
+                Rovers goals
               </p>
+              <h2 className="mt-2 font-display text-3xl font-semibold">
+                How the goals were made
+              </h2>
             </div>
+            <p className="font-mono text-xs uppercase tracking-[0.12em] text-[#071a2b]/45">
+              {goals.length} {goals.length === 1 ? "goal" : "goals"} recorded
+            </p>
+          </div>
 
+          {goals.length > 0 && (
             <ol className="mt-6 border border-[#071a2b]/15 bg-[#071a2b]/15">
               {goals.map((goal, index) => (
                 <li
@@ -343,8 +362,23 @@ export default function MatchReport(props: {
                 </li>
               ))}
             </ol>
-          </section>
-        )}
+          )}
+          {(expectedGoalTotal === null || goals.length < expectedGoalTotal) && (
+            <GoalSubmissionForm
+              season={match.season.toString()}
+              matchDate={match.date}
+              opposition={
+                match.opposition ||
+                (match.homeTeam === "Tranmere Rovers"
+                  ? match.awayTeam
+                  : match.homeTeam) ||
+                "Unknown opposition"
+              }
+              competition={match.competition}
+              playerNames={matchPlayerNames}
+            />
+          )}
+        </section>
 
         {props.milestones.length > 0 && (
           <section className="mb-12 border-y border-[#071a2b]/15 bg-blue-50/45 py-8 sm:px-8">
@@ -570,8 +604,41 @@ export default function MatchReport(props: {
                     </div>
                   ))}
                 </div>
+                <div className="mt-5 border-t border-[#071a2b]/10 pt-5">
+                  <p className="mb-4 max-w-2xl text-sm leading-6 text-[#071a2b]/60">
+                    Is somebody missing from the XI? Add one player or propose
+                    the remaining lineup in a single submission.
+                  </p>
+                  <MissingAppearanceCorrectionForm
+                    season={match.season.toString()}
+                    matchDate={match.date}
+                  />
+                </div>
               </div>
             </details>
+          </section>
+        )}
+
+        {players.length === 0 && (
+          <section className="border border-[#071a2b]/15 bg-[#fffdf8] p-6 sm:p-8">
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-700">
+              Team sheet
+            </p>
+            <h2 className="mt-2 font-display text-3xl font-semibold">
+              Rovers XI not yet recorded
+            </h2>
+            <p className="mt-3 max-w-2xl text-sm leading-6 text-[#071a2b]/60">
+              Help complete this match by submitting any starters, shirt
+              numbers, substitutions or cards that are missing. Every entry is
+              reviewed before publication.
+            </p>
+            <div className="mt-6 border-t border-[#071a2b]/10 pt-6">
+              <MissingAppearanceCorrectionForm
+                season={match.season.toString()}
+                matchDate={match.date}
+                emptyLineup
+              />
+            </div>
           </section>
         )}
 

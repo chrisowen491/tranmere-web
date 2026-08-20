@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { FantasyTeamBuilder } from "@/components/apps/FantasyTeamBuilder";
-import { getUniquePlayers } from "@/lib/players";
+import { getPlayerCardOptions } from "@/lib/players";
 import { auth0 } from "@/lib/auth0";
 import { getOwnedFantasyTeam } from "@/lib/fantasyTeams";
 import Link from "next/link";
@@ -28,7 +28,7 @@ export default async function FantasyTeamPage({
     session && requestedId
       ? await getOwnedFantasyTeam(env.DB, requestedId, session.user.sub)
       : null;
-  const players = await getUniquePlayers(env.DB);
+  const players = await getPlayerCardOptions(env.DB);
   const availablePlayers = players.map((player) => ({
     id: player.id,
     name: player.name,

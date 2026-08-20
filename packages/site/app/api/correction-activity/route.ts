@@ -13,6 +13,7 @@ const kinds = new Set<CorrectionKind>([
   "player-profile",
   "kit",
   "goal",
+  "goal-submission",
   "appearance",
 ]);
 

@@ -2,6 +2,7 @@
 
 import {
   editableAppearanceLabels,
+  isNewAppearanceCorrection,
   type AppearanceCorrection,
   type EditableAppearance,
 } from "@/lib/appearanceCorrections";
@@ -80,10 +81,16 @@ export function AppearanceCorrectionReview({
         >
           <header className="bg-[#071a2b] p-6 text-white sm:p-8">
             <p className="font-mono text-xs uppercase tracking-[0.14em] text-blue-300">
-              {correction.season} · {correction.matchDate}
+              {isNewAppearanceCorrection(correction.appearanceId)
+                ? "Missing lineup entry"
+                : "Appearance correction"}{" "}
+              · {correction.season} · {correction.matchDate}
             </p>
             <h2 className="mt-2 font-display text-3xl font-semibold">
-              {display(correction.current.playerName)} v {correction.opposition}
+              {display(
+                correction.current.playerName ?? correction.changes.playerName,
+              )}{" "}
+              v {correction.opposition}
             </h2>
             <Link
               href={`/match/${correction.season}/${correction.matchDate}`}

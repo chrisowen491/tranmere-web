@@ -25,6 +25,10 @@ export interface AppearanceCorrection {
   submittedAt: string;
 }
 
+export function isNewAppearanceCorrection(appearanceId: string) {
+  return appearanceId.startsWith("new:");
+}
+
 interface DBAppearanceCorrection {
   id: string;
   appearance_id: string;

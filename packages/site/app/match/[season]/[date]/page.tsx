@@ -241,30 +241,14 @@ export default async function MatchPage(props: { params: MatchParams }) {
         manager={manager}
         milestones={milestones}
       ></MatchReport>
-      <section className="mx-auto max-w-7xl px-6 pb-8 sm:px-10 lg:px-12">
-        {session ? (
-          <MatchAttendanceControl
-            gameId={gameId}
-            initialAttended={Boolean(attendanceEntry)}
-          />
-        ) : (
-          <div className="border border-[#071a2b]/15 bg-[#fffdf8] p-6 text-sm font-semibold text-[#071a2b]">
-            <a
-              href={`/auth/login?returnTo=${encodeURIComponent(baseUrl)}`}
-              className="text-blue-700"
-            >
-              Log in
-            </a>{" "}
-            to record this match in your private Rovers passport.
-          </div>
-        )}
-      </section>
-      {!game.noProgrammeIssued && (
-        <section className="mx-auto max-w-7xl px-6 pb-24 sm:px-10 lg:px-12">
+      <section className="mx-auto max-w-7xl px-6 pb-24 sm:px-10 lg:px-12">
+        <div
+          className={`grid gap-6 ${game.noProgrammeIssued ? "" : "lg:grid-cols-2"}`}
+        >
           {session ? (
-            <ProgrammeCollectionControl
+            <MatchAttendanceControl
               gameId={gameId}
-              initialEntry={collectionEntry}
+              initialAttended={Boolean(attendanceEntry)}
             />
           ) : (
             <div className="border border-[#071a2b]/15 bg-[#fffdf8] p-6 text-sm font-semibold text-[#071a2b]">
@@ -274,11 +258,28 @@ export default async function MatchPage(props: { params: MatchParams }) {
               >
                 Log in
               </a>{" "}
-              to add this programme to your collection.
+              to record this match in your private Rovers passport.
             </div>
           )}
-        </section>
-      )}
+          {!game.noProgrammeIssued &&
+            (session ? (
+              <ProgrammeCollectionControl
+                gameId={gameId}
+                initialEntry={collectionEntry}
+              />
+            ) : (
+              <div className="border border-[#071a2b]/15 bg-[#fffdf8] p-6 text-sm font-semibold text-[#071a2b]">
+                <a
+                  href={`/auth/login?returnTo=${encodeURIComponent(baseUrl)}`}
+                  className="text-blue-700"
+                >
+                  Log in
+                </a>{" "}
+                to add this programme to your collection.
+              </div>
+            ))}
+        </div>
+      </section>
     </>
   );
 }

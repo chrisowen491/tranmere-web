@@ -2,11 +2,18 @@ import { ensureAppearanceCorrectionsTable } from "@/lib/appearanceCorrections";
 import { ensureAttendanceCorrectionsTable } from "@/lib/attendanceCorrections";
 import { ensureFormationCorrectionsTable } from "@/lib/formationCorrections";
 import { ensureGoalCorrectionsTable } from "@/lib/goalCorrections";
+import { ensureGoalSubmissionsTable } from "@/lib/goalSubmissions";
 import { ensureKitCorrectionsTable } from "@/lib/kitCorrections";
 import { ensurePlayerProfileCorrectionsTable } from "@/lib/playerProfileCorrections";
 
 export type CorrectionKind =
-  "attendance" | "formation" | "player-profile" | "kit" | "goal" | "appearance";
+  | "attendance"
+  | "formation"
+  | "player-profile"
+  | "kit"
+  | "goal"
+  | "goal-submission"
+  | "appearance";
 
 export type CorrectionActivityStatus = "pending" | "approved" | "rejected";
 
@@ -50,6 +57,7 @@ const labels: Record<CorrectionKind, string> = {
   "player-profile": "Player profile",
   kit: "Match kit",
   goal: "Goal details",
+  "goal-submission": "Missing goal",
   appearance: "Appearance",
 };
 
@@ -59,6 +67,7 @@ const correctionTables: Record<CorrectionKind, string> = {
   "player-profile": "PlayerProfileCorrections",
   kit: "MatchKitCorrections",
   goal: "GoalCorrections",
+  "goal-submission": "GoalSubmissions",
   appearance: "AppearanceCorrections",
 };
 
@@ -77,6 +86,7 @@ export async function ensureCorrectionActivityTables(db: D1Database) {
   await ensurePlayerProfileCorrectionsTable(db);
   await ensureKitCorrectionsTable(db);
   await ensureGoalCorrectionsTable(db);
+  await ensureGoalSubmissionsTable(db);
   await ensureAppearanceCorrectionsTable(db);
 }
 
@@ -129,6 +139,13 @@ const activityQueries = [
          review_note, reviewed_at
   FROM AppearanceCorrections
   WHERE submitted_by_sub = ?`,
+  `SELECT id, 'goal-submission' AS kind,
+         'goal-submission:' || season || ':' || match_date || ':' || goal_json AS contribution_key,
+         season, match_date, opposition AS subject,
+         '{}' AS current_json, goal_json AS changes_json, source, explanation,
+         submitted_at, status, review_note, reviewed_at
+   FROM GoalSubmissions
+   WHERE submitted_by_sub = ?`,
 ] as const;
 
 const publicContributionQueries = [
@@ -150,6 +167,9 @@ const publicContributionQueries = [
   `SELECT c.submitted_by_sub AS auth_sub, up.correction_username AS display_name,
           'appearance:' || c.appearance_id || ':' || c.changes_json AS contribution_key
    FROM AppearanceCorrections c`,
+  `SELECT c.submitted_by_sub AS auth_sub, up.correction_username AS display_name,
+          'goal-submission:' || c.season || ':' || c.match_date || ':' || c.goal_json AS contribution_key
+   FROM GoalSubmissions c`,
 ] as const;
 
 export async function getCorrectionActivity(db: D1Database, authSub: string) {
@@ -165,11 +185,13 @@ export async function getCorrectionActivity(db: D1Database, authSub: string) {
 
   return results.map((row) => {
     const current = parseJson(row.current_json);
+    const changes = parseJson(row.changes_json);
     const subject =
       row.kind === "goal" && typeof current.scorer === "string"
         ? `${current.scorer} v ${row.subject}`
-        : row.kind === "appearance" && typeof current.playerName === "string"
-          ? `${current.playerName} v ${row.subject}`
+        : row.kind === "appearance" &&
+            typeof (current.playerName ?? changes.playerName) === "string"
+          ? `${current.playerName ?? changes.playerName} v ${row.subject}`
           : row.subject;
     const publicPath =
       row.status !== "approved"
@@ -190,7 +212,7 @@ export async function getCorrectionActivity(db: D1Database, authSub: string) {
       source: row.source,
       explanation: row.explanation,
       current,
-      changes: parseJson(row.changes_json),
+      changes,
       reviewNote: row.review_note,
       reviewedAt: row.reviewed_at,
       publicPath,

@@ -48,6 +48,7 @@ function d1Fixture(firstResults: unknown[] = []) {
           return statement;
         }),
         first: vi.fn(async () => results.shift() ?? null),
+        all: vi.fn(async () => ({ results: [] })),
         run: vi.fn(async () => ({ meta: { changes: 1 } })),
       };
       return statement;
@@ -121,6 +122,39 @@ describe("appearance correction workflow", () => {
     );
   });
 
+  it("stores missing lineup players without an existing Apps row", async () => {
+    const { db, statements } = d1Fixture([
+      {
+        season: 1989,
+        match_date: "1989-08-19",
+        opposition: "Crewe Alexandra",
+        competition: "League",
+      },
+      null,
+    ]);
+    mocks.getCloudflareContext.mockReturnValue({ env: { DB: db } });
+    const response = await suggestAppearanceCorrection(
+      request("POST", {
+        season: "1989",
+        matchDate: "1989-08-19",
+        newAppearances: [{ playerName: "Ian Muir", shirtNumber: "10" }],
+        source: "Match programme",
+      }),
+    );
+    expect(response.status).toBe(201);
+    const insert = statements.find(({ sql }) =>
+      sql.includes("INSERT INTO AppearanceCorrections"),
+    );
+    expect(insert?.values).toEqual(
+      expect.arrayContaining([
+        expect.stringMatching(/^new:/),
+        "1989",
+        "1989-08-19",
+        expect.stringContaining('"playerName":"Ian Muir"'),
+      ]),
+    );
+  });
+
   it("publishes approved fields to the targeted Apps row", async () => {
     const { db, statements } = d1Fixture([
       {
@@ -152,5 +186,45 @@ describe("appearance correction workflow", () => {
     ]);
     expect(mocks.revalidatePath).toHaveBeenCalledWith("/match/1989/1989-08-19");
     expect(mocks.revalidatePath).toHaveBeenCalledWith("/season/1989");
+  });
+
+  it("publishes an approved missing player as a new Apps row", async () => {
+    const { db, statements } = d1Fixture([
+      {
+        appearance_id: "new:proposal-1",
+        season: "1989",
+        match_date: "1989-08-19",
+        opposition: "Crewe Alexandra",
+        changes_json: JSON.stringify({
+          playerName: "Ian Muir",
+          shirtNumber: "10",
+        }),
+      },
+      {
+        season: 1989,
+        match_date: "1989-08-19",
+        opposition: "Crewe Alexandra",
+        competition: "League",
+      },
+      null,
+    ]);
+    mocks.getCloudflareContext.mockReturnValue({ env: { DB: db } });
+    const response = await reviewAppearanceCorrection(
+      request("PATCH", { id: "correction-1", status: "approved" }),
+    );
+    expect(response.status).toBe(200);
+    const insert = statements.find(({ sql }) =>
+      sql.includes("INSERT INTO Apps"),
+    );
+    expect(insert?.values).toEqual(
+      expect.arrayContaining([
+        1989,
+        "1989-08-19",
+        "Ian Muir",
+        "League",
+        "Crewe Alexandra",
+        10,
+      ]),
+    );
   });
 });

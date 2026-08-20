@@ -19,7 +19,7 @@ import type { Match } from "@tranmere-web/lib/src/tranmere-web-types";
 import { getGameBySeasonAndDate, getLatestPlayedGame } from "@/lib/games";
 import { getAllArticles, getAllShirts } from "@/lib/api";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
-import { getUniquePlayers, type PlayerRecord } from "@/lib/players";
+import { getPlayerCardOptions, type PlayerCardOption } from "@/lib/players";
 
 export const revalidate = 7200;
 
@@ -113,7 +113,7 @@ const exploreLinks = [
   },
 ];
 
-function PromoPlayer({ player }: { player: PlayerRecord }) {
+function PromoPlayer({ player }: { player: PlayerCardOption }) {
   return (
     <div className="flex w-20 flex-col items-center text-center">
       <div className="h-16 w-16 overflow-hidden rounded-full border border-white/45 bg-[#f4f0e8]">
@@ -168,7 +168,7 @@ export default async function Home() {
 
   const [players, onThisDay, shirts, articles, latestMatch] = await Promise.all(
     [
-      getUniquePlayers(env.DB),
+      getPlayerCardOptions(env.DB),
       GetOnThisDay(env.DB),
       getAllShirts(),
       getAllArticles(4),

@@ -17,6 +17,16 @@ export interface PlayerRecord {
 
 export type PlayerInput = Omit<PlayerRecord, "id">;
 
+export interface PlayerCardOption {
+  id: string;
+  name: string;
+  picLink: string | null;
+}
+
+export interface WhoAmIPlayerOption extends PlayerCardOption {
+  position: string | null;
+}
+
 function parseLinks(value: string) {
   try {
     const links = JSON.parse(value) as unknown;
@@ -91,6 +101,68 @@ export async function getUniquePlayers(db: D1Database, query?: string) {
       }, new Map<string, PlayerRecord>())
       .values(),
   ].sort((a, b) => a.name.localeCompare(b.name));
+}
+
+export async function getPlayerCardOptions(db: D1Database) {
+  const { results } = await db
+    .prepare(
+      `SELECT id, name, pic_link
+       FROM Players
+       ORDER BY name ASC, id ASC`,
+    )
+    .all<{ id: string; name: string; pic_link: string | null }>();
+  return [
+    ...results
+      .reduce((players, row) => {
+        const candidate = {
+          id: row.id,
+          name: row.name,
+          picLink: row.pic_link,
+        };
+        const current = players.get(row.name);
+        if (!current || (!current.picLink && candidate.picLink))
+          players.set(row.name, candidate);
+        return players;
+      }, new Map<string, PlayerCardOption>())
+      .values(),
+  ];
+}
+
+export async function getWhoAmIPlayerOptions(db: D1Database) {
+  const { results } = await db
+    .prepare(
+      `SELECT id, name, pic_link, position
+       FROM Players
+       ORDER BY name ASC, id ASC`,
+    )
+    .all<{
+      id: string;
+      name: string;
+      pic_link: string | null;
+      position: string | null;
+    }>();
+  return [
+    ...results
+      .reduce((players, row) => {
+        const candidate = {
+          id: row.id,
+          name: row.name,
+          picLink: row.pic_link,
+          position: row.position,
+        };
+        const current = players.get(row.name);
+        const currentScore =
+          Number(Boolean(current?.picLink)) +
+          Number(Boolean(current?.position));
+        const candidateScore =
+          Number(Boolean(candidate.picLink)) +
+          Number(Boolean(candidate.position));
+        if (!current || candidateScore > currentScore)
+          players.set(row.name, candidate);
+        return players;
+      }, new Map<string, WhoAmIPlayerOption>())
+      .values(),
+  ];
 }
 
 export async function getPlayersByNames(db: D1Database, names: string[]) {

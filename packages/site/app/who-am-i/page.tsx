@@ -5,7 +5,7 @@ import {
   queryPlayerSeasonSummaryRows,
 } from "@tranmere-web/lib/src/d1-queries";
 import { WhoAmIGame } from "@/components/apps/WhoAmIGame";
-import { getUniquePlayers } from "@/lib/players";
+import { getWhoAmIPlayerOptions } from "@/lib/players";
 
 export const metadata: Metadata = {
   title: "Who Am I? — Daily Tranmere player",
@@ -40,7 +40,7 @@ function avatarSeason(picLink?: string | null) {
 
 export default async function WhoAmIPage() {
   const context = await getCloudflareContext({ async: true });
-  const players = await getUniquePlayers(context.env.DB);
+  const players = await getWhoAmIPlayerOptions(context.env.DB);
   const eligiblePlayers = players.filter(
     (player) =>
       player.picLink &&

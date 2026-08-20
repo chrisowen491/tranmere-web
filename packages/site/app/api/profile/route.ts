@@ -47,6 +47,9 @@ export async function DELETE() {
       .prepare("DELETE FROM GoalCorrections WHERE submitted_by_sub = ?")
       .bind(authSub),
     db
+      .prepare("DELETE FROM GoalSubmissions WHERE submitted_by_sub = ?")
+      .bind(authSub),
+    db
       .prepare("DELETE FROM AppearanceCorrections WHERE submitted_by_sub = ?")
       .bind(authSub),
     db.prepare("DELETE FROM UserProfiles WHERE auth_sub = ?").bind(authSub),

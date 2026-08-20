@@ -52,7 +52,11 @@ export async function GetCommentsByUrl(
 ): Promise<Comment[]> {
   try {
     const commentsQuery = await env.DB.prepare(
-      "SELECT * FROM Ratings WHERE page_url = ?",
+      `SELECT id, page_url, image_url, created, sub, user_name, email, rating,
+              comment
+       FROM Ratings
+       WHERE page_url = ?
+       ORDER BY created DESC, id DESC`,
     )
       .bind(url)
       .all<DBComment>();
