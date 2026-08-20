@@ -41,35 +41,10 @@ export function isFormation(value: string): value is ManagerFormation {
   return (MANAGER_FORMATIONS as readonly string[]).includes(value);
 }
 
-export async function ensureFormationCorrectionsTable(db: D1Database) {
-  await db.batch([
-    db.prepare(`CREATE TABLE IF NOT EXISTS MatchFormationCorrections (
-      id TEXT NOT NULL PRIMARY KEY,
-      season TEXT NOT NULL,
-      match_date TEXT NOT NULL,
-      home_team TEXT NOT NULL,
-      away_team TEXT NOT NULL,
-      current_formation TEXT,
-      proposed_formation TEXT NOT NULL,
-      explanation TEXT,
-      submitted_by_account_id TEXT NOT NULL,
-      submitted_by_name TEXT NOT NULL,
-      submitted_at TEXT NOT NULL,
-      status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'rejected')),
-      reviewed_by TEXT,
-      reviewed_at TEXT,
-      review_note TEXT
-    )`),
-    db.prepare(`CREATE INDEX IF NOT EXISTS MatchFormationCorrections_status_idx
-      ON MatchFormationCorrections (status, submitted_at)`),
-  ]);
-}
-
 export async function getFormationCorrections(
   db: D1Database,
   status?: FormationCorrectionStatus,
 ) {
-  await ensureFormationCorrectionsTable(db);
   const statement = status
     ? db
         .prepare(

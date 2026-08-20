@@ -2,7 +2,6 @@ import { getAdminSession } from "@/lib/adminAuth";
 import { auth0 } from "@/lib/auth0";
 import { resolveAccount } from "@/lib/accounts";
 import {
-  ensureGoalCorrectionsTable,
   parseEditableGoal,
   type EditableGoal,
   type GoalCorrectionStatus,
@@ -126,7 +125,6 @@ export async function POST(request: NextRequest) {
       return error(`${name} could not be matched to a player profile.`, 400);
   }
 
-  await ensureGoalCorrectionsTable(db);
   const account = await resolveAccount(db, session.user.sub);
   const changesJson = JSON.stringify(changes);
   const duplicate = await db
@@ -182,7 +180,6 @@ export async function PATCH(request: NextRequest) {
     return error("Choose whether to approve or reject this correction.", 400);
 
   const db = getCloudflareContext().env.DB;
-  await ensureGoalCorrectionsTable(db);
   const correction = await db
     .prepare(
       `SELECT goal_id, season, match_date, changes_json

@@ -2,11 +2,7 @@ import { auth0 } from "@/lib/auth0";
 import { resolveAccount } from "@/lib/accounts";
 import { getAdminSession } from "@/lib/adminAuth";
 import { getGameBySeasonAndDate } from "@/lib/games";
-import {
-  ensureKitCorrectionsTable,
-  isAvatarKit,
-  type KitCorrectionStatus,
-} from "@/lib/kitCorrections";
+import { isAvatarKit, type KitCorrectionStatus } from "@/lib/kitCorrections";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { revalidatePath } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
@@ -43,7 +39,6 @@ export async function POST(request: NextRequest) {
   if (!match) return error("That match could not be found.", 404);
   if (match.kit === body.proposedKit)
     return error("That kit is already shown on the match page.", 409);
-  await ensureKitCorrectionsTable(env.DB);
   const account = await resolveAccount(env.DB, session.user.sub);
   const duplicate = await env.DB.prepare(
     `SELECT id FROM MatchKitCorrections
@@ -93,7 +88,6 @@ export async function PATCH(request: NextRequest) {
     return error("Choose whether to approve or reject this correction.", 400);
 
   const db = getCloudflareContext().env.DB;
-  await ensureKitCorrectionsTable(db);
   const correction = await db
     .prepare(
       `SELECT season, match_date, proposed_kit FROM MatchKitCorrections

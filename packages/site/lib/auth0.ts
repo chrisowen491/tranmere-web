@@ -7,6 +7,7 @@ import { NextResponse } from "next/server";
 import { attachLinkedIdentity } from "@/lib/accountLinking";
 import { linkAuth0Identity } from "@/lib/auth0Management";
 import { resolveAccount } from "@/lib/accounts";
+import { ROLES_CLAIM } from "@/lib/authPermissions";
 
 const usernameClaim = "https://www.tranmere-web.com/username";
 
@@ -23,6 +24,9 @@ export const auth0 = new Auth0Client({
         : {}),
       ...(typeof session.user.preferred_username === "string"
         ? { preferred_username: session.user.preferred_username }
+        : {}),
+      ...(Array.isArray(session.user[ROLES_CLAIM])
+        ? { [ROLES_CLAIM]: session.user[ROLES_CLAIM] }
         : {}),
     },
   }),

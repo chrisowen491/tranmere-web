@@ -2,7 +2,6 @@ import { NextRequest } from "next/server";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
-  ensureGoalCorrectionsTable: vi.fn(),
   getAdminSession: vi.fn(),
   getCloudflareContext: vi.fn(),
   getSession: vi.fn(),
@@ -23,7 +22,6 @@ vi.mock("@/lib/goalCorrections", async (importOriginal) => {
     await importOriginal<typeof import("@/lib/goalCorrections")>();
   return {
     ...original,
-    ensureGoalCorrectionsTable: mocks.ensureGoalCorrectionsTable,
   };
 });
 vi.mock("next/cache", () => ({

@@ -6,7 +6,6 @@ const mocks = vi.hoisted(() => ({
   getAdminSession: vi.fn(),
   getSession: vi.fn(),
   getGameBySeasonAndDate: vi.fn(),
-  ensureAttendanceCorrectionsTable: vi.fn(),
   revalidatePath: vi.fn(),
 }));
 
@@ -26,23 +25,15 @@ vi.mock("@/lib/games", () => ({
   getGameBySeasonAndDate: mocks.getGameBySeasonAndDate,
 }));
 
-vi.mock("@/lib/attendanceCorrections", () => ({
-  ensureAttendanceCorrectionsTable: mocks.ensureAttendanceCorrectionsTable,
-}));
+vi.mock("@/lib/attendanceCorrections", () => ({}));
 
 vi.mock("next/cache", () => ({
   revalidatePath: mocks.revalidatePath,
 }));
 
-import {
-  POST as createApp,
-} from "@/app/api/admin/apps/route";
-import {
-  POST as createGoal,
-} from "@/app/api/admin/goals/route";
-import {
-  PATCH as reviewAttendanceCorrection,
-} from "@/app/api/attendance-corrections/route";
+import { POST as createApp } from "@/app/api/admin/apps/route";
+import { POST as createGoal } from "@/app/api/admin/goals/route";
+import { PATCH as reviewAttendanceCorrection } from "@/app/api/attendance-corrections/route";
 import { POST as sendContactMessage } from "@/app/api/contact-us/route";
 
 type D1Result = { meta: { changes: number } };
@@ -55,10 +46,12 @@ function request(method: string, body: unknown) {
   });
 }
 
-function d1Fixture(options: {
-  firstResults?: unknown[];
-  runResults?: D1Result[];
-} = {}) {
+function d1Fixture(
+  options: {
+    firstResults?: unknown[];
+    runResults?: D1Result[];
+  } = {},
+) {
   const firstResults = [...(options.firstResults ?? [])];
   const runResults = [...(options.runResults ?? [])];
   const statements: Array<{
@@ -109,7 +102,7 @@ describe("admin mutation routes", () => {
     expect(await response.json()).toEqual({
       message: "You do not have permission to manage appearances.",
     });
-    expect((db.prepare as ReturnType<typeof vi.fn>)).not.toHaveBeenCalled();
+    expect(db.prepare as ReturnType<typeof vi.fn>).not.toHaveBeenCalled();
   });
 
   it("rejects malformed appearance and goal payloads", async () => {
@@ -135,7 +128,7 @@ describe("admin mutation routes", () => {
 
     expect(appResponse.status).toBe(400);
     expect(goalResponse.status).toBe(400);
-    expect((db.prepare as ReturnType<typeof vi.fn>)).not.toHaveBeenCalled();
+    expect(db.prepare as ReturnType<typeof vi.fn>).not.toHaveBeenCalled();
   });
 
   it("writes a validated appearance and revalidates its dependent pages", async () => {
@@ -161,7 +154,13 @@ describe("admin mutation routes", () => {
     expect(statements).toHaveLength(1);
     expect(statements[0].sql).toContain("INSERT INTO Apps");
     expect(statements[0].values).toEqual(
-      expect.arrayContaining([2025, "2025-08-02", "Test Player", "Test United", 9]),
+      expect.arrayContaining([
+        2025,
+        "2025-08-02",
+        "Test Player",
+        "Test United",
+        9,
+      ]),
     );
     expect(mocks.revalidatePath).toHaveBeenCalledWith("/admin/apps");
     expect(mocks.revalidatePath).toHaveBeenCalledWith("/match/2025/2025-08-02");
@@ -231,7 +230,6 @@ describe("attendance-correction approval", () => {
     );
 
     expect(response.status).toBe(200);
-    expect(mocks.ensureAttendanceCorrectionsTable).toHaveBeenCalledWith(db);
     expect(statements.map(({ sql }) => sql)).toEqual(
       expect.arrayContaining([
         expect.stringContaining("UPDATE Games"),
@@ -241,7 +239,9 @@ describe("attendance-correction approval", () => {
     expect(mocks.revalidatePath).toHaveBeenCalledWith("/match/2017/2017-08-05");
     expect(mocks.revalidatePath).toHaveBeenCalledWith("/season/2017");
     expect(mocks.revalidatePath).toHaveBeenCalledWith("/results");
-    expect(mocks.revalidatePath).toHaveBeenCalledWith("/results/top-attendances");
+    expect(mocks.revalidatePath).toHaveBeenCalledWith(
+      "/results/top-attendances",
+    );
   });
 
   it("does not approve a correction when the main game record is absent", async () => {

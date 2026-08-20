@@ -63,38 +63,6 @@ export const editablePlayerProfileLabels: Record<
   secondaryPosition: "Secondary position",
 };
 
-export async function ensurePlayerProfileCorrectionsTable(db: D1Database) {
-  await db.batch([
-    db.prepare(`
-      CREATE TABLE IF NOT EXISTS PlayerProfileCorrections (
-        id TEXT NOT NULL PRIMARY KEY,
-        player_name TEXT NOT NULL,
-        current_json TEXT NOT NULL,
-        changes_json TEXT NOT NULL,
-        source TEXT NOT NULL,
-        explanation TEXT,
-        submitted_by_account_id TEXT NOT NULL,
-        submitted_by_name TEXT NOT NULL,
-        submitted_by_email TEXT,
-        submitted_at TEXT NOT NULL,
-        status TEXT NOT NULL DEFAULT 'pending'
-          CHECK (status IN ('pending', 'approved', 'rejected')),
-        reviewed_by TEXT,
-        reviewed_at TEXT,
-        review_note TEXT
-      )
-    `),
-    db.prepare(`
-      CREATE INDEX IF NOT EXISTS PlayerProfileCorrections_status_idx
-      ON PlayerProfileCorrections (status, submitted_at)
-    `),
-    db.prepare(`
-      CREATE INDEX IF NOT EXISTS PlayerProfileCorrections_player_idx
-      ON PlayerProfileCorrections (player_name, status, reviewed_at)
-    `),
-  ]);
-}
-
 function parseProfile(value: string): EditablePlayerProfile {
   try {
     return JSON.parse(value) as EditablePlayerProfile;
@@ -218,7 +186,6 @@ export async function approvePlayerProfileCorrection(
   reviewedBy: string,
   reviewNote: string | null,
 ) {
-  await ensurePlayerProfileCorrectionsTable(db);
   const correction = await db
     .prepare(
       `SELECT player_name, changes_json
@@ -314,7 +281,6 @@ export async function getApprovedPlayerProfileChanges(
   db: D1Database,
   playerName: string,
 ) {
-  await ensurePlayerProfileCorrectionsTable(db);
   const result = await db
     .prepare(
       `SELECT changes_json
@@ -335,7 +301,6 @@ export async function getPlayerProfileCorrections(
   db: D1Database,
   status?: PlayerProfileCorrectionStatus,
 ) {
-  await ensurePlayerProfileCorrectionsTable(db);
   const query = status
     ? db
         .prepare(
