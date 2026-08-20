@@ -144,6 +144,28 @@ export async function queryPlayerMilestoneRows(
   ).results;
 }
 
+export async function queryLongestPlayerAbsences(
+  db: D1DatabaseReader,
+  limit = 8
+) {
+  const values: D1Value[] = [];
+  return (
+    await all<PlayerMilestoneRow>(
+      db,
+      withLimit(
+        `SELECT id, player_name, milestone_type, match_date, season, opposition,
+                milestone_value
+         FROM PlayerMilestones
+         WHERE milestone_type = 'longest-absence'
+         ORDER BY milestone_value DESC, player_name ASC`,
+        values,
+        limit
+      ),
+      values
+    )
+  ).results;
+}
+
 export async function queryPlayerSeasonSummaryRows(
   db: D1DatabaseReader,
   options: PlayerSeasonSummaryQueryOptions = {}

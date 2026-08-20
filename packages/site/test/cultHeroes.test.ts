@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type {
-  AppRow,
   GoalRow,
+  PlayerMilestoneRow,
   PlayerSeasonSummaryRow,
 } from "@tranmere-web/lib/src/d1-types";
 import { buildCultHeroSections } from "@/lib/cultHeroes";
@@ -35,22 +35,19 @@ function summary(
   };
 }
 
-function app(player_name: string, match_date: string): AppRow {
+function absence(
+  player_name: string,
+  match_date: string,
+  days: number,
+): PlayerMilestoneRow {
   return {
-    id: `${player_name}-${match_date}`,
-    season: Number(match_date.slice(0, 4)),
-    match_date,
+    id: `longest-absence:${player_name}`,
     player_name,
-    competition: "League",
+    milestone_type: "longest-absence",
+    match_date,
+    season: Number(match_date.slice(0, 4)),
     opposition: "Opponent",
-    shirt_number: null,
-    yellow_card: 0,
-    red_card: 0,
-    substitute_yellow_card: 0,
-    substitute_red_card: 0,
-    substitute_time: null,
-    substituted_by: null,
-    substitute_substituted_by: null,
+    milestone_value: days,
   };
 }
 
@@ -98,7 +95,7 @@ describe("cult hero index", () => {
     );
     const sections = buildCultHeroSections(
       rows,
-      [app("Returnee", "1990-01-01"), app("Returnee", "1992-02-01")],
+      [absence("Returnee", "1992-02-01", 761)],
       [goal("Cup Hero", "FA Cup"), goal("Cup Hero", "LC 2")],
       profiles,
     );

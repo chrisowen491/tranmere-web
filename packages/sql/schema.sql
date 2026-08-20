@@ -481,7 +481,8 @@ CREATE TABLE IF NOT EXISTS PlayerMilestones (
       'debut',
       'latest-appearance',
       'first-goal',
-      'appearance-landmark'
+      'appearance-landmark',
+      'longest-absence'
     )
   ),
   CHECK (
@@ -496,6 +497,9 @@ CREATE INDEX IF NOT EXISTS PlayerMilestones_match_date_idx
 
 CREATE INDEX IF NOT EXISTS PlayerMilestones_player_idx
   ON PlayerMilestones (player_name, match_date);
+
+CREATE INDEX IF NOT EXISTS PlayerMilestones_type_value_idx
+  ON PlayerMilestones (milestone_type, milestone_value DESC, player_name ASC);
 
 CREATE TABLE IF NOT EXISTS ArchiveCompleteness (
   season INTEGER NOT NULL,

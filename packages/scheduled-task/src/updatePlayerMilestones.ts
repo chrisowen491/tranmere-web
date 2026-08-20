@@ -144,6 +144,54 @@ const firstGoals = `
   WHERE goal_rank = 1;
 `;
 
+const longestAbsences = `
+  WITH appearances AS (
+    ${appearanceEvents}
+  ),
+  previous_appearances AS (
+    SELECT
+      season,
+      match_date,
+      opposition,
+      player_name,
+      LAG(match_date) OVER (
+        PARTITION BY player_name
+        ORDER BY match_date ASC, season ASC
+      ) AS previous_match_date
+    FROM appearances
+  ),
+  ranked AS (
+    SELECT
+      season,
+      match_date,
+      opposition,
+      player_name,
+      CAST(julianday(match_date) - julianday(previous_match_date) AS INTEGER) AS gap_days,
+      ROW_NUMBER() OVER (
+        PARTITION BY player_name
+        ORDER BY
+          julianday(match_date) - julianday(previous_match_date) DESC,
+          match_date DESC
+      ) AS gap_rank
+    FROM previous_appearances
+    WHERE previous_match_date IS NOT NULL
+  )
+  INSERT INTO PlayerMilestones (
+    id, player_name, milestone_type, match_date, season, opposition,
+    milestone_value
+  )
+  SELECT
+    'longest-absence:' || player_name,
+    player_name,
+    'longest-absence',
+    match_date,
+    season,
+    opposition,
+    gap_days
+  FROM ranked
+  WHERE gap_rank = 1 AND gap_days >= 365;
+`;
+
 /**
  * Rebuilds compact career milestones from Apps and Goals. Match pages can
  * query this table by date rather than loading every participant's full career.
@@ -153,7 +201,8 @@ export async function rebuildPlayerMilestones(db: D1Database) {
     db.prepare('DELETE FROM PlayerMilestones'),
     db.prepare(appearanceBoundaries),
     db.prepare(appearanceLandmarks),
-    db.prepare(firstGoals)
+    db.prepare(firstGoals),
+    db.prepare(longestAbsences)
   ]);
 
   const count = await db

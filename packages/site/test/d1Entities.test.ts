@@ -3,6 +3,7 @@ import {
   countPlayerRows,
   queryGameDateRangeBounds,
   queryGameRows,
+  queryLongestPlayerAbsences,
   queryPlayerMilestoneRows,
   queryPlayerRows,
   queryTransferRows,
@@ -325,5 +326,18 @@ describe("D1 queries", () => {
       "ORDER BY match_date ASC, player_name ASC, milestone_type ASC",
     );
     expect(mock.boundValues).toEqual([["2026-08-01"]]);
+  });
+
+  it("loads ranked comeback milestones without scanning appearances", async () => {
+    const mock = databaseReturning([]);
+
+    await queryLongestPlayerAbsences(mock.db, 8);
+
+    const sql = String(mock.prepare.mock.calls[0][0]);
+    expect(sql).toContain("FROM PlayerMilestones");
+    expect(sql).toContain("milestone_type = 'longest-absence'");
+    expect(sql).toContain("ORDER BY milestone_value DESC, player_name ASC");
+    expect(sql).toContain("LIMIT ?");
+    expect(mock.boundValues).toEqual([[8]]);
   });
 });

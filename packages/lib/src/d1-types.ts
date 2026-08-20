@@ -175,7 +175,11 @@ export interface HatTrickRow {
 }
 
 export type PlayerMilestoneType =
-  'debut' | 'latest-appearance' | 'first-goal' | 'appearance-landmark';
+  | 'debut'
+  | 'latest-appearance'
+  | 'first-goal'
+  | 'appearance-landmark'
+  | 'longest-absence';
 
 export interface PlayerMilestoneRow {
   id: string;
