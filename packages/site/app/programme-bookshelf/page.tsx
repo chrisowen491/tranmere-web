@@ -11,7 +11,7 @@ export const metadata = pageMetadata({
   title: "Tranmere Rovers programme gallery",
   description:
     "Browse digitised Tranmere Rovers match programmes in an interactive page-turning archive.",
-  pathname: "/programmes",
+  pathname: "/programme-bookshelf",
 });
 
 function formatProgrammeDate(date: string) {
@@ -42,7 +42,7 @@ export default async function ProgrammesPage() {
       <JsonLd
         data={breadcrumbJsonLd([
           { name: "Home", pathname: "/" },
-          { name: "Programme gallery", pathname: "/programmes" },
+          { name: "Programme gallery", pathname: "/programme-bookshelf" },
         ])}
       />
       <JsonLd
@@ -52,14 +52,14 @@ export default async function ProgrammesPage() {
           name: "Tranmere Rovers programme gallery",
           description:
             "Digitised Tranmere Rovers match programmes available to read online.",
-          url: "https://www.tranmere-web.com/programmes",
+          url: "https://www.tranmere-web.com/programme-bookshelf",
           mainEntity: {
             "@type": "ItemList",
             numberOfItems: programmes.length,
             itemListElement: programmes.map((programme, index) => ({
               "@type": "ListItem",
               position: index + 1,
-              url: `https://www.tranmere-web.com/programmes/${programme.date}`,
+              url: `https://www.tranmere-web.com/programme-bookshelf/${programme.date}`,
               item: {
                 "@type": "DigitalDocument",
                 name: programme.name,
@@ -129,7 +129,7 @@ export default async function ProgrammesPage() {
             {programmes.map((programme, index) => (
               <Link
                 key={`${programme.date}-${programme.url}`}
-                href={`/programmes/${programme.date}`}
+                href={`/programme-bookshelf/${programme.date}`}
                 className="group flex min-h-64 flex-col bg-[#fffdf8] p-7 transition hover:bg-white sm:p-8"
               >
                 <div className="flex items-start justify-between gap-6">

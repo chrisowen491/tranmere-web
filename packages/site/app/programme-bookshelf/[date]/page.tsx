@@ -56,14 +56,14 @@ export async function generateMetadata(props: {
     return pageMetadata({
       title: "Programme not found",
       description: "This programme could not be found in the archive.",
-      pathname: `/programmes/${date}`,
+      pathname: `/programme-bookshelf/${date}`,
     });
   }
 
   return pageMetadata({
     title: `${programme.name} programme`,
     description: `Read the ${formatProgrammeDate(programme.date)} ${programme.name} match programme online.`,
-    pathname: `/programmes/${programme.date}`,
+    pathname: `/programme-bookshelf/${programme.date}`,
   });
 }
 
@@ -89,10 +89,10 @@ export default async function ProgrammePage(props: {
       <JsonLd
         data={breadcrumbJsonLd([
           { name: "Home", pathname: "/" },
-          { name: "Programme gallery", pathname: "/programmes" },
+          { name: "Programme gallery", pathname: "/programme-bookshelf" },
           {
             name: programme.name,
-            pathname: `/programmes/${programme.date}`,
+            pathname: `/programme-bookshelf/${programme.date}`,
           },
         ])}
       />
@@ -105,7 +105,7 @@ export default async function ProgrammePage(props: {
           numberOfPages: programme.pages,
           encodingFormat: "application/pdf",
           contentUrl: absoluteProgrammeUrl(programme),
-          url: `https://www.tranmere-web.com/programmes/${programme.date}`,
+          url: `https://www.tranmere-web.com/programme-bookshelf/${programme.date}`,
         }}
       />
 
@@ -113,7 +113,7 @@ export default async function ProgrammePage(props: {
         <div className="archive-grid absolute inset-0 opacity-35" />
         <div className="relative mx-auto max-w-7xl px-6 py-14 sm:px-10 lg:px-12 lg:py-20">
           <Link
-            href="/programmes"
+            href="/programme-bookshelf"
             className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-blue-300 transition hover:text-white"
           >
             <ArrowLeftIcon className="h-4 w-4" />
@@ -197,7 +197,7 @@ export default async function ProgrammePage(props: {
           ) : (
             <div className="border border-[#071a2b]/15 bg-[#fffdf8] p-6 text-sm font-semibold">
               <a
-                href={`/auth/login?returnTo=${encodeURIComponent(`/programmes/${programme.date}`)}`}
+                href={`/auth/login?returnTo=${encodeURIComponent(`/programme-bookshelf/${programme.date}`)}`}
                 className="text-blue-700"
               >
                 Log in

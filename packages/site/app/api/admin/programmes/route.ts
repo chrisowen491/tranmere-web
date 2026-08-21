@@ -43,7 +43,7 @@ function validateProgramme(body: ProgrammeRequest): ProgrammeInput | null {
 }
 
 function revalidateProgrammes() {
-  revalidateAdminPaths(["/programmes"]);
+  revalidateAdminPaths(["/programme-bookshelf"]);
 }
 
 export async function POST(request: NextRequest) {

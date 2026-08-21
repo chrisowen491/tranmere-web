@@ -14,7 +14,7 @@ const linkGroups = [
     links: [
       { label: "Results", href: "/results" },
       { label: "Honours", href: "/honours" },
-      { label: "Programmes", href: "/programmes" },
+      { label: "Programme Bookshelf", href: "/programme-bookshelf" },
       { label: "Players", href: "/players" },
       { label: "Managers", href: "/managers" },
       { label: "Transfers", href: "/transfer-central" },

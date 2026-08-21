@@ -225,7 +225,7 @@ export default async function ProgrammeCollectionPage() {
                 No programmes tracked yet.
               </h3>
               <Link
-                href="/programmes"
+                href="/programme-bookshelf"
                 className="mt-4 inline-block font-bold text-blue-700"
               >
                 Browse the programme archive →
