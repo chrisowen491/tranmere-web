@@ -4,6 +4,8 @@ import { useUser } from "@auth0/nextjs-auth0";
 import {
   ASSIST_TYPES,
   GOAL_FEET,
+  GOAL_DISTANCES,
+  GOAL_DISTANCE_LABELS,
   GOAL_TYPES,
 } from "@tranmere-web/lib/src/goal-constants";
 import { useState } from "react";
@@ -60,6 +62,7 @@ export function GoalSubmissionForm({
           foot: data.get("foot"),
           assist: data.get("assist"),
           assistType: data.get("assistType"),
+          distance: data.get("distance"),
         },
         source: data.get("source"),
         explanation: data.get("explanation"),
@@ -163,6 +166,17 @@ export function GoalSubmissionForm({
               maxLength={100}
               className={inputClass}
             />
+          </div>
+          <div>
+            <label className={labelClass}>Distance</label>
+            <select name="distance" defaultValue="" className={inputClass}>
+              <option value="">Not recorded</option>
+              {GOAL_DISTANCES.map((distance) => (
+                <option key={distance} value={distance}>
+                  {GOAL_DISTANCE_LABELS[distance]}
+                </option>
+              ))}
+            </select>
           </div>
           <div>
             <label className={labelClass}>

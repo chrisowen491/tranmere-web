@@ -71,6 +71,7 @@ function mapGoal(row: {
   minute: string | null;
   assist: string | null;
   assist_type: string | null;
+  distance: import("@tranmere-web/lib/src/goal-constants").GoalDistance | null;
 }): Goal {
   return {
     id: row.id,
@@ -82,6 +83,7 @@ function mapGoal(row: {
     Scorer: row.scorer,
     Assist: row.assist ?? undefined,
     AssistType: row.assist_type ?? undefined,
+    Distance: row.distance ?? undefined,
     Season: String(row.season),
   };
 }

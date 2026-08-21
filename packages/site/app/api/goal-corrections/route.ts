@@ -7,7 +7,10 @@ import {
   type GoalCorrectionStatus,
 } from "@/lib/goalCorrections";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
-import { GOAL_FEET } from "@tranmere-web/lib/src/goal-constants";
+import {
+  GOAL_DISTANCES,
+  GOAL_FEET,
+} from "@tranmere-web/lib/src/goal-constants";
 import { revalidatePath } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -18,6 +21,7 @@ const editableFields: Array<keyof EditableGoal> = [
   "foot",
   "assist",
   "assistType",
+  "distance",
 ];
 
 const fieldLengths: Record<keyof EditableGoal, number> = {
@@ -27,6 +31,7 @@ const fieldLengths: Record<keyof EditableGoal, number> = {
   foot: 20,
   assist: 200,
   assistType: 100,
+  distance: 20,
 };
 
 interface GoalRecord {
@@ -40,6 +45,7 @@ interface GoalRecord {
   foot: string | null;
   assist: string | null;
   assist_type: string | null;
+  distance: string | null;
 }
 
 function error(message: string, status: number) {
@@ -54,6 +60,7 @@ function snapshot(goal: GoalRecord): Required<EditableGoal> {
     foot: goal.foot ?? "",
     assist: goal.assist ?? "",
     assistType: goal.assist_type ?? "",
+    distance: goal.distance ?? "",
   };
 }
 
@@ -79,7 +86,7 @@ async function getGoal(db: D1Database, id: string) {
   return db
     .prepare(
       `SELECT id, season, match_date, opposition, scorer, minute, goal_type,
-              foot, assist, assist_type
+              foot, assist, assist_type, distance
        FROM Goals WHERE id = ?`,
     )
     .bind(id)
@@ -120,6 +127,13 @@ export async function POST(request: NextRequest) {
     !GOAL_FEET.includes(changes.foot as (typeof GOAL_FEET)[number])
   )
     return error("Choose a valid foot or body part.", 400);
+  if (
+    changes.distance &&
+    !GOAL_DISTANCES.includes(
+      changes.distance as (typeof GOAL_DISTANCES)[number],
+    )
+  )
+    return error("Choose a valid goal distance.", 400);
   for (const name of [changes.scorer, changes.assist]) {
     if (name && !(await playerExists(db, name)))
       return error(`${name} could not be matched to a player profile.`, 400);
@@ -209,6 +223,13 @@ export async function PATCH(request: NextRequest) {
       !GOAL_FEET.includes(changes.foot as (typeof GOAL_FEET)[number])
     )
       return error("The suggested foot or body part is invalid.", 400);
+    if (
+      changes.distance &&
+      !GOAL_DISTANCES.includes(
+        changes.distance as (typeof GOAL_DISTANCES)[number],
+      )
+    )
+      return error("The suggested goal distance is invalid.", 400);
     for (const name of [changes.scorer, changes.assist]) {
       if (name && !(await playerExists(db, name)))
         return error(`${name} could not be matched to a player profile.`, 400);
@@ -218,7 +239,7 @@ export async function PATCH(request: NextRequest) {
       db
         .prepare(
           `UPDATE Goals SET scorer = ?, minute = ?, goal_type = ?, foot = ?,
-                            assist = ?, assist_type = ? WHERE id = ?`,
+                            assist = ?, assist_type = ?, distance = ? WHERE id = ?`,
         )
         .bind(
           next.scorer,
@@ -227,6 +248,7 @@ export async function PATCH(request: NextRequest) {
           next.foot || null,
           next.assist || null,
           next.assistType || null,
+          next.distance || null,
           goal.id,
         ),
       db

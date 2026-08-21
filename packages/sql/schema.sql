@@ -586,17 +586,13 @@ CREATE TABLE IF NOT EXISTS Goals (
   assist TEXT,
   assist_type TEXT,
   foot TEXT,
-  six_yard_box INTEGER NOT NULL DEFAULT 0,
-  eighteen_yard_box INTEGER NOT NULL DEFAULT 0,
+  distance TEXT,
   cross_side TEXT,
-  long_range INTEGER NOT NULL DEFAULT 0,
   CHECK (season BETWEEN 1800 AND 2200),
   CHECK (
     match_date GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]'
   ),
-  CHECK (six_yard_box IN (0, 1)),
-  CHECK (eighteen_yard_box IN (0, 1)),
-  CHECK (long_range IN (0, 1))
+  CHECK (distance IS NULL OR distance IN ('6YardBox', '18YardBox', 'LongRange'))
 );
 
 CREATE INDEX IF NOT EXISTS Goals_scorer_date_idx

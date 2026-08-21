@@ -4,6 +4,8 @@ import { useUser } from "@auth0/nextjs-auth0";
 import {
   ASSIST_TYPES,
   GOAL_FEET,
+  GOAL_DISTANCES,
+  GOAL_DISTANCE_LABELS,
   GOAL_TYPES,
 } from "@tranmere-web/lib/src/goal-constants";
 import type { Goal } from "@tranmere-web/lib/src/tranmere-web-types";
@@ -39,6 +41,7 @@ export function GoalCorrectionForm({
     foot: goal.Foot ?? "",
     assist: goal.Assist ?? "",
     assistType: goal.AssistType ?? "",
+    distance: goal.Distance ?? "",
   };
 
   async function submit(form: HTMLFormElement) {
@@ -206,6 +209,24 @@ export function GoalCorrectionForm({
               maxLength={100}
               className={inputClass}
             />
+          </div>
+          <div>
+            <label className={labelClass} htmlFor={`goal-distance-${goal.id}`}>
+              Distance
+            </label>
+            <select
+              id={`goal-distance-${goal.id}`}
+              name="distance"
+              defaultValue={current.distance}
+              className={inputClass}
+            >
+              <option value="">Not recorded</option>
+              {GOAL_DISTANCES.map((distance) => (
+                <option key={distance} value={distance}>
+                  {GOAL_DISTANCE_LABELS[distance]}
+                </option>
+              ))}
+            </select>
           </div>
           <div>
             <label className={labelClass} htmlFor={`goal-source-${goal.id}`}>

@@ -364,8 +364,7 @@ export async function queryGoalRows(
       db,
       withLimit(
         `SELECT id, season, match_date, scorer, opposition, competition, minute,
-                goal_type, assist, assist_type, foot, six_yard_box,
-                eighteen_yard_box, cross_side, long_range
+                goal_type, assist, assist_type, foot, distance, cross_side
          FROM Goals
          ${where}
          ORDER BY match_date DESC, scorer ASC, id ASC`,

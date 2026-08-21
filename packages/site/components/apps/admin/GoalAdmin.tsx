@@ -4,6 +4,8 @@ import type { GoalRow } from "@tranmere-web/lib/src/d1-types";
 import {
   ASSIST_TYPES,
   CROSS_SIDES,
+  GOAL_DISTANCES,
+  GOAL_DISTANCE_LABELS,
   GOAL_FEET,
   GOAL_TYPES,
 } from "@tranmere-web/lib/src/goal-constants";
@@ -34,10 +36,8 @@ function blankGoal(season: number, date?: string): GoalRow {
     assist: null,
     assist_type: null,
     foot: null,
-    six_yard_box: 0,
-    eighteen_yard_box: 0,
+    distance: null,
     cross_side: null,
-    long_range: 0,
   };
 }
 
@@ -69,10 +69,8 @@ function payload(goal: GoalRow) {
     assist: goal.assist,
     assistType: goal.assist_type,
     foot: goal.foot,
-    sixYardBox: goal.six_yard_box,
-    eighteenYardBox: goal.eighteen_yard_box,
+    distance: goal.distance,
     crossSide: goal.cross_side,
-    longRange: goal.long_range,
   };
 }
 
@@ -96,17 +94,10 @@ export function GoalAdmin({
   const [message, setMessage] = useState<string | null>(null);
   const [isError, setIsError] = useState(false);
 
-  function changeField(key: keyof GoalRow, value: string | boolean) {
+  function changeField(key: keyof GoalRow, value: string) {
     setEditing((goal) => {
       if (!goal) return goal;
       if (key === "season") return { ...goal, season: Number(value) };
-      if (
-        key === "six_yard_box" ||
-        key === "eighteen_yard_box" ||
-        key === "long_range"
-      ) {
-        return { ...goal, [key]: value ? 1 : 0 } as GoalRow;
-      }
       return { ...goal, [key]: String(value) || null } as GoalRow;
     });
   }
@@ -412,25 +403,22 @@ export function GoalAdmin({
                   />
                 </select>
               </Field>
-              <div className="sm:col-span-2 lg:col-span-1 xl:col-span-2 grid grid-cols-3 gap-3 border border-[#071a2b]/10 p-3">
-                <Checkbox
-                  label="Six-yard box"
-                  checked={Boolean(editing.six_yard_box)}
-                  onChange={(checked) => changeField("six_yard_box", checked)}
-                />
-                <Checkbox
-                  label="18-yard box"
-                  checked={Boolean(editing.eighteen_yard_box)}
-                  onChange={(checked) =>
-                    changeField("eighteen_yard_box", checked)
+              <Field label="Distance">
+                <select
+                  value={editing.distance ?? ""}
+                  onChange={(event) =>
+                    changeField("distance", event.target.value)
                   }
-                />
-                <Checkbox
-                  label="Long range"
-                  checked={Boolean(editing.long_range)}
-                  onChange={(checked) => changeField("long_range", checked)}
-                />
-              </div>
+                  className={inputClass}
+                >
+                  <option value="">Not recorded</option>
+                  {GOAL_DISTANCES.map((distance) => (
+                    <option key={distance} value={distance}>
+                      {GOAL_DISTANCE_LABELS[distance]}
+                    </option>
+                  ))}
+                </select>
+              </Field>
             </div>
             <button
               type="button"
@@ -550,27 +538,5 @@ function OptionList({
           </option>
         ))}
     </>
-  );
-}
-
-function Checkbox({
-  label,
-  checked,
-  onChange,
-}: {
-  label: string;
-  checked: boolean;
-  onChange: (checked: boolean) => void;
-}) {
-  return (
-    <label className="flex items-center gap-2 text-xs font-semibold text-[#071a2b]/70">
-      <input
-        type="checkbox"
-        checked={checked}
-        onChange={(event) => onChange(event.target.checked)}
-        className="h-4 w-4 accent-[#1d4ed8]"
-      />
-      {label}
-    </label>
   );
 }

@@ -4,7 +4,10 @@ import { resolveAccount } from "@/lib/accounts";
 import { parseSubmittedGoal } from "@/lib/goalSubmissions";
 import type { EditableGoal } from "@/lib/goalCorrections";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
-import { GOAL_FEET } from "@tranmere-web/lib/src/goal-constants";
+import {
+  GOAL_DISTANCES,
+  GOAL_FEET,
+} from "@tranmere-web/lib/src/goal-constants";
 import { revalidatePath } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -31,6 +34,9 @@ function cleanGoal(input: EditableGoal): Required<EditableGoal> {
     assistType: String(input.assistType ?? "")
       .trim()
       .slice(0, 100),
+    distance: String(input.distance ?? "")
+      .trim()
+      .slice(0, 20),
   };
 }
 function validateGoal(goal: Required<EditableGoal>) {
@@ -39,6 +45,11 @@ function validateGoal(goal: Required<EditableGoal>) {
     return "Enter a valid minute, such as 74 or 90+3.";
   if (goal.foot && !GOAL_FEET.includes(goal.foot as (typeof GOAL_FEET)[number]))
     return "Choose a valid foot or body part.";
+  if (
+    goal.distance &&
+    !GOAL_DISTANCES.includes(goal.distance as (typeof GOAL_DISTANCES)[number])
+  )
+    return "Choose a valid goal distance.";
   return null;
 }
 async function playerExists(db: D1Database, name: string) {
@@ -151,7 +162,7 @@ export async function PATCH(request: NextRequest) {
     const results = await db.batch([
       db
         .prepare(
-          `INSERT INTO Goals (id, season, match_date, scorer, opposition, competition, minute, goal_type, assist, assist_type, foot, six_yard_box, eighteen_yard_box, cross_side, long_range) SELECT ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0, NULL, 0 WHERE EXISTS (SELECT 1 FROM GoalSubmissions WHERE id = ? AND status = 'pending')`,
+          `INSERT INTO Goals (id, season, match_date, scorer, opposition, competition, minute, goal_type, assist, assist_type, foot, distance, cross_side) SELECT ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NULL WHERE EXISTS (SELECT 1 FROM GoalSubmissions WHERE id = ? AND status = 'pending')`,
         )
         .bind(
           goalId,
@@ -165,6 +176,7 @@ export async function PATCH(request: NextRequest) {
           goal.assist || null,
           goal.assistType || null,
           goal.foot || null,
+          goal.distance || null,
           body.id,
         ),
       db

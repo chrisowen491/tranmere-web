@@ -1,3 +1,5 @@
+import type { GoalDistance } from './goal-constants';
+
 export interface PlayerRow {
   id: string;
   name: string;
@@ -265,10 +267,8 @@ export interface GoalRow {
   assist: string | null;
   assist_type: string | null;
   foot: string | null;
-  six_yard_box: number;
-  eighteen_yard_box: number;
+  distance: GoalDistance | null;
   cross_side: string | null;
-  long_range: number;
 }
 
 export interface UserProfileRow {

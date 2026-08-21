@@ -179,6 +179,7 @@ export interface Goal {
   Scorer: string;
   Assist?: string;
   AssistType?: string;
+  Distance?: import('./goal-constants').GoalDistance;
   Season?: string;
 }
 

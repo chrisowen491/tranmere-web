@@ -135,6 +135,7 @@ describe("goal correction workflow", () => {
           minute: "12",
           goalType: "Open play",
           foot: "Left",
+          distance: "18YardBox",
         }),
       },
       goal,
@@ -156,6 +157,7 @@ describe("goal correction workflow", () => {
       "Left",
       "Harvey Saunders",
       "Pass",
+      "18YardBox",
       "goal-1",
     ]);
     expect(mocks.revalidatePath).toHaveBeenCalledWith("/match/2024/2024-08-20");

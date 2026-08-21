@@ -189,6 +189,14 @@ export function PlayerAvatarBuilder() {
                     <option>dreads</option>
                     <option>zane-okoro</option>
                     <option>eighties</option>
+                    <option value="eighties-feathered-crop">
+                      80s feathered crop
+                    </option>
+                    <option value="eighties-side-sweep">80s side sweep</option>
+                    <option value="eighties-soft-perm">80s soft perm</option>
+                    <option value="eighties-football-mullet">
+                      80s football mullet
+                    </option>
                     <option>big-curly</option>
                     <option>mullit</option>
                     <option>square</option>

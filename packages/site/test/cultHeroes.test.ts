@@ -64,10 +64,8 @@ function goal(scorer: string, competition: string): GoalRow {
     assist: null,
     assist_type: null,
     foot: null,
-    six_yard_box: 0,
-    eighteen_yard_box: 0,
+    distance: null,
     cross_side: null,
-    long_range: 0,
   };
 }
 

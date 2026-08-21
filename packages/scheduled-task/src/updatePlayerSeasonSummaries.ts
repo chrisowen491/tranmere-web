@@ -1,3 +1,19 @@
+import {
+  GOAL_TYPES,
+  type GoalType
+} from '@tranmere-web/lib/src/goal-constants';
+
+function canonicalGoalType(value: GoalType) {
+  if (!GOAL_TYPES.includes(value)) {
+    throw new Error(`Unsupported canonical goal type: ${value}`);
+  }
+  return value;
+}
+
+const FREE_KICK_GOAL_TYPE = canonicalGoalType('FreeKick');
+const PENALTY_GOAL_TYPE = canonicalGoalType('Penalty');
+const HEADER_GOAL_TYPE = canonicalGoalType('Header');
+
 const seasonContributions = `
   WITH contributions AS (
     SELECT
@@ -46,9 +62,9 @@ const seasonContributions = `
       0,
       0,
       0,
-      CASE WHEN goal_type = 'FreeKick' THEN 1 ELSE 0 END,
-      CASE WHEN goal_type = 'Penalty' THEN 1 ELSE 0 END,
-      CASE WHEN goal_type = 'Header' THEN 1 ELSE 0 END
+      CASE WHEN goal_type = ? THEN 1 ELSE 0 END,
+      CASE WHEN goal_type = ? THEN 1 ELSE 0 END,
+      CASE WHEN goal_type = ? THEN 1 ELSE 0 END
     FROM Goals
     WHERE trim(scorer) <> ''
 
@@ -121,7 +137,9 @@ const totalContributions = `
 export async function rebuildPlayerSeasonSummaries(db: D1Database) {
   await db.batch([
     db.prepare('DELETE FROM PlayerSeasonSummaries'),
-    db.prepare(seasonContributions),
+    db
+      .prepare(seasonContributions)
+      .bind(FREE_KICK_GOAL_TYPE, PENALTY_GOAL_TYPE, HEADER_GOAL_TYPE),
     db.prepare(totalContributions)
   ]);
 

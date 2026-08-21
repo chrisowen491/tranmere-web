@@ -1,6 +1,5 @@
 import {
   adminError,
-  booleanFlag,
   isIsoDate,
   optionalText,
   requiredText,
@@ -8,6 +7,10 @@ import {
   requireAdminApi,
 } from "@/lib/adminCrud";
 import type { GoalRow } from "@tranmere-web/lib/src/d1-types";
+import {
+  GOAL_DISTANCES,
+  type GoalDistance,
+} from "@tranmere-web/lib/src/goal-constants";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -22,10 +25,8 @@ type GoalInput = {
   assist: string | null;
   assistType: string | null;
   foot: string | null;
-  sixYardBox: number;
-  eighteenYardBox: number;
+  distance: GoalDistance | null;
   crossSide: string | null;
-  longRange: number;
 };
 
 type GoalRequest = Partial<GoalInput> & { id?: string };
@@ -35,13 +36,15 @@ function validateGoal(body: GoalRequest): GoalInput | null {
   const matchDate = requiredText(body.matchDate, 10);
   const scorer = requiredText(body.scorer);
   const opposition = requiredText(body.opposition);
+  const distance = optionalText(body.distance, 20);
   if (
     !Number.isSafeInteger(season) ||
     season < 1800 ||
     season > 2200 ||
     !isIsoDate(matchDate) ||
     !scorer ||
-    !opposition
+    !opposition ||
+    (distance !== null && !GOAL_DISTANCES.includes(distance as GoalDistance))
   ) {
     return null;
   }
@@ -56,10 +59,8 @@ function validateGoal(body: GoalRequest): GoalInput | null {
     assist: optionalText(body.assist),
     assistType: optionalText(body.assistType),
     foot: optionalText(body.foot),
-    sixYardBox: booleanFlag(body.sixYardBox),
-    eighteenYardBox: booleanFlag(body.eighteenYardBox),
+    distance: distance as GoalDistance | null,
     crossSide: optionalText(body.crossSide),
-    longRange: booleanFlag(body.longRange),
   };
 }
 
@@ -75,10 +76,8 @@ function values(goal: GoalInput) {
     goal.assist,
     goal.assistType,
     goal.foot,
-    goal.sixYardBox,
-    goal.eighteenYardBox,
+    goal.distance,
     goal.crossSide,
-    goal.longRange,
   ];
 }
 
@@ -95,10 +94,8 @@ function responseGoal(id: string, goal: GoalInput): GoalRow {
     assist: goal.assist,
     assist_type: goal.assistType,
     foot: goal.foot,
-    six_yard_box: goal.sixYardBox,
-    eighteen_yard_box: goal.eighteenYardBox,
+    distance: goal.distance,
     cross_side: goal.crossSide,
-    long_range: goal.longRange,
   };
 }
 
@@ -120,8 +117,8 @@ export async function POST(request: NextRequest) {
     .env.DB.prepare(
       `INSERT INTO Goals (
       id, season, match_date, scorer, opposition, competition, minute, goal_type,
-      assist, assist_type, foot, six_yard_box, eighteen_yard_box, cross_side, long_range
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      assist, assist_type, foot, distance, cross_side
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     )
     .bind(id, ...values(goal))
     .run();
@@ -141,8 +138,7 @@ export async function PATCH(request: NextRequest) {
     .env.DB.prepare(
       `UPDATE Goals SET
       season = ?, match_date = ?, scorer = ?, opposition = ?, competition = ?, minute = ?,
-      goal_type = ?, assist = ?, assist_type = ?, foot = ?, six_yard_box = ?,
-      eighteen_yard_box = ?, cross_side = ?, long_range = ?
+      goal_type = ?, assist = ?, assist_type = ?, foot = ?, distance = ?, cross_side = ?
      WHERE id = ?`,
     )
     .bind(...values(goal), id)
@@ -162,7 +158,7 @@ export async function DELETE(request: NextRequest) {
   const existing = await db
     .prepare(
       `SELECT id, season, match_date, scorer, opposition, competition, minute, goal_type,
-            assist, assist_type, foot, six_yard_box, eighteen_yard_box, cross_side, long_range
+            assist, assist_type, foot, distance, cross_side
      FROM Goals WHERE id = ?`,
     )
     .bind(id)

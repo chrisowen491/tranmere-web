@@ -7,6 +7,7 @@ export interface EditableGoal {
   foot?: string;
   assist?: string;
   assistType?: string;
+  distance?: string;
 }
 
 export interface GoalCorrection {
@@ -44,6 +45,7 @@ export const editableGoalLabels: Record<keyof EditableGoal, string> = {
   foot: "Foot",
   assist: "Assist",
   assistType: "Assist type",
+  distance: "Distance",
 };
 
 export function parseEditableGoal(value: string): EditableGoal {
