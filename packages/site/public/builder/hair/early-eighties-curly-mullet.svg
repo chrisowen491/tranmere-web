@@ -1,0 +1,23 @@
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+  <g id="hair-early-eighties-curly-mullet">
+    <path fill="#HAIR" d="M156 109c0-51 40-84 99-84 61 0 101 33 101 84 0 18-3 35-9 51-7-22-17-39-31-51-15-13-35-21-61-25-25 4-45 12-60 25-14 12-25 29-32 51-5-16-7-33-7-51Z"/>
+    <g fill="#HAIR" stroke="#HAIR" stroke-width="6">
+      <circle cx="174" cy="94" r="23"/>
+      <circle cx="190" cy="64" r="24"/>
+      <circle cx="219" cy="44" r="25"/>
+      <circle cx="252" cy="38" r="26"/>
+      <circle cx="286" cy="44" r="25"/>
+      <circle cx="317" cy="62" r="24"/>
+      <circle cx="339" cy="91" r="23"/>
+      <circle cx="207" cy="88" r="25"/>
+      <circle cx="239" cy="75" r="26"/>
+      <circle cx="273" cy="76" r="26"/>
+      <circle cx="306" cy="89" r="25"/>
+    </g>
+    <path fill="#HAIR" d="M160 108c-8 17-10 36-6 57 3 18 1 33-6 45 14-1 26-8 34-20 8-12 11-27 9-45-2-18 2-34 11-49-19-2-33 2-42 12ZM352 108c8 17 10 36 6 57-3 18-1 33 6 45-14-1-26-8-34-20-8-12-11-27-9-45 2-18-2-34-11-49 19-2 33 2 42 12Z"/>
+    <g fill="none" stroke="#HIGHLIGHTS" stroke-linecap="round" opacity="0.6">
+      <path d="M174 87c11-10 23-10 33 0M190 59c12-11 24-10 34 1M220 42c13-10 26-9 37 2M254 42c13-9 26-8 37 3M288 51c12-9 24-7 34 3M317 70c11-8 22-6 30 4" stroke-width="3.5"/>
+      <path d="M201 102c12-10 24-9 35 2M235 86c13-9 26-8 37 2M271 88c13-8 25-6 35 3" stroke-width="3"/>
+    </g>
+  </g>
+</svg>

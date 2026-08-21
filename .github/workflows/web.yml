@@ -32,6 +32,13 @@ jobs:
         run: yarn workspace @tranmere-web/site lint
       - name: Validate D1 migrations
         run: yarn workspace @tranmere-web/sql migrations
+      - name: Apply production D1 migrations
+        run: yarn db:migrate:production
+        working-directory: ./packages/site
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_AUTH_KEY }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
       - name: Build
         run: yarn cloudflare-build
         env:
@@ -44,13 +51,6 @@ jobs:
           AUTH0_SECRET: 'dummy_value'
           NEXTJS_ENV: 'production'
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_AUTH_KEY }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-
-      - name: Apply production D1 migrations
-        run: yarn db:migrate:production
-        working-directory: ./packages/site
-        env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_AUTH_KEY }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 

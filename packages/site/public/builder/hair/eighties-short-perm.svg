@@ -1,0 +1,23 @@
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+  <g id="hair-eighties-short-perm">
+    <path fill="#HAIR" d="M160 105c0-47 38-78 95-78 58 0 97 31 97 78 0 16-3 32-8 47-7-21-17-37-30-48-15-12-35-20-59-23-24 3-44 11-58 23-14 11-24 27-31 48-4-15-6-31-6-47Z"/>
+    <g fill="#HAIR" stroke="#HAIR" stroke-width="6">
+      <circle cx="178" cy="91" r="21"/>
+      <circle cx="193" cy="62" r="22"/>
+      <circle cx="222" cy="43" r="23"/>
+      <circle cx="254" cy="38" r="24"/>
+      <circle cx="287" cy="44" r="23"/>
+      <circle cx="317" cy="62" r="22"/>
+      <circle cx="337" cy="91" r="21"/>
+      <circle cx="208" cy="84" r="22"/>
+      <circle cx="239" cy="72" r="23"/>
+      <circle cx="271" cy="72" r="23"/>
+      <circle cx="305" cy="84" r="22"/>
+    </g>
+    <path fill="#HAIR" d="M162 107c-5 13-6 27-3 43 2 13 1 24-4 33 11-1 20-7 26-16 6-10 8-22 6-37-1-13 2-25 9-36-16-1-27 3-34 13ZM350 107c5 13 6 27 3 43-2 13-1 24 4 33-11-1-20-7-26-16-6-10-8-22-6-37 1-13-2-25-9-36 16-1 27 3 34 13Z"/>
+    <g fill="none" stroke="#HIGHLIGHTS" stroke-linecap="round" opacity="0.62">
+      <path d="M177 84c11-10 22-10 32 0M206 57c12-11 24-10 34 1M239 46c12-10 25-9 35 1M272 49c12-9 24-8 34 2M304 67c11-8 22-6 30 3" stroke-width="3.5"/>
+      <path d="M199 97c11-9 23-8 33 2M232 82c12-9 25-8 35 2M268 83c12-8 24-6 34 3" stroke-width="3"/>
+    </g>
+  </g>
+</svg>

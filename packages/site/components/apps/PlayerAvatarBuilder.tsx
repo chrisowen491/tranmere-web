@@ -13,7 +13,7 @@ export function PlayerAvatarBuilder() {
   const [neckColour, setNeckColour] = useState("fcb98b");
   const [colour, setColour] = useState("000000");
   const [feature, setFeature] = useState("none");
-  const [highlights, setHighlights] = useState("8e740c");
+  const [highlights, setHighlights] = useState("000000");
   const [background, setBackground] = useState("LightGray");
   const avatarUrl = `${base}${kit}/${hair}/${skinColour}/${feature}/${colour}/${neckColour}/${background}/${highlights}`;
   const labelClass =
@@ -184,7 +184,42 @@ export function PlayerAvatarBuilder() {
                     <option>droopy-fringe</option>
                     <option>curtains</option>
                     <option>feathered</option>
+                    <option value="thirties-slick-side-part">
+                      30s slick side-part
+                    </option>
+                    <option value="thirties-waved-side-part">
+                      30s waved side-part
+                    </option>
+                    <option value="thirties-close-back-sides">
+                      30s close back &amp; sides
+                    </option>
+                    <option value="thirties-centre-part">
+                      30s centre part
+                    </option>
+                    <option value="thirties-balding">
+                      30s balding
+                    </option>
+                    <option value="sixties-classic-side-part">
+                      60s classic side-part
+                    </option>
+                    <option value="sixties-brushed-forward">
+                      60s brushed forward
+                    </option>
+                    <option value="sixties-compact-quiff">
+                      60s compact quiff
+                    </option>
+                    <option value="sixties-crew-cut">60s crew cut</option>
+                    <option value="sixties-ivy-league">60s Ivy League</option>
+                    <option value="sixties-wavy-crop">60s wavy crop</option>
                     <option>big-seventies</option>
+                    <option value="seventies-centre-part">
+                      70s centre part
+                    </option>
+                    <option value="seventies-pageboy">70s pageboy</option>
+                    <option value="seventies-layered-shag">
+                      70s layered shag
+                    </option>
+                    <option value="seventies-curly-shag">70s curly shag</option>
                     <option>high-forehead</option>
                     <option>dreads</option>
                     <option>zane-okoro</option>
@@ -196,6 +231,37 @@ export function PlayerAvatarBuilder() {
                     <option value="eighties-soft-perm">80s soft perm</option>
                     <option value="eighties-football-mullet">
                       80s football mullet
+                    </option>
+                    <option value="eighties-short-side-part">
+                      80s short side-part
+                    </option>
+                    <option value="eighties-short-feathered">
+                      80s short feathered
+                    </option>
+                    <option value="eighties-short-perm">80s short perm</option>
+                    <option value="eighties-short-back-sides">
+                      80s short back &amp; sides
+                    </option>
+                    <option value="early-eighties-wedge">
+                      Early 80s wedge
+                    </option>
+                    <option value="early-eighties-spiky-crop">
+                      Early 80s tousled crop
+                    </option>
+                    <option value="early-eighties-feathered-sweep">
+                      Early 80s feathered sweep
+                    </option>
+                    <option value="early-eighties-curly-mullet">
+                      Early 80s curly mullet
+                    </option>
+                    <option value="early-eighties-forward-fringe">
+                      Early 80s forward fringe
+                    </option>
+                    <option value="early-eighties-curly-crop">
+                      Early 80s curly crop
+                    </option>
+                    <option value="early-eighties-long-side-part">
+                      Early 80s long side-part
                     </option>
                     <option>big-curly</option>
                     <option>mullit</option>

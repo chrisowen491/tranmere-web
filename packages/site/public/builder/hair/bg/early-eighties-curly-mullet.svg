@@ -1,0 +1,14 @@
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+  <g id="hair-bg-early-eighties-curly-mullet" fill="#HAIR">
+    <path d="M166 83c-16 23-23 51-20 84l5 47c2 21-3 38-14 51 19 1 35-6 46-21 11-15 15-34 11-57l-7-58-21-46Z"/>
+    <path d="M344 83c16 23 23 51 20 84l-5 47c-2 21 3 38 14 51-19 1-35-6-46-21-11-15-15-34-11-57l7-58 21-46Z"/>
+    <g fill="#HAIR" stroke="#HAIR" stroke-width="6">
+      <circle cx="166" cy="190" r="25"/>
+      <circle cx="177" cy="224" r="25"/>
+      <circle cx="199" cy="250" r="23"/>
+      <circle cx="344" cy="190" r="25"/>
+      <circle cx="333" cy="224" r="25"/>
+      <circle cx="311" cy="250" r="23"/>
+    </g>
+  </g>
+</svg>
