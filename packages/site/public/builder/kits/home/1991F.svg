@@ -1,0 +1,17 @@
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+
+    <g id="chest">
+        <path fill="#fbff00" d="m255.74181,313.00899l44,0l98.846,21.665c27.533,6.035 47.154,30.421 47.154,58.609l0,85.726l-66,0l0,33l-124,0l-124,0l0,-33l-66,0l0,-85.726c0,-28.187 19.621,-52.574 47.154,-58.609l98.846,-21.665l44,0z"/>
+    </g>
+    
+    <g id="sleeve-cuffs">
+        <path d="m68.5,470.79168l62,0l0,8l-62,0l0,-8z" fill="url(#navy-checker-cuff)" id="svg_6"/>
+        <path d="m382.16667,470.79168l62,0l0,8l-62,0l0,-8z" fill="url(#navy-checker-cuff)" id="svg_7"/>
+    </g>
+
+    <use href="#enkay" y="-5"/>
+    <use href="#ens"  y="-5" />
+    <use href="#full-crest" />
+    <use href="#wirral" fill="#00bf00" />
+
+</svg>
