@@ -73,4 +73,16 @@ describe("archive completeness queries", () => {
     );
     expect(statement.bind).toHaveBeenCalledWith(1990, 50);
   });
+
+  it("treats a goal as detailed once its goal type is recorded", async () => {
+    const { db, prepare, statement } = databaseReturning([]);
+
+    await queryArchiveCompletenessGaps(db, 1990, "goal-details", 50);
+
+    expect(prepare).toHaveBeenCalledWith(
+      expect.stringContaining("Goals.goal_type IS NULL"),
+    );
+    expect(prepare.mock.calls[0]?.[0]).not.toContain("Goals.minute");
+    expect(statement.bind).toHaveBeenCalledWith(1990, 50);
+  });
 });

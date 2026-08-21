@@ -27,7 +27,7 @@ export const ARCHIVE_COMPLETENESS_CATEGORIES = [
     key: 'goal-details',
     label: 'Detailed goal data',
     shortLabel: 'Goal detail',
-    description: 'Goals with both a minute and a recorded goal type.',
+    description: 'Goals with a recorded goal type.',
     entity: 'goal'
   },
   {

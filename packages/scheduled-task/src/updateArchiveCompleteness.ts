@@ -49,7 +49,7 @@ const rebuildArchiveCompletenessSql = `
   goal_detail_totals AS (
     SELECT
       season,
-      SUM(CASE WHEN minute IS NOT NULL AND TRIM(minute) <> '' AND goal_type IS NOT NULL AND TRIM(goal_type) <> '' THEN 1 ELSE 0 END) AS complete_count,
+      SUM(CASE WHEN goal_type IS NOT NULL AND TRIM(goal_type) <> '' THEN 1 ELSE 0 END) AS complete_count,
       COUNT(*) AS total_count
     FROM Goals
     GROUP BY season

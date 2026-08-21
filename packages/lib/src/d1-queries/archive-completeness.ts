@@ -95,7 +95,7 @@ export async function queryArchiveCompletenessGaps(
                 Goals.opposition
          FROM Goals
          WHERE Goals.season = ?
-           AND (Goals.minute IS NULL OR TRIM(Goals.minute) = '' OR Goals.goal_type IS NULL OR TRIM(Goals.goal_type) = '')
+           AND (Goals.goal_type IS NULL OR TRIM(Goals.goal_type) = '')
          ORDER BY Goals.match_date DESC, Goals.scorer ASC, Goals.id ASC
          LIMIT ?`,
         [season, limit]
