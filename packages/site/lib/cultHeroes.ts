@@ -373,7 +373,7 @@ export async function getCultHeroSections(
   const [summaryRows, longestAbsences, goals] = await Promise.all([
     queryPlayerSeasonSummaryRows(db),
     queryLongestPlayerAbsences(db),
-    queryGoalRows(db),
+    queryGoalRows(db, { statisticsOnly: true }),
   ]);
   const names = [
     ...new Set([

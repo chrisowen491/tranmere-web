@@ -1,4 +1,5 @@
 import type { Manager, Match } from "@tranmere-web/lib/src/tranmere-web-types";
+import { statisticalMatches } from "@tranmere-web/lib/src/competition-constants";
 
 export interface ManagerSelection {
   manager: Manager;
@@ -64,7 +65,8 @@ function percentage(value: number, total: number) {
 }
 
 export function calculateManagerStats(matches: Match[]): ManagerStats {
-  const chronological = [...matches].sort(
+  const countedMatches = statisticalMatches(matches);
+  const chronological = [...countedMatches].sort(
     (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
   );
   const state = {
@@ -115,15 +117,15 @@ export function calculateManagerStats(matches: Match[]): ManagerStats {
   });
 
   return {
-    played: matches.length,
+    played: countedMatches.length,
     won: state.won,
     drawn: state.drawn,
     lost: state.lost,
     goalsFor: state.goalsFor,
     goalsAgainst: state.goalsAgainst,
-    winRate: percentage(state.won, matches.length),
-    pointsPerGame: matches.length
-      ? (state.won * 3 + state.drawn) / matches.length
+    winRate: percentage(state.won, countedMatches.length),
+    pointsPerGame: countedMatches.length
+      ? (state.won * 3 + state.drawn) / countedMatches.length
       : 0,
     bestWinningRun: state.bestWinningRun,
     bestUnbeatenRun: state.bestUnbeatenRun,
@@ -138,7 +140,11 @@ export async function loadManagerMatches(selection: ManagerSelection) {
     ? new Date().toISOString().slice(0, 10)
     : dateLeft;
   const managerRange = encodeURIComponent(`${dateJoined},${endDate}`);
-  return loadAllResultPages({ manager: managerRange, sort: "Date" });
+  return loadAllResultPages({
+    manager: managerRange,
+    sort: "Date",
+    statisticsOnly: "true",
+  });
 }
 
 export async function loadAllResultPages(

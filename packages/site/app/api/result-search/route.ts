@@ -33,6 +33,7 @@ export async function GET(request: NextRequest) {
     dateTo: dateTo?.toLowerCase().startsWith("now")
       ? new Date().toISOString().slice(0, 10)
       : dateTo,
+    statisticsOnly: params.get("statisticsOnly") === "true",
     sort: sort(params.get("sort")),
     limit: pagination.limit + 1,
     offset: pagination.cursor,

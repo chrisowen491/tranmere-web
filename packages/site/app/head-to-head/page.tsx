@@ -1,5 +1,5 @@
 import { ArrowUpRightIcon } from "@heroicons/react/24/outline";
-import { getClubs } from "@/lib/clubs";
+import { getHeadToHeadClubs } from "@/lib/clubs";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -7,7 +7,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Head-to-head records",
   description:
-    "Explore Tranmere Rovers results and head-to-head records against every opponent in the archive.",
+    "Explore Tranmere Rovers competitive head-to-head records against every opponent in the archive.",
 };
 
 const tagSizes = [
@@ -29,7 +29,7 @@ function tagSize(name: string) {
 
 export default async function HeadToHeadPage() {
   const db = (await getCloudflareContext({ async: true })).env.DB;
-  const teams = await getClubs(db);
+  const teams = await getHeadToHeadClubs(db);
   const letters = [...new Set(teams.map((team) => team.name[0].toUpperCase()))];
 
   return (
@@ -44,11 +44,11 @@ export default async function HeadToHeadPage() {
           <h1 className="mt-7 max-w-4xl font-display text-5xl font-semibold leading-[0.95] tracking-[-0.05em] sm:text-7xl">
             Every opponent.
             <br />
-            Every meeting.
+            Every competitive meeting.
           </h1>
           <p className="mt-7 max-w-2xl text-lg leading-8 text-white/65">
-            Pick a club to see the complete head-to-head record, including every
-            score, venue and season in the Tranmere-Web archive.
+            Pick a club to see the complete competitive head-to-head record,
+            including every score, venue and season in the Tranmere-Web archive.
           </p>
           <div className="mt-10 flex flex-wrap gap-x-8 gap-y-4 border-t border-white/15 pt-7 font-mono text-xs uppercase tracking-[0.16em] text-white/50">
             <span>{teams.length} opponents</span>

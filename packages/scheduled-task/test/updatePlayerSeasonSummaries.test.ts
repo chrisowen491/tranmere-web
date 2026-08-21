@@ -47,6 +47,15 @@ describe('rebuildPlayerSeasonSummaries', () => {
 
     expect(contribution?.values).toEqual(['FreeKick', 'Penalty', 'Header']);
     expect(contribution?.sql).toContain('CASE WHEN goal_type = ?');
+    expect(contribution?.sql).toContain(
+      "LOWER(TRIM(COALESCE(Apps.competition, ''))) <> 'friendly'"
+    );
+    expect(contribution?.sql).toContain(
+      "LOWER(TRIM(COALESCE(Goals.competition, ''))) <> 'friendly'"
+    );
+    expect(
+      contribution?.sql.match(/FROM Games statistical_game/g)
+    ).toHaveLength(4);
     expect(count).toBe(42);
   });
 });

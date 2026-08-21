@@ -1,9 +1,13 @@
 import { describe, expect, it, vi } from "vitest";
 import {
   countPlayerRows,
+  countPlayerAppearanceRows,
+  queryAppRows,
   queryGameDateRangeBounds,
   queryGameRows,
+  queryGoalRows,
   queryLongestPlayerAbsences,
+  queryPlayerAppearanceRows,
   queryPlayerMilestoneRows,
   queryPlayerRows,
   queryTransferRows,
@@ -287,6 +291,17 @@ describe("D1 queries", () => {
     expect(mock.boundValues).toEqual([["2026-08-15", 1]]);
   });
 
+  it("can load only matches that count towards statistics", async () => {
+    const mock = databaseReturning([]);
+
+    await queryGameRows(mock.db, { season: 1991, statisticsOnly: true });
+
+    const sql = String(mock.prepare.mock.calls[0][0]);
+    expect(sql).toContain("season = ?");
+    expect(sql).toContain("LOWER(TRIM(competition)) <> 'friendly'");
+    expect(mock.boundValues).toEqual([[1991]]);
+  });
+
   it("loads only the first and last match dates for a managerial tenure", async () => {
     const mock = databaseReturning([
       {
@@ -306,12 +321,47 @@ describe("D1 queries", () => {
     expect(sql).toContain("MAX(match_date) AS last_match_date");
     expect(sql).toContain("match_date >= ?");
     expect(sql).toContain("match_date <= ?");
+    expect(sql).toContain("LOWER(TRIM(competition)) <> 'friendly'");
     expect(sql).not.toContain("home_team");
     expect(mock.boundValues).toEqual([["2024-01-01", "2025-06-30"]]);
     expect(bounds).toEqual({
       first_match_date: "2024-01-01",
       last_match_date: "2025-06-30",
     });
+  });
+
+  it("can exclude friendly apps and goals from player statistics queries", async () => {
+    const apps = databaseReturning([]);
+    await queryAppRows(apps.db, { statisticsOnly: true });
+    expect(String(apps.prepare.mock.calls[0][0])).toContain(
+      "COALESCE(Apps.competition",
+    );
+    expect(String(apps.prepare.mock.calls[0][0])).toContain(
+      "FROM Games statistical_game",
+    );
+
+    const appearances = databaseReturning([]);
+    await queryPlayerAppearanceRows(appearances.db, "John Aldridge", {
+      season: 1991,
+      statisticsOnly: true,
+    });
+    expect(String(appearances.prepare.mock.calls[0][0])).toContain(
+      "COALESCE(Apps.competition",
+    );
+
+    const count = databaseReturning([{ total: 0 }]);
+    await countPlayerAppearanceRows(count.db, "John Aldridge", 1991, {
+      statisticsOnly: true,
+    });
+    expect(String(count.prepare.mock.calls[0][0])).toContain(
+      "COALESCE(Apps.competition",
+    );
+
+    const goals = databaseReturning([]);
+    await queryGoalRows(goals.db, { statisticsOnly: true });
+    expect(String(goals.prepare.mock.calls[0][0])).toContain(
+      "COALESCE(Goals.competition",
+    );
   });
 
   it("uses a compact match-date lookup for derived player milestones", async () => {

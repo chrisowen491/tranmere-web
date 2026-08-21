@@ -45,11 +45,19 @@ export async function GET(request: NextRequest) {
     const [rows, total, goals] = await Promise.all([
       queryPlayerAppearanceRows(env.DB, player, {
         season,
+        statisticsOnly: true,
         limit: PAGE_SIZE,
         offset,
       }),
-      countPlayerAppearanceRows(env.DB, player, season),
-      queryGoalRows(env.DB, { scorer: player, scorerMatch: "exact", season }),
+      countPlayerAppearanceRows(env.DB, player, season, {
+        statisticsOnly: true,
+      }),
+      queryGoalRows(env.DB, {
+        scorer: player,
+        scorerMatch: "exact",
+        season,
+        statisticsOnly: true,
+      }),
     ]);
     const goalsByDate = goalCountsByDate(goals);
 

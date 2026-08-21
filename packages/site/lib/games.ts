@@ -10,6 +10,7 @@ import type {
   H2HTotal,
   Match,
 } from "@tranmere-web/lib/src/tranmere-web-types";
+import { statisticalMatches } from "@tranmere-web/lib/src/competition-constants";
 
 export type GameSearchOptions = GameQueryOptions;
 
@@ -91,9 +92,10 @@ function venueLabel(match: Match) {
 }
 
 export function getHeadToHead(matches: Match[]) {
+  const countedMatches = statisticalMatches(matches);
   const byVenue = new Map<string, H2HResult>();
   const total = emptyRecord("Total");
-  for (const match of matches) {
+  for (const match of countedMatches) {
     const venue = venueLabel(match);
     const record = byVenue.get(venue) || emptyRecord(venue);
     const scored = match.location === "H" ? match.hgoal : match.vgoal;
@@ -111,7 +113,7 @@ export function getHeadToHead(matches: Match[]) {
   }
   return {
     h2hresults: [...byVenue.values()],
-    h2htotal: matches.length ? ([total] as H2HTotal[]) : [],
+    h2htotal: countedMatches.length ? ([total] as H2HTotal[]) : [],
   };
 }
 

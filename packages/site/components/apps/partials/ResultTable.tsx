@@ -56,7 +56,7 @@ export function ResultTable(props: {
                   Selection summary
                 </p>
                 <h2 className="mt-2 font-display text-3xl font-semibold">
-                  Overall record
+                  Competitive record
                 </h2>
               </div>
               {props.h2htotal?.[0] && (

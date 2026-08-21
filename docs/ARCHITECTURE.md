@@ -32,20 +32,13 @@ flowchart LR
         MCP[MCP Worker]
     end
 
-    subgraph AWS legacy compatibility
-        GraphQL[Legacy GraphQL endpoint]
-        Dynamo[(Legacy DynamoDB)]
-    end
-
     Contentful[Contentful CMS]
     Auth0[Auth0 OAuth authorization server]
-    YouTube[YouTube API]
     OpenAI[OpenAI API]
 
     Visitor --> Site
     AIClient --> MCP
     Site --> Contentful
-    Site --> YouTube
     Site --> D1
     Site --> Cache
     Site --> CFAI
@@ -55,7 +48,6 @@ flowchart LR
     MCP --> Auth0
     GraphQL --> Dynamo
     GitHub --> Site
-    GitHub --> AWS
 ```
 
 ## Repository layout
@@ -103,7 +95,7 @@ configuration provides:
   configured Auth0 administrator email; and
 - the custom domain `www.tranmere-web.com`.
 
-Contentful and YouTube are called directly from server-side site code for
+Contentful is called directly from server-side site code for
 editorial content, images, shirts, and video playlists.
 
 ## D1 data services
@@ -248,7 +240,7 @@ maintains npm and GitHub Actions dependencies.
 
 The site runs locally with the Next.js development server. Local development
 still requires suitable environment values, and features backed by Contentful,
-Cloudflare, YouTube, or AI providers may require access to those external
+Cloudflare, or AI providers may require access to those external
 services.
 
 ## Architectural boundaries and conventions
@@ -274,11 +266,9 @@ services.
 
 ## Known architectural considerations
 
-- The application spans Cloudflare, AWS, and several SaaS providers. A page may
+- The application spans Cloudflare and several SaaS providers. A page may
   depend on more than one provider, so timeout, caching, and graceful-degradation
   behavior are important.
-- The legacy GraphQL endpoint and its DynamoDB data are transitional. Their
-  retirement needs a separate compatibility and data-retention plan.
 - New write operations should define authentication, authorization, validation,
   rate-limiting and cache invalidation requirements explicitly.
 - Shared types are imported through workspace source paths in several places.
@@ -286,6 +276,6 @@ services.
   at build time.
 - Do not reintroduce API reads for games, reports, apps, goals,
   player-season summaries or hat-tricks; they are D1-owned.
-- `packages/vectorize` and `packages/mcp` are adjacent services with their own
+- `packages/scheduled-task` and `packages/mcp` are adjacent services with their own
   deployment lifecycles; they are not required for the core website to serve
   standard fan content.

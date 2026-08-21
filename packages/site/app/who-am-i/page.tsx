@@ -57,8 +57,12 @@ export default async function WhoAmIPage() {
     queryAppRows(context.env.DB, {
       player: dailyPlayer.name,
       playerMatch: "exact",
+      statisticsOnly: true,
     }),
-    queryAppRows(context.env.DB, { substitutedBy: dailyPlayer.name }),
+    queryAppRows(context.env.DB, {
+      substitutedBy: dailyPlayer.name,
+      statisticsOnly: true,
+    }),
   ]);
   const seasons = summaryRows
     .filter((season) => /^\d{4}$/.test(season.season))

@@ -18,6 +18,7 @@ export interface GameQueryOptions {
   offset?: number;
   includeKit?: boolean;
   playedOnly?: boolean;
+  statisticsOnly?: boolean;
 }
 
 export interface GameDateRangeBounds {
@@ -81,6 +82,9 @@ export async function queryGameRows(
       "full_time_score IS NOT NULL AND TRIM(full_time_score) <> ''"
     );
   }
+  if (options.statisticsOnly) {
+    conditions.push("LOWER(TRIM(competition)) <> 'friendly'");
+  }
   const orderBy =
     options.sort === 'attendance-desc'
       ? 'attendance DESC, match_date DESC'
@@ -134,7 +138,8 @@ export async function queryGameDateRangeBounds(
               MAX(match_date) AS last_match_date
        FROM Games
        WHERE match_date >= ?
-         AND match_date <= ?`
+         AND match_date <= ?
+         AND LOWER(TRIM(competition)) <> 'friendly'`
     )
     .bind(dateFrom, dateTo)
     .first<GameDateRangeBounds>();

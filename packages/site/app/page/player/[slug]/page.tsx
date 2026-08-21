@@ -61,10 +61,14 @@ export default async function PlayerProfilePage(props: { params: SlugParams }) {
     [
       queryPlayerAppearanceRows(env.DB, d1Player.name, {
         season: latestAppearanceSeason,
+        statisticsOnly: true,
         limit: APPEARANCE_PAGE_SIZE,
       }),
-      countPlayerAppearanceRows(env.DB, d1Player.name, latestAppearanceSeason),
+      countPlayerAppearanceRows(env.DB, d1Player.name, latestAppearanceSeason, {
+        statisticsOnly: true,
+      }),
       queryPlayerAppearanceRows(env.DB, d1Player.name, {
+        statisticsOnly: true,
         limit: 1,
         sort: "date-asc",
       }),
@@ -72,6 +76,7 @@ export default async function PlayerProfilePage(props: { params: SlugParams }) {
         scorer: d1Player.name,
         scorerMatch: "exact",
         season: latestAppearanceSeason,
+        statisticsOnly: true,
       }),
     ],
   );

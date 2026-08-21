@@ -2,6 +2,10 @@ import { queryGoalRows } from "@tranmere-web/lib/src/d1-queries";
 import type { Match } from "@tranmere-web/lib/src/tranmere-web-types";
 import { getHeadToHead, searchGames } from "@/lib/games";
 import { matchOutcome, resultLabel } from "@/lib/seasonMatchUtils";
+import {
+  countsTowardsStatistics,
+  statisticalMatches,
+} from "@tranmere-web/lib/src/competition-constants";
 
 type Streak = { length: number; start?: Match; end?: Match };
 
@@ -47,15 +51,21 @@ function maximumBy<T>(items: T[], score: (item: T) => number) {
 
 export async function getOpponentDossier(db: D1Database, opposition: string) {
   const [{ results }, goals] = await Promise.all([
-    searchGames(db, { opposition, sort: "date-asc" }),
-    queryGoalRows(db, { opposition }),
+    searchGames(db, {
+      opposition,
+      sort: "date-asc",
+      statisticsOnly: true,
+    }),
+    queryGoalRows(db, { opposition, statisticsOnly: true }),
   ]);
-  const matches = sortByDate(results);
+  const matches = sortByDate(statisticalMatches(results));
   const scorers = [
-    ...goals.reduce((totals, goal) => {
-      totals.set(goal.scorer, (totals.get(goal.scorer) ?? 0) + 1);
-      return totals;
-    }, new Map<string, number>()),
+    ...goals
+      .filter((goal) => countsTowardsStatistics(goal.competition))
+      .reduce((totals, goal) => {
+        totals.set(goal.scorer, (totals.get(goal.scorer) ?? 0) + 1);
+        return totals;
+      }, new Map<string, number>()),
   ]
     .map(([name, goals]) => ({ name, goals }))
     .sort(

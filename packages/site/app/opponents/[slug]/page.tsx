@@ -48,7 +48,7 @@ export async function generateMetadata(props: {
   const club = decodeURIComponent(slug);
   return pageMetadata({
     title: `${club} opponent dossier`,
-    description: `Tranmere Rovers' complete record, key meetings and leading scorers against ${club}.`,
+    description: `Tranmere Rovers' competitive record, key meetings and leading scorers against ${club}.`,
     pathname: `/opponents/${encodeURIComponent(club)}`,
   });
 }
@@ -105,8 +105,8 @@ export default async function OpponentDossierPage(props: {
             {club.name}
           </h1>
           <p className="mt-7 max-w-2xl text-lg leading-8 text-white/65">
-            Every meeting in the archive, with the numbers, streaks and names
-            that tell the story of this fixture.
+            Every competitive meeting in the archive, with the numbers, streaks
+            and names that tell the story of this fixture.
           </p>
           <div className="mt-10 flex w-48 gap-1">
             <span className="h-2 flex-1" style={{ backgroundColor: primary }} />

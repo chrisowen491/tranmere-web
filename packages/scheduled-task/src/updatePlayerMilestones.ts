@@ -1,3 +1,25 @@
+const statisticalApps = `
+  LOWER(TRIM(COALESCE(Apps.competition, ''))) <> 'friendly'
+  AND NOT EXISTS (
+    SELECT 1
+    FROM Games statistical_game
+    WHERE statistical_game.season = Apps.season
+      AND statistical_game.match_date = Apps.match_date
+      AND LOWER(TRIM(statistical_game.competition)) = 'friendly'
+  )
+`;
+
+const statisticalGoals = `
+  LOWER(TRIM(COALESCE(Goals.competition, ''))) <> 'friendly'
+  AND NOT EXISTS (
+    SELECT 1
+    FROM Games statistical_game
+    WHERE statistical_game.season = Goals.season
+      AND statistical_game.match_date = Goals.match_date
+      AND LOWER(TRIM(statistical_game.competition)) = 'friendly'
+  )
+`;
+
 const appearanceEvents = `
   SELECT DISTINCT season, match_date, opposition, player_name
   FROM (
@@ -7,7 +29,7 @@ const appearanceEvents = `
       opposition,
       player_name
     FROM Apps
-    WHERE trim(player_name) <> ''
+    WHERE trim(player_name) <> '' AND ${statisticalApps}
 
     UNION ALL
 
@@ -17,7 +39,9 @@ const appearanceEvents = `
       opposition,
       substituted_by
     FROM Apps
-    WHERE substituted_by IS NOT NULL AND trim(substituted_by) <> ''
+    WHERE substituted_by IS NOT NULL
+      AND trim(substituted_by) <> ''
+      AND ${statisticalApps}
 
     UNION ALL
 
@@ -30,6 +54,7 @@ const appearanceEvents = `
     WHERE
       substitute_substituted_by IS NOT NULL
       AND trim(substitute_substituted_by) <> ''
+      AND ${statisticalApps}
   )
 `;
 
@@ -126,7 +151,9 @@ const firstGoals = `
         ORDER BY match_date ASC, season ASC, id ASC
       ) AS goal_rank
     FROM Goals
-    WHERE trim(scorer) <> '' AND scorer <> 'Own Goal'
+    WHERE trim(scorer) <> ''
+      AND scorer <> 'Own Goal'
+      AND ${statisticalGoals}
   )
   INSERT INTO PlayerMilestones (
     id, player_name, milestone_type, match_date, season, opposition,

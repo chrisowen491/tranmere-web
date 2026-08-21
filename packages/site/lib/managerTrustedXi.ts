@@ -7,6 +7,7 @@ import type { ManagerRecord } from "@/lib/managers";
 import { getPlayersByNames, type PlayerRecord } from "@/lib/players";
 import { arrangeLineup, formationLabel } from "@/lib/matchLineup";
 import { searchGames } from "@/lib/games";
+import { statisticalMatches } from "@tranmere-web/lib/src/competition-constants";
 
 export interface TrustedXiPlayer {
   name: string;
@@ -114,8 +115,16 @@ export async function getManagerTrustedXi(
     ? new Date().toISOString().slice(0, 10)
     : manager.dateLeft.slice(0, 10);
   const [apps, goals] = await Promise.all([
-    queryAppRows(db, { dateFrom: joined, dateTo: left }),
-    queryGoalRows(db, { dateFrom: joined, dateTo: left }),
+    queryAppRows(db, {
+      dateFrom: joined,
+      dateTo: left,
+      statisticsOnly: true,
+    }),
+    queryGoalRows(db, {
+      dateFrom: joined,
+      dateTo: left,
+      statisticsOnly: true,
+    }),
   ]);
   const starts = new Map<string, number>();
   const substituteAppearances = new Map<string, number>();
@@ -171,8 +180,10 @@ export async function getManagerTrustedXi(
   const { results: matches } = await searchGames(db, {
     dateFrom: joined,
     dateTo: left,
+    statisticsOnly: true,
   });
-  const outcomes = matches.map((match) => {
+  const countedMatches = statisticalMatches(matches);
+  const outcomes = countedMatches.map((match) => {
     const home = match.home === "Tranmere Rovers";
     const scored = home ? match.hgoal : match.vgoal;
     const conceded = home ? match.vgoal : match.hgoal;
@@ -183,7 +194,7 @@ export async function getManagerTrustedXi(
     manager,
     formation: formationLabel(lineup.formation),
     rows: lineup.rows,
-    matches: matches.length,
+    matches: countedMatches.length,
     wins: outcomes.filter((outcome) => outcome === "W").length,
     draws: outcomes.filter((outcome) => outcome === "D").length,
     losses: outcomes.filter((outcome) => outcome === "L").length,

@@ -43,6 +43,20 @@ export async function getClubs(db: D1Database): Promise<Team[]> {
   return result.results;
 }
 
+export async function getHeadToHeadClubs(db: D1Database): Promise<Team[]> {
+  const result = await db
+    .prepare(
+      `SELECT DISTINCT Clubs.name
+       FROM Clubs
+       INNER JOIN Games ON Games.opposition = Clubs.name COLLATE NOCASE
+       WHERE LOWER(TRIM(Games.competition)) <> 'friendly'
+       ORDER BY Clubs.name ASC`,
+    )
+    .all<Team>();
+
+  return result.results;
+}
+
 export async function getClubRecords(db: D1Database) {
   const rows = await queryClubRows(db);
   return rows.map(mapClub);

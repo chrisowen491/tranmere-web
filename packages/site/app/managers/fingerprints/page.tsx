@@ -26,6 +26,7 @@ export default async function ManagerFingerprintsPage() {
     searchGames(env.DB, {
       dateFrom: initialManager.dateJoined,
       dateTo: dateLeft,
+      statisticsOnly: true,
     }),
     getManagerTrustedXi(env.DB, initialManager),
   ]);

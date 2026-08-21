@@ -171,6 +171,7 @@ export default async function MatchPage(props: { params: MatchParams }) {
       dateTo: match.date,
       sort: "date-desc",
       limit: 2,
+      statisticsOnly: true,
     }),
   ]);
 

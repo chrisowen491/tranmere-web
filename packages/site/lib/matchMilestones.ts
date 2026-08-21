@@ -70,8 +70,15 @@ async function getLegacyPlayerMilestones(
         name,
         rows: (
           await Promise.all([
-            queryAppRows(db, { player: name, playerMatch: "exact" }),
-            queryAppRows(db, { substitutedBy: name }),
+            queryAppRows(db, {
+              player: name,
+              playerMatch: "exact",
+              statisticsOnly: true,
+            }),
+            queryAppRows(db, {
+              substitutedBy: name,
+              statisticsOnly: true,
+            }),
           ])
         )
           .flat()
@@ -84,7 +91,11 @@ async function getLegacyPlayerMilestones(
     Promise.all(
       scorers.map(async (name) => ({
         name,
-        rows: await queryGoalRows(db, { scorer: name, scorerMatch: "exact" }),
+        rows: await queryGoalRows(db, {
+          scorer: name,
+          scorerMatch: "exact",
+          statisticsOnly: true,
+        }),
       })),
     ),
   ]);

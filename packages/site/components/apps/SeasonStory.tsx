@@ -19,6 +19,7 @@ import { JumpBox } from "../forms/JumpBox";
 import type { PlayerStatisticsView } from "@/lib/playerStatistics";
 import type { HonoursAchievement } from "@tranmere-web/lib/src/honours-constants";
 import type { LeagueSeasonSummaryRow } from "@tranmere-web/lib/src/d1-types";
+import { countsTowardsStatistics } from "@tranmere-web/lib/src/competition-constants";
 import {
   goalsAgainst,
   goalsFor,
@@ -85,7 +86,9 @@ export function SeasonStory(props: {
   );
   const completedResults = results.filter(
     (result) =>
-      typeof result.hgoal === "number" && typeof result.vgoal === "number",
+      countsTowardsStatistics(result.competition) &&
+      typeof result.hgoal === "number" &&
+      typeof result.vgoal === "number",
   );
   const leagueResults = completedResults.filter(
     (result) =>

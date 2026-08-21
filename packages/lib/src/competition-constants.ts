@@ -18,3 +18,13 @@ export const MATCH_COMPETITIONS = [
 ] as const;
 
 export type MatchCompetition = (typeof MATCH_COMPETITIONS)[number];
+
+export function countsTowardsStatistics(competition?: string | null) {
+  return competition?.trim().toLowerCase() !== 'friendly';
+}
+
+export function statisticalMatches<T extends { competition?: string | null }>(
+  matches: T[]
+) {
+  return matches.filter((match) => countsTowardsStatistics(match.competition));
+}

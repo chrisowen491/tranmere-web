@@ -15,6 +15,10 @@ import { BlogItem } from "@/lib/types";
 import Link from "next/link";
 import type { HonoursAchievement } from "@tranmere-web/lib/src/honours-constants";
 import {
+  countsTowardsStatistics,
+  statisticalMatches,
+} from "@tranmere-web/lib/src/competition-constants";
+import {
   matchOutcome,
   outcomeClass,
   outcomeCounts,
@@ -164,7 +168,9 @@ export function SeasonTimeline(props: {
   );
   const completedMatches = results.filter(
     (match) =>
-      typeof match.hgoal === "number" && typeof match.vgoal === "number",
+      countsTowardsStatistics(match.competition) &&
+      typeof match.hgoal === "number" &&
+      typeof match.vgoal === "number",
   );
   const wins = outcomeCounts(completedMatches).W;
   if (chapters.length === 0 && undatedTransfers.length === 0) return null;
@@ -189,7 +195,7 @@ export function SeasonTimeline(props: {
             <dl className="mt-7 grid grid-cols-3 overflow-hidden border border-[#071a2b]/15 bg-[#fffdf8]">
               {[
                 ["Months", chapters.length],
-                ["Matches", completedMatches.length],
+                ["Competitive matches", completedMatches.length],
                 ["Wins", wins],
               ].map(([label, value]) => (
                 <div
@@ -299,7 +305,8 @@ export function SeasonTimeline(props: {
 
             <ol>
               {chapters.map((chapter, chapterIndex) => {
-                const form = outcomeCounts(chapter.matches);
+                const countedMatches = statisticalMatches(chapter.matches);
+                const form = outcomeCounts(countedMatches);
                 const hasRelegation = chapter.achievements.some(
                   (achievement) => achievement.kind === "Relegation",
                 );
@@ -361,12 +368,12 @@ export function SeasonTimeline(props: {
                               </span>
                             )}
                           </div>
-                          {chapter.matches.length > 0 && (
+                          {countedMatches.length > 0 && (
                             <div
                               className="flex gap-1"
                               aria-label="Monthly form"
                             >
-                              {chapter.matches.map((match) => {
+                              {countedMatches.map((match) => {
                                 const result = matchOutcome(match);
                                 return (
                                   <span
@@ -383,8 +390,8 @@ export function SeasonTimeline(props: {
                         </div>
                         <div className="mt-3 flex items-center justify-between border-b border-[#071a2b]/15 pb-4 text-xs">
                           <span className="font-bold uppercase tracking-[0.12em] text-[#071a2b]/45">
-                            {chapter.matches.length} matches · {form.W}W{" "}
-                            {form.D}D {form.L}L
+                            {countedMatches.length} competitive matches ·{" "}
+                            {form.W}W {form.D}D {form.L}L
                           </span>
                           <span className="font-bold text-blue-700 group-open:hidden">
                             Open chapter +

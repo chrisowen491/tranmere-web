@@ -91,12 +91,28 @@ export async function getPlayerPartnership(
     secondSubstitutes,
     secondGoals,
   ] = await Promise.all([
-    queryAppRows(db, { player: firstPlayer, playerMatch: "exact" }),
-    queryAppRows(db, { substitutedBy: firstPlayer }),
-    queryGoalRows(db, { scorer: firstPlayer, scorerMatch: "exact" }),
-    queryAppRows(db, { player: secondPlayer, playerMatch: "exact" }),
-    queryAppRows(db, { substitutedBy: secondPlayer }),
-    queryGoalRows(db, { scorer: secondPlayer, scorerMatch: "exact" }),
+    queryAppRows(db, {
+      player: firstPlayer,
+      playerMatch: "exact",
+      statisticsOnly: true,
+    }),
+    queryAppRows(db, { substitutedBy: firstPlayer, statisticsOnly: true }),
+    queryGoalRows(db, {
+      scorer: firstPlayer,
+      scorerMatch: "exact",
+      statisticsOnly: true,
+    }),
+    queryAppRows(db, {
+      player: secondPlayer,
+      playerMatch: "exact",
+      statisticsOnly: true,
+    }),
+    queryAppRows(db, { substitutedBy: secondPlayer, statisticsOnly: true }),
+    queryGoalRows(db, {
+      scorer: secondPlayer,
+      scorerMatch: "exact",
+      statisticsOnly: true,
+    }),
   ]);
   const goalsByMatch = (goals: typeof firstGoals) =>
     goals.reduce((totals, goal) => {

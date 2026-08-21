@@ -17,6 +17,7 @@ import { useMemo, useState } from "react";
 import type { ManagerRecord } from "@/lib/managers";
 import type { ManagerTrustedXi } from "@/lib/managerTrustedXi";
 import { loadAllResultPages } from "@/lib/managerComparisonData";
+import { statisticalMatches } from "@tranmere-web/lib/src/competition-constants";
 
 interface FingerprintMetric {
   label: string;
@@ -184,7 +185,11 @@ export function ManagerFingerprints({
   const [xi, setXi] = useState(initialXi);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const fingerprint = useMemo(() => fingerprintFor(matches), [matches]);
+  const countedMatches = useMemo(() => statisticalMatches(matches), [matches]);
+  const fingerprint = useMemo(
+    () => fingerprintFor(countedMatches),
+    [countedMatches],
+  );
   const availableManagers = managers.filter(
     (item) =>
       item.dateLeft.toLowerCase().startsWith("now") ||
@@ -193,7 +198,7 @@ export function ManagerFingerprints({
   const trustedCore = [...xi.rows.flat()]
     .sort((a, b) => b.starts - a.starts)
     .slice(0, 5);
-  const recentMatches = [...matches]
+  const recentMatches = [...countedMatches]
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     .slice(0, 5);
 
@@ -210,6 +215,7 @@ export function ManagerFingerprints({
         loadAllResultPages({
           manager: `${selected.dateJoined},${dateLeft}`,
           sort: "Date",
+          statisticsOnly: "true",
         }),
         fetch(
           `/api/manager-trusted-xi?manager=${encodeURIComponent(selected.id)}`,
@@ -318,10 +324,10 @@ export function ManagerFingerprints({
             </div>
             <div className="grid grid-cols-2 border-t border-white/15 sm:grid-cols-4">
               {[
-                ["Matches", matches.length],
+                ["Matches", countedMatches.length],
                 ["Goals for", fingerprint.goalsFor],
                 ["Goals against", fingerprint.goalsAgainst],
-                ["Points / game", pointsPerGame(matches).toFixed(2)],
+                ["Points / game", pointsPerGame(countedMatches).toFixed(2)],
               ].map(([label, value]) => (
                 <div
                   key={String(label)}
@@ -343,7 +349,7 @@ export function ManagerFingerprints({
             </p>
             <p className="mt-4 text-sm leading-6 text-[#071a2b]/65">
               A fingerprint describes what repeatedly happened during a
-              manager&rsquo;s spell. It is calculated from recorded results,
+              manager&rsquo;s spell. It is calculated from competitive results,
               venues, goals and exact player starts—not a subjective tactical
               rating.
             </p>

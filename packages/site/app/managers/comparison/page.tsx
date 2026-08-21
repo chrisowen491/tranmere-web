@@ -26,6 +26,7 @@ export default async function ManagerComparisonPage() {
       await searchGames(env.DB, {
         dateFrom: manager.dateJoined,
         dateTo: dateLeft,
+        statisticsOnly: true,
       })
     ).results;
   }
@@ -50,8 +51,9 @@ export default async function ManagerComparisonPage() {
             One Rovers record.
           </h1>
           <p className="mt-7 max-w-2xl text-lg leading-8 text-white/65">
-            Compare any two managerial tenures using every result in the
-            archive—from win rates and scoring records to their strongest runs.
+            Compare any two managerial tenures using every competitive result in
+            the archive—from win rates and scoring records to their strongest
+            runs.
           </p>
           <div className="mt-10 flex flex-wrap gap-x-8 gap-y-4 border-t border-white/15 pt-7 font-mono text-xs uppercase tracking-[0.16em] text-white/50">
             <span>{managers.length} managerial spells</span>

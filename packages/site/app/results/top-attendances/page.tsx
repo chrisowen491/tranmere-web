@@ -11,6 +11,7 @@ import { getCloudflareContext } from "@opennextjs/cloudflare";
 import Image from "next/image";
 import Link from "next/link";
 import { searchGames } from "@/lib/games";
+import { countsTowardsStatistics } from "@tranmere-web/lib/src/competition-constants";
 import { absoluteUrl, breadcrumbJsonLd, JsonLd } from "@/components/seo/JsonLd";
 import { pageMetadata } from "@/lib/seo";
 
@@ -59,9 +60,15 @@ function seasonLabel(season: string) {
 
 export default async function TopAttendancesPage() {
   const env = (await getCloudflareContext({ async: true })).env;
-  const { results } = await searchGames(env.DB, { sort: "attendance-desc" });
+  const { results } = await searchGames(env.DB, {
+    sort: "attendance-desc",
+    statisticsOnly: true,
+  });
   const matches = results
-    .filter((match) => attendance(match) > 0)
+    .filter(
+      (match) =>
+        countsTowardsStatistics(match.competition) && attendance(match) > 0,
+    )
     .toSorted(
       (left, right) =>
         attendance(right) - attendance(left) ||
