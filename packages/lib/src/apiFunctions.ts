@@ -112,7 +112,7 @@ export function replaceSeasonsKit(input: string, season?: string): string {
 
   if (season) {
     let seasonKit = season;
-    if (seasonMapping.get(parseInt(season))) {
+    if (!/[a-z]/i.test(season) && seasonMapping.get(parseInt(season))) {
       seasonKit = seasonMapping.get(parseInt(season))!.toString();
     }
 

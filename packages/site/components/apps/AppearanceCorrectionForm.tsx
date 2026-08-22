@@ -26,6 +26,7 @@ export function AppearanceCorrectionForm({
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [isError, setIsError] = useState(false);
+  const [replacement, setReplacement] = useState(appearance.SubbedBy ?? "");
   if (!appearance.id || isLoading) return null;
 
   const current = {
@@ -39,6 +40,7 @@ export function AppearanceCorrectionForm({
     substituteYellowCard: Boolean(appearance.SubYellow),
     substituteRedCard: Boolean(appearance.SubRed),
   };
+  const hasReplacement = replacement.trim().length > 0;
 
   async function submit(form: HTMLFormElement) {
     setBusy(true);
@@ -167,41 +169,49 @@ export function AppearanceCorrectionForm({
             <input
               id={`app-sub-${appearance.id}`}
               name="substitutedBy"
-              defaultValue={current.substitutedBy}
+              value={replacement}
+              onChange={(event) => setReplacement(event.target.value)}
               list={`app-players-${appearance.id}`}
               maxLength={200}
               className={inputClass}
             />
           </div>
-          <div>
-            <label
-              className={labelClass}
-              htmlFor={`app-sub-replacement-${appearance.id}`}
-            >
-              Replacement then replaced by
-            </label>
-            <input
-              id={`app-sub-replacement-${appearance.id}`}
-              name="substituteSubstitutedBy"
-              defaultValue={current.substituteSubstitutedBy}
-              list={`app-players-${appearance.id}`}
-              maxLength={200}
-              className={inputClass}
-            />
-          </div>
-          <div>
-            <label className={labelClass} htmlFor={`app-time-${appearance.id}`}>
-              Substitution minute
-            </label>
-            <input
-              id={`app-time-${appearance.id}`}
-              name="substituteTime"
-              defaultValue={current.substituteTime}
-              placeholder="For example: 74"
-              maxLength={40}
-              className={inputClass}
-            />
-          </div>
+          {hasReplacement && (
+            <>
+              <div>
+                <label
+                  className={labelClass}
+                  htmlFor={`app-sub-replacement-${appearance.id}`}
+                >
+                  Replacement then replaced by
+                </label>
+                <input
+                  id={`app-sub-replacement-${appearance.id}`}
+                  name="substituteSubstitutedBy"
+                  defaultValue={current.substituteSubstitutedBy}
+                  list={`app-players-${appearance.id}`}
+                  maxLength={200}
+                  className={inputClass}
+                />
+              </div>
+              <div>
+                <label
+                  className={labelClass}
+                  htmlFor={`app-time-${appearance.id}`}
+                >
+                  Substitution minute
+                </label>
+                <input
+                  id={`app-time-${appearance.id}`}
+                  name="substituteTime"
+                  defaultValue={current.substituteTime}
+                  placeholder="For example: 74"
+                  maxLength={40}
+                  className={inputClass}
+                />
+              </div>
+            </>
+          )}
           <fieldset className="sm:col-span-2">
             <legend className={labelClass}>Starter cards</legend>
             <div className="mt-2 flex gap-5">
@@ -225,29 +235,31 @@ export function AppearanceCorrectionForm({
               </label>
             </div>
           </fieldset>
-          <fieldset className="sm:col-span-2">
-            <legend className={labelClass}>Replacement cards</legend>
-            <div className="mt-2 flex gap-5">
-              <label className="flex items-center gap-2 text-sm">
-                <input
-                  className={checkboxClass}
-                  name="substituteYellowCard"
-                  type="checkbox"
-                  defaultChecked={current.substituteYellowCard}
-                />{" "}
-                Yellow
-              </label>
-              <label className="flex items-center gap-2 text-sm">
-                <input
-                  className={checkboxClass}
-                  name="substituteRedCard"
-                  type="checkbox"
-                  defaultChecked={current.substituteRedCard}
-                />{" "}
-                Red
-              </label>
-            </div>
-          </fieldset>
+          {hasReplacement && (
+            <fieldset className="sm:col-span-2">
+              <legend className={labelClass}>Replacement cards</legend>
+              <div className="mt-2 flex gap-5">
+                <label className="flex items-center gap-2 text-sm">
+                  <input
+                    className={checkboxClass}
+                    name="substituteYellowCard"
+                    type="checkbox"
+                    defaultChecked={current.substituteYellowCard}
+                  />{" "}
+                  Yellow
+                </label>
+                <label className="flex items-center gap-2 text-sm">
+                  <input
+                    className={checkboxClass}
+                    name="substituteRedCard"
+                    type="checkbox"
+                    defaultChecked={current.substituteRedCard}
+                  />{" "}
+                  Red
+                </label>
+              </div>
+            </fieldset>
+          )}
           <div className="sm:col-span-2">
             <label
               className={labelClass}
