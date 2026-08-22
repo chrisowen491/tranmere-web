@@ -184,6 +184,9 @@ export function PlayerAvatarBuilder() {
                     <option>droopy-fringe</option>
                     <option>curtains</option>
                     <option>feathered</option>
+                    <option value="nineties-feathered-centre-part">
+                      90s feathered centre-part
+                    </option>
                     <option value="thirties-slick-side-part">
                       30s slick side-part
                     </option>
@@ -247,9 +250,6 @@ export function PlayerAvatarBuilder() {
                     </option>
                     <option value="early-eighties-spiky-crop">
                       Early 80s tousled crop
-                    </option>
-                    <option value="early-eighties-feathered-sweep">
-                      Early 80s feathered sweep
                     </option>
                     <option value="early-eighties-curly-mullet">
                       Early 80s curly mullet
