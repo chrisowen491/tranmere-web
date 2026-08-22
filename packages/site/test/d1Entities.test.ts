@@ -364,6 +364,30 @@ describe("D1 queries", () => {
     );
   });
 
+  it("includes a substitute who was later replaced in appearance queries", async () => {
+    const appearances = databaseReturning([]);
+    await queryPlayerAppearanceRows(appearances.db, "Sam Finley", {
+      season: 1991,
+    });
+    expect(String(appearances.prepare.mock.calls[0][0])).toContain(
+      "substitute_substituted_by = ?",
+    );
+    expect(appearances.boundValues).toEqual([
+      ["Sam Finley", "Sam Finley", "Sam Finley", "Sam Finley", 1991],
+    ]);
+
+    const count = databaseReturning([{ total: 1 }]);
+    await expect(
+      countPlayerAppearanceRows(count.db, "Sam Finley", 1991),
+    ).resolves.toBe(1);
+    expect(String(count.prepare.mock.calls[0][0])).toContain(
+      "substitute_substituted_by = ?",
+    );
+    expect(count.boundValues).toEqual([
+      ["Sam Finley", "Sam Finley", "Sam Finley", 1991],
+    ]);
+  });
+
   it("uses a compact match-date lookup for derived player milestones", async () => {
     const mock = databaseReturning([]);
 

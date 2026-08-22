@@ -39,6 +39,7 @@ function mapAppearance(row: {
   red_card: number;
   substitute_time: string | null;
   substituted_by: string | null;
+  substitute_substituted_by: string | null;
   substitute_yellow_card: number;
   substitute_red_card: number;
 }): Appearance {
@@ -51,6 +52,7 @@ function mapAppearance(row: {
     Name: row.player_name,
     Number: row.shirt_number?.toString(),
     SubbedBy: row.substituted_by,
+    SubSubbedBy: row.substitute_substituted_by,
     SubTime: row.substitute_time,
     YellowCard: row.yellow_card ? "TRUE" : null,
     RedCard: row.red_card ? "TRUE" : null,
@@ -149,7 +151,10 @@ export default async function MatchPage(props: { params: MatchParams }) {
     formattedGoals: formatGoals(goals),
     substitutes: apps
       .filter((appearance) => appearance.SubbedBy)
-      .map((appearance) => `${appearance.SubbedBy} for ${appearance.Name}`),
+      .map(
+        (appearance) =>
+          `${appearance.SubbedBy} for ${appearance.Name}${appearance.SubSubbedBy ? `; ${appearance.SubSubbedBy} for ${appearance.SubbedBy}` : ""}`,
+      ),
   };
   const [match, manager] = await Promise.all([
     enrichMatchPlayers(env.DB, matchData),

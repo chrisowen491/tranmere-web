@@ -295,7 +295,7 @@ export async function queryPlayerAppearanceRows(
   playerName: string,
   options: PlayerAppearanceQueryOptions = {}
 ) {
-  const values: D1Value[] = [playerName, playerName, playerName];
+  const values: D1Value[] = [playerName, playerName, playerName, playerName];
   const seasonClause = options.season === undefined ? '' : ' AND season = ?';
   if (options.season !== undefined) values.push(options.season);
   const statisticsClause = options.statisticsOnly
@@ -315,7 +315,7 @@ export async function queryPlayerAppearanceRows(
                 substitute_substituted_by,
                 CASE WHEN player_name = ? THEN 'Start' ELSE 'Sub' END AS appearance_type
          FROM Apps
-         WHERE (player_name = ? OR substituted_by = ?)${seasonClause}${statisticsClause}
+         WHERE (player_name = ? OR substituted_by = ? OR substitute_substituted_by = ?)${seasonClause}${statisticsClause}
          ORDER BY ${orderBy}`,
         values,
         options.limit,
@@ -336,13 +336,13 @@ export async function countPlayerAppearanceRows(
   const statisticsClause = options.statisticsOnly
     ? ` AND ${statisticsOnlyCondition('Apps')}`
     : '';
-  const values: D1Value[] = [playerName, playerName];
+  const values: D1Value[] = [playerName, playerName, playerName];
   if (season !== undefined) values.push(season);
   const result = await db
     .prepare(
       `SELECT COUNT(*) AS total
        FROM Apps
-       WHERE (player_name = ? OR substituted_by = ?)${seasonClause}${statisticsClause}`
+       WHERE (player_name = ? OR substituted_by = ? OR substitute_substituted_by = ?)${seasonClause}${statisticsClause}`
     )
     .bind(...values)
     .first<{ total: number }>();

@@ -105,7 +105,7 @@ export default function MatchReport(props: {
   const matchPlayerNames = [
     ...new Set(
       players
-        .flatMap((player) => [player.Name, player.SubbedBy])
+        .flatMap((player) => [player.Name, player.SubbedBy, player.SubSubbedBy])
         .filter(Boolean),
     ),
   ] as string[];
@@ -544,6 +544,20 @@ export default function MatchReport(props: {
                         >
                           {player.SubbedBy}
                         </Link>
+                        {player.SubSubbedBy && (
+                          <>
+                            <span className="text-[#071a2b]/45">
+                              {" "}
+                              then replaced by{" "}
+                            </span>
+                            <Link
+                              href={`/page/player/${player.SubSubbedBy}`}
+                              className="font-semibold hover:text-blue-700"
+                            >
+                              {player.SubSubbedBy}
+                            </Link>
+                          </>
+                        )}
                         {player.SubTime && (
                           <span className="font-mono text-xs text-[#071a2b]/45">
                             {" "}
@@ -591,6 +605,9 @@ export default function MatchReport(props: {
                               : "No shirt number"}
                             {player.SubbedBy
                               ? ` · replaced by ${player.SubbedBy}${player.SubTime ? ` (${player.SubTime})` : ""}`
+                              : ""}
+                            {player.SubSubbedBy
+                              ? ` · ${player.SubbedBy} then replaced by ${player.SubSubbedBy}`
                               : ""}
                           </p>
                         </div>
