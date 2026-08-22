@@ -2,6 +2,7 @@
 
 import { AVATAR_KIT_OPTIONS } from "@tranmere-web/lib/src/avatar-kit-constants";
 import { useUser } from "@auth0/nextjs-auth0";
+import Image from "next/image";
 import { useState } from "react";
 
 export function KitCorrectionForm({
@@ -17,6 +18,10 @@ export function KitCorrectionForm({
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [kit, setKit] = useState(currentKit ?? "");
+  const kitPreviewUrl = kit
+    ? `/builder/${kit}/simple/ffd3b3/none/000000/fcb98b/transparent/000000`
+    : null;
 
   async function submit(form: HTMLFormElement) {
     setBusy(true);
@@ -85,25 +90,49 @@ export function KitCorrectionForm({
             void submit(event.currentTarget);
           }}
         >
-          <label className="block text-xs font-bold" htmlFor="suggested-kit">
-            Kit worn by Rovers
-          </label>
-          <select
-            id="suggested-kit"
-            name="kit"
-            defaultValue={currentKit ?? ""}
-            required
-            className="block w-full border border-[#071a2b]/20 bg-white px-3 py-2 text-sm focus:border-blue-700 focus:outline-none"
-          >
-            <option value="" disabled>
-              Choose kit
-            </option>
-            {AVATAR_KIT_OPTIONS.map((kit) => (
-              <option key={kit.value} value={kit.value}>
-                {kit.label}
-              </option>
-            ))}
-          </select>
+          <div className="grid grid-cols-[minmax(0,1fr)_5rem] items-end gap-3">
+            <div>
+              <label
+                className="block text-xs font-bold"
+                htmlFor="suggested-kit"
+              >
+                Kit worn by Rovers
+              </label>
+              <select
+                id="suggested-kit"
+                name="kit"
+                value={kit}
+                onChange={(event) => setKit(event.target.value)}
+                required
+                className="mt-2 block w-full border border-[#071a2b]/20 bg-white px-3 py-2 text-sm focus:border-blue-700 focus:outline-none"
+              >
+                <option value="" disabled>
+                  Choose kit
+                </option>
+                {AVATAR_KIT_OPTIONS.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="overflow-hidden border border-[#071a2b]/15 bg-[#e8e2d6]">
+              {kitPreviewUrl ? (
+                <Image
+                  src={kitPreviewUrl}
+                  alt={`Preview of the selected ${AVATAR_KIT_OPTIONS.find((option) => option.value === kit)?.label ?? "Rovers"} kit`}
+                  width={160}
+                  height={160}
+                  unoptimized
+                  className="aspect-square w-full object-cover"
+                />
+              ) : (
+                <div className="grid aspect-square place-items-center px-2 text-center font-mono text-[9px] font-bold uppercase tracking-[0.12em] text-[#071a2b]/45">
+                  Choose kit
+                </div>
+              )}
+            </div>
+          </div>
           <textarea
             name="explanation"
             rows={2}
