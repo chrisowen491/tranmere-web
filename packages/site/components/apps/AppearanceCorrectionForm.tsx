@@ -34,6 +34,7 @@ export function AppearanceCorrectionForm({
     yellowCard: Boolean(appearance.YellowCard),
     redCard: Boolean(appearance.RedCard),
     substitutedBy: appearance.SubbedBy ?? "",
+    substituteSubstitutedBy: appearance.SubSubbedBy ?? "",
     substituteTime: appearance.SubTime ?? "",
     substituteYellowCard: Boolean(appearance.SubYellow),
     substituteRedCard: Boolean(appearance.SubRed),
@@ -50,6 +51,9 @@ export function AppearanceCorrectionForm({
       yellowCard: data.has("yellowCard"),
       redCard: data.has("redCard"),
       substitutedBy: String(data.get("substitutedBy") ?? "").trim(),
+      substituteSubstitutedBy: String(
+        data.get("substituteSubstitutedBy") ?? "",
+      ).trim(),
       substituteTime: String(data.get("substituteTime") ?? "").trim(),
       substituteYellowCard: data.has("substituteYellowCard"),
       substituteRedCard: data.has("substituteRedCard"),
@@ -164,6 +168,22 @@ export function AppearanceCorrectionForm({
               id={`app-sub-${appearance.id}`}
               name="substitutedBy"
               defaultValue={current.substitutedBy}
+              list={`app-players-${appearance.id}`}
+              maxLength={200}
+              className={inputClass}
+            />
+          </div>
+          <div>
+            <label
+              className={labelClass}
+              htmlFor={`app-sub-replacement-${appearance.id}`}
+            >
+              Replacement then replaced by
+            </label>
+            <input
+              id={`app-sub-replacement-${appearance.id}`}
+              name="substituteSubstitutedBy"
+              defaultValue={current.substituteSubstitutedBy}
               list={`app-players-${appearance.id}`}
               maxLength={200}
               className={inputClass}

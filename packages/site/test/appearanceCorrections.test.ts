@@ -70,6 +70,7 @@ const appearance = {
   yellow_card: 0,
   red_card: 0,
   substituted_by: "Tony Thomas",
+  substitute_substituted_by: "Ian Nolan",
   substitute_time: "72",
   substitute_yellow_card: 0,
   substitute_red_card: 0,
@@ -108,7 +109,11 @@ describe("appearance correction workflow", () => {
     const response = await suggestAppearanceCorrection(
       request("POST", {
         appearanceId: "app-1",
-        changes: { shirtNumber: "9", yellowCard: true },
+        changes: {
+          shirtNumber: "9",
+          yellowCard: true,
+          substituteSubstitutedBy: "Ian Nolan",
+        },
         source: "Match programme",
       }),
     );
@@ -122,6 +127,7 @@ describe("appearance correction workflow", () => {
         "1989",
         "1989-08-19",
         expect.stringContaining('"yellowCard":true'),
+        expect.stringContaining('"substituteSubstitutedBy":"Ian Nolan"'),
       ]),
     );
   });
@@ -183,6 +189,7 @@ describe("appearance correction workflow", () => {
       1,
       0,
       "Tony Thomas",
+      "Ian Nolan",
       "72",
       0,
       0,

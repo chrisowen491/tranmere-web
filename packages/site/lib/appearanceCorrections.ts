@@ -6,6 +6,7 @@ export interface EditableAppearance {
   yellowCard?: boolean;
   redCard?: boolean;
   substitutedBy?: string;
+  substituteSubstitutedBy?: string;
   substituteTime?: string;
   substituteYellowCard?: boolean;
   substituteRedCard?: boolean;
@@ -52,6 +53,7 @@ export const editableAppearanceLabels: Record<
   yellowCard: "Yellow card",
   redCard: "Red card",
   substitutedBy: "Replacement",
+  substituteSubstitutedBy: "Replacement then replaced by",
   substituteTime: "Substitution time",
   substituteYellowCard: "Replacement yellow card",
   substituteRedCard: "Replacement red card",

@@ -21,6 +21,7 @@ interface AppearanceRecord {
   yellow_card: number;
   red_card: number;
   substituted_by: string | null;
+  substitute_substituted_by: string | null;
   substitute_time: string | null;
   substitute_yellow_card: number;
   substitute_red_card: number;
@@ -37,6 +38,7 @@ const textFields = new Set<keyof EditableAppearance>([
   "playerName",
   "shirtNumber",
   "substitutedBy",
+  "substituteSubstitutedBy",
   "substituteTime",
 ]);
 const booleanFields = new Set<keyof EditableAppearance>([
@@ -57,6 +59,7 @@ function snapshot(row: AppearanceRecord): Required<EditableAppearance> {
     yellowCard: Boolean(row.yellow_card),
     redCard: Boolean(row.red_card),
     substitutedBy: row.substituted_by ?? "",
+    substituteSubstitutedBy: row.substitute_substituted_by ?? "",
     substituteTime: row.substitute_time ?? "",
     substituteYellowCard: Boolean(row.substitute_yellow_card),
     substituteRedCard: Boolean(row.substitute_red_card),
@@ -105,6 +108,7 @@ function completeNewAppearance(input: EditableAppearance) {
     yellowCard: cleaned.yellowCard ?? false,
     redCard: cleaned.redCard ?? false,
     substitutedBy: cleaned.substitutedBy ?? "",
+    substituteSubstitutedBy: cleaned.substituteSubstitutedBy ?? "",
     substituteTime: cleaned.substituteTime ?? "",
     substituteYellowCard: cleaned.substituteYellowCard ?? false,
     substituteRedCard: cleaned.substituteRedCard ?? false,
@@ -115,7 +119,7 @@ async function getAppearance(db: D1Database, id: string) {
   return db
     .prepare(
       `SELECT id, season, match_date, opposition, player_name,
-      shirt_number, yellow_card, red_card, substituted_by, substitute_time,
+      shirt_number, yellow_card, red_card, substituted_by, substitute_substituted_by, substitute_time,
       substitute_yellow_card, substitute_red_card FROM Apps WHERE id = ?`,
     )
     .bind(id)
@@ -263,7 +267,11 @@ export async function POST(request: NextRequest) {
     );
   const validationError = validateChanges(changes);
   if (validationError) return error(validationError, 400);
-  for (const name of [changes.playerName, changes.substitutedBy]) {
+  for (const name of [
+    changes.playerName,
+    changes.substitutedBy,
+    changes.substituteSubstitutedBy,
+  ]) {
     if (name && !(await playerExists(db, name)))
       return error(`${name} could not be matched to a player profile.`, 400);
   }
@@ -366,7 +374,7 @@ export async function PATCH(request: NextRequest) {
               shirt_number, yellow_card, red_card, substitute_yellow_card,
               substitute_red_card, substitute_time, substituted_by,
               substitute_substituted_by
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NULL)`,
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
           )
           .bind(
             crypto.randomUUID(),
@@ -382,6 +390,7 @@ export async function PATCH(request: NextRequest) {
             Number(changes.substituteRedCard),
             changes.substituteTime || null,
             changes.substitutedBy || null,
+            changes.substituteSubstitutedBy || null,
           ),
         db
           .prepare(
@@ -397,9 +406,11 @@ export async function PATCH(request: NextRequest) {
       ]);
       if (!results[0].meta.changes || !results[1].meta.changes)
         return error("The missing appearance could not be published.", 409);
-      for (const name of [changes.playerName, changes.substitutedBy].filter(
-        (value): value is string => Boolean(value),
-      ))
+      for (const name of [
+        changes.playerName,
+        changes.substitutedBy,
+        changes.substituteSubstitutedBy,
+      ].filter((value): value is string => Boolean(value)))
         revalidatePath(`/page/player/${encodeURIComponent(name)}`);
     } else {
       const appearance = await getAppearance(db, correction.appearance_id);
@@ -410,7 +421,11 @@ export async function PATCH(request: NextRequest) {
       );
       const validationError = validateChanges(changes);
       if (validationError) return error(validationError, 400);
-      for (const name of [changes.playerName, changes.substitutedBy]) {
+      for (const name of [
+        changes.playerName,
+        changes.substitutedBy,
+        changes.substituteSubstitutedBy,
+      ]) {
         if (name && !(await playerExists(db, name)))
           return error(
             `${name} could not be matched to a player profile.`,
@@ -422,7 +437,7 @@ export async function PATCH(request: NextRequest) {
         db
           .prepare(
             `UPDATE Apps SET player_name = ?, shirt_number = ?, yellow_card = ?, red_card = ?,
-        substituted_by = ?, substitute_time = ?, substitute_yellow_card = ?, substitute_red_card = ? WHERE id = ?`,
+        substituted_by = ?, substitute_substituted_by = ?, substitute_time = ?, substitute_yellow_card = ?, substitute_red_card = ? WHERE id = ?`,
           )
           .bind(
             next.playerName,
@@ -430,6 +445,7 @@ export async function PATCH(request: NextRequest) {
             Number(next.yellowCard),
             Number(next.redCard),
             next.substitutedBy || null,
+            next.substituteSubstitutedBy || null,
             next.substituteTime || null,
             Number(next.substituteYellowCard),
             Number(next.substituteRedCard),
@@ -453,8 +469,10 @@ export async function PATCH(request: NextRequest) {
         [
           appearance.player_name,
           appearance.substituted_by,
+          appearance.substitute_substituted_by,
           next.playerName,
           next.substitutedBy,
+          next.substituteSubstitutedBy,
         ].filter((name): name is string => Boolean(name)),
       ))
         revalidatePath(`/page/player/${encodeURIComponent(name)}`);
