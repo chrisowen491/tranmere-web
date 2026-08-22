@@ -530,6 +530,9 @@ CREATE TABLE IF NOT EXISTS ArchiveCompleteness (
 CREATE INDEX IF NOT EXISTS ArchiveCompleteness_category_season_idx
   ON ArchiveCompleteness (category, season DESC);
 
+CREATE INDEX IF NOT EXISTS ArchiveCompleteness_season_category_idx
+  ON ArchiveCompleteness (season DESC, category ASC);
+
 CREATE TABLE IF NOT EXISTS Apps (
   id TEXT NOT NULL PRIMARY KEY,
   season INTEGER NOT NULL,
@@ -573,6 +576,9 @@ CREATE INDEX IF NOT EXISTS Apps_player_date_id_idx
 
 CREATE INDEX IF NOT EXISTS Apps_substituted_by_idx
   ON Apps (substituted_by, match_date DESC);
+
+CREATE INDEX IF NOT EXISTS Apps_substitute_substituted_by_idx
+  ON Apps (substitute_substituted_by, match_date DESC);
 
 CREATE TABLE IF NOT EXISTS Goals (
   id TEXT NOT NULL PRIMARY KEY,
