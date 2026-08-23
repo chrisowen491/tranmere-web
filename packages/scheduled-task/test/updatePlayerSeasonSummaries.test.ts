@@ -42,7 +42,7 @@ describe('rebuildPlayerSeasonSummaries', () => {
 
     const count = await rebuildPlayerSeasonSummaries(db);
     const contribution = statements.find(({ sql }) =>
-      sql.includes('WITH contributions')
+      sql.includes('statistical_apps AS MATERIALIZED')
     );
 
     expect(contribution?.values).toEqual(['FreeKick', 'Penalty', 'Header']);
@@ -53,9 +53,10 @@ describe('rebuildPlayerSeasonSummaries', () => {
     expect(contribution?.sql).toContain(
       "LOWER(TRIM(COALESCE(Goals.competition, ''))) <> 'friendly'"
     );
+    expect(contribution?.sql).toContain('substitute_substituted_by');
     expect(
       contribution?.sql.match(/FROM Games statistical_game/g)
-    ).toHaveLength(4);
+    ).toHaveLength(2);
     expect(count).toBe(42);
   });
 });

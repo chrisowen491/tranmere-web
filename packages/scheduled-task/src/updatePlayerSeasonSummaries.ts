@@ -37,7 +37,18 @@ const statisticalGoals = `
 `;
 
 const seasonContributions = `
-  WITH contributions AS (
+  WITH
+  statistical_apps AS MATERIALIZED (
+    SELECT *
+    FROM Apps
+    WHERE ${statisticalApps}
+  ),
+  statistical_goals AS MATERIALIZED (
+    SELECT *
+    FROM Goals
+    WHERE ${statisticalGoals}
+  ),
+  contributions AS (
     SELECT
       CAST(season AS TEXT) AS season,
       player_name,
@@ -51,8 +62,8 @@ const seasonContributions = `
       0 AS free_kicks,
       0 AS penalties,
       0 AS headers
-    FROM Apps
-    WHERE trim(player_name) <> '' AND ${statisticalApps}
+    FROM statistical_apps
+    WHERE trim(player_name) <> ''
 
     UNION ALL
 
@@ -69,10 +80,28 @@ const seasonContributions = `
       0,
       0,
       0
-    FROM Apps
+    FROM statistical_apps
     WHERE substituted_by IS NOT NULL
       AND trim(substituted_by) <> ''
-      AND ${statisticalApps}
+
+    UNION ALL
+
+    SELECT
+      CAST(season AS TEXT),
+      substitute_substituted_by,
+      1,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    FROM statistical_apps
+    WHERE substitute_substituted_by IS NOT NULL
+      AND trim(substitute_substituted_by) <> ''
 
     UNION ALL
 
@@ -89,8 +118,8 @@ const seasonContributions = `
       CASE WHEN goal_type = ? THEN 1 ELSE 0 END,
       CASE WHEN goal_type = ? THEN 1 ELSE 0 END,
       CASE WHEN goal_type = ? THEN 1 ELSE 0 END
-    FROM Goals
-    WHERE trim(scorer) <> '' AND ${statisticalGoals}
+    FROM statistical_goals
+    WHERE trim(scorer) <> ''
 
     UNION ALL
 
@@ -107,10 +136,9 @@ const seasonContributions = `
       0,
       0,
       0
-    FROM Goals
+    FROM statistical_goals
     WHERE assist IS NOT NULL
       AND trim(assist) <> ''
-      AND ${statisticalGoals}
   )
   INSERT INTO PlayerSeasonSummaries (
     season, player_name, appearances, starts, substitute_appearances, goals,

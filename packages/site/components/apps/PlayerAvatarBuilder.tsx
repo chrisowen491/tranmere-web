@@ -172,7 +172,6 @@ export function PlayerAvatarBuilder() {
                     <option>bushy</option>
                     <option>scruffy</option>
                     <option>extra-scruffy</option>
-                    <option>bowl</option>
                     <option>thick</option>
                     <option>greying</option>
                     <option>curly</option>
