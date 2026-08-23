@@ -6,6 +6,7 @@ import { registerGetClubsTool } from './tools/get-clubs';
 import { registerGetManagersTool } from './tools/get-managers';
 import { registerGetMatchByDateTool } from './tools/get-match-by-date';
 import { registerGetPlayersTool } from './tools/get-players';
+import { registerGetPlayersToolV2 } from './tools/get-players-v2';
 import { registerGetTransfersTool } from './tools/get-transfers';
 import { registerSearchResultsTool } from './tools/search-results';
 import { registerUpdatePlayerProfileTool } from './tools/update-player-profile';
@@ -24,7 +25,6 @@ function registerReadTools(context: {
   env: Env;
   auth: ServerAccess;
 }) {
-  registerGetPlayersTool(context);
   registerGetMatchByDateTool(context);
   registerSearchResultsTool(context);
   registerGetClubsTool(context);
@@ -40,6 +40,7 @@ function registerWriteTools(context: {
   registerCreatePlayerProfileTool(context);
   registerUpdatePlayerProfileTool(context);
   registerCreateTransferTool(context);
+  registerGetPlayersToolV2(context);
 }
 
 export function createServer(
@@ -56,6 +57,9 @@ export function createServer(
   registerReadTools(context);
   if (options.includeWriteTools) {
     registerWriteTools(context);
+    registerGetPlayersToolV2(context);
+  } else {
+    registerGetPlayersTool(context);
   }
 
   return server;

@@ -1,4 +1,4 @@
-export const PLAYERS_UI_URI = 'ui://tranmere-web/players-v7.html';
+export const PLAYERS_UI_URI = 'ui://tranmere-web/players-profile-v1.html';
 
 export const playersWidgetHtml = `
 <!doctype html>
@@ -303,9 +303,22 @@ export const playersWidgetHtml = `
 
       function render(output) {
         const players = Array.isArray(output?.players) ? output.players : [];
-        summaryElement.textContent = players.length === 1
-          ? "1 player found"
-          : players.length + " players found";
+        const totalCount = Number.isInteger(output?.totalCount)
+          ? output.totalCount
+          : players.length;
+        const page = Number.isInteger(output?.page) ? output.page : 1;
+        const pageSize = Number.isInteger(output?.pageSize)
+          ? output.pageSize
+          : players.length;
+        const first = players.length ? (page - 1) * pageSize + 1 : 0;
+        const last = players.length ? first + players.length - 1 : 0;
+        summaryElement.textContent = !players.length
+          ? totalCount
+            ? "No players on page " + page
+            : "No matching players found"
+          : totalCount === 1
+            ? "1 player found"
+            : "Showing " + first + "–" + last + " of " + totalCount + " players";
         playersElement.replaceChildren();
 
         if (!players.length) {
@@ -357,6 +370,9 @@ export const playersWidgetHtml = `
 
         Promise.resolve(window.openai.setWidgetState({
           count: parsed.count,
+          totalCount: parsed.totalCount,
+          page: parsed.page,
+          pageSize: parsed.pageSize,
           players: parsed.players
         })).catch(() => {
           // Widget state is a progressive enhancement; live tool output still renders.
