@@ -184,109 +184,118 @@ export function PlayerAvatarBuilder() {
                     <option>droopy-fringe</option>
                     <option>curtains</option>
                     <option>feathered</option>
-                    <option value="nineties-feathered-centre-part">
-                      90s feathered centre-part
-                    </option>
-                    <option value="thirties-slick-side-part">
-                      30s slick side-part
-                    </option>
-                    <option value="thirties-waved-side-part">
-                      30s waved side-part
-                    </option>
-                    <option value="thirties-close-back-sides">
-                      30s close back &amp; sides
-                    </option>
-                    <option value="thirties-centre-part">
-                      30s centre part
-                    </option>
-                    <option value="thirties-balding">
-                      30s balding
-                    </option>
-                    <option value="sixties-classic-side-part">
-                      60s classic side-part
-                    </option>
-                    <option value="sixties-brushed-forward">
-                      60s brushed forward
-                    </option>
-                    <option value="sixties-compact-quiff">
-                      60s compact quiff
-                    </option>
-                    <option value="sixties-crew-cut">60s crew cut</option>
-                    <option value="sixties-ivy-league">60s Ivy League</option>
-                    <option value="sixties-wavy-crop">60s wavy crop</option>
-                    <option>big-seventies</option>
-                    <option value="seventies-centre-part">
-                      70s centre part
-                    </option>
-                    <option value="seventies-pageboy">70s pageboy</option>
-                    <option value="seventies-layered-shag">
-                      70s layered shag
-                    </option>
-                    <option value="seventies-curly-shag">70s curly shag</option>
                     <option>high-forehead</option>
-                    <option>dreads</option>
-                    <option>zane-okoro</option>
-                    <option>eighties</option>
-                    <option value="eighties-feathered-crop">
-                      80s feathered crop
-                    </option>
-                    <option value="eighties-side-sweep">80s side sweep</option>
-                    <option value="eighties-soft-perm">80s soft perm</option>
-                    <option value="eighties-football-mullet">
-                      80s football mullet
-                    </option>
-                    <option value="eighties-short-side-part">
-                      80s short side-part
-                    </option>
-                    <option value="eighties-short-feathered">
-                      80s short feathered
-                    </option>
-                    <option value="eighties-short-perm">80s short perm</option>
-                    <option value="eighties-short-back-sides">
-                      80s short back &amp; sides
-                    </option>
-                    <option value="early-eighties-wedge">
-                      Early 80s wedge
-                    </option>
-                    <option value="early-eighties-spiky-crop">
-                      Early 80s tousled crop
-                    </option>
-                    <option value="early-eighties-curly-mullet">
-                      Early 80s curly mullet
-                    </option>
-                    <option value="early-eighties-forward-fringe">
-                      Early 80s forward fringe
-                    </option>
-                    <option value="early-eighties-curly-crop">
-                      Early 80s curly crop
-                    </option>
-                    <option value="early-eighties-long-side-part">
-                      Early 80s long side-part
-                    </option>
-                    <option>big-curly</option>
                     <option>mullit</option>
-                    <option>square</option>
-                    <option>morgan</option>
-                    <option>dadi</option>
-                    <option>connor</option>
-                    <option>lloyd</option>
-                    <option>lewis</option>
-                    <option>morrissey</option>
-                    <option>mickey</option>
-                    <option>george</option>
-                    <option>calvin</option>
-                    <option>frank</option>
-                    <option>derek</option>
-                    <option>les</option>
-                    <option>liam</option>
-                    <option>jason</option>
-                    <option>kenny</option>
-                    <option>jimmy</option>
-                    <option>manny</option>
-                    <option>steve</option>
-                    <option>jim</option>
-                    <option>stuart</option>
-                    <option>dickie</option>
+                    <option>big-curly</option>
+                    <option>square</option>                    
+                    <optgroup label="30s Styles">
+                      <option value="thirties-slick-side-part">
+                        30s slick side-part
+                      </option>
+                      <option value="thirties-waved-side-part">
+                        30s waved side-part
+                      </option>
+                      <option value="thirties-close-back-sides">
+                        30s close back &amp; sides
+                      </option>
+                      <option value="thirties-centre-part">
+                        30s centre part
+                      </option>
+                      <option value="thirties-balding">
+                        30s balding
+                      </option>
+                    </optgroup>
+                    <optgroup label="60s Styles">
+                      <option value="sixties-classic-side-part">
+                        60s classic side-part
+                      </option>
+                      <option value="sixties-brushed-forward">
+                        60s brushed forward
+                      </option>
+                      <option value="sixties-compact-quiff">
+                        60s compact quiff
+                      </option>
+                      <option value="sixties-crew-cut">60s crew cut</option>
+                      <option value="sixties-ivy-league">60s Ivy League</option>
+                      <option value="sixties-wavy-crop">60s wavy crop</option>
+                    </optgroup>
+                    <optgroup label="70s Styles">
+                      <option>big-seventies</option>
+                      <option value="seventies-centre-part">
+                        70s centre part
+                      </option>
+                      <option value="seventies-pageboy">70s pageboy</option>
+                      <option value="seventies-layered-shag">
+                        70s layered shag
+                      </option>
+                      <option value="seventies-curly-shag">70s curly shag</option>
+                    </optgroup>
+                    <optgroup label="80s Styles">
+                      <option>eighties</option>
+                      <option value="early-eighties-wedge">
+                        Early 80s wedge
+                      </option>
+                      <option value="early-eighties-spiky-crop">
+                        Early 80s tousled crop
+                      </option>
+                      <option value="early-eighties-curly-mullet">
+                        Early 80s curly mullet
+                      </option>
+                      <option value="early-eighties-forward-fringe">
+                        Early 80s forward fringe
+                      </option>
+                      <option value="early-eighties-curly-crop">
+                        Early 80s curly crop
+                      </option>
+                      <option value="early-eighties-long-side-part">
+                        Early 80s long side-part
+                      </option>                    
+                      <option value="eighties-feathered-crop">
+                        80s feathered crop
+                      </option>
+                      <option value="eighties-side-sweep">80s side sweep</option>
+                      <option value="eighties-soft-perm">80s soft perm</option>
+                      <option value="eighties-football-mullet">
+                        80s football mullet
+                      </option>
+                      <option value="eighties-short-side-part">
+                        80s short side-part
+                      </option>
+                      <option value="eighties-short-feathered">
+                        80s short feathered
+                      </option>
+                      <option value="eighties-short-perm">80s short perm</option>
+                      <option value="eighties-short-back-sides">
+                        80s short back &amp; sides
+                      </option>
+                    </optgroup>
+                    <optgroup label="90s Styles">
+                      <option value="nineties-feathered-centre-part">
+                        90s feathered centre-part
+                      </option>
+                    </optgroup>
+                    <optgroup label="Special Styles">
+                      <option>dreads</option>
+                      <option>zane-okoro</option>
+                      <option>morgan</option>
+                      <option>dadi</option>                    
+                      <option>calvin</option>                    
+                      <option>connor</option>
+                      <option>lloyd</option>
+                      <option>lewis</option>
+                      <option>morrissey</option>
+                      <option>mickey</option>
+                      <option>george</option>
+                      <option>frank</option>
+                      <option>derek</option>
+                      <option>les</option>
+                      <option>liam</option>
+                      <option>kenny</option>
+                      <option>jimmy</option>
+                      <option>manny</option>
+                      <option>jim</option>
+                      <option>dickie</option>
+                    </optgroup>
                   </select>
                 </div>
               </div>
@@ -374,6 +383,7 @@ export function PlayerAvatarBuilder() {
                     <option>fringe</option>
                     <option>parting</option>
                     <option>combed-bit</option>
+                    <option>widows-peak</option>
                   </select>
                 </div>
               </div>
