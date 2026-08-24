@@ -669,7 +669,7 @@ export default function MatchReport(props: {
             Related links
           </p>
           <h2 className="mt-2 font-display text-3xl font-semibold">
-            Elsewhere on this matchday
+            External Links
           </h2>
           {props.matchLinks.length > 0 ? (
             <div className="mt-6 grid gap-px border border-[#071a2b]/15 bg-[#071a2b]/15 sm:grid-cols-2">
