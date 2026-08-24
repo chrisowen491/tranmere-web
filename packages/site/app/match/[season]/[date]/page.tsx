@@ -21,6 +21,7 @@ import { pageMetadata } from "@/lib/seo";
 import { absoluteUrl, breadcrumbJsonLd, JsonLd } from "@/components/seo/JsonLd";
 import { getManagerAtDate } from "@/lib/managers";
 import { getMatchMilestones } from "@/lib/matchMilestones";
+import { getMatchLinks } from "@/lib/matchLinks";
 import {
   getGameBySeasonAndDate,
   getMatchReport,
@@ -120,19 +121,21 @@ export default async function MatchPage(props: { params: MatchParams }) {
   const params = await props.params;
   const env = (await getCloudflareContext({ async: true })).env;
   const baseUrl = `/match/${params.season}/${params.date}`;
-  const [game, reportRow, appRows, goalRows, session] = await Promise.all([
-    getGameBySeasonAndDate(env.DB, params.season, params.date),
-    getMatchReport(env.DB, params.date),
-    queryAppRows(env.DB, {
-      season: Number(params.season),
-      matchDate: params.date,
-    }),
-    queryGoalRows(env.DB, {
-      season: Number(params.season),
-      matchDate: params.date,
-    }),
-    auth0.getSession(),
-  ]);
+  const [game, reportRow, appRows, goalRows, session, matchLinks] =
+    await Promise.all([
+      getGameBySeasonAndDate(env.DB, params.season, params.date),
+      getMatchReport(env.DB, params.date),
+      queryAppRows(env.DB, {
+        season: Number(params.season),
+        matchDate: params.date,
+      }),
+      queryGoalRows(env.DB, {
+        season: Number(params.season),
+        matchDate: params.date,
+      }),
+      auth0.getSession(),
+      getMatchLinks(env.DB, params.season, params.date),
+    ]);
   if (!game) notFound();
   const gameId = game.id;
   if (!gameId) notFound();
@@ -252,6 +255,7 @@ export default async function MatchPage(props: { params: MatchParams }) {
         avg={avg}
         manager={manager}
         milestones={milestones}
+        matchLinks={matchLinks}
       ></MatchReport>
       <section className="mx-auto max-w-7xl px-6 pb-24 sm:px-10 lg:px-12">
         <div

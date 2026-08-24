@@ -24,6 +24,8 @@ import { arrangeMatchLineup, formationLabel } from "@/lib/matchLineup";
 import type { MatchMilestone } from "@/lib/matchMilestones";
 import { ManagerFormation } from "@tranmere-web/lib/src/manager-constants";
 import { matchOutcome, outcomeClass } from "@/lib/seasonMatchUtils";
+import type { MatchLink } from "@/lib/matchLinks";
+import { MatchLinkSuggestionForm } from "./MatchLinkSuggestionForm";
 
 function playerAvatar(picLink: string, season: number, kit?: string) {
   return replaceSeasonsKit(picLink, kit || season.toString());
@@ -81,6 +83,7 @@ export default function MatchReport(props: {
   avg: number;
   manager: ManagerRecord | null;
   milestones: MatchMilestone[];
+  matchLinks: MatchLink[];
 }) {
   const { match } = props;
   const penalty = penaltyOutcome(match.pens, match.homeTeam, match.awayTeam);
@@ -660,6 +663,43 @@ export default function MatchReport(props: {
             </div>
           </section>
         )}
+
+        <section className="border border-[#071a2b]/15 bg-[#fffdf8] p-6 sm:p-8">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-700">
+            Related links
+          </p>
+          <h2 className="mt-2 font-display text-3xl font-semibold">
+            Elsewhere on this matchday
+          </h2>
+          {props.matchLinks.length > 0 ? (
+            <div className="mt-6 grid gap-px border border-[#071a2b]/15 bg-[#071a2b]/15 sm:grid-cols-2">
+              {props.matchLinks.map((item) => (
+                <a
+                  key={item.id}
+                  href={item.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="bg-[#fffdf8] px-4 py-4 text-sm font-bold transition hover:bg-[#e8e2d6] hover:text-blue-700"
+                >
+                  <span className="block">{item.label} ↗</span>
+                  <span className="mt-1 block font-mono text-[10px] uppercase tracking-[.12em] text-[#071a2b]/50">
+                    {item.publisher || item.linkType}
+                  </span>
+                </a>
+              ))}
+            </div>
+          ) : (
+            <p className="mt-4 text-sm text-[#071a2b]/60">
+              No external links have been added yet.
+            </p>
+          )}
+          <div className="mt-6 border-t border-[#071a2b]/15 pt-5">
+            <MatchLinkSuggestionForm
+              season={match.season.toString()}
+              matchDate={match.date}
+            />
+          </div>
+        </section>
 
         <section className="mt-12 grid gap-8 border-t border-[#071a2b]/15 pt-10 lg:grid-cols-[minmax(0,1fr)_280px]">
           <div>

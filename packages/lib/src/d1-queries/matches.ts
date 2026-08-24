@@ -157,7 +157,7 @@ export async function queryOnThisDayGameRow(
        WHERE substr(match_date, 6, 5) = ?
          AND match_date < ?
          AND no_programme_issued = 0
-       ORDER BY match_date DESC, id ASC
+       ORDER BY match_date ASC, id ASC
        LIMIT 1`
     )
     .bind(monthDay, beforeDate)

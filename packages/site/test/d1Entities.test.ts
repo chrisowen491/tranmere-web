@@ -7,6 +7,7 @@ import {
   queryGameRows,
   queryGoalRows,
   queryLongestPlayerAbsences,
+  queryOnThisDayGameRow,
   queryPlayerAppearanceRows,
   queryPlayerMilestoneRows,
   queryPlayerRows,
@@ -328,6 +329,16 @@ describe("D1 queries", () => {
       first_match_date: "2024-01-01",
       last_match_date: "2025-06-30",
     });
+  });
+
+  it("prefers the oldest eligible fixture for On This Day", async () => {
+    const mock = databaseReturning([]);
+
+    await queryOnThisDayGameRow(mock.db, "08-24", "2026-08-24");
+
+    const sql = String(mock.prepare.mock.calls[0][0]);
+    expect(sql).toContain("ORDER BY match_date ASC, id ASC");
+    expect(mock.boundValues).toEqual([["08-24", "2026-08-24"]]);
   });
 
   it("can exclude friendly apps and goals from player statistics queries", async () => {

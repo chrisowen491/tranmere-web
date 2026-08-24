@@ -6,6 +6,7 @@ import { getKitCorrections } from "@/lib/kitCorrections";
 import { getGoalCorrections } from "@/lib/goalCorrections";
 import { getAppearanceCorrections } from "@/lib/appearanceCorrections";
 import { getGoalSubmissions } from "@/lib/goalSubmissions";
+import { getMatchLinkSuggestions } from "@/lib/matchLinks";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import {
   ArrowRightIcon,
@@ -41,6 +42,7 @@ export default async function AdminPage() {
     goalCorrections,
     appearanceCorrections,
     goalSubmissions,
+    matchLinkSuggestions,
   ] = await Promise.all([
     getAttendanceCorrections(env.DB, "pending"),
     getPlayerProfileCorrections(env.DB, "pending"),
@@ -49,6 +51,7 @@ export default async function AdminPage() {
     getGoalCorrections(env.DB, "pending"),
     getAppearanceCorrections(env.DB, "pending"),
     getGoalSubmissions(env.DB),
+    getMatchLinkSuggestions(env.DB),
   ]);
   const totalPending =
     attendanceCorrections.length +
@@ -57,9 +60,18 @@ export default async function AdminPage() {
     kitCorrections.length +
     goalCorrections.length +
     appearanceCorrections.length +
-    goalSubmissions.length;
+    goalSubmissions.length +
+    matchLinkSuggestions.length;
 
   const queues = [
+    {
+      title: "External match links",
+      description:
+        "Publish trusted sources and review supporter-suggested links.",
+      href: "/admin/match-links",
+      count: matchLinkSuggestions.length,
+      icon: DocumentTextIcon,
+    },
     {
       title: "Match attendances",
       description:

@@ -64,6 +64,11 @@ export async function DELETE() {
       .bind(account.id),
     db
       .prepare(
+        "DELETE FROM MatchLinkSuggestions WHERE submitted_by_account_id = ?",
+      )
+      .bind(account.id),
+    db
+      .prepare(
         "DELETE FROM MatchFormationCorrections WHERE submitted_by_account_id = ?",
       )
       .bind(account.id),
