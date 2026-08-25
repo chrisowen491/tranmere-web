@@ -6,6 +6,7 @@ import {
   GraphQLPlayerResponse,
   GraphQLShirtResponse,
 } from "./types";
+import { cache } from "react";
 
 const ARTICLE_GROUP_FIELDS = `
   sys {
@@ -73,7 +74,7 @@ const ARTICLE_GRAPHQL_FIELDS = `
   }
 `;
 
-async function fetchGraphQL(query: string) {
+async function fetchGraphQL(query: string, tags: string[]) {
   return fetch(
     `https://graphql.contentful.com/content/v1/spaces/${process.env.CF_SPACE}`,
     {
@@ -83,9 +84,10 @@ async function fetchGraphQL(query: string) {
         Authorization: `Bearer ${process.env.CF_KEY}`,
       },
       body: JSON.stringify({ query }),
-      // Associate all fetches for articles with an "articles" cache tag so content can
-      // be revalidated or updated from Contentful on publish
-      next: { tags: ["articles"] },
+      cache: "force-cache",
+      // Cache editorial data independently so a future Contentful webhook can
+      // invalidate only the collection or item that was published.
+      next: { revalidate: 60 * 60 * 24, tags },
     },
   ).then((response) => response.json());
 }
@@ -118,6 +120,7 @@ export async function getAssetsByTag(tag: string) {
         }
       }
     }`,
+    [`contentful:gallery:${tag}`],
   );
 
   return extractGalleryImageEntries(articles as GraphQLAssetsResponse);
@@ -132,6 +135,7 @@ export async function getAllPlayers(limit = 500) {
         }
       }
     }`,
+    ["contentful:players"],
   );
 
   return extractPlayerEntries(players as GraphQLPlayerResponse);
@@ -145,7 +149,8 @@ export async function getAllArticles(limit = 3) {
             ${ARTICLE_GROUP_FIELDS}
           }
         }
-      }`,
+    }`,
+    ["contentful:articles"],
   );
 
   return extractArticleEntries(articles as GraphQLBlogResponse);
@@ -176,7 +181,8 @@ export async function getAllShirts(limit = 100) {
             manufacturer
           }
         }
-      }`,
+    }`,
+    ["contentful:shirts"],
   );
 
   return extractShirtEntries(shirts as GraphQLShirtResponse);
@@ -190,13 +196,14 @@ export async function getAllArticlesForTag(limit = 3, tag: string) {
             ${ARTICLE_GROUP_FIELDS}
           }
         }
-      }`,
+    }`,
+    [`contentful:articles:tag:${tag}`, "contentful:articles"],
   );
 
   return extractArticleEntries(articles as GraphQLBlogResponse);
 }
 
-export async function getArticle(slug: string) {
+export const getArticle = cache(async function getArticle(slug: string) {
   const article = await fetchGraphQL(
     `query {
         blogPostCollection(where:{slug: "${slug}"}, limit: 1) {
@@ -204,7 +211,8 @@ export async function getArticle(slug: string) {
             ${ARTICLE_GRAPHQL_FIELDS}
           }
         }
-      }`,
+    }`,
+    [`contentful:article:${slug}`, "contentful:articles"],
   );
   return extractArticleEntries(article as GraphQLBlogResponse)[0];
-}
+});

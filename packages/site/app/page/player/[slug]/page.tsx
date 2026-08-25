@@ -20,6 +20,7 @@ import { auth0 } from "@/lib/auth0";
 import { resolveAccount } from "@/lib/accounts";
 
 const APPEARANCE_PAGE_SIZE = 25;
+export const revalidate = 7200;
 
 export async function generateMetadata(props: { params: SlugParams }) {
   const params = await props.params;

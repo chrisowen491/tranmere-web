@@ -12,6 +12,8 @@ import { breadcrumbJsonLd, JsonLd } from "@/components/seo/JsonLd";
 import { searchGames } from "@/lib/games";
 import { queryLeagueSeasonSummaryRows } from "@tranmere-web/lib/src/d1-queries";
 
+export const revalidate = 7200;
+
 export async function generateMetadata(props: { params: SlugParams }) {
   const params = await props.params;
   const season = decodeURI(params.slug);

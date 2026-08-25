@@ -403,6 +403,10 @@ CREATE TABLE IF NOT EXISTS LeagueSeasonSummaries (
 CREATE INDEX IF NOT EXISTS Games_opposition_date_idx
   ON Games (opposition, match_date);
 
+CREATE INDEX IF NOT EXISTS Games_head_to_head_opposition_idx
+  ON Games(opposition COLLATE NOCASE)
+  WHERE LOWER(TRIM(competition)) <> 'friendly';
+
 CREATE INDEX IF NOT EXISTS Games_competition_date_idx
   ON Games (competition, match_date);
 
