@@ -1,0 +1,21 @@
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+ <defs>
+  <clipPath id="kit-1980-shirt-clip">
+   <path id="svg_1" d="m255.742,313.009l44,0l98.846,21.665c27.533,6.035 47.154,30.421 47.154,58.609l0,85.726l-66,0l0,33l-248,0l0,-33l-66,0l0,-85.726c0,-28.188 19.621,-52.574 47.154,-58.609l98.846,-21.665l44,0z"/>
+  </clipPath>
+ </defs>
+  <g id="shirt">
+   <path id="svg_4" d="m255.742,313.009l44,0l98.846,21.665c27.533,6.035 47.154,30.421 47.154,58.609l0,85.726l-66,0l0,33l-248,0l0,-33l-66,0l0,-85.726c0,-28.188 19.621,-52.574 47.154,-58.609l98.846,-21.665l44,0z" fill="#e02f55"/>
+  </g>
+  <g clip-path="url(#kit-1980-shirt-clip)" id="shoulder-and-sleeve-tape">
+   <g id="svg_5" fill="none">
+    <path id="svg_6" stroke-width="25" stroke="#fff" d="m218,316c-42,5 -85,13 -109,28c-26,17 -34,59 -35,124"/>
+    <path id="svg_7" stroke-width="25" stroke="#fff" d="m294,316c42,5 85,13 109,28c26,17 34,59 35,124"/>
+    <path id="svg_8" stroke-width="18" stroke="#e02f55" d="m218,316c-42,5 -85,13 -109,28c-26,17 -34,59 -35,124"/>
+    <path id="svg_9" stroke-width="18" stroke="#e02f55" d="m294,316c42,5 85,13 109,28c26,17 34,59 35,124"/>
+   </g>
+  </g>
+
+  <use id="svg_32"  fill="#fff" href="#umbro" y="-10"/>
+  <use id="svg_33" fill="#fff" href="#letters" x ="170" />
+</svg>

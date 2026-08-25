@@ -124,6 +124,7 @@ export interface Match {
   ticket?: string;
   youtube?: string;
   pens?: string;
+  afterExtraTime?: boolean;
   home?: string;
   visitor?: string;
   opposition?: string;

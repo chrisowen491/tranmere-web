@@ -17,8 +17,7 @@
 
     <def id="Collars">
         <g id="full-collar">
-            <line stroke-width="10" stroke="var(--collar-base, #0000ff)" y2="379.45312" x2="257" y1="351.45313" x1="226" fill="none"/>
-            <line stroke="var(--collar-base, #0000ff)" stroke-width="26" transform="rotate(11.289350509643555 264.989898681641,367.18627929687506) " y2="383.68396" x2="251.86521" y1="350.68864" x1="278.1146" fill="none"/>
+            <rect transform="rotate(44.8763 256.25 370.125)" stroke="var(--collar-base, #0000ff)" id="svg_7" height="16.19901" width="16.4667" y="362.0255" x="248.01665" fill="var(--collar-base, #0000ff)"/>
             <g>
                 <path fill="var(--collar, #0000ff)" d="m256,358l-30,30l-31.996,-70.056l17.996,-11.944l44,52z" stroke="var(--collar-line, #b2b2b2)"/>
             </g>

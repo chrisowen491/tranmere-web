@@ -1,21 +1,53 @@
- <svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
-    <g id="shirt">
-        <g id="chest">
-            <path fill="#ffff00" d="m255.74181,313.00899l44,0l98.846,21.665c27.533,6.035 47.154,30.421 47.154,58.609l0,85.726l-66,0l0,33l-124,0l-124,0l0,-33l-66,0l0,-85.726c0,-28.187 19.621,-52.574 47.154,-58.609l98.846,-21.665l44,0z"/>
-        </g>
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <clipPath id="kit-1980-shirt-clip">
+      <path d="m255.742 313.009h44l98.846 21.665c27.533 6.035 47.154 30.421 47.154 58.609v85.726h-66v33h-248v-33h-66v-85.726c0-28.188 19.621-52.574 47.154-58.609l98.846-21.665h44z"/>
+    </clipPath>
+    <g id="kit-1980-tape-diamond" fill="none" stroke="#1949d7" stroke-linejoin="round">
+      <path d="M0-8 11 0 0 8-11 0Z" stroke-width="2.4"/>
+      <path d="M0-4.5 6 0 0 4.5-6 0Z" stroke-width="1.8"/>
     </g>
-  <g id="shoulders">
-   <path fill="#0000ff" d="m398.5978,332.77168l-99.36623,-22.02808l-44.23158,0l-44.23158,0l-99.36623,22.02808c-27.67791,6.13614 -47.40218,30.93082 -47.40218,59.59122l0,66.82749l20.10526,0l0,-66.82749c0,-18.96052 13.29058,-35.6679 31.60145,-39.72782l97.2391,-21.5563l84.10835,0l97.2391,21.5563c18.31087,4.0589 31.60145,20.7673 31.60145,39.72782l0,66.82749l20.10526,0l0,-66.82749c0,-28.6604 -19.72427,-53.45508 -47.40218,-59.59122l0.00001,0z" stroke="null"/>
-   <path fill="#ffff00" d="m392.67631,339.88899l-94.92091,-22.02808l-42.2528,0l-42.25279,0l-94.92091,22.02808c-26.43969,6.13614 -45.28155,30.93082 -45.28155,59.59122l0,66.82749l19.20582,0l0,-66.82749c0,-18.96052 12.696,-35.6679 30.1877,-39.72782l92.88893,-21.5563l80.3456,0l92.88893,21.5563c17.4917,4.0589 30.1877,20.7673 30.1877,39.72782l0,66.82749l19.20582,0l0,-66.82749c0,-28.6604 -18.84187,-53.45508 -45.28155,-59.59122l0.00001,0z" stroke="null"/>
-   <path fill="#0000ff" d="m389.02217,342.29638l-92.04451,-20.36843l-40.97241,0l-40.9724,0l-92.04451,20.36843c-25.63848,5.67383 -43.90938,28.60041 -43.90938,55.10146l0,61.79254l18.62382,0l0,-61.79254c0,-17.53198 12.31128,-32.9806 29.27292,-36.73462l90.07412,-19.9322l77.91089,0l90.07411,19.9322c16.96164,3.75309 29.27293,19.20264 29.27293,36.73462l0,61.79254l18.62382,0l0,-61.79254c0,-26.50106 -18.2709,-49.42764 -43.90938,-55.10146l-0.00002,0z" stroke="null"/>
-   <path fill="#ffff00" d="m384.73699,350.0893l-88.38366,-19.01053l-39.34282,0l-39.34282,0l-88.38366,19.01053c-24.61877,5.29557 -42.16299,26.69372 -42.16299,51.42804l0,57.67304l17.8831,0l0,-57.67304c0,-16.36319 11.82163,-30.78188 28.10866,-34.28565l86.49162,-18.60338l74.81216,0l86.49162,18.60338c16.28704,3.50289 28.10866,17.92246 28.10866,34.28565l0,57.67304l17.8831,0l0,-57.67304c0,-24.73432 -17.54421,-46.13246 -42.16299,-51.42804l0.00002,0z" stroke="null"/>
+  </defs>
+
+  <g id="shirt">
+    <path fill="#ffff00" d="m255.742 313.009h44l98.846 21.665c27.533 6.035 47.154 30.421 47.154 58.609v85.726h-66v33h-248v-33h-66v-85.726c0-28.188 19.621-52.574 47.154-58.609l98.846-21.665h44z"/>
   </g>
 
-    <use href="#letters" x="180" fill="#0000ff" />
-    <g id="sleeves">
-        <rect stroke="#0000ff" fill="#0000ff" stroke-width="0" stroke-opacity="null" x="63.82454" y="458.02906" width="68.08997" height="21.54386"/>
-        <rect stroke="#0000ff" fill="#0000ff" stroke-width="0" stroke-opacity="null" x="378.92495" y="458.15187" width="67.09259" height="21.54386"/>
+  <g id="shoulder-and-sleeve-tape" clip-path="url(#kit-1980-shirt-clip)">
+    <g fill="none" stroke-linecap="butt">
+      <path d="M218 316C176 321 133 329 109 344C83 361 75 403 74 468" stroke="#1f48c4" stroke-width="25"/>
+      <path d="M294 316C336 321 379 329 403 344C429 361 437 403 438 468" stroke="#1f48c4" stroke-width="25"/>
+      <path d="M218 316C176 321 133 329 109 344C83 361 75 403 74 468" stroke="#ffff00" stroke-width="18"/>
+      <path d="M294 316C336 321 379 329 403 344C429 361 437 403 438 468" stroke="#ffff00" stroke-width="18"/>
     </g>
-    <use href="#umbro" fill="#0000ff" />
+    <g id="left-umbro-tape">
+      <use href="#kit-1980-tape-diamond" transform="translate(203 319) rotate(-8)"/>
+      <use href="#kit-1980-tape-diamond" transform="translate(178 323) rotate(-10)"/>
+      <use href="#kit-1980-tape-diamond" transform="translate(153 328) rotate(-12)"/>
+      <use href="#kit-1980-tape-diamond" transform="translate(128 335) rotate(-18)"/>
+      <use href="#kit-1980-tape-diamond" transform="translate(106 348) rotate(-36)"/>
+      <use href="#kit-1980-tape-diamond" transform="translate(91 369) rotate(-65)"/>
+      <use href="#kit-1980-tape-diamond" transform="translate(82 394) rotate(-77)"/>
+      <use href="#kit-1980-tape-diamond" transform="translate(77 420) rotate(-84)"/>
+      <use href="#kit-1980-tape-diamond" transform="translate(75 447) rotate(-88)"/>
+    </g>
+    <g id="right-umbro-tape">
+      <use href="#kit-1980-tape-diamond" transform="translate(309 319) rotate(8)"/>
+      <use href="#kit-1980-tape-diamond" transform="translate(334 323) rotate(10)"/>
+      <use href="#kit-1980-tape-diamond" transform="translate(359 328) rotate(12)"/>
+      <use href="#kit-1980-tape-diamond" transform="translate(384 335) rotate(18)"/>
+      <use href="#kit-1980-tape-diamond" transform="translate(406 348) rotate(36)"/>
+      <use href="#kit-1980-tape-diamond" transform="translate(421 369) rotate(65)"/>
+      <use href="#kit-1980-tape-diamond" transform="translate(430 394) rotate(77)"/>
+      <use href="#kit-1980-tape-diamond" transform="translate(435 420) rotate(84)"/>
+      <use href="#kit-1980-tape-diamond" transform="translate(437 447) rotate(88)"/>
+    </g>
+  </g>
 
-  </svg>
+  <use href="#letters" x="180" fill="#1f48c4"/>
+  <g id="sleeves" fill="#1f48c4">
+    <rect x="63.825" y="458.029" width="68.09" height="21.544"/>
+    <rect x="378.925" y="458.152" width="67.093" height="21.544"/>
+  </g>
+  <use href="#umbro" fill="#1f48c4"/>
+</svg>

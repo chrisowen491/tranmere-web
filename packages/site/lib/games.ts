@@ -45,6 +45,9 @@ export function mapGame(row: GameRow): Match {
     noProgrammeIssued: row.no_programme_issued === 1,
     ticket: row.ticket && row.ticket !== "#N/A" ? row.ticket : undefined,
     pens: row.penalties || undefined,
+    afterExtraTime: ["1", "true", "y", "yes"].includes(
+      row.after_extra_time?.trim().toLowerCase() ?? "",
+    ),
     home: row.home_team,
     visitor: row.away_team,
     opposition: row.opposition,

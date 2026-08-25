@@ -1,0 +1,19 @@
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+  <g id="kitmaker" fill="#f7f3e8">
+    <g id="lowfields">
+      <path fill-rule="evenodd" d="M176 364a16 16 0 1 1 0 32 16 16 0 0 1 0-32Zm0 2.7a13.3 13.3 0 1 0 0 26.6 13.3 13.3 0 0 0 0-26.6Z"/>
+      <path d="M166.5 369h12v2.2h-2.8v15.4h6.2l1.2-4.1h2.2l-.8 6.5h-18v-2.2h2.8v-15.6h-2.8Z"/>
+      <g font-family="Arial Narrow, Arial, sans-serif" font-size="7.2" font-weight="900" text-anchor="middle">
+        <text x="154.5" y="393.5" transform="rotate(-29 154.5 393.5)">L</text>
+        <text x="159" y="397.2" transform="rotate(-21 159 397.2)">O</text>
+        <text x="164.8" y="400" transform="rotate(-13 164.8 400)">W</text>
+        <text x="171" y="401.7" transform="rotate(-5 171 401.7)">F</text>
+        <text x="175.1" y="402.2">I</text>
+        <text x="178.8" y="402">E</text>
+        <text x="183.1" y="401.2" transform="rotate(6 183.1 401.2)">L</text>
+        <text x="187.8" y="399.4" transform="rotate(14 187.8 399.4)">D</text>
+        <text x="193" y="396.1" transform="rotate(23 193 396.1)">S</text>
+      </g>
+    </g>
+  </g>
+</svg>

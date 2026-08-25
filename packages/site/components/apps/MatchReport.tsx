@@ -172,6 +172,12 @@ export default function MatchReport(props: {
               {match.awayTeam}
             </h1>
 
+            {match.afterExtraTime && (
+              <p className="mt-5 inline-flex w-fit items-center border border-blue-700/20 bg-blue-50 px-3 py-2 text-xs font-bold uppercase tracking-[0.12em] text-blue-800">
+                After extra time
+              </p>
+            )}
+
             {penalty && (
               <p
                 className={`mt-5 inline-flex w-fit items-center border px-3 py-2 text-xs font-bold uppercase tracking-[0.12em] ${

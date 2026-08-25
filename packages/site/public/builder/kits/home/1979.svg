@@ -1,22 +1,56 @@
 <svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
-    <g id="shirt">
-        <g id="chest">
-            <path fill="#ffffff" d="m255.74181,313.00899l44,0l98.846,21.665c27.533,6.035 47.154,30.421 47.154,58.609l0,85.726l-66,0l0,33l-124,0l-124,0l0,-33l-66,0l0,-85.726c0,-28.187 19.621,-52.574 47.154,-58.609l98.846,-21.665l44,0z"/>
-        </g>
-    </g>
-    <g id="stripe">
-        <line transform="rotate(-7.897456169128418 264.5000000000003,440.4531250000001) " y2="346.02338" x2="370.53749" y1="534.88287" x1="158.4625" stroke-width="37" fill="none" stroke="#0000ff"/>
-        <text font-weight="bold" transform="rotate(-50.243595123291016 261.8359374999997,441.20312499999994) " xml:space="preserve" text-anchor="start" font-family="'Trebuchet MS', Gadget, sans-serif" font-size="29" y="451.45313" x="189.5" stroke-width="0" fill="#ffffff" stroke="#0000ff">STORETON</text>
-    </g>
-    <use href="#umbro" fill="#fff" x="173" y="-44" />
-    <use href="#letters" fill="#0000ff" />
-
-    <line y2="211.45313" x2="93.5" y1="305.45313" x1="28.5" stroke-opacity="null" stroke-width="3" fill="none" stroke="null"/>
-    <line y2="81.45313" x2="110.5" y1="160.45313" x1="48.5" stroke-opacity="null" stroke-width="3" fill="none" stroke="null"/>
-    <path transform="rotate(52.28608703613281 364.9164123535156,325.3844604492187) " d="m383.17558,339.74806l0,-28.72722l-36.51835,28.72722l36.51835,0z" stroke-opacity="null" stroke-width="0" fill="#0000ff" stroke="#0000ff"/>
-
-  <g id="sleeves">
-   <rect stroke="#0000ff" fill="#0000ff" stroke-width="0" stroke-opacity="null" x="63.82454" y="458.02906" width="68.08997" height="21.54386"/>
-   <rect stroke="#0000ff" fill="#0000ff" stroke-width="0" stroke-opacity="null" x="378.92495" y="458.15187" width="67.09259" height="21.54386"/>
+ <defs>
+  <clipPath id="kit-1980-shirt-clip">
+   <path id="svg_1" d="m255.742,313.009l44,0l98.846,21.665c27.533,6.035 47.154,30.421 47.154,58.609l0,85.726l-66,0l0,33l-248,0l0,-33l-66,0l0,-85.726c0,-28.188 19.621,-52.574 47.154,-58.609l98.846,-21.665l44,0z"/>
+  </clipPath>
+  <g stroke-linejoin="round" stroke="#1949d7" fill="none" id="kit-1980-tape-diamond">
+   <path id="svg_2" stroke-width="2.4" d="m0,-8l11,8l-11,8l-11,-8l11,-8z"/>
+   <path id="svg_3" stroke-width="1.8" d="m0,-4.5l6,4.5l-6,4.5l-6,-4.5l6,-4.5z"/>
   </g>
+ </defs>
+  <g id="shirt">
+   <path id="svg_4" d="m255.742,313.009l44,0l98.846,21.665c27.533,6.035 47.154,30.421 47.154,58.609l0,85.726l-66,0l0,33l-248,0l0,-33l-66,0l0,-85.726c0,-28.188 19.621,-52.574 47.154,-58.609l98.846,-21.665l44,0z" fill="#fff"/>
+  </g>
+  <g clip-path="url(#kit-1980-shirt-clip)" id="shoulder-and-sleeve-tape">
+   <g id="svg_5" fill="none">
+    <path id="svg_6" stroke-width="25" stroke="#1f48c4" d="m218,316c-42,5 -85,13 -109,28c-26,17 -34,59 -35,124"/>
+    <path id="svg_7" stroke-width="25" stroke="#1f48c4" d="m294,316c42,5 85,13 109,28c26,17 34,59 35,124"/>
+    <path id="svg_8" stroke-width="18" stroke="#fff" d="m218,316c-42,5 -85,13 -109,28c-26,17 -34,59 -35,124"/>
+    <path id="svg_9" stroke-width="18" stroke="#fff" d="m294,316c42,5 85,13 109,28c26,17 34,59 35,124"/>
+   </g>
+   <g id="left-umbro-tape">
+    <use id="svg_10" transform="rotate(-8 203 319)" x="203" y="319" href="#kit-1980-tape-diamond"/>
+    <use id="svg_11" transform="rotate(-10 178 323)" x="178" y="323" href="#kit-1980-tape-diamond"/>
+    <use id="svg_12" transform="rotate(-12 153 328)" x="153" y="328" href="#kit-1980-tape-diamond"/>
+    <use id="svg_13" transform="rotate(-18 128 335)" x="128" y="335" href="#kit-1980-tape-diamond"/>
+    <use id="svg_14" transform="rotate(-36 106 348)" x="106" y="348" href="#kit-1980-tape-diamond"/>
+    <use id="svg_15" transform="rotate(-65 91 369)" x="91" y="369" href="#kit-1980-tape-diamond"/>
+    <use id="svg_16" transform="rotate(-77 82 394)" x="82" y="394" href="#kit-1980-tape-diamond"/>
+    <use id="svg_17" transform="rotate(-84 77 420)" x="77" y="420" href="#kit-1980-tape-diamond"/>
+    <use id="svg_18" transform="rotate(-88 75 447)" x="75" y="447" href="#kit-1980-tape-diamond"/>
+   </g>
+   <g id="right-umbro-tape">
+    <use id="svg_19" transform="rotate(8 309 319)" x="309" y="319" href="#kit-1980-tape-diamond"/>
+    <use id="svg_20" transform="rotate(10 334 323)" x="334" y="323" href="#kit-1980-tape-diamond"/>
+    <use id="svg_21" transform="rotate(12 359 328)" x="359" y="328" href="#kit-1980-tape-diamond"/>
+    <use id="svg_22" transform="rotate(18 384 335)" x="384" y="335" href="#kit-1980-tape-diamond"/>
+    <use id="svg_23" transform="rotate(36 406 348)" x="406" y="348" href="#kit-1980-tape-diamond"/>
+    <use id="svg_24" transform="rotate(65 421 369)" x="421" y="369" href="#kit-1980-tape-diamond"/>
+    <use id="svg_25" transform="rotate(77 430 394)" x="430" y="394" href="#kit-1980-tape-diamond"/>
+    <use id="svg_26" transform="rotate(84 435 420)" x="435" y="420" href="#kit-1980-tape-diamond"/>
+    <use id="svg_27" transform="rotate(88 437 447)" x="437" y="447" href="#kit-1980-tape-diamond"/>
+   </g>
+  </g>
+  <g fill="#1f48c4" id="sleeves">
+   <rect id="svg_28" height="21.544" width="68.09" y="458.029" x="63.825"/>
+   <rect id="svg_29" height="21.544" width="67.093" y="458.152" x="378.925"/>
+  </g>
+  <g id="stripe">
+   <line transform="rotate(-4.79621 264.458 448.415)" stroke="#0000ff" id="svg_30" fill="none" stroke-width="37" x1="146.1957" y1="526.29907" x2="382.7208" y2="370.53028"/>
+   <text transform="rotate(-37.195 257.605 450.203)" id="svg_31" stroke="#0000ff" fill="#ffffff" stroke-width="0" x="187" y="460.45313" font-size="29" font-family="'Trebuchet MS', Gadget, sans-serif" text-anchor="start" xml:space="preserve" font-weight="bold">STORETON</text>
+   <rect stroke="#ffffff" id="svg_34" height="49.5" width="15.00001" y="356.49999" x="373.49999" stroke-width="0" fill="#ffffff"/>
+   <rect stroke="#ffffff" id="svg_35" height="49.5" width="15.00001" y="346.5" x="363.5" stroke-width="0" fill="#ffffff"/>
+  </g>
+  <use id="svg_32" y="-22" x="185" fill="#fff" href="#umbro"/>
+  <use id="svg_33" fill="#0000ff" href="#letters"/>
 </svg>
