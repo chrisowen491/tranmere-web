@@ -1,5 +1,6 @@
 import { ShirtSearchApp } from "@/components/apps/ShirtSearch";
-import { getAllShirts } from "@/lib/api";
+import { getAllShirts } from "@/lib/shirts";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { breadcrumbJsonLd, JsonLd } from "@/components/seo/JsonLd";
 import { pageMetadata } from "@/lib/seo";
 
@@ -12,8 +13,8 @@ export const metadata = pageMetadata({
 });
 
 export default async function ShirtHome() {
- 
-  const shirts = await getAllShirts();
+  const db = (await getCloudflareContext({ async: true })).env.DB;
+  const shirts = await getAllShirts(db);
   shirts.sort((a, b) => (a.name > b.name ? 1 : b.name > a.name ? -1 : 0));
 
   return (

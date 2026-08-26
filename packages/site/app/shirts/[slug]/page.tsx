@@ -1,6 +1,6 @@
 import { ShirtApp } from "@/components/apps/Shirt";
 import { SlugParams } from "@/lib/types";
-import { getAllShirts } from "@/lib/api";
+import { getShirtBySlug } from "@/lib/shirts";
 import { GetCommentsByUrl } from "@/lib/comments";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { notFound } from "next/navigation";
@@ -12,9 +12,8 @@ export const revalidate = 7200;
 
 export async function generateMetadata(props: { params: SlugParams }) {
   const params = await props.params;
-  const shirts = await getAllShirts();
-
-  const shirt = shirts.find((s) => s.slug === params.slug);
+  const db = (await getCloudflareContext({ async: true })).env.DB;
+  const shirt = await getShirtBySlug(db, params.slug);
   if (!shirt) return {};
   return pageMetadata({
     title: shirt.name,
@@ -24,13 +23,12 @@ export async function generateMetadata(props: { params: SlugParams }) {
   });
 }
 export default async function ShirtHome(props: { params: SlugParams }) {
-  const shirts = await getAllShirts();
   const params = await props.params;
-  const shirt = shirts.find((s) => s.slug === params.slug);
+  const env = (await getCloudflareContext({ async: true })).env;
+  const shirt = await getShirtBySlug(env.DB, params.slug);
 
   if (!shirt) notFound();
 
-  const env = (await getCloudflareContext({ async: true })).env;
   const session = await auth0.getSession();
   const account = session
     ? await resolveAccount(env.DB, session.user.sub)

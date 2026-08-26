@@ -259,6 +259,14 @@ export default async function AdminPage() {
               icon: DocumentTextIcon,
             },
             {
+              href: "/admin/shirts",
+              title: "Shirts",
+              description:
+                "Manage shirt details, seasons, archive images and avatar artwork.",
+              action: "Manage shirts",
+              icon: SwatchIcon,
+            },
+            {
               href: "/admin/games",
               title: "Games",
               description:

@@ -17,7 +17,8 @@ import {
 import { GetOnThisDay, GetYear } from "@tranmere-web/lib/src/apiFunctions";
 import type { Match } from "@tranmere-web/lib/src/tranmere-web-types";
 import { getGameBySeasonAndDate, getLatestPlayedGame } from "@/lib/games";
-import { getAllArticles, getAllShirts } from "@/lib/api";
+import { getAllArticles } from "@/lib/api";
+import { getAllShirts } from "@/lib/shirts";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { getPlayerCardOptions, type PlayerCardOption } from "@/lib/players";
 
@@ -170,7 +171,7 @@ export default async function Home() {
     [
       getPlayerCardOptions(env.DB),
       GetOnThisDay(env.DB),
-      getAllShirts(),
+      getAllShirts(env.DB),
       getAllArticles(4),
       getLatestPlayedGame(env.DB, today),
     ],

@@ -29,14 +29,6 @@ export interface GraphQLBlogResponse {
   };
 }
 
-export interface GraphQLShirtResponse {
-  data: {
-    shirtCollection: {
-      items: Shirt[];
-    };
-  };
-}
-
 export interface GraphQLAssetsResponse {
   data: {
     assetCollection: {
@@ -301,6 +293,7 @@ export interface PageInfo {
 }
 
 export interface Shirt {
+  id: string;
   slug: string;
   name: string;
   price: string;
@@ -308,12 +301,13 @@ export interface Shirt {
   imagesCollection: {
     items: GalleryImage[];
   };
-  description: Blog;
+  description: Blog | null;
   variants: string[];
   use: ShirtUsageType;
   seasons: string[];
   color: ShirtColor;
   decade: string;
+  avatarImageUrl?: string;
 }
 
 export enum ShirtColor {

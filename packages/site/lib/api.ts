@@ -4,7 +4,6 @@ import {
   GraphQLAssetsResponse,
   GraphQLBlogResponse,
   GraphQLPlayerResponse,
-  GraphQLShirtResponse,
 } from "./types";
 import { cache } from "react";
 
@@ -100,10 +99,6 @@ function extractArticleEntries(fetchResponse: GraphQLBlogResponse) {
   return fetchResponse?.data?.blogPostCollection?.items;
 }
 
-function extractShirtEntries(fetchResponse: GraphQLShirtResponse) {
-  return fetchResponse?.data?.shirtCollection?.items;
-}
-
 function extractGalleryImageEntries(fetchResponse: GraphQLAssetsResponse) {
   return fetchResponse?.data?.assetCollection?.items;
 }
@@ -154,38 +149,6 @@ export async function getAllArticles(limit = 3) {
   );
 
   return extractArticleEntries(articles as GraphQLBlogResponse);
-}
-
-export async function getAllShirts(limit = 100) {
-  const shirts = await fetchGraphQL(
-    `query {
-        shirtCollection(where:{slug_exists: true}, limit: ${limit}) {
-          items {
-            name
-            decade
-            imagesCollection {
-              items {
-                url
-                title
-                description
-              }
-            }
-            color
-            description {
-              json
-            }
-            use
-            seasons
-            variants
-            slug
-            manufacturer
-          }
-        }
-    }`,
-    ["contentful:shirts"],
-  );
-
-  return extractShirtEntries(shirts as GraphQLShirtResponse);
 }
 
 export async function getAllArticlesForTag(limit = 3, tag: string) {
