@@ -155,6 +155,7 @@ export async function queryOnThisDayGameRow(
       `SELECT ${gameColumns}, referee, ticket
        FROM Games
        WHERE substr(match_date, 6, 5) = ?
+         AND match_date >= '1961-01-01'
          AND match_date < ?
          AND no_programme_issued = 0
        ORDER BY match_date ASC, id ASC

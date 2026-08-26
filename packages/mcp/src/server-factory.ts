@@ -40,7 +40,6 @@ function registerWriteTools(context: {
   registerCreatePlayerProfileTool(context);
   registerUpdatePlayerProfileTool(context);
   registerCreateTransferTool(context);
-  registerGetPlayersToolV2(context);
 }
 
 export function createServer(

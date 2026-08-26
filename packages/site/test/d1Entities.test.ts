@@ -331,12 +331,13 @@ describe("D1 queries", () => {
     });
   });
 
-  it("prefers the oldest eligible fixture for On This Day", async () => {
+  it("prefers the oldest post-1960 fixture for On This Day", async () => {
     const mock = databaseReturning([]);
 
     await queryOnThisDayGameRow(mock.db, "08-24", "2026-08-24");
 
     const sql = String(mock.prepare.mock.calls[0][0]);
+    expect(sql).toContain("match_date >= '1961-01-01'");
     expect(sql).toContain("ORDER BY match_date ASC, id ASC");
     expect(mock.boundValues).toEqual([["08-24", "2026-08-24"]]);
   });
