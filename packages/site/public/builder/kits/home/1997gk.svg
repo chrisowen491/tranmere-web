@@ -1,0 +1,31 @@
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <clipPath id="1997gk-shirt-clip">
+      <path  d="M 255.742 313.009 L 299.742 313.009 L 398.588 334.674 C 426.121 340.709 445.742 365.095 445.742 393.283 L 445.742 479.009 L 444.612 510.582 L 379.742 512.009 L 255.742 512.009 L 131.742 512.009 L 65.784 511.981 L 65.742 479.009 L 65.742 393.283 C 65.742 365.096 85.363 340.709 112.896 334.674 L 211.742 313.009 L 255.742 313.009 Z"/>  
+    </clipPath>
+    <pattern id="1997gk-tartan" width="44" height="44" patternUnits="userSpaceOnUse" patternTransform="rotate(-26)">
+      <rect width="44" height="44" fill="#162c42"/>
+      <rect width="8" height="44" fill="#253f55"/>
+      <rect x="11" width="3" height="44" fill="#18a6b3" opacity=".85"/>
+      <rect x="16" width="5" height="44" fill="#a52c92" opacity=".9"/>
+      <rect x="23" width="2" height="44" fill="#e346a9" opacity=".8"/>
+      <rect x="29" width="7" height="44" fill="#0a7186" opacity=".75"/>
+      <path d="M0 4h44M0 27h44" stroke="#264a60" stroke-width="4" opacity=".85"/>
+      <path d="M0 14h44M0 36h44" stroke="#ba348f" stroke-width="2" opacity=".8"/>
+    </pattern>
+  </defs>
+  <g id="shirt">
+   <path fill="#162c42"  d="M 255.742 313.009 L 299.742 313.009 L 398.588 334.674 C 426.121 340.709 445.742 365.095 445.742 393.283 L 445.742 479.009 L 444.612 510.582 L 379.742 512.009 L 255.742 512.009 L 131.742 512.009 L 65.784 511.981 L 65.742 479.009 L 65.742 393.283 C 65.742 365.096 85.363 340.709 112.896 334.674 L 211.742 313.009 L 255.742 313.009 Z"/>     
+   <g clip-path="url(#1997gk-shirt-clip)">
+      <rect x="56" y="307" width="400" height="205" fill="url(#1997gk-tartan)"/>
+    </g>
+  </g>
+    <g id="collar">
+   <path stroke="null" fill="#000000" d="m289.98107,310.12734l-68.32193,0l-18.46245,5.65262c2.07528,38.03157 0.03106,68.09611 52.62342,68.09611s50.54813,-30.06454 52.62342,-68.09611l-18.46245,-5.65262l-0.00001,0z" id="svg_12"/>
+  </g>
+  <rect fill="url(#1997gk-tartan)" stroke-width="null" stroke-dasharray="null" opacity="undefined" x="237.5" y="351.5" width="36" height="38" id="svg_55"/>
+
+  <g id="kitmaker"><use href="#mizuno" fill="#fff" x="73" y="-16"/></g>
+  <g id="tranmere-crest"><use href="#simple-crest" x="-75" y="20"/></g>
+  <g id="sponsor"><use href="#wirral" fill="#fff"/></g>
+</svg>
