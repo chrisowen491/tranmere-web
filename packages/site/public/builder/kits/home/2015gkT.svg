@@ -1,0 +1,27 @@
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+ <defs>
+  <clipPath id="kit-2015gk-shirt-clip">
+   <path id="svg_1" d="m255.742,313.009l44,0l98.846,21.665c27.533,6.035 47.154,30.421 47.154,58.609l0,85.726l-1.13,31.573l-64.87,1.427l-124,0l-124,0l-65.958,-0.028l-0.042,-32.972l0,-85.726c0,-28.187 19.621,-52.574 47.154,-58.609l98.846,-21.665l44,0z"/>
+  </clipPath>
+  <pattern patternUnits="userSpaceOnUse" height="12" width="14" id="kit-2015gk-honeycomb">
+   <path id="svg_2" stroke-width="1.25" stroke="#062f1a" fill="none" d="m3.5,0l7,0l3.5,6l-3.5,6l-7,0l-3.5,-6l3.5,-6z"/>
+  </pattern>
+  <linearGradient x2="1" x1="0" id="kit-2015gk-green">
+   <stop stop-color="#3f464e"/>
+   <stop stop-color="#3f464e" offset="0.5"/>
+   <stop stop-color="#3f464e" offset="1"/>
+  </linearGradient>
+ </defs>
+  <g clip-path="url(#kit-2015gk-shirt-clip)" id="shirt">
+   <path id="svg_3" d="m255.742,313.009l44,0l98.846,21.665c27.533,6.035 47.154,30.421 47.154,58.609l0,85.726l-1.13,31.573l-64.87,1.427l-124,0l-124,0l-65.958,-0.028l-0.042,-32.972l0,-85.726c0,-28.187 19.621,-52.574 47.154,-58.609l98.846,-21.665l44,0z" fill="url(#kit-2015gk-green)"/>
+   <path stroke="null" id="svg_4" fill="#da3e77" d="m123.99999,363l133.00001,48.69792l133.00001,-48.69792l-7.91667,46.92708l-125.08334,38.07292l-125.08334,-38.07292l-7.91667,-46.92708z"/>
+   <path id="svg_5" opacity="0.9" fill="url(#kit-2015gk-honeycomb)" d="m66,433l60,0l0,79l-60,0l0,-79zm320,0l60,0l0,79l-60,0l0,-79z"/>
+  </g>
+  <g id="kitmaker">
+   <rect id="svg_6" x="214" y="372" fill="#fff" rx="3" height="16" width="82"/>
+   <rect id="svg_7" fill="#3f464e" rx="2" height="10" width="76" y="375" x="217"/>
+   <text id="svg_8" font-weight="700" font-size="10" font-family="Arial, sans-serif" fill="#fff" text-anchor="middle" y="383.5" x="255">carbrini</text>
+  </g>
+  <use id="svg_9" y="20" href="#homebargains"/>
+  <use id="svg_10" x="-75" y="43" href="#simple-crest"/>
+</svg>
