@@ -60,6 +60,21 @@ const rebuildArchiveCompletenessSql = `
     LEFT JOIN MatchReports ON MatchReports.match_date = Games.match_date
     GROUP BY Games.season
   ),
+  highlight_totals AS (
+    SELECT
+      Games.season,
+      SUM(
+        CASE WHEN EXISTS (
+          SELECT 1
+          FROM MatchLinks
+          WHERE MatchLinks.season = Games.season
+            AND MatchLinks.match_date = Games.match_date
+            AND MatchLinks.link_type = 'highlights'
+        ) THEN 1 ELSE 0 END
+      ) AS complete_count
+    FROM Games
+    GROUP BY Games.season
+  ),
   season_players AS (
     SELECT season, player_name AS name FROM Apps WHERE TRIM(player_name) <> ''
     UNION
@@ -80,7 +95,7 @@ const rebuildArchiveCompletenessSql = `
     VALUES
       ('lineups'), ('goals'), ('goal-details'), ('attendances'),
       ('formations'), ('programmes'), ('player-profiles'), ('kits'),
-      ('match-reports')
+      ('match-reports'), ('highlights')
   )
   INSERT INTO ArchiveCompleteness (
     season, category, complete_count, total_count, updated_at
@@ -98,6 +113,7 @@ const rebuildArchiveCompletenessSql = `
       WHEN 'player-profiles' THEN COALESCE(profile_totals.complete_count, 0)
       WHEN 'kits' THEN game_totals.kits
       WHEN 'match-reports' THEN COALESCE(report_totals.complete_count, 0)
+      WHEN 'highlights' THEN COALESCE(highlight_totals.complete_count, 0)
     END,
     CASE categories.category
       WHEN 'goal-details' THEN COALESCE(goal_detail_totals.total_count, 0)
@@ -111,7 +127,8 @@ const rebuildArchiveCompletenessSql = `
   LEFT JOIN match_goal_totals ON match_goal_totals.season = game_totals.season
   LEFT JOIN goal_detail_totals ON goal_detail_totals.season = game_totals.season
   LEFT JOIN profile_totals ON profile_totals.season = game_totals.season
-  LEFT JOIN report_totals ON report_totals.season = game_totals.season;
+  LEFT JOIN report_totals ON report_totals.season = game_totals.season
+  LEFT JOIN highlight_totals ON highlight_totals.season = game_totals.season;
 `;
 
 /** Rebuilds the public, aggregate-only view of archive coverage. */

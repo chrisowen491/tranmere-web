@@ -578,7 +578,8 @@ CREATE TABLE IF NOT EXISTS ArchiveCompleteness (
       'programmes',
       'player-profiles',
       'kits',
-      'match-reports'
+      'match-reports',
+      'highlights'
     )
   ),
   CHECK (complete_count >= 0),

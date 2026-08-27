@@ -49,6 +49,13 @@ function matchGapCondition(category: ArchiveCompletenessCategory) {
       return `(Games.kit IS NULL OR TRIM(Games.kit) = '')`;
     case 'match-reports':
       return `NOT EXISTS (SELECT 1 FROM MatchReports WHERE MatchReports.match_date = Games.match_date)`;
+    case 'highlights':
+      return `NOT EXISTS (
+        SELECT 1 FROM MatchLinks
+        WHERE MatchLinks.season = Games.season
+          AND MatchLinks.match_date = Games.match_date
+          AND MatchLinks.link_type = 'highlights'
+      )`;
     default:
       return null;
   }

@@ -73,6 +73,13 @@ export const ARCHIVE_COMPLETENESS_CATEGORIES = [
     shortLabel: 'Reports',
     description: 'Matches with a written report in the archive.',
     entity: 'match'
+  },
+  {
+    key: 'highlights',
+    label: 'Match highlights',
+    shortLabel: 'Highlights',
+    description: 'Matches with at least one highlights video or external link.',
+    entity: 'match'
   }
 ] as const satisfies readonly ArchiveCompletenessCategoryDefinition[];
 

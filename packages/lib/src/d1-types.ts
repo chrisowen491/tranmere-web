@@ -202,7 +202,8 @@ export type ArchiveCompletenessCategory =
   | 'programmes'
   | 'player-profiles'
   | 'kits'
-  | 'match-reports';
+  | 'match-reports'
+  | 'highlights';
 
 export interface ArchiveCompletenessRow {
   season: number;

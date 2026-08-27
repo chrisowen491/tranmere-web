@@ -74,6 +74,17 @@ describe("archive completeness queries", () => {
     expect(statement.bind).toHaveBeenCalledWith(1990, 50);
   });
 
+  it("finds games without a highlights link", async () => {
+    const { db, prepare, statement } = databaseReturning([]);
+
+    await queryArchiveCompletenessGaps(db, 1990, "highlights", 50);
+
+    expect(prepare).toHaveBeenCalledWith(
+      expect.stringContaining("MatchLinks.link_type = 'highlights'"),
+    );
+    expect(statement.bind).toHaveBeenCalledWith(1990, 50);
+  });
+
   it("treats a goal as detailed once its goal type is recorded", async () => {
     const { db, prepare, statement } = databaseReturning([]);
 
