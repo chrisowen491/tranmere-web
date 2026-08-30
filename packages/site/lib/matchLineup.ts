@@ -254,6 +254,25 @@ const formations: Record<ManagerFormation, FormationSlot[][]> = {
     ],
     [{ id: "goalkeeper", position: "Goalkeeper" }],
   ],
+  "4-3-1-2": [
+    [{ id: "forward-centre-left", position: "Striker" }],
+    [{ id: "forward-centre-right", position: "Striker" }],
+    [
+      { id: "attacker-centre", position: "Attacking Midfield" },
+    ],
+    [
+      { id: "mid-centre-left", position: "Central Midfielder" },
+      { id: "mid-centre", position: "Central Midfielder" },
+      { id: "mid-centre-right", position: "Central Midfielder" },
+    ],
+    [
+      { id: "def-left", position: "Left Back" },
+      { id: "def-centre-left", position: "Central Defender" },
+      { id: "def-centre-right", position: "Central Defender" },
+      { id: "def-right", position: "Right Back" },
+    ],
+    [{ id: "goalkeeper", position: "Goalkeeper" }],
+  ],
   "4-4-1-1": [
     [{ id: "forward-centre", position: "Striker" }],
     [{ id: "att-midfield", position: "Attacking Midfield" }],
