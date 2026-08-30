@@ -237,7 +237,7 @@ const formations: Record<ManagerFormation, FormationSlot[][]> = {
   ],
   "4-3-1-2": [
     [
-      { id: "forward-centre-left", position: "Striker" }
+      { id: "forward-centre-left", position: "Striker" },
       { id: "forward-centre-right", position: "Striker" }
     ],
     [
