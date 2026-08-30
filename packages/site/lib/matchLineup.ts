@@ -575,7 +575,7 @@ export function arrangeLineup<T>(
   getPositions: (player: T) => PlayerPositions = () => ({}),
   getPriority: (player: T, index: number) => number = () => 0,
 ) {
-  const formation = requestedFormation ?? "442";
+  const formation = requestedFormation ?? "4-4-2";
   const rows = formations[formation];
   const slots = rows.flat();
   const playersBySlot =

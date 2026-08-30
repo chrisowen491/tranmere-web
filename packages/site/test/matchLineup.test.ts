@@ -36,11 +36,11 @@ describe("formation and lineup assignment", () => {
     );
 
     expect(lineup.formation).toBe("4-4-2");
-    expect(lineup.rows.map((row) => row.length)).toEqual([2, 4, 4, 1]);
-    expect(lineup.rows[0].every((item) => item.position === "Striker")).toBe(
+    expect(lineup.rows.map((row: string | any[]) => row.length)).toEqual([2, 4, 4, 1]);
+    expect(lineup.rows[0].every((item: { position: string; }) => item.position === "Striker")).toBe(
       true,
     );
-    expect(lineup.rows[2].map((item) => item.position)).toEqual([
+    expect(lineup.rows[2].map((item: { position: any; }) => item.position)).toEqual([
       "Full Back",
       "Central Defender",
       "Central Defender",
@@ -57,7 +57,7 @@ describe("formation and lineup assignment", () => {
         player("Emergency keeper", "Central Midfielder", "Goalkeeper"),
         player("Unknown player", null),
       ],
-      "442",
+      "4-4-2",
       positions,
     );
 
@@ -80,9 +80,9 @@ describe("formation and lineup assignment", () => {
     ];
 
     expect(
-      arrangeLineup(players, "4-3-3", positions).rows.map((row) => row.length),
+      arrangeLineup(players, "4-3-3", positions).rows.map((row: string | any[]) => row.length),
     ).toEqual([3, 3, 4, 1]);
-    expect(arrangeLineup(players, undefined, positions).formation).toBe("442");
+    expect(arrangeLineup(players, undefined, positions).formation).toBe("4-4-2");
     expect(formationLabel("5-3-2")).toBe("5-3-2");
   });
 
@@ -106,7 +106,7 @@ describe("formation and lineup assignment", () => {
     );
 
     expect(lineup.rows[1][0].name).toBe("Gareth Roberts");
-    expect(lineup.rows[2].map((player) => player.name)).toContain(
+    expect(lineup.rows[2].map((player: { name: any; }) => player.name)).toContain(
       "Ian Goodison",
     );
   });
