@@ -88,7 +88,7 @@ export default function MatchReport(props: {
   const { match } = props;
   const penalty = penaltyOutcome(match.pens, match.homeTeam, match.awayTeam);
   const players = match.apps ?? [];
-  let formation: ManagerFormation | undefined = "442";
+  let formation: ManagerFormation | undefined = "4-4-2";
   if (match.formation && (match.formation as ManagerFormation) != null) {
     formation = match.formation as ManagerFormation;
   } else if (props.manager?.favouriteFormation) {
