@@ -26,25 +26,6 @@ interface FormationSlot {
 }
 
 const formations: Record<ManagerFormation, FormationSlot[][]> = {
-  "442": [
-    [
-      { id: "st-left", position: "Striker" },
-      { id: "st-right", position: "Striker" },
-    ],
-    [
-      { id: "mid-left", position: "Left Midfield" },
-      { id: "mid-centre-left", position: "Central Midfielder" },
-      { id: "mid-centre-right", position: "Central Midfielder" },
-      { id: "mid-right", position: "Right Midfield" },
-    ],
-    [
-      { id: "def-left", position: "Left Back" },
-      { id: "def-centre-left", position: "Central Defender" },
-      { id: "def-centre-right", position: "Central Defender" },
-      { id: "def-right", position: "Right Back" },
-    ],
-    [{ id: "goalkeeper", position: "Goalkeeper" }],
-  ],
   "4-4-2": [
     [
       { id: "st-left", position: "Striker" },
@@ -255,8 +236,10 @@ const formations: Record<ManagerFormation, FormationSlot[][]> = {
     [{ id: "goalkeeper", position: "Goalkeeper" }],
   ],
   "4-3-1-2": [
-    [{ id: "forward-centre-left", position: "Striker" }],
-    [{ id: "forward-centre-right", position: "Striker" }],
+    [
+      { id: "forward-centre-left", position: "Striker" }
+      { id: "forward-centre-right", position: "Striker" }
+    ],
     [
       { id: "attacker-centre", position: "Attacking Midfield" },
     ],
