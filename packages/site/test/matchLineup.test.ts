@@ -37,9 +37,7 @@ describe("formation and lineup assignment", () => {
 
     expect(lineup.formation).toBe("4-4-2");
     expect(lineup.rows.map((row: string | any[]) => row.length)).toEqual([2, 4, 4, 1]);
-    expect(lineup.rows[0].every((item: { position: string; }) => item.position === "Striker")).toBe(
-      true,
-    );
+    expect(lineup.rows[0].every((item) => item.position === "Striker")).toBe(true);
     expect(lineup.rows[2].map((item: { position: any; }) => item.position)).toEqual([
       "Full Back",
       "Central Defender",
