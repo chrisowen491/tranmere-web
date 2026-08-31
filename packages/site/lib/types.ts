@@ -324,6 +324,7 @@ export enum ShirtUsageType {
   Home = "Home",
   Away = "Away",
   Third = "Third",
+  Fourth = "Fourth",
   Goalkeeper = "Goalkeeper",
   GoalkeeperAway = "Goalkeeper Away",
   Training = "Training",

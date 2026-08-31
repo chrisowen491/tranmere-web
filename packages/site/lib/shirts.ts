@@ -89,6 +89,7 @@ export interface KitPerformance {
 function kitSuffix(usage: string) {
   if (usage === "Away") return "A";
   if (usage === "Third") return "T";
+  if (usage === "Fourth") return "F";
   if (usage === "Goalkeeper") return "gk";
   if (["Goalkeeper Away", "GoalkeeperAway"].includes(usage)) return "gkA";
   return "";
