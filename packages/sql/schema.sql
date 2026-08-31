@@ -471,6 +471,9 @@ CREATE INDEX IF NOT EXISTS Games_home_team_date_idx
 CREATE INDEX IF NOT EXISTS Games_match_date_id_idx
   ON Games (match_date ASC, id ASC);
 
+CREATE INDEX IF NOT EXISTS Games_kit_date_idx
+  ON Games (kit, match_date DESC);
+
 CREATE TABLE IF NOT EXISTS HatTricks (
   id TEXT NOT NULL PRIMARY KEY,
   season INTEGER NOT NULL,

@@ -2,6 +2,8 @@
 
 import { Shirt } from "@/lib/types";
 import type { Comment } from "@/lib/comments";
+import type { KitPerformance } from "@/lib/shirts";
+import { KitPerformance as KitPerformanceSection } from "@/components/apps/KitPerformance";
 import CommentPanel from "@/components/comments/CommentPanel";
 import { Reviews } from "@/components/comments/Reviews";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
@@ -24,10 +26,12 @@ export function ShirtApp({
   shirt,
   comments,
   averageRating,
+  performance,
 }: {
   shirt: Shirt;
   comments: Comment[];
   averageRating: number;
+  performance: KitPerformance | null;
 }) {
   const images = shirt.imagesCollection.items;
   const primaryImage = images[0];
@@ -251,6 +255,8 @@ export function ShirtApp({
           </section>
         </aside>
       </section>
+
+      <KitPerformanceSection performance={performance} shirtName={shirt.name} />
 
       <section className="mx-auto max-w-7xl px-6 pb-12 sm:px-10 lg:px-12">
         <div className="grid gap-8 border-y border-[#071a2b]/15 py-10 lg:grid-cols-[240px_minmax(0,1fr)]">

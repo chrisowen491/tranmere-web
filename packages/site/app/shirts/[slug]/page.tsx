@@ -1,6 +1,6 @@
 import { ShirtApp } from "@/components/apps/Shirt";
 import { SlugParams } from "@/lib/types";
-import { getShirtBySlug } from "@/lib/shirts";
+import { getShirtBySlug, getShirtPerformance } from "@/lib/shirts";
 import { GetCommentsByUrl } from "@/lib/comments";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { notFound } from "next/navigation";
@@ -29,6 +29,8 @@ export default async function ShirtHome(props: { params: SlugParams }) {
 
   if (!shirt) notFound();
 
+  const performance = await getShirtPerformance(env.DB, shirt);
+
   const session = await auth0.getSession();
   const account = session
     ? await resolveAccount(env.DB, session.user.sub)
@@ -46,6 +48,11 @@ export default async function ShirtHome(props: { params: SlugParams }) {
     : 0;
 
   return (
-    <ShirtApp shirt={shirt} comments={comments} averageRating={averageRating} />
+    <ShirtApp
+      shirt={shirt}
+      comments={comments}
+      averageRating={averageRating}
+      performance={performance}
+    />
   );
 }

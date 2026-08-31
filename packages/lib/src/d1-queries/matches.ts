@@ -10,6 +10,7 @@ export interface GameQueryOptions {
   competition?: string;
   venue?: string;
   opposition?: string;
+  kit?: string;
   penalties?: string;
   dateFrom?: string;
   dateTo?: string;
@@ -62,6 +63,10 @@ export async function queryGameRows(
   if (options.opposition) {
     conditions.push('opposition = ?');
     values.push(options.opposition);
+  }
+  if (options.kit) {
+    conditions.push('kit = ?');
+    values.push(options.kit);
   }
   if (options.penalties === 'Penalty Shootout') {
     conditions.push("penalties IS NOT NULL AND TRIM(penalties) <> ''");

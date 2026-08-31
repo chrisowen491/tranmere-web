@@ -1,4 +1,8 @@
 import type { Document } from "@contentful/rich-text-types";
+import { AVATAR_KIT_OPTIONS } from "@tranmere-web/lib/src/avatar-kit-constants";
+import { HONOURS_SEASONS } from "@tranmere-web/lib/src/honours-constants";
+import type { Match } from "@tranmere-web/lib/src/tranmere-web-types";
+import { mapGame } from "@/lib/games";
 import {
   ShirtColor,
   ShirtUsageType,
@@ -49,6 +53,179 @@ export interface ShirtInput {
   images: GalleryImage[];
   seasons: string[];
   variants: string[];
+}
+
+export interface KitPerformanceRecord {
+  played: number;
+  won: number;
+  drawn: number;
+  lost: number;
+  goalsFor: number;
+  goalsAgainst: number;
+}
+
+export interface KitPerformanceSplit extends KitPerformanceRecord {
+  label: string;
+}
+
+export interface KitHonourMatch {
+  title: string;
+  detail: string;
+  kind: string;
+  match: Match;
+}
+
+export interface KitPerformance {
+  kitCode: string;
+  overall: KitPerformanceRecord;
+  byVenue: KitPerformanceSplit[];
+  byCompetition: KitPerformanceSplit[];
+  matches: Match[];
+  biggestWins: Match[];
+  cupTies: Match[];
+  honourMatches: KitHonourMatch[];
+}
+
+function kitSuffix(usage: string) {
+  if (usage === "Away") return "A";
+  if (usage === "Third") return "T";
+  if (usage === "Goalkeeper") return "gk";
+  if (["Goalkeeper Away", "GoalkeeperAway"].includes(usage)) return "gkA";
+  return "";
+}
+
+function labelMatchesUsage(label: string, usage: string) {
+  if (["Goalkeeper Away", "GoalkeeperAway"].includes(usage))
+    return /GK Away/i.test(label);
+  if (usage === "Goalkeeper")
+    return /\bGK\b/i.test(label) && !/GK Away/i.test(label);
+  return new RegExp(`\\b${usage}\\b`, "i").test(label);
+}
+
+function labelIncludesYear(label: string, year: number) {
+  const match = label.match(/^(\d{4})(?:-(\d{2}))?/);
+  if (!match) return false;
+  const start = Number(match[1]);
+  const end = match[2]
+    ? Math.floor(start / 100) * 100 + Number(match[2])
+    : start;
+  return year >= start && year <= end;
+}
+
+export function resolveShirtKitCode(shirt: Shirt) {
+  if (shirt.avatarImageUrl) {
+    const segments = new URL(
+      shirt.avatarImageUrl,
+      "https://www.tranmere-web.com",
+    ).pathname.split("/");
+    const builderIndex = segments.indexOf("builder");
+    if (builderIndex >= 0 && segments[builderIndex + 1]) {
+      return decodeURIComponent(segments[builderIndex + 1]);
+    }
+  }
+
+  const year = Number(shirt.slug.match(/^(\d{4})/)?.[1]);
+  if (!year) return null;
+  const exact = `${year}${kitSuffix(shirt.use)}`;
+  if (AVATAR_KIT_OPTIONS.some(({ value }) => value === exact)) return exact;
+
+  return (
+    AVATAR_KIT_OPTIONS.find(
+      ({ label }) =>
+        labelMatchesUsage(label, shirt.use) && labelIncludesYear(label, year),
+    )?.value ?? null
+  );
+}
+
+function matchScore(match: Match) {
+  return match.location === "H"
+    ? { goalsFor: match.hgoal, goalsAgainst: match.vgoal }
+    : { goalsFor: match.vgoal, goalsAgainst: match.hgoal };
+}
+
+function performanceRecord(matches: Match[]): KitPerformanceRecord {
+  return matches.reduce<KitPerformanceRecord>(
+    (record, match) => {
+      const { goalsFor, goalsAgainst } = matchScore(match);
+      record.played += 1;
+      record.goalsFor += goalsFor;
+      record.goalsAgainst += goalsAgainst;
+      if (goalsFor > goalsAgainst) record.won += 1;
+      else if (goalsFor < goalsAgainst) record.lost += 1;
+      else record.drawn += 1;
+      return record;
+    },
+    { played: 0, won: 0, drawn: 0, lost: 0, goalsFor: 0, goalsAgainst: 0 },
+  );
+}
+
+function performanceSplits(
+  matches: Match[],
+  labelFor: (match: Match) => string,
+) {
+  const groups = new Map<string, Match[]>();
+  for (const match of matches) {
+    const label = labelFor(match);
+    groups.set(label, [...(groups.get(label) ?? []), match]);
+  }
+  return [...groups.entries()]
+    .map(([label, group]) => ({ label, ...performanceRecord(group) }))
+    .sort((a, b) => b.played - a.played || a.label.localeCompare(b.label));
+}
+
+export async function getShirtPerformance(db: D1Database, shirt: Shirt) {
+  const kitCode = resolveShirtKitCode(shirt);
+  if (!kitCode) return null;
+
+  const { queryGameRows } = await import("@tranmere-web/lib/src/d1-queries");
+  const rows = await queryGameRows(db, {
+    kit: kitCode,
+    includeKit: true,
+    playedOnly: true,
+    statisticsOnly: true,
+    sort: "date-desc",
+  });
+  const matches = rows.map(mapGame);
+  const winningMargins = matches.map((match) => {
+    const score = matchScore(match);
+    return score.goalsFor - score.goalsAgainst;
+  });
+  const biggestMargin = Math.max(0, ...winningMargins);
+  const biggestWins = matches.filter((match) => {
+    const score = matchScore(match);
+    return (
+      score.goalsFor - score.goalsAgainst === biggestMargin && biggestMargin > 0
+    );
+  });
+  const matchByDate = new Map(matches.map((match) => [match.date, match]));
+  const honourMatches = HONOURS_SEASONS.flatMap((season) =>
+    season.achievements.flatMap((achievement) => {
+      const match = matchByDate.get(achievement.achievedOn);
+      return match ? [{ ...achievement, match }] : [];
+    }),
+  );
+
+  return {
+    kitCode,
+    overall: performanceRecord(matches),
+    byVenue: performanceSplits(matches, (match) =>
+      match.location === "H"
+        ? "Home"
+        : match.location === "N"
+          ? "Neutral"
+          : "Away",
+    ),
+    byCompetition: performanceSplits(
+      matches,
+      (match) => match.competition ?? "Other",
+    ),
+    matches,
+    biggestWins,
+    cupTies: matches.filter(
+      (match) => (match.competition ?? "").trim().toLowerCase() !== "league",
+    ),
+    honourMatches,
+  } satisfies KitPerformance;
 }
 
 function parseDescription(value: string | null) {

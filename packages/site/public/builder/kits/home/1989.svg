@@ -1,6 +1,6 @@
 <svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
  <defs>
-  <pattern id="navy-checker-cuff" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="matrix(1,0,0,1,0.6666644215583801,9.583359777927399)">
+  <pattern id="navy-checker-cuff2" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="matrix(1,0,0,1,0.6666644215583801,9.583359777927399)">
    <rect width="4" height="4" fill="#123f69" id="svg_1"/>
    <rect x="4" y="4" width="4" height="4" fill="#123f69" id="svg_3"/>
   </pattern>
@@ -14,8 +14,8 @@
   <g id="sleeve-cuffs">
    <path d="m65.75,469.25l66,0" fill="none" stroke="#d4d8d8" id="svg_46"/>
    <path d="m379.75,469.25l66,0" fill="none" stroke="#d4d8d8" id="svg_47"/>
-   <path d="m68.5,470.79168l62,0l0,8l-62,0l0,-8z" fill="url(#navy-checker-cuff)" id="svg_6"/>
-   <path d="m382.16667,470.79168l62,0l0,8l-62,0l0,-8z" fill="url(#navy-checker-cuff)" id="svg_7"/>
+   <path d="m68.5,470.79168l62,0l0,8l-62,0l0,-8z" fill="url(#navy-checker-cuff2)" id="svg_6"/>
+   <path d="m382.16667,470.79168l62,0l0,8l-62,0l0,-8z" fill="url(#navy-checker-cuff2)" id="svg_7"/>
   </g>
   
   <use href="#enkay"/>

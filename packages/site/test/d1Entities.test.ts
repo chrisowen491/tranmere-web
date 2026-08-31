@@ -155,6 +155,24 @@ describe("D1 entity mapping", () => {
 });
 
 describe("D1 queries", () => {
+  it("uses the indexed kit column for confirmed match usage", async () => {
+    const mock = databaseReturning([]);
+
+    await queryGameRows(mock.db, {
+      kit: "1993A",
+      includeKit: true,
+      playedOnly: true,
+      statisticsOnly: true,
+      sort: "date-desc",
+    });
+
+    const sql = String(mock.prepare.mock.calls[0][0]);
+    expect(sql).toContain("kit = ?");
+    expect(sql).toContain("LOWER(TRIM(competition)) <> 'friendly'");
+    expect(sql).toContain("ORDER BY match_date DESC");
+    expect(mock.boundValues).toEqual([["1993A"]]);
+  });
+
   it("queries only requested player names and keeps the most complete duplicate", async () => {
     const sparse = playerRow({ id: "sparse", name: "Alex Test" });
     const complete = playerRow({
