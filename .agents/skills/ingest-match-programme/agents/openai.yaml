@@ -1,0 +1,4 @@
+interface:
+  display_name: 'Match Programme Ingestion'
+  short_description: 'Crop programme scans and store them in R2'
+  default_prompt: 'Use $ingest-match-programme to import this match programme image URL for the supplied fixture date.'
