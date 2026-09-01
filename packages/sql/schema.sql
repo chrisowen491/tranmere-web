@@ -673,6 +673,15 @@ CREATE INDEX IF NOT EXISTS Goals_season_scorer_idx
 CREATE INDEX IF NOT EXISTS Goals_match_idx
   ON Goals (season, match_date, scorer);
 
+CREATE INDEX IF NOT EXISTS Goals_atlas_season_date_idx
+  ON Goals (season, match_date DESC);
+
+CREATE INDEX IF NOT EXISTS Goals_atlas_competition_date_idx
+  ON Goals (competition, match_date DESC);
+
+CREATE INDEX IF NOT EXISTS Goals_atlas_type_date_idx
+  ON Goals (goal_type, match_date DESC);
+
 CREATE INDEX IF NOT EXISTS Goals_opposition_date_scorer_id_idx
   ON Goals (opposition, match_date DESC, scorer ASC, id ASC);
 

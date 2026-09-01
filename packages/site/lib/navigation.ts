@@ -50,6 +50,7 @@ export const navigation = [
   {
     title: "Stats",
     links: [
+      { title: "Goals Atlas", href: "/goals-atlas" },
       { title: "Highest Attendances", href: "/results/top-attendances" },
       {
         title: "Highest Prenton Park Attendances",

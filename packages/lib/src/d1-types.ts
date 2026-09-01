@@ -272,6 +272,25 @@ export interface GoalRow {
   cross_side: string | null;
 }
 
+export interface GoalAtlasRow extends GoalRow {
+  full_time_score: string | null;
+}
+
+export interface GoalAtlasSummaryRow {
+  total: number;
+  minute_complete: number;
+  goal_type_complete: number;
+  foot_complete: number;
+  assist_type_complete: number;
+  distance_complete: number;
+  cross_side_complete: number;
+}
+
+export interface GoalAtlasBucketRow {
+  label: string;
+  total: number;
+}
+
 export interface UserProfileRow {
   account_id: string;
   public_collection_id: string | null;

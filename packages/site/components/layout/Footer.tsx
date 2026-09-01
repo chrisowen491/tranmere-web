@@ -34,6 +34,7 @@ const linkGroups = [
   {
     label: "Fun stuff",
     links: [
+      { label: "Goals Atlas", href: "/goals-atlas" },
       { label: "Fantasy XI", href: "/fantasy-team" },
       { label: "Who am I?", href: "/who-am-i" },
       { label: "Player builder", href: "/players/avatar-builder" },

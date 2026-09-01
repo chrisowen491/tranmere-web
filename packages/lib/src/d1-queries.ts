@@ -9,5 +9,6 @@ export * from './d1-queries/archive-completeness';
 export * from './d1-queries/attendance';
 export * from './d1-queries/matches';
 export * from './d1-queries/player-statistics';
+export * from './d1-queries/goal-atlas';
 export * from './d1-queries/search';
 export type { D1DatabaseReader } from './d1-queries/shared';

@@ -9,6 +9,7 @@ import {
   ChartBarSquareIcon,
   ClipboardDocumentCheckIcon,
   MagnifyingGlassIcon,
+  MapIcon,
   TicketIcon,
   TrophyIcon,
   UserGroupIcon,
@@ -60,6 +61,12 @@ const archiveLinks = [
     detail: "Squads, results and season summaries",
     href: `/season/${GetYear()}`,
     icon: ChartBarSquareIcon,
+  },
+  {
+    label: "Goals Atlas",
+    detail: "Explore where Rovers’ goals were scored",
+    href: "/goals-atlas",
+    icon: MapIcon,
   },
 ];
 
@@ -791,7 +798,7 @@ export default async function Home() {
             ))}
           </nav>
 
-          <div className="mt-12 grid border-l border-t border-[#071a2b]/20 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-12 grid border-l border-t border-[#071a2b]/20 sm:grid-cols-2 lg:grid-cols-5">
             {archiveLinks.map((item) => (
               <Link
                 key={item.label}
