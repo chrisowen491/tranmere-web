@@ -18,7 +18,6 @@ import { ResultTable } from "./partials/ResultTable";
 import { LinkButton } from "../forms/LinkButton";
 import { BlogItem, Shirt } from "@/lib/types";
 import { replaceSeasonsKit } from "@tranmere-web/lib/src/apiFunctions";
-import { areIntervalsOverlapping } from "date-fns";
 import Link from "next/link";
 import Image from "next/image";
 import { SeasonStory } from "./SeasonStory";
@@ -26,28 +25,13 @@ import { SeasonTimeline } from "./SeasonTimeline";
 import type { PlayerStatisticsView } from "@/lib/playerStatistics";
 import { HONOURS_SEASONS } from "@tranmere-web/lib/src/honours-constants";
 import type { LeagueSeasonSummaryRow } from "@tranmere-web/lib/src/d1-types";
+import { getSeasonManagers } from "@/lib/seasonManagers";
 
 const DIVISION_NAMES: Record<number, Record<number, string>> = {
   0: { 2: "Division 2", 3: "Division 3", 4: "Division 4" },
   1: { 2: "Division 1", 3: "Division 2", 4: "Division 3" },
   2: { 2: "The Championship", 3: "League 1", 4: "League 2" },
 };
-
-function getSeasonManagers(managers: Manager[], season: number): Manager[] {
-  const seasonInterval = {
-    start: new Date(season, 6, 20),
-    end: new Date(season + 1, 4, 15),
-  };
-
-  return managers.filter((manager) =>
-    areIntervalsOverlapping(seasonInterval, {
-      start: new Date(manager.dateJoined),
-      end: manager.dateLeft.toLowerCase().startsWith("now")
-        ? new Date()
-        : new Date(manager.dateLeft),
-    }),
-  );
-}
 
 function getDivisionName(results: Match[], season: number): string {
   const tier = results.reduce<number | undefined>((currentTier, result) => {
