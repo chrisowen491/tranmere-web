@@ -43,16 +43,17 @@ describe("shirt performance kit mapping", () => {
     ).toBe("2014A");
   });
 
-  it("finds the spanning avatar kit for a shirt without an exact year asset", () => {
+  it("does not borrow artwork from a neighbouring season", () => {
     expect(
       resolveShirtKitCode(
         shirt({
-          slug: "1973-home-shirt",
-          name: "1973 Home Shirt",
-          seasons: ["1973"],
-          decade: "1970s",
+          slug: "2007-away-shirt",
+          name: "2007 Away Shirt",
+          use: ShirtUsageType.Away,
+          seasons: ["2007"],
+          decade: "2000s",
         }),
       ),
-    ).toBe("1972");
+    ).toBeNull();
   });
 });

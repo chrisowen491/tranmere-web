@@ -95,24 +95,6 @@ function kitSuffix(usage: string) {
   return "";
 }
 
-function labelMatchesUsage(label: string, usage: string) {
-  if (["Goalkeeper Away", "GoalkeeperAway"].includes(usage))
-    return /GK Away/i.test(label);
-  if (usage === "Goalkeeper")
-    return /\bGK\b/i.test(label) && !/GK Away/i.test(label);
-  return new RegExp(`\\b${usage}\\b`, "i").test(label);
-}
-
-function labelIncludesYear(label: string, year: number) {
-  const match = label.match(/^(\d{4})(?:-(\d{2}))?/);
-  if (!match) return false;
-  const start = Number(match[1]);
-  const end = match[2]
-    ? Math.floor(start / 100) * 100 + Number(match[2])
-    : start;
-  return year >= start && year <= end;
-}
-
 export function resolveShirtKitCode(shirt: Shirt) {
   if (shirt.avatarImageUrl) {
     const segments = new URL(
@@ -129,13 +111,7 @@ export function resolveShirtKitCode(shirt: Shirt) {
   if (!year) return null;
   const exact = `${year}${kitSuffix(shirt.use)}`;
   if (AVATAR_KIT_OPTIONS.some(({ value }) => value === exact)) return exact;
-
-  return (
-    AVATAR_KIT_OPTIONS.find(
-      ({ label }) =>
-        labelMatchesUsage(label, shirt.use) && labelIncludesYear(label, year),
-    )?.value ?? null
-  );
+  return null;
 }
 
 function matchScore(match: Match) {

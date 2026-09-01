@@ -71,6 +71,8 @@
   "env": {
     "staging": {
       "name": "tranmere-web-staging",
+      "routes": [
+      ],
       "services": [
         {
           "binding": "WORKER_SELF_REFERENCE",
