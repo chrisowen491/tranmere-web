@@ -25,6 +25,7 @@ export const AVATAR_KIT_OPTIONS = [
   { value: '2019gkA', label: '2019-20 GK Away' },
   { value: '2018', label: '2018-19 Home' },
   { value: '2018A', label: '2018-19 Away' },
+  { value: '2018T', label: '2018-19 Third' },
   { value: '2017', label: '2017-18 Home' },
   { value: '2017A', label: '2017-18 Away' },
   { value: '2017T', label: '2017-18 Third' },
