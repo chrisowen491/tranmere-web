@@ -5,6 +5,7 @@ on:
     branches: [master]
     paths:
       - 'packages/site/**'
+      - '!packages/sitepublic/builder'
       - 'packages/sql/migrations/**'
       - '.github/workflows/web.yml'
 
