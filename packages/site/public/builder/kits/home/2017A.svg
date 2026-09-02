@@ -1,18 +1,42 @@
 <svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
-    
+    <defs>
+        <clipPath id="kit-2017a-shirt-clip">
+            <path d="m255.74181,313.00899l44,0l98.846,21.665c27.533,6.035 47.154,30.421 47.154,58.609l0,85.726l-66,0l0,33l-124,0l-124,0l0,-33l-66,0l0,-85.726c0,-28.187 19.621,-52.574 47.154,-58.609l98.846,-21.665l44,0z"/>
+        </clipPath>
+        <pattern id="kit-2017a-shoulder-dots" width="6" height="6" patternUnits="userSpaceOnUse">
+            <circle cx="1.5" cy="1.5" r="1.45" fill="#FFD21A"/>
+            <circle cx="4.5" cy="4.5" r="1.15" fill="#F4B900"/>
+        </pattern>
+        <linearGradient id="kit-2017a-shoulder-fade-left" x1="207" y1="315" x2="79" y2="357" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#FFD21A"/>
+            <stop offset="0.4" stop-color="#FFD21A" stop-opacity="0.8"/>
+            <stop offset="1" stop-color="#FFD21A" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="kit-2017a-shoulder-fade-right" x1="304" y1="315" x2="433" y2="357" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#FFD21A"/>
+            <stop offset="0.4" stop-color="#FFD21A" stop-opacity="0.8"/>
+            <stop offset="1" stop-color="#FFD21A" stop-opacity="0"/>
+        </linearGradient>
+    </defs>
+
     <g id="shirt">
         <g id="chest">
             <path fill="#7A0E1F" d="m255.74181,313.00899l44,0l98.846,21.665c27.533,6.035 47.154,30.421 47.154,58.609l0,85.726l-66,0l0,33l-124,0l-124,0l0,-33l-66,0l0,-85.726c0,-28.187 19.621,-52.574 47.154,-58.609l98.846,-21.665l44,0z"/>
+        </g>
+        <g id="shoulder-flashes" clip-path="url(#kit-2017a-shirt-clip)">
+            <path d="M211.7 313L184 319.1l-71.1 15.6c-17.2 3.8-31.4 14.8-39.7 29.6 13.3-6.5 28.1-10 44.6-13.7l72.5-16 24.2-8.8z" fill="url(#kit-2017a-shoulder-fade-left)"/>
+            <path d="M299.7 313l28 6.1 71 15.6c17.3 3.8 31.5 14.8 39.8 29.6-13.3-6.5-28.1-10-44.6-13.7l-72.5-16-24.2-8.8z" fill="url(#kit-2017a-shoulder-fade-right)"/>
+            <path d="M211.7 313L184 319.1l-71.1 15.6c-17.2 3.8-31.4 14.8-39.7 29.6 13.3-6.5 28.1-10 44.6-13.7l72.5-16 24.2-8.8zM299.7 313l28 6.1 71 15.6c17.3 3.8 31.5 14.8 39.8 29.6-13.3-6.5-28.1-10-44.6-13.7l-72.5-16-24.2-8.8z" fill="url(#kit-2017a-shoulder-dots)" opacity="0.82"/>
         </g>
     </g>
 
     <g id="Collar">
         <rect fill="none" stroke-width="null" x="251.07408" y="357.407" width="11.99999" height="29.92589" stroke="#b2b2b2"/>
-        <ellipse fill="none" stroke-width="null" cx="256.77777" cy="368.77905" rx="3.77778" ry="3.66667" stroke="#C26E14"/>
+        <ellipse fill="none" stroke-width="null" cx="256.77777" cy="368.77905" rx="3.77778" ry="3.66667" stroke="#f8d421"/>
     </g>
 
-    <use href="#puma" fill="#C26E14" /> 
-    <use href="#crest-letters" fill="#C26E14" />
-    <use href="#bandm" style="--logo-dark: #C26E14; --logo-darker: #7A0E1F; --logo-light: #C26E14; --logo-middle: #C26E14"/> 
-    
-   </svg>
+    <use href="#puma" fill="#f8d421" />
+    <use href="#crest-letters" fill="#f8d421" />
+    <use href="#bandm" style="--logo-dark: #f8d421; --logo-darker: #7A0E1F; --logo-light: #f8d421; --logo-middle: #f8d421"/>
+
+</svg>
