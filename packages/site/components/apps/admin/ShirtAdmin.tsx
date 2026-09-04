@@ -1,6 +1,7 @@
 "use client";
 
 import type { GalleryImage, Shirt } from "@/lib/types";
+import { descriptionDocumentToText } from "@/lib/shirtDescription";
 import {
   PencilSquareIcon,
   PlusIcon,
@@ -111,7 +112,7 @@ export function ShirtAdmin({ initialShirts }: { initialShirts: Shirt[] }) {
           name: data.get("name"),
           price: data.get("price"),
           manufacturer: data.get("manufacturer"),
-          descriptionJson: data.get("descriptionJson"),
+          descriptionText: data.get("descriptionText"),
           use: data.get("use"),
           color: data.get("color"),
           decade: data.get("decade"),
@@ -423,18 +424,17 @@ export function ShirtAdmin({ initialShirts }: { initialShirts: Shirt[] }) {
 
           <div>
             <label className={labelClass} htmlFor="shirt-description">
-              Contentful rich-text JSON
+              Description
             </label>
             <textarea
               id="shirt-description"
-              name="descriptionJson"
+              name="descriptionText"
               rows={7}
-              defaultValue={
-                editing?.description?.json
-                  ? JSON.stringify(editing.description.json, null, 2)
-                  : ""
-              }
-              className={`${inputClass} font-mono text-xs`}
+              defaultValue={descriptionDocumentToText(
+                editing?.description?.json,
+              )}
+              placeholder="Describe the shirt and its history."
+              className={inputClass}
             />
           </div>
           <button

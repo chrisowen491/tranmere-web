@@ -10,6 +10,7 @@ import {
   updateShirt,
   type ShirtInput,
 } from "@/lib/shirts";
+import { descriptionTextToDocument } from "@/lib/shirtDescription";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -20,6 +21,7 @@ interface ShirtRequest {
   price?: string;
   manufacturer?: string;
   descriptionJson?: string;
+  descriptionText?: string;
   use?: string;
   color?: string;
   decade?: string;
@@ -83,7 +85,12 @@ function validateShirt(body: ShirtRequest): ShirtInput | null {
     .filter((image) => image.url);
 
   let descriptionJson: string | null = null;
-  if (body.descriptionJson?.trim()) {
+  if (typeof body.descriptionText === "string") {
+    const description = descriptionTextToDocument(
+      body.descriptionText.slice(0, 20_000),
+    );
+    descriptionJson = description ? JSON.stringify(description) : null;
+  } else if (body.descriptionJson?.trim()) {
     try {
       const description = JSON.parse(body.descriptionJson);
       if (!description || typeof description !== "object") return null;
