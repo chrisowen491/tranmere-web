@@ -256,6 +256,28 @@ export interface PlayerAppearanceRow extends AppRow {
   appearance_type: 'Start' | 'Sub';
 }
 
+export type FantasyPosition =
+  'Goalkeeper' | 'Defender' | 'Midfielder' | 'Forward' | 'Unclassified';
+
+export interface FantasyRankingRow {
+  player_name: string;
+  position: string | null;
+  fantasy_position: FantasyPosition;
+  pic_link: string | null;
+  appearances: number;
+  goals: number;
+  assists: number;
+  yellow_cards: number;
+  red_cards: number;
+  clean_sheets: number;
+  appearance_points: number;
+  goal_points: number;
+  assist_points: number;
+  card_points: number;
+  clean_sheet_points: number;
+  total_points: number;
+}
+
 export interface GoalRow {
   id: string;
   season: number;

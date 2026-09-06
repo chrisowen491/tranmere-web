@@ -29,6 +29,7 @@ export const navigation = [
         href: "/players/misfiring-strikers",
       },
       { title: "Super Subs", href: "/players/super-subs" },
+      { title: "Fantasy Rankings", href: "/players/fantasy-rankings" },
       {
         title: "Top Scorers By Season",
         href: "/players/top-scorers-by-season",

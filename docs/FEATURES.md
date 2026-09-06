@@ -43,6 +43,7 @@ data ownership and system boundaries.
 | Lethal finishers        | `/players/lethal-finishers`      | Ranks players by goals per appearance.                                                                                           |
 | Misfiring strikers      | `/players/misfiring-strikers`    | Ranks eligible strikers using appearances, substitute appearances, goals and red cards.                                          |
 | Super subs              | `/players/super-subs`            | Ranks players by substitute appearances.                                                                                         |
+| Fantasy rankings        | `/players/fantasy-rankings`      | Ranks players all-time or by season using appearance, goal, assist and card-based fantasy football points.                       |
 | Hat-trick archive       | `/players/hat-tricks`            | Lists recorded hat-tricks and links them to matches and players.                                                                 |
 | Partnership explorer    | `/players/partnerships`          | Autocompletes two players and analyses matches and results when they played together.                                            |
 | Cult hero index         | `/players/cult-heroes`           | Editorial-style player discovery for one-club spells, comebacks, substitute specialists, cup heroes and promotion contributors.  |
