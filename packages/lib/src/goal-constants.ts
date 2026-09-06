@@ -2,6 +2,7 @@ export const GOAL_TYPES = [
   'Penalty',
   'FreeKick',
   'Shot',
+  'Deflection',
   'DirectFromCross',
   'Header',
   'OwnGoal',
@@ -14,14 +15,12 @@ export type GoalType = (typeof GOAL_TYPES)[number];
 export const ASSIST_TYPES = [
   'Pass',
   'Cross',
-  'Set piece',
   'Rebound',
   'Corner',
   'Header',
   'Long Throw',
   'Short Throw',
-  'Free Kick',
-  'Goal Kick'  
+  'Free Kick' 
 ] as const;
 
 export const GOAL_FEET = ['Left', 'Right', 'Head', 'Body'] as const;
