@@ -15,22 +15,22 @@ data ownership and system boundaries.
 
 ## Matches, Results and Seasons
 
-| Feature             | Route                      | Summary                                                                                                                                           |
-| ------------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Results archive     | `/results`                 | Searches and filters the D1-backed results archive by season, competition, opponent and manager, with a visual overall record summary.            |
-| Match record        | `/match/[season]/[date]`   | Uses D1 match facts, report, player apps and goals to show score, programme, attendance, formation-aware team sheet, cards, comments and ratings. |
-| Matchday milestones | `/match/[season]/[date]`   | Flags player debuts, final appearances, first goals, hat-tricks and managerial first or last matches.                                             |
-| Last time we met    | `/match/[season]/[date]`   | Links each match to the immediately preceding recorded meeting with the same opposition and its complete head-to-head archive.                    |
-| Season index        | `/seasons`                 | Lists recorded seasons by decade, highlights honours and relegations, and excludes wartime seasons without matches.                               |
-| Season review       | `/season/[season]`         | Combines D1 results, squad statistics, most-used XI, manager, transfers, shirt and a month-by-month season timeline.                              |
-| Honours archive     | `/honours`                 | Collects titles, promotions, play-off triumphs, landmark cup runs and relegations with links to the relevant season archive.                      |
-| Head-to-head index  | `/head-to-head`            | Provides an opponent tag cloud linking to complete club records.                                                                                  |
-| Opponent record     | `/games/[club]`            | Shows the full match history against a selected opponent.                                                                                         |
-| FA Cup archive      | `/results/fa-cup`          | Summarises runs, rounds reached, notable matches, records and programme covers.                                                                   |
-| League Cup archive  | `/results/league-cup`      | Summarises League Cup progress, notable runs, records and programme covers.                                                                       |
-| Penalty shootouts   | `/games/penalty-shootouts` | Presents every recorded shootout with match links and outcomes.                                                                                   |
-| Wembley archive     | `/games/at-wembley`        | Presents every recorded Tranmere match at Wembley.                                                                                                |
-| Highest attendances | `/results/top-attendances` | Ranks the top 50 crowds and includes programme covers where available.                                                                            |
+| Feature             | Route                      | Summary                                                                                                                                            |
+| ------------------- | -------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Results archive     | `/results`                 | Searches and filters the D1-backed results archive by season, competition, opponent and manager, with a visual overall record summary.             |
+| Match record        | `/match/[season]/[date]`   | Uses D1 match facts, report, player apps and goals to show score, programme, attendance, formation-aware team sheet, cards, comments and ratings.  |
+| Matchday milestones | `/match/[season]/[date]`   | Flags player debuts, final appearances, first goals, hat-tricks and managerial first or last matches.                                              |
+| Last time we met    | `/match/[season]/[date]`   | Links each match to the immediately preceding recorded meeting with the same opposition and its complete head-to-head archive.                     |
+| Season index        | `/seasons`                 | Lists recorded seasons by decade, highlights honours and relegations, and excludes wartime seasons without matches.                                |
+| Season review       | `/season/[season]`         | Combines D1 results, squad statistics, fantasy-ranked Player of the Season, most-used XI, manager, transfers, shirt and a month-by-month timeline. |
+| Honours archive     | `/honours`                 | Collects titles, promotions, play-off triumphs, landmark cup runs and relegations with links to the relevant season archive.                       |
+| Head-to-head index  | `/head-to-head`            | Provides an opponent tag cloud linking to complete club records.                                                                                   |
+| Opponent record     | `/games/[club]`            | Shows the full match history against a selected opponent.                                                                                          |
+| FA Cup archive      | `/results/fa-cup`          | Summarises runs, rounds reached, notable matches, records and programme covers.                                                                    |
+| League Cup archive  | `/results/league-cup`      | Summarises League Cup progress, notable runs, records and programme covers.                                                                        |
+| Penalty shootouts   | `/games/penalty-shootouts` | Presents every recorded shootout with match links and outcomes.                                                                                    |
+| Wembley archive     | `/games/at-wembley`        | Presents every recorded Tranmere match at Wembley.                                                                                                 |
+| Highest attendances | `/results/top-attendances` | Ranks the top 50 crowds and includes programme covers where available.                                                                             |
 
 ## Players
 

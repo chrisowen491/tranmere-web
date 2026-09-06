@@ -11,7 +11,11 @@ import { getPlayerStatistics } from "@/lib/playerStatistics";
 import { pageMetadata } from "@/lib/seo";
 import { breadcrumbJsonLd, JsonLd } from "@/components/seo/JsonLd";
 import { searchGames } from "@/lib/games";
-import { queryLeagueSeasonSummaryRows } from "@tranmere-web/lib/src/d1-queries";
+import {
+  queryFantasyRankingRows,
+  queryLeagueSeasonSummaryRows,
+} from "@tranmere-web/lib/src/d1-queries";
+import { getFantasyPlayerOfSeasonWinners } from "@/lib/fantasyRankings";
 
 export const revalidate = 7200;
 
@@ -44,6 +48,12 @@ export default async function SeasonPage(props: { params: SlugParams }) {
   const players = await getPlayerStatistics(env.DB, {
     season,
   });
+
+  const fantasyRankings = await queryFantasyRankingRows(env.DB, {
+    season: Number(season),
+  });
+  const fantasyPlayerOfSeason =
+    getFantasyPlayerOfSeasonWinners(fantasyRankings);
 
   const transfers = await getTransfers(env.DB, { season });
 
@@ -85,6 +95,7 @@ export default async function SeasonPage(props: { params: SlugParams }) {
         articles={articles}
         shirts={shirts}
         leagueSummary={leagueSummary}
+        fantasyPlayerOfSeason={fantasyPlayerOfSeason}
       ></SeasonReview>
     </>
   );
