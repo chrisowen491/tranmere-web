@@ -54,6 +54,7 @@ const atlasDistanceLabels = {
   "6YardBox": "Inside six-yard box",
   "18YardBox": "Inside 18, outside six-yard box",
   LongRange: "Outside 18-yard box",
+  OwnHalf: "Inside own half",
 } as const;
 
 function completeness(value: number, total: number) {

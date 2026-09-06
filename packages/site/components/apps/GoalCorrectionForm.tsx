@@ -154,14 +154,21 @@ export function GoalCorrectionForm({
             <label className={labelClass} htmlFor={`goal-type-${goal.id}`}>
               Goal type
             </label>
-            <input
+            <select
               id={`goal-type-${goal.id}`}
               name="goalType"
               defaultValue={current.goalType}
-              list={`goal-types-${goal.id}`}
-              maxLength={100}
               className={inputClass}
-            />
+            >
+              <option value="">Not recorded</option>
+              {[...new Set([...GOAL_TYPES, current.goalType])]
+                .filter((type): type is string => Boolean(type))
+                .map((type) => (
+                  <option key={type} value={type}>
+                    {type}
+                  </option>
+                ))}
+            </select>
           </div>
           <div>
             <label className={labelClass} htmlFor={`goal-assist-${goal.id}`}>
@@ -263,11 +270,6 @@ export function GoalCorrectionForm({
           <datalist id={`goal-players-${goal.id}`}>
             {playerNames.map((name) => (
               <option key={name} value={name} />
-            ))}
-          </datalist>
-          <datalist id={`goal-types-${goal.id}`}>
-            {GOAL_TYPES.map((type) => (
-              <option key={type} value={type} />
             ))}
           </datalist>
           <datalist id={`assist-types-${goal.id}`}>

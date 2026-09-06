@@ -6,7 +6,7 @@ export const GOAL_TYPES = [
   'DirectFromCross',
   'Header',
   'OwnGoal',
-  'Body',  
+  'Body',
   'Rebound'
 ] as const;
 
@@ -20,14 +20,19 @@ export const ASSIST_TYPES = [
   'Header',
   'Long Throw',
   'Short Throw',
-  'Free Kick' 
+  'Free Kick'
 ] as const;
 
 export const GOAL_FEET = ['Left', 'Right', 'Head', 'Body'] as const;
 
 export const CROSS_SIDES = ['Left', 'Right'] as const;
 
-export const GOAL_DISTANCES = ['6YardBox', '18YardBox', 'LongRange', 'OwnHalf'] as const;
+export const GOAL_DISTANCES = [
+  '6YardBox',
+  '18YardBox',
+  'LongRange',
+  'OwnHalf'
+] as const;
 
 export type GoalDistance = (typeof GOAL_DISTANCES)[number];
 
@@ -35,5 +40,5 @@ export const GOAL_DISTANCE_LABELS: Record<GoalDistance, string> = {
   '6YardBox': 'Six-yard box',
   '18YardBox': '18-yard box',
   LongRange: 'Long range',
-  OwnHalf: 'Own Half',
+  OwnHalf: 'Own Half'
 };

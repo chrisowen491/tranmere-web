@@ -133,12 +133,14 @@ export function GoalSubmissionForm({
           </div>
           <div>
             <label className={labelClass}>Goal type</label>
-            <input
-              name="goalType"
-              list="missing-goal-types"
-              maxLength={100}
-              className={inputClass}
-            />
+            <select name="goalType" className={inputClass} defaultValue="">
+              <option value="">Not recorded</option>
+              {GOAL_TYPES.map((value) => (
+                <option key={value} value={value}>
+                  {value}
+                </option>
+              ))}
+            </select>
           </div>
           <div>
             <label className={labelClass}>Foot or body part</label>
@@ -210,11 +212,6 @@ export function GoalSubmissionForm({
           <datalist id="missing-goal-players">
             {playerNames.map((name) => (
               <option key={name} value={name} />
-            ))}
-          </datalist>
-          <datalist id="missing-goal-types">
-            {GOAL_TYPES.map((value) => (
-              <option key={value} value={value} />
             ))}
           </datalist>
           <datalist id="missing-assist-types">
