@@ -661,7 +661,10 @@ CREATE TABLE IF NOT EXISTS Goals (
   CHECK (
     match_date GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]'
   ),
-  CHECK (distance IS NULL OR distance IN ('6YardBox', '18YardBox', 'LongRange'))
+  CHECK (
+    distance IS NULL
+    OR distance IN ('6YardBox', '18YardBox', 'LongRange', 'OwnHalf')
+  )
 );
 
 CREATE INDEX IF NOT EXISTS Goals_scorer_date_idx

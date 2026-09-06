@@ -38,9 +38,20 @@ export function GoalCorrectionReview({
           reviewNote: new FormData(form).get("reviewNote"),
         }),
       });
-      const result = (await response.json()) as { message?: string };
+      const responseText = await response.text();
+      let result: { message?: string } = {};
+      if (responseText) {
+        try {
+          result = JSON.parse(responseText) as { message?: string };
+        } catch {
+          // Cloudflare can return an HTML or empty response for an unhandled error.
+        }
+      }
       if (!response.ok)
-        throw new Error(result.message || "The review could not be saved.");
+        throw new Error(
+          result.message ||
+            `The review could not be saved (server returned ${response.status}).`,
+        );
       setCorrections((items) =>
         items.filter((item) => item.id !== correction.id),
       );
