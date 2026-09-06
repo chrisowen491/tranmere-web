@@ -1,4 +1,5 @@
 import type { FantasyRankingRow } from '../d1-types';
+import { MATCH_EVENT_FANTASY_POINTS } from '../match-event-constants';
 import { all, type D1DatabaseReader, type D1Value } from './shared';
 
 export interface FantasyRankingQueryOptions {
@@ -22,7 +23,10 @@ export async function queryFantasyRankingRows(
   const values: D1Value[] = [];
   const appSeason = options.season === undefined ? '' : 'AND Apps.season = ?';
   const goalSeason = options.season === undefined ? '' : 'AND Goals.season = ?';
-  if (options.season !== undefined) values.push(options.season, options.season);
+  const eventSeason =
+    options.season === undefined ? '' : 'AND MatchEvents.season = ?';
+  if (options.season !== undefined)
+    values.push(options.season, options.season, options.season);
 
   const result = await all<FantasyRankingRow>(
     db,
@@ -49,6 +53,18 @@ export async function queryFantasyRankingRows(
        FROM Goals
        WHERE ${statisticalMatchCondition('Goals')}
          ${goalSeason}
+     ),
+     statistical_events AS MATERIALIZED (
+       SELECT player_name, event_type
+       FROM MatchEvents
+       WHERE NOT EXISTS (
+         SELECT 1
+         FROM Games statistical_game
+         WHERE statistical_game.season = MatchEvents.season
+           AND statistical_game.match_date = MatchEvents.match_date
+           AND LOWER(TRIM(COALESCE(statistical_game.competition, ''))) = 'friendly'
+       )
+       ${eventSeason}
      ),
      expanded_appearances AS (
        SELECT
@@ -131,12 +147,30 @@ export async function queryFantasyRankingRows(
        WHERE TRIM(COALESCE(assist, '')) <> ''
        GROUP BY TRIM(assist)
      ),
+     event_totals AS (
+       SELECT
+         TRIM(player_name) AS player_name,
+         SUM(CASE WHEN event_type = 'PenaltySave' THEN 1 ELSE 0 END) AS penalty_saves,
+         SUM(CASE WHEN event_type = 'PenaltyMiss' THEN 1 ELSE 0 END) AS penalty_misses,
+         SUM(CASE WHEN event_type = 'OwnGoal' THEN 1 ELSE 0 END) AS own_goals,
+         SUM(CASE
+           WHEN event_type = 'PenaltySave' THEN ${MATCH_EVENT_FANTASY_POINTS.PenaltySave}
+           WHEN event_type = 'PenaltyMiss' THEN ${MATCH_EVENT_FANTASY_POINTS.PenaltyMiss}
+           WHEN event_type = 'OwnGoal' THEN ${MATCH_EVENT_FANTASY_POINTS.OwnGoal}
+           ELSE 0
+         END) AS event_points
+       FROM statistical_events
+       WHERE TRIM(COALESCE(player_name, '')) <> ''
+       GROUP BY TRIM(player_name)
+     ),
      ranked_players AS (
        SELECT player_name FROM appearance_totals
        UNION
        SELECT player_name FROM goal_totals
        UNION
        SELECT player_name FROM assist_totals
+       UNION
+       SELECT player_name FROM event_totals
      ),
      metrics AS (
        SELECT
@@ -156,6 +190,9 @@ export async function queryFantasyRankingRows(
          COALESCE(appearance_totals.yellow_cards, 0) AS yellow_cards,
          COALESCE(appearance_totals.red_cards, 0) AS red_cards,
          COALESCE(appearance_totals.clean_sheets, 0) AS clean_sheets,
+         COALESCE(event_totals.penalty_saves, 0) AS penalty_saves,
+         COALESCE(event_totals.penalty_misses, 0) AS penalty_misses,
+         COALESCE(event_totals.own_goals, 0) AS own_goals,
          COALESCE(appearance_totals.appearance_points, 0) AS appearance_points,
          COALESCE(goal_totals.goals, 0) * CASE
            WHEN Players.position = 'Goalkeeper' THEN 10
@@ -170,14 +207,16 @@ export async function queryFantasyRankingRows(
            WHEN Players.position IN ('Goalkeeper', 'Central Defender', 'Full Back', 'Left Back', 'Right Back', 'Sweeper') THEN 4
            WHEN Players.position IN ('Central Midfielder', 'Defensive Midfield', 'Attacking Midfield', 'Right Midfield', 'Left Midfield', 'Wing Half', 'Winger') THEN 1
            ELSE 0
-         END AS clean_sheet_points
+         END AS clean_sheet_points,
+         COALESCE(event_totals.event_points, 0) AS event_points
        FROM ranked_players
        LEFT JOIN appearance_totals USING (player_name)
        LEFT JOIN goal_totals USING (player_name)
        LEFT JOIN assist_totals USING (player_name)
+       LEFT JOIN event_totals USING (player_name)
        LEFT JOIN Players ON Players.name = ranked_players.player_name COLLATE NOCASE
      )
-     SELECT *, appearance_points + goal_points + assist_points + card_points + clean_sheet_points AS total_points
+     SELECT *, appearance_points + goal_points + assist_points + card_points + clean_sheet_points + event_points AS total_points
      FROM metrics
      ORDER BY total_points DESC, goals DESC, appearances DESC, player_name ASC`,
     values

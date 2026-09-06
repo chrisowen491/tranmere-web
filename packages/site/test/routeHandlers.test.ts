@@ -33,6 +33,7 @@ vi.mock("next/cache", () => ({
 
 import { POST as createApp } from "@/app/api/admin/apps/route";
 import { POST as createGoal } from "@/app/api/admin/goals/route";
+import { POST as createMatchEvent } from "@/app/api/admin/match-events/route";
 import { PATCH as reviewAttendanceCorrection } from "@/app/api/attendance-corrections/route";
 import { POST as sendContactMessage } from "@/app/api/contact-us/route";
 
@@ -202,6 +203,60 @@ describe("admin mutation routes", () => {
     expect(mocks.revalidatePath).toHaveBeenCalledWith(
       "/page/player/Test%20Player",
     );
+  });
+
+  it("writes an extensible match event and invalidates fantasy rankings", async () => {
+    const { db, statements } = d1Fixture();
+    mocks.getCloudflareContext.mockReturnValue({ env: { DB: db } });
+    mocks.getGameBySeasonAndDate.mockResolvedValue({ id: "game-1" });
+
+    const response = await createMatchEvent(
+      request("POST", {
+        season: 2025,
+        matchDate: "2025-08-02",
+        playerName: "Test Keeper",
+        eventType: "PenaltySave",
+        minute: "73",
+        notes: "Saved low to his left.",
+        metadataJson: '{"penaltyTaker":"Away Player"}',
+      }),
+    );
+
+    expect(response.status).toBe(201);
+    expect(statements).toHaveLength(1);
+    expect(statements[0].sql).toContain("INSERT INTO MatchEvents");
+    expect(statements[0].values).toEqual(
+      expect.arrayContaining([
+        2025,
+        "2025-08-02",
+        "Test Keeper",
+        "PenaltySave",
+        "73",
+        '{"penaltyTaker":"Away Player"}',
+      ]),
+    );
+    expect(mocks.revalidatePath).toHaveBeenCalledWith(
+      "/players/fantasy-rankings",
+    );
+    expect(mocks.revalidatePath).toHaveBeenCalledWith("/season/2025");
+  });
+
+  it("rejects invalid match-event metadata", async () => {
+    const { db } = d1Fixture();
+    mocks.getCloudflareContext.mockReturnValue({ env: { DB: db } });
+
+    const response = await createMatchEvent(
+      request("POST", {
+        season: 2025,
+        matchDate: "2025-08-02",
+        playerName: "Test Player",
+        eventType: "FutureEvent",
+        metadataJson: "not-json",
+      }),
+    );
+
+    expect(response.status).toBe(400);
+    expect(db.prepare as ReturnType<typeof vi.fn>).not.toHaveBeenCalled();
   });
 });
 

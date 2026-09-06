@@ -43,7 +43,7 @@ data ownership and system boundaries.
 | Lethal finishers        | `/players/lethal-finishers`      | Ranks players by goals per appearance.                                                                                           |
 | Misfiring strikers      | `/players/misfiring-strikers`    | Ranks eligible strikers using appearances, substitute appearances, goals and red cards.                                          |
 | Super subs              | `/players/super-subs`            | Ranks players by substitute appearances.                                                                                         |
-| Fantasy rankings        | `/players/fantasy-rankings`      | Ranks players all-time or by season using appearance, goal, assist and card-based fantasy football points.                       |
+| Fantasy rankings        | `/players/fantasy-rankings`      | Ranks players all-time or by season using appearances, goals, assists, clean sheets, cards, penalties and own goals.             |
 | Hat-trick archive       | `/players/hat-tricks`            | Lists recorded hat-tricks and links them to matches and players.                                                                 |
 | Partnership explorer    | `/players/partnerships`          | Autocompletes two players and analyses matches and results when they played together.                                            |
 | Cult hero index         | `/players/cult-heroes`           | Editorial-style player discovery for one-club spells, comebacks, substitute specialists, cup heroes and promotion contributors.  |
@@ -107,6 +107,8 @@ The authenticated `/admin` hub links to:
 - player-profile correction review;
 - player creation and editing;
 - appearance, goal and hat-trick creation and editing;
+- extensible match-event management for penalty saves, penalty misses, own
+  goals and future event types;
 - transfer creation and editing;
 - manager creation and editing;
 - club creation and editing;

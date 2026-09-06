@@ -25,7 +25,7 @@ describe("fantasy ranking query", () => {
     await queryFantasyRankingRows(mock.db, { season: 1994 });
 
     const sql = String(mock.prepare.mock.calls[0][0]);
-    expect(mock.boundValues).toEqual([[1994, 1994]]);
+    expect(mock.boundValues).toEqual([[1994, 1994, 1994]]);
     expect(sql).toContain("TRIM(substituted_by)");
     expect(sql).toContain("TRIM(substitute_substituted_by)");
     expect(sql).toContain("ELSE 60");
@@ -33,6 +33,10 @@ describe("fantasy ranking query", () => {
     expect(sql).toContain("AS team_clean_sheet");
     expect(sql).toContain("AS clean_sheet_points");
     expect(sql).toContain("card_points + clean_sheet_points");
+    expect(sql).toContain("event_type = 'PenaltySave' THEN 5");
+    expect(sql).toContain("event_type = 'PenaltyMiss' THEN -2");
+    expect(sql).toContain("event_type = 'OwnGoal' THEN -2");
+    expect(sql).toContain("clean_sheet_points + event_points");
     expect(sql).toContain("COALESCE(assist_totals.assists, 0) * 3");
     expect(sql).toContain("COALESCE(appearance_totals.red_cards, 0) * 3");
   });

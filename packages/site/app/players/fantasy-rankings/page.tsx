@@ -184,11 +184,13 @@ export default async function FantasyRankingsPage({
                 <th className="px-4 py-4 text-center">Goals</th>
                 <th className="px-4 py-4 text-center">Assists</th>
                 <th className="px-4 py-4 text-center">CS</th>
+                <th className="px-4 py-4 text-center">Events</th>
                 <th className="px-4 py-4 text-center">Cards</th>
                 <th className="px-4 py-4 text-center">App pts</th>
                 <th className="px-4 py-4 text-center">Goal pts</th>
                 <th className="px-4 py-4 text-center">Assist pts</th>
                 <th className="px-4 py-4 text-center">CS pts</th>
+                <th className="px-4 py-4 text-center">Event pts</th>
                 <th className="px-4 py-4 text-center">Card pts</th>
                 <th className="px-4 py-4 text-right">Total</th>
               </tr>
@@ -233,6 +235,13 @@ export default async function FantasyRankingsPage({
                   <td className="px-4 py-4 text-center font-mono text-sm">
                     {player.clean_sheets}
                   </td>
+                  <td
+                    className="px-4 py-4 text-center font-mono text-xs"
+                    title="Penalty saves · Penalty misses · Own goals"
+                  >
+                    {player.penalty_saves} PS · {player.penalty_misses} PM ·{" "}
+                    {player.own_goals} OG
+                  </td>
                   <td className="px-4 py-4 text-center font-mono text-sm">
                     {player.yellow_cards}Y · {player.red_cards}R
                   </td>
@@ -247,6 +256,9 @@ export default async function FantasyRankingsPage({
                   </td>
                   <td className="px-4 py-4 text-center font-mono text-sm">
                     {player.clean_sheet_points}
+                  </td>
+                  <td className="px-4 py-4 text-center font-mono text-sm">
+                    {player.event_points}
                   </td>
                   <td className="px-4 py-4 text-center font-mono text-sm">
                     {player.card_points}
@@ -270,8 +282,9 @@ export default async function FantasyRankingsPage({
             deduct 1 point and red cards deduct 3. A 60-minute clean-sheet
             appearance earns 4 points for goalkeepers and defenders or 1 for
             midfielders. Position scoring uses each player&apos;s recorded
-            primary position. Own goals, penalty misses, penalty saves and goals
-            conceded are not currently scored.
+            primary position. A penalty save earns 5 points; penalty misses and
+            own goals deduct 2 points each. Goals conceded are not currently
+            scored.
           </p>
         </aside>
       </section>

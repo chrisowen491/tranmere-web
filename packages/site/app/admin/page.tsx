@@ -20,6 +20,7 @@ import {
   UserGroupIcon,
   SwatchIcon,
   FlagIcon,
+  BoltIcon,
 } from "@heroicons/react/24/outline";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -289,6 +290,14 @@ export default async function AdminPage() {
                 "Add, edit or remove scoring events, assists and goal details.",
               action: "Manage goals",
               icon: DocumentTextIcon,
+            },
+            {
+              href: "/admin/match-events",
+              title: "Match events",
+              description:
+                "Record penalty saves, penalty misses, own goals and other player events.",
+              action: "Manage match events",
+              icon: BoltIcon,
             },
             {
               href: "/admin/hat-tricks",

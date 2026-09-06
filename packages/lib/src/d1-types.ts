@@ -270,12 +270,29 @@ export interface FantasyRankingRow {
   yellow_cards: number;
   red_cards: number;
   clean_sheets: number;
+  penalty_saves: number;
+  penalty_misses: number;
+  own_goals: number;
   appearance_points: number;
   goal_points: number;
   assist_points: number;
   card_points: number;
   clean_sheet_points: number;
+  event_points: number;
   total_points: number;
+}
+
+export interface MatchEventRow {
+  id: string;
+  season: number;
+  match_date: string;
+  player_name: string;
+  event_type: string;
+  minute: string | null;
+  notes: string | null;
+  metadata_json: string | null;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface GoalRow {
