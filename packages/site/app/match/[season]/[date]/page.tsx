@@ -12,7 +12,11 @@ import type {
   MatchPageData,
 } from "@tranmere-web/lib/src/tranmere-web-types";
 import { GetYear } from "@tranmere-web/lib/src/apiFunctions";
-import { queryAppRows, queryGoalRows } from "@tranmere-web/lib/src/d1-queries";
+import {
+  queryAppRows,
+  queryGoalRows,
+  queryMatchEventRows,
+} from "@tranmere-web/lib/src/d1-queries";
 import MatchReport from "@/components/apps/MatchReport";
 import { GetCommentsByUrl } from "@/lib/comments";
 import { notFound } from "next/navigation";
@@ -121,7 +125,7 @@ export default async function MatchPage(props: { params: MatchParams }) {
   const params = await props.params;
   const env = (await getCloudflareContext({ async: true })).env;
   const baseUrl = `/match/${params.season}/${params.date}`;
-  const [game, reportRow, appRows, goalRows, session, matchLinks] =
+  const [game, reportRow, appRows, goalRows, matchEvents, session, matchLinks] =
     await Promise.all([
       getGameBySeasonAndDate(env.DB, params.season, params.date),
       getMatchReport(env.DB, params.date),
@@ -130,6 +134,10 @@ export default async function MatchPage(props: { params: MatchParams }) {
         matchDate: params.date,
       }),
       queryGoalRows(env.DB, {
+        season: Number(params.season),
+        matchDate: params.date,
+      }),
+      queryMatchEventRows(env.DB, {
         season: Number(params.season),
         matchDate: params.date,
       }),
@@ -256,6 +264,7 @@ export default async function MatchPage(props: { params: MatchParams }) {
         manager={manager}
         milestones={milestones}
         matchLinks={matchLinks}
+        matchEvents={matchEvents}
       ></MatchReport>
       <section className="mx-auto max-w-7xl px-6 pb-24 sm:px-10 lg:px-12">
         <div

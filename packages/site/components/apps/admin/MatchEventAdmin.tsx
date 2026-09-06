@@ -4,6 +4,7 @@ import {
   MATCH_EVENT_FANTASY_POINTS,
   MATCH_EVENT_TYPE_LABELS,
   MATCH_EVENT_TYPES,
+  matchEventTypeLabel,
   type MatchEventType,
 } from "@tranmere-web/lib/src/match-event-constants";
 import type { MatchEventRow } from "@tranmere-web/lib/src/d1-types";
@@ -34,13 +35,6 @@ function blankEvent(season: number, date?: string): MatchEventRow {
     created_at: now,
     updated_at: now,
   };
-}
-
-function eventLabel(eventType: string) {
-  if (MATCH_EVENT_TYPES.includes(eventType as MatchEventType)) {
-    return MATCH_EVENT_TYPE_LABELS[eventType as MatchEventType];
-  }
-  return eventType.replace(/([a-z])([A-Z])/g, "$1 $2");
 }
 
 function fantasyPoints(eventType: string) {
@@ -162,7 +156,7 @@ export function MatchEventAdmin({
   async function removeEvent(event: MatchEventRow) {
     if (
       !window.confirm(
-        `Delete ${eventLabel(event.event_type)} for ${event.player_name}?`,
+        `Delete ${matchEventTypeLabel(event.event_type)} for ${event.player_name}?`,
       )
     )
       return;
@@ -413,7 +407,7 @@ export function MatchEventAdmin({
                         {event.player_name}
                       </td>
                       <td className="px-5 py-4">
-                        {eventLabel(event.event_type)}
+                        {matchEventTypeLabel(event.event_type)}
                       </td>
                       <td className="px-5 py-4 text-center font-mono">
                         {event.minute || "—"}

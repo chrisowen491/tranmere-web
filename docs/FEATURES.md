@@ -18,7 +18,7 @@ data ownership and system boundaries.
 | Feature             | Route                      | Summary                                                                                                                                            |
 | ------------------- | -------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Results archive     | `/results`                 | Searches and filters the D1-backed results archive by season, competition, opponent and manager, with a visual overall record summary.             |
-| Match record        | `/match/[season]/[date]`   | Uses D1 match facts, report, player apps and goals to show score, programme, attendance, formation-aware team sheet, cards, comments and ratings.  |
+| Match record        | `/match/[season]/[date]`   | Uses D1 match facts, report, apps, goals and related player events to show the score, programme, team sheet, comments and ratings.                 |
 | Matchday milestones | `/match/[season]/[date]`   | Flags player debuts, final appearances, first goals, hat-tricks and managerial first or last matches.                                              |
 | Last time we met    | `/match/[season]/[date]`   | Links each match to the immediately preceding recorded meeting with the same opposition and its complete head-to-head archive.                     |
 | Season index        | `/seasons`                 | Lists recorded seasons by decade, highlights honours and relegations, and excludes wartime seasons without matches.                                |

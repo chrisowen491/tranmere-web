@@ -26,6 +26,8 @@ import { ManagerFormation } from "@tranmere-web/lib/src/manager-constants";
 import { matchOutcome, outcomeClass } from "@/lib/seasonMatchUtils";
 import type { MatchLink } from "@/lib/matchLinks";
 import { MatchLinkSuggestionForm } from "./MatchLinkSuggestionForm";
+import type { MatchEventRow } from "@tranmere-web/lib/src/d1-types";
+import { matchEventTypeLabel } from "@tranmere-web/lib/src/match-event-constants";
 
 function playerAvatar(picLink: string, season: number, kit?: string) {
   return replaceSeasonsKit(picLink, kit || season.toString());
@@ -39,6 +41,10 @@ function goalMinuteValue(minute?: string) {
 function goalMinuteLabel(minute?: string) {
   if (!minute) return "—";
   return minute.endsWith("'") ? minute : `${minute}'`;
+}
+
+function matchEventMinuteValue(minute: string | null) {
+  return goalMinuteValue(minute ?? undefined);
 }
 
 function expectedRoversGoals(
@@ -84,6 +90,7 @@ export default function MatchReport(props: {
   manager: ManagerRecord | null;
   milestones: MatchMilestone[];
   matchLinks: MatchLink[];
+  matchEvents: MatchEventRow[];
 }) {
   const { match } = props;
   const penalty = penaltyOutcome(match.pens, match.homeTeam, match.awayTeam);
@@ -99,6 +106,13 @@ export default function MatchReport(props: {
   const goals = [...(match.goals ?? [])].sort(
     (left, right) =>
       goalMinuteValue(left.Minute) - goalMinuteValue(right.Minute),
+  );
+  const matchEvents = [...props.matchEvents].sort(
+    (left, right) =>
+      matchEventMinuteValue(left.minute) -
+        matchEventMinuteValue(right.minute) ||
+      left.event_type.localeCompare(right.event_type) ||
+      left.player_name.localeCompare(right.player_name),
   );
   const expectedGoalTotal = expectedRoversGoals(
     match.score,
@@ -245,6 +259,35 @@ export default function MatchReport(props: {
                 <p className="mt-2 font-display text-xl font-semibold">
                   {match.formattedGoals}
                 </p>
+              </div>
+            )}
+
+            {matchEvents.length > 0 && (
+              <div className="mt-7 border-t border-[#071a2b]/15 pt-6">
+                <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#071a2b]/50">
+                  Match events
+                </p>
+                <ul className="mt-3 grid gap-2">
+                  {matchEvents.map((event) => (
+                    <li
+                      key={event.id}
+                      className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-l-2 border-blue-700 pl-3 text-sm"
+                    >
+                      <Link
+                        href={`/page/player/${encodeURIComponent(event.player_name)}`}
+                        className="font-semibold text-blue-700 underline decoration-blue-700/25 underline-offset-4"
+                      >
+                        {event.player_name}
+                      </Link>
+                      <span className="font-mono text-xs font-bold text-[#071a2b]/65">
+                        {matchEventTypeLabel(event.event_type)}
+                        {event.minute
+                          ? ` · ${goalMinuteLabel(event.minute)}`
+                          : ""}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
               </div>
             )}
 
