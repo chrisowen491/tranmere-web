@@ -20,7 +20,8 @@ export const ASSIST_TYPES = [
   'Header',
   'Long Throw',
   'Short Throw',
-  'Free Kick'
+  'Free Kick',
+  'GK Throw'
 ] as const;
 
 export const GOAL_FEET = ['Left', 'Right', 'Head', 'Body'] as const;
