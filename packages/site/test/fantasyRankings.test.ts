@@ -56,4 +56,15 @@ describe("fantasy ranking query", () => {
     );
     expect(sql).toContain("LOWER(TRIM(scorer)) <> 'own goal'");
   });
+
+  it("limits and offsets ranking pages while retaining the total count", async () => {
+    const mock = databaseReturning();
+
+    await queryFantasyRankingRows(mock.db, { limit: 50, offset: 100 });
+
+    const sql = String(mock.prepare.mock.calls[0][0]);
+    expect(mock.boundValues).toEqual([[50, 100]]);
+    expect(sql).toContain("COUNT(*) OVER () AS total_count");
+    expect(sql).toContain("LIMIT ? OFFSET ?");
+  });
 });

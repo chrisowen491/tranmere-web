@@ -18,11 +18,31 @@ export const metadata = pageMetadata({
 });
 
 interface FantasyRankingsPageProps {
-  searchParams: Promise<{ season?: string }>;
+  searchParams: Promise<{ season?: string; page?: string }>;
 }
+
+const PAGE_SIZE = 50;
 
 function seasonLabel(season: number) {
   return `${season}/${String(season + 1).slice(-2)}`;
+}
+
+function adjustmentSummary(player: {
+  penalty_saves: number;
+  penalty_misses: number;
+  own_goals: number;
+  yellow_cards: number;
+  red_cards: number;
+}) {
+  return [
+    player.penalty_saves ? `${player.penalty_saves} PS` : null,
+    player.penalty_misses ? `${player.penalty_misses} PM` : null,
+    player.own_goals ? `${player.own_goals} OG` : null,
+    player.yellow_cards ? `${player.yellow_cards} YC` : null,
+    player.red_cards ? `${player.red_cards} RC` : null,
+  ]
+    .filter(Boolean)
+    .join(" · ");
 }
 
 export default async function FantasyRankingsPage({
@@ -33,14 +53,32 @@ export default async function FantasyRankingsPage({
   const selectedSeason = Number.isInteger(requestedSeason)
     ? requestedSeason
     : undefined;
+  const requestedPage = Number(params.page);
+  const currentPage =
+    Number.isInteger(requestedPage) && requestedPage > 0 ? requestedPage : 1;
+  const offset = (currentPage - 1) * PAGE_SIZE;
   const env = (await getCloudflareContext({ async: true })).env;
   const [players, seasonRows] = await Promise.all([
-    queryFantasyRankingRows(env.DB, { season: selectedSeason }),
+    queryFantasyRankingRows(env.DB, {
+      season: selectedSeason,
+      limit: PAGE_SIZE,
+      offset,
+    }),
     querySearchIndexSeasonRows(env.DB),
   ]);
   const seasons = seasonRows.map(({ season }) => season).sort((a, b) => b - a);
   const leader = players[0];
+  const totalPlayers = players[0]?.total_count ?? 0;
+  const totalPages = Math.ceil(totalPlayers / PAGE_SIZE);
   const scope = selectedSeason ? seasonLabel(selectedSeason) : "All time";
+  const pageHref = (page: number) => {
+    const query = new URLSearchParams();
+    if (selectedSeason !== undefined)
+      query.set("season", String(selectedSeason));
+    if (page > 1) query.set("page", String(page));
+    const search = query.toString();
+    return `/players/fantasy-rankings${search ? `?${search}` : ""}`;
+  };
 
   return (
     <main className="min-h-screen bg-[#f4f0e8] text-[#071a2b]">
@@ -84,7 +122,7 @@ export default async function FantasyRankingsPage({
                   Players
                 </dt>
                 <dd className="mt-3 font-display text-4xl font-semibold">
-                  {players.length}
+                  {totalPlayers}
                 </dd>
               </div>
             </dl>
@@ -123,7 +161,7 @@ export default async function FantasyRankingsPage({
         </div>
       </section>
 
-      {leader && (
+      {leader && currentPage === 1 && (
         <section className="border-b border-[#071a2b]/15 bg-[#fffdf8]">
           <Link
             href={`/page/player/${encodeURIComponent(leader.player_name)}`}
@@ -174,24 +212,22 @@ export default async function FantasyRankingsPage({
         </div>
 
         <div className="overflow-x-auto border border-[#071a2b]/15 bg-[#fffdf8]">
-          <table className="w-full min-w-[1050px] text-left">
+          <table className="w-full min-w-[620px] text-left">
             <thead className="border-b border-[#071a2b]/15 bg-[#071a2b] text-xs font-bold uppercase tracking-[0.1em] text-white/65">
               <tr>
                 <th className="w-16 px-4 py-4">Rank</th>
                 <th className="px-4 py-4">Player</th>
-                <th className="px-4 py-4">Position</th>
                 <th className="px-4 py-4 text-center">Apps</th>
                 <th className="px-4 py-4 text-center">Goals</th>
-                <th className="px-4 py-4 text-center">Assists</th>
-                <th className="px-4 py-4 text-center">CS</th>
-                <th className="px-4 py-4 text-center">Events</th>
-                <th className="px-4 py-4 text-center">Cards</th>
-                <th className="px-4 py-4 text-center">App pts</th>
-                <th className="px-4 py-4 text-center">Goal pts</th>
-                <th className="px-4 py-4 text-center">Assist pts</th>
-                <th className="px-4 py-4 text-center">CS pts</th>
-                <th className="px-4 py-4 text-center">Event pts</th>
-                <th className="px-4 py-4 text-center">Card pts</th>
+                <th className="hidden px-4 py-4 text-center md:table-cell">
+                  Assists
+                </th>
+                <th className="hidden px-4 py-4 text-center lg:table-cell">
+                  Clean sheets
+                </th>
+                <th className="hidden px-4 py-4 text-center xl:table-cell">
+                  Events &amp; cards
+                </th>
                 <th className="px-4 py-4 text-right">Total</th>
               </tr>
             </thead>
@@ -202,7 +238,7 @@ export default async function FantasyRankingsPage({
                   className="group hover:bg-[#f4f0e8]"
                 >
                   <td className="px-4 py-4 font-mono text-sm text-[#071a2b]/50">
-                    {index + 1}
+                    {offset + index + 1}
                   </td>
                   <td className="px-4 py-4">
                     <Link
@@ -217,11 +253,13 @@ export default async function FantasyRankingsPage({
                         unoptimized
                         className="h-10 w-10 rounded-full border border-[#071a2b]/10 bg-[#071a2b] object-cover"
                       />
-                      {player.player_name}
+                      <span>
+                        <span className="block">{player.player_name}</span>
+                        <span className="mt-1 block font-mono text-[9px] font-bold uppercase tracking-[0.1em] text-[#071a2b]/45">
+                          {player.fantasy_position}
+                        </span>
+                      </span>
                     </Link>
-                  </td>
-                  <td className="px-4 py-4 text-sm text-[#071a2b]/65">
-                    {player.fantasy_position}
                   </td>
                   <td className="px-4 py-4 text-center font-mono text-sm">
                     {player.appearances}
@@ -229,39 +267,17 @@ export default async function FantasyRankingsPage({
                   <td className="px-4 py-4 text-center font-mono text-sm">
                     {player.goals}
                   </td>
-                  <td className="px-4 py-4 text-center font-mono text-sm">
+                  <td className="hidden px-4 py-4 text-center font-mono text-sm md:table-cell">
                     {player.assists}
                   </td>
-                  <td className="px-4 py-4 text-center font-mono text-sm">
+                  <td className="hidden px-4 py-4 text-center font-mono text-sm lg:table-cell">
                     {player.clean_sheets}
                   </td>
                   <td
-                    className="px-4 py-4 text-center font-mono text-xs"
-                    title="Penalty saves · Penalty misses · Own goals"
+                    className="hidden px-4 py-4 text-center font-mono text-[10px] font-bold text-[#071a2b]/60 xl:table-cell"
+                    title="Penalty saves · Penalty misses · Own goals · Yellow cards · Red cards"
                   >
-                    {player.penalty_saves} PS · {player.penalty_misses} PM ·{" "}
-                    {player.own_goals} OG
-                  </td>
-                  <td className="px-4 py-4 text-center font-mono text-sm">
-                    {player.yellow_cards}Y · {player.red_cards}R
-                  </td>
-                  <td className="px-4 py-4 text-center font-mono text-sm">
-                    {player.appearance_points}
-                  </td>
-                  <td className="px-4 py-4 text-center font-mono text-sm">
-                    {player.goal_points}
-                  </td>
-                  <td className="px-4 py-4 text-center font-mono text-sm">
-                    {player.assist_points}
-                  </td>
-                  <td className="px-4 py-4 text-center font-mono text-sm">
-                    {player.clean_sheet_points}
-                  </td>
-                  <td className="px-4 py-4 text-center font-mono text-sm">
-                    {player.event_points}
-                  </td>
-                  <td className="px-4 py-4 text-center font-mono text-sm">
-                    {player.card_points}
+                    {adjustmentSummary(player) || "—"}
                   </td>
                   <td className="px-4 py-4 text-right font-mono text-lg font-bold text-blue-700">
                     {player.total_points}
@@ -271,6 +287,43 @@ export default async function FantasyRankingsPage({
             </tbody>
           </table>
         </div>
+
+        {totalPages > 1 && (
+          <nav
+            aria-label="Fantasy ranking pages"
+            className="mt-5 flex items-center justify-between gap-4 border border-[#071a2b]/15 bg-[#fffdf8] px-4 py-3"
+          >
+            {currentPage > 1 ? (
+              <Link
+                href={pageHref(currentPage - 1)}
+                className="border border-[#071a2b]/20 px-3 py-2 text-xs font-bold transition hover:border-blue-700 hover:text-blue-700"
+              >
+                Previous
+              </Link>
+            ) : (
+              <span className="border border-[#071a2b]/10 px-3 py-2 text-xs font-bold text-[#071a2b]/30">
+                Previous
+              </span>
+            )}
+            <p className="font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-[#071a2b]/55">
+              Page {currentPage} of {totalPages} · Showing {offset + 1}–
+              {Math.min(offset + players.length, totalPlayers)} of{" "}
+              {totalPlayers}
+            </p>
+            {currentPage < totalPages ? (
+              <Link
+                href={pageHref(currentPage + 1)}
+                className="bg-[#071a2b] px-3 py-2 text-xs font-bold text-white transition hover:bg-blue-700"
+              >
+                Next
+              </Link>
+            ) : (
+              <span className="bg-[#071a2b]/15 px-3 py-2 text-xs font-bold text-[#071a2b]/35">
+                Next
+              </span>
+            )}
+          </nav>
+        )}
 
         <aside className="mt-8 border-l-4 border-blue-700 bg-[#e8e2d6] px-6 py-5 text-sm leading-6 text-[#071a2b]/70">
           <p className="font-bold text-[#071a2b]">How points are calculated</p>

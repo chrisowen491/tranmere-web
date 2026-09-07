@@ -112,6 +112,75 @@ export default function SeasonReview(props: {
         achievements={achievements}
         leagueSummary={leagueSummary}
       />
+      {fantasyPlayerOfSeason.length > 0 && (
+        <section
+          aria-labelledby="fantasy-player-of-season-heading"
+          className="mx-auto max-w-7xl px-6 pt-12 sm:px-10 lg:px-12"
+        >
+          <div className="border border-[#071a2b]/15 bg-[#071a2b] text-white">
+            <div className="grid gap-px bg-white/15 md:grid-cols-[minmax(0,1fr)_auto]">
+              <div className="bg-[#071a2b] p-6 sm:p-8">
+                <p className="flex items-center gap-3 text-xs font-bold uppercase tracking-[0.16em] text-blue-300">
+                  <TrophyIcon className="h-5 w-5" aria-hidden="true" />
+                  TranmereWeb award
+                </p>
+                <h2
+                  id="fantasy-player-of-season-heading"
+                  className="mt-3 font-display text-3xl font-semibold tracking-[-0.04em] sm:text-4xl"
+                >
+                  {fantasyPlayerOfSeason.length > 1
+                    ? "Players of the Season"
+                    : "Player of the Season"}
+                </h2>
+                <p className="mt-3 max-w-2xl text-sm leading-6 text-white/60">
+                  Awarded to the highest-scoring player
+                  {fantasyPlayerOfSeason.length > 1 ? "s" : ""} in the
+                  TranmereWeb fantasy rankings for {season}/
+                  {String(seasonInt + 1).slice(-2)}.
+                </p>
+              </div>
+              <div className="grid gap-px bg-white/15 sm:grid-flow-col">
+                {fantasyPlayerOfSeason.map((winner) => (
+                  <div
+                    key={winner.player_name}
+                    className="flex min-w-72 items-center gap-4 bg-[#132c82] p-6 sm:p-8"
+                  >
+                    <Image
+                      src={replaceSeasonsKit(
+                        winner.pic_link ||
+                          "https://www.tranmere-web.com/builder/2026/none/cccccc/none/000000/cccccc/none/cccccc",
+                        season,
+                      )}
+                      alt={`${winner.player_name}, TranmereWeb ${season} Player of the Season`}
+                      width={96}
+                      height={96}
+                      unoptimized
+                      className="h-16 w-16 border border-white/20 bg-[#e8e2d6] object-cover"
+                    />
+                    <div>
+                      <Link
+                        href={`/page/player/${encodeURIComponent(winner.player_name)}`}
+                        className="font-display text-2xl font-semibold transition hover:text-blue-300"
+                      >
+                        {winner.player_name}
+                      </Link>
+                      <Link
+                        href={`/players/fantasy-rankings?season=${season}`}
+                        className="mt-2 flex items-baseline gap-2 font-mono font-bold text-blue-300 transition hover:text-white"
+                      >
+                        <span className="text-2xl">{winner.total_points}</span>
+                        <span className="text-[10px] uppercase tracking-[0.14em]">
+                          points · See why
+                        </span>
+                      </Link>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
       <SeasonTimeline
         season={season}
         results={results}
@@ -237,78 +306,6 @@ export default function SeasonReview(props: {
             Managers
           </Link>
         </nav>
-
-        {fantasyPlayerOfSeason.length > 0 && (
-          <section
-            aria-labelledby="fantasy-player-of-season-heading"
-            className="mx-auto max-w-7xl px-6 pt-12 sm:px-10 lg:px-12"
-          >
-            <div className="border border-[#071a2b]/15 bg-[#071a2b] text-white">
-              <div className="grid gap-px bg-white/15 md:grid-cols-[minmax(0,1fr)_auto]">
-                <div className="bg-[#071a2b] p-6 sm:p-8">
-                  <p className="flex items-center gap-3 text-xs font-bold uppercase tracking-[0.16em] text-blue-300">
-                    <TrophyIcon className="h-5 w-5" aria-hidden="true" />
-                    TranmereWeb award
-                  </p>
-                  <h2
-                    id="fantasy-player-of-season-heading"
-                    className="mt-3 font-display text-3xl font-semibold tracking-[-0.04em] sm:text-4xl"
-                  >
-                    {fantasyPlayerOfSeason.length > 1
-                      ? "Players of the Season"
-                      : "Player of the Season"}
-                  </h2>
-                  <p className="mt-3 max-w-2xl text-sm leading-6 text-white/60">
-                    Awarded to the highest-scoring player
-                    {fantasyPlayerOfSeason.length > 1 ? "s" : ""} in the
-                    TranmereWeb fantasy rankings for {season}/
-                    {String(seasonInt + 1).slice(-2)}.
-                  </p>
-                </div>
-                <div className="grid gap-px bg-white/15 sm:grid-flow-col">
-                  {fantasyPlayerOfSeason.map((winner) => (
-                    <div
-                      key={winner.player_name}
-                      className="flex min-w-72 items-center gap-4 bg-[#132c82] p-6 sm:p-8"
-                    >
-                      <Image
-                        src={replaceSeasonsKit(
-                          winner.pic_link ||
-                            "https://www.tranmere-web.com/builder/2026/none/cccccc/none/000000/cccccc/none/cccccc",
-                          season,
-                        )}
-                        alt={`${winner.player_name}, TranmereWeb ${season} Player of the Season`}
-                        width={96}
-                        height={96}
-                        unoptimized
-                        className="h-16 w-16 border border-white/20 bg-[#e8e2d6] object-cover"
-                      />
-                      <div>
-                        <Link
-                          href={`/page/player/${encodeURIComponent(winner.player_name)}`}
-                          className="font-display text-2xl font-semibold transition hover:text-blue-300"
-                        >
-                          {winner.player_name}
-                        </Link>
-                        <Link
-                          href={`/players/fantasy-rankings?season=${season}`}
-                          className="mt-2 flex items-baseline gap-2 font-mono font-bold text-blue-300 transition hover:text-white"
-                        >
-                          <span className="text-2xl">
-                            {winner.total_points}
-                          </span>
-                          <span className="text-[10px] uppercase tracking-[0.14em]">
-                            points · See why
-                          </span>
-                        </Link>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </section>
-        )}
 
         <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
           <div className="mx-auto grid max-w-2xl grid-cols-1 grid-rows-1 items-start gap-x-8 gap-y-8 lg:mx-0 lg:max-w-none lg:grid-cols-3">

@@ -280,6 +280,7 @@ export interface FantasyRankingRow {
   clean_sheet_points: number;
   event_points: number;
   total_points: number;
+  total_count?: number;
 }
 
 export interface MatchEventRow {

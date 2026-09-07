@@ -4,6 +4,8 @@ import { all, type D1DatabaseReader, type D1Value } from './shared';
 
 export interface FantasyRankingQueryOptions {
   season?: number;
+  limit?: number;
+  offset?: number;
 }
 
 const statisticalMatchCondition = (table: 'Apps' | 'Goals') => `
@@ -27,6 +29,8 @@ export async function queryFantasyRankingRows(
     options.season === undefined ? '' : 'AND MatchEvents.season = ?';
   if (options.season !== undefined)
     values.push(options.season, options.season, options.season);
+  const pagination = options.limit ? `LIMIT ? OFFSET ?` : '';
+  if (options.limit) values.push(options.limit, options.offset ?? 0);
 
   const result = await all<FantasyRankingRow>(
     db,
@@ -216,9 +220,12 @@ export async function queryFantasyRankingRows(
        LEFT JOIN event_totals USING (player_name)
        LEFT JOIN Players ON Players.name = ranked_players.player_name COLLATE NOCASE
      )
-     SELECT *, appearance_points + goal_points + assist_points + card_points + clean_sheet_points + event_points AS total_points
+     SELECT *,
+       appearance_points + goal_points + assist_points + card_points + clean_sheet_points + event_points AS total_points,
+       COUNT(*) OVER () AS total_count
      FROM metrics
-     ORDER BY total_points DESC, goals DESC, appearances DESC, player_name ASC`,
+     ORDER BY total_points DESC, goals DESC, appearances DESC, player_name ASC
+     ${pagination}`,
     values
   );
 
