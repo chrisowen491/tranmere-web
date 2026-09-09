@@ -18,6 +18,7 @@ import { mapPlayerSeasonSummary } from "@/lib/playerStatistics";
 import { goalCountsByDate, mapPlayerAppearance } from "@/lib/playerAppearances";
 import { auth0 } from "@/lib/auth0";
 import { resolveAccount } from "@/lib/accounts";
+import { getPlayerAwards } from "@/lib/awards";
 
 const APPEARANCE_PAGE_SIZE = 25;
 export const revalidate = 7200;
@@ -119,12 +120,13 @@ export default async function PlayerProfilePage(props: { params: SlugParams }) {
     };
   });
 
-  const [articles, transfers] = await Promise.all([
+  const [articles, transfers, awards] = await Promise.all([
     getAllArticlesForTag(100, d1Player.name),
     getTransfers(env.DB, {
       playerName: d1Player.name,
       playerMatch: "exact",
     }),
+    getPlayerAwards(env.DB, { playerName: d1Player.name }),
   ]);
   profile.transfers = transfers;
 
@@ -179,6 +181,7 @@ export default async function PlayerProfilePage(props: { params: SlugParams }) {
         articles={articles}
         comments={comments}
         avg={avg}
+        awards={awards}
         appearancePagination={{
           total: appearanceTotal,
           pageSize: APPEARANCE_PAGE_SIZE,

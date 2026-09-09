@@ -16,6 +16,8 @@ import {
   queryLeagueSeasonSummaryRows,
 } from "@tranmere-web/lib/src/d1-queries";
 import { getFantasyPlayerOfSeasonWinners } from "@/lib/fantasyRankings";
+import { getClubCaptainsBySeason } from "@/lib/clubCaptains";
+import { getPlayerAwards } from "@/lib/awards";
 
 export const revalidate = 7200;
 
@@ -61,6 +63,11 @@ export default async function SeasonPage(props: { params: SlugParams }) {
 
   const shirts = await getShirtsBySeason(env.DB, season);
 
+  const [captains, awards] = await Promise.all([
+    getClubCaptainsBySeason(env.DB, Number(season)),
+    getPlayerAwards(env.DB, { season: Number(season) }),
+  ]);
+
   const seasons = GetSeasons();
   return (
     <>
@@ -96,6 +103,8 @@ export default async function SeasonPage(props: { params: SlugParams }) {
         shirts={shirts}
         leagueSummary={leagueSummary}
         fantasyPlayerOfSeason={fantasyPlayerOfSeason}
+        captains={captains}
+        awards={awards}
       ></SeasonReview>
     </>
   );

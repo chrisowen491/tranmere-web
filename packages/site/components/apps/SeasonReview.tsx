@@ -30,6 +30,8 @@ import type {
   LeagueSeasonSummaryRow,
 } from "@tranmere-web/lib/src/d1-types";
 import { getSeasonManagers } from "@/lib/seasonManagers";
+import type { ClubCaptainRecord } from "@/lib/clubCaptains";
+import type { PlayerAwardRecord } from "@/lib/awards";
 
 const DIVISION_NAMES: Record<number, Record<number, string>> = {
   0: { 2: "Division 2", 3: "Division 3", 4: "Division 4" },
@@ -73,6 +75,8 @@ export default function SeasonReview(props: {
   seasons: number[];
   leagueSummary?: LeagueSeasonSummaryRow;
   fantasyPlayerOfSeason: FantasyRankingRow[];
+  captains: ClubCaptainRecord[];
+  awards: PlayerAwardRecord[];
 }) {
   const {
     results,
@@ -86,6 +90,8 @@ export default function SeasonReview(props: {
     seasons,
     leagueSummary,
     fantasyPlayerOfSeason,
+    captains,
+    awards,
   } = props;
   const seasonInt = Number(season);
   const achievements =
@@ -112,6 +118,88 @@ export default function SeasonReview(props: {
         achievements={achievements}
         leagueSummary={leagueSummary}
       />
+      {(captains.length > 0 || awards.length > 0) && (
+        <section
+          className="mx-auto max-w-7xl px-6 pt-12 sm:px-10 lg:px-12"
+          aria-labelledby="season-recognition-heading"
+        >
+          <div className="border border-[#071a2b]/15 bg-[#fffdf8]">
+            <div className="border-b border-[#071a2b]/10 px-6 py-5 sm:px-8">
+              <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-blue-700">
+                <TrophyIcon className="h-5 w-5" />
+                Season recognition
+              </p>
+              <h2
+                id="season-recognition-heading"
+                className="mt-2 font-display text-3xl font-semibold"
+              >
+                Captains & awards
+              </h2>
+            </div>
+            <div className="grid divide-y divide-[#071a2b]/10 md:grid-cols-2 md:divide-x md:divide-y-0">
+              <div className="p-6 sm:p-8">
+                <h3 className="text-xs font-bold uppercase tracking-[0.14em] text-[#071a2b]/50">
+                  Club {captains.length === 1 ? "captain" : "captains"}
+                </h3>
+                <div className="mt-4 space-y-4">
+                  {captains.length ? (
+                    captains.map((captain) => (
+                      <div key={captain.id}>
+                        <Link
+                          href={`/page/player/${encodeURIComponent(captain.playerName)}`}
+                          className="font-display text-2xl font-semibold text-blue-700 hover:underline"
+                        >
+                          {captain.playerName}
+                        </Link>
+                        {captain.notes && (
+                          <p className="mt-1 text-sm text-[#071a2b]/60">
+                            {captain.notes}
+                          </p>
+                        )}
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-sm text-[#071a2b]/50">
+                      No captain recorded.
+                    </p>
+                  )}
+                </div>
+              </div>
+              <div className="p-6 sm:p-8">
+                <h3 className="text-xs font-bold uppercase tracking-[0.14em] text-[#071a2b]/50">
+                  Player awards
+                </h3>
+                <div className="mt-4 divide-y divide-[#071a2b]/10">
+                  {awards.length ? (
+                    awards.map((award) => (
+                      <div key={award.id} className="py-4 first:pt-0">
+                        <p className="font-display text-xl font-semibold">
+                          {award.awardName}
+                        </p>
+                        <Link
+                          href={`/page/player/${encodeURIComponent(award.playerName)}`}
+                          className="mt-1 inline-block font-bold text-blue-700 hover:underline"
+                        >
+                          {award.playerName}
+                        </Link>
+                        {award.notes && (
+                          <p className="mt-1 text-sm text-[#071a2b]/60">
+                            {award.notes}
+                          </p>
+                        )}
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-sm text-[#071a2b]/50">
+                      No awards recorded.
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
       {fantasyPlayerOfSeason.length > 0 && (
         <section
           aria-labelledby="fantasy-player-of-season-heading"

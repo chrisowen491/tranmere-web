@@ -21,6 +21,7 @@ import {
   SwatchIcon,
   FlagIcon,
   BoltIcon,
+  TrophyIcon,
 } from "@heroicons/react/24/outline";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -242,6 +243,22 @@ export default async function AdminPage() {
                 "Add managerial appointments or edit names, dates, formations and portraits.",
               action: "Manage managers",
               icon: UserGroupIcon,
+            },
+            {
+              href: "/admin/club-captains",
+              title: "Club captains",
+              description:
+                "Record one or more first-team captains for each season.",
+              action: "Manage captains",
+              icon: UserGroupIcon,
+            },
+            {
+              href: "/admin/awards",
+              title: "Player awards",
+              description:
+                "Create seasonal awards and record one or more player recipients.",
+              action: "Manage awards",
+              icon: TrophyIcon,
             },
             {
               href: "/admin/clubs",

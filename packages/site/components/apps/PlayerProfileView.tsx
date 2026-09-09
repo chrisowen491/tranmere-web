@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
 import { ArrowUpRightIcon } from "@heroicons/react/20/solid";
+import { TrophyIcon } from "@heroicons/react/24/outline";
 import { BlogItem, PlayerProfile } from "@/lib/types";
 import type { Comment } from "@/lib/comments";
 import { PlayerStatsTable } from "@/components/apps/partials/PlayerStatsTable";
@@ -16,6 +17,7 @@ import CommentPanel from "@/components/comments/CommentPanel";
 import { PlayerProfileCorrectionForm } from "./PlayerProfileCorrectionForm";
 import type { EditablePlayerProfile } from "@/lib/playerProfileCorrections";
 import type { Appearance } from "@tranmere-web/lib/src/tranmere-web-types";
+import type { PlayerAwardRecord } from "@/lib/awards";
 
 const breadcrumbs = [
   { id: 1, name: "Home", href: "/" },
@@ -90,6 +92,7 @@ export default function PlayerProfileView(props: {
   comments: Comment[];
   articles: BlogItem[];
   avg: number;
+  awards: PlayerAwardRecord[];
   biographyMarkdown: string | null;
   editableProfile: EditablePlayerProfile;
   appearancePagination: {
@@ -209,9 +212,7 @@ export default function PlayerProfileView(props: {
     (season) => season.Season === appearanceSeason,
   );
 
-  const profileLinks = [
-    ...profile.links,
-  ];
+  const profileLinks = [...profile.links];
 
   return (
     <main className="pb-24 text-[#071a2b]">
@@ -444,6 +445,42 @@ export default function PlayerProfileView(props: {
             </span>
             <ArrowUpRightIcon className="h-5 w-5 transition group-hover:-translate-y-1 group-hover:translate-x-1" />
           </Link>
+
+          {props.awards.length > 0 && (
+            <section
+              className="border border-[#071a2b]/15 bg-[#fffdf8] p-5"
+              aria-labelledby="player-awards-heading"
+            >
+              <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-blue-700">
+                <TrophyIcon className="h-5 w-5" />
+                Honours
+              </p>
+              <h2
+                id="player-awards-heading"
+                className="mt-2 font-display text-2xl font-semibold"
+              >
+                Player awards
+              </h2>
+              <div className="mt-4 divide-y divide-[#071a2b]/10">
+                {props.awards.map((award) => (
+                  <div key={award.id} className="py-4 first:pt-0">
+                    <p className="font-bold">{award.awardName}</p>
+                    <Link
+                      href={`/season/${award.season}`}
+                      className="mt-1 inline-block font-mono text-xs font-bold text-blue-700 hover:underline"
+                    >
+                      {award.season}/{String(award.season + 1).slice(-2)}
+                    </Link>
+                    {award.notes && (
+                      <p className="mt-2 text-sm text-[#071a2b]/60">
+                        {award.notes}
+                      </p>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
 
           <div className="border border-[#071a2b]/15 bg-[#fffdf8] p-5">
             <p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-700">
