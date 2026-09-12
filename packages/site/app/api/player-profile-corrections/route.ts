@@ -1,6 +1,7 @@
 import { auth0 } from "@/lib/auth0";
 import { resolveAccount } from "@/lib/accounts";
 import { getAdminSession } from "@/lib/adminAuth";
+import { autoApproveAdminSubmissions } from "@/lib/adminAutoApproval";
 import {
   approvePlayerProfileCorrection,
   normalizeDateOfBirth,
@@ -212,6 +213,15 @@ async function submitCorrection(request: NextRequest) {
       )
       .run(),
   );
+
+  const autoApproved = await autoApproveAdminSubmissions(
+    session.user,
+    request,
+    [correctionId],
+    PATCH,
+    "Player profile updated and automatically approved.",
+  );
+  if (autoApproved) return autoApproved;
 
   return NextResponse.json(
     { message: "Profile correction submitted for review." },

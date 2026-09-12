@@ -1,6 +1,7 @@
 import { auth0 } from "@/lib/auth0";
 import { resolveAccount } from "@/lib/accounts";
 import { getAdminSession } from "@/lib/adminAuth";
+import { autoApproveAdminSubmissions } from "@/lib/adminAutoApproval";
 import { getGameBySeasonAndDate } from "@/lib/games";
 import { isAvatarKit, type KitCorrectionStatus } from "@/lib/kitCorrections";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
@@ -48,6 +49,7 @@ export async function POST(request: NextRequest) {
     .bind(body.season, body.matchDate, account.id, body.proposedKit)
     .first();
   if (duplicate) return error("That kit is already awaiting review.", 409);
+  const correctionId = crypto.randomUUID();
   await env.DB.prepare(
     `INSERT INTO MatchKitCorrections (
        id, season, match_date, home_team, away_team, current_kit,
@@ -56,7 +58,7 @@ export async function POST(request: NextRequest) {
      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending')`,
   )
     .bind(
-      crypto.randomUUID(),
+      correctionId,
       body.season,
       body.matchDate,
       match.home || "Tranmere Rovers",
@@ -69,6 +71,14 @@ export async function POST(request: NextRequest) {
       new Date().toISOString(),
     )
     .run();
+  const autoApproved = await autoApproveAdminSubmissions(
+    session.user,
+    request,
+    [correctionId],
+    PATCH,
+    "Kit updated and automatically approved.",
+  );
+  if (autoApproved) return autoApproved;
   return NextResponse.json(
     { message: "Kit suggestion is awaiting review." },
     { status: 201 },

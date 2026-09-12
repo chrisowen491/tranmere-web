@@ -1,6 +1,7 @@
 import { auth0 } from "@/lib/auth0";
 import { resolveAccount } from "@/lib/accounts";
 import { getAdminSession } from "@/lib/adminAuth";
+import { autoApproveAdminSubmissions } from "@/lib/adminAutoApproval";
 import { getGameBySeasonAndDate } from "@/lib/games";
 import { MATCH_LINK_TYPES, type MatchLinkStatus } from "@/lib/matchLinks";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
@@ -50,12 +51,13 @@ export async function POST(request: NextRequest) {
     .bind(season, matchDate, url, account.id)
     .first();
   if (duplicate) return error("You have already suggested this link.", 409);
+  const suggestionId = crypto.randomUUID();
   await db
     .prepare(
       "INSERT INTO MatchLinkSuggestions (id, season, match_date, label, url, link_type, publisher, notes, submitted_by_account_id, submitted_by_name, submitted_by_email, submitted_at, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending')",
     )
     .bind(
-      crypto.randomUUID(),
+      suggestionId,
       season,
       matchDate,
       label,
@@ -69,6 +71,14 @@ export async function POST(request: NextRequest) {
       new Date().toISOString(),
     )
     .run();
+  const autoApproved = await autoApproveAdminSubmissions(
+    session.user,
+    request,
+    [suggestionId],
+    PATCH,
+    "Link published and automatically approved.",
+  );
+  if (autoApproved) return autoApproved;
   return NextResponse.json(
     { message: "Link submitted for review." },
     { status: 201 },

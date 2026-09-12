@@ -1,6 +1,7 @@
 import { auth0 } from "@/lib/auth0";
 import { resolveAccount } from "@/lib/accounts";
 import { getAdminSession } from "@/lib/adminAuth";
+import { autoApproveAdminSubmissions } from "@/lib/adminAutoApproval";
 import { getGameBySeasonAndDate } from "@/lib/games";
 import { type AttendanceCorrectionStatus } from "@/lib/attendanceCorrections";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
@@ -82,6 +83,7 @@ export async function POST(request: NextRequest) {
     return error("You have already submitted this correction for review.", 409);
   }
 
+  const correctionId = crypto.randomUUID();
   await db
     .prepare(
       `INSERT INTO MatchAttendanceCorrections (
@@ -91,7 +93,7 @@ export async function POST(request: NextRequest) {
       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending')`,
     )
     .bind(
-      crypto.randomUUID(),
+      correctionId,
       body.season,
       body.matchDate,
       (match.home || body.homeTeam || "Tranmere Rovers").slice(0, 100),
@@ -109,6 +111,15 @@ export async function POST(request: NextRequest) {
       new Date().toISOString(),
     )
     .run();
+
+  const autoApproved = await autoApproveAdminSubmissions(
+    session.user,
+    request,
+    [correctionId],
+    PATCH,
+    "Attendance updated and automatically approved.",
+  );
+  if (autoApproved) return autoApproved;
 
   return NextResponse.json(
     { message: "Correction submitted for review." },

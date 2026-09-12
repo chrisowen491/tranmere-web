@@ -1,4 +1,5 @@
 import { getAdminSession } from "@/lib/adminAuth";
+import { autoApproveAdminSubmissions } from "@/lib/adminAutoApproval";
 import { auth0 } from "@/lib/auth0";
 import { resolveAccount } from "@/lib/accounts";
 import { parseSubmittedGoal } from "@/lib/goalSubmissions";
@@ -101,12 +102,13 @@ export async function POST(request: NextRequest) {
     .first();
   if (duplicate)
     return error("That missing goal is already awaiting review.", 409);
+  const submissionId = crypto.randomUUID();
   await db
     .prepare(
       `INSERT INTO GoalSubmissions (id, season, match_date, opposition, competition, goal_json, source, explanation, submitted_by_account_id, submitted_by_name, submitted_at, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending')`,
     )
     .bind(
-      crypto.randomUUID(),
+      submissionId,
       String(season),
       body.matchDate,
       body.opposition.trim().slice(0, 200),
@@ -119,6 +121,14 @@ export async function POST(request: NextRequest) {
       new Date().toISOString(),
     )
     .run();
+  const autoApproved = await autoApproveAdminSubmissions(
+    session.user,
+    request,
+    [submissionId],
+    PATCH,
+    "Missing goal published and automatically approved.",
+  );
+  if (autoApproved) return autoApproved;
   return NextResponse.json(
     { message: "The missing goal is awaiting review." },
     { status: 201 },

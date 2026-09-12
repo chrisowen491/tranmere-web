@@ -1,4 +1,5 @@
 import { getAdminSession } from "@/lib/adminAuth";
+import { autoApproveAdminSubmissions } from "@/lib/adminAutoApproval";
 import { auth0 } from "@/lib/auth0";
 import { resolveAccount } from "@/lib/accounts";
 import {
@@ -152,6 +153,7 @@ export async function POST(request: NextRequest) {
   if (duplicate)
     return error("You have already submitted these goal changes.", 409);
 
+  const correctionId = crypto.randomUUID();
   await db
     .prepare(
       `INSERT INTO GoalCorrections (
@@ -161,7 +163,7 @@ export async function POST(request: NextRequest) {
       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending')`,
     )
     .bind(
-      crypto.randomUUID(),
+      correctionId,
       goal.id,
       String(goal.season),
       goal.match_date,
@@ -175,6 +177,14 @@ export async function POST(request: NextRequest) {
       new Date().toISOString(),
     )
     .run();
+  const autoApproved = await autoApproveAdminSubmissions(
+    session.user,
+    request,
+    [correctionId],
+    PATCH,
+    "Goal updated and automatically approved.",
+  );
+  if (autoApproved) return autoApproved;
   return NextResponse.json(
     { message: "Goal changes are awaiting review." },
     { status: 201 },

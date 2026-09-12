@@ -1,6 +1,7 @@
 import { auth0 } from "@/lib/auth0";
 import { resolveAccount } from "@/lib/accounts";
 import { getAdminSession } from "@/lib/adminAuth";
+import { autoApproveAdminSubmissions } from "@/lib/adminAutoApproval";
 import {
   isFormation,
   type FormationCorrectionStatus,
@@ -51,6 +52,7 @@ export async function POST(request: NextRequest) {
     .first();
   if (duplicate)
     return error("That formation is already awaiting review.", 409);
+  const correctionId = crypto.randomUUID();
   await env.DB.prepare(
     `INSERT INTO MatchFormationCorrections (
        id, season, match_date, home_team, away_team, current_formation,
@@ -59,7 +61,7 @@ export async function POST(request: NextRequest) {
      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending')`,
   )
     .bind(
-      crypto.randomUUID(),
+      correctionId,
       body.season,
       body.matchDate,
       match.home || "Tranmere Rovers",
@@ -72,6 +74,14 @@ export async function POST(request: NextRequest) {
       new Date().toISOString(),
     )
     .run();
+  const autoApproved = await autoApproveAdminSubmissions(
+    session.user,
+    request,
+    [correctionId],
+    PATCH,
+    "Formation updated and automatically approved.",
+  );
+  if (autoApproved) return autoApproved;
   return NextResponse.json(
     { message: "Formation suggestion is awaiting review." },
     { status: 201 },
