@@ -16,6 +16,7 @@ import { pageMetadata } from "@/lib/seo";
 import { absoluteUrl, breadcrumbJsonLd, JsonLd } from "@/components/seo/JsonLd";
 import { auth0 } from "@/lib/auth0";
 import { resolveAccount } from "@/lib/accounts";
+import Image from "next/image";
 
 export const revalidate = 7200;
 
@@ -155,10 +156,13 @@ export default async function BlogPage(props: { params: SlugParams }) {
                 aria-hidden="true"
                 className="absolute inset-5 border border-white/20"
               />
-              <img
+              <Image
                 src={article.pic.url}
                 alt={article.title}
-                className="absolute inset-0 h-full w-full object-contain p-8"
+                fill
+                priority
+                sizes="(min-width: 1024px) 42vw, 100vw"
+                className="object-contain p-8"
               />
             </div>
           )}

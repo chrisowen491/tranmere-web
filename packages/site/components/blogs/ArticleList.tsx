@@ -16,11 +16,14 @@ function StoryImage({
     <Image
       alt={post.title}
       src={post.pic?.url ?? fallbackImage}
-      width={960}
-      height={720}
-      unoptimized
+      fill
+      sizes={
+        priority
+          ? "(min-width: 1024px) 52vw, 100vw"
+          : "(min-width: 1024px) 31vw, (min-width: 640px) 48vw, 100vw"
+      }
       priority={priority}
-      className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.025]"
+      className="object-cover transition duration-500 group-hover:scale-[1.025]"
     />
   );
 }
