@@ -142,6 +142,18 @@ export async function getSharedFantasyTeam(db: D1Database, shareId: string) {
   return row ? mapFantasyTeam(row) : null;
 }
 
+export async function listSharedFantasyTeams(db: D1Database) {
+  const result = await db
+    .prepare(
+      `SELECT ${columns}
+       FROM FantasyTeams
+       WHERE is_shared = 1 AND share_id IS NOT NULL
+       ORDER BY updated_at DESC, name, id`,
+    )
+    .all<FantasyTeamRow>();
+  return result.results.map(mapFantasyTeam);
+}
+
 export async function validateFantasyTeamInput(db: D1Database, value: unknown) {
   if (!value || typeof value !== "object")
     throw new Error("Invalid team data.");

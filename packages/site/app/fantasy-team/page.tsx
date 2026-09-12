@@ -48,17 +48,33 @@ export default async function FantasyTeamPage({
         </h1>
         <p className="mt-6 max-w-2xl text-lg leading-8 text-[#071a2b]/60">
           Choose a formation, kit and captain from the player archive. Logged-in
-          supporters can save themed teams privately, revisit them and decide
-          exactly which XIs to share.
+          supporters can save themed teams privately, revisit them and share
+          selected XIs. Browse other supporters&apos; shared teams, challenge
+          one with your own XI and see which side scores most points across five
+          randomly drawn archive matches.
         </p>
-        {session && (
+        <div className="mt-7 flex flex-wrap gap-3">
+          {session && (
+            <Link
+              href="/profile/fantasy-teams"
+              className="inline-flex border border-[#071a2b] px-5 py-3 text-sm font-bold transition hover:bg-[#071a2b] hover:text-white"
+            >
+              View your saved XIs →
+            </Link>
+          )}
           <Link
-            href="/profile/fantasy-teams"
-            className="mt-7 inline-flex border border-[#071a2b] px-5 py-3 text-sm font-bold transition hover:bg-[#071a2b] hover:text-white"
+            href="/fantasy-team/shared"
+            className="inline-flex bg-blue-700 px-5 py-3 text-sm font-bold text-white"
           >
-            View your saved XIs →
+            Browse shared XIs →
           </Link>
-        )}
+          <Link
+            href="/fantasy-team/challenge/league"
+            className="inline-flex border border-[#071a2b] px-5 py-3 text-sm font-bold transition hover:bg-[#071a2b] hover:text-white"
+          >
+            Challenge league →
+          </Link>
+        </div>
       </div>
       <FantasyTeamBuilder
         players={availablePlayers}

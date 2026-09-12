@@ -54,6 +54,12 @@ export default async function SharedFantasyTeamPage({ params }: Props) {
         />
         <div className="mt-6 flex flex-wrap gap-3">
           <Link
+            href={`/fantasy-team/challenge/${id}`}
+            className="bg-[#071a2b] px-5 py-3 text-sm font-bold text-white"
+          >
+            Challenge this XI
+          </Link>
+          <Link
             href={`/fantasy-team/shared/${id}/image`}
             target="_blank"
             className="bg-blue-700 px-5 py-3 text-sm font-bold text-white"
@@ -65,6 +71,12 @@ export default async function SharedFantasyTeamPage({ params }: Props) {
             className="border border-[#071a2b] px-5 py-3 text-sm font-bold"
           >
             Build your own XI
+          </Link>
+          <Link
+            href="/fantasy-team/shared"
+            className="border border-[#071a2b]/20 px-5 py-3 text-sm font-bold"
+          >
+            Browse all shared XIs
           </Link>
         </div>
         <p className="mt-6 text-sm text-[#071a2b]/55">
