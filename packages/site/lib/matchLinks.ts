@@ -28,6 +28,50 @@ export interface MatchLinkSuggestion extends MatchLink {
   submittedAt: string;
   status: MatchLinkStatus;
 }
+
+export function youtubeVideoId(value: string) {
+  try {
+    const url = new URL(value);
+    const hostname = url.hostname.toLowerCase().replace(/^www\./, "");
+    let id: string | null = null;
+    if (hostname === "youtu.be") id = url.pathname.split("/")[1] ?? null;
+    if (hostname === "youtube.com" || hostname.endsWith(".youtube.com")) {
+      if (url.pathname === "/watch") id = url.searchParams.get("v");
+      else if (/^\/(embed|shorts|live)\//.test(url.pathname))
+        id = url.pathname.split("/")[2] ?? null;
+    }
+    return id && /^[\w-]{11}$/.test(id) ? id : null;
+  } catch {
+    return null;
+  }
+}
+
+function youtubeTimeInSeconds(value: string | null) {
+  if (!value) return 0;
+  if (/^\d+$/.test(value)) return Number(value);
+  const parts = value.match(/^(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s)?$/i);
+  if (!parts) return 0;
+  return (
+    Number(parts[1] ?? 0) * 3600 +
+    Number(parts[2] ?? 0) * 60 +
+    Number(parts[3] ?? 0)
+  );
+}
+
+export function youtubeVideoStart(value: string) {
+  try {
+    const url = new URL(value);
+    const hash = new URLSearchParams(url.hash.replace(/^#/, ""));
+    return youtubeTimeInSeconds(
+      url.searchParams.get("t") ??
+        url.searchParams.get("start") ??
+        hash.get("t") ??
+        hash.get("start"),
+    );
+  } catch {
+    return 0;
+  }
+}
 type Row = Record<string, unknown>;
 function type(value: unknown): MatchLinkType {
   return MATCH_LINK_TYPES.includes(value as MatchLinkType)

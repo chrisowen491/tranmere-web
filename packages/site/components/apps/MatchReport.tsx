@@ -24,7 +24,11 @@ import { arrangeMatchLineup, formationLabel } from "@/lib/matchLineup";
 import type { MatchMilestone } from "@/lib/matchMilestones";
 import { ManagerFormation } from "@tranmere-web/lib/src/manager-constants";
 import { matchOutcome, outcomeClass } from "@/lib/seasonMatchUtils";
-import type { MatchLink } from "@/lib/matchLinks";
+import {
+  youtubeVideoId,
+  youtubeVideoStart,
+  type MatchLink,
+} from "@/lib/matchLinks";
 import { MatchLinkSuggestionForm } from "./MatchLinkSuggestionForm";
 import type { MatchEventRow } from "@tranmere-web/lib/src/d1-types";
 import { matchEventTypeLabel } from "@tranmere-web/lib/src/match-event-constants";
@@ -93,6 +97,15 @@ export default function MatchReport(props: {
   matchEvents: MatchEventRow[];
 }) {
   const { match } = props;
+  const videoLinks = props.matchLinks.flatMap((item) => {
+    const videoId = youtubeVideoId(item.url);
+    return videoId
+      ? [{ item, videoId, start: youtubeVideoStart(item.url) }]
+      : [];
+  });
+  const externalLinks = props.matchLinks.filter(
+    (item) => !youtubeVideoId(item.url),
+  );
   const penalty = penaltyOutcome(match.pens, match.homeTeam, match.awayTeam);
   const players = match.apps ?? [];
   let formation: ManagerFormation | undefined = "4-4-2";
@@ -691,7 +704,7 @@ export default function MatchReport(props: {
         )}
 
         {players.length === 0 && (
-          <section className="border border-[#071a2b]/15 bg-[#fffdf8] p-6 sm:p-8">
+          <section className="mb-12 border border-[#071a2b]/15 bg-[#fffdf8] p-6 sm:p-8">
             <p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-700">
               Team sheet
             </p>
@@ -713,16 +726,57 @@ export default function MatchReport(props: {
           </section>
         )}
 
+        {videoLinks.length > 0 && (
+          <section className="mb-12 border border-[#071a2b]/15 bg-[#fffdf8] p-6 sm:p-8">
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-700">
+              Match video
+            </p>
+            <h2 className="mt-2 font-display text-3xl font-semibold">
+              Watch from the archive
+            </h2>
+            <div
+              className={
+                videoLinks.length === 1
+                  ? "mt-6 max-w-6xl"
+                  : "mt-6 grid gap-6 lg:grid-cols-2"
+              }
+            >
+              {videoLinks.map(({ item, videoId, start }) => (
+                <article key={item.id}>
+                  <div
+                    className="relative w-full overflow-hidden border border-[#071a2b]/15 bg-[#071a2b]"
+                    style={{ aspectRatio: "16 / 9" }}
+                  >
+                    <iframe
+                      className="absolute inset-0 h-full w-full"
+                      src={`https://www.youtube-nocookie.com/embed/${videoId}${start > 0 ? `?start=${start}` : ""}`}
+                      title={item.label}
+                      loading="lazy"
+                      referrerPolicy="strict-origin-when-cross-origin"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowFullScreen
+                    />
+                  </div>
+                  <h3 className="mt-3 text-base font-bold">{item.label}</h3>
+                  <p className="mt-1 font-mono text-[10px] uppercase tracking-[.12em] text-[#071a2b]/50">
+                    {item.publisher || item.linkType}
+                  </p>
+                </article>
+              ))}
+            </div>
+          </section>
+        )}
+
         <section className="border border-[#071a2b]/15 bg-[#fffdf8] p-6 sm:p-8">
           <p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-700">
             Related links
           </p>
           <h2 className="mt-2 font-display text-3xl font-semibold">
-            External Links
+            {videoLinks.length > 0 ? "Other external links" : "External links"}
           </h2>
-          {props.matchLinks.length > 0 ? (
+          {externalLinks.length > 0 ? (
             <div className="mt-6 grid gap-px border border-[#071a2b]/15 bg-[#071a2b]/15 sm:grid-cols-2">
-              {props.matchLinks.map((item) => (
+              {externalLinks.map((item) => (
                 <a
                   key={item.id}
                   href={item.url}
@@ -739,7 +793,7 @@ export default function MatchReport(props: {
             </div>
           ) : (
             <p className="mt-4 text-sm text-[#071a2b]/60">
-              No external links have been added yet.
+              No other external links have been added yet.
             </p>
           )}
           <div className="mt-6 border-t border-[#071a2b]/15 pt-5">
