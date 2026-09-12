@@ -152,9 +152,10 @@ export async function getAllArticles(limit = 3) {
 }
 
 export async function getAllArticlesForTag(limit = 3, tag: string) {
+  const tagLiteral = JSON.stringify(tag);
   const articles = await fetchGraphQL(
     `query {
-        blogPostCollection(where:{tags_contains_all: "${tag}"}, order: datePosted_DESC, limit: ${limit}) {
+        blogPostCollection(where:{tags_contains_all: ${tagLiteral}}, order: datePosted_DESC, limit: ${limit}) {
           items {
             ${ARTICLE_GROUP_FIELDS}
           }

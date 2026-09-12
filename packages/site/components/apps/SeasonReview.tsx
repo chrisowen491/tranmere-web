@@ -11,7 +11,6 @@ import { TrophyIcon } from "@heroicons/react/24/outline";
 import {
   H2HResult,
   H2HTotal,
-  Manager,
   Match,
   Transfer,
 } from "@tranmere-web/lib/src/tranmere-web-types";
@@ -32,6 +31,7 @@ import type {
 import { getSeasonManagers } from "@/lib/seasonManagers";
 import type { ClubCaptainRecord } from "@/lib/clubCaptains";
 import type { PlayerAwardRecord } from "@/lib/awards";
+import type { ManagerRecord } from "@/lib/managers";
 
 const DIVISION_NAMES: Record<number, Record<number, string>> = {
   0: { 2: "Division 2", 3: "Division 3", 4: "Division 4" },
@@ -68,7 +68,7 @@ export default function SeasonReview(props: {
   h2htotal: H2HTotal[];
   players: PlayerStatisticsView[];
   season: string;
-  managers: Manager[];
+  managers: ManagerRecord[];
   transfers: Transfer[];
   articles: BlogItem[];
   shirts: Shirt[];
@@ -452,7 +452,7 @@ export default function SeasonReview(props: {
                                 <div className="ml-4">
                                   <LinkButton
                                     text={manager.name}
-                                    href={`/managers`}
+                                    href={`/managers/${manager.id}`}
                                   ></LinkButton>
                                 </div>
                               </div>

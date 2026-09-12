@@ -1,6 +1,7 @@
 import { ManagerAdmin } from "@/components/apps/admin/ManagerAdmin";
+import { ManagerLinkAdmin } from "@/components/apps/admin/ManagerLinkAdmin";
 import { requireAdminPage } from "@/lib/adminAuth";
-import { getManagers } from "@/lib/managers";
+import { getManagerLinks, getManagers } from "@/lib/managers";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -16,6 +17,7 @@ export default async function ManagerAdminPage() {
   await requireAdminPage("/admin/managers");
   const env = getCloudflareContext().env;
   const managers = await getManagers(env.DB);
+  const managerLinks = await getManagerLinks(env.DB);
 
   return (
     <main className="min-h-screen bg-[#f4f0e8] pb-24 text-[#071a2b]">
@@ -50,6 +52,7 @@ export default async function ManagerAdminPage() {
 
       <section className="mx-auto max-w-7xl px-6 py-10 sm:px-10 lg:px-12">
         <ManagerAdmin initialManagers={managers} />
+        <ManagerLinkAdmin managers={managers} initialLinks={managerLinks} />
       </section>
     </main>
   );

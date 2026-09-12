@@ -81,7 +81,7 @@ export async function POST(request: NextRequest) {
     crypto.randomUUID(),
     manager,
   );
-  revalidateAdminPaths(["/managers"]);
+  revalidateAdminPaths(["/managers", `/managers/${created?.id}`]);
   return NextResponse.json({ manager: created }, { status: 201 });
 }
 
@@ -104,6 +104,6 @@ export async function PATCH(request: NextRequest) {
   }
 
   const updated = await updateManager(db, body.id, manager);
-  revalidateAdminPaths(["/managers"]);
+  revalidateAdminPaths(["/managers", `/managers/${body.id}`]);
   return NextResponse.json({ manager: updated });
 }

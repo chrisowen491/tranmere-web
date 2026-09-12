@@ -68,7 +68,7 @@ export default async function ManagerRecords() {
                 name: manager.name,
                 jobTitle: "Football manager",
                 memberOf: { "@id": "https://www.tranmere-web.com/#team" },
-                image: manager.imagePath
+                image: manager.imagePath,
               },
             })),
           },
@@ -141,7 +141,12 @@ export default async function ManagerRecords() {
                 Current manager
               </p>
               <h2 className="mt-2 font-display text-4xl font-semibold tracking-[-0.04em]">
-                {currentManager.name}
+                <Link
+                  href={`/managers/${currentManager.id}`}
+                  className="hover:text-blue-700"
+                >
+                  {currentManager.name}
+                </Link>
               </h2>
               <p className="mt-3 flex items-center gap-2 text-sm text-[#071a2b]/60">
                 <CalendarDaysIcon className="h-4 w-4" />
@@ -229,7 +234,12 @@ export default async function ManagerRecords() {
                 </div>
                 <div className="px-1 pb-2 pt-6">
                   <h3 className="font-display text-3xl font-semibold tracking-[-0.035em]">
-                    {manager.name}
+                    <Link
+                      href={`/managers/${manager.id}`}
+                      className="hover:text-blue-700"
+                    >
+                      {manager.name}
+                    </Link>
                   </h3>
                   <dl className="mt-6 grid grid-cols-2 border-t border-[#071a2b]/15 pt-4">
                     <div>
