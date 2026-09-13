@@ -76,13 +76,118 @@ export type FantasyTeamInput = Omit<
 export function hasValidFantasyGoalkeeper(
   assignments: FantasyAssignment[],
   playerPositions: ReadonlyMap<string, string | null>,
+  playerSecondaryPositions: ReadonlyMap<string, string | null> = new Map(),
 ) {
   const goalkeeper = assignments.find(
     (assignment) => assignment.position === "GK",
   );
   return goalkeeper
-    ? playerPositions.get(goalkeeper.playerId) === "Goalkeeper"
+    ? playerPositions.get(goalkeeper.playerId) === "Goalkeeper" ||
+        playerSecondaryPositions.get(goalkeeper.playerId) === "Goalkeeper"
     : false;
+}
+
+export const FANTASY_STRIKER_POSITIONS = new Set([
+  "Striker",
+  "Inside Forward",
+  "Outside Left",
+  "Outside Right",
+]);
+
+export const FANTASY_MIDFIELD_POSITIONS = new Set([
+  "Winger",
+  "Left Midfield",
+  "Right Midfield",
+  "Central Midfielder",
+  "Attacking Midfield",
+  "Defensive Midfield",
+  "Wing Half",
+]);
+
+export const FANTASY_DEFENSIVE_POSITIONS = new Set([
+  "Central Defender",
+  "Sweeper",
+  "Full Back",
+  "Left Back",
+  "Right Back",
+  "Wing Half",
+]);
+
+const FANTASY_MIDFIELD_SLOTS = new Set(["LM", "CM", "RM"]);
+const FANTASY_DEFENSIVE_SLOTS = new Set(["LB", "CB", "RB"]);
+
+function hasValidPlayersForSlots(
+  assignments: FantasyAssignment[],
+  playerPositions: ReadonlyMap<string, string | null>,
+  playerSecondaryPositions: ReadonlyMap<string, string | null>,
+  slotPositions: ReadonlySet<string>,
+  allowedPlayerPositions: ReadonlySet<string>,
+) {
+  const relevantAssignments = assignments.filter((assignment) =>
+    slotPositions.has(assignment.position),
+  );
+  return (
+    relevantAssignments.length > 0 &&
+    relevantAssignments.every(
+      (assignment) =>
+        allowedPlayerPositions.has(
+          playerPositions.get(assignment.playerId) ?? "",
+        ) ||
+        allowedPlayerPositions.has(
+          playerSecondaryPositions.get(assignment.playerId) ?? "",
+        ),
+    )
+  );
+}
+
+export function hasValidFantasyStrikers(
+  assignments: FantasyAssignment[],
+  playerPositions: ReadonlyMap<string, string | null>,
+  playerSecondaryPositions: ReadonlyMap<string, string | null> = new Map(),
+) {
+  const strikers = assignments.filter(
+    (assignment) => assignment.position === "ST",
+  );
+  return (
+    strikers.length > 0 &&
+    strikers.every(
+      (assignment) =>
+        FANTASY_STRIKER_POSITIONS.has(
+          playerPositions.get(assignment.playerId) ?? "",
+        ) ||
+        FANTASY_STRIKER_POSITIONS.has(
+          playerSecondaryPositions.get(assignment.playerId) ?? "",
+        ),
+    )
+  );
+}
+
+export function hasValidFantasyMidfielders(
+  assignments: FantasyAssignment[],
+  playerPositions: ReadonlyMap<string, string | null>,
+  playerSecondaryPositions: ReadonlyMap<string, string | null> = new Map(),
+) {
+  return hasValidPlayersForSlots(
+    assignments,
+    playerPositions,
+    playerSecondaryPositions,
+    FANTASY_MIDFIELD_SLOTS,
+    FANTASY_MIDFIELD_POSITIONS,
+  );
+}
+
+export function hasValidFantasyDefenders(
+  assignments: FantasyAssignment[],
+  playerPositions: ReadonlyMap<string, string | null>,
+  playerSecondaryPositions: ReadonlyMap<string, string | null> = new Map(),
+) {
+  return hasValidPlayersForSlots(
+    assignments,
+    playerPositions,
+    playerSecondaryPositions,
+    FANTASY_DEFENSIVE_SLOTS,
+    FANTASY_DEFENSIVE_POSITIONS,
+  );
 }
 
 function parseAssignments(value: string): FantasyAssignment[] {
@@ -200,9 +305,15 @@ export async function validateFantasyTeamInput(db: D1Database, value: unknown) {
   }
   const placeholders = [...playerIds].map(() => "?").join(",");
   const found = await db
-    .prepare(`SELECT id, position FROM Players WHERE id IN (${placeholders})`)
+    .prepare(
+      `SELECT id, position, secondary_position FROM Players WHERE id IN (${placeholders})`,
+    )
     .bind(...playerIds)
-    .all<{ id: string; position: string | null }>();
+    .all<{
+      id: string;
+      position: string | null;
+      secondary_position: string | null;
+    }>();
   if (found.results.length !== 11)
     throw new Error(
       "One or more selected players are no longer in the TranmereWeb database.",
@@ -210,8 +321,31 @@ export async function validateFantasyTeamInput(db: D1Database, value: unknown) {
   const positions = new Map(
     found.results.map((player) => [player.id, player.position]),
   );
-  if (!hasValidFantasyGoalkeeper(input.assignments, positions))
+  const secondaryPositions = new Map(
+    found.results.map((player) => [player.id, player.secondary_position]),
+  );
+  if (
+    !hasValidFantasyGoalkeeper(input.assignments, positions, secondaryPositions)
+  )
     throw new Error("Choose a goalkeeper for the goalkeeper position.");
+  if (
+    !hasValidFantasyStrikers(input.assignments, positions, secondaryPositions)
+  )
+    throw new Error(
+      "Choose a striker, inside forward, outside left or outside right for each striker position.",
+    );
+  if (
+    !hasValidFantasyMidfielders(
+      input.assignments,
+      positions,
+      secondaryPositions,
+    )
+  )
+    throw new Error("Choose a midfielder for each midfield position.");
+  if (
+    !hasValidFantasyDefenders(input.assignments, positions, secondaryPositions)
+  )
+    throw new Error("Choose a defender for each defensive position.");
   const rationale = input.rationale?.trim() ?? "";
   if (rationale.length > 600)
     throw new Error("Keep the rationale to 600 characters or fewer.");

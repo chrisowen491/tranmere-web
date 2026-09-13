@@ -13,7 +13,10 @@ import {
 import { AVATAR_KIT_OPTIONS } from "@tranmere-web/lib/src/avatar-kit-constants";
 import { replaceSeasonsKit } from "@tranmere-web/lib/src/apiFunctions";
 import {
+  FANTASY_DEFENSIVE_POSITIONS,
   FANTASY_FORMATIONS,
+  FANTASY_MIDFIELD_POSITIONS,
+  FANTASY_STRIKER_POSITIONS,
   type FantasyFormation,
   type FantasyTeam,
 } from "@/lib/fantasyTeams";
@@ -27,6 +30,19 @@ export type FantasyPlayer = {
   missing?: boolean;
 };
 type Slot = { id: string; position: string };
+
+const MIDFIELD_SLOTS = new Set(["LM", "CM", "RM"]);
+const DEFENSIVE_SLOTS = new Set(["LB", "CB", "RB"]);
+
+function hasEligiblePosition(
+  player: FantasyPlayer,
+  positions: ReadonlySet<string>,
+) {
+  return (
+    positions.has(player.position ?? "") ||
+    positions.has(player.secondaryPosition ?? "")
+  );
+}
 
 type Props = {
   players: FantasyPlayer[];
@@ -88,7 +104,16 @@ export function FantasyTeamBuilder({
         (player) =>
           !assignedIds.has(player.id) &&
           (selectedSlot?.position !== "GK" ||
-            player.position === "Goalkeeper") &&
+            player.position === "Goalkeeper" ||
+            player.secondaryPosition === "Goalkeeper") &&
+          (selectedSlot?.position !== "ST" ||
+            hasEligiblePosition(player, FANTASY_STRIKER_POSITIONS)) &&
+          (!selectedSlot ||
+            !MIDFIELD_SLOTS.has(selectedSlot.position) ||
+            hasEligiblePosition(player, FANTASY_MIDFIELD_POSITIONS)) &&
+          (!selectedSlot ||
+            !DEFENSIVE_SLOTS.has(selectedSlot.position) ||
+            hasEligiblePosition(player, FANTASY_DEFENSIVE_POSITIONS)) &&
           player.name.toLowerCase().includes(needle),
       )
       .slice(0, 30);
@@ -292,6 +317,25 @@ export function FantasyTeamBuilder({
               No goalkeepers match this search.
             </p>
           )}
+          {selectedSlot?.position === "ST" && filteredPlayers.length === 0 && (
+            <p className="border border-[#071a2b]/10 bg-[#f4f0e8] p-4 text-sm text-[#071a2b]/60">
+              No eligible forwards match this search.
+            </p>
+          )}
+          {selectedSlot &&
+            MIDFIELD_SLOTS.has(selectedSlot.position) &&
+            filteredPlayers.length === 0 && (
+              <p className="border border-[#071a2b]/10 bg-[#f4f0e8] p-4 text-sm text-[#071a2b]/60">
+                No midfielders match this search.
+              </p>
+            )}
+          {selectedSlot &&
+            DEFENSIVE_SLOTS.has(selectedSlot.position) &&
+            filteredPlayers.length === 0 && (
+              <p className="border border-[#071a2b]/10 bg-[#f4f0e8] p-4 text-sm text-[#071a2b]/60">
+                No defenders match this search.
+              </p>
+            )}
           {filteredPlayers.map((player) => (
             <button
               key={player.id}
