@@ -1,7 +1,7 @@
 <svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
     <g id="skin">
-        <ellipse ry="55.5" rx="91" cy="94.95313" cx="254.5" stroke-width="null" fill="#SKIN" stroke="null"/>
-        <g>
+        
+          <path stroke="null" fill="#SKIN" stroke-width="null" opacity="undefined" d="m255.25,155.28645c-50.32229,0 -91.08334,-24.83702 -91.08334,-55.5c0,-30.66298 40.76105,-55.5 91.08334,-55.5c50.32229,0 91.08334,24.83702 91.08334,55.5c0,30.66298 -40.76105,55.5 -91.08334,55.5z" id="svg_1"/><g>
             <path d="m211.25968,276.84762l0,36c0,24.301 19.699,44 44,44s44,-19.699 44,-44l0,-36l-88,0z" fill="#SKIN"/>
         </g>
         <g>

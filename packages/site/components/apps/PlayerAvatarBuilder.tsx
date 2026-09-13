@@ -401,6 +401,7 @@ export function PlayerAvatarBuilder() {
                   >
                     <option value="LightGray">LightGray</option>
                     <option value="White">White</option>
+                    <option value="Blue">Blue</option>
                     <option value="none">Transparent</option>
                   </select>
                 </div>

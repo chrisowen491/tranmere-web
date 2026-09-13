@@ -10,8 +10,8 @@ export interface PlayerRecord {
   foot: string | null;
   height: string | null;
   placeOfBirth: string | null;
-  position: string | null;
-  secondaryPosition: string | null;
+  position?: string | null;
+  secondaryPosition?: string | null;
   links: string[];
 }
 
@@ -21,6 +21,8 @@ export interface PlayerCardOption {
   id: string;
   name: string;
   picLink: string | null;
+  position: string | null;
+  secondaryPosition: string | null;
 }
 
 export interface WhoAmIPlayerOption extends PlayerCardOption {
@@ -106,11 +108,17 @@ export async function getUniquePlayers(db: D1Database, query?: string) {
 export async function getPlayerCardOptions(db: D1Database) {
   const { results } = await db
     .prepare(
-      `SELECT id, name, pic_link
+      `SELECT id, name, pic_link, position, secondary_position
        FROM Players
        ORDER BY name ASC, id ASC`,
     )
-    .all<{ id: string; name: string; pic_link: string | null }>();
+    .all<{
+      id: string;
+      name: string;
+      pic_link: string | null;
+      position: string | null;
+      secondary_position: string | null;
+    }>();
   return [
     ...results
       .reduce((players, row) => {
@@ -118,6 +126,8 @@ export async function getPlayerCardOptions(db: D1Database) {
           id: row.id,
           name: row.name,
           picLink: row.pic_link,
+          position: row.position,
+          secondaryPosition: row.secondary_position,
         };
         const current = players.get(row.name);
         if (!current || (!current.picLink && candidate.picLink))
@@ -131,7 +141,7 @@ export async function getPlayerCardOptions(db: D1Database) {
 export async function getWhoAmIPlayerOptions(db: D1Database) {
   const { results } = await db
     .prepare(
-      `SELECT id, name, pic_link, position
+      `SELECT id, name, pic_link, position, secondary_position
        FROM Players
        ORDER BY name ASC, id ASC`,
     )
@@ -140,6 +150,7 @@ export async function getWhoAmIPlayerOptions(db: D1Database) {
       name: string;
       pic_link: string | null;
       position: string | null;
+      secondary_position: string | null;
     }>();
   return [
     ...results
@@ -149,6 +160,7 @@ export async function getWhoAmIPlayerOptions(db: D1Database) {
           name: row.name,
           picLink: row.pic_link,
           position: row.position,
+          secondaryPosition: row.secondary_position,
         };
         const current = players.get(row.name);
         const currentScore =

@@ -73,6 +73,18 @@ export type FantasyTeamInput = Omit<
   "id" | "shareId" | "isShared" | "createdAt" | "updatedAt"
 >;
 
+export function hasValidFantasyGoalkeeper(
+  assignments: FantasyAssignment[],
+  playerPositions: ReadonlyMap<string, string | null>,
+) {
+  const goalkeeper = assignments.find(
+    (assignment) => assignment.position === "GK",
+  );
+  return goalkeeper
+    ? playerPositions.get(goalkeeper.playerId) === "Goalkeeper"
+    : false;
+}
+
 function parseAssignments(value: string): FantasyAssignment[] {
   try {
     const parsed = JSON.parse(value) as unknown;
@@ -188,15 +200,18 @@ export async function validateFantasyTeamInput(db: D1Database, value: unknown) {
   }
   const placeholders = [...playerIds].map(() => "?").join(",");
   const found = await db
-    .prepare(
-      `SELECT COUNT(DISTINCT id) AS count FROM Players WHERE id IN (${placeholders})`,
-    )
+    .prepare(`SELECT id, position FROM Players WHERE id IN (${placeholders})`)
     .bind(...playerIds)
-    .first<{ count: number }>();
-  if (found?.count !== 11)
+    .all<{ id: string; position: string | null }>();
+  if (found.results.length !== 11)
     throw new Error(
       "One or more selected players are no longer in the TranmereWeb database.",
     );
+  const positions = new Map(
+    found.results.map((player) => [player.id, player.position]),
+  );
+  if (!hasValidFantasyGoalkeeper(input.assignments, positions))
+    throw new Error("Choose a goalkeeper for the goalkeeper position.");
   const rationale = input.rationale?.trim() ?? "";
   if (rationale.length > 600)
     throw new Error("Keep the rationale to 600 characters or fewer.");

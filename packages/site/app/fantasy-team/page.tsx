@@ -37,6 +37,8 @@ export default async function FantasyTeamPage({
     id: player.id,
     name: player.name,
     picLink: player.picLink ?? defaultPlayerImage,
+    position: player.position,
+    secondaryPosition: player.secondaryPosition,
   }));
 
   return (

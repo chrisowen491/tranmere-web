@@ -22,6 +22,8 @@ export type FantasyPlayer = {
   id: string;
   name: string;
   picLink: string;
+  position?: string | null;
+  secondaryPosition?: string | null;
   missing?: boolean;
 };
 type Slot = { id: string; position: string };
@@ -85,10 +87,12 @@ export function FantasyTeamBuilder({
       .filter(
         (player) =>
           !assignedIds.has(player.id) &&
+          (selectedSlot?.position !== "GK" ||
+            player.position === "Goalkeeper") &&
           player.name.toLowerCase().includes(needle),
       )
       .slice(0, 30);
-  }, [assignedIds, players, query]);
+  }, [assignedIds, players, query, selectedSlot]);
 
   function chooseFormation(next: FantasyFormation) {
     setFormation(next);
@@ -283,6 +287,11 @@ export function FantasyTeamBuilder({
           />
         </div>
         <div className="mt-4 max-h-72 overflow-y-auto">
+          {selectedSlot?.position === "GK" && filteredPlayers.length === 0 && (
+            <p className="border border-[#071a2b]/10 bg-[#f4f0e8] p-4 text-sm text-[#071a2b]/60">
+              No goalkeepers match this search.
+            </p>
+          )}
           {filteredPlayers.map((player) => (
             <button
               key={player.id}
