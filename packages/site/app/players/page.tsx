@@ -69,6 +69,7 @@ export default async function PlayerSearchPage() {
                 ["Lethal finishers", "/players/lethal-finishers"],
                 ["Goalkeeper records", "/players/goalkeeper-record"],
                 ["Club captains", "/players/club-captains"],
+                ["Squad-number history", "/players/squad-numbers"],
                 ["Super subs", "/players/super-subs"],
                 ["Misfiring strikers", "/players/misfiring-strikers"],
                 ["Cult heroes", "/players/cult-heroes"],
