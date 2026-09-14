@@ -627,16 +627,63 @@ CREATE TABLE IF NOT EXISTS Apps (
   substitute_time TEXT,
   substituted_by TEXT,
   substitute_substituted_by TEXT,
+  substituted_by_shirt_number INTEGER,
+  substitute_substituted_by_shirt_number INTEGER,
   CHECK (season BETWEEN 1800 AND 2200),
   CHECK (
     match_date GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]'
   ),
   CHECK (shirt_number IS NULL OR shirt_number >= 0),
+  CHECK (
+    substituted_by_shirt_number IS NULL OR substituted_by_shirt_number >= 0
+  ),
+  CHECK (
+    substitute_substituted_by_shirt_number IS NULL
+    OR substitute_substituted_by_shirt_number >= 0
+  ),
   CHECK (yellow_card IN (0, 1)),
   CHECK (red_card IN (0, 1)),
   CHECK (substitute_yellow_card IN (0, 1)),
   CHECK (substitute_red_card IN (0, 1))
 );
+
+CREATE TRIGGER IF NOT EXISTS Apps_pre_1986_substitute_numbers_insert
+AFTER INSERT ON Apps
+WHEN NEW.season < 1986
+BEGIN
+  UPDATE Apps
+  SET substituted_by_shirt_number = CASE
+        WHEN NEW.substituted_by IS NOT NULL AND TRIM(NEW.substituted_by) <> ''
+          THEN 12
+        ELSE substituted_by_shirt_number
+      END,
+      substitute_substituted_by_shirt_number = CASE
+        WHEN NEW.substitute_substituted_by IS NOT NULL
+          AND TRIM(NEW.substitute_substituted_by) <> ''
+          THEN 12
+        ELSE substitute_substituted_by_shirt_number
+      END
+  WHERE id = NEW.id;
+END;
+
+CREATE TRIGGER IF NOT EXISTS Apps_pre_1986_substitute_numbers_update
+AFTER UPDATE OF season, substituted_by, substitute_substituted_by ON Apps
+WHEN NEW.season < 1986
+BEGIN
+  UPDATE Apps
+  SET substituted_by_shirt_number = CASE
+        WHEN NEW.substituted_by IS NOT NULL AND TRIM(NEW.substituted_by) <> ''
+          THEN 12
+        ELSE NULL
+      END,
+      substitute_substituted_by_shirt_number = CASE
+        WHEN NEW.substitute_substituted_by IS NOT NULL
+          AND TRIM(NEW.substitute_substituted_by) <> ''
+          THEN 12
+        ELSE NULL
+      END
+  WHERE id = NEW.id;
+END;
 
 CREATE INDEX IF NOT EXISTS Apps_player_date_idx
   ON Apps (player_name, match_date DESC);

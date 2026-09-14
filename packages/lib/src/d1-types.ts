@@ -250,6 +250,8 @@ export interface AppRow {
   substitute_time: string | null;
   substituted_by: string | null;
   substitute_substituted_by: string | null;
+  substituted_by_shirt_number: number | null;
+  substitute_substituted_by_shirt_number: number | null;
 }
 
 export interface PlayerAppearanceRow extends AppRow {

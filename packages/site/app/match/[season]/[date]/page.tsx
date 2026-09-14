@@ -45,6 +45,8 @@ function mapAppearance(row: {
   substitute_time: string | null;
   substituted_by: string | null;
   substitute_substituted_by: string | null;
+  substituted_by_shirt_number: number | null;
+  substitute_substituted_by_shirt_number: number | null;
   substitute_yellow_card: number;
   substitute_red_card: number;
 }): Appearance {
@@ -58,6 +60,8 @@ function mapAppearance(row: {
     Number: row.shirt_number?.toString(),
     SubbedBy: row.substituted_by,
     SubSubbedBy: row.substitute_substituted_by,
+    SubbedByNumber: row.substituted_by_shirt_number?.toString(),
+    SubSubbedByNumber: row.substitute_substituted_by_shirt_number?.toString(),
     SubTime: row.substitute_time,
     YellowCard: row.yellow_card ? "TRUE" : null,
     RedCard: row.red_card ? "TRUE" : null,

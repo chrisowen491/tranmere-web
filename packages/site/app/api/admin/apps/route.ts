@@ -25,23 +25,44 @@ type AppInput = {
   substituteTime: string | null;
   substitutedBy: string | null;
   substituteSubstitutedBy: string | null;
+  substitutedByShirtNumber: number | null;
+  substituteSubstitutedByShirtNumber: number | null;
 };
 
-type AppRequest = Omit<Partial<AppInput>, "shirtNumber"> & {
+type AppRequest = Omit<
+  Partial<AppInput>,
+  | "shirtNumber"
+  | "substitutedByShirtNumber"
+  | "substituteSubstitutedByShirtNumber"
+> & {
   id?: string;
   shirtNumber?: number | string | null;
+  substitutedByShirtNumber?: number | string | null;
+  substituteSubstitutedByShirtNumber?: number | string | null;
 };
+
+function optionalNumber(value: number | string | null | undefined) {
+  if (value === "" || value === null || value === undefined) return null;
+  const number = Number(value);
+  return Number.isSafeInteger(number) && number >= 0 ? number : NaN;
+}
 
 function validateApp(body: AppRequest): AppInput | null {
   const season = Number(body.season);
   const matchDate = requiredText(body.matchDate, 10);
-  const shirtNumberValue = body.shirtNumber;
-  const shirtNumber =
-    shirtNumberValue === "" ||
-    shirtNumberValue === null ||
-    shirtNumberValue === undefined
-      ? null
-      : Number(shirtNumberValue);
+  const shirtNumber = optionalNumber(body.shirtNumber);
+  const substitutedBy = optionalText(body.substitutedBy);
+  const substituteSubstitutedBy = optionalText(body.substituteSubstitutedBy);
+  const substitutedByShirtNumber = substitutedBy
+    ? season < 1986
+      ? 12
+      : optionalNumber(body.substitutedByShirtNumber)
+    : null;
+  const substituteSubstitutedByShirtNumber = substituteSubstitutedBy
+    ? season < 1986
+      ? 12
+      : optionalNumber(body.substituteSubstitutedByShirtNumber)
+    : null;
   const playerName = requiredText(body.playerName);
   const opposition = requiredText(body.opposition);
 
@@ -52,8 +73,9 @@ function validateApp(body: AppRequest): AppInput | null {
     !isIsoDate(matchDate) ||
     !playerName ||
     !opposition ||
-    (shirtNumber !== null &&
-      (!Number.isSafeInteger(shirtNumber) || shirtNumber < 0))
+    Number.isNaN(shirtNumber) ||
+    Number.isNaN(substitutedByShirtNumber) ||
+    Number.isNaN(substituteSubstitutedByShirtNumber)
   ) {
     return null;
   }
@@ -70,8 +92,10 @@ function validateApp(body: AppRequest): AppInput | null {
     substituteYellowCard: booleanFlag(body.substituteYellowCard),
     substituteRedCard: booleanFlag(body.substituteRedCard),
     substituteTime: optionalText(body.substituteTime, 40),
-    substitutedBy: optionalText(body.substitutedBy),
-    substituteSubstitutedBy: optionalText(body.substituteSubstitutedBy),
+    substitutedBy,
+    substituteSubstitutedBy,
+    substitutedByShirtNumber,
+    substituteSubstitutedByShirtNumber,
   };
 }
 
@@ -90,6 +114,8 @@ function values(app: AppInput) {
     app.substituteTime,
     app.substitutedBy,
     app.substituteSubstitutedBy,
+    app.substitutedByShirtNumber,
+    app.substituteSubstitutedByShirtNumber,
   ];
 }
 
@@ -109,6 +135,9 @@ function responseApp(id: string, app: AppInput) {
     substitute_time: app.substituteTime,
     substituted_by: app.substitutedBy,
     substitute_substituted_by: app.substituteSubstitutedBy,
+    substituted_by_shirt_number: app.substitutedByShirtNumber,
+    substitute_substituted_by_shirt_number:
+      app.substituteSubstitutedByShirtNumber,
   };
 }
 
@@ -135,8 +164,9 @@ export async function POST(request: NextRequest) {
         id, season, match_date, player_name, competition, opposition,
         shirt_number, yellow_card, red_card, substitute_yellow_card,
         substitute_red_card, substitute_time, substituted_by,
-        substitute_substituted_by
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        substitute_substituted_by, substituted_by_shirt_number,
+        substitute_substituted_by_shirt_number
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     )
     .bind(id, ...values(app))
     .run();
@@ -161,7 +191,8 @@ export async function PATCH(request: NextRequest) {
         season = ?, match_date = ?, player_name = ?, competition = ?, opposition = ?,
         shirt_number = ?, yellow_card = ?, red_card = ?, substitute_yellow_card = ?,
         substitute_red_card = ?, substitute_time = ?, substituted_by = ?,
-        substitute_substituted_by = ?
+        substitute_substituted_by = ?, substituted_by_shirt_number = ?,
+        substitute_substituted_by_shirt_number = ?
        WHERE id = ?`,
     )
     .bind(...values(app), id)
@@ -187,7 +218,8 @@ export async function DELETE(request: NextRequest) {
       `SELECT id, season, match_date, player_name, competition, opposition,
               shirt_number, yellow_card, red_card, substitute_yellow_card,
               substitute_red_card, substitute_time, substituted_by,
-              substitute_substituted_by
+              substitute_substituted_by, substituted_by_shirt_number,
+              substitute_substituted_by_shirt_number
        FROM Apps WHERE id = ?`,
     )
     .bind(id)

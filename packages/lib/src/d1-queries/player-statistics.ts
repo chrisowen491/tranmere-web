@@ -275,11 +275,7 @@ export async function queryAppRows(
     await all<AppRow>(
       db,
       withLimit(
-        `SELECT id, season, match_date, player_name, competition, opposition,
-                shirt_number, yellow_card, red_card, substitute_yellow_card,
-                substitute_red_card, substitute_time, substituted_by,
-                substitute_substituted_by
-         FROM Apps
+        `SELECT * FROM Apps
          ${where}
          ORDER BY match_date DESC, player_name ASC, id ASC`,
         values,
@@ -309,10 +305,7 @@ export async function queryPlayerAppearanceRows(
     await all<PlayerAppearanceRow>(
       db,
       withLimit(
-        `SELECT id, season, match_date, player_name, competition, opposition,
-                shirt_number, yellow_card, red_card, substitute_yellow_card,
-                substitute_red_card, substitute_time, substituted_by,
-                substitute_substituted_by,
+        `SELECT *,
                 CASE WHEN player_name = ? THEN 'Start' ELSE 'Sub' END AS appearance_type
          FROM Apps
          WHERE (player_name = ? OR substituted_by = ? OR substitute_substituted_by = ?)${seasonClause}${statisticsClause}

@@ -28,6 +28,29 @@ function validNumber(value: number | null) {
   return value !== null && Number.isInteger(value) && value > 0 && value < 100;
 }
 
+function numberedAppearances(rows: AppRow[]) {
+  return rows.flatMap((row) => {
+    const appearances = [row];
+    if (row.substituted_by) {
+      appearances.push({
+        ...row,
+        id: `${row.id}:substitute`,
+        player_name: row.substituted_by,
+        shirt_number: row.substituted_by_shirt_number,
+      });
+    }
+    if (row.substitute_substituted_by) {
+      appearances.push({
+        ...row,
+        id: `${row.id}:second-substitute`,
+        player_name: row.substitute_substituted_by,
+        shirt_number: row.substitute_substituted_by_shirt_number,
+      });
+    }
+    return appearances;
+  });
+}
+
 function playerRecords(rows: AppRow[]) {
   const players = new Map<string, AppRow[]>();
   for (const row of rows) {
@@ -54,7 +77,9 @@ export function buildSquadNumberHistory(
   rows: AppRow[],
   filters: SquadNumberFilters = {},
 ) {
-  const numberedRows = rows.filter((row) => validNumber(row.shirt_number));
+  const numberedRows = numberedAppearances(rows).filter((row) =>
+    validNumber(row.shirt_number),
+  );
   const filteredRows = numberedRows.filter(
     (row) =>
       (!filters.number || row.shirt_number === filters.number) &&

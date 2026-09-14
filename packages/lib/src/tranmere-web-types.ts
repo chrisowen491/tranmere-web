@@ -112,6 +112,8 @@ export interface Appearance {
   Number: string | null | undefined;
   SubbedBy?: string | null | undefined;
   SubSubbedBy?: string | null | undefined;
+  SubbedByNumber?: string | null | undefined;
+  SubSubbedByNumber?: string | null | undefined;
   SubTime?: string | null | undefined;
   YellowCard?: string | null | undefined;
   RedCard?: string | null | undefined;

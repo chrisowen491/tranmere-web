@@ -22,7 +22,12 @@ export function mapPlayerAppearance(
     Competition: row.competition ?? "",
     Season: String(row.season),
     Name: playerName,
-    Number: row.shirt_number?.toString(),
+    Number: (isSubstitute
+      ? row.substituted_by === playerName
+        ? row.substituted_by_shirt_number
+        : row.substitute_substituted_by_shirt_number
+      : row.shirt_number
+    )?.toString(),
     SubbedBy: isSubstitute ? row.player_name : row.substituted_by,
     SubTime: row.substitute_time,
     YellowCard: (isSubstitute ? row.substitute_yellow_card : row.yellow_card)

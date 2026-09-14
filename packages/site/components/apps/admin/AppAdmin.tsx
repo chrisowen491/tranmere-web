@@ -33,6 +33,8 @@ function blankApp(season: number, date?: string): AppForm {
     substitute_time: null,
     substituted_by: null,
     substitute_substituted_by: null,
+    substituted_by_shirt_number: null,
+    substitute_substituted_by_shirt_number: null,
   };
 }
 
@@ -61,6 +63,9 @@ function payload(app: AppForm) {
     substituteTime: app.substitute_time,
     substitutedBy: app.substituted_by,
     substituteSubstitutedBy: app.substitute_substituted_by,
+    substitutedByShirtNumber: app.substituted_by_shirt_number,
+    substituteSubstitutedByShirtNumber:
+      app.substitute_substituted_by_shirt_number,
   };
 }
 
@@ -94,8 +99,12 @@ export function AppAdmin({
     setEditing((app) => {
       if (!app) return app;
       if (key === "season") return { ...app, season: Number(value) };
-      if (key === "shirt_number") {
-        return { ...app, shirt_number: value === "" ? null : Number(value) };
+      if (
+        key === "shirt_number" ||
+        key === "substituted_by_shirt_number" ||
+        key === "substitute_substituted_by_shirt_number"
+      ) {
+        return { ...app, [key]: value === "" ? null : Number(value) };
       }
       if (
         key === "yellow_card" ||
@@ -379,11 +388,39 @@ export function AppAdmin({
                   className={inputClass}
                 />
               </Field>
+              <Field label="Replacement shirt number">
+                <input
+                  type="number"
+                  min="0"
+                  value={editing.substituted_by_shirt_number ?? ""}
+                  onChange={(event) =>
+                    changeField(
+                      "substituted_by_shirt_number",
+                      event.target.value,
+                    )
+                  }
+                  className={inputClass}
+                />
+              </Field>
               <Field label="Replacement then replaced by">
                 <input
                   value={editing.substitute_substituted_by ?? ""}
                   onChange={(event) =>
                     changeField("substitute_substituted_by", event.target.value)
+                  }
+                  className={inputClass}
+                />
+              </Field>
+              <Field label="Second replacement shirt number">
+                <input
+                  type="number"
+                  min="0"
+                  value={editing.substitute_substituted_by_shirt_number ?? ""}
+                  onChange={(event) =>
+                    changeField(
+                      "substitute_substituted_by_shirt_number",
+                      event.target.value,
+                    )
                   }
                   className={inputClass}
                 />

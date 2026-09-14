@@ -23,6 +23,8 @@ function appearance(
     substitute_time: null,
     substituted_by: null,
     substitute_substituted_by: null,
+    substituted_by_shirt_number: null,
+    substitute_substituted_by_shirt_number: null,
   };
 }
 
@@ -62,5 +64,20 @@ describe("squad number history", () => {
     expect(history.filteredRows).toHaveLength(1);
     expect(history.numbers).toHaveLength(1);
     expect(history.numbers[0].leadingPlayer.player).toBe("Goalkeeper B");
+  });
+
+  it("includes recorded shirt numbers for substitutes", () => {
+    const row = appearance("Starter", 9, 1985, "1985-08-01");
+    row.substituted_by = "Substitute";
+    row.substituted_by_shirt_number = 12;
+
+    const history = buildSquadNumberHistory([row]);
+
+    expect(
+      history.numbers.find((record) => record.number === 12),
+    ).toMatchObject({
+      appearances: 1,
+      leadingPlayer: { player: "Substitute" },
+    });
   });
 });
