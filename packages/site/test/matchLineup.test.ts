@@ -36,9 +36,15 @@ describe("formation and lineup assignment", () => {
     );
 
     expect(lineup.formation).toBe("4-4-2");
-    expect(lineup.rows.map((row: string | any[]) => row.length)).toEqual([2, 4, 4, 1]);
-    expect(lineup.rows[0].every((item) => item.position === "Striker")).toBe(true);
-    expect(lineup.rows[2].map((item: { position: any; }) => item.position)).toEqual([
+    expect(lineup.rows.map((row: string | any[]) => row.length)).toEqual([
+      2, 4, 4, 1,
+    ]);
+    expect(lineup.rows[0].every((item) => item.position === "Striker")).toBe(
+      true,
+    );
+    expect(
+      lineup.rows[2].map((item: { position: any }) => item.position),
+    ).toEqual([
       "Full Back",
       "Central Defender",
       "Central Defender",
@@ -62,6 +68,26 @@ describe("formation and lineup assignment", () => {
     expect(lineup.rows.at(-1)?.[0].name).toBe("Emergency keeper");
   });
 
+  it("uses secondary fallback suitability when a striker must fill midfield", () => {
+    const lineup = arrangeLineup(
+      [
+        player("Wayne Allison", "Striker"),
+        player("Alex Hay", "Striker", "Attacking Midfield"),
+        player("Andy Parkinson", "Striker", "Attacking Midfield"),
+        player("Iain Hume", "Striker", "Attacking Midfield"),
+        player("Danny Harrison", "Defensive Midfield"),
+        player("Micky Mellon", "Central Midfielder", "Left Midfield"),
+      ],
+      "4-3-3",
+      positions,
+    );
+
+    expect(lineup.rows[0].map((item) => item.name)).toContain("Wayne Allison");
+    expect(lineup.rows[1].map((item) => item.name)).not.toContain(
+      "Wayne Allison",
+    );
+  });
+
   it("honours the requested formation and defaults to 4-4-2", () => {
     const players = [
       player("Keeper", "Goalkeeper"),
@@ -78,9 +104,13 @@ describe("formation and lineup assignment", () => {
     ];
 
     expect(
-      arrangeLineup(players, "4-3-3", positions).rows.map((row: string | any[]) => row.length),
+      arrangeLineup(players, "4-3-3", positions).rows.map(
+        (row: string | any[]) => row.length,
+      ),
     ).toEqual([3, 3, 4, 1]);
-    expect(arrangeLineup(players, undefined, positions).formation).toBe("4-4-2");
+    expect(arrangeLineup(players, undefined, positions).formation).toBe(
+      "4-4-2",
+    );
     expect(formationLabel("5-3-2")).toBe("5-3-2");
   });
 
@@ -104,8 +134,8 @@ describe("formation and lineup assignment", () => {
     );
 
     expect(lineup.rows[1][0].name).toBe("Gareth Roberts");
-    expect(lineup.rows[2].map((player: { name: any; }) => player.name)).toContain(
-      "Ian Goodison",
-    );
+    expect(
+      lineup.rows[2].map((player: { name: any }) => player.name),
+    ).toContain("Ian Goodison");
   });
 });

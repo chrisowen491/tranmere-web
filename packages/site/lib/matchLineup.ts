@@ -4,18 +4,18 @@ import type { MatchAppearanceView } from "@/lib/matchPlayers";
 type Position =
   | "Goalkeeper"
   | "Full Back"
-  | "Wing Half"  
+  | "Wing Half"
   | "Left Back"
   | "Right Back"
   | "Central Defender"
-  | "Sweeper"  
+  | "Sweeper"
   | "Central Midfielder"
   | "Left Midfield"
   | "Right Midfield"
   | "Attacking Midfield"
-  | "Inside Forward"  
-  | "Outside Left"  
-  | "Outside Right"      
+  | "Inside Forward"
+  | "Outside Left"
+  | "Outside Right"
   | "Defensive Midfield"
   | "Winger"
   | "Striker";
@@ -88,9 +88,7 @@ const formations: Record<ManagerFormation, FormationSlot[][]> = {
       { id: "st-left", position: "Striker" },
       { id: "st-right", position: "Striker" },
     ],
-    [
-        { id: "att-centre", position: "Attacking Midfield" },
-    ],
+    [{ id: "att-centre", position: "Attacking Midfield" }],
     [
       { id: "mid-left", position: "Central Midfielder" },
       { id: "mid-right", position: "Central Midfielder" },
@@ -101,9 +99,7 @@ const formations: Record<ManagerFormation, FormationSlot[][]> = {
       { id: "def-centre-right", position: "Central Defender" },
       { id: "def-right", position: "Right Back" },
     ],
-    [
-      { id: "def-centre", position: "Sweeper" },
-    ],
+    [{ id: "def-centre", position: "Sweeper" }],
     [{ id: "goalkeeper", position: "Goalkeeper" }],
   ],
   "3-4-2-1": [
@@ -238,11 +234,9 @@ const formations: Record<ManagerFormation, FormationSlot[][]> = {
   "4-3-1-2": [
     [
       { id: "forward-centre-left", position: "Striker" },
-      { id: "forward-centre-right", position: "Striker" }
+      { id: "forward-centre-right", position: "Striker" },
     ],
-    [
-      { id: "attacker-centre", position: "Attacking Midfield" },
-    ],
+    [{ id: "attacker-centre", position: "Attacking Midfield" }],
     [
       { id: "mid-centre-left", position: "Central Midfielder" },
       { id: "mid-centre", position: "Central Midfielder" },
@@ -289,9 +283,9 @@ const formations: Record<ManagerFormation, FormationSlot[][]> = {
     [
       { id: "full-left", position: "Full Back" },
       { id: "full-right", position: "Full Back" },
-    ],    
+    ],
     [{ id: "goalkeeper", position: "Goalkeeper" }],
-  ],  
+  ],
 };
 
 const fallbackScores: Record<Position, Partial<Record<Position, number>>> = {
@@ -307,8 +301,8 @@ const fallbackScores: Record<Position, Partial<Record<Position, number>>> = {
   "Wing Half": {
     "Wing Half": 100,
     "Full Back": 80,
-    "Central Defender": 60
-  },  
+    "Central Defender": 60,
+  },
   "Left Back": {
     "Left Back": 100,
     "Full Back": 80,
@@ -319,14 +313,14 @@ const fallbackScores: Record<Position, Partial<Record<Position, number>>> = {
   },
   "Central Defender": {
     "Central Defender": 100,
-    "Sweeper": 90,
+    Sweeper: 90,
     "Full Back": 70,
     "Left Back": 70,
     "Right Back": 70,
     "Central Midfielder": 55,
   },
-  "Sweeper": {
-    "Sweeper": 100,
+  Sweeper: {
+    Sweeper: 100,
     "Central Defender": 90,
     "Full Back": 70,
     "Left Back": 70,
@@ -365,7 +359,7 @@ const fallbackScores: Record<Position, Partial<Record<Position, number>>> = {
     "Left Midfield": 85,
     Winger: 85,
     Striker: 60,
-  },  
+  },
   "Right Midfield": {
     "Right Midfield": 100,
     Winger: 80,
@@ -381,7 +375,7 @@ const fallbackScores: Record<Position, Partial<Record<Position, number>>> = {
     "Right Midfield": 85,
     Winger: 85,
     Striker: 60,
-  },    
+  },
   Winger: {
     Winger: 100,
     "Right Midfield": 80,
@@ -401,12 +395,12 @@ const fallbackScores: Record<Position, Partial<Record<Position, number>>> = {
   },
   "Inside Forward": {
     "Inside Forward": 100,
-    "Striker": 80,
+    Striker: 80,
     "Central Midfielder": 70,
     "Defensive Midfield": 70,
     "Attacking Midfield": 70,
     Winger: 45,
-  },  
+  },
   Striker: {
     Striker: 100,
     "Inside Forward": 75,
@@ -460,12 +454,19 @@ function suitability(positions: PlayerPositions, slot: FormationSlot) {
     return -1_000;
   }
 
-  const knownPosition = positions.position ?? positions.secondaryPosition;
-  if (!knownPosition) return slot.position === "Goalkeeper" ? 1 : 30;
+  const knownPositions = [
+    positions.position,
+    positions.secondaryPosition,
+  ].filter((position): position is string => Boolean(position));
+  if (knownPositions.length === 0)
+    return slot.position === "Goalkeeper" ? 1 : 30;
 
-  return (
-    fallbackScores[slot.position][knownPosition as Position] ??
-    (slot.position === "Goalkeeper" ? 1 : 10)
+  return Math.max(
+    ...knownPositions.map(
+      (position) =>
+        fallbackScores[slot.position][position as Position] ??
+        (slot.position === "Goalkeeper" ? 1 : 10),
+    ),
   );
 }
 
