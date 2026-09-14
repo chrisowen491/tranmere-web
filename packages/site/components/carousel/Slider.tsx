@@ -1,4 +1,4 @@
-import { GalleryImage } from "@/lib/types";
+import type { GalleryImage } from "@/lib/types";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -12,13 +12,13 @@ const Slider = (props: { images: GalleryImage[]; title: string }) => {
           <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
             {images.map((elem, idx) => (
               <div key={idx} className="group relative">
-                <div className="aspect-h-1 aspect-w-1 w-full rounded-md bg-indigo-200 dark:bg-black lg:aspect-none group-hover:opacity-75 lg:h-80">
+                <div className="relative aspect-square w-full overflow-hidden border border-[#071a2b]/15 bg-[#e8e2d6] group-hover:opacity-75 lg:h-80">
                   <Image
                     alt={elem.description ? elem.description : "Image"}
                     src={elem.url}
-                    width={400}
-                    height={400}
-                    className="h-full w-full object-cover object-center lg:h-full lg:w-full"
+                    fill
+                    sizes="(min-width: 1280px) 280px, (min-width: 1024px) 22vw, (min-width: 640px) 45vw, 100vw"
+                    className="object-cover object-center"
                   />
                 </div>
                 <div className="mt-4 flex justify-between">
