@@ -23,9 +23,21 @@ export function PenaltyShootoutSequence({
   const orderedKicks = [...kicks].sort((a, b) => a.kick_order - b.kick_order);
 
   if (playerAvatars) {
+    // A historical shootout can have only Rovers' takers recorded. Pairing
+    // consecutive rows would then put two Rovers kicks in one round and hide
+    // one of them. Build each row from the nth kick for each side instead.
+    const roversKicks = orderedKicks.filter(
+      (kick) => kick.team_side === "tranmere",
+    );
+    const oppositionKicks = orderedKicks.filter(
+      (kick) => kick.team_side === "opposition",
+    );
     const rounds = Array.from(
-      { length: Math.ceil(orderedKicks.length / 2) },
-      (_, index) => orderedKicks.slice(index * 2, index * 2 + 2),
+      { length: Math.max(roversKicks.length, oppositionKicks.length) },
+      (_, index) => ({
+        roversKick: roversKicks[index],
+        oppositionKick: oppositionKicks[index],
+      }),
     );
 
     return (
@@ -40,8 +52,14 @@ export function PenaltyShootoutSequence({
           </p>
         </div>
         <ol className="divide-y divide-[#071a2b]/10">
-          {rounds.map((round, roundIndex) => {
-            const completed = orderedKicks.slice(0, (roundIndex + 1) * 2);
+          {rounds.map(({ roversKick, oppositionKick }, roundIndex) => {
+            const lastKickOrder = Math.max(
+              roversKick?.kick_order ?? 0,
+              oppositionKick?.kick_order ?? 0,
+            );
+            const completed = orderedKicks.filter(
+              (kick) => kick.kick_order <= lastKickOrder,
+            );
             const roversScore = completed.filter(
               (kick) =>
                 kick.team_side === "tranmere" && kick.outcome === "scored",
@@ -50,13 +68,6 @@ export function PenaltyShootoutSequence({
               (kick) =>
                 kick.team_side === "opposition" && kick.outcome === "scored",
             ).length;
-            const roversKick = round.find(
-              (kick) => kick.team_side === "tranmere",
-            );
-            const oppositionKick = round.find(
-              (kick) => kick.team_side === "opposition",
-            );
-
             const renderKick = (
               kick: PenaltyShootoutKickRow | undefined,
             ) => {
@@ -121,7 +132,7 @@ export function PenaltyShootoutSequence({
 
             return (
               <li
-                key={round[0]?.id ?? roundIndex}
+                key={roversKick?.id ?? oppositionKick?.id ?? roundIndex}
                 className="grid grid-cols-[minmax(0,1fr)_72px_minmax(0,1fr)] items-center px-3 py-4 sm:grid-cols-[minmax(0,1fr)_96px_minmax(0,1fr)] sm:px-5"
               >
                 {renderKick(roversKick)}
