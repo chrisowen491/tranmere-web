@@ -16,6 +16,7 @@ import {
   queryAppRows,
   queryGoalRows,
   queryMatchEventRows,
+  queryPenaltyShootoutKicks,
 } from "@tranmere-web/lib/src/d1-queries";
 import MatchReport from "@/components/apps/MatchReport";
 import { GetCommentsByUrl } from "@/lib/comments";
@@ -31,6 +32,7 @@ import {
   getMatchReport,
   searchGames,
 } from "@/lib/games";
+import { getPlayerStatisticsProfiles } from "@/lib/playerStatistics";
 
 function mapAppearance(row: {
   id: string;
@@ -129,28 +131,50 @@ export default async function MatchPage(props: { params: MatchParams }) {
   const params = await props.params;
   const env = (await getCloudflareContext({ async: true })).env;
   const baseUrl = `/match/${params.season}/${params.date}`;
-  const [game, reportRow, appRows, goalRows, matchEvents, session, matchLinks] =
-    await Promise.all([
-      getGameBySeasonAndDate(env.DB, params.season, params.date),
-      getMatchReport(env.DB, params.date),
-      queryAppRows(env.DB, {
-        season: Number(params.season),
-        matchDate: params.date,
-      }),
-      queryGoalRows(env.DB, {
-        season: Number(params.season),
-        matchDate: params.date,
-      }),
-      queryMatchEventRows(env.DB, {
-        season: Number(params.season),
-        matchDate: params.date,
-      }),
-      auth0.getSession(),
-      getMatchLinks(env.DB, params.season, params.date),
-    ]);
+  const [
+    game,
+    reportRow,
+    appRows,
+    goalRows,
+    matchEvents,
+    shootoutKicks,
+    session,
+    matchLinks,
+  ] = await Promise.all([
+    getGameBySeasonAndDate(env.DB, params.season, params.date),
+    getMatchReport(env.DB, params.date),
+    queryAppRows(env.DB, {
+      season: Number(params.season),
+      matchDate: params.date,
+    }),
+    queryGoalRows(env.DB, {
+      season: Number(params.season),
+      matchDate: params.date,
+    }),
+    queryMatchEventRows(env.DB, {
+      season: Number(params.season),
+      matchDate: params.date,
+    }),
+    queryPenaltyShootoutKicks(env.DB, {
+      season: Number(params.season),
+      matchDate: params.date,
+    }),
+    auth0.getSession(),
+    getMatchLinks(env.DB, params.season, params.date),
+  ]);
   if (!game) notFound();
   const gameId = game.id;
   if (!gameId) notFound();
+  const shootoutPlayerNames = shootoutKicks
+    .filter((kick) => kick.team_side === "tranmere")
+    .map((kick) => kick.player_name);
+  const shootoutProfiles = await getPlayerStatisticsProfiles(
+    env.DB,
+    shootoutPlayerNames,
+  );
+  const shootoutPlayerAvatars = Object.fromEntries(
+    shootoutPlayerNames.map((name) => [name, shootoutProfiles.get(name)!.picLink]),
+  );
   const apps = appRows.map(mapAppearance);
   const goals = goalRows.map(mapGoal);
   const matchData: MatchPageData = {
@@ -269,6 +293,8 @@ export default async function MatchPage(props: { params: MatchParams }) {
         milestones={milestones}
         matchLinks={matchLinks}
         matchEvents={matchEvents}
+        shootoutKicks={shootoutKicks}
+        shootoutPlayerAvatars={shootoutPlayerAvatars}
       ></MatchReport>
       <section className="mx-auto max-w-7xl px-6 pb-24 sm:px-10 lg:px-12">
         <div

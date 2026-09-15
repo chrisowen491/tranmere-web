@@ -317,6 +317,14 @@ export default async function AdminPage() {
               icon: BoltIcon,
             },
             {
+              href: "/admin/penalty-shootouts",
+              title: "Penalty shootouts",
+              description:
+                "Record every penalty taker, kick order and scored, missed or saved outcome.",
+              action: "Manage shootouts",
+              icon: FlagIcon,
+            },
+            {
               href: "/admin/hat-tricks",
               title: "Hat-tricks",
               description:

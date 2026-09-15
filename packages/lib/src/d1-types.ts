@@ -298,6 +298,22 @@ export interface MatchEventRow {
   updated_at: string;
 }
 
+export type PenaltyShootoutTeamSide = 'tranmere' | 'opposition';
+export type PenaltyShootoutOutcome = 'scored' | 'missed' | 'saved';
+
+export interface PenaltyShootoutKickRow {
+  id: string;
+  season: number;
+  match_date: string;
+  kick_order: number;
+  team_side: PenaltyShootoutTeamSide;
+  player_name: string;
+  outcome: PenaltyShootoutOutcome;
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface GoalRow {
   id: string;
   season: number;

@@ -28,7 +28,7 @@ data ownership and system boundaries.
 | Opponent record     | `/games/[club]`                | Shows the full match history against a selected opponent.                                                                                          |
 | FA Cup archive      | `/results/fa-cup`              | Summarises runs, rounds reached, notable matches, records and programme covers.                                                                    |
 | League Cup archive  | `/results/league-cup`          | Summarises League Cup progress, notable runs, records and programme covers.                                                                        |
-| Penalty shootouts   | `/games/penalty-shootouts`     | Presents every recorded shootout with match links and outcomes.                                                                                    |
+| Penalty shootouts   | `/games/penalty-shootouts`     | Presents every recorded shootout with match links, outcomes and kick-by-kick taker details maintained through the admin area.                      |
 | Wembley archive     | `/games/at-wembley`            | Presents every recorded Tranmere match at Wembley.                                                                                                 |
 | Highest attendances | `/results/top-attendances`     | Ranks the top 50 crowds and includes programme covers where available.                                                                             |
 | Attendance explorer | `/results/attendance-explorer` | Explores recorded crowd trends by season, venue, competition and opposition with linked record gates.                                              |
@@ -49,7 +49,7 @@ data ownership and system boundaries.
 | Partnership explorer    | `/players/partnerships`          | Autocompletes two players and analyses matches and results when they played together.                                            |
 | Cult hero index         | `/players/cult-heroes`           | Editorial-style player discovery for one-club spells, comebacks, substitute specialists, cup heroes and promotion contributors.  |
 | Promotion squads        | `/players/promotion-squads`      | Reintroduces the managers and most-used players behind promotion and play-off-winning campaigns.                                 |
-| Squad-number history    | `/players/squad-numbers`         | Traces recorded starting shirt numbers by player and season across traditional and modern numbering eras.                       |
+| Squad-number history    | `/players/squad-numbers`         | Traces recorded starting shirt numbers by player and season across traditional and modern numbering eras.                        |
 
 ## Managers, Clubs and Transfers
 

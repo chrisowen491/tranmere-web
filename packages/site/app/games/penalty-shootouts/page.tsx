@@ -1,4 +1,8 @@
-import { ArrowRightIcon, BoltIcon } from "@heroicons/react/24/outline";
+import {
+  ArrowRightIcon,
+  BoltIcon,
+  ChevronDownIcon,
+} from "@heroicons/react/24/outline";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import type { Match } from "@tranmere-web/lib/src/tranmere-web-types";
 import Image from "next/image";
@@ -6,6 +10,8 @@ import Link from "next/link";
 import { breadcrumbJsonLd, JsonLd } from "@/components/seo/JsonLd";
 import { searchGames } from "@/lib/games";
 import { pageMetadata } from "@/lib/seo";
+import { queryPenaltyShootoutKicks } from "@tranmere-web/lib/src/d1-queries";
+import { PenaltyShootoutSequence } from "@/components/apps/PenaltyShootoutSequence";
 
 export const metadata = pageMetadata({
   title: "Tranmere Rovers penalty shootouts",
@@ -46,10 +52,10 @@ function shootoutTotal(match: Match) {
 
 export default async function PenaltyShootoutsPage() {
   const env = (await getCloudflareContext({ async: true })).env;
-  const { results } = await searchGames(env.DB, {
-    penalties: "Penalty Shootout",
-    sort: "date-desc",
-  });
+  const [{ results }, kicks] = await Promise.all([
+    searchGames(env.DB, { penalties: "Penalty Shootout", sort: "date-desc" }),
+    queryPenaltyShootoutKicks(env.DB),
+  ]);
   const matches = results;
   const won = matches.filter((match) => shootoutOutcome(match) === "W").length;
   const lost = matches.filter((match) => shootoutOutcome(match) === "L").length;
@@ -214,6 +220,11 @@ export default async function PenaltyShootoutsPage() {
               <tbody className="divide-y divide-[#071a2b]/10">
                 {matches.map((match) => {
                   const outcome = shootoutOutcome(match);
+                  const matchKicks = kicks.filter(
+                    (kick) =>
+                      String(kick.season) === match.season &&
+                      kick.match_date === match.date,
+                  );
                   return (
                     <tr
                       key={`${match.season}-${match.date}`}
@@ -247,7 +258,24 @@ export default async function PenaltyShootoutsPage() {
                         {outcome === "W" ? "Won" : "Lost"}
                       </td>
                       <td className="px-5 py-4 text-sm text-[#071a2b]/65">
-                        {match.pens}
+                        <p>{match.pens}</p>
+                        {matchKicks.length > 0 && (
+                          <details className="group mt-3 border-t border-[#071a2b]/10 pt-3">
+                            <summary className="flex cursor-pointer list-none items-center justify-between gap-3 font-semibold text-blue-700 marker:hidden hover:text-[#071a2b] [&::-webkit-details-marker]:hidden">
+                              <span>
+                                View full shootout ({matchKicks.length} kicks)
+                              </span>
+                              <ChevronDownIcon
+                                aria-hidden="true"
+                                className="h-4 w-4 shrink-0 transition-transform group-open:rotate-180"
+                              />
+                            </summary>
+                            <PenaltyShootoutSequence
+                              kicks={matchKicks}
+                              opposition={match.opposition ?? "Opposition"}
+                            />
+                          </details>
+                        )}
                       </td>
                     </tr>
                   );

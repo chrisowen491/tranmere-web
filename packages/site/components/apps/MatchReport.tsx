@@ -30,8 +30,12 @@ import {
   type MatchLink,
 } from "@/lib/matchLinks";
 import { MatchLinkSuggestionForm } from "./MatchLinkSuggestionForm";
-import type { MatchEventRow } from "@tranmere-web/lib/src/d1-types";
+import type {
+  MatchEventRow,
+  PenaltyShootoutKickRow,
+} from "@tranmere-web/lib/src/d1-types";
 import { matchEventTypeLabel } from "@tranmere-web/lib/src/match-event-constants";
+import { PenaltyShootoutSequence } from "./PenaltyShootoutSequence";
 
 function playerAvatar(picLink: string, season: number, kit?: string) {
   return replaceSeasonsKit(picLink, kit || season.toString());
@@ -95,6 +99,8 @@ export default function MatchReport(props: {
   milestones: MatchMilestone[];
   matchLinks: MatchLink[];
   matchEvents: MatchEventRow[];
+  shootoutKicks: PenaltyShootoutKickRow[];
+  shootoutPlayerAvatars: Record<string, string>;
 }) {
   const { match } = props;
   const videoLinks = props.matchLinks.flatMap((item) => {
@@ -315,6 +321,23 @@ export default function MatchReport(props: {
       </div>
 
       <div className="mx-auto max-w-7xl px-6 py-12 sm:px-10 lg:px-12">
+        {props.shootoutKicks.length > 0 && (
+          <section className="mb-12 border-y border-[#071a2b]/15 py-8">
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-700">
+              Penalty shootout
+            </p>
+            <h2 className="mt-2 font-display text-3xl font-semibold">
+              Every kick from twelve yards
+            </h2>
+            <PenaltyShootoutSequence
+              kicks={props.shootoutKicks}
+              opposition={match.opposition ?? match.awayTeam ?? "Opposition"}
+              playerAvatars={props.shootoutPlayerAvatars}
+              season={Number(match.season)}
+              kit={match.kit}
+            />
+          </section>
+        )}
         {match.report && (
           <section className="mb-12 grid gap-5 border-y border-[#071a2b]/15 py-8 lg:grid-cols-[240px_minmax(0,1fr)]">
             <div>
