@@ -632,6 +632,31 @@ export default function MatchReport(props: {
                         >
                           {player.SubbedBy}
                         </Link>
+                        {(player.SubYellow || player.SubRed) && (
+                          <span className="ml-2 inline-flex items-center gap-1 align-middle">
+                            {player.SubYellow && (
+                              <span
+                                title={`${player.SubbedBy} yellow card`}
+                                className="h-3.5 w-2.5 bg-yellow-400"
+                              />
+                            )}
+                            {player.SubRed && (
+                              <span
+                                title={`${player.SubbedBy} red card`}
+                                className="h-3.5 w-2.5 bg-red-500"
+                              />
+                            )}
+                            <span className="sr-only">
+                              {player.SubYellow
+                                ? `${player.SubbedBy} yellow card`
+                                : ""}
+                              {player.SubYellow && player.SubRed ? ", " : ""}
+                              {player.SubRed
+                                ? `${player.SubbedBy} red card`
+                                : ""}
+                            </span>
+                          </span>
+                        )}
                         {player.SubSubbedBy && (
                           <>
                             <span className="text-[#071a2b]/45">
