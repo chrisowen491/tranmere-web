@@ -314,6 +314,19 @@ export interface PenaltyShootoutKickRow {
   updated_at: string;
 }
 
+export type SeasonNewsSnippetPlacement = 'pre-season' | 'timeline';
+
+export interface SeasonNewsSnippetRow {
+  id: string;
+  season: number;
+  news_date: string;
+  placement: SeasonNewsSnippetPlacement;
+  title: string | null;
+  body: string;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface GoalRow {
   id: string;
   season: number;

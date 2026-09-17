@@ -25,6 +25,7 @@ import {
   parseArchiveDate,
   resultLabel,
 } from "@/lib/seasonMatchUtils";
+import type { SeasonNewsSnippet } from "@/lib/seasonNews";
 
 interface MonthChapter {
   key: string;
@@ -34,6 +35,7 @@ interface MonthChapter {
   managersLeaving: Manager[];
   transfers: Transfer[];
   achievements: HonoursAchievement[];
+  snippets: SeasonNewsSnippet[];
 }
 
 function isLoanTransfer(transfer: Transfer) {
@@ -75,6 +77,7 @@ function buildChapters(
   managers: Manager[],
   transfers: Transfer[],
   achievements: readonly HonoursAchievement[],
+  snippets: SeasonNewsSnippet[],
 ) {
   const firstYear = Number(season);
   const seasonStart = new Date(firstYear, 4, 1);
@@ -93,6 +96,7 @@ function buildChapters(
       managersLeaving: [],
       transfers: [],
       achievements: [],
+      snippets: [],
     };
     chapters.set(key, chapter);
     return chapter;
@@ -128,6 +132,14 @@ function buildChapters(
     }
   });
 
+  snippets
+    .filter((snippet) => snippet.placement === "timeline")
+    .forEach((snippet) => {
+      const date = parseArchiveDate(snippet.news_date);
+      if (date && date >= seasonStart && date <= seasonEnd)
+        ensureChapter(date).snippets.push(snippet);
+    });
+
   return [...chapters.values()]
     .sort((a, b) => a.date.getTime() - b.date.getTime())
     .map((chapter) => ({
@@ -136,6 +148,9 @@ function buildChapters(
         (a, b) =>
           (parseArchiveDate(a.date)?.getTime() ?? 0) -
           (parseArchiveDate(b.date)?.getTime() ?? 0),
+      ),
+      snippets: chapter.snippets.sort((a, b) =>
+        a.news_date.localeCompare(b.news_date),
       ),
     }));
 }
@@ -147,16 +162,28 @@ export function SeasonTimeline(props: {
   transfers: Transfer[];
   articles: BlogItem[];
   achievements: readonly HonoursAchievement[];
+  snippets: SeasonNewsSnippet[];
 }) {
-  const { season, results, managers, transfers, articles, achievements } =
-    props;
+  const {
+    season,
+    results,
+    managers,
+    transfers,
+    articles,
+    achievements,
+    snippets,
+  } = props;
   const chapters = buildChapters(
     season,
     results,
     managers,
     transfers,
     achievements,
+    snippets,
   );
+  const preSeasonSnippets = snippets
+    .filter((snippet) => snippet.placement === "pre-season")
+    .sort((a, b) => a.news_date.localeCompare(b.news_date));
   const undatedTransfers = transfers.filter(
     (transfer) => !parseArchiveDate(transfer.date),
   );
@@ -173,7 +200,12 @@ export function SeasonTimeline(props: {
       typeof match.vgoal === "number",
   );
   const wins = outcomeCounts(completedMatches).W;
-  if (chapters.length === 0 && undatedTransfers.length === 0) return null;
+  if (
+    chapters.length === 0 &&
+    undatedTransfers.length === 0 &&
+    preSeasonSnippets.length === 0
+  )
+    return null;
 
   return (
     <section
@@ -222,7 +254,7 @@ export function SeasonTimeline(props: {
           </header>
 
           <div>
-            {undatedTransfers.length > 0 && (
+            {(undatedTransfers.length > 0 || preSeasonSnippets.length > 0) && (
               <article className="relative border-l border-[#071a2b]/20 pb-12 pl-8 sm:pl-12">
                 <span className="absolute -left-4 top-0 grid h-8 w-8 place-items-center rounded-full bg-blue-700 text-white ring-8 ring-[#fffdf8]">
                   <ArrowsRightLeftIcon className="h-4 w-4" aria-hidden="true" />
@@ -231,75 +263,102 @@ export function SeasonTimeline(props: {
                   May · Opening chapter
                 </p>
                 <h3 className="mt-2 font-display text-2xl font-semibold">
-                  Pre-season squad changes
+                  Pre-season
                 </h3>
-                <details className="group mt-2">
-                  <summary className="flex cursor-pointer list-none items-center justify-between border-b border-[#071a2b]/15 pb-4 text-sm text-[#071a2b]/55 [&::-webkit-details-marker]:hidden">
-                    <span>
-                      {undatedTransfers.length} recorded{" "}
-                      {undatedTransfers.length === 1 ? "move" : "moves"}. Exact
-                      dates are not held in the archive.
-                    </span>
-                    <span className="shrink-0 pl-4 font-bold text-blue-700 group-open:hidden">
-                      View moves +
-                    </span>
-                    <span className="hidden shrink-0 pl-4 font-bold text-blue-700 group-open:inline">
-                      Hide moves −
-                    </span>
-                  </summary>
-                  <div className="mt-5 grid gap-5 sm:grid-cols-2">
-                    {[
-                      {
-                        title: "Arrivals",
-                        transfers: undatedArrivals,
-                        accent: "border-emerald-600",
-                        label: "text-emerald-700",
-                        detail: (transfer: Transfer) => `From ${transfer.from}`,
-                      },
-                      {
-                        title: "Departures",
-                        transfers: undatedDepartures,
-                        accent: "border-rose-600",
-                        label: "text-rose-700",
-                        detail: (transfer: Transfer) => `To ${transfer.to}`,
-                      },
-                    ].map((group) => (
-                      <div
-                        className={`border-t-4 ${group.accent} bg-[#f4f0e8] p-4`}
-                        key={group.title}
+                {preSeasonSnippets.length > 0 && (
+                  <div className="mt-5 space-y-3">
+                    {preSeasonSnippets.map((snippet) => (
+                      <article
+                        key={snippet.id}
+                        className="border-l-4 border-blue-700 bg-blue-50 p-4"
                       >
-                        <p
-                          className={`font-mono text-[0.65rem] font-bold uppercase tracking-[0.14em] ${group.label}`}
-                        >
-                          {group.title} · {group.transfers.length}
+                        <p className="font-mono text-[0.65rem] font-bold uppercase tracking-[0.14em] text-blue-700">
+                          {dayLabel(snippet.news_date)} · Archive news
                         </p>
-                        <div className="mt-3 space-y-2">
-                          {group.transfers.length > 0 ? (
-                            group.transfers.map((transfer) => (
-                              <Link
-                                href={`/page/player/${encodeURIComponent(transfer.name)}`}
-                                key={transfer.id}
-                                className="group block border border-[#071a2b]/10 bg-[#fffdf8] px-3 py-2.5 transition hover:border-blue-700"
-                              >
-                                <span className="block font-semibold group-hover:text-blue-700">
-                                  {transfer.name}
-                                </span>
-                                <span className="mt-1 block text-xs text-[#071a2b]/50">
-                                  {group.detail(transfer)}
-                                  {transfer.value ? ` · ${transfer.value}` : ""}
-                                </span>
-                              </Link>
-                            ))
-                          ) : (
-                            <p className="py-2 text-sm text-[#071a2b]/50">
-                              No recorded {group.title.toLowerCase()}.
-                            </p>
-                          )}
-                        </div>
-                      </div>
+                        {snippet.title && (
+                          <h4 className="mt-2 font-display text-xl font-semibold">
+                            {snippet.title}
+                          </h4>
+                        )}
+                        <p className="mt-2 whitespace-pre-line text-sm leading-6 text-[#071a2b]/65">
+                          {snippet.body}
+                        </p>
+                      </article>
                     ))}
                   </div>
-                </details>
+                )}
+                {undatedTransfers.length > 0 && (
+                  <details className="group mt-2">
+                    <summary className="flex cursor-pointer list-none items-center justify-between border-b border-[#071a2b]/15 pb-4 text-sm text-[#071a2b]/55 [&::-webkit-details-marker]:hidden">
+                      <span>
+                        {undatedTransfers.length} recorded{" "}
+                        {undatedTransfers.length === 1 ? "move" : "moves"}.
+                        Exact dates are not held in the archive.
+                      </span>
+                      <span className="shrink-0 pl-4 font-bold text-blue-700 group-open:hidden">
+                        View moves +
+                      </span>
+                      <span className="hidden shrink-0 pl-4 font-bold text-blue-700 group-open:inline">
+                        Hide moves −
+                      </span>
+                    </summary>
+                    <div className="mt-5 grid gap-5 sm:grid-cols-2">
+                      {[
+                        {
+                          title: "Arrivals",
+                          transfers: undatedArrivals,
+                          accent: "border-emerald-600",
+                          label: "text-emerald-700",
+                          detail: (transfer: Transfer) =>
+                            `From ${transfer.from}`,
+                        },
+                        {
+                          title: "Departures",
+                          transfers: undatedDepartures,
+                          accent: "border-rose-600",
+                          label: "text-rose-700",
+                          detail: (transfer: Transfer) => `To ${transfer.to}`,
+                        },
+                      ].map((group) => (
+                        <div
+                          className={`border-t-4 ${group.accent} bg-[#f4f0e8] p-4`}
+                          key={group.title}
+                        >
+                          <p
+                            className={`font-mono text-[0.65rem] font-bold uppercase tracking-[0.14em] ${group.label}`}
+                          >
+                            {group.title} · {group.transfers.length}
+                          </p>
+                          <div className="mt-3 space-y-2">
+                            {group.transfers.length > 0 ? (
+                              group.transfers.map((transfer) => (
+                                <Link
+                                  href={`/page/player/${encodeURIComponent(transfer.name)}`}
+                                  key={transfer.id}
+                                  className="group block border border-[#071a2b]/10 bg-[#fffdf8] px-3 py-2.5 transition hover:border-blue-700"
+                                >
+                                  <span className="block font-semibold group-hover:text-blue-700">
+                                    {transfer.name}
+                                  </span>
+                                  <span className="mt-1 block text-xs text-[#071a2b]/50">
+                                    {group.detail(transfer)}
+                                    {transfer.value
+                                      ? ` · ${transfer.value}`
+                                      : ""}
+                                  </span>
+                                </Link>
+                              ))
+                            ) : (
+                              <p className="py-2 text-sm text-[#071a2b]/50">
+                                No recorded {group.title.toLowerCase()}.
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </details>
+                )}
               </article>
             )}
 
@@ -460,6 +519,29 @@ export function SeasonTimeline(props: {
                               </Link>
                             ))}
                           </div>
+                        </div>
+                      )}
+
+                      {chapter.snippets.length > 0 && (
+                        <div className="mt-5 space-y-3">
+                          {chapter.snippets.map((snippet) => (
+                            <article
+                              key={snippet.id}
+                              className="border-l-4 border-blue-700 bg-blue-50 p-4"
+                            >
+                              <p className="font-mono text-[0.65rem] font-bold uppercase tracking-[0.14em] text-blue-700">
+                                {dayLabel(snippet.news_date)} · Archive news
+                              </p>
+                              {snippet.title && (
+                                <h4 className="mt-2 font-display text-xl font-semibold">
+                                  {snippet.title}
+                                </h4>
+                              )}
+                              <p className="mt-2 whitespace-pre-line text-sm leading-6 text-[#071a2b]/65">
+                                {snippet.body}
+                              </p>
+                            </article>
+                          ))}
                         </div>
                       )}
 

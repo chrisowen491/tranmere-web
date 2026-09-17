@@ -32,6 +32,7 @@ import { getSeasonManagers } from "@/lib/seasonManagers";
 import type { ClubCaptainRecord } from "@/lib/clubCaptains";
 import type { PlayerAwardRecord } from "@/lib/awards";
 import type { ManagerRecord } from "@/lib/managers";
+import type { SeasonNewsSnippet } from "@/lib/seasonNews";
 
 const DIVISION_NAMES: Record<number, Record<number, string>> = {
   0: { 2: "Division 2", 3: "Division 3", 4: "Division 4" },
@@ -77,6 +78,7 @@ export default function SeasonReview(props: {
   fantasyPlayerOfSeason: FantasyRankingRow[];
   captains: ClubCaptainRecord[];
   awards: PlayerAwardRecord[];
+  snippets: SeasonNewsSnippet[];
 }) {
   const {
     results,
@@ -92,6 +94,7 @@ export default function SeasonReview(props: {
     fantasyPlayerOfSeason,
     captains,
     awards,
+    snippets,
   } = props;
   const seasonInt = Number(season);
   const achievements =
@@ -276,6 +279,7 @@ export default function SeasonReview(props: {
         transfers={transfers}
         articles={articles}
         achievements={achievements}
+        snippets={snippets}
       />
       <div id="season-archive">
         <header className="relative isolate">

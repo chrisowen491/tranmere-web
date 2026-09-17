@@ -11,6 +11,7 @@ import {
   managerArticleTag,
 } from "@/lib/managers";
 import { pageMetadata } from "@/lib/seo";
+import { getSeasonNewsSnippets } from "@/lib/seasonNews";
 import { queryGameRows } from "@tranmere-web/lib/src/d1-queries";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { ArrowLeftIcon, UserIcon } from "@heroicons/react/24/outline";
@@ -43,7 +44,7 @@ export default async function ManagerProfilePage({ params }: Props) {
     ? new Date().toISOString().slice(0, 10)
     : manager.dateLeft;
   const articleTag = managerArticleTag(manager.name);
-  const [rows, links, articles] = await Promise.all([
+  const [rows, links, articles, seasonNews] = await Promise.all([
     queryGameRows(db, {
       dateFrom: manager.dateJoined,
       dateTo,
@@ -53,6 +54,7 @@ export default async function ManagerProfilePage({ params }: Props) {
     }),
     getManagerLinks(db, manager.id),
     getAllArticlesForTag(100, articleTag),
+    getSeasonNewsSnippets(db, { tag: articleTag }),
   ]);
   const stats = calculateManagerStats(rows.map(mapGame));
   const primaryStats = [
@@ -224,6 +226,46 @@ export default async function ManagerProfilePage({ params }: Props) {
                   Tag a blog post with “{articleTag}” to include it here.
                 </p>
               </div>
+            )}
+            {seasonNews.length > 0 && (
+              <section
+                className="mt-10 border-t border-[#071a2b]/15 pt-8"
+                aria-labelledby="manager-timeline-notes-heading"
+              >
+                <p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-700">
+                  Season archive
+                </p>
+                <h2
+                  id="manager-timeline-notes-heading"
+                  className="mt-2 font-display text-3xl font-semibold"
+                >
+                  Timeline notes
+                </h2>
+                <div className="mt-6 divide-y divide-[#071a2b]/10 border border-[#071a2b]/15 bg-[#fffdf8] px-5">
+                  {seasonNews.map((snippet) => (
+                    <article key={snippet.id} className="py-5">
+                      <p className="font-mono text-xs text-[#071a2b]/45">
+                        {snippet.season}/{String(snippet.season + 1).slice(-2)}{" "}
+                        · {snippet.news_date}
+                      </p>
+                      {snippet.title && (
+                        <h3 className="mt-2 font-display text-xl font-semibold">
+                          {snippet.title}
+                        </h3>
+                      )}
+                      <p className="mt-2 whitespace-pre-line text-sm leading-6 text-[#071a2b]/60">
+                        {snippet.body}
+                      </p>
+                      <Link
+                        href={`/season/${snippet.season}#season-timeline`}
+                        className="mt-2 inline-block text-xs font-bold text-blue-700 hover:underline"
+                      >
+                        View season timeline
+                      </Link>
+                    </article>
+                  ))}
+                </div>
+              </section>
             )}
           </section>
 

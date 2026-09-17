@@ -18,6 +18,7 @@ import {
 import { getFantasyPlayerOfSeasonWinners } from "@/lib/fantasyRankings";
 import { getClubCaptainsBySeason } from "@/lib/clubCaptains";
 import { getPlayerAwards } from "@/lib/awards";
+import { getSeasonNewsSnippets } from "@/lib/seasonNews";
 
 export const revalidate = 7200;
 
@@ -63,9 +64,10 @@ export default async function SeasonPage(props: { params: SlugParams }) {
 
   const shirts = await getShirtsBySeason(env.DB, season);
 
-  const [captains, awards] = await Promise.all([
+  const [captains, awards, snippets] = await Promise.all([
     getClubCaptainsBySeason(env.DB, Number(season)),
     getPlayerAwards(env.DB, { season: Number(season) }),
+    getSeasonNewsSnippets(env.DB, { season: Number(season) }),
   ]);
 
   const seasons = GetSeasons();
@@ -105,6 +107,7 @@ export default async function SeasonPage(props: { params: SlugParams }) {
         fantasyPlayerOfSeason={fantasyPlayerOfSeason}
         captains={captains}
         awards={awards}
+        snippets={snippets}
       ></SeasonReview>
     </>
   );

@@ -261,6 +261,14 @@ export default async function AdminPage() {
               icon: TrophyIcon,
             },
             {
+              href: "/admin/season-news",
+              title: "Season news",
+              description:
+                "Add short dated news notes to season timelines and tag players or managers.",
+              action: "Manage season news",
+              icon: DocumentTextIcon,
+            },
+            {
               href: "/admin/clubs",
               title: "Clubs",
               description:

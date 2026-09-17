@@ -18,6 +18,7 @@ import { PlayerProfileCorrectionForm } from "./PlayerProfileCorrectionForm";
 import type { EditablePlayerProfile } from "@/lib/playerProfileCorrections";
 import type { Appearance } from "@tranmere-web/lib/src/tranmere-web-types";
 import type { PlayerAwardRecord } from "@/lib/awards";
+import type { SeasonNewsSnippet } from "@/lib/seasonNews";
 
 const breadcrumbs = [
   { id: 1, name: "Home", href: "/" },
@@ -93,6 +94,7 @@ export default function PlayerProfileView(props: {
   articles: BlogItem[];
   avg: number;
   awards: PlayerAwardRecord[];
+  seasonNews: SeasonNewsSnippet[];
   biographyMarkdown: string | null;
   editableProfile: EditablePlayerProfile;
   appearancePagination: {
@@ -639,6 +641,41 @@ export default function PlayerProfileView(props: {
                         {article.title}
                       </Link>
                     </h3>
+                  </article>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {props.seasonNews.length > 0 && (
+            <div className="border border-[#071a2b]/15 bg-[#fffdf8] p-5">
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-700">
+                Season archive
+              </p>
+              <h2 className="mt-2 font-display text-2xl font-semibold">
+                Timeline notes
+              </h2>
+              <div className="mt-4 divide-y divide-[#071a2b]/10">
+                {props.seasonNews.map((snippet) => (
+                  <article key={snippet.id} className="py-4 first:pt-0">
+                    <p className="font-mono text-xs text-[#071a2b]/45">
+                      {snippet.season}/{String(snippet.season + 1).slice(-2)} ·{" "}
+                      {snippet.news_date}
+                    </p>
+                    {snippet.title && (
+                      <h3 className="mt-2 font-display text-lg font-semibold">
+                        {snippet.title}
+                      </h3>
+                    )}
+                    <p className="mt-2 whitespace-pre-line text-sm leading-6 text-[#071a2b]/60">
+                      {snippet.body}
+                    </p>
+                    <Link
+                      href={`/season/${snippet.season}#season-timeline`}
+                      className="mt-2 inline-block text-xs font-bold text-blue-700 hover:underline"
+                    >
+                      View season timeline
+                    </Link>
                   </article>
                 ))}
               </div>
