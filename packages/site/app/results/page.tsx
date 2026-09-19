@@ -72,6 +72,7 @@ export default async function ResultsSearchPage() {
                 ["League Cup archive", "/results/league-cup"],
                 ["Highest attendances", "/results/top-attendances"],
                 ["Attendance explorer", "/results/attendance-explorer"],
+                ["Streaks & sequences", "/results/streaks"],
                 ["Head-to-head records", "/head-to-head"],
               ].map(([label, href]) => (
                 <Link

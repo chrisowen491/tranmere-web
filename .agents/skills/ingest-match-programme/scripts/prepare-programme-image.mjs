@@ -10,7 +10,7 @@ const DEFAULT_THRESHOLD = 12;
 
 function usage() {
   return `Usage:
-  node prepare-programme-image.mjs --url <image-url> --output <output.png> [--threshold <0-255>]
+  node prepare-programme-image.mjs --url <image-url> --output <output.png> [--threshold <0-255>] [--crop <left,top,width,height>]
 
 Downloads an image, applies EXIF orientation, trims near-white outer margins,
 and writes a PNG. The download limit is 50 MB.`;
@@ -27,7 +27,7 @@ function parseArgs(argv) {
       continue;
     }
 
-    if (!['--url', '--output', '--threshold'].includes(argument)) {
+    if (!['--url', '--output', '--threshold', '--crop'].includes(argument)) {
       throw new Error(`Unknown argument: ${argument}`);
     }
 
@@ -112,9 +112,20 @@ async function main() {
 
   const downloaded = await readResponse(response);
   const original = await sharp(downloaded, { failOn: 'error' }).metadata();
+  const crop = options.crop?.split(',').map(Number);
+  if (crop && (crop.length !== 4 || crop.some((part) => !Number.isInteger(part)))) {
+    throw new Error('--crop must be left,top,width,height in pixels');
+  }
 
-  const { data, info } = await sharp(downloaded, { failOn: 'error' })
-    .rotate()
+  let image = sharp(downloaded, { failOn: 'error' }).rotate();
+  if (crop) {
+    const [left, top, width, height] = crop;
+    if (left < 0 || top < 0 || width < 2 || height < 2) {
+      throw new Error('--crop must define a positive image area');
+    }
+    image = image.extract({ left, top, width, height });
+  }
+  const { data, info } = await image
     .flatten({ background: '#ffffff' })
     .trim({ background: '#ffffff', threshold })
     .png({ compressionLevel: 9, adaptiveFiltering: true })
