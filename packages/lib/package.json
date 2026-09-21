@@ -12,10 +12,10 @@
   "license": "GPL-3.0-only",
   "dependencies": {
     "@contentful/rich-text-types": "^17.0.0",
-    "@types/node": "^26.5.1"
+    "@types/node": "^26.6.1"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.163",
-    "prettier": "3.9.6"
+    "prettier": "3.9.8"
   }
 }
