@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { AppRow } from "@tranmere-web/lib/src/d1-types";
 import { buildSquadNumberHistory } from "@/lib/squadNumberHistory";
+import { buildPlayerShirtNumberHistory } from "@/lib/playerAppearances";
 
 function appearance(
   player: string,
@@ -79,5 +80,26 @@ describe("squad number history", () => {
       appearances: 1,
       leadingPlayer: { player: "Substitute" },
     });
+  });
+
+  it("summarises every shirt number worn by one player", () => {
+    const starts = [
+      appearance("Kenny Irons", 4, 1991, "1991-08-17"),
+      appearance("Kenny Irons", 4, 1991, "1991-08-24"),
+      appearance("Starter", 8, 1991, "1991-08-31"),
+    ];
+    starts[2].substituted_by = "Kenny Irons";
+    starts[2].substituted_by_shirt_number = 12;
+
+    const rows = [
+      { ...starts[0], appearance_type: "Start" as const },
+      { ...starts[1], appearance_type: "Start" as const },
+      { ...starts[2], appearance_type: "Sub" as const },
+    ];
+
+    expect(buildPlayerShirtNumberHistory(rows, "Kenny Irons")).toEqual([
+      { number: 4, appearances: 2, starts: 2, substituteAppearances: 0 },
+      { number: 12, appearances: 1, starts: 0, substituteAppearances: 1 },
+    ]);
   });
 });

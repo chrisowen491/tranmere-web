@@ -19,6 +19,7 @@ import type { EditablePlayerProfile } from "@/lib/playerProfileCorrections";
 import type { Appearance } from "@tranmere-web/lib/src/tranmere-web-types";
 import type { PlayerAwardRecord } from "@/lib/awards";
 import type { SeasonNewsSnippet } from "@/lib/seasonNews";
+import type { PlayerShirtNumberRecord } from "@/lib/playerAppearances";
 
 const breadcrumbs = [
   { id: 1, name: "Home", href: "/" },
@@ -95,6 +96,7 @@ export default function PlayerProfileView(props: {
   avg: number;
   awards: PlayerAwardRecord[];
   seasonNews: SeasonNewsSnippet[];
+  shirtNumbers: PlayerShirtNumberRecord[];
   biographyMarkdown: string | null;
   editableProfile: EditablePlayerProfile;
   appearancePagination: {
@@ -479,6 +481,51 @@ export default function PlayerProfileView(props: {
                       </p>
                     )}
                   </div>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {props.shirtNumbers.length > 0 && (
+            <section
+              className="border border-[#071a2b]/15 bg-[#fffdf8] p-5"
+              aria-labelledby="player-shirt-numbers-heading"
+            >
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-700">
+                Kit history
+              </p>
+              <h2
+                id="player-shirt-numbers-heading"
+                className="mt-2 font-display text-2xl font-semibold"
+              >
+                Shirts worn
+              </h2>
+              <p className="mt-2 text-sm leading-6 text-[#071a2b]/60">
+                Recorded shirt numbers across starts and substitute appearances.
+              </p>
+              <div className="mt-5 grid gap-px border border-[#071a2b]/15 bg-[#071a2b]/15 sm:grid-cols-2 lg:grid-cols-1">
+                {props.shirtNumbers.map((record) => (
+                  <Link
+                    key={record.number}
+                    href={`/players/squad-numbers?number=${record.number}`}
+                    className="group grid grid-cols-[64px_1fr] items-center bg-[#fffdf8] p-4 transition hover:bg-blue-50/70"
+                  >
+                    <span className="font-display text-5xl font-semibold leading-none text-blue-700">
+                      {record.number}
+                    </span>
+                    <span>
+                      <strong className="block text-sm group-hover:text-blue-700">
+                        {record.appearances}{" "}
+                        {record.appearances === 1
+                          ? "appearance"
+                          : "appearances"}
+                      </strong>
+                      <span className="mt-1 block font-mono text-[9px] uppercase tracking-[0.12em] text-[#071a2b]/45">
+                        {record.starts} starts · {record.substituteAppearances}{" "}
+                        as sub
+                      </span>
+                    </span>
+                  </Link>
                 ))}
               </div>
             </section>

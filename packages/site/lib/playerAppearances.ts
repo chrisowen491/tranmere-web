@@ -8,6 +8,51 @@ export function goalCountsByDate(rows: Array<{ match_date: string }>) {
   }, new Map<string, number>());
 }
 
+export interface PlayerShirtNumberRecord {
+  number: number;
+  appearances: number;
+  starts: number;
+  substituteAppearances: number;
+}
+
+function validShirtNumber(value: number | null) {
+  return value !== null && Number.isInteger(value) && value > 0 && value < 100;
+}
+
+export function buildPlayerShirtNumberHistory(
+  rows: PlayerAppearanceRow[],
+  playerName: string,
+) {
+  const records = new Map<number, PlayerShirtNumberRecord>();
+
+  for (const row of rows) {
+    const isSubstitute = row.appearance_type === "Sub";
+    const number = isSubstitute
+      ? row.substituted_by === playerName
+        ? row.substituted_by_shirt_number
+        : row.substitute_substituted_by_shirt_number
+      : row.shirt_number;
+
+    if (!validShirtNumber(number)) continue;
+
+    const record = records.get(number!) ?? {
+      number: number!,
+      appearances: 0,
+      starts: 0,
+      substituteAppearances: 0,
+    };
+    record.appearances += 1;
+    if (isSubstitute) record.substituteAppearances += 1;
+    else record.starts += 1;
+    records.set(number!, record);
+  }
+
+  return [...records.values()].sort(
+    (left, right) =>
+      right.appearances - left.appearances || left.number - right.number,
+  );
+}
+
 export function mapPlayerAppearance(
   row: PlayerAppearanceRow,
   playerName: string,

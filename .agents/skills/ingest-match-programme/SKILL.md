@@ -1,12 +1,13 @@
 ---
 name: ingest-match-programme
-description: Download, crop and ingest a Tranmere match programme image from a URL into Cloudflare R2, then update the existing D1 Games programme_path. Use when asked to add or replace a programme image for a known fixture. Do not use for PDF ingestion or metadata-only programme edits.
+description: Prepare a front-on, background-free Tranmere match programme cover from an image URL, upload it to Cloudflare R2 and link it to an existing D1 game. Use when asked to add or replace a programme image for a known fixture. Do not use for PDF ingestion or metadata-only programme edits.
 ---
 
 # Match programme ingestion
 
 Use this skill for one image URL and one existing Tranmere-Web game. The result
-is a cropped PNG in the `tranmere-web-images` R2 bucket and a relative
+is a straight-on PNG of the programme cover, with no surrounding background, in
+the `tranmere-web-images` R2 bucket and a relative
 `Games.programme_path` such as `2026-27/2026-08-15.png`.
 
 Run commands from the repository root. Use `npx wrangler` and
@@ -35,26 +36,40 @@ The D1 `season` is the opening year. Convert it to a folder named
 `YYYY-YY`: `2026` becomes `2026-27`, and `1999` becomes `1999-00`. The object
 key and D1 value must be `<season-folder>/<match-date>.png`.
 
-## 2. Download and crop
+## 2. Prepare and inspect the cover
 
-Create a temporary directory with `mktemp -d`, then run the bundled helper:
+Create a temporary directory with `mktemp -d`, then run the bundled helper to
+download the source image and remove simple outer margins:
 
 ```bash
 node .agents/skills/ingest-match-programme/scripts/prepare-programme-image.mjs \
   --url '<image-url>' \
-  --output '<temporary-directory>/2026-08-15.png'
+  --output '<temporary-directory>/source.png'
 ```
 
 The helper follows HTTP redirects, limits downloads to 50 MB, honours image
-orientation, removes near-white outer margins and always writes PNG. Its JSON
-output reports original and cropped dimensions plus the SHA-256 hash. If white
-space remains, rerun with a larger `--threshold` value; the default is `12` and
-the accepted range is `0` to `255`.
+orientation and writes PNG. Its output reports dimensions and a SHA-256 hash.
+Inspect the source before editing: where the opponent or date is printed,
+confirm it matches the D1 fixture. Stop if visible details contradict it;
+do not invent missing cover text.
 
-Inspect the prepared image visually before uploading. Reject a blank result,
-an image cropped into the programme artwork, an unrelated image, or a crop that
-still has material white borders. Do not alter the programme content beyond
-rotation, whitespace removal and PNG conversion.
+If the cover is photographed at an angle or against a visible surface, use the
+`imagegen` skill's built-in image-editing workflow with `source.png` as the edit
+target. Request a head-on, rectangular view of **this cover only**, filling the
+frame with no carpet, table, shadows or other background. Supply the printed
+words and numbers verbatim in the prompt. Preserve the crest, artwork, colours,
+typography and border; do not redesign the programme or add content. If the
+source is already head-on and background-free, keep it rather than regenerating
+it. A tighter crop alone is not a substitute for correcting perspective and
+removing a photographed background.
+
+Inspect the final PNG beside the source at readable size. Check every visible
+date, opponent, issue number, price and heading, as well as the crest and border.
+Image generation can change small text: make a targeted retry if needed, and
+**do not upload** if printed details or artwork cannot be preserved faithfully.
+Keep the approved final image as a workspace asset and use that exact PNG for
+the R2 upload. Report that it is a reconstructed front-on view, not an original
+scan. Do not silently replace the source with a plausible but inaccurate cover.
 
 ## 3. Upload to R2
 
@@ -64,7 +79,7 @@ Upload the checked file under the exact object key. For production:
 npx wrangler r2 object put \
   'tranmere-web-images/2026-27/2026-08-15.png' \
   --remote \
-  --file '<temporary-directory>/2026-08-15.png' \
+  --file '<approved-final-image.png>' \
   --content-type 'image/png' \
   --cache-control 'public, max-age=31536000, immutable'
 ```
@@ -74,7 +89,7 @@ programme, retain the same deterministic key unless the user requested a
 different path.
 
 Verify the remote object by downloading it to a second temporary filename and
-comparing its SHA-256 hash with the helper output:
+comparing its SHA-256 hash with the approved final PNG:
 
 ```bash
 npx wrangler r2 object get \
@@ -110,6 +125,7 @@ npx wrangler d1 execute tranmere-web \
   --command "SELECT id, season, match_date, opposition, programme_path FROM Games WHERE id = '<confirmed-id>';"
 ```
 
-Report the fixture, R2 bucket and object key, original and cropped dimensions,
-and final D1 `programme_path`. Remove only the temporary files created for this
-run.
+Report the fixture, R2 bucket and object key, source and final dimensions, and
+final D1 `programme_path`. Note that the published image is a front-on
+reconstruction when image editing was used. Remove only the temporary files
+created for this run; keep the approved workspace asset.

@@ -15,7 +15,11 @@ import {
   queryPlayerSeasonSummaryRows,
 } from "@tranmere-web/lib/src/d1-queries";
 import { mapPlayerSeasonSummary } from "@/lib/playerStatistics";
-import { goalCountsByDate, mapPlayerAppearance } from "@/lib/playerAppearances";
+import {
+  buildPlayerShirtNumberHistory,
+  goalCountsByDate,
+  mapPlayerAppearance,
+} from "@/lib/playerAppearances";
 import { auth0 } from "@/lib/auth0";
 import { resolveAccount } from "@/lib/accounts";
 import { getPlayerAwards } from "@/lib/awards";
@@ -60,8 +64,8 @@ export default async function PlayerProfilePage(props: { params: SlugParams }) {
     .map((row) => Number(row.season))
     .sort((a, b) => b - a);
   const latestAppearanceSeason = appearanceSeasons[0];
-  const [appearanceRows, appearanceTotal, debutRows, goals] = await Promise.all(
-    [
+  const [appearanceRows, appearanceTotal, debutRows, goals, shirtNumberRows] =
+    await Promise.all([
       queryPlayerAppearanceRows(env.DB, d1Player.name, {
         season: latestAppearanceSeason,
         statisticsOnly: true,
@@ -81,8 +85,10 @@ export default async function PlayerProfilePage(props: { params: SlugParams }) {
         season: latestAppearanceSeason,
         statisticsOnly: true,
       }),
-    ],
-  );
+      queryPlayerAppearanceRows(env.DB, d1Player.name, {
+        statisticsOnly: true,
+      }),
+    ]);
   const goalsByDate = goalCountsByDate(goals);
   profile.seasons = seasonRows.map(mapPlayerSeasonSummary);
   profile.appearances = appearanceRows.map((row) =>
@@ -185,6 +191,10 @@ export default async function PlayerProfilePage(props: { params: SlugParams }) {
         avg={avg}
         awards={awards}
         seasonNews={seasonNews}
+        shirtNumbers={buildPlayerShirtNumberHistory(
+          shirtNumberRows,
+          d1Player.name,
+        )}
         appearancePagination={{
           total: appearanceTotal,
           pageSize: APPEARANCE_PAGE_SIZE,
