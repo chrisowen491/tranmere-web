@@ -8,10 +8,28 @@ import { attachLinkedIdentity } from "@/lib/accountLinking";
 import { linkAuth0Identity } from "@/lib/auth0Management";
 import { resolveAccount } from "@/lib/accounts";
 import { ROLES_CLAIM } from "@/lib/authPermissions";
+import { normaliseAuthErrorCode, safeAuthReturnTo } from "@/lib/authError";
 
 const usernameClaim = "https://www.tranmere-web.com/username";
 
 export const auth0 = new Auth0Client({
+  onCallback: async (error, context) => {
+    const baseUrl =
+      context.appBaseUrl ||
+      process.env.APP_BASE_URL ||
+      process.env.AUTH0_BASE_URL ||
+      "https://www.tranmere-web.com";
+    const returnTo = safeAuthReturnTo(context.returnTo);
+
+    if (error) {
+      const destination = new URL("/auth/error", baseUrl);
+      destination.searchParams.set("code", normaliseAuthErrorCode(error));
+      destination.searchParams.set("returnTo", returnTo);
+      return NextResponse.redirect(destination);
+    }
+
+    return NextResponse.redirect(new URL(returnTo, baseUrl));
+  },
   beforeSessionSaved: async (session) => ({
     ...session,
     user: {
