@@ -99,6 +99,14 @@ export const STATIC_SEARCH_PAGES: StaticSearchPage[] = [
     aliases: 'quiz game player'
   },
   {
+    id: 'name-the-xi',
+    title: 'Name the XI',
+    description:
+      'Name the starting eleven from a Tranmere match in the archive',
+    href: '/name-the-xi',
+    aliases: 'quiz game lineup starting eleven team sheet'
+  },
+  {
     id: 'avatar-builder',
     title: 'Player Avatar Builder',
     description: 'Create a Tranmere Rovers player avatar',

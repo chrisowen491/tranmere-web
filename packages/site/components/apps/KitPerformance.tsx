@@ -50,15 +50,49 @@ export function KitPerformance({
     ...performance.honourMatches.map(({ match, title, kind }) => ({
       match,
       label: `${kind}: ${title}`,
+      detail: undefined,
     })),
     ...performance.biggestWins.slice(0, 3).map((match) => ({
       match,
       label: "Biggest win in this kit",
+      detail: undefined,
     })),
     ...performance.cupTies.slice(0, 4).map((match) => ({
       match,
       label: match.competition,
+      detail: undefined,
     })),
+    ...(() => {
+      const mostGoals = Math.max(
+        0,
+        ...performance.matches.map((match) => match.hgoal + match.vgoal),
+      );
+      return mostGoals > 0
+        ? performance.matches
+            .filter((match) => match.hgoal + match.vgoal === mostGoals)
+            .slice(0, 3)
+            .map((match) => ({
+              match,
+              label: "Highest-scoring match",
+              detail: `${mostGoals} goals`,
+            }))
+        : [];
+    })(),
+    ...(() => {
+      const biggestCrowd = Math.max(
+        0,
+        ...performance.matches.map((match) => match.attendance ?? 0),
+      );
+      return biggestCrowd > 0
+        ? performance.matches
+            .filter((match) => match.attendance === biggestCrowd)
+            .map((match) => ({
+              match,
+              label: "Biggest crowd",
+              detail: `${biggestCrowd.toLocaleString()} attendance`,
+            }))
+        : [];
+    })(),
   ].filter(
     (item, index, items) =>
       items.findIndex(({ match }) => match.id === item.match.id) === index,
@@ -167,7 +201,7 @@ export function KitPerformance({
             Notable matches
           </h2>
           <div className="mt-5 grid gap-px bg-[#071a2b]/15 sm:grid-cols-2 lg:grid-cols-3">
-            {notableMatches.map(({ match, label }) => (
+            {notableMatches.map(({ match, label, detail }) => (
               <Link
                 key={match.id}
                 href={matchHref(match)}
@@ -180,6 +214,7 @@ export function KitPerformance({
                   {match.opposition} · {match.ft}
                 </span>
                 <span className="mt-2 block font-mono text-xs text-[#071a2b]/50">
+                  {detail ? `${detail} · ` : ""}
                   {match.date}
                 </span>
               </Link>

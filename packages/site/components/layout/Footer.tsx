@@ -38,6 +38,7 @@ const linkGroups = [
       { label: "Fantasy XI", href: "/fantasy-team" },
       { label: "Fantasy rankings", href: "/players/fantasy-rankings" },
       { label: "Who am I?", href: "/who-am-i" },
+      { label: "Name the XI", href: "/name-the-xi" },
       { label: "Player builder", href: "/players/avatar-builder" },
       { label: "Programme checklist", href: "/programme-collections" },
     ],

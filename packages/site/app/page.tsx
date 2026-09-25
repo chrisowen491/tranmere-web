@@ -563,6 +563,27 @@ export default async function Home() {
             </div>
           </Link>
 
+          <Link
+            href="/name-the-xi"
+            className="group mb-6 flex flex-col justify-between gap-5 border border-[#071a2b]/15 bg-[#fffdf8] p-6 transition hover:bg-[#e8e2d6] sm:flex-row sm:items-center sm:px-8"
+          >
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-700">
+                Daily lineup quiz
+              </p>
+              <h3 className="mt-2 font-display text-2xl font-semibold">
+                Name the XI
+              </h3>
+              <p className="mt-2 max-w-2xl text-sm leading-6 text-[#071a2b]/60">
+                One archived match. Can you name all eleven starters?
+              </p>
+            </div>
+            <span className="inline-flex shrink-0 items-center gap-3 text-sm font-bold text-blue-700">
+              Play today’s game
+              <ArrowRightIcon className="h-4 w-4 transition group-hover:translate-x-1" />
+            </span>
+          </Link>
+
           <div className="grid gap-6 lg:grid-cols-2">
             <Link
               href="/fantasy-team"
