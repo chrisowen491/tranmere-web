@@ -15,10 +15,10 @@
     "@tranmere-web/lib": "*"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^5.20260918.1",
+    "@cloudflare/workers-types": "^5.20260925.2",
     "eslint": "^9.39.2",
-    "typescript-eslint": "^8.70.0",
-    "vitest": "^5.0.1",
-    "wrangler": "^4.135.0"
+    "typescript-eslint": "^8.70.1",
+    "vitest": "^5.0.2",
+    "wrangler": "^4.141.0"
   }
 }
