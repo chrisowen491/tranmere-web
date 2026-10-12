@@ -39,6 +39,7 @@ export interface Match {
   division?: string;
   competition?: string;
   programme?: string;
+  teamsheet?: string;
   noProgrammeIssued?: boolean;
   ticket?: string;
   youtube?: string;

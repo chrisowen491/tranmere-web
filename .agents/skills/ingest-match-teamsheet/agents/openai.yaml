@@ -1,0 +1,3 @@
+interface:
+  display_name: 'Match Teamsheet Ingestion'
+  short_description: 'Upload teamsheets to R2 and link D1 games'

@@ -39,6 +39,7 @@ const blankGame = (season: number): GameForm => ({
   after_extra_time: null,
   penalties: null,
   programme_path: null,
+  teamsheet_path: null,
   no_programme_issued: 0,
   formation: null,
   kit: null,
@@ -57,6 +58,7 @@ const optionalFields: Array<{ key: keyof GameForm; label: string }> = [
   { key: "after_extra_time", label: "After extra time" },
   { key: "penalties", label: "Penalties" },
   { key: "programme_path", label: "Programme path" },
+  { key: "teamsheet_path", label: "Teamsheet path" },
   { key: "referee", label: "Referee" },
   { key: "ticket", label: "Ticket" },
 ];
@@ -84,6 +86,7 @@ function payload(game: GameForm) {
     afterExtraTime: game.after_extra_time,
     penalties: game.penalties,
     programmePath: game.programme_path,
+    teamsheetPath: game.teamsheet_path,
     noProgrammeIssued: game.no_programme_issued === 1,
     formation: game.formation,
     kit: game.kit,

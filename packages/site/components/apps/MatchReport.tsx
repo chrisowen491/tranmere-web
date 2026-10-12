@@ -177,7 +177,7 @@ export default function MatchReport(props: {
                 priority
                 alt={`${match.homeTeam} v ${match.awayTeam} match programme`}
                 src={`https://img.tranmere-web.com/${match.programme}`}
-                className="relative z-10 mx-auto h-full max-h-[520px] w-full object-contain"
+                className="relative z-10 mx-auto h-auto max-h-[520px] w-full object-contain"
               />
             ) : (
               <div className="relative z-10 grid h-full place-items-center text-center text-white/60">
@@ -186,6 +186,28 @@ export default function MatchReport(props: {
                     ? "No programme issued"
                     : "Programme cover not recorded"}
                 </p>
+              </div>
+            )}
+            {match.teamsheet && (
+              <div className="relative z-10 mt-6 border-t border-white/20 pt-6 text-center">
+                <p className="mb-3 font-mono text-xs font-bold uppercase tracking-[0.14em] text-white/80">
+                  Teamsheet
+                </p>
+                <a
+                  href={`https://img.tranmere-web.com/${match.teamsheet}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`View full teamsheet for ${match.homeTeam} v ${match.awayTeam}`}
+                  className="relative mx-auto block h-[520px] w-full"
+                >
+                  <Image
+                    fill
+                    sizes="(min-width: 1024px) 520px, 100vw"
+                    alt={`${match.homeTeam} v ${match.awayTeam} teamsheet`}
+                    src={`https://img.tranmere-web.com/${match.teamsheet}`}
+                    className="object-contain"
+                  />
+                </a>
               </div>
             )}
             <p className="absolute left-5 top-5 z-20 bg-[#071a2b] px-3 py-2 font-mono text-xs font-bold uppercase tracking-[0.14em] text-white">

@@ -439,6 +439,7 @@ CREATE TABLE IF NOT EXISTS Games (
   after_extra_time TEXT,
   penalties TEXT,
   programme_path TEXT,
+  teamsheet_path TEXT,
   no_programme_issued INTEGER NOT NULL DEFAULT 0,
   formation TEXT,
   kit TEXT,

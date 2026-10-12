@@ -30,7 +30,7 @@ export interface GameDateRangeBounds {
 const gameColumns = `id, season, match_date, competition, round, home_team, away_team,
   opposition, venue, attendance, full_time_score, home_goals, away_goals,
   division, tier, leg, tie, neutral, after_extra_time, penalties,
-  programme_path, no_programme_issued, formation`;
+  programme_path, teamsheet_path, no_programme_issued, formation`;
 
 export async function querySearchIndexSeasonRows(db: D1DatabaseReader) {
   return (

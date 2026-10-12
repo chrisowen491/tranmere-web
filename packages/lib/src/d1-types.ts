@@ -143,6 +143,7 @@ export interface GameRow {
   after_extra_time: string | null;
   penalties: string | null;
   programme_path: string | null;
+  teamsheet_path: string | null;
   no_programme_issued: number;
   formation: string | null;
   kit?: string | null;
