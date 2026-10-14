@@ -4,6 +4,8 @@ import { JsonLd, breadcrumbJsonLd } from "@/components/seo/JsonLd";
 import { NameTheXiGame } from "@/components/apps/NameTheXiGame";
 import { getWhoAmIPlayerOptions } from "@/lib/players";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Name the XI — Daily Tranmere lineup quiz",
   description:
