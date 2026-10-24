@@ -5464,13 +5464,13 @@ framer-motion@^12.43.0:
     motion-utils "^12.39.0"
     tslib "^2.4.0"
 
-framer-motion@^13.4.4:
-  version "13.5.1"
-  resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-13.5.1.tgz#afa53c127eb72e9ae32aefc2e8f7bc06531efd6b"
-  integrity sha512-HeWOaeHD3kyTSIEMT6+nw7fBn4saIfxxabZyAITbycAl4xr1kzGJKIvGt/OWghSlvIA9qTnZ1zTGelHAe6S8DA==
+framer-motion@^14.5.0:
+  version "14.5.0"
+  resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-14.5.0.tgz#2231205611f65bdf9d33fd8a3e592f72b35549dd"
+  integrity sha512-pXIj1m9JX//3XExUgQIpS0f5iWcjenO14ekdg9S++Rr0VzfnAaveoNzonigRarD/+AM3umTGS3K/RANGQJitCQ==
   dependencies:
-    motion-dom "13.5.1"
-    motion-utils "13.5.0"
+    motion-dom "14.5.0"
+    motion-utils "14.1.1"
     tslib "^2.4.0"
 
 framesync@6.0.1:
@@ -6880,12 +6880,12 @@ mnemonist@0.38.3:
   dependencies:
     obliterator "^1.6.1"
 
-motion-dom@13.5.1:
-  version "13.5.1"
-  resolved "https://registry.yarnpkg.com/motion-dom/-/motion-dom-13.5.1.tgz#4d3cddcbda97a7f34235cc6c8477897bce8aa3c8"
-  integrity sha512-/7CVCD20Mz1KobktorpdgvowV0V41J7UxqE+qWS3GkSJqrRr5ft+2RloOYtEKv+wvBp3JaSFBclhxt4ja8ovHg==
+motion-dom@14.5.0:
+  version "14.5.0"
+  resolved "https://registry.yarnpkg.com/motion-dom/-/motion-dom-14.5.0.tgz#d8137544e8dec3c2a4b91136dd1e53b2678580d6"
+  integrity sha512-GAdnk1AgdtyrD3I09ZxEpV+Nt5QgwUsxN55qQV8mfk082dFQpcoT07wXkQAHRZjvZWUEBYhBVNeoXvtkYdL8jA==
   dependencies:
-    motion-utils "13.5.0"
+    motion-utils "14.1.1"
 
 motion-dom@^12.43.0:
   version "12.43.0"
@@ -6894,10 +6894,10 @@ motion-dom@^12.43.0:
   dependencies:
     motion-utils "^12.39.0"
 
-motion-utils@13.5.0:
-  version "13.5.0"
-  resolved "https://registry.yarnpkg.com/motion-utils/-/motion-utils-13.5.0.tgz#13b41a3f5d67c9d6b5fafe23c7439611bf97fb9f"
-  integrity sha512-Hqe/sqjIKliPZg8sVjWAkdySDPJNIeKH+euVkDOG8ri3DUUU7ZjndmHsGqEPz2iHpiyVaV5I22iguCMHU2he+Q==
+motion-utils@14.1.1:
+  version "14.1.1"
+  resolved "https://registry.yarnpkg.com/motion-utils/-/motion-utils-14.1.1.tgz#aa34a30a91da308178b60e98fbf3d06590773470"
+  integrity sha512-3VvN5Uvf8B6qG+OfOui6Nht5EWp+vLuU3IqcAj7ItZGKqtmTjCebl5sGZF7/08gEHRnEl1AP/fIwbcEyVrcQGQ==
 
 motion-utils@^12.39.0:
   version "12.39.0"
