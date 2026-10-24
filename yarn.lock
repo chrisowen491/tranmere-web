@@ -2463,17 +2463,17 @@
     react-dom "18.2.0"
     tailwind-merge "1.8.1"
 
-"@modelcontextprotocol/core@2.1.0":
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/@modelcontextprotocol/core/-/core-2.1.0.tgz#efca4b429d53697eb69a91c8c3c7f7ba3bd098a3"
-  integrity sha512-YdFj5gMRHr0gYNAhTbQDgjLHiEJdIAUYxomhKseUNye7ZGlISQmUoLh2sveFFCiQ7j2YMffT1kgSND0FSfIFjQ==
+"@modelcontextprotocol/core@2.3.0":
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/@modelcontextprotocol/core/-/core-2.3.0.tgz#e16da853964147db06c34e12fab7269a07e10ed6"
+  integrity sha512-09BHFaNVBe5pB2AhzCfLj0cqmsKLERvZQ4FblzP90UMGLaXVqdZPByFjURwsUYCmxonUW2yAwgTTvle+8O2/8w==
   dependencies:
     zod "^4.2.0"
 
-"@modelcontextprotocol/sdk@1.31.0":
-  version "1.31.0"
-  resolved "https://registry.yarnpkg.com/@modelcontextprotocol/sdk/-/sdk-1.31.0.tgz#86ce85651376ae54e5df2db29b18da0eef7054d4"
-  integrity sha512-UvTMgnNlnIBO/22ob2RcVGDlcvOslQs8T59+FTGdA0L27a39fdGF/EDETNtDVK4DZGpwomlsYpRdA8UXcVL/pw==
+"@modelcontextprotocol/sdk@1.32.0":
+  version "1.32.0"
+  resolved "https://registry.yarnpkg.com/@modelcontextprotocol/sdk/-/sdk-1.32.0.tgz#534d2c2793fd38a621edbca3238580fdb56898bc"
+  integrity sha512-8BviX/hK4Gd2eL1KdTwm0gfl4d3wdoErW0Jd00h6nomUAtk6IJk5vwQJc6kfWtJTzN5OEV/lgIiJKI8fiDGAlA==
   dependencies:
     "@hono/node-server" "^1.19.9 || ^2.0.5"
     ajv "^8.17.1"
@@ -2493,12 +2493,12 @@
     zod "^3.25 || ^4.0"
     zod-to-json-schema "^3.25.1"
 
-"@modelcontextprotocol/server@2.1.0":
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/@modelcontextprotocol/server/-/server-2.1.0.tgz#8225e92cc3d2de2dae30ca9b4ebbf04a65336d12"
-  integrity sha512-FdvwZU5N03O77Suh35JqjAqq5R1ZTEPFtwu6N4BgBq28qrQtrCnpbLL5U2pwYCuE194jAw0xnlOVmIqhfoYuUQ==
+"@modelcontextprotocol/server@2.3.0":
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/@modelcontextprotocol/server/-/server-2.3.0.tgz#02a721e2614482af6fc94b6ee0083cff13cc18f5"
+  integrity sha512-+6b0LdsQLmHsvS7J6sQJ4weTpzUn61fU1JKS+321/+IyDYoHW5CR2Tgqcs6GgAAQvlesCo6yX3xttgmx+XGtJw==
   dependencies:
-    "@modelcontextprotocol/core" "2.1.0"
+    "@modelcontextprotocol/core" "2.3.0"
     zod "^4.2.0"
 
 "@motionone/animation@^10.12.0":
