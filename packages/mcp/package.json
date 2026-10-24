@@ -16,7 +16,7 @@
   "dependencies": {
     "@cloudflare/kumo": "^2.14.0",
     "@modelcontextprotocol/sdk": "1.31.0",
-    "@modelcontextprotocol/server": "2.1.0",
+    "@modelcontextprotocol/server": "2.3.0",
     "@tranmere-web/lib": "*",
     "agents": "*",
     "jose": "^6.2.12",
