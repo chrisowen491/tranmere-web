@@ -7,6 +7,8 @@ import {
 import { WhoAmIGame } from "@/components/apps/WhoAmIGame";
 import { getWhoAmIPlayerOptions } from "@/lib/players";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Who Am I? — Daily Tranmere player",
   description:
