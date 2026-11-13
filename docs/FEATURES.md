@@ -79,6 +79,7 @@ data ownership and system boundaries.
 | Shared Fantasy XI    | `/fantasy-team/shared/[id]`             | Presents an explicitly shared, read-only team with graceful handling of renamed or missing players and a branded image.                      |
 | Who Am I?            | `/who-am-i`                             | Runs a daily player-identification game from archive clues.                                                                                  |
 | Name the XI          | `/name-the-xi`                          | Runs a daily lineup quiz from a match with eleven recorded starters; saves progress locally and links to the match on completion.            |
+| Higher or Lower      | `/higher-or-lower`                      | Runs ten daily player comparisons on recorded appearances and goals, with a saved score and streak.                                          |
 | Rovers passport      | `/profile/passport`                     | Gives a logged-in supporter a private match-attendance log with season, venue, competition, result and milestone summaries.                  |
 | Archive completeness | `/archive-completeness`                 | Shows precomputed, public coverage by season and category, then links archive gaps to reviewed contribution journeys.                        |
 

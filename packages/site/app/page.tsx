@@ -552,8 +552,8 @@ export default async function Home() {
                   Who am I?
                 </h3>
                 <p className="mt-4 max-w-xl leading-7 text-[#071a2b]/60">
-                  Identify today’s Rovers player from their position, career
-                  record and debut. Every wrong answer unlocks another clue.
+                  Identify today’s Rovers player from biography and archive
+                  clues. Every wrong answer unlocks another clue.
                 </p>
               </div>
               <span className="mt-8 inline-flex items-center gap-3 text-sm font-bold text-emerald-700">
@@ -576,6 +576,28 @@ export default async function Home() {
               </h3>
               <p className="mt-2 max-w-2xl text-sm leading-6 text-[#071a2b]/60">
                 One archived match. Can you name all eleven starters?
+              </p>
+            </div>
+            <span className="inline-flex shrink-0 items-center gap-3 text-sm font-bold text-blue-700">
+              Play today’s game
+              <ArrowRightIcon className="h-4 w-4 transition group-hover:translate-x-1" />
+            </span>
+          </Link>
+
+          <Link
+            href="/higher-or-lower"
+            className="group mb-6 flex flex-col justify-between gap-5 border border-[#071a2b]/15 bg-[#fffdf8] p-6 transition hover:bg-[#e8e2d6] sm:flex-row sm:items-center sm:px-8"
+          >
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-700">
+                Daily stats game
+              </p>
+              <h3 className="mt-2 font-display text-2xl font-semibold">
+                Higher or Lower
+              </h3>
+              <p className="mt-2 max-w-2xl text-sm leading-6 text-[#071a2b]/60">
+                Compare Rovers players on appearances and goals. Ten calls to
+                build your best streak.
               </p>
             </div>
             <span className="inline-flex shrink-0 items-center gap-3 text-sm font-bold text-blue-700">
