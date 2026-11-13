@@ -5,7 +5,8 @@ import {
   queryPlayerSeasonSummaryRows,
 } from "@tranmere-web/lib/src/d1-queries";
 import { WhoAmIGame } from "@/components/apps/WhoAmIGame";
-import { getWhoAmIPlayerOptions } from "@/lib/players";
+import { getPlayersByNames, getWhoAmIPlayerOptions } from "@/lib/players";
+import { buildWhoAmIClues } from "@/lib/whoAmIClues";
 
 export const dynamic = "force-dynamic";
 
@@ -51,21 +52,23 @@ export default async function WhoAmIPage() {
   );
   const date = dailyKey();
   const dailyPlayer = eligiblePlayers[hash(date) % eligiblePlayers.length];
-  const [summaryRows, starts, substituteAppearances] = await Promise.all([
-    queryPlayerSeasonSummaryRows(context.env.DB, {
-      player: dailyPlayer.name,
-      playerMatch: "exact",
-    }),
-    queryAppRows(context.env.DB, {
-      player: dailyPlayer.name,
-      playerMatch: "exact",
-      statisticsOnly: true,
-    }),
-    queryAppRows(context.env.DB, {
-      substitutedBy: dailyPlayer.name,
-      statisticsOnly: true,
-    }),
-  ]);
+  const [summaryRows, starts, substituteAppearances, profiles] =
+    await Promise.all([
+      queryPlayerSeasonSummaryRows(context.env.DB, {
+        player: dailyPlayer.name,
+        playerMatch: "exact",
+      }),
+      queryAppRows(context.env.DB, {
+        player: dailyPlayer.name,
+        playerMatch: "exact",
+        statisticsOnly: true,
+      }),
+      queryAppRows(context.env.DB, {
+        substitutedBy: dailyPlayer.name,
+        statisticsOnly: true,
+      }),
+      getPlayersByNames(context.env.DB, [dailyPlayer.name]),
+    ]);
   const seasons = summaryRows
     .filter((season) => /^\d{4}$/.test(season.season))
     .sort((a, b) => Number(a.season) - Number(b.season));
@@ -83,6 +86,17 @@ export default async function WhoAmIPage() {
     (Date.parse(`${date}T00:00:00Z`) - Date.parse("2026-01-01T00:00:00Z")) /
       86400000,
   );
+  const player = {
+    name: dailyPlayer.name,
+    position: dailyPlayer.position!,
+    image: dailyPlayer.picLink!,
+    firstSeason: seasons.at(0)?.season ?? avatarSeason(dailyPlayer.picLink),
+    lastSeason: seasons.at(-1)?.season ?? avatarSeason(dailyPlayer.picLink),
+    appearances: totalAppearances,
+    goals: totalGoals,
+    debutDate: debut?.match_date,
+    debutOpposition: debut?.opposition,
+  };
 
   return (
     <main className="min-h-screen bg-[#f4f0e8] text-[#071a2b]">
@@ -90,19 +104,15 @@ export default async function WhoAmIPage() {
         date={date}
         gameNumber={gameNumber}
         candidates={players.map((player) => player.name)}
-        player={{
-          name: dailyPlayer.name,
-          position: dailyPlayer.position!,
-          image: dailyPlayer.picLink!,
-          firstSeason:
-            seasons.at(0)?.season ?? avatarSeason(dailyPlayer.picLink),
-          lastSeason:
-            seasons.at(-1)?.season ?? avatarSeason(dailyPlayer.picLink),
-          appearances: totalAppearances,
-          goals: totalGoals,
-          debutDate: debut?.match_date,
-          debutOpposition: debut?.opposition,
-        }}
+        player={player}
+        clues={buildWhoAmIClues(
+          {
+            ...player,
+            biographyMarkdown: profiles.get(dailyPlayer.name)
+              ?.biographyMarkdown,
+          },
+          date,
+        )}
       />
     </main>
   );

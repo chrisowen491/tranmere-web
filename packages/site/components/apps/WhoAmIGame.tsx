@@ -6,22 +6,17 @@ import {
   ClipboardDocumentIcon,
   EyeSlashIcon,
   LightBulbIcon,
+  LockClosedIcon,
   XCircleIcon,
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import Link from "next/link";
 import { FormEvent, useEffect, useMemo, useState } from "react";
+import type { WhoAmIClue } from "@/lib/whoAmIClues";
 
 type DailyPlayer = {
   name: string;
-  position: string;
   image: string;
-  firstSeason?: string;
-  lastSeason?: string;
-  appearances: number;
-  goals: number;
-  debutDate?: string;
-  debutOpposition?: string;
 };
 
 type SavedGame = {
@@ -30,30 +25,6 @@ type SavedGame = {
 };
 
 const maxAttempts = 5;
-
-function careerLabel(player: DailyPlayer) {
-  if (!player.firstSeason) return "Career dates are not recorded";
-  if (!player.lastSeason || player.firstSeason === player.lastSeason) {
-    return `Appeared during the ${player.firstSeason}–${String(Number(player.firstSeason) + 1).slice(-2)} season`;
-  }
-  return `Rovers career spans ${player.firstSeason}–${String(Number(player.lastSeason) + 1).slice(-2)}`;
-}
-
-function namePattern(name: string) {
-  const words = name.split(/\s+/);
-  return `${words.length} word${words.length === 1 ? "" : "s"}, ${name.replace(/\s/g, "").length} letters · initials ${words.map((word) => word[0]).join("")}`;
-}
-
-function formatDebutDate(date?: string) {
-  if (!date) return "";
-  const parsed = new Date(date);
-  if (Number.isNaN(parsed.getTime())) return date;
-  return new Intl.DateTimeFormat("en-GB", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  }).format(parsed);
-}
 
 function calculateStreak(date: string, history: Record<string, string>) {
   let streak = 0;
@@ -70,6 +41,7 @@ export function WhoAmIGame(props: {
   gameNumber: number;
   candidates: string[];
   player: DailyPlayer;
+  clues: WhoAmIClue[];
 }) {
   const storageKey = `tranmere-who-am-i-${props.date}`;
   const [guesses, setGuesses] = useState<string[]>([]);
@@ -96,20 +68,18 @@ export function WhoAmIGame(props: {
       .slice(0, 8);
   }, [guesses, props.candidates, query]);
 
-  const clues = [
-    `Primary position: ${props.player.position}`,
-    careerLabel(props.player),
-    props.player.appearances > 0
-      ? `${props.player.appearances} recorded appearances and ${props.player.goals} goals`
-      : `This player is represented in the avatar archive`,
-    props.player.debutOpposition
-      ? `Debut: ${formatDebutDate(props.player.debutDate)} against ${props.player.debutOpposition}`
-      : `The name begins with “${props.player.name.charAt(0)}”`,
-    namePattern(props.player.name),
-  ];
   const visibleClueCount = finished
-    ? clues.length
-    : Math.min(guesses.length + 1, clues.length);
+    ? props.clues.length
+    : Math.min(guesses.length + 1, props.clues.length);
+  const portraitStyle = finished
+    ? ""
+    : [
+        "scale-110 blur-xl grayscale brightness-0",
+        "scale-110 blur-xl grayscale brightness-50",
+        "scale-105 blur-lg grayscale brightness-75",
+        "blur-md grayscale",
+        "blur-sm grayscale",
+      ][Math.min(guesses.length, maxAttempts - 1)];
 
   useEffect(() => {
     const saved = window.localStorage.getItem(storageKey);
@@ -158,6 +128,12 @@ export function WhoAmIGame(props: {
       setMessage("Choose a player from the suggestions.");
       return;
     }
+    if (
+      guesses.some((guess) => guess.toLowerCase() === exactPlayer.toLowerCase())
+    ) {
+      setMessage("You’ve already guessed that player.");
+      return;
+    }
     setGuesses((current) => [...current, exactPlayer]);
     setQuery("");
     setMessage(
@@ -189,15 +165,16 @@ export function WhoAmIGame(props: {
         <div className="relative mx-auto grid max-w-6xl gap-10 px-6 py-14 sm:px-10 lg:grid-cols-[0.8fr_1.2fr] lg:px-12 lg:py-20">
           <div className="flex flex-col justify-between">
             <div>
-              <p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-400">
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-blue-300">
                 Daily archive game · #{props.gameNumber}
               </p>
               <h1 className="mt-5 font-display text-5xl font-semibold tracking-[-0.05em] sm:text-6xl">
                 Who am I?
               </h1>
               <p className="mt-5 max-w-md text-lg leading-8 text-white/60">
-                Identify today’s Tranmere player. Every wrong answer reveals
-                another clue.
+                A new player and a fresh mix of biography and archive clues
+                every day. Each guess reveals another clue and a little more of
+                their portrait.
               </p>
             </div>
             <div className="mt-10 flex gap-8 border-t border-white/15 pt-6">
@@ -228,11 +205,9 @@ export function WhoAmIGame(props: {
                   alt={finished ? props.player.name : "Mystery player"}
                   fill
                   unoptimized
-                  className={`object-contain transition duration-500 ${
-                    finished ? "" : "scale-110 blur-xl grayscale brightness-0"
-                  }`}
+                  className={`object-contain transition-all duration-700 ${portraitStyle}`}
                 />
-                {!finished && (
+                {!finished && guesses.length < 2 && (
                   <span className="absolute inset-0 grid place-items-center font-display text-7xl font-semibold text-white">
                     ?
                   </span>
@@ -240,24 +215,38 @@ export function WhoAmIGame(props: {
               </div>
               <div>
                 <p className="text-xs font-bold uppercase tracking-[0.16em] text-white/45">
-                  Clues revealed · {visibleClueCount}/{clues.length}
+                  Clues revealed · {visibleClueCount}/{props.clues.length}
                 </p>
                 <ol className="mt-4 space-y-3">
-                  {clues.slice(0, visibleClueCount).map((clue, index) => (
+                  {props.clues.map((clue, index) => (
                     <li
-                      key={clue}
+                      key={`${clue.label}-${index}`}
                       className="flex gap-3 border-b border-white/10 pb-3 text-sm leading-6 text-white/75"
                     >
-                      <LightBulbIcon
-                        aria-hidden="true"
-                        className="mt-1 h-4 w-4 flex-none text-emerald-400"
-                      />
-                      <span>
+                      {index < visibleClueCount ? (
+                        <LightBulbIcon
+                          aria-hidden="true"
+                          className="mt-1 h-4 w-4 flex-none text-blue-300"
+                        />
+                      ) : (
+                        <LockClosedIcon
+                          aria-hidden="true"
+                          className="mt-1 h-4 w-4 flex-none text-white/30"
+                        />
+                      )}
+                      <div>
                         <span className="mr-2 font-mono text-white/35">
                           0{index + 1}
                         </span>
-                        {clue}
-                      </span>
+                        <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-blue-300">
+                          {index < visibleClueCount ? clue.label : "Locked"}
+                        </span>
+                        <p className="mt-1">
+                          {index < visibleClueCount
+                            ? clue.text
+                            : "Revealed after another guess"}
+                        </p>
+                      </div>
                     </li>
                   ))}
                 </ol>
@@ -281,11 +270,11 @@ export function WhoAmIGame(props: {
                       setMessage("");
                     }}
                     autoComplete="off"
-                    className="min-w-0 flex-1 border border-white/25 bg-white/10 px-4 py-3 text-white outline-none placeholder:text-white/35 focus:border-emerald-400"
+                    className="min-w-0 flex-1 border border-white/25 bg-white/10 px-4 py-3 text-white outline-none placeholder:text-white/35 focus:border-blue-300"
                     placeholder="Start typing a player name"
                   />
                   <button
-                    className="bg-emerald-400 px-5 py-3 text-sm font-bold text-[#071a2b] transition hover:bg-emerald-300"
+                    className="bg-blue-300 px-5 py-3 text-sm font-bold text-[#071a2b] transition hover:bg-blue-200"
                     type="submit"
                   >
                     Guess
