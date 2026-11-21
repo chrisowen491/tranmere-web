@@ -12,9 +12,21 @@ export const timeMachineEventsSql = `
          '/match/' || season || '/', match_date, 'https://img.tranmere-web.com/' || programme_path
   FROM Games WHERE trim(programme_path) NOT IN ('', '#N/A')
   UNION ALL
-  SELECT 'Cup tie', match_date, competition || ' · ' || home_team || ' ' || full_time_score || ' ' || away_team,
-         '/match/' || season || '/', match_date, NULL
-  FROM Games WHERE competition IN ('FA Cup', 'League Cup')
+  SELECT 'Cup tie', g.match_date,
+         g.competition || ' · ' || g.home_team || ' ' || g.full_time_score || ' ' || g.away_team ||
+         COALESCE(' · Rovers goals: ' || (
+           SELECT group_concat(label, ', ') FROM (
+             SELECT trim(scorer) || CASE WHEN goal_type = 'OwnGoal' THEN ' (og)' ELSE '' END ||
+                    CASE WHEN count(*) > 1 THEN ' ×' || count(*) ELSE '' END AS label
+             FROM Goals
+             WHERE season = g.season AND match_date = g.match_date AND opposition = g.opposition
+               AND trim(scorer) != ''
+             GROUP BY trim(scorer), CASE WHEN goal_type = 'OwnGoal' THEN 1 ELSE 0 END
+             ORDER BY trim(scorer), label
+           )
+         ), ''),
+         '/match/' || g.season || '/', g.match_date, NULL
+  FROM Games g WHERE g.competition IN ('FA Cup', 'League Cup')
   UNION ALL
   SELECT 'Match shirt', MIN(g.match_date), 'Opening fixture of this home shirt’s first archived season',
          '/shirts/', s.slug, i.url
